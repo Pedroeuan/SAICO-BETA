@@ -11864,7 +11864,7 @@
   .nav-sidebar .nav-link > .right,
   .nav-sidebar .nav-link > p > .right {
     position: absolute;
-    right: 1rem;
+    right: 0rem;
     top: .7rem;
   }
   
