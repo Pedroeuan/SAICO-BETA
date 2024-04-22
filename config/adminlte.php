@@ -429,10 +429,26 @@ return [
                     'icon' => 'fas fa-luggage-cart',
                     'submenu' => [
                         [
-                            'text' => 'level_one',
+                            'text' => 'Equipos',
+                            'icon' => '	fas fa-laptop',
                             'url' => '#',
                         ],
                         [
+                            'text' => 'Consumibles',
+                            'icon' => 'fas fa-vials',
+                            'url' => '#',
+                        ],
+                        [
+                            'text' => 'Kits',
+                            'icon' => 'fas fa-suitcase',
+                            'url' => '#',
+                        ],
+                        [
+                            'text' => 'Solicitud E y C',
+                            'icon' => 'fas fa-file-alt',
+                            'url' => '#',
+                        ],
+                        /*[
                             'text' => 'level_one',
                             'url' => '#',
                             'submenu' => 
@@ -462,11 +478,53 @@ return [
                         [
                             'text' => 'level_one',
                             'url' => '#',
+                        ],*/
+                    ],
+                ],
+
+                 // Sidebar Administrativo:
+        [
+            'text' => 'SUPERVISOR',
+            'icon' => 'fas fa-universal-access',
+            'submenu' => [
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                    'submenu' => 
+                    [
+                        [
+                            'text' => 'level_two',
+                            'url' => '#',
+                        ],
+                        [
+                            'text' => 'level_two',
+                            'url' => '#',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'level_three',
+                                    'url' => '#',
+                                ],
+                                [
+                                    'text' => 'level_three',
+                                    'url' => '#',
+                                ],
+                            ],
                         ],
                     ],
                 ],
 
-    ],
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                ],
+            ],
+        ],
+    ],//Final Menu
 
     /*
     |--------------------------------------------------------------------------
