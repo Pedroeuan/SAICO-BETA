@@ -431,7 +431,7 @@ return [
                         [
                             'text' => 'Equipos',
                             'icon' => '	fas fa-laptop',
-                            'url' => '#',
+                            'url' => '/Equipos_Y_Consumibles',
                         ],
                         [
                             'text' => 'Consumibles',
