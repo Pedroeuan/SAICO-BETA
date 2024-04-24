@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('Equipos_Y_Consumibles', [Equipos_Y_ConsumiblesController::class, 'index'])->name('Equipos_Y_Consumibles');
+    Route::get('Equipos_Y_Consumibles', [Equipos_Y_ConsumiblesController::class, 'index'])->name('index');
 });
 
 

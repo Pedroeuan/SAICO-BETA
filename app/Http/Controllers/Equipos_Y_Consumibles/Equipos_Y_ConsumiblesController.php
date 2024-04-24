@@ -24,7 +24,7 @@ class Equipos_Y_ConsumiblesController extends Controller
      */
     public function index()
     {
-        return view('Equipos_Y_Consumibles.Equipos_Y_Consumibles');
+        return view('Equipos_Y_Consumibles.index');
         //return 'Hello World';
     }
 }
