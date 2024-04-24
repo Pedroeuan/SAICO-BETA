@@ -430,8 +430,8 @@ return [
                     'submenu' => [
                         [
                             'text' => 'Equipos',
-                            'icon' => '	fas fa-laptop',
-                            'url' => '/Equipos_Y_Consumibles',
+                            'icon' => 'fas fa-tools',
+                            'url' => 'Equipos_Y_Consumibles',
                         ],
                         [
                             'text' => 'Consumibles',
