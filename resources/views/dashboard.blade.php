@@ -1,46 +1,19 @@
-@php
-/*
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
-@endsection
-*/
-@endphp
-
 @extends('adminlte::page')
 
 @section('title', 'AICO')
 
 @section('content_header')
-    <h1>AICO</h1>
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+<div class="content-wrapper" style="overflow: hidden; height: 100%;">
+    @extends('MenuPrincipal')
+</div>
 @stop
 
 @section('css')
     {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    <link rel="stylesheet" href="vendor/adminlte\dist/css/MenuP.css">
 @stop
 
 @section('js')
