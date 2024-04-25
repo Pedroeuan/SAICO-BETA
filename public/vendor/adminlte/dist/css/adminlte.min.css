@@ -10857,12 +10857,21 @@
   .layout-top-nav .wrapper {
     margin-left: 0;
   }
-  
+  /*
   .layout-top-nav .wrapper .main-header .brand-image {
     margin-top: -.5rem;
     margin-right: .2rem;
     height: 33px;
-  }
+  }*/
+
+  .layout-top-nav .wrapper .main-header .brand-image {
+    margin-top: 0; /* Eliminamos el margen superior */
+    margin-right: auto; /* Centramos el logo horizontalmente */
+    margin-left: auto; /* Centramos el logo horizontalmente */
+    height: 33px;
+    display: block; /* Aseguramos que el logo sea un bloque para que se pueda centrar horizontalmente */
+}
+
   
   .layout-top-nav .wrapper .main-sidebar {
     bottom: inherit;

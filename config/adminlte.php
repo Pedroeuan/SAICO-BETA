@@ -63,8 +63,8 @@ return [
     |
     */
 
-    'logo' => '<H3><b>AICO</b></H3>',
-    'logo_img' => 'vendor/adminlte/dist/img/Logos/Logo_AICO.png',
+    'logo' => '<H4><b>S/AICO</b></H4>',
+    'logo_img' => 'vendor/adminlte\dist/img/Logos/Logo_AICO.png',
     'logo_img_class' => 'brand-image img-rounded elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -152,7 +152,7 @@ return [
     |
     */
 
-    'layout_topnav' => null,
+    'layout_topnav' => true,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => true,
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -298,6 +298,7 @@ return [
         [
             'text' => 'ADMINISTRATIVO',
             'icon' => 'fas fa-chalkboard-teacher',
+            //'topnav' => true,
             'submenu' => [
                 [
                     'text' => 'level_one',
@@ -341,6 +342,7 @@ return [
                [
                 'text' => 'OPERATIVO',
                 'icon' => 'fas fa-id-card-alt',
+                //'topnav' => true,
                 'submenu' => [
                     [
                         'text' => 'level_one',
@@ -384,6 +386,7 @@ return [
              [
                 'text' => 'CLIENTES',
                 'icon' => 'far fa-handshake',
+                //'topnav' => true,
                 'submenu' => [
                     [
                         'text' => 'level_one',
@@ -427,6 +430,7 @@ return [
                 [
                     'text' => 'EQUIPOS Y CONSUMIBLES',
                     'icon' => 'fas fa-luggage-cart',
+                    //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Equipos',
@@ -486,6 +490,7 @@ return [
         [
             'text' => 'SUPERVISOR',
             'icon' => 'fas fa-universal-access',
+            //'topnav' => true,
             'submenu' => [
                 [
                     'text' => 'level_one',
