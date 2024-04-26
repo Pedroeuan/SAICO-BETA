@@ -9896,7 +9896,7 @@
   
   .preloader {
     display: flex;
-    background-color: #f4f6f9;
+    background-color: #f4f6f9; /*color de fondo de carga*/
     height: 100vh;
     width: 100%;
     transition: height 200ms linear;
@@ -11000,7 +11000,7 @@
   }
   
   .content-wrapper {
-    background-color: #f4f6f9;
+    background-color: #0b1b2f00; /*Color de fondo despues de la carga*/
   }
   
   .content-wrapper > .content {
