@@ -435,7 +435,7 @@ return [
                         [
                             'text' => 'Equipos',
                             'icon' => 'fas fa-tools',
-                            'url' => 'Equipos_Y_Consumibles',
+                            'url' => 'Equipos',
                         ],
                         [
                             'text' => 'Consumibles',
