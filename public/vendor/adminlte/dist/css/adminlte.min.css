@@ -157,13 +157,13 @@
   }
   
   a {
-    color: #1900ff;  /*Color Texto Adminlte*/
+    color: #000000;  /*Color Texto Adminlte*/
     text-decoration: none;
     background-color: transparent;
   }
   
   a:hover {
-    color: #000000;
+    color: #000000; /*Color Texto al pasar el mouse Adminlte*/
     text-decoration: none;
   }
   
