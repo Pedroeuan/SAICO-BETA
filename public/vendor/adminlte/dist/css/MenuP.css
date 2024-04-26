@@ -8,7 +8,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at bottom, #1b2735, #090a0f);
+  background: radial-gradient(ellipse at bottom, #182a3d, #0f0909);
   font-weight: 300;
 }
 .all {
@@ -42,8 +42,8 @@ body {
   height: 150px;
   transform-style: preserve-3d;
   border-radius: 10px;
-  border: 1px solid #fff;
-  box-shadow: 0 0 20px 5px rgba(255, 100, 100, 0.4); /*iluminación de fondo del inicio*/
+  border: 1px solid rgba(255, 100, 100, 0.4);;
+  box-shadow: 0 0 20px 5px rgba(0, 47, 255, 0.4); /*iluminación de fondo de los cuadros*/
   opacity: 0;
   transition: all .3s ease;
   transition-delay: 1s;
@@ -51,13 +51,13 @@ body {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: #58d;
+  background-color: #3577c2; /*color fondo cuadros al pasar el mouse*/
   cursor: pointer;
   background-blend-mode: color-burn;
   
   &:hover {
-    box-shadow: 0 0 30px 10px rgba(100, 100, 255, .6);
-  background-color: #ccf;
+    box-shadow: 0 0 30px 10px rgba(232, 255, 100, 0.6);
+  background-color: #ccf; /*fondo color cuadro de en medio*/
   }
 }
 .text {
@@ -73,7 +73,7 @@ body {
 }
 .lefter {
   transform: translateX(-60px) translateZ(-50px) rotateY(-10deg);
-  background-image: url(https://cdn3.iconfinder.com/data/icons/other-icons/48/organization-512.png);
+  background-image: url(https://cdn0.iconfinder.com/data/icons/font-awesome-solid-vol-1/640/chalkboard-teacher-512.png);
 }
 .left {
   transform: translateX(-30px) translateZ(-25px) rotateY(-5deg);
@@ -94,12 +94,12 @@ body {
 .explainer {
   font-weight: 300;
   font-size: 2rem;
-  color: #fff;
+  color: #5d6d03;
   transition: all .6s ease;
   width: 100%;
   height: 100%;
-  background-color: #ffffff; /* colo de fondo del inicio*/
-  background-image: radial-gradient(circle at center top, #cce, #33a);
+  background-color: #ffffff; /* color de fondo del inicio*/
+  background-image: radial-gradient(circle at center top, rgb(0, 0, 255), #33a);
   background-image: url('vendor/adminltedist/img/Logos/Logo_AICO.png'); /*imagen*/
   border-radius: 10px;
   text-shadow: 0 0 10px rgba(226, 20, 20, 0.8);/*texto del inicio*/
