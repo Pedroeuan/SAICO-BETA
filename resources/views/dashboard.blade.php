@@ -6,9 +6,7 @@
 @stop
 
 @section('content')
-<div class="content-wrapper" style="overflow: hidden; height: 100%;">
-    @extends('MenuPrincipal')
-</div>
+@include('MenuPrincipal')
 @stop
 
 @section('css')

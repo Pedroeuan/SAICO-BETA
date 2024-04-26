@@ -5,7 +5,10 @@
 @section('title', 'Equipos')
 
 @section('content')
-    
+ <br>
+ <br>
+ <br>
+ <br>   
 <div
     class="table-responsive"
 >

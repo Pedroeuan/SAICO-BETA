@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Equipos_Y_Consumibles\Equipos_Y_ConsumiblesController;
+//use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Equipos\EquiposController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,13 +20,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('Equipos_Y_Consumibles', [Equipos_Y_ConsumiblesController::class, 'index'])->name('index');
+    Route::get('Equipos', [EquiposController::class, 'index'])->name('Equipos');
 });
-
-
 
 require __DIR__.'/auth.php';
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
+

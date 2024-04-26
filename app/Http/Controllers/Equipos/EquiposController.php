@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Equipos_Y_Consumibles;
+namespace App\Http\Controllers\Equipos;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class Equipos_Y_ConsumiblesController extends Controller
+class EquiposController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,7 +24,7 @@ class Equipos_Y_ConsumiblesController extends Controller
      */
     public function index()
     {
-        return view('Equipos_Y_Consumibles.index');
+        return view('Equipos.index');
         //return 'Hello World';
     }
 }
