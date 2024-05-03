@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Equipos;
 
-use App\Models\Equipos;
+use App\Models\Equipos\Equipo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -25,7 +25,7 @@ class EquiposController extends Controller
      */
     public function index()
     {
-        $Equipos=Equipos::all();
+        $Equipos=Equipo::all();
         //dd($Equipos);
         return view('Equipos.index',compact('Equipos'));
         //return view('Equipos.index');
