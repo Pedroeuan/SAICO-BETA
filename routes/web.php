@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 //use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Equipos\EquiposController;
+use App\Http\Controllers\GeneralEycController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,9 +24,15 @@ Route::middleware('auth')->group(function () {
     Route::get('Equipos', [EquiposController::class, 'index'])->name('Equipos');
 });
 
+/*Route::middleware('auth')->group(function () {
+    Route::get('general_eyc', [GeneralEycController::class, 'index'])->name('general_eyc');
+});*/
+
+
 require __DIR__.'/auth.php';
 
 Auth::routes();
 
 Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 
+//Route::resource('Equipos', EquiposController::class);

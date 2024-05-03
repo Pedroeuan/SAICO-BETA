@@ -45,12 +45,9 @@
         </tbody>
     </table>
 </div>
-
-
-
-
-
 @stop
+
+
 
 @section('css')
     {{-- Add here extra stylesheets --}}

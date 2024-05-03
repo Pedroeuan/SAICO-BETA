@@ -1,36 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Equipos;
+namespace App\Http\Controllers;
 
-use App\Models\Equipos;
+use App\Models\general_eyc;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class EquiposController extends Controller
+class GeneralEycController extends Controller
 {
- /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * Display a listing of the resource.
      */
     public function index()
     {
-        $Equipos=Equipos::all();
+        
+        $Equipos=general_eyc::all();
         //dd($Equipos);
         return view('Equipos.index',compact('Equipos'));
-        //return view('Equipos.index');
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -51,7 +37,7 @@ class EquiposController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Equipos $equipos)
+    public function show(general_eyc $general_eyc)
     {
         //
     }
@@ -59,7 +45,7 @@ class EquiposController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Equipos $equipos)
+    public function edit(general_eyc $general_eyc)
     {
         //
     }
@@ -67,7 +53,7 @@ class EquiposController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Equipos $equipos)
+    public function update(Request $request, general_eyc $general_eyc)
     {
         //
     }
@@ -75,7 +61,7 @@ class EquiposController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Equipos $equipos)
+    public function destroy(general_eyc $general_eyc)
     {
         //
     }
