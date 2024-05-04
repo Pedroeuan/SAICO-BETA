@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Equipos;
 
-use App\Models\Equipos\Equipo;
-use App\Models\Equipos\Certificado;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
-
-class EquiposController extends Controller
+class Certificados extends Controller
 {
- /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -28,16 +24,7 @@ class EquiposController extends Controller
      */
     public function index()
     {
-        /*$Equipos=Equipo::all();
-        //dd($Equipos);
-        return view('Equipos.index',compact('Equipos'));*/
-            // Obtener todos los equipos con sus certificados asociados
-            //$equiposConCertificados = Equipo::with('certificado')->get();
-            //SELECT * FROM general_eyc JOIN certificados
-            $Equipos = DB::select('SELECT * FROM general_eyc JOIN certificados');
 
-            // Pasar los datos a la vista
-            return view('Equipos.index', compact('Equipos'));
     }
 
 

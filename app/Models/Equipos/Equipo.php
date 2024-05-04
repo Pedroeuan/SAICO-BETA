@@ -9,4 +9,9 @@ class Equipo extends Model
 {
     protected $table = 'general_eyc'; // Nombre de la tabla en la base de datos
     use HasFactory;
+
+    public function certificado()
+    {
+        return $this->hasOne(Certificado::class);
+    }
 }
