@@ -20,12 +20,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('Equipos', [EquiposController::class, 'index'])->name('Equipos');
+    Route::get('Equipos', [EquiposController::class, 'index'])->name('Equipo');
 });
+
 
 require __DIR__.'/auth.php';
 
 Auth::routes();
 
 Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
-

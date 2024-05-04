@@ -5,9 +5,13 @@
 @section('content_header')
 @stop
 
+@php 
+/*
 @section('content')
 @include('MenuPrincipal')
 @stop
+*/
+@endphp
 
 @section('css')
     {{-- Add here extra stylesheets --}}
