@@ -1,4 +1,3 @@
-@endphp
 
 @extends('adminlte::page')
 
@@ -6,6 +5,8 @@
 
 @section('content')
 <br>  
+<br>
+<br>
 <a href="Equipos/create" class="btn btn-primary">Agregar</a>
     
 
@@ -45,10 +46,6 @@
         </tbody>
     </table>
 </div>
-
-
-
-
 @stop
 
 
