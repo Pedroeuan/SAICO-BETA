@@ -5,13 +5,14 @@
 @section('title', 'Equipos')
 
 @section('content')
- <br>  
-<div
-    class="table-responsive"
->
-    <table
-        class="table table-primary"
-    >
+<br>  
+<a href="Equipos/create" class="btn btn-primary">Agregar</a>
+    
+
+    <div class="table-responsive">
+<br>
+<div class="p-3 mb-2 bg-primary text-center text-white">EQUIPOS</div>
+    <table class="table table-primary">
         <thead>
             <tr>
                 <th scope="col">NOMBRE</th>
@@ -25,18 +26,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($Equipos as $equipo)
+            @foreach ($generalConCertificados as $general_eyc)
             @php 
-            //dd($Equipos)
+            //dd($generalConCertificados)
             @endphp
             <tr class="">
-                <td scope="row">{{$equipo->Nombre_E_P_BP}}</td>
-                <td scope="row">{{$equipo->No_economico}}</td>
-                <td scope="row">{{$equipo->Marca}}</td>
-                <td scope="row">{{$equipo->Modelo}}</td>
-                <td scope="row">{{$equipo->Serie}}</td>
-                <td scope="row">{{$equipo->Destino}}</td>
-                <td scope="row">{{$equipo->Fecha_calibracion}}</td>
+                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                <td scope="row">{{$general_eyc->No_economico}}</td>
+                <td scope="row">{{$general_eyc->Marca}}</td>
+                <td scope="row">{{$general_eyc->Modelo}}</td>
+                <td scope="row">{{$general_eyc->Serie}}</td>
+                <td scope="row">{{$general_eyc->Destino}}</td>
+                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                 <td scope="row">ACCIONES</td>
                 
             </tr>
@@ -44,6 +45,10 @@
         </tbody>
     </table>
 </div>
+
+
+
+
 @stop
 
 
@@ -51,4 +56,5 @@
 @section('css')
     {{-- Add here extra stylesheets --}}
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    {{--<link rel="stylesheet" href="vendor/adminlte\dist/css/Equipos.scss">--}}
 @stop

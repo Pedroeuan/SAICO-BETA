@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Equipos;
+namespace App\Http\Controllers\EquiposyConsumibles;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class Certificados extends Controller
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\Certificados;
+
+class general_eycController extends Controller
 {
-    /**
+   /**
      * Create a new controller instance.
      *
      * @return void
@@ -16,17 +20,24 @@ class Certificados extends Controller
     {
         $this->middleware('auth');
     }
-
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+      /**
+     * Show the form for creating a new resource.
+     */
     public function index()
     {
-
+    // Obtener todos los equipos con sus certificados
+        $generalConCertificados = general_eyc::with('certificados')->get();
+        
+        return view('Equipos.index', compact('generalConCertificados'));
+                       /*vista*/    /*variable donde se guardan los datos*/
     }
-
+  
 
     /**
      * Show the form for creating a new resource.
@@ -34,6 +45,7 @@ class Certificados extends Controller
     public function create()
     {
         //
+        return view('Equipos.create');
     }
 
     /**
@@ -47,7 +59,7 @@ class Certificados extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Equipos $equipos)
+    public function show(general_eyc $general_eyc)
     {
         //
     }
@@ -55,7 +67,7 @@ class Certificados extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Equipos $equipos)
+    public function edit(general_eyc $general_eyc)
     {
         //
     }
@@ -63,7 +75,7 @@ class Certificados extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Equipos $equipos)
+    public function update(Request $request, general_eyc $general_eyc)
     {
         //
     }
@@ -71,7 +83,7 @@ class Certificados extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Equipos $equipos)
+    public function destroy(general_eyc $general_eyc)
     {
         //
     }
