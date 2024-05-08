@@ -37,3 +37,5 @@ Auth::routes();
 
 Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 /*mike*/
+
+/*comentario */
