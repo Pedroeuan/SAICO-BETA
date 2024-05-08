@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('Equipos/create', [general_eycController::class, 'create'])->name('Equipos/create');
 });
 
-
+/*yacziry*/
 
 require __DIR__.'/auth.php';
 
