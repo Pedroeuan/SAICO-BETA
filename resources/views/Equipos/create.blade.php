@@ -84,7 +84,7 @@
                <div class="col-md-6">
                 <div class="form-group">
                   <label>SAT:</label>
-                  <input class="form-control" type="text" name="SAT">
+                  <input class="form-control" type="text" name="SAT" placeholder="Ejemplo: 41116500">
                 </div>
                 <!-- /.form-group -->
               </div>
@@ -93,7 +93,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>BMPRO:</label>
-                  <input class="form-control" type="text" name="BMPRO">
+                  <input class="form-control" type="text" name="BMPRO" placeholder="Ejemplo: 5K010014">
                 </div>
                 <!-- /.form-group -->
               </div>
@@ -101,7 +101,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Factura:</label>
-                  <input class="form-control" type="file" name="">
+                  <input class="form-control" type="file" name="Factura" placeholder="Ejemplo: 5K010014">
                 </div>
               </div>
 
