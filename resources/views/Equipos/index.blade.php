@@ -27,18 +27,29 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($generalConCertificados as $general_eyc)
             @php 
-            //dd($generalConCertificados)
+                //dd($generalConCertificados)
             @endphp
+            @foreach ($generalConCertificados as $general_eyc)
             <tr class="">
+                @if($generalConCertificados->isEmpty())
+                <td scope="row" colspan="6">SIN DATOS</td>
+                @else
                 <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                 <td scope="row">{{$general_eyc->No_economico}}</td>
                 <td scope="row">{{$general_eyc->Marca}}</td>
                 <td scope="row">{{$general_eyc->Modelo}}</td>
                 <td scope="row">{{$general_eyc->Serie}}</td>
                 <td scope="row">{{$general_eyc->Destino}}</td>
+                @endif
+                @php 
+                //dd($general_eyc->certificados)
+                @endphp
+                @if($general_eyc->certificados==null)
+                <td scope="row">SIN FECHA ASIGNADA</td>
+                @else
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                @endif
                 <td scope="row">ACCIONES</td>
                 
             </tr>

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\EquiposyConsumibles\general_eyc;
-use App\Models\EquiposyConsumibles\Certificados;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Models\EquiposyConsumibles\equipos;
 
 class general_eycController extends Controller
 {
@@ -33,7 +34,8 @@ class general_eycController extends Controller
     {
     // Obtener todos los equipos con sus certificados
         $generalConCertificados = general_eyc::with('certificados')->get();
-        
+        //$generalConEquipos = general_eyc::with('equipos')->get();
+        //dd($generalConEquipos);
         return view('Equipos.index', compact('generalConCertificados'));
                        /*vista*/    /*variable donde se guardan los datos*/
     }
@@ -52,10 +54,12 @@ class general_eycController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) /*Metodo para Guardar/Agregar al BD */
-    {       /*instancia */
+    {       
+        /*Tabla General_EyC */
+        /*instancia */
         $generalConCertificados=new general_eyc;
-        /*variable->nombredelacolumnaenlaBD=$request->input('nombredelinputenelformulario') */
-        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_EyC');
+        /*variable->nombre de la columna en la BD=$request->input('nombre del input en el formulario') */
+        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
         $generalConCertificados->No_economico=$request->input('No_economico');
         $generalConCertificados->Serie=$request->input('Serie');
         $generalConCertificados->Marca=$request->input('Marca');
@@ -68,9 +72,26 @@ class general_eycController extends Controller
         $generalConCertificados->Factura=$request->input('Factura');
         $generalConCertificados->Destino=$request->input('Destino');
         $generalConCertificados->Tipo=$request->input('Tipo');
+        $generalConCertificados->Foto=$request->input('Foto');
+        $generalConCertificados->Disponibilidad=$request->input('Disponibilidad');
         //dd($generalConCertificados);
         $generalConCertificados->save();
-        return redirect()->back();
+
+        /*Equipos*/
+        //$generalConEquipos = general_eyc::with('equipos')->get();
+        $generalConEquipos=new equipos;
+        // Asociar el modelo relacionado con el modelo principal
+        $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConEquipos->Proceso=$request->input('Proceso');
+        $generalConEquipos->Metodo=$request->input('Metodo');
+         
+        //dd($generalConEquipos);
+        $generalConEquipos->save();
+        
+        return redirect()->route('Equipos.index')->with('success', 'Datos guardados exitosamente');
+        //return redirect()->back();
+
+        
     }
 
     /**

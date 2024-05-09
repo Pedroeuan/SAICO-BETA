@@ -25,5 +25,11 @@ class general_eyc extends Model
         return $this->hasOne(Certificados::class, 'idGeneral_EyC');
     }
 
+    public function equipos()
+    {
+        //dd($this->hasOne(Certificados::class, 'idGeneral_EyC'));
+        return $this->hasOne(equipos::class, 'idGeneral_EyC');
+    }
+
     use HasFactory;
 }
