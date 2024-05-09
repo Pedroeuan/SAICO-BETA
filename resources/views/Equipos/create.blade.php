@@ -16,7 +16,7 @@
 
                 <div class="form-group">
                   <label>Nombre equipo:</label>
-                  <input class="form-control" type="text" name="Nombre_EyC" placeholder="Ejemplo: Yugo">
+                  <input class="form-control" type="text" name="Nombre_E_P_BP" placeholder="Ejemplo: Yugo">
                 </div>
                 <!-- /.form-group -->
               </div>
@@ -102,7 +102,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Factura:</label>
-                  <input class="form-control" type="file" name="Factura" placeholder="Ejemplo: 5K010014">
+                  <input class="form-control" type="file" name="Factura">
                 </div>
               </div>
 
@@ -129,11 +129,26 @@
                 </div>
         </div>
 
-        <!-- /.col -->
         <div class="col-md-6">
+                <div class="form-group">
+                  <label>Foto:</label>
+                  <input class="form-control" type="file" name="Foto">
+                </div>
+              </div>
+
+        <!-- /.col -->
+          <div class="col-md-6">
                 <div class="form-group">
                   <label>Disponibilidad:</label>
                   <input class="form-control" type="text" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
+                </div>
+                <!-- /.form-group -->
+              </div>
+
+               <!-- /.col -->
+               <div class="col-md-6">
+                <div class="form-group">
+                  
                 </div>
                 <!-- /.form-group -->
               </div>
