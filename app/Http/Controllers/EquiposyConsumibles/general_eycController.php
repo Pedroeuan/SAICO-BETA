@@ -45,15 +45,32 @@ class general_eycController extends Controller
     public function create()
     {
         //
-        return view('Equipos.create');
+        return view('Equipos.create'); /*Muestra la vista de equipos */
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) /*Metodo para Guardar/Agregar al BD */
+    {       /*instancia */
+        $generalConCertificados=new general_eyc;
+        /*variable->nombredelacolumnaenlaBD=$request->input('nombredelinputenelformulario') */
+        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_EyC');
+        $generalConCertificados->No_economico=$request->input('No_economico');
+        $generalConCertificados->Serie=$request->input('Serie');
+        $generalConCertificados->Marca=$request->input('Marca');
+        $generalConCertificados->Modelo=$request->input('Modelo');
+        $generalConCertificados->Ubicacion=$request->input('Ubicacion');
+        $generalConCertificados->Almacenamiento=$request->input('Almacenamiento');
+        $generalConCertificados->Comentario=$request->input('Comentario');
+        $generalConCertificados->SAT=$request->input('SAT');
+        $generalConCertificados->BMPRO=$request->input('BMPRO');
+        $generalConCertificados->Factura=$request->input('Factura');
+        $generalConCertificados->Destino=$request->input('Destino');
+        $generalConCertificados->Tipo=$request->input('Tipo');
+        //dd($generalConCertificados);
+        $generalConCertificados->save();
+        return redirect()->back();
     }
 
     /**

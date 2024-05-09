@@ -8,7 +8,8 @@
 <br>
 <br>
  <!-- form start -->
- <form role="form">
+ <form role="form" action="{{route('general_eyc.store')}}" method="post">
+          @csrf 
           <div class="box-body">
             <div class="row">
               <div class="col-md-6">
@@ -75,7 +76,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Comentario:</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
                 </div>
                 <!-- /.form-group -->
               </div>
@@ -109,7 +110,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Destino:</label>
-                  <input class="form-control" type="text" name="Destino">
+                  <input class="form-control" type="text" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                 </div>
                 <!-- /.form-group -->
               </div>
@@ -117,13 +118,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Tipo:</label>
-                  <select class="form-control select2" style="width: 100%;">
+                  <select class="form-control select2" style="width: 100%;" name="Tipo">
                     <option selected="selected">Elige un tipo</option>
-                    <option value="">EQUIPOS</option>
-                    <option value="">BLOCK Y PROBETA</option>
-                    <option value="">ACCESORIOS</option>
-                    <option value="">COMPLEMENTOS</option>
-                    <option value="">CONSUMIBLES</option>
+                    <option value="EQUIPOS">EQUIPOS</option>
+                    <option value="BLOCK Y PROBETA">BLOCK Y PROBETA</option>
+                    <option value="ACCESORIOS">ACCESORIOS</option>
+                    <option value="COMPLEMENTOS">COMPLEMENTOS</option>
+                    <option value="CONSUMIBLES">CONSUMIBLES</option>
                   </select>
                 </div>
         </div>
@@ -132,7 +133,44 @@
         <div class="col-md-6">
                 <div class="form-group">
                   <label>Disponibilidad:</label>
-                  <input class="form-control" type="text" name="Disponibilidad">
+                  <input class="form-control" type="text" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
+                </div>
+                <!-- /.form-group -->
+              </div>
+
+              <!-- /.col -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  EQUIPOS
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  EQUIPOS
+                </div>
+                <!-- /.form-group -->
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Proceso:</label>
+                  <select class="form-control select2" style="width: 100%;" name="Proceso">
+                    <option selected="selected">Elige un Proceso</option>
+                    <option value="EQUIPOS">TODOS</option>
+                    <option value="BLOCK Y PROBETA">PINS</option>
+                    <option value="ACCESORIOS">PIMP</option>
+                    <option value="COMPLEMENTOS">PISO</option>
+                  </select>
+                </div>
+        </div>
+
+              <!-- /.col -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Metodo:</label>
+                  <input class="form-control" type="text" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
                 </div>
                 <!-- /.form-group -->
               </div>

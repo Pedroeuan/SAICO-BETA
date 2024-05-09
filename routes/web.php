@@ -25,8 +25,12 @@ Route::middleware('auth')->group(function () {
 
 /*Equipos y Consumibles*/ 
 Route::middleware('auth')->group(function () {
+    /*Ruta de Vistas*/
     Route::get('Equipos', [general_eycController::class, 'index'])->name('Equipos');
     Route::get('Equipos/create', [general_eycController::class, 'create'])->name('Equipos/create');
+
+    /*Ruta de Guardado*/
+    Route::post('general_eyc', [general_eycController::class, 'store'])->name('general_eyc.store');
 });
 
 
