@@ -155,7 +155,7 @@ return [
     'layout_topnav' => true,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => true,
-    'layout_fixed_navbar' => true,
+    'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -255,7 +255,6 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
-
     'use_route_url' => false,
     'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
@@ -296,13 +295,14 @@ return [
     'menu' => [
         // Sidebar Administrativo:
         [
-            'text' => 'ADMINISTRATIVO',
+            'text' => 'Planeacion',
             'icon' => 'fas fa-chalkboard-teacher',
             //'topnav' => true,
             'submenu' => [
                 [
                     'text' => 'level_one',
                     'url' => '#',
+                    //can => 'nombre-ruta'
                 ],
                 [
                     'text' => 'level_one',
@@ -340,7 +340,7 @@ return [
 
                // Sidebar Operativos:
                [
-                'text' => 'OPERATIVO',
+                'text' => 'Operativos',
                 'icon' => 'fas fa-id-card-alt',
                 //'topnav' => true,
                 'submenu' => [
@@ -384,7 +384,7 @@ return [
 
              // Sidebar Clientes:
              [
-                'text' => 'CLIENTES',
+                'text' => 'Ventas',
                 'icon' => 'far fa-handshake',
                 //'topnav' => true,
                 'submenu' => [
@@ -428,19 +428,19 @@ return [
 
                 // Sidebar Equipos y Consumibles:
                 [
-                    'text' => 'EQUIPOS Y CONSUMIBLES',
+                    'text' => 'Equipos',
                     'icon' => 'fas fa-luggage-cart',
                     //'topnav' => true,
                     'submenu' => [
                         [
-                            'text' => 'Equipos',
+                            'text' => 'Inventario',
                             'icon' => 'fas fa-tools',
-                            'url' => 'Equipos',
+                            'url' => 'inventario',
                         ],
                         [
-                            'text' => 'Consumibles',
+                            'text' => 'Registro',
                             'icon' => 'fas fa-vials',
-                            'url' => '#',
+                            'url' => 'registro/create',
                         ],
                         [
                             'text' => 'Kits',
@@ -488,7 +488,7 @@ return [
 
                  // Sidebar Administrativo:
         [
-            'text' => 'SUPERVISOR',
+            'text' => 'Admin',
             'icon' => 'fas fa-universal-access',
             //'topnav' => true,
             'submenu' => [
