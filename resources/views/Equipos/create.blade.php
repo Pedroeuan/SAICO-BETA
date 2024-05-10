@@ -8,7 +8,7 @@
 <br>
 <br>
  <!-- form start -->
- <form role="form" action="{{route('general_eyc.store')}}" method="post">
+ <form role="form" action="{{route('general_eyc.store')}}" method="post" enctype="multipart/form-data">
           @csrf 
           <div class="box-body">
             <div class="row">
@@ -132,7 +132,7 @@
         <div class="col-md-6">
                 <div class="form-group">
                   <label>Foto:</label>
-                  <input class="form-control" type="file" name="Foto">
+                  <input class="form-control" type="file" name="Foto" enctype="multipart/form-data">
                 </div>
               </div>
 
