@@ -107,26 +107,7 @@ class general_eycController extends Controller
         }
 
         //return redirect('/Equipos');
-        //return redirect()->route('Equipos');
-    }
-
-    public function upload(Request $request)
-    {
-        // Verificar si se ha enviado un archivo PDF
-        if ($request->hasFile('pdf_file')) {
-            // Guardar el archivo PDF en la carpeta "public/pdf"
-            $pdf = $request->file('pdf_file');
-            $pdf->storeAs('pdf', $pdf->getClientOriginalName());
-
-            // Opcional: obtener la ruta del archivo guardado
-            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-
-            // Opcional: devolver una respuesta con la ruta del archivo guardado
-            return "PDF subido correctamente. Ruta del archivo: " . public_path($pdfPath);
-        } else {
-            // Si no se ha enviado un archivo PDF, devolver un mensaje de error
-            return "Error: no se ha enviado un archivo PDF.";
-        }
+        return redirect()->route('Equipos');
     }
 
     /**
@@ -140,15 +121,49 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(general_eyc $general_eyc)
+    public function edit($idgeneral_eyc)
     {
-        //
+        $generalConCertificados=general_eyc::find($idgeneral_eyc);
+        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
+        $generalConCertificados->No_economico=$request->input('No_economico');
+        $generalConCertificados->Serie=$request->input('Serie');
+        $generalConCertificados->Marca=$request->input('Marca');
+        $generalConCertificados->Modelo=$request->input('Modelo');
+        $generalConCertificados->Ubicacion=$request->input('Ubicacion');
+        $generalConCertificados->Almacenamiento=$request->input('Almacenamiento');
+        $generalConCertificados->Comentario=$request->input('Comentario');
+        $generalConCertificados->SAT=$request->input('SAT');
+        $generalConCertificados->BMPRO=$request->input('BMPRO');
+        $generalConCertificados->Destino=$request->input('Destino');
+        $generalConCertificados->Tipo=$request->input('Tipo');
+        $generalConCertificados->Foto=$request->input('Foto');
+        $generalConCertificados->Disponibilidad=$request->input('Disponibilidad');
+
+        $generalConCertificados->update();
+
+        $generalConEquipos=equipos::find($idgeneral_eyc);
+        $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC;
+        $generalConEquipos->Proceso=$request->input('Proceso');
+        $generalConEquipos->Metodo=$request->input('Metodo');
+
+        $generalConEquipos->update();
+
+        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+            $pdf = $request->file('Factura');
+            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+            return response()->json(['pdf_path' => $pdfPath]);
+           return redirect()->route('Equipos');
+        } else {
+
+        }
+        return redirect()->route('Equipos');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, general_eyc $general_eyc)
+    public function update(Request $request,$idgeneral_eyc)
     {
         //
     }
@@ -156,8 +171,23 @@ class general_eycController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(general_eyc $general_eyc)
+    public function destroy($general_eyc)
     {
-        //
+        $generalConCertificados=general_eyc::find($idgeneral_eyc);
+        $generalConCertificados->delete();
+
+        $generalConEquipos=equipos::find($idgeneral_eyc);
+        $generalConEquipos->delete();
+
+        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+            $pdf = $request->file('Factura');
+            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+            return response()->json(['pdf_path' => $pdfPath]);
+           return redirect()->route('Equipos');
+        } else {
+
+        }
+        return redirect()->route('Equipos');
     }
 }
