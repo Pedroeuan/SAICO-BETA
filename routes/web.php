@@ -28,11 +28,9 @@ Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf')
 
 /*Equipos y Consumibles*/ 
 Route::middleware('auth')->group(function () {
-    /*Ruta de Vistas*/
-    Route::get('Equipos', [general_eycController::class, 'index'])->name('Equipos');
-    Route::get('Equipos/create', [general_eycController::class, 'create'])->name('Equipos/create');
-    /*Ruta de Guardado*/
-    Route::post('general_eyc', [general_eycController::class, 'store'])->name('general_eyc.store');
+
+    Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
+    Route::get('registro/create', [general_eycController::class, 'create'])->name('registro/create');
 });
 
 require __DIR__.'/auth.php';
