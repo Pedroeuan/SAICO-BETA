@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
     Route::get('registro/create', [general_eycController::class, 'create'])->name('registro/create');
+    
 });
 
 require __DIR__.'/auth.php';

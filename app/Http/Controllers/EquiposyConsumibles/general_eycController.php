@@ -152,7 +152,9 @@ class general_eycController extends Controller
             $pdf = $request->file('Factura');
             $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
             $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
             return response()->json(['pdf_path' => $pdfPath]);
+            
            return redirect()->route('Equipos');
         } else {
 

@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form action="">
+                            <form action="{{route('general_eyc.store')}}" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
