@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EquiposyConsumibles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\certificados;
@@ -39,14 +40,11 @@ class general_eycController extends Controller
         return view('Equipos.index', compact('generalConCertificados'));
                        /*vista*/    /*variable donde se guardan los datos*/
     }
-  
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
         return view('Equipos.create'); /*Muestra la vista de equipos */
     }
 
@@ -69,7 +67,7 @@ class general_eycController extends Controller
         $generalConCertificados->Comentario=$request->input('Comentario');
         $generalConCertificados->SAT=$request->input('SAT');
         $generalConCertificados->BMPRO=$request->input('BMPRO');
-        $generalConCertificados->Factura=$request->input('Factura');
+        //$generalConCertificados->Factura=$request->input('Factura');
         $generalConCertificados->Destino=$request->input('Destino');
         $generalConCertificados->Tipo=$request->input('Tipo');
         $generalConCertificados->Foto=$request->input('Foto');
@@ -84,14 +82,51 @@ class general_eycController extends Controller
         $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConEquipos->Proceso=$request->input('Proceso');
         $generalConEquipos->Metodo=$request->input('Metodo');
-         
         //dd($generalConEquipos);
         $generalConEquipos->save();
-        
-        return redirect()->route('Equipos.index')->with('success', 'Datos guardados exitosamente');
-        //return redirect()->back();
 
-        
+        // Verificar si se ha enviado un archivo PDF
+        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+
+            // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+            $pdf = $request->file('Factura');
+            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
+            // Opcional: obtener la ruta del archivo guardado
+            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
+            // Opcional: devolver una respuesta con la ruta del archivo guardado
+           // return "PDF subido correctamente. Ruta del archivo: " . public_path($pdfPath);
+           // Devolver la ruta del PDF
+            return response()->json(['pdf_path' => $pdfPath]);
+
+           return redirect()->route('Equipos');
+        } else {
+            // Si no se ha enviado un archivo PDF, devolver un mensaje de error
+            //return "Error: no se ha enviado un archivo PDF.";
+        }
+
+        //return redirect('/Equipos');
+        //return redirect()->route('Equipos');
+    }
+
+    public function upload(Request $request)
+    {
+        // Verificar si se ha enviado un archivo PDF
+        if ($request->hasFile('pdf_file')) {
+            // Guardar el archivo PDF en la carpeta "public/pdf"
+            $pdf = $request->file('pdf_file');
+            $pdf->storeAs('pdf', $pdf->getClientOriginalName());
+
+            // Opcional: obtener la ruta del archivo guardado
+            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
+            // Opcional: devolver una respuesta con la ruta del archivo guardado
+            return "PDF subido correctamente. Ruta del archivo: " . public_path($pdfPath);
+        } else {
+            // Si no se ha enviado un archivo PDF, devolver un mensaje de error
+            return "Error: no se ha enviado un archivo PDF.";
+        }
     }
 
     /**
