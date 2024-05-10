@@ -25,8 +25,8 @@ Route::middleware('auth')->group(function () {
 
 /*Equipos y Consumibles*/ 
 Route::middleware('auth')->group(function () {
-    Route::get('Equipos', [general_eycController::class, 'index'])->name('Equipos');
-    Route::get('Equipos/create', [general_eycController::class, 'create'])->name('Equipos/create');
+    Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
+    Route::get('registro/create', [general_eycController::class, 'create'])->name('registro/create');
 });
 
 /*yacziry*/
