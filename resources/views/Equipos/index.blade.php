@@ -54,10 +54,10 @@
                 @endif
 
                 <td scope="row">
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#create">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="/edit{{$generalConCertificados->idGeneral_EyC}}">
                         Editar
                     </button>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#create">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="/delete{{$generalConCertificados->idGeneral_EyC}}">
                         Eliminar
                     </button>
                 </td>
