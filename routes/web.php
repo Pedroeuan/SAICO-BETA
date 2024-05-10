@@ -1,9 +1,11 @@
 <?php
+//use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\ProfileController;
-//use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
+
+use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -19,20 +21,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-/*Route::middleware('auth')->group(function () {
-    Route::get('general_eyc', [general_eycController::class, 'index'])->name('Equipos');
-});*/
+/*PDF*/
+Route::middleware('auth')->group(function () {
+Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
+});
 
 /*Equipos y Consumibles*/ 
 Route::middleware('auth')->group(function () {
+
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
     Route::get('registro/create', [general_eycController::class, 'create'])->name('registro/create');
 });
-
-/*yacziry*/
 
 require __DIR__.'/auth.php';
 
 Auth::routes();
 
-Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
+//Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');

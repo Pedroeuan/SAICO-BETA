@@ -7,6 +7,7 @@
 <br>
 <h3 align="center"> Registro de equipos</h3>
 <br>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
@@ -39,12 +40,14 @@
                                         </div>
                                     </div>
 
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
                                         </div>
                                     </div>
+
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -457,12 +460,10 @@
                         <!-- Agrega más paneles de tabs según sea necesario -->
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
-            </div><!-- /.card -->
-        </div>
-    </div>
-</div>
+            </div><!-- /.card -->       
 
 @stop
+
 
 <!--@push('scripts')
     <script>
