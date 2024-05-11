@@ -43,15 +43,15 @@ class general_eycController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createEquipos()
     {
-        return view('Equipos.create'); /*Muestra la vista de equipos */
+        return view('Equipos.create'); /*Muestra la vista de equipos*/
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) /*Metodo para Guardar/Agregar al BD */
+    public function storeEquipos(Request $request) /*Metodo para Guardar/Agregar al BD */
     {       
         /*Tabla General_EyC */
         /*instancia */
@@ -100,14 +100,14 @@ class general_eycController extends Controller
            // Devolver la ruta del PDF
             return response()->json(['pdf_path' => $pdfPath]);
 
-           return redirect()->route('Equipos');
+           return redirect()->route('inventario');
         } else {
             // Si no se ha enviado un archivo PDF, devolver un mensaje de error
             //return "Error: no se ha enviado un archivo PDF.";
         }
 
         //return redirect('/Equipos');
-        return redirect()->route('Equipos');
+        return redirect()->route('inventario');
     }
 
     /**
@@ -121,7 +121,15 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($idgeneral_eyc)
+    public function editEquipos()
+    {
+        return view('Equipos.edit');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update($idgeneral_eyc)
     {
         $generalConCertificados=general_eyc::find($idgeneral_eyc);
         $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
@@ -152,20 +160,14 @@ class general_eycController extends Controller
             $pdf = $request->file('Factura');
             $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
             $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
             return response()->json(['pdf_path' => $pdfPath]);
-           return redirect()->route('Equipos');
+            
+           return redirect()->route('inventario');
         } else {
 
         }
-        return redirect()->route('Equipos');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request,$idgeneral_eyc)
-    {
-        //
+        return redirect()->route('inventario');
     }
 
     /**

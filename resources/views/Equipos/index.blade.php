@@ -24,43 +24,42 @@
                         <th>NS</th>
                         <th>Destino</th>
                         <th>Fecha calibración</th>
-                        <th>Foto</th>
+                        <!--<th>Foto</th>-->
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
+                @foreach ($generalConCertificados as $general_eyc)
                     <tr>
-                        <td>consumibles</td>
-                        <td>025</td>
-                        <td>olympus</td>
-                        <td>olympus</td>
-                        <td>4569875</td>
-                        <td>protexa</td>
-                        <td>07/05/24</td>
-                        <td>prueba</td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-warning btnEditarUsuario" data-toggle="modal" data-target="#modalEditarInventario" idInventario=""><i class="fas fa-pencil-alt" aria-hidden="true"aria-hidden="true"></i></button>
-                                <button class="btn btn-danger btnEliminarUsuario" data-toggle="modal" data-target="#modalEliminarInventario" idInventario=""><i class="fa fa-times" aria-hidden="true"></i></button>     
-                            </div>
-                        </td>
+                    @if($generalConCertificados)
+                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                        <td scope="row">{{$general_eyc->No_economico}}</td>
+                        <td scope="row">{{$general_eyc->Marca}}</td>
+                        <td scope="row">{{$general_eyc->Modelo}}</td>
+                        <td scope="row">{{$general_eyc->Serie}}</td>
+                        <td scope="row">{{$general_eyc->Destino}}</td>
+                    @else
+                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">SIN DATOS</td>
+                @endif
+                @if($general_eyc->certificados==null)
+                <td scope="row">SIN FECHA ASIGNADA</td>
+                @else
+                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                @endif
+
+                <td>
+                    <div class="btn-group">
+                        <a href="registro/edit/{{$general_eyc->idGeneral_EyC}}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        <a href="/delete/{{$general_eyc->idGeneral_EyC}}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    </div>
+                </td>
                     </tr>
-                    <tr>
-                        <td>accesorios</td>
-                        <td>025</td>
-                        <td>olympus</td>
-                        <td>olympus</td>
-                        <td>4569875</td>
-                        <td>protexa</td>
-                        <td>07/05/24</td>
-                        <td>prueba</td>
-                        <td>
-                            <div class="btn-group">
-                            <button class="btn btn-warning btnEditarUsuario" data-toggle="modal" data-target="#modalEditarInventario" idInventario=""><i class="fas fa-pencil-alt" aria-hidden="true"aria-hidden="true"></i></button>
-                                <button class="btn btn-danger btnEliminarUsuario" data-toggle="modal" data-target="#modalEliminarInventario" idInventario=""><i class="fa fa-times" aria-hidden="true"></i></button>     
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
