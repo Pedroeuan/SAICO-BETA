@@ -52,13 +52,12 @@
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                 @endif
 
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-warning btnEditarUsuario" data-toggle="modal" data-target="#modalEditarInventario" idInventario=""><i class="fas fa-pencil-alt" aria-hidden="true"aria-hidden="true"></i></button>
-                                <button class="btn btn-danger btnEliminarUsuario" data-toggle="modal" data-target="#modalEliminarInventario" idInventario=""><i class="fa fa-times" aria-hidden="true"></i></button>     
-                            </div>
-                        </td>
-
+                <td>
+                    <div class="btn-group">
+                        <a href="registro/edit/{{$general_eyc->idGeneral_EyC}}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        <a href="/delete/{{$general_eyc->idGeneral_EyC}}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    </div>
+                </td>
                     </tr>
                     @endforeach
                 </tbody>
