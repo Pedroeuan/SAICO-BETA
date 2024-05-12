@@ -5,9 +5,9 @@ namespace App\Http\Controllers\EquiposyConsumibles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class certificados extends Controller
+class certificadosController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      */
     public function index()
