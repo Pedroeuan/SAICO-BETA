@@ -5,7 +5,7 @@
 
 @section('content')
 <br>
-<h3 align="center"> Registro de equipos</h3>
+<h3 align="center"> Edición de equipos</h3>
 <br>
 
 <div class="container">
@@ -32,7 +32,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
 
@@ -103,7 +103,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
