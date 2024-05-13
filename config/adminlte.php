@@ -440,7 +440,7 @@ return [
                         [
                             'text' => 'Registro',
                             'icon' => 'fas fa-vials',
-                            'url' => 'registro/create',
+                            'url' => 'registros/createEquipos',
                         ],
                         [
                             'text' => 'Kits',

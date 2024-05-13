@@ -31,14 +31,11 @@ Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos Tabla General*/
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
     /*Rutas de Vistas Equipos*/
-    Route::get('registro/create', [general_eycController::class, 'createEquipos'])->name('registro/create');
-    Route::get('registro/editEquipos', [general_eycController::class, 'editEquipos'])->name('registro/editEquipos');
+    Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
+    Route::get('/edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
 
-    
     /*Ruta de Guardado*/
-    Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos');
-
-    
+    Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
 });
 
 require __DIR__.'/auth.php';

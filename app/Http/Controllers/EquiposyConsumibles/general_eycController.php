@@ -71,7 +71,7 @@ class general_eycController extends Controller
         $generalConCertificados->Destino=$request->input('Destino');
         $generalConCertificados->Tipo=$request->input('Tipo');
         $generalConCertificados->Foto=$request->input('Foto');
-        $generalConCertificados->Disponibilidad=$request->input('Disponibilidad');
+        $generalConCertificados->Disponibilidad_Estado=$request->input('Disponibilidad_Estado');
         //dd($generalConCertificados);
         $generalConCertificados->save();
 
@@ -86,7 +86,8 @@ class general_eycController extends Controller
         $generalConEquipos->save();
 
         // Verificar si se ha enviado un archivo PDF
-        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+        //if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+        if ($request->hasFile('Factura')) {
 
             // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
             $pdf = $request->file('Factura');
@@ -97,10 +98,9 @@ class general_eycController extends Controller
 
             // Opcional: devolver una respuesta con la ruta del archivo guardado
            // return "PDF subido correctamente. Ruta del archivo: " . public_path($pdfPath);
-           // Devolver la ruta del PDF
-            return response()->json(['pdf_path' => $pdfPath]);
-
+            //return response()->json(['pdf_path' => $pdfPath]);// Devolver la ruta del PDF
            return redirect()->route('inventario');
+
         } else {
             // Si no se ha enviado un archivo PDF, devolver un mensaje de error
             //return "Error: no se ha enviado un archivo PDF.";
@@ -121,16 +121,24 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editEquipos()
+    public function editEquipos($general_eyc)
     {
-        return view('Equipos.edit');
+            // Buscar el equipo y los datos generales en la base de datos
+            $equipo = Equipos::findOrFail($general_eyc);
+            $generalEyC = general_eyc::findOrFail($equipo->idGeneral_EyC);
+            //dd( $generalEyC);
+            // Pasar los datos del equipo y los datos generales a la vista de edición
+            return view('Equipos.edit', compact('equipo', 'generalEyC'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($idgeneral_eyc)
+    public function update(Request $request, $idgeneral_eyc)
     {
+        //dd('entro');
+        //$generalConCertificados=general_eyc::find($idgeneral_eyc);
+        $idgeneral_eyc=1;
         $generalConCertificados=general_eyc::find($idgeneral_eyc);
         $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
         $generalConCertificados->No_economico=$request->input('No_economico');
