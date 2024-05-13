@@ -39,7 +39,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001">
+                                            <input type="text" class="form-control inputForm" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
 
@@ -47,7 +47,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX">
+                                            <input type="text" class="form-control inputForm" name="Marca" value="{{ $generalEyC->Marca }}" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
 
@@ -55,61 +55,61 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM">
+                                            <input type="text" class="form-control inputForm" name="Modelo" value="{{ $generalEyC->Modelo }}" placeholder="Ejemplo: DPM">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199">
+                                            <input type="text" class="form-control inputForm" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->No_economicoUbicacion }}" placeholder="Ejemplo: OFICINA">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" value="{{ $generalEyC->Almacenamiento }}" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
+                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" name="Factura" ></input>
+                                            <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" ></input>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Destino }}" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad }}" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Foto</label>
-                                            <input type="file" class="form-control inputForm" name="Foto">
+                                            <input type="file" class="form-control inputForm" value="{{ $generalEyC->Foto }}" name="Foto">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -118,10 +118,11 @@
                                           <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
                                           <select class="form-control select2" style="width: 100%;" name="Proceso">
                                             <option selected="selected">Elige un Proceso</option>
-                                            <option value="EQUIPOS">TODOS</option>
+                                            <option value="TODOS">TODOS</option>
                                             <option value="BLOCK Y PROBETA">PINS</option>
                                             <option value="ACCESORIOS">PIMP</option>
                                             <option value="COMPLEMENTOS">PISO</option>
+                                            <option value="Q.C">Q.C</option>
                                           </select>
                                         </div>
                                     </div>
@@ -139,8 +140,11 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
+                                            @php 
+                                            dd($equipo);
+                                            @endphp
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
+                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
                                     <div>
