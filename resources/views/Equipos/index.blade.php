@@ -7,8 +7,8 @@
 <br>  
 <br>
 <br>
- <!-- form start -->
- <form role="form">
+<!-- form start -->
+<form role="form">
     <div class="box">
         <h3 align="center">Inventario de equipos</h3>
         
@@ -65,35 +65,6 @@
             </table>
         </div>
     </div>
-    <!-- /.box -->
-      
-    <!-- modal agregar usuario -->
-    <div id="modalAgregarEquipo" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form role="form" method="post" enctype="multipart/form-data">
-                    <div class="modal-header" style="background:#3c8dbc; color:white">
-                        <h5 class="modal-title">Agregar datos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="box-body">
-                            <!-- nombre -->
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input type="text" class="form-control input-lg" name="nuevoNombre" placeholder="Ingresar nombre" required>
-                                </div>             
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
 </form>
         @stop
 
