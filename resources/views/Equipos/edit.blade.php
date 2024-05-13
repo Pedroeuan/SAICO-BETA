@@ -67,7 +67,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->No_economicoUbicacion }}" placeholder="Ejemplo: OFICINA">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->Ubicacion }}" placeholder="Ejemplo: OFICINA">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -103,7 +103,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad }}" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -117,19 +117,26 @@
                                           <label class="col-form-label" for="inputSuccess">Proceso</label>
                                           <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
                                           <select class="form-control select2" style="width: 100%;" name="Proceso">
-                                            <option selected="selected">Elige un Proceso</option>
-                                            <option value="TODOS">TODOS</option>
-                                            <option value="BLOCK Y PROBETA">PINS</option>
-                                            <option value="ACCESORIOS">PIMP</option>
-                                            <option value="COMPLEMENTOS">PISO</option>
-                                            <option value="Q.C">Q.C</option>
-                                          </select>
+                                                <option>Elige un Proceso</option>
+                                                <option value="TODOS" @if ($equipo->Proceso =='TODOS') selected="selected" @endif>TODOS</option>
+                                                <option value="PINS"  @if ($equipo->Proceso =='PINS') selected="selected" @endif>PINS</option>
+                                                <option value="PIMP"  @if ($equipo->Proceso =='PIMP') selected="selected" @endif>PIMP</option>
+                                                <option value="PISO"  @if ($equipo->Proceso =='PISO') selected="selected" @endif>PISO</option>
+                                                <option value="Q.C"  @if ($equipo->Proceso =='Q.C') selected="selected" @endif>Q.C</option>
+                                                <option value="N/A"  @if ($equipo->Proceso =='N/A') selected="selected" @endif>N/A</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Método</label>
-                                            <input type="text" class="form-control inputForm" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
+                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Metodo }}" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Tipo_E }}" name="Tipo_E" placeholder="Electro Magnetico">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -140,9 +147,6 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            @php 
-                                            dd($equipo);
-                                            @endphp
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>

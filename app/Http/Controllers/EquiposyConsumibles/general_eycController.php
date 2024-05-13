@@ -82,6 +82,7 @@ class general_eycController extends Controller
         $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConEquipos->Proceso=$request->input('Proceso');
         $generalConEquipos->Metodo=$request->input('Metodo');
+        $generalConEquipos->Tipo_E=$request->input('Tipo_E');
         //dd($generalConEquipos);
         $generalConEquipos->save();
 
@@ -138,7 +139,6 @@ class general_eycController extends Controller
     {
         //dd('entro');
         //$generalConCertificados=general_eyc::find($idgeneral_eyc);
-        $idgeneral_eyc=1;
         $generalConCertificados=general_eyc::find($idgeneral_eyc);
         $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
         $generalConCertificados->No_economico=$request->input('No_economico');
@@ -161,6 +161,7 @@ class general_eycController extends Controller
         $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC;
         $generalConEquipos->Proceso=$request->input('Proceso');
         $generalConEquipos->Metodo=$request->input('Metodo');
+        $generalConEquipos->Tipo_E=$request->input('Tipo_E');
 
         $generalConEquipos->update();
 
