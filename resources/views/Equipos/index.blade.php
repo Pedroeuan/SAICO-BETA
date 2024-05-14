@@ -30,7 +30,7 @@
                         <th>NS</th>
                         <th>Destino</th>
                         <th>Fecha calibración</th>
-                        <!--<th>Foto</th>-->
+                        <th>Foto</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -58,6 +58,12 @@
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                 @endif
 
+                <td scope="row"> 
+                    @if ($general_eyc->Foto)
+                  <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a>                                                
+                    @endif
+                </td>
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
