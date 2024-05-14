@@ -99,6 +99,16 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->
+                                                @if ($generalEyC->Factura)
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">Ver Factura</a>
+                                                @endif
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalEyC->Destino }}" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                                         </div>
