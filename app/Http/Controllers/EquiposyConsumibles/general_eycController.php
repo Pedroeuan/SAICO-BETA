@@ -82,6 +82,7 @@ class general_eycController extends Controller
         $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConEquipos->Proceso=$request->input('Proceso');
         $generalConEquipos->Metodo=$request->input('Metodo');
+        $generalConEquipos->Tipo_E=$request->input('Tipo_E');
         //dd($generalConEquipos);
         $generalConEquipos->save();
 
@@ -121,68 +122,75 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editEquipos($general_eyc)
+    public function editEquipos($id)
     {
             // Buscar el equipo y los datos generales en la base de datos
-            $equipo = Equipos::findOrFail($general_eyc);
+            $equipo = Equipos::findOrFail($id);
             $generalEyC = general_eyc::findOrFail($equipo->idGeneral_EyC);
             //dd( $generalEyC);
             // Pasar los datos del equipo y los datos generales a la vista de edición
-            return view('Equipos.edit', compact('equipo', 'generalEyC'));
+            return view('Equipos.edit', compact('equipo', 'generalEyC', 'id'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $idgeneral_eyc)
+    public function updateEquipos(Request $request, $id)
     {
-        //dd('entro');
-        //$generalConCertificados=general_eyc::find($idgeneral_eyc);
-        $idgeneral_eyc=1;
-        $generalConCertificados=general_eyc::find($idgeneral_eyc);
-        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
-        $generalConCertificados->No_economico=$request->input('No_economico');
-        $generalConCertificados->Serie=$request->input('Serie');
-        $generalConCertificados->Marca=$request->input('Marca');
-        $generalConCertificados->Modelo=$request->input('Modelo');
-        $generalConCertificados->Ubicacion=$request->input('Ubicacion');
-        $generalConCertificados->Almacenamiento=$request->input('Almacenamiento');
-        $generalConCertificados->Comentario=$request->input('Comentario');
-        $generalConCertificados->SAT=$request->input('SAT');
-        $generalConCertificados->BMPRO=$request->input('BMPRO');
-        $generalConCertificados->Destino=$request->input('Destino');
-        $generalConCertificados->Tipo=$request->input('Tipo');
-        $generalConCertificados->Foto=$request->input('Foto');
-        $generalConCertificados->Disponibilidad=$request->input('Disponibilidad');
-
+        $generalConCertificados = general_eyc::find($id);
+    
+        $generalConCertificados->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+        $generalConCertificados->No_economico = $request->input('No_economico');
+        $generalConCertificados->Serie = $request->input('Serie');
+        $generalConCertificados->Marca = $request->input('Marca');
+        $generalConCertificados->Modelo = $request->input('Modelo');
+        $generalConCertificados->Ubicacion = $request->input('Ubicacion');
+        $generalConCertificados->Almacenamiento = $request->input('Almacenamiento');
+        $generalConCertificados->Comentario = $request->input('Comentario');
+        $generalConCertificados->SAT = $request->input('SAT');
+        $generalConCertificados->BMPRO = $request->input('BMPRO');
+        $generalConCertificados->Destino = $request->input('Destino');
+        $generalConCertificados->Tipo = $request->input('Tipo');
+        $generalConCertificados->Foto = $request->input('Foto');
+        $generalConCertificados->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    
         $generalConCertificados->update();
-
-        $generalConEquipos=equipos::find($idgeneral_eyc);
+    
+        $generalConEquipos = equipos::find($id); // Corrección aquí
+    
         $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC;
-        $generalConEquipos->Proceso=$request->input('Proceso');
-        $generalConEquipos->Metodo=$request->input('Metodo');
-
+        $generalConEquipos->Proceso = $request->input('Proceso');
+        $generalConEquipos->Metodo = $request->input('Metodo');
+        $generalConEquipos->Tipo_E = $request->input('Tipo_E');
+    
         $generalConEquipos->update();
-
-        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
+    
+        if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
             $pdf = $request->file('Factura');
             $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
             $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-
-            return response()->json(['pdf_path' => $pdfPath]);
-            
-           return redirect()->route('inventario');
-        } else {
-
+    
+            //return response()->json(['pdf_path' => $pdfPath]);
         }
+    
         return redirect()->route('inventario');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($general_eyc)
+    public function destroyEquipos($id)
     {
+
+        $generalConCertificados=general_eyc::find($id);
+        $generalConCertificados->delete();
+
+        $generalConEquipos=equipos::find($id);
+        $generalConEquipos->delete();
+
+
+        return redirect()->route('inventario');
 
     }
 }
