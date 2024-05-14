@@ -26,7 +26,11 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form action="{{route('editEquipos', $id)}}" method="post" enctype="multipart/form-data">
+                            @php
+                            //<form action="{{route('editEquipos', $id)}}" method="post" enctype="multipart/form-data">
+                                @endphp
+                            <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+
                               @csrf
                              
                                 <div class="row">

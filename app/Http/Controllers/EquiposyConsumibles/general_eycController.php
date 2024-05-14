@@ -135,7 +135,7 @@ class general_eycController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function updateEquipos(Request $request, $id)
     {
         $generalConCertificados = general_eyc::find($id);
     
@@ -170,7 +170,7 @@ class general_eycController extends Controller
             $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
             $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
     
-            return response()->json(['pdf_path' => $pdfPath]);
+            //return response()->json(['pdf_path' => $pdfPath]);
         }
     
         return redirect()->route('inventario');
@@ -180,23 +180,15 @@ class general_eycController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($general_eyc)
+    public function destroyEquipos($id)
     {
-        $generalConCertificados=general_eyc::find($idgeneral_eyc);
+        $generalConCertificados=general_eyc::find($id);
         $generalConCertificados->delete();
 
-        $generalConEquipos=equipos::find($idgeneral_eyc);
+        $generalConEquipos=equipos::find($id);
         $generalConEquipos->delete();
 
-        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
-            $pdf = $request->file('Factura');
-            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-            return response()->json(['pdf_path' => $pdfPath]);
-           return redirect()->route('Equipos');
-        } else {
 
-        }
-        return redirect()->route('Equipos');
+        return redirect()->route('inventario');
     }
 }
