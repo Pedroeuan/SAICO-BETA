@@ -27,7 +27,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
                             <form action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
-                              @csrf 
+                            @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -141,7 +141,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             @php 
-                                            dd($equipo);
+                                            //dd($equipo);
                                             @endphp
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>

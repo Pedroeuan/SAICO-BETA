@@ -183,21 +183,6 @@ class general_eycController extends Controller
      */
     public function destroy($general_eyc)
     {
-        $generalConCertificados=general_eyc::find($idgeneral_eyc);
-        $generalConCertificados->delete();
 
-        $generalConEquipos=equipos::find($idgeneral_eyc);
-        $generalConEquipos->delete();
-
-        if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
-            $pdf = $request->file('Factura');
-            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-            return response()->json(['pdf_path' => $pdfPath]);
-           return redirect()->route('Equipos');
-        } else {
-
-        }
-        return redirect()->route('Equipos');
     }
 }

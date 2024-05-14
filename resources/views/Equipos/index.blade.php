@@ -3,6 +3,13 @@
 
 @section('title', 'Equipos')
 
+@section('css')
+<!--datatable -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+
+@endsection
+
 @section('content')
 <br>  
 <br>
@@ -11,10 +18,9 @@
 <form role="form">
     <div class="box">
         <h3 align="center">Inventario de equipos</h3>
-        
         <br>
         <div class="box-body">
-            <table class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -55,7 +61,7 @@
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <a href="/delete/{{$general_eyc->idGeneral_EyC}}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </div>
                 </td>
                     </tr>
@@ -65,5 +71,38 @@
         </div>
     </div>
 </form>
-        @stop
+@stop
+
+@section('js')
+<!--datatable -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // funcion borrar 
+    $(".btnEliminarEquipo").on("click", function(){
+        //valor del id a eliminar
+        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
+        console.log(idGeneral_EyC);
+            Swal.fire({
+                title: "Seguro de eliminar este elemento?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "Sí",
+                denyButtonText: "No"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Eliminado!", "", "success");
+                } else if (result.isDenied) {
+                    Swal.fire("Cancelado", "", "error");
+                }
+            });
+    })
+
+    //mostrar datatable
+    new DataTable('#tablaJs');
+</script>
+
+@endsection
 
