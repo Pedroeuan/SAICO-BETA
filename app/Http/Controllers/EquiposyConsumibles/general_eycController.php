@@ -55,18 +55,42 @@ class general_eycController extends Controller
 {
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+        // Obtener el archivo PDF de la solicitud
         $pdf = $request->file('Factura');
-        // Al guardar la factura
-        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-        // Opcional: obtener la ruta del archivo guardado
-        //$pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+        
+        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+
+        // Opcional: guardar la ruta en la base de datos
+        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        // $generalConCertificados->save();
     } else {
-        // Si no se ha enviado un archivo PDF, devolver un mensaje de error
+        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
         return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
 
-    /*Tabla General_EyC */
+    // Validar que se ha enviado el archivo de imagen
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Validar que el archivo es una imagen
+        $request->validate([
+            'Foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajuste de validación
+        ]);
+
+        // Obtener el archivo de imagen de la solicitud
+        $imagen = $request->file('Foto');
+        
+        // Guardar el archivo de imagen en la carpeta "public/Equipos/Fotos"
+        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+
+        // Opcional: guardar la ruta en la base de datos
+        // $generalConCertificados->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        // $generalConCertificados->save();
+    } else {
+        // Si no se ha enviado un archivo de imagen válido, devolver un mensaje de error
+        return redirect()->back()->withErrors(['Foto' => 'Error: no se ha enviado un archivo de imagen válido.']);
+    }
+
+    /* Tabla General_EyC */
     $generalConCertificados = new general_eyc;
     $generalConCertificados->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     $generalConCertificados->No_economico = $request->input('No_economico');
@@ -79,13 +103,13 @@ class general_eycController extends Controller
     $generalConCertificados->SAT = $request->input('SAT');
     $generalConCertificados->BMPRO = $request->input('BMPRO');
     $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+    $generalConCertificados->Foto = $imagenPath; // Guarda la ruta del archivo de foto
     $generalConCertificados->Destino = $request->input('Destino');
     $generalConCertificados->Tipo = $request->input('Tipo');
-    $generalConCertificados->Foto = $request->input('Foto');
     $generalConCertificados->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     $generalConCertificados->save();
 
-    /*Equipos*/
+    /* Equipos */
     $generalConEquipos = new equipos;
     $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     $generalConEquipos->Proceso = $request->input('Proceso');
@@ -96,66 +120,6 @@ class general_eycController extends Controller
     return redirect()->route('inventario');
 }
 
-     /*
-    public function storeEquipos(Request $request) /*Metodo para Guardar/Agregar al BD 
-    {       
-       Tabla General_EyC 
-        /*instancia 
-        $generalConCertificados=new general_eyc;
-        /*variable->nombre de la columna en la BD=$request->input('nombre del input en el formulario') 
-        $generalConCertificados->Nombre_E_P_BP=$request->input('Nombre_E_P_BP');
-        $generalConCertificados->No_economico=$request->input('No_economico');
-        $generalConCertificados->Serie=$request->input('Serie');
-        $generalConCertificados->Marca=$request->input('Marca');
-        $generalConCertificados->Modelo=$request->input('Modelo');
-        $generalConCertificados->Ubicacion=$request->input('Ubicacion');
-        $generalConCertificados->Almacenamiento=$request->input('Almacenamiento');
-        $generalConCertificados->Comentario=$request->input('Comentario');
-        $generalConCertificados->SAT=$request->input('SAT');
-        $generalConCertificados->BMPRO=$request->input('BMPRO');
-        $generalConCertificados->Factura=$request->input('Factura');
-        $generalConCertificados->Destino=$request->input('Destino');
-        $generalConCertificados->Tipo=$request->input('Tipo');
-        $generalConCertificados->Foto=$request->input('Foto');
-        $generalConCertificados->Disponibilidad_Estado=$request->input('Disponibilidad_Estado');
-        //dd($generalConCertificados);
-        $generalConCertificados->save();
-
-        /*Equipos
-        //$generalConEquipos = general_eyc::with('equipos')->get();
-        $generalConEquipos=new equipos;
-        // Asociar el modelo relacionado con el modelo principal
-        $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConEquipos->Proceso=$request->input('Proceso');
-        $generalConEquipos->Metodo=$request->input('Metodo');
-        $generalConEquipos->Tipo_E=$request->input('Tipo_E');
-        //dd($generalConEquipos);
-        $generalConEquipos->save();
-
-        // Verificar si se ha enviado un archivo PDF
-        //if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
-        if ($request->hasFile('Factura')&& $request->file('Factura')->isValid()) {
-
-            // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-            $pdf = $request->file('Factura');
-            $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-
-            // Opcional: obtener la ruta del archivo guardado
-            $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
-
-            // Opcional: devolver una respuesta con la ruta del archivo guardado
-           // return "PDF subido correctamente. Ruta del archivo: " . public_path($pdfPath);
-            //return response()->json(['pdf_path' => $pdfPath]);// Devolver la ruta del PDF
-           return redirect()->route('inventario');
-
-        } else {
-            // Si no se ha enviado un archivo PDF, devolver un mensaje de error
-            //return "Error: no se ha enviado un archivo PDF.";
-        }
-
-        //return redirect('/Equipos');
-        return redirect()->route('inventario');
-    }*/
 
     /**
      * Display the specified resource.
@@ -200,7 +164,6 @@ class general_eycController extends Controller
         'BMPRO' => $request->input('BMPRO'),
         'Destino' => $request->input('Destino'),
         'Tipo' => $request->input('Tipo'),
-        'Foto' => $request->input('Foto'),
         'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
     ]);
 
@@ -212,73 +175,47 @@ class general_eycController extends Controller
         'Tipo_E' => $request->input('Tipo_E'),
     ]);
 
-   // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
-if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-    // Obtener la ruta del archivo anterior desde la base de datos
-    $rutaAnterior = $generalConCertificados->Factura;
-        if (Storage::disk('public')->exists($rutaAnterior)) {
-            // El archivo existe, se puede eliminar
-            Storage::disk('public')->delete($rutaAnterior);
-            }else{
-
-            }
-
-    // Guardar el nuevo archivo PDF
-    $pdf = $request->file('Factura');
-    $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
-
-    // Actualizar la ruta de la factura en la base de datos
-    $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-    $generalConCertificados->save();
-
-    // Redireccionar al usuario a donde desees
-    return redirect()->route('inventario');
-    }
-}
-
-    /*public function updateEquipos(Request $request, $id)
-{
-    // Obtener el equipo existente
-    $generalConCertificados = general_eyc::find($id);
-
-    // Actualizar los datos del equipo
-    $generalConCertificados->update([
-        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
-        'No_economico' => $request->input('No_economico'),
-        'Serie' => $request->input('Serie'),
-        'Marca' => $request->input('Marca'),
-        'Modelo' => $request->input('Modelo'),
-        'Ubicacion' => $request->input('Ubicacion'),
-        'Almacenamiento' => $request->input('Almacenamiento'),
-        'Comentario' => $request->input('Comentario'),
-        'SAT' => $request->input('SAT'),
-        'BMPRO' => $request->input('BMPRO'),
-        'Destino' => $request->input('Destino'),
-        'Tipo' => $request->input('Tipo'),
-        'Foto' => $request->input('Foto'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
-    ]);
-
-    // Actualizar los datos del equipo asociado
-    $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-    $generalConEquipos->update([
-        'Proceso' => $request->input('Proceso'),
-        'Metodo' => $request->input('Metodo'),
-        'Tipo_E' => $request->input('Tipo_E'),
-    ]);
-
-    // Actualizar la factura si se proporciona un nuevo archivo
+    // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalConCertificados->Factura;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+
+        // Guardar el nuevo archivo PDF
         $pdf = $request->file('Factura');
-        $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
 
         // Actualizar la ruta de la factura en la base de datos
-        $generalConCertificados->update(['Factura' => $pdf->getClientOriginalName()]);
+        $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalConCertificados->save();
     }
 
-    // Redireccionar al usuario a donde desees
+    // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalConCertificados->Foto;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+
+        // Guardar el nuevo archivo de imagen
+        $imagen = $request->file('Foto');
+        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+
+        // Actualizar la ruta de la imagen en la base de datos
+        $generalConCertificados->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $generalConCertificados->save();
+    }
+
     return redirect()->route('inventario');
-}*/
+}
+
 
     /**
      * Remove the specified resource from storage.
