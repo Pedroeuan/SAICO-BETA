@@ -30,12 +30,18 @@ Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf')
 Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos Tabla General*/
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
+
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
-    Route::get('/edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
+    Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
+    
+
+    
 
     /*Ruta de Guardado*/
     Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
+    /*Ruta de Actualizar*/
+    Route::post('edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
 });
 
 require __DIR__.'/auth.php';

@@ -55,7 +55,7 @@
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <a href="/delete/{{$general_eyc->idGeneral_EyC}}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
                     </div>
                 </td>
                     </tr>

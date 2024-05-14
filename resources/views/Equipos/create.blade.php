@@ -118,10 +118,12 @@
                                           <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
                                           <select class="form-control select2" style="width: 100%;" name="Proceso">
                                             <option selected="selected">Elige un Proceso</option>
-                                            <option value="EQUIPOS">TODOS</option>
-                                            <option value="BLOCK Y PROBETA">PINS</option>
-                                            <option value="ACCESORIOS">PIMP</option>
-                                            <option value="COMPLEMENTOS">PISO</option>
+                                            <option value="TODOS">TODOS</option>
+                                            <option value="PINS">PINS</option>
+                                            <option value="PIMP">PIMP</option>
+                                            <option value="PISO">PISO</option>
+                                            <option value="Q.C">Q.C</option>
+                                            <option value="N/A">N/A</option>
                                           </select>
                                         </div>
                                     </div>
@@ -131,18 +133,28 @@
                                             <input type="text" class="form-control inputForm" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
+                                            <input type="text" class="form-control inputForm" name="Tipo_E" placeholder="Electro Magnetico">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
                                         </div>
                                     </div>
+
                                     <div>
                                         <button type="submit" class="btn btn-info bg-success">Guardar</button>
                                     </div>
