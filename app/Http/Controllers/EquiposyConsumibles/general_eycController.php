@@ -67,7 +67,7 @@ class general_eycController extends Controller
         $generalConCertificados->Comentario=$request->input('Comentario');
         $generalConCertificados->SAT=$request->input('SAT');
         $generalConCertificados->BMPRO=$request->input('BMPRO');
-        //$generalConCertificados->Factura=$request->input('Factura');
+        $generalConCertificados->Factura=$request->input('Factura');
         $generalConCertificados->Destino=$request->input('Destino');
         $generalConCertificados->Tipo=$request->input('Tipo');
         $generalConCertificados->Foto=$request->input('Foto');
@@ -88,7 +88,7 @@ class general_eycController extends Controller
 
         // Verificar si se ha enviado un archivo PDF
         //if ($request->hasFile('Factura') && $request->file('pdf_file')->isValid()) {
-        if ($request->hasFile('Factura')) {
+        if ($request->hasFile('Factura')&& $request->file('Factura')->isValid()) {
 
             // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
             $pdf = $request->file('Factura');
@@ -136,6 +136,51 @@ class general_eycController extends Controller
      * Update the specified resource in storage.
      */
     public function updateEquipos(Request $request, $id)
+{
+    // Obtener el equipo existente
+    $generalConCertificados = general_eyc::find($id);
+
+    // Actualizar los datos del equipo
+    $generalConCertificados->update([
+        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+        'No_economico' => $request->input('No_economico'),
+        'Serie' => $request->input('Serie'),
+        'Marca' => $request->input('Marca'),
+        'Modelo' => $request->input('Modelo'),
+        'Ubicacion' => $request->input('Ubicacion'),
+        'Almacenamiento' => $request->input('Almacenamiento'),
+        'Comentario' => $request->input('Comentario'),
+        'SAT' => $request->input('SAT'),
+        'BMPRO' => $request->input('BMPRO'),
+        'Destino' => $request->input('Destino'),
+        'Tipo' => $request->input('Tipo'),
+        'Foto' => $request->input('Foto'),
+        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+    ]);
+
+    // Actualizar los datos del equipo asociado
+    $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+    $generalConEquipos->update([
+        'Proceso' => $request->input('Proceso'),
+        'Metodo' => $request->input('Metodo'),
+        'Tipo_E' => $request->input('Tipo_E'),
+    ]);
+
+    // Actualizar la factura si se proporciona un nuevo archivo
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        $pdf = $request->file('Factura');
+        $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName());
+
+        // Actualizar la ruta de la factura en la base de datos
+        $generalConCertificados->update(['Factura' => $pdf->getClientOriginalName()]);
+    }
+
+    // Redireccionar al usuario a donde desees
+    return redirect()->route('inventario');
+}
+
+    /*
+    public function updateEquipos(Request $request, $id)
     {
         $generalConCertificados = general_eyc::find($id);
     
@@ -149,6 +194,7 @@ class general_eycController extends Controller
         $generalConCertificados->Comentario = $request->input('Comentario');
         $generalConCertificados->SAT = $request->input('SAT');
         $generalConCertificados->BMPRO = $request->input('BMPRO');
+        $generalConCertificados->Factura=$request->input('Factura');
         $generalConCertificados->Destino = $request->input('Destino');
         $generalConCertificados->Tipo = $request->input('Tipo');
         $generalConCertificados->Foto = $request->input('Foto');
@@ -174,7 +220,7 @@ class general_eycController extends Controller
         }
     
         return redirect()->route('inventario');
-    }
+    }*/
     
 
     /**
