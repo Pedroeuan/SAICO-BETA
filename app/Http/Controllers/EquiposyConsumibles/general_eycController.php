@@ -182,6 +182,7 @@ class general_eycController extends Controller
      */
     public function destroyEquipos($id)
     {
+
         $generalConCertificados=general_eyc::find($id);
         $generalConCertificados->delete();
 
@@ -190,5 +191,6 @@ class general_eycController extends Controller
 
 
         return redirect()->route('inventario');
+
     }
 }

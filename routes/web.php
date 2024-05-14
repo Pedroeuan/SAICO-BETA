@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
+use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -33,9 +34,8 @@ Route::middleware('auth')->group(function () {
 
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
+    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
     Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
-    
-
     
 
     /*Ruta de Guardado*/

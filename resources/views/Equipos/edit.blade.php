@@ -30,9 +30,7 @@
                             //<form action="{{route('editEquipos', $id)}}" method="post" enctype="multipart/form-data">
                                 @endphp
                             <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-
                               @csrf
-                             
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -152,6 +150,7 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
+
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
