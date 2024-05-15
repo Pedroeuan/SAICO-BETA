@@ -57,20 +57,23 @@
                 @else
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                 @endif
-
                 <td scope="row"> 
-                    @if ($general_eyc->Foto)
+                    @if ($general_eyc->Foto != 'N/A')
                   <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a>                                                
+                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
+                    @elseif($general_eyc->Foto == 'N/A')  
+                    <a target="_blank">SIN FOTO</a>                                              
                     @endif
                 </td>
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
                         <!-Yacziry-->
                           @php
-                          //Pedro
+                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
                         @endphp
                     </div>
@@ -107,44 +110,55 @@
         initializeDataTable();
     });
 
-    // Función borrar 
-    $(".btnEliminarEquipo").on("click", function(){
-        // Valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-        console.log(idGeneral_EyC);
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/equipos/${idGeneral_EyC}`, // Ruta del endpoint
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}' // Token CSRF
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire("Eliminado!", "", "success").then(() => {
-                                // Destruir y reinicializar el DataTable después de la eliminación
-                                initializeDataTable();
-                            });
-                        } else {
-                            Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+    function confirmDelete(id) {
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Enviar la solicitud DELETE al servidor
+            $.ajax({
+                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                type: 'DELETE', // Método HTTP DELETE
+                data: {
+                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                },
+                success: function(response) {
+                    // Manejar la respuesta del servidor si es necesario
+                    if (response.success) {
+                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
+                        location.reload();
+                    } else {
+                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
                     }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+                },
+                error: function() {
+                    // Manejar errores de la solicitud AJAX
+                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
+                    Swal.fire({
+                        title: "Confirmado!",
+                        text: "Equipo Eliminado Correctamente!",
+                        icon: "success",
+                        didClose: function() {
+                            location.reload();
+                            }
+                        });
+                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
+                      /*  setTimeout(function() {
+                            location.reload();
+                        }, 3000);*/
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
     });
+}
+
 </script>
 <!--
 <script>

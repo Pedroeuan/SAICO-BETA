@@ -53,43 +53,6 @@ class general_eycController extends Controller
      */
     public function storeEquipos(Request $request)
 {
-    // Validar que se ha enviado el archivo de factura
-    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-        // Obtener el archivo PDF de la solicitud
-        $pdf = $request->file('Factura');
-        
-        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
-
-        // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        // $generalConCertificados->save();
-    } else {
-        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
-        return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
-    }
-
-    // Validar que se ha enviado el archivo de imagen
-    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
-        // Validar que el archivo es una imagen
-        $request->validate([
-            'Foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajuste de validación
-        ]);
-
-        // Obtener el archivo de imagen de la solicitud
-        $imagen = $request->file('Foto');
-        
-        // Guardar el archivo de imagen en la carpeta "public/Equipos/Fotos"
-        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
-
-        // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
-        // $generalConCertificados->save();
-    } else {
-        // Si no se ha enviado un archivo de imagen válido, devolver un mensaje de error
-       return redirect()->back()->withErrors(['Foto' => 'Error: no se ha enviado un archivo de imagen válido.']);
-    }
-
     /* Tabla General_EyC */
     $generalConCertificados = new general_eyc;
     if($request->input('Nombre_E_P_BP')==null)
@@ -152,25 +115,89 @@ class general_eycController extends Controller
     }else{
         $generalConCertificados->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Factura')==null)
+    if($request->input('Destino')==null)
+    {
+        $generalConCertificados->Destino = 'N/A';
+    }else{
+        $generalConCertificados->Destino = $request->input('Destino');
+    } 
+    if($request->input('Tipo')==null)
+    {
+        $generalConCertificados->Tipo = 'N/A';
+    }else{
+        $generalConCertificados->Tipo = $request->input('Tipo');
+    } 
+    if($request->input('Disponibilidad_Estado')==null)
+    {
+        $generalConCertificados->Disponibilidad_Estado = 'N/A';
+    }else{
+        $generalConCertificados->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    } 
+
+    // Validar que se ha enviado el archivo de factura
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener el archivo PDF de la solicitud
+        $pdf = $request->file('Factura');
+        
+        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+
+        // Opcional: guardar la ruta en la base de datos
+        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        // $generalConCertificados->save();
+        $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+    } else {
+        if($request->input('Factura') == null)
     {
         $generalConCertificados->Factura = 'N/A';
-    }else{
-        $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
-    } 
-    
-    $generalConCertificados->Foto = $imagenPath; // Guarda la ruta del archivo de foto
-    $generalConCertificados->Destino = $request->input('Destino');
-    $generalConCertificados->Tipo = $request->input('Tipo');
-    $generalConCertificados->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    }
+        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
+        //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
+    }
+       // Validar que se ha enviado el archivo de fotos
+       if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Obtener el archivo PDF de la solicitud
+        $Foto = $request->file('Foto');
+        
+        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+        $FotoPath = $Foto->storeAs('Equipos/Fotos', $Foto->getClientOriginalName(), 'public');
+
+        // Opcional: guardar la ruta en la base de datos
+        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        // $generalConCertificados->save();
+        $generalConCertificados->Foto = $FotoPath; // Guarda la ruta del archivo de factura
+    } else {
+        if($request->input('Foto') == null)
+    {
+        $generalConCertificados->Foto = 'N/A';
+    }
+        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
+        //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
+    }
     $generalConCertificados->save();
 
     /* Equipos */
     $generalConEquipos = new equipos;
     $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-    $generalConEquipos->Proceso = $request->input('Proceso');
-    $generalConEquipos->Metodo = $request->input('Metodo');
-    $generalConEquipos->Tipo_E = $request->input('Tipo_E');
+    if($request->input('Proceso')==null)
+    {
+        $generalConEquipos->Proceso = 'N/A';
+    }else{
+        $generalConEquipos->Proceso = $request->input('Proceso');
+    } 
+    if($request->input('Metodo')==null)
+    {
+        $generalConEquipos->Metodo = 'N/A';
+    }else{
+        $generalConEquipos->Metodo = $request->input('Metodo');
+    } 
+    if($request->input('Tipo_E')==null)
+    {
+        $generalConEquipos->Tipo_E = 'N/A';
+    }else{
+        $generalConEquipos->Tipo_E = $request->input('Tipo_E');
+    } 
+    
     $generalConEquipos->save();
 
     return redirect()->route('inventario');
@@ -276,27 +303,37 @@ class general_eycController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    // EquiposController.php
     public function destroyEquipos($id)
     {
-        $generalConCertificados = general_eyc::find($id);
-    
+        $generalConEquipos = equipos::find($id);
+            //dd($generalConEquipos);
         // Verifica si el registro existe antes de intentar eliminarlo
-        if ($generalConCertificados) {
-            // Eliminar archivos asociados si existen
-            if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
-                Storage::disk('public')->delete($generalConCertificados->Factura);
-            }
-            if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
-                Storage::disk('public')->delete($generalConCertificados->Foto);
-            }
+        if ($generalConEquipos) {
+            $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
     
-            // Eliminar el registro de la base de datos
-            $generalConCertificados->delete();
+            // Elimina el registro de la tabla 'equipos'
+            $generalConEquipos->delete();
+            
+            $generalConCertificados = general_eyc::find($idGeneral_EyC);
+            
+            // Verifica si el registro existe antes de intentar eliminarlo
+            if ($generalConCertificados) {
+                // Elimina archivos asociados si existen
+                if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
+                    Storage::disk('public')->delete($generalConCertificados->Factura);
+                }
+                if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
+                    Storage::disk('public')->delete($generalConCertificados->Foto);
+                }
+                
+                // Elimina el registro de la tabla 'general_eyc'
+                $generalConCertificados->delete();
+            }
         }
     
-        return response()->json(['success' => true]);
+        return redirect()->route('inventario');
     }
+    
     
    /* public function destroyEquipos($id)
     {

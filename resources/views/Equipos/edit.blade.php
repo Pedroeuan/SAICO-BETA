@@ -97,11 +97,21 @@
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura)
+                                    @php 
+                                    //dd($generalEyC->Factura );
+                                    @endphp
+                                    @if ($generalEyC->Factura != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Factura == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FACTURA</a>                                                
                                         </div>
                                     </div>
                                    @endif
@@ -123,11 +133,18 @@
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Foto)
+                                    @if ($generalEyC->Foto != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FOTO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Foto == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FOTO</a>                                                
                                         </div>
                                     </div>
                                     @endif
