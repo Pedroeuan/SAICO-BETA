@@ -36,7 +36,7 @@
                         <th>Destino</th>
                         <th>Fecha calibración</th>
                         <!--<th>Foto</th>-->
-                        <th>Solicitar</th>
+                        <th>Solicitar cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,84 +49,10 @@
                         <td scope="row">as</td>
                         <td scope="row">SIN DATOS</td>
                         <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                                <label for="customCheckbox1" class="custom-control-label"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">bs</td>
-                        <td scope="row">bs</td>
-                        <td scope="row">bs</td>
-                        <td scope="row">bs</td>
-                        <td scope="row">ys</td>
-                        <td scope="row">ps</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox2" value="option2">
-                                <label for="customCheckbox2" class="custom-control-label"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">rtf</td>
-                        <td scope="row">fgv</td>
-                        <td scope="row">fdd</td>
-                        <td scope="row">rt</td>
-                        <td scope="row">ggd</td>
-                        <td scope="row">fgg</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox3" value="option3">
-                                <label for="customCheckbox3" class="custom-control-label"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">aggs</td>
-                        <td scope="row">atyyys</td>
-                        <td scope="row">ayyys</td>
-                        <td scope="row">ayyys</td>
-                        <td scope="row">ayys</td>
-                        <td scope="row">ayyys</td>
-                        <td scope="row">SIyyyyN DATOS</td>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox4" value="option4">
-                                <label for="customCheckbox4" class="custom-control-label"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">aoops</td>
-                        <td scope="row">aopos</td>
-                        <td scope="row">aooos</td>
-                        <td scope="row">aoos</td>
-                        <td scope="row">aooos</td>
-                        <td scope="row">aooos</td>
-                        <td scope="row">SIOS</td>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox5" value="option5">
-                                <label for="customCheckbox5" class="custom-control-label"></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox6" value="option6">
-                                <label for="customCheckbox6" class="custom-control-label"></label>
+                            <div class="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Cantidad">
+                                </div>
                             </div>
                         </td>
                     </tr>
