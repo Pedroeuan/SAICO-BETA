@@ -52,6 +52,27 @@ class general_eycController extends Controller
      */
     public function storeEquipos(Request $request)
 {
+    /*$request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'No_economico' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Ubicacion' => 'required|string|max:255',
+        'Almacenamiento' => 'required|string|max:255',
+        'Comentario' => 'nullable|string|max:255',
+        'SAT' => 'nullable|string|max:255',
+        'BMPRO' => 'nullable|string|max:255',
+        'Destino' => 'nullable|string|max:255',
+        'Tipo' => 'nullable|string|max:255',
+        'Disponibilidad_Estado' => 'nullable|string|max:255',
+        'Proceso' => 'nullable|string|max:255',
+        'Metodo' => 'nullable|string|max:255',
+        'Tipo_E' => 'nullable|string|max:255',
+        'No_certificado' => 'nullable|string|max:255',
+        'Fecha_calibracion' => 'nullable|date',
+        'Prox_fecha_calibracion' => 'nullable|date|after_or_equal:Fecha_calibracion',
+    ]);*/
     /* Tabla General_EyC */
     $general = new general_eyc;
     if($request->input('Nombre_E_P_BP')==null)
@@ -230,12 +251,12 @@ class general_eycController extends Controller
     public function editEquipos($id)
     {
             // Buscar el equipo y los datos generales en la base de datos
-            $equipo = Equipos::findOrFail($id);
-            $generalEyC = general_eyc::findOrFail($equipo->idGeneral_EyC);
-            $certificado = certificados::findOrFail($generalEyC->idGeneral_EyC);
+            $generalConEquipos = Equipos::findOrFail($id);
+            $generalEyC = general_eyc::findOrFail($generalConEquipos->idGeneral_EyC);
+            $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
             //dd( $generalEyC);
             // Pasar los datos del equipo y los datos generales a la vista de edición
-            return view('Equipos.edit', compact('certificado','equipo', 'generalEyC', 'id'));
+            return view('Equipos.edit', compact('generalConCertificados','generalConEquipos', 'generalEyC', 'id'));
     }
 
     /**
@@ -243,11 +264,12 @@ class general_eycController extends Controller
      */
     public function updateEquipos(Request $request, $id)
 {
+    
     // Obtener el equipo existente
-    $generalConCertificados = general_eyc::find($id);
+    $generalEyC  = general_eyc::find($id);
 
     // Actualizar los datos del equipo
-    $generalConCertificados->update([
+    $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
         'No_economico' => $request->input('No_economico'),
         'Serie' => $request->input('Serie'),
@@ -274,7 +296,7 @@ class general_eycController extends Controller
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
-        $rutaAnterior = $generalConCertificados->Factura;
+        $rutaAnterior = $general->Factura;
 
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
@@ -286,27 +308,44 @@ class general_eycController extends Controller
         $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
 
         // Actualizar la ruta de la factura en la base de datos
-        $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        $generalConCertificados->save();
+        $general->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $general->save();
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
-        $rutaAnterior = $generalConCertificados->Foto;
+        $rutaAnterior = $general->Foto;
 
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             Storage::disk('public')->delete($rutaAnterior);
         }
-
         // Guardar el nuevo archivo de imagen
         $imagen = $request->file('Foto');
         $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
-
         // Actualizar la ruta de la imagen en la base de datos
-        $generalConCertificados->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
-        $generalConCertificados->save();
+        $general->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $general->save();
+    }
+
+     // Actualizar los datos del certificado asociado
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+     $generalConCertificado->update([
+         'No_certificado' => $request->input('No_certificado'),
+         'Fecha_calibracion' => $request->input('Fecha_calibracion'),
+         'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
+     ]);
+
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Certificado_Actual');
+        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+        $generalConCertificado->save();
     }
 
     return redirect()->route('inventario');
