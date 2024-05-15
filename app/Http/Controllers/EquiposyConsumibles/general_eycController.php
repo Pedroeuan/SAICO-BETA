@@ -187,19 +187,19 @@ class general_eycController extends Controller
     $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Proceso')==null)
     {
-        $generalConCertificados->Proceso = 'N/A';
+        $generalConEquipos->Proceso = 'N/A';
     }else{
         $generalConEquipos->Proceso = $request->input('Proceso');
     } 
     if($request->input('Metodo')==null)
     {
-        $generalConCertificados->Metodo = 'N/A';
+        $generalConEquipos->Metodo = 'N/A';
     }else{
         $generalConEquipos->Metodo = $request->input('Metodo');
     } 
     if($request->input('Tipo_E')==null)
     {
-        $generalConCertificados->Tipo_E = 'N/A';
+        $generalConEquipos->Tipo_E = 'N/A';
     }else{
         $generalConEquipos->Tipo_E = $request->input('Tipo_E');
     } 
@@ -309,38 +309,37 @@ class general_eycController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    // EquiposController.php
     public function destroyEquipos($id)
     {
-        $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-
-
-         // Verifica si el registro existe antes de intentar eliminarlo
-         if ($generalConEquipos) {
-            // Eliminar el registro de la base de datos
-            
-        $generalConCertificados = general_eyc::find($id);
-    
+        $generalConEquipos = equipos::find($id);
+            //dd($generalConEquipos);
         // Verifica si el registro existe antes de intentar eliminarlo
-        if ($generalConCertificados) {
-            // Eliminar archivos asociados si existen
-            if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
-                Storage::disk('public')->delete($generalConCertificados->Factura);
-            }
-            if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
-                Storage::disk('public')->delete($generalConCertificados->Foto);
-            }
+        if ($generalConEquipos) {
+            $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
     
-            // Eliminar el registro de la base de datos
+            // Elimina el registro de la tabla 'equipos'
             $generalConEquipos->delete();
-            $generalConCertificados->delete();
-            return redirect()->route('inventario');
+            
+            $generalConCertificados = general_eyc::find($idGeneral_EyC);
+            
+            // Verifica si el registro existe antes de intentar eliminarlo
+            if ($generalConCertificados) {
+                // Elimina archivos asociados si existen
+                if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
+                    Storage::disk('public')->delete($generalConCertificados->Factura);
+                }
+                if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
+                    Storage::disk('public')->delete($generalConCertificados->Foto);
+                }
+                
+                // Elimina el registro de la tabla 'general_eyc'
+                $generalConCertificados->delete();
+            }
         }
+    
+        return redirect()->route('inventario');
     }
     
-        //return response()->json(['success' => true]);
-        
-    }
     
    /* public function destroyEquipos($id)
     {
