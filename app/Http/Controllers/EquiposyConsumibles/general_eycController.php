@@ -87,22 +87,78 @@ class general_eycController extends Controller
         // $generalConCertificados->save();
     } else {
         // Si no se ha enviado un archivo de imagen válido, devolver un mensaje de error
-        return redirect()->back()->withErrors(['Foto' => 'Error: no se ha enviado un archivo de imagen válido.']);
+       return redirect()->back()->withErrors(['Foto' => 'Error: no se ha enviado un archivo de imagen válido.']);
     }
 
     /* Tabla General_EyC */
     $generalConCertificados = new general_eyc;
-    $generalConCertificados->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
-    $generalConCertificados->No_economico = $request->input('No_economico');
-    $generalConCertificados->Serie = $request->input('Serie');
-    $generalConCertificados->Marca = $request->input('Marca');
-    $generalConCertificados->Modelo = $request->input('Modelo');
-    $generalConCertificados->Ubicacion = $request->input('Ubicacion');
-    $generalConCertificados->Almacenamiento = $request->input('Almacenamiento');
-    $generalConCertificados->Comentario = $request->input('Comentario');
-    $generalConCertificados->SAT = $request->input('SAT');
-    $generalConCertificados->BMPRO = $request->input('BMPRO');
-    $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+    if($request->input('Nombre_E_P_BP')==null)
+    {
+        $generalConCertificados->Nombre_E_P_BP = 'N/A';
+    }else{
+        $generalConCertificados->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+    }
+    if($request->input('No_economico')==null)
+    {
+        $generalConCertificados->No_economico = 'N/A';
+    }else{
+        $generalConCertificados->No_economico = $request->input('No_economico');
+    }
+    if($request->input('Serie')==null)
+    {
+        $generalConCertificados->Serie = 'N/A';
+    }else{
+        $generalConCertificados->Serie = $request->input('Serie');
+    }
+    if($request->input('Marca')==null)
+    {
+        $generalConCertificados->Marca = 'N/A';
+    }else{
+        $generalConCertificados->Marca = $request->input('Marca');
+    }
+    if($request->input('Modelo')==null)
+    {
+        $generalConCertificados->Modelo = 'N/A';
+    }else{
+        $generalConCertificados->Modelo = $request->input('Modelo');
+    }
+    if($request->input('Ubicacion')==null)
+    {
+        $generalConCertificados->Ubicacion = 'N/A';
+    }else{
+        $generalConCertificados->Ubicacion = $request->input('Ubicacion');
+    }
+    if($request->input('Almacenamiento')==null)
+    {
+        $generalConCertificados->Almacenamiento = 'N/A';
+    }else{
+        $generalConCertificados->Almacenamiento = $request->input('Almacenamiento');
+    }
+    if($request->input('Comentario')==null)
+    {
+        $generalConCertificados->Comentario = 'N/A';
+    }else{
+        $generalConCertificados->Comentario = $request->input('Comentario');
+    }
+    if($request->input('SAT')==null)
+    {
+        $generalConCertificados->SAT = 'N/A';
+    }else{
+        $generalConCertificados->SAT = $request->input('SAT');
+    }
+    if($request->input('BMPRO')==null)
+    {
+        $generalConCertificados->BMPRO = 'N/A';
+    }else{
+        $generalConCertificados->BMPRO = $request->input('BMPRO');
+    }
+    if($request->input('Factura')==null)
+    {
+        $generalConCertificados->Factura = 'N/A';
+    }else{
+        $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+    } 
+    
     $generalConCertificados->Foto = $imagenPath; // Guarda la ruta del archivo de foto
     $generalConCertificados->Destino = $request->input('Destino');
     $generalConCertificados->Tipo = $request->input('Tipo');
@@ -220,7 +276,29 @@ class general_eycController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // EquiposController.php
     public function destroyEquipos($id)
+    {
+        $generalConCertificados = general_eyc::find($id);
+    
+        // Verifica si el registro existe antes de intentar eliminarlo
+        if ($generalConCertificados) {
+            // Eliminar archivos asociados si existen
+            if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
+                Storage::disk('public')->delete($generalConCertificados->Factura);
+            }
+            if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
+                Storage::disk('public')->delete($generalConCertificados->Foto);
+            }
+    
+            // Eliminar el registro de la base de datos
+            $generalConCertificados->delete();
+        }
+    
+        return response()->json(['success' => true]);
+    }
+    
+   /* public function destroyEquipos($id)
     {
 
         $generalConCertificados=general_eyc::find($id);
@@ -232,5 +310,5 @@ class general_eycController extends Controller
 
         return redirect()->route('inventario');
 
-    }
+    }*/
 }
