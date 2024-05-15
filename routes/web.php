@@ -43,7 +43,9 @@ Route::middleware('auth')->group(function () {
     /*Ruta de Actualizar*/
     Route::post('edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
-    Route::delete('/equipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos');
+    Route::delete('/equipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('equipos.destroy');
+
+
 });
 
 require __DIR__.'/auth.php';

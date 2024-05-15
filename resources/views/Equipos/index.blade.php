@@ -59,19 +59,30 @@
                 @endif
 
                 <td scope="row"> 
-                    @if ($general_eyc->Foto)
+                    @if ($general_eyc->Foto != 'N/A')
                   <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a>                                                
+                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
+                    @elseif($general_eyc->Foto == 'N/A')  
+                    <a target="_blank">SIN FOTO</a>                                              
                     @endif
                 </td>
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <form id="delete-form-{{ $general_eyc->idGeneral_EyC }}" action="{{ route('equipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                        </form>
+
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $general_eyc->idGeneral_EyC }}').submit();" class="btn btn-danger" role="button">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        
+                        
                         <!-Yacziry-->
                           @php
                           //Pedro
-                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                          //<a href="{{ route('equipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         @endphp
                     </div>
                 </td>
@@ -82,6 +93,10 @@
         </div>
     </div>
 </form>
+
+
+</a>
+
 @stop
 
 @section('js')
@@ -108,7 +123,7 @@
     });
 
     // Función borrar 
-    $(".btnEliminarEquipo").on("click", function(){
+    $(document).on("click", ".btnEliminarEquipo", function(){
         // Valor del id a eliminar
         var idGeneral_EyC = $(this).attr("idGeneral_EyC");
         console.log(idGeneral_EyC);
@@ -146,6 +161,7 @@
         });
     });
 </script>
+
 <!--
 <script>
     // funcion borrar 
