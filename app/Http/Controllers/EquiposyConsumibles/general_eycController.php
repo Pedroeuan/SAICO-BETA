@@ -38,7 +38,8 @@ class general_eycController extends Controller
     // Obtener todos los equipos con sus certificados
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->get();
-        return view('Equipos.index', compact('generalConCertificados','general'));
+        $generalConEquipos = general_eyc::with('Equipos')->get();
+        return view('Equipos.index', compact('generalConCertificados','general','generalConEquipos'));
                        /*vista*/    /*variable donde se guardan los datos*/
     }
     /**
@@ -298,7 +299,7 @@ class general_eycController extends Controller
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
-        $rutaAnterior = $general->Factura;
+        $rutaAnterior = $generalEyC->Factura;
 
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
@@ -310,14 +311,14 @@ class general_eycController extends Controller
         $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
 
         // Actualizar la ruta de la factura en la base de datos
-        $general->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        $general->save();
+        $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalEyC->save();
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
-        $rutaAnterior = $general->Foto;
+        $rutaAnterior = $generalEyC->Foto;
 
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
@@ -327,8 +328,8 @@ class general_eycController extends Controller
         $imagen = $request->file('Foto');
         $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
         // Actualizar la ruta de la imagen en la base de datos
-        $general->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
-        $general->save();
+        $generalEyC->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $generalEyC->save();
     }
 
      // Actualizar los datos del certificado asociado
@@ -359,34 +360,110 @@ class general_eycController extends Controller
      */
     public function destroyEquipos($id)
     {
+        $generalConEquipos = Equipos::find($id);
+        $generalConCertificado = Certificados::where('idGeneral_EyC', $id)->first();
+
+        if ($generalConEquipos) {
+            $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
+            $generalConEquipos->delete();
+
+            if ($generalConCertificado) {
+                $generalConCertificado->delete();
+            }
+            
+            $general = GeneralEyc::find($idGeneral_EyC);
+            
+            if ($general) {
+                if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
+                    Storage::disk('public')->delete($general->Factura);
+                }
+                if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
+                    Storage::disk('public')->delete($general->Foto);
+                }
+                $general->delete();
+            }
+        }
+    
+        return response()->json(['success' => true]);
+    }
+
+   /*  public function destroyEquipos($id)
+{
+    // Buscar el registro en la tabla 'equipos'
+    $generalConEquipos = equipos::find($id);
+    
+    if ($generalConEquipos) {
+        $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
+        
+        // Buscar el registro en la tabla 'certificados'
+        $generalConCertificado = certificados::where('idGeneral_EyC', $idGeneral_EyC)->first();
+
+        // Eliminar el registro de la tabla 'equipos'
+        $generalConEquipos->delete();
+
+        // Eliminar el registro de la tabla 'certificados' si existe
+        if ($generalConCertificado) {
+            $generalConCertificado->delete();
+        }
+        
+        // Buscar el registro en la tabla 'general_eyc'
+        $general = general_eyc::find($idGeneral_EyC);
+        
+        if ($general) {
+            // Eliminar archivos asociados si existen
+            if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
+                Storage::disk('public')->delete($general->Factura);
+            }
+            if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
+                Storage::disk('public')->delete($general->Foto);
+            }
+            
+            // Eliminar el registro de la tabla 'general_eyc'
+            $general->delete();
+        }
+    } else {
+        return redirect()->route('inventario')->with('error', 'Equipo no encontrado');
+    }
+
+    return redirect()->route('inventario')->with('success', 'Equipo eliminado exitosamente');
+}*/
+
+    /*
+    public function destroyEquipos($id)
+    {
         $generalConEquipos = equipos::find($id);
-            //dd($generalConEquipos);
+        $generalConCertificado = certificados::find($id);
+            dd($generalConEquipos);
+            //dd($generalConCertificado);
         // Verifica si el registro existe antes de intentar eliminarlo
         if ($generalConEquipos) {
             $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
-    
             // Elimina el registro de la tabla 'equipos'
             $generalConEquipos->delete();
+
+            if ($generalConCertificado) {
+                $generalConCertificado->delete();
+            }
             
-            $generalConCertificados = general_eyc::find($idGeneral_EyC);
+            $general = general_eyc::find($idGeneral_EyC);
             
             // Verifica si el registro existe antes de intentar eliminarlo
-            if ($generalConCertificados) {
+            if ($general) {
                 // Elimina archivos asociados si existen
-                if ($generalConCertificados->Factura && Storage::disk('public')->exists($generalConCertificados->Factura)) {
-                    Storage::disk('public')->delete($generalConCertificados->Factura);
+                if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
+                    Storage::disk('public')->delete($general->Factura);
                 }
-                if ($generalConCertificados->Foto && Storage::disk('public')->exists($generalConCertificados->Foto)) {
-                    Storage::disk('public')->delete($generalConCertificados->Foto);
+                if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
+                    Storage::disk('public')->delete($general->Foto);
                 }
                 
                 // Elimina el registro de la tabla 'general_eyc'
-                $generalConCertificados->delete();
+                $general->delete();
             }
         }
     
         return redirect()->route('inventario');
-    }
+    }*/
 
 
          /*APARTADO DE CONSUMIBLES*/

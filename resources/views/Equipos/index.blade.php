@@ -123,8 +123,9 @@
     }).then((result) => {
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
+            console.log(id);
             $.ajax({
-                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                url: '/general_eyc/destroyEquipos/' + id, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario

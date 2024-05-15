@@ -37,13 +37,19 @@ Route::middleware('auth')->group(function () {
     Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
     Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
     
-
+    /*EQUIPOS*/
     /*Ruta de Guardado*/
-    Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
+    //Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos');
+    Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
-    Route::post('edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
+    Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
-    Route::delete('destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos.destroy');
+    //Route::delete('destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos.destroy');
+    Route::delete('/general_eyc/destroyEquipos/{id}', [GeneralEycController::class, 'destroyEquipos'])->name('general_eyc.destroyEquipos');
+
+        /*CONSUMIBLES*/
+    /*Ruta de Guardado*/
+    Route::post('general_eyc', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
 });
 
 require __DIR__.'/auth.php';
