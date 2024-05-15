@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class general_eyc extends Model
 {
     protected $fillable = [
-        'Nombre_E_P_BP',
         // Agrega aquí otros campos que necesites permitir en asignación masiva
+        'Nombre_E_P_BP',
         'No_economico',
         'Serie',
         'Marca',
