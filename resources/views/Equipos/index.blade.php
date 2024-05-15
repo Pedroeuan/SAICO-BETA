@@ -20,7 +20,7 @@
         <h3 align="center">Inventario de equipos</h3>
         <br>
         <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -57,7 +57,6 @@
                 @else
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                 @endif
-
                 <td scope="row"> 
                     @if ($general_eyc->Foto != 'N/A')
                   <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -72,6 +71,11 @@
                         <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
+                        <!-Yacziry-->
+                          @php
+                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        @endphp
                     </div>
                 </td>
                     </tr>
@@ -90,6 +94,22 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    let dataTable;
+
+    function initializeDataTable() {
+        // Destruir el DataTable si ya está inicializado
+        if ($.fn.DataTable.isDataTable('#tablaJs')) {
+            dataTable.destroy();
+        }
+        // Inicializar el DataTable
+        dataTable = new DataTable('#tablaJs');
+    }
+
+    // Inicializar el DataTable al cargar la página
+    $(document).ready(function() {
+        initializeDataTable();
+    });
+
     function confirmDelete(id) {
     Swal.fire({
         title: "¿Seguro de eliminar este elemento?",
@@ -139,25 +159,7 @@
     });
 }
 
-/*
-function confirmDelete(id) {
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-form-' + id).submit();
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
-    });
-}*/
-
 </script>
-
 <!--
 <script>
     // funcion borrar 
