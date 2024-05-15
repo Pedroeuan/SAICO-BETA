@@ -191,7 +191,8 @@
                         </div>
                             <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane" id="tab_2">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
