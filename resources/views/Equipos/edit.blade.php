@@ -94,9 +94,17 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" ></input>
+                                            <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Factura)
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                   @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
@@ -112,9 +120,17 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Foto</label>
-                                            <input type="file" class="form-control inputForm" value="{{ $generalEyC->Foto }}" name="Foto">
+                                            <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Foto)
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FOTO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                           <label class="col-form-label" for="inputSuccess">Proceso</label>

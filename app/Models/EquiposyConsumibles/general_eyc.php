@@ -7,6 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class general_eyc extends Model
 {
+    protected $fillable = [
+        // Agrega aquí otros campos que necesites permitir en asignación masiva
+        'Nombre_E_P_BP',
+        'No_economico',
+        'Serie',
+        'Marca',
+        'Modelo',
+        'Ubicacion',
+        'Almacenamiento',
+        'Comentario',
+        'SAT',
+        'BMPRO',
+        'Destino',
+        'Tipo',
+        'Foto',
+        'Disponibilidad_Estado',
+    ];
     protected $table = 'general_eyc';
     protected $primaryKey = 'idGeneral_EyC';
     /*En Laravel, por defecto, Eloquent espera que las tablas de la base de datos 
