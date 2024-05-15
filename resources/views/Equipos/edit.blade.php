@@ -97,9 +97,6 @@
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
-                                    @php 
-                                    //dd($generalEyC->Factura );
-                                    @endphp
                                     @if ($generalEyC->Factura != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -175,6 +172,50 @@
                                             <input type="text" class="form-control inputForm" value="{{ $equipo->Tipo_E }}" name="Tipo_E" placeholder="Electro Magnetico">
                                         </div>
                                     </div>
+                                    @php 
+                                    //dd($certificado);
+                                    @endphp
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $certificado->No_certificado }}" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+                                    @if ($certificado->Certificado_Actual != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $certificado->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($certificado->Certificado_Actual == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FOTO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            <input type="date" class="form-control inputForm" value="{{ $certificado->Fecha_calibracion }}" name="Fecha_calibracion">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <input type="date" class="form-control inputForm" value="{{ $certificado->Prox_fecha_calibracion }}" name="Prox_fecha_calibracion">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\EquiposyConsumibles\general_eyc;
-use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\equipos;
+use App\Models\EquiposyConsumibles\certificados;
 
 class general_eycController extends Controller
 {
@@ -34,10 +34,9 @@ class general_eycController extends Controller
     public function index()
     {
     // Obtener todos los equipos con sus certificados
+        $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->get();
-        //$generalConEquipos = general_eyc::with('equipos')->get();
-        //dd($generalConEquipos);
-        return view('Equipos.index', compact('generalConCertificados'));
+        return view('Equipos.index', compact('generalConCertificados','general'));
                        /*vista*/    /*variable donde se guardan los datos*/
     }
     /**
@@ -54,84 +53,84 @@ class general_eycController extends Controller
     public function storeEquipos(Request $request)
 {
     /* Tabla General_EyC */
-    $generalConCertificados = new general_eyc;
+    $general = new general_eyc;
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $generalConCertificados->Nombre_E_P_BP = 'N/A';
+        $general->Nombre_E_P_BP = 'N/A';
     }else{
-        $generalConCertificados->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+        $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
     if($request->input('No_economico')==null)
     {
-        $generalConCertificados->No_economico = 'N/A';
+        $general->No_economico = 'N/A';
     }else{
-        $generalConCertificados->No_economico = $request->input('No_economico');
+        $general->No_economico = $request->input('No_economico');
     }
     if($request->input('Serie')==null)
     {
-        $generalConCertificados->Serie = 'N/A';
+        $general->Serie = 'N/A';
     }else{
-        $generalConCertificados->Serie = $request->input('Serie');
+        $general->Serie = $request->input('Serie');
     }
     if($request->input('Marca')==null)
     {
-        $generalConCertificados->Marca = 'N/A';
+        $general->Marca = 'N/A';
     }else{
-        $generalConCertificados->Marca = $request->input('Marca');
+        $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $generalConCertificados->Modelo = 'N/A';
+        $general->Modelo = 'N/A';
     }else{
-        $generalConCertificados->Modelo = $request->input('Modelo');
+        $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $generalConCertificados->Ubicacion = 'N/A';
+        $general->Ubicacion = 'N/A';
     }else{
-        $generalConCertificados->Ubicacion = $request->input('Ubicacion');
+        $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $generalConCertificados->Almacenamiento = 'N/A';
+        $general->Almacenamiento = 'N/A';
     }else{
-        $generalConCertificados->Almacenamiento = $request->input('Almacenamiento');
+        $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $generalConCertificados->Comentario = 'N/A';
+        $general->Comentario = 'N/A';
     }else{
-        $generalConCertificados->Comentario = $request->input('Comentario');
+        $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $generalConCertificados->SAT = 'N/A';
+        $general->SAT = 'N/A';
     }else{
-        $generalConCertificados->SAT = $request->input('SAT');
+        $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $generalConCertificados->BMPRO = 'N/A';
+        $general->BMPRO = 'N/A';
     }else{
-        $generalConCertificados->BMPRO = $request->input('BMPRO');
+        $general->BMPRO = $request->input('BMPRO');
     }
     if($request->input('Destino')==null)
     {
-        $generalConCertificados->Destino = 'N/A';
+        $general->Destino = 'N/A';
     }else{
-        $generalConCertificados->Destino = $request->input('Destino');
+        $general->Destino = $request->input('Destino');
     } 
     if($request->input('Tipo')==null)
     {
-        $generalConCertificados->Tipo = 'N/A';
+        $general->Tipo = 'N/A';
     }else{
-        $generalConCertificados->Tipo = $request->input('Tipo');
+        $general->Tipo = $request->input('Tipo');
     } 
     if($request->input('Disponibilidad_Estado')==null)
     {
-        $generalConCertificados->Disponibilidad_Estado = 'N/A';
+        $general->Disponibilidad_Estado = 'N/A';
     }else{
-        $generalConCertificados->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+        $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
 
     // Validar que se ha enviado el archivo de factura
@@ -145,40 +144,30 @@ class general_eycController extends Controller
         // Opcional: guardar la ruta en la base de datos
         // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
         // $generalConCertificados->save();
-        $generalConCertificados->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+        $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
     } else {
         if($request->input('Factura') == null)
     {
-        $generalConCertificados->Factura = 'N/A';
+        $general->Factura = 'N/A';
     }
         // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
-       // Validar que se ha enviado el archivo de fotos
        if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
-        // Obtener el archivo PDF de la solicitud
         $Foto = $request->file('Foto');
-        
-        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
         $FotoPath = $Foto->storeAs('Equipos/Fotos', $Foto->getClientOriginalName(), 'public');
-
-        // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        // $generalConCertificados->save();
-        $generalConCertificados->Foto = $FotoPath; // Guarda la ruta del archivo de factura
+        $general->Foto = $FotoPath;
     } else {
         if($request->input('Foto') == null)
     {
-        $generalConCertificados->Foto = 'N/A';
+        $general->Foto = 'N/A';
     }
-        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
-        //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
-    $generalConCertificados->save();
+    $general->save();
 
     /* Equipos */
     $generalConEquipos = new equipos;
-    $generalConEquipos->idGeneral_EyC = $generalConCertificados->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Proceso')==null)
     {
         $generalConEquipos->Proceso = 'N/A';
@@ -196,13 +185,36 @@ class general_eycController extends Controller
         $generalConEquipos->Tipo_E = 'N/A';
     }else{
         $generalConEquipos->Tipo_E = $request->input('Tipo_E');
-    } 
-    
+    }   
     $generalConEquipos->save();
+
+    /* Certificados */
+    $generalConCertificados = new certificados;
+    $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    if($request->input('No_certificado')==null)
+    {
+        $generalConCertificados->No_certificado = 'N/A';
+    }else{
+        $generalConCertificados->No_certificado = $request->input('No_certificado');
+    }   
+        $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $Certificado_Actual = $request->file('Certificado_Actual');
+        
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos/Certificados', $Certificado_Actual->getClientOriginalName(), 'public');
+
+        $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
+    } else {
+        if($request->input('Certificado_Actual') == null)
+    {
+        $generalConCertificados->Certificado_Actual = 'N/A';
+    }
+    }
+    $generalConCertificados->save();
 
     return redirect()->route('inventario');
 }
-
 
     /**
      * Display the specified resource.
@@ -220,9 +232,10 @@ class general_eycController extends Controller
             // Buscar el equipo y los datos generales en la base de datos
             $equipo = Equipos::findOrFail($id);
             $generalEyC = general_eyc::findOrFail($equipo->idGeneral_EyC);
+            $certificado = certificados::findOrFail($generalEyC->idGeneral_EyC);
             //dd( $generalEyC);
             // Pasar los datos del equipo y los datos generales a la vista de edición
-            return view('Equipos.edit', compact('equipo', 'generalEyC', 'id'));
+            return view('Equipos.edit', compact('certificado','equipo', 'generalEyC', 'id'));
     }
 
     /**
