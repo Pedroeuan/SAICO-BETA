@@ -20,7 +20,7 @@
         <h3 align="center">Inventario de equipos</h3>
         <br>
         <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -69,19 +69,9 @@
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <form id="delete-form-{{ $general_eyc->idGeneral_EyC }}" action="{{ route('destroyEquipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" method="POST" style="display: none;">
-                            @csrf
-                            @method('DELETE')
-                        </form>
-
                         <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
-                        <!-Yacziry-->
-                          @php
-                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button><button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        @endphp
                     </div>
                 </td>
                     </tr>
@@ -100,6 +90,56 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function confirmDelete(id) {
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Enviar la solicitud DELETE al servidor
+            $.ajax({
+                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                type: 'DELETE', // Método HTTP DELETE
+                data: {
+                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                },
+                success: function(response) {
+                    // Manejar la respuesta del servidor si es necesario
+                    if (response.success) {
+                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
+                        location.reload();
+                    } else {
+                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                    }
+                },
+                error: function() {
+                    // Manejar errores de la solicitud AJAX
+                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
+                    Swal.fire({
+                        title: "Confirmado!",
+                        text: "Equipo Eliminado Correctamente!",
+                        icon: "success",
+                        didClose: function() {
+                            location.reload();
+                            }
+                        });
+                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
+                      /*  setTimeout(function() {
+                            location.reload();
+                        }, 3000);*/
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
+    });
+}
+
+/*
 function confirmDelete(id) {
     Swal.fire({
         title: "¿Seguro de eliminar este elemento?",
@@ -114,7 +154,8 @@ function confirmDelete(id) {
             Swal.fire("Cancelado", "", "error");
         }
     });
-}
+}*/
+
 </script>
 
 <!--
