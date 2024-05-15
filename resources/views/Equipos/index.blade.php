@@ -35,9 +35,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                @php 
+                //dd($generalConCertificados);
+                @endphp
                 @foreach ($generalConCertificados as $general_eyc)
                     <tr>
-                    @if($generalConCertificados)
+                    @if($general)
                         <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                         <td scope="row">{{$general_eyc->No_economico}}</td>
                         <td scope="row">{{$general_eyc->Marca}}</td>
@@ -51,8 +54,8 @@
                         <td scope="row">SIN DATOS</td>
                         <td scope="row">SIN DATOS</td>
                         <td scope="row">SIN DATOS</td>
-                @endif
-                @if($general_eyc->certificados==null)
+                @endif         
+                @if($general_eyc->certificados->Fecha_calibracion==null)
                 <td scope="row">SIN FECHA ASIGNADA</td>
                 @else
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>

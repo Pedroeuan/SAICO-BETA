@@ -97,9 +97,6 @@
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
-                                    @php 
-                                    //dd($generalEyC->Factura );
-                                    @endphp
                                     @if ($generalEyC->Factura != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -154,27 +151,68 @@
                                           <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
                                           <select class="form-control select2" style="width: 100%;" name="Proceso">
                                                 <option>Elige un Proceso</option>
-                                                <option value="TODOS" @if ($equipo->Proceso =='TODOS') selected="selected" @endif>TODOS</option>
-                                                <option value="PINS"  @if ($equipo->Proceso =='PINS') selected="selected" @endif>PINS</option>
-                                                <option value="PIMP"  @if ($equipo->Proceso =='PIMP') selected="selected" @endif>PIMP</option>
-                                                <option value="PISO"  @if ($equipo->Proceso =='PISO') selected="selected" @endif>PISO</option>
-                                                <option value="Q.C"  @if ($equipo->Proceso =='Q.C') selected="selected" @endif>Q.C</option>
-                                                <option value="N/A"  @if ($equipo->Proceso =='N/A') selected="selected" @endif>N/A</option>
+                                                <option value="TODOS" @if ($generalConEquipos->Proceso =='TODOS') selected="selected" @endif>TODOS</option>
+                                                <option value="PINS"  @if ($generalConEquipos->Proceso =='PINS') selected="selected" @endif>PINS</option>
+                                                <option value="PIMP"  @if ($generalConEquipos->Proceso =='PIMP') selected="selected" @endif>PIMP</option>
+                                                <option value="PISO"  @if ($generalConEquipos->Proceso =='PISO') selected="selected" @endif>PISO</option>
+                                                <option value="Q.C"  @if ($generalConEquipos->Proceso =='Q.C') selected="selected" @endif>Q.C</option>
+                                                <option value="N/A"  @if ($generalConEquipos->Proceso =='N/A') selected="selected" @endif>N/A</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Método</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Metodo }}" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConEquipos->Metodo }}" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Tipo_E }}" name="Tipo_E" placeholder="Electro Magnetico">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConEquipos->Tipo_E }}" name="Tipo_E" placeholder="Electro Magnetico">
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Fecha_calibracion }}" name="Fecha_calibracion">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Prox_fecha_calibracion }}" name="Prox_fecha_calibracion">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
