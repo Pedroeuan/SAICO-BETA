@@ -51,3 +51,4 @@ require __DIR__.'/auth.php';
 Auth::routes();
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
+
