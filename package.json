@@ -19,6 +19,6 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "npm": "^10.7.0"
+        "sweetalert2": "^11.11.0"
     }
 }

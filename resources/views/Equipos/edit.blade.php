@@ -5,7 +5,7 @@
 
 @section('content')
 <br>
-<h3 align="center"> Registro de equipos</h3>
+<h3 align="center"> Edición de equipos</h3>
 <br>
 
 <div class="container">
@@ -26,20 +26,23 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
-                              @csrf 
+                            @php
+                            //<form action="{{route('editEquipos', $id)}}" method="post" enctype="multipart/form-data">
+                                @endphp
+                            <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                              @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001">
+                                            <input type="text" class="form-control inputForm" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
 
@@ -47,7 +50,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX">
+                                            <input type="text" class="form-control inputForm" name="Marca" value="{{ $generalEyC->Marca }}" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
 
@@ -55,37 +58,37 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM">
+                                            <input type="text" class="form-control inputForm" name="Modelo" value="{{ $generalEyC->Modelo }}" placeholder="Ejemplo: DPM">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199">
+                                            <input type="text" class="form-control inputForm" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->Ubicacion }}" placeholder="Ejemplo: OFICINA">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" value="{{ $generalEyC->Almacenamiento }}" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
+                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -94,16 +97,34 @@
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
+                                    @php 
+                                    //dd($generalEyC->Factura );
+                                    @endphp
+                                    @if ($generalEyC->Factura != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Factura == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                   @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Destino }}" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -112,49 +133,61 @@
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Foto != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FOTO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Foto == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FOTO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                           <label class="col-form-label" for="inputSuccess">Proceso</label>
                                           <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
                                           <select class="form-control select2" style="width: 100%;" name="Proceso">
-                                            <option selected="selected">Elige un Proceso</option>
-                                            <option value="TODOS">TODOS</option>
-                                            <option value="PINS">PINS</option>
-                                            <option value="PIMP">PIMP</option>
-                                            <option value="PISO">PISO</option>
-                                            <option value="Q.C">Q.C</option>
-                                            <option value="N/A">N/A</option>
-                                          </select>
+                                                <option>Elige un Proceso</option>
+                                                <option value="TODOS" @if ($equipo->Proceso =='TODOS') selected="selected" @endif>TODOS</option>
+                                                <option value="PINS"  @if ($equipo->Proceso =='PINS') selected="selected" @endif>PINS</option>
+                                                <option value="PIMP"  @if ($equipo->Proceso =='PIMP') selected="selected" @endif>PIMP</option>
+                                                <option value="PISO"  @if ($equipo->Proceso =='PISO') selected="selected" @endif>PISO</option>
+                                                <option value="Q.C"  @if ($equipo->Proceso =='Q.C') selected="selected" @endif>Q.C</option>
+                                                <option value="N/A"  @if ($equipo->Proceso =='N/A') selected="selected" @endif>N/A</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Método</label>
-                                            <input type="text" class="form-control inputForm" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
+                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Metodo }}" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
                                         </div>
                                     </div>
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_E" placeholder="Electro Magnetico">
+                                            <input type="text" class="form-control inputForm" value="{{ $equipo->Tipo_E }}" name="Tipo_E" placeholder="Electro Magnetico">
                                         </div>
                                     </div>
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-12">
                                         <div class="form-group">
+
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
+                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
-
                                     <div>
                                         <button type="submit" class="btn btn-info bg-success">Guardar</button>
                                     </div>

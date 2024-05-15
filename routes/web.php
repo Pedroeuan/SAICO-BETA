@@ -1,9 +1,12 @@
 <?php
+//use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\ProfileController;
-//use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
+
+use App\Http\Controllers\EquiposyConsumibles\general_eycController;
+use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -19,23 +22,33 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-/*Route::middleware('auth')->group(function () {
-    Route::get('general_eyc', [general_eycController::class, 'index'])->name('Equipos');
-});*/
+/*PDF*/
+Route::middleware('auth')->group(function () {
+Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
+});
 
 /*Equipos y Consumibles*/ 
 Route::middleware('auth')->group(function () {
-    Route::get('Equipos', [general_eycController::class, 'index'])->name('Equipos');
-    Route::get('Equipos/create', [general_eycController::class, 'create'])->name('Equipos/create');
+    /*Rutas de Vistas Equipos Tabla General*/
+    Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
+
+    /*Rutas de Vistas Equipos*/
+    Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
+    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
+    
+
+    /*Ruta de Guardado*/
+    Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
+    /*Ruta de Actualizar*/
+    Route::post('edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
+    /*Ruta para borrar*/
+    Route::delete('destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos.destroy');
 });
-
-
 
 require __DIR__.'/auth.php';
 
 Auth::routes();
 
-Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
-/*mike*/
+//Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 
-/*comentario */
