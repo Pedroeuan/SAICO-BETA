@@ -154,31 +154,25 @@ class general_eycController extends Controller
         // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
-
-       // Validar que se ha enviado el archivo de imagen
+       // Validar que se ha enviado el archivo de fotos
        if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
-        // Validar que el archivo es una imagen
-        $request->validate([
-            'Foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajuste de validación
-        ]);
-
-        // Obtener el archivo de imagen de la solicitud
-        $imagen = $request->file('Foto');
+        // Obtener el archivo PDF de la solicitud
+        $Foto = $request->file('Foto');
         
-        // Guardar el archivo de imagen en la carpeta "public/Equipos/Fotos"
-        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+        $FotoPath = $Foto->storeAs('Equipos/Fotos', $Foto->getClientOriginalName(), 'public');
 
         // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
         // $generalConCertificados->save();
-        $generalConCertificados->Foto = $imagenPath; // Guarda la ruta del archivo de foto
+        $generalConCertificados->Foto = $FotoPath; // Guarda la ruta del archivo de factura
     } else {
-        // Si no se ha enviado un archivo de imagen válido, devolver un mensaje de error
-       //return redirect()->back()->withErrors(['Foto' => 'Error: no se ha enviado un archivo de imagen válido.']);
-       if($request->input('Foto') == null)
-       {
-           $generalConCertificados->Foto = 'N/A';
-       }
+        if($request->input('Foto') == null)
+    {
+        $generalConCertificados->Foto = 'N/A';
+    }
+        // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
+        //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
     $generalConCertificados->save();
 
