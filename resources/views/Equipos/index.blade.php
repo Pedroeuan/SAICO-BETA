@@ -69,20 +69,18 @@
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <form id="delete-form-{{ $general_eyc->idGeneral_EyC }}" action="{{ route('equipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
+                        <form id="delete-form-{{ $general_eyc->idGeneral_EyC }}" action="{{ route('destroyEquipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('DELETE')
                         </form>
 
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $general_eyc->idGeneral_EyC }}').submit();" class="btn btn-danger" role="button">
+                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
                             <i class="fa fa-times" aria-hidden="true"></i>
-                        
-                        
+                        </a>
                         <!-Yacziry-->
                           @php
-                          //Pedro
-                          //<a href="{{ route('equipos.destroy', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button><button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
                         @endphp
                     </div>
                 </td>
@@ -93,10 +91,6 @@
         </div>
     </div>
 </form>
-
-
-</a>
-
 @stop
 
 @section('js')
@@ -106,60 +100,21 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    let dataTable;
-
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
+function confirmDelete(id) {
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
         }
-        // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
-
-    // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
     });
-
-    // Función borrar 
-    $(document).on("click", ".btnEliminarEquipo", function(){
-        // Valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-        console.log(idGeneral_EyC);
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/equipos/${idGeneral_EyC}`, // Ruta del endpoint
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}' // Token CSRF
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire("Eliminado!", "", "success").then(() => {
-                                // Destruir y reinicializar el DataTable después de la eliminación
-                                initializeDataTable();
-                            });
-                        } else {
-                            Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
-    });
+}
 </script>
 
 <!--

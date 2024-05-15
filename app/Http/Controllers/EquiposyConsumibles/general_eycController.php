@@ -318,9 +318,7 @@ class general_eycController extends Controller
          // Verifica si el registro existe antes de intentar eliminarlo
          if ($generalConEquipos) {
             // Eliminar el registro de la base de datos
-            $generalConEquipos->delete();
-        }
-
+            
         $generalConCertificados = general_eyc::find($id);
     
         // Verifica si el registro existe antes de intentar eliminarlo
@@ -334,11 +332,14 @@ class general_eycController extends Controller
             }
     
             // Eliminar el registro de la base de datos
+            $generalConEquipos->delete();
             $generalConCertificados->delete();
+            return redirect()->route('inventario');
         }
+    }
     
         //return response()->json(['success' => true]);
-        return redirect()->route('inventario');
+        
     }
     
    /* public function destroyEquipos($id)
