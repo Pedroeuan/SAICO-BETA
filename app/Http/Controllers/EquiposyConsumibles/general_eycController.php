@@ -39,7 +39,7 @@ class general_eycController extends Controller
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->get();
         $generalConEquipos = general_eyc::with('Equipos')->get();
-        return view('Equipos.index', compact('generalConCertificados','general','generalConEquipos'));
+        return view('Equipos.index', compact('general','generalConCertificados','generalConEquipos'));
                        /*vista*/    /*variable donde se guardan los datos*/
     }
     /**
@@ -360,93 +360,18 @@ class general_eycController extends Controller
      */
     public function destroyEquipos($id)
     {
-        $generalConEquipos = Equipos::find($id);
-        $generalConCertificado = Certificados::where('idGeneral_EyC', $id)->first();
-
-        if ($generalConEquipos) {
-            $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
-            $generalConEquipos->delete();
-
-            if ($generalConCertificado) {
-                $generalConCertificado->delete();
-            }
-            
-            $general = GeneralEyc::find($idGeneral_EyC);
-            
-            if ($general) {
-                if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
-                    Storage::disk('public')->delete($general->Factura);
-                }
-                if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
-                    Storage::disk('public')->delete($general->Foto);
-                }
-                $general->delete();
-            }
-        }
-    
-        return response()->json(['success' => true]);
-    }
-
-   /*  public function destroyEquipos($id)
-{
-    // Buscar el registro en la tabla 'equipos'
-    $generalConEquipos = equipos::find($id);
-    
-    if ($generalConEquipos) {
-        $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
-        
-        // Buscar el registro en la tabla 'certificados'
-        $generalConCertificado = certificados::where('idGeneral_EyC', $idGeneral_EyC)->first();
-
-        // Eliminar el registro de la tabla 'equipos'
-        $generalConEquipos->delete();
-
-        // Eliminar el registro de la tabla 'certificados' si existe
-        if ($generalConCertificado) {
-            $generalConCertificado->delete();
-        }
-        
-        // Buscar el registro en la tabla 'general_eyc'
-        $general = general_eyc::find($idGeneral_EyC);
-        
-        if ($general) {
-            // Eliminar archivos asociados si existen
-            if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
-                Storage::disk('public')->delete($general->Factura);
-            }
-            if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
-                Storage::disk('public')->delete($general->Foto);
-            }
-            
-            // Eliminar el registro de la tabla 'general_eyc'
-            $general->delete();
-        }
-    } else {
-        return redirect()->route('inventario')->with('error', 'Equipo no encontrado');
-    }
-
-    return redirect()->route('inventario')->with('success', 'Equipo eliminado exitosamente');
-}*/
-
-    /*
-    public function destroyEquipos($id)
-    {
         $generalConEquipos = equipos::find($id);
         $generalConCertificado = certificados::find($id);
-            dd($generalConEquipos);
-            //dd($generalConCertificado);
         // Verifica si el registro existe antes de intentar eliminarlo
         if ($generalConEquipos) {
-            $idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
+            //$idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
             // Elimina el registro de la tabla 'equipos'
             $generalConEquipos->delete();
-
+            }
             if ($generalConCertificado) {
                 $generalConCertificado->delete();
             }
-            
-            $general = general_eyc::find($idGeneral_EyC);
-            
+            $general = general_eyc::find($id);
             // Verifica si el registro existe antes de intentar eliminarlo
             if ($general) {
                 // Elimina archivos asociados si existen
@@ -460,10 +385,10 @@ class general_eycController extends Controller
                 // Elimina el registro de la tabla 'general_eyc'
                 $general->delete();
             }
-        }
+        
     
         return redirect()->route('inventario');
-    }*/
+    }
 
 
          /*APARTADO DE CONSUMIBLES*/

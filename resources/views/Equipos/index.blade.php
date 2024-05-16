@@ -39,8 +39,11 @@
                 //dd($generalConCertificados);
                 @endphp
                 @foreach ($generalConCertificados as $general_eyc)
+                @php 
+                //dd($general_eyc->idGeneral_EyC);
+                @endphp
                     <tr>
-                    @if($general)
+                    @if($general_eyc)
                         <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                         <td scope="row">{{$general_eyc->No_economico}}</td>
                         <td scope="row">{{$general_eyc->Marca}}</td>
@@ -69,16 +72,9 @@
                     @endif
                 </td>
                 <td>
-                    <div class="btn-group">
-                        <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </a>
-                        <!-Yacziry-->
-                          @php
-                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        @endphp
+                <div class="btn-group">
+                        <a href="{{ route('edicion/editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </div>
                 </td>
                     </tr>
@@ -97,25 +93,30 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    let dataTable;
+    new DataTable('#tablaJs');
+   
+   let dataTable;
 
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-        // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
+   function initializeDataTable() {
+       // Destruir el DataTable si ya está inicializado
+       if ($.fn.DataTable.isDataTable('#tablaJs')) {
+           dataTable.destroy();
+       }
+       // Inicializar el DataTable
+       dataTable = new DataTable('#tablaJs');
+   }
 
-    // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
-    });
+   // Inicializar el DataTable al cargar la página
+   $(document).ready(function() {
+       initializeDataTable();
+   });
 
-    function confirmDelete(id) {
+    $(".btnEliminarEquipo").on("click", function(){
+    //valor del id a eliminar
+    var idGeneral_EyC = $(this).attr("idGeneral_EyC");
+    console.log(idGeneral_EyC);
     Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -123,9 +124,8 @@
     }).then((result) => {
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
-            console.log(id);
             $.ajax({
-                url: '/general_eyc/destroyEquipos/' + id, // URL del endpoint de eliminación
+                url: '/eliminar/destroyEquipos/' + idGeneral_EyC, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
@@ -137,11 +137,11 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
                     }
                 },
                 error: function() {
-                    // Manejar errores de la solicitud AJAX
+                     // Manejar errores de la solicitud AJAX
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
@@ -161,7 +161,7 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
-}
+});
 
 </script>
 <!--

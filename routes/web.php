@@ -35,17 +35,16 @@ Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
     Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
-    Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
+    Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('edicion/editEquipos');
     
     /*EQUIPOS*/
     /*Ruta de Guardado*/
-    //Route::post('general_eyc', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos');
     Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
-    //Route::delete('destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos.destroy');
-    Route::delete('/general_eyc/destroyEquipos/{id}', [GeneralEycController::class, 'destroyEquipos'])->name('general_eyc.destroyEquipos');
+    Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
+    
 
         /*CONSUMIBLES*/
     /*Ruta de Guardado*/
