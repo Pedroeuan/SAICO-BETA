@@ -51,6 +51,11 @@ class general_eyc extends Model
         return $this->hasOne(consumibles::class, 'idGeneral_EyC');
     }
 
+    public function almacen()
+    {
+        return $this->hasOne(almacen::class, 'idGeneral_EyC');
+    }
+
 
     use HasFactory;
 }

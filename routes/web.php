@@ -45,11 +45,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
-    
 
-        /*CONSUMIBLES*/
+    /*CONSUMIBLES*/
     /*Ruta de Guardado*/
-    Route::post('general_eyc', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
+    Route::post('general_eyc/storeConsumibles', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
+      /*Ruta de Actualizar*/
+      Route::post('/edicion/updateConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
 });
 
 require __DIR__.'/auth.php';
