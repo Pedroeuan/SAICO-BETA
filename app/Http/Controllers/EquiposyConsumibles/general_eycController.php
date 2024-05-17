@@ -11,6 +11,8 @@ use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
+use App\Models\EquiposyConsumibles\almacen;
+
 
 class general_eycController extends Controller
 {
@@ -223,9 +225,21 @@ class general_eycController extends Controller
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }   
 
+    if($request->input('Fecha_calibracion')==null)
+    {
+        $generalConCertificados->Fecha_calibracion = '01/01/0001';
+    }else{
         $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
-        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }  
 
+    if($request->input('Prox_fecha_calibracion')==null)
+    {
+        $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }  
+        //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+        //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $Certificado_Actual = $request->file('Certificado_Actual');
         
@@ -254,8 +268,6 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    //$general = general_eyc::get();
-    //$generalConCertificados = general_eyc::with('certificados')->get();
     public function editEyC($id)
         {
             $generalEyC = general_eyc::findOrFail($id);
@@ -263,15 +275,16 @@ class general_eycController extends Controller
             $generalConEquipos = general_eyc::with('certificados')->where('idGeneral_EyC', $id)->first();
             $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
             $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
 
-             // Retornar la vista con los datos obtenidos
-                return view('Equipos.edit', compact('id','generalEyC','generalConCertificados', 'generalConEquipos', 'generalConConsumibles'));
+            // Retornar la vista con los datos obtenidos
+            return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen'));
         }
 
    /* //FUNCIONAL
      public function editEyC($id)
         {
-                  $generalEyC = general_eyc::findOrFail($id);
+            $generalEyC = general_eyc::findOrFail($id);
                if($generalEyC->Tipo=='EQUIPOS')
                {
                 $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
@@ -285,55 +298,8 @@ class general_eycController extends Controller
                 $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
 
                 return view('Equipos.edit', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
-               }
-                  
+               }      
         }*/
-
-       /* public function editEyC($id)
-        {
-               $generalEyC = general_eyc::findOrFail($id);
-                $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
-                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
-                //$generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
-                //dd($generalConConsumibles);
-                // Pasar los datos del equipo y los datos generales a la vista de edición
-                //return view('Equipos.edit', compact('id','generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC'));
-                return view('Equipos.edit', compact('id','generalConCertificados','generalConEquipos', 'generalEyC'));  
-        }
- 
-        public function editEyCon($id)
-        {
-               $generalEyC = general_eyc::findOrFail($id);
-
-                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
-                $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
-
-                return view('Equipos.edit2', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
-            }*/
-    
-     
-      /* public function editEyC($id)
-    {
-            // Buscar el equipo y los datos generales en la base de datos
-            $generalConEquipos = Equipos::findOrFail($id);
-            $generalEyC = general_eyc::findOrFail($generalConEquipos->idGeneral_EyC);
-            $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
-            $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
-            //dd( $generalEyC);
-            // Pasar los datos del equipo y los datos generales a la vista de edición
-            return view('Equipos.edit', compact('generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC', 'id'));
-    }
-       public function editEyC($id)
-    {
-           $generalEyC = general_eyc::findOrFail($id);
-            $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
-            $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
-            $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
-            //dd( $generalEyC);
-            // Pasar los datos del equipo y los datos generales a la vista de edición
-            return view('Equipos.edit', compact('id','generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC'));
-    }*/
-
 
     /**
      * Update the specified resource in storage.
@@ -435,15 +401,25 @@ class general_eycController extends Controller
     {
         $generalConEquipos = equipos::find($id);
         $generalConCertificado = certificados::find($id);
+        $generalConConsumible = consumibles::find($id);
+        $generalConAlmacen = almacen::find($id);
         // Verifica si el registro existe antes de intentar eliminarlo
         if ($generalConEquipos) {
-            //$idGeneral_EyC = $generalConEquipos->idGeneral_EyC;
             // Elimina el registro de la tabla 'equipos'
             $generalConEquipos->delete();
             }
+
             if ($generalConCertificado) {
                 $generalConCertificado->delete();
             }
+            if ($generalConConsumible) {
+                $generalConConsumible->delete();
+            }
+
+            if ($generalConAlmacen) {
+                $generalConAlmacen->delete();
+            }
+
             $general = general_eyc::find($id);
             // Verifica si el registro existe antes de intentar eliminarlo
             if ($general) {
@@ -605,9 +581,13 @@ class general_eycController extends Controller
         $generalConCertificados->No_certificado = 'N/A';
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
-    }   
-        $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
-        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }  
+    
+        $generalConCertificados->Fecha_calibracion = '01/01/0001';
+        $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+
+        //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+        //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $Certificado_Actual = $request->file('Certificado_Actual');
         
@@ -622,8 +602,126 @@ class general_eycController extends Controller
     }
     $generalConCertificados->save();
 
+     /*Alamcen */
+     $generalConAlmacen = new almacen;
+     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+     if($request->input('Lote')==null)
+     {
+        $generalConAlmacen->Lote = 'N/A';
+     }else{
+        $generalConAlmacen->Lote = $request->input('Lote');
+     }
+
+     if($request->input('Stock')==null)
+     {
+        $generalConAlmacen->Stock = 0;
+     }else{
+        $generalConAlmacen->Stock = $request->input('Stock');
+     }
+
+     $generalConAlmacen->save();
+
     return redirect()->route('inventario');
 }
 
+   /**
+     * Update the specified resource in storage.
+     */
+    public function updateConsumibles(Request $request, $id)
+{
+    
+    // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+        'No_economico' => $request->input('No_economico'),
+        'Serie' => $request->input('Serie'),
+        'Marca' => $request->input('Marca'),
+        'Modelo' => $request->input('Modelo'),
+        'Ubicacion' => $request->input('Ubicacion'),
+        'Almacenamiento' => $request->input('Almacenamiento'),
+        'Comentario' => $request->input('Comentario'),
+        'SAT' => $request->input('SAT'),
+        'BMPRO' => $request->input('BMPRO'),
+        'Destino' => $request->input('Destino'),
+        'Tipo' => $request->input('Tipo'),
+        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+    ]);
+
+    // Actualizar los datos del equipo asociado
+    /*$generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+    $generalConEquipos->update([
+        'Proceso' => $request->input('Proceso'),
+        'Metodo' => $request->input('Metodo'),
+        'Tipo_E' => $request->input('Tipo_E'),
+    ]);*/
+
+    // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Factura;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+
+        // Guardar el nuevo archivo PDF
+        $pdf = $request->file('Factura');
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+
+        // Actualizar la ruta de la factura en la base de datos
+        $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+    // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Foto;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        // Guardar el nuevo archivo de imagen
+        $imagen = $request->file('Foto');
+        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+        // Actualizar la ruta de la imagen en la base de datos
+        $generalEyC->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+     // Actualizar los datos del certificado asociado
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+     $generalConCertificado->update([
+         'No_certificado' => $request->input('No_certificado'),
+         //'Fecha_calibracion' => $request->input('Fecha_calibracion'),
+         //'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
+     ]);
+
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Certificado_Actual');
+        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+        $generalConCertificado->save();
+    }
+
+     // Actualizar los datos del Almacen asociado
+     $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+     $generalConAlmacen->update([
+         'Lote' => $request->input('Lote'),
+         'Stock' => $request->input('Stock'),
+     ]);
+
+
+    return redirect()->route('inventario');
+}
 
 }
