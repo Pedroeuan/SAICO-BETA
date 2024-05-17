@@ -57,8 +57,13 @@
                         <td scope="row">SIN DATOS</td>
                         <td scope="row">SIN DATOS</td>
                         <td scope="row">SIN DATOS</td>
-                @endif         
-                @if($general_eyc->certificados->Fecha_calibracion==null)
+                @endif 
+                @php 
+                //dd($general_eyc->certificados->Fecha_calibracion);
+                /* */
+                @endphp  
+                @if($general_eyc->certificados)
+                @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
                 <td scope="row">SIN FECHA ASIGNADA</td>
                 @else
                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
@@ -72,10 +77,21 @@
                     @endif
                 </td>
                 <td>
+                @endif
                 <div class="btn-group">
-                        <a href="{{ route('edicion/editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                @if($general_eyc->Tipo=='EQUIPOS')
+                        <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        @elseif($general_eyc->Tipo=='CONSUMIBLES')
+                        <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                @endif
+                @php 
+                   /*
+                   <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                     */
+                @endphp
+                    <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </div>
+
                 </td>
                     </tr>
                     @endforeach

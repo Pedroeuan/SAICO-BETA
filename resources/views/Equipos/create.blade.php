@@ -13,7 +13,8 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-2">
-                    <ul class="nav nav-pills">
+                <ul class="nav nav-pills justify-content-center">
+
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
@@ -197,7 +198,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -263,7 +264,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -280,8 +281,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
-                                            <input type="text" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -293,9 +294,20 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lote</label>
-                                            <input type="number" class="form-control inputForm" name="Lote" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Enter ...">
                                         </div>
                                     </div>
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
+                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
+                                            <!--<select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="TIERRA">TIERRA</option>
+                                                <option value="COSTA FUERA">COSTA FUERA</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -321,7 +333,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -427,7 +439,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -540,7 +552,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

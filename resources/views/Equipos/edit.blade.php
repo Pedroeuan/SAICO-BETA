@@ -13,29 +13,36 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-2">
-                    <ul class="nav nav-pills">
+                <ul class="nav nav-pills justify-content-center"> 
+                    @if($generalEyC->Tipo=='EQUIPOS')
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Blocks</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Complementos</a></li>
+                    @endif
+                    @if($generalEyC->Tipo=='CONSUMIBLES')
+                        <li class="nav-item"><a class="nav-link active" href="#tab_2" data-toggle="tab">Consumibles</a></li>
+                    @endif
+                    @if($generalEyC->Tipo=='ACCESORIOS')
+                        <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab">Accesorios</a></li>
+                    @endif
+                    @if($generalEyC->Tipo=='BLOCKS')
+                        <li class="nav-item"><a class="nav-link active" href="#tab_4" data-toggle="tab">Blocks</a></li>
+                    @endif
+                    @if($generalEyC->Tipo=='HERRAMIENTAS')
+                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">HERRAMIENTAS</a></li>
+                    @endif
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
-                </div><!-- /.card-header -->
-
+                </div><!-- /.card-header -->  
                 <div class="card-body">
+                 @if($generalEyC->Tipo=='EQUIPOS')  
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            @php
-                            //<form action="{{route('editEquipos', $id)}}" method="post" enctype="multipart/form-data">
-                                @endphp
-                            <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                              <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                               @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
 
@@ -233,61 +240,64 @@
                             </form>
                         </div>
                             <!-- Contenido de la primera pestaña -->
-                        <div class="tab-pane" id="tab_2">
-                            <form action="">
+                    @endif
+                    @if($generalEyC->Tipo=='CONSUMIBLES')
+                            <div class="tab-pane" id="tab_2">
+                            <form action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Nombre_E_P_BP }}" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Marca" value="{{ $generalEyC->Marca }}" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Modelo" value="{{ $generalEyC->Modelo }}" placeholder="Ejemplo: DPM">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->Ubicacion }}" placeholder="Ejemplo: OFICINA">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" value="{{ $generalEyC->Almacenamiento }}" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -296,30 +306,90 @@
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Factura != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Factura == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                   @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Destino" value="{{ $generalEyC->Destino }}" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
-                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConConsumibles->Proveedor }}" name="Proveedor" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Foto != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FICHA TÉCNICA</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Foto == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FICHA TÉCNICA</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConAlmacen->Lote }}" name="Lote" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
+                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
+                                           <!-- <select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="TIERRA" @if ($generalConConsumibles->Tipo == 'TIERRA') selected="selected" @endif>TIERRA</option>
+                                                <option value="COSTA FUERA" @if ($generalConConsumibles->Tipo == 'COSTA FUERA') selected="selected" @endif>COSTA FUERA</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -329,7 +399,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
+                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
                                     <div>
@@ -338,13 +408,16 @@
                                 </div>
                             </form>
                         </div>
+                        <!--ACCESORIOS -->
+                    @endif
+                    @if($generalEyC->Tipo=='ACCESORIOS')
                         <div class="tab-pane" id="tab_3">
                             <form action="">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -443,13 +516,15 @@
                                 </div>
                             </form>
                         </div>
+                    @endif
+                    @if($generalEyC->Tipo=='BLOCKS')
                         <div class="tab-pane" id="tab_4">
                             <form action="">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -554,13 +629,15 @@
                                 </div>
                             </form>
                         </div>
+                    @endif
+                    @if($generalEyC->Tipo=='HERRAMIENTAS')
                         <div class="tab-pane" id="tab_5">
                             <form action="">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -659,12 +736,11 @@
                                 </div>
                             </form>
                         </div>
-                        
+                    @endif
                         <!-- Agrega más paneles de tabs según sea necesario -->
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
             </div><!-- /.card -->       
-
 @stop
 
 

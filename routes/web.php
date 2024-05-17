@@ -33,9 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
 
     /*Rutas de Vistas Equipos*/
-    Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
-    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
-    Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('edicion/editEquipos');
+    Route::get('registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
+    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
+    Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
+    //Route::get('/edicion/editEyCon/{id}', [general_eycController::class, 'editEyCon'])->name('edicion.editEyCon');
     
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -44,11 +45,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
-    
 
-        /*CONSUMIBLES*/
+    /*CONSUMIBLES*/
     /*Ruta de Guardado*/
-    Route::post('general_eyc', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
+    Route::post('general_eyc/storeConsumibles', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
+      /*Ruta de Actualizar*/
+      Route::post('/edicion/updateConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
 });
 
 require __DIR__.'/auth.php';

@@ -9,6 +9,7 @@ class general_eyc extends Model
 {
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
+        'idGeneral_EyC',
         'Nombre_E_P_BP',
         'No_economico',
         'Serie',
@@ -35,18 +36,26 @@ class general_eyc extends Model
     $timestamps a tu modelo y estableciéndola en false: */
     public $timestamps = false; 
 
+    public function equipos()
+    {
+        return $this->hasOne(equipos::class, 'idGeneral_EyC');
+    }
 
     public function certificados()
     {
-        //dd($this->hasOne(Certificados::class, 'idGeneral_EyC'));
-        return $this->hasOne(Certificados::class, 'idGeneral_EyC');
+        return $this->hasOne(certificados::class, 'idGeneral_EyC');
     }
 
-    public function equipos()
+    public function consumibles()
     {
-        //dd($this->hasOne(Certificados::class, 'idGeneral_EyC'));
-        return $this->hasOne(equipos::class, 'idGeneral_EyC');
+        return $this->hasOne(consumibles::class, 'idGeneral_EyC');
     }
+
+    public function almacen()
+    {
+        return $this->hasOne(almacen::class, 'idGeneral_EyC');
+    }
+
 
     use HasFactory;
 }
