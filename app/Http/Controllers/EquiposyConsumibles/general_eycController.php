@@ -254,19 +254,22 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    //$general = general_eyc::get();
+    //$generalConCertificados = general_eyc::with('certificados')->get();
+    public function editEyC($id)
+        {
+            $generalEyC = general_eyc::findOrFail($id);
+            $generalConEquipos = general_eyc::with('certificados')->where('idGeneral_EyC', $id)->first();
+            $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
+            $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
 
+             // Retornar la vista con los datos obtenidos
+                return view('Equipos.edit', compact('id','generalEyC','generalConCertificados', 'generalConEquipos', 'generalConConsumibles'));
+        }
+
+   /* //FUNCIONAL
      public function editEyC($id)
         {
-
-            /*$generalEyC = general_eyc::findOrFail($id);
-                $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
-                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
-                $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
-                //dd($generalConConsumibles);
-                // Pasar los datos del equipo y los datos generales a la vista de edición
-                return view('Equipos.edit', compact('id','generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC'));
-                //return view('Equipos.edit', compact('id','generalConCertificados','generalConEquipos', 'generalEyC'));
-             */
                   $generalEyC = general_eyc::findOrFail($id);
                if($generalEyC->Tipo=='EQUIPOS')
                {
@@ -283,7 +286,7 @@ class general_eycController extends Controller
                 return view('Equipos.edit', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
                }
                   
-        }
+        }*/
 
        /* public function editEyC($id)
         {
@@ -307,8 +310,8 @@ class general_eycController extends Controller
                 return view('Equipos.edit2', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
             }*/
     
-     /*
-       public function editEyC($id)
+     
+      /* public function editEyC($id)
     {
             // Buscar el equipo y los datos generales en la base de datos
             $generalConEquipos = Equipos::findOrFail($id);
@@ -319,7 +322,7 @@ class general_eycController extends Controller
             // Pasar los datos del equipo y los datos generales a la vista de edición
             return view('Equipos.edit', compact('generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC', 'id'));
     }
-        public function editEyC($id)
+       public function editEyC($id)
     {
            $generalEyC = general_eyc::findOrFail($id);
             $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
@@ -328,8 +331,8 @@ class general_eycController extends Controller
             //dd( $generalEyC);
             // Pasar los datos del equipo y los datos generales a la vista de edición
             return view('Equipos.edit', compact('id','generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC'));
-    }
-*/
+    }*/
+
 
     /**
      * Update the specified resource in storage.
