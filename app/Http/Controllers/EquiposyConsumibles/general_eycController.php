@@ -254,7 +254,38 @@ class general_eycController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-        public function editEyC($id)
+
+     public function editEyC($id)
+        {
+
+            /*$generalEyC = general_eyc::findOrFail($id);
+                $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
+                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
+                $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
+                //dd($generalConConsumibles);
+                // Pasar los datos del equipo y los datos generales a la vista de edición
+                return view('Equipos.edit', compact('id','generalConConsumibles','generalConCertificados','generalConEquipos', 'generalEyC'));
+                //return view('Equipos.edit', compact('id','generalConCertificados','generalConEquipos', 'generalEyC'));
+             */
+                  $generalEyC = general_eyc::findOrFail($id);
+               if($generalEyC->Tipo=='EQUIPOS')
+               {
+                $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
+                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
+                
+                return view('Equipos.edit', compact('id','generalConCertificados','generalConEquipos', 'generalEyC'));
+               }else if($generalEyC->Tipo=='CONSUMIBLES')
+               {
+                $generalEyC = general_eyc::findOrFail($id);
+                $generalConCertificados = certificados::findOrFail($generalEyC->idGeneral_EyC);
+                $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
+
+                return view('Equipos.edit', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
+               }
+                  
+        }
+
+       /* public function editEyC($id)
         {
                $generalEyC = general_eyc::findOrFail($id);
                 $generalConEquipos = Equipos::findOrFail($generalEyC->idGeneral_EyC);
@@ -274,7 +305,7 @@ class general_eycController extends Controller
                 $generalConConsumibles = consumibles::findOrFail($generalEyC->idGeneral_EyC);
 
                 return view('Equipos.edit2', compact('id','generalConCertificados','generalConConsumibles', 'generalEyC'));  
-            }
+            }*/
     
      /*
        public function editEyC($id)

@@ -35,8 +35,7 @@ Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
-    Route::get('edicion/editEyC/{general_eyc}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
-    Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('editEyC');
+    Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
     Route::get('/edicion/editEyCon/{id}', [general_eycController::class, 'editEyCon'])->name('edicion.editEyCon');
     
     /*EQUIPOS*/
