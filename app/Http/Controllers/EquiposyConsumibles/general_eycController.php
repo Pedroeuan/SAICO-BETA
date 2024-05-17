@@ -259,6 +259,7 @@ class general_eycController extends Controller
     public function editEyC($id)
         {
             $generalEyC = general_eyc::findOrFail($id);
+            /*devuelven los datos de la tabla a la que estan ligados */
             $generalConEquipos = general_eyc::with('certificados')->where('idGeneral_EyC', $id)->first();
             $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
             $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
