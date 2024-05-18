@@ -12,6 +12,7 @@ use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\accesorios;
 
 
 class general_eycController extends Controller
@@ -602,7 +603,7 @@ class general_eycController extends Controller
     }
     $generalConCertificados->save();
 
-     /*Alamcen */
+     /*Almacen */
      $generalConAlmacen = new almacen;
      $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
      if($request->input('Lote')==null)
@@ -723,5 +724,157 @@ class general_eycController extends Controller
 
     return redirect()->route('inventario');
 }
+
+
+ /*APARTADO DE ACCESORIOS*/
+ public function storeAccesorios(Request $request)
+ {
+     /* Tabla General_EyC */
+     $general = new general_eyc;
+     if($request->input('Nombre_E_P_BP')==null)
+     {
+         $general->Nombre_E_P_BP = 'N/A';
+     }else{
+         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+     }
+     if($request->input('No_economico')==null)
+     {
+         $general->No_economico = 'N/A';
+     }else{
+         $general->No_economico = $request->input('No_economico');
+     }
+     if($request->input('Serie')==null)
+     {
+         $general->Serie = 'N/A';
+     }else{
+         $general->Serie = $request->input('Serie');
+     }
+     if($request->input('Marca')==null)
+     {
+         $general->Marca = 'N/A';
+     }else{
+         $general->Marca = $request->input('Marca');
+     }
+     if($request->input('Modelo')==null)
+     {
+         $general->Modelo = 'N/A';
+     }else{
+         $general->Modelo = $request->input('Modelo');
+     }
+     if($request->input('Ubicacion')==null)
+     {
+         $general->Ubicacion = 'N/A';
+     }else{
+         $general->Ubicacion = $request->input('Ubicacion');
+     }
+     if($request->input('Almacenamiento')==null)
+     {
+         $general->Almacenamiento = 'N/A';
+     }else{
+         $general->Almacenamiento = $request->input('Almacenamiento');
+     }
+     if($request->input('Comentario')==null)
+     {
+         $general->Comentario = 'N/A';
+     }else{
+         $general->Comentario = $request->input('Comentario');
+     }
+     if($request->input('SAT')==null)
+     {
+         $general->SAT = 'N/A';
+     }else{
+         $general->SAT = $request->input('SAT');
+     }
+     if($request->input('BMPRO')==null)
+     {
+         $general->BMPRO = 'N/A';
+     }else{
+         $general->BMPRO = $request->input('BMPRO');
+     }
+     if($request->input('Destino')==null)
+     {
+         $general->Destino = 'N/A';
+     }else{
+         $general->Destino = $request->input('Destino');
+     } 
+     if($request->input('Disponibilidad_Estado')==null)
+     {
+         $general->Disponibilidad_Estado = 'N/A';
+     }else{
+         $general->Disponibilidad_Estado = $request->input('Proveedor');
+     }
+         $general->Foto = 'N/A';
+
+     if($request->input('Tipo')==null)
+     {
+         $general->Tipo = 'N/A';
+     }else{
+         $general->Tipo = $request->input('Tipo');
+     }  
+     // Validar que se ha enviado el archivo de factura
+     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+         // Obtener el archivo PDF de la solicitud
+         $pdf = $request->file('Factura');
+         
+         // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+         $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+         // Opcional: guardar la ruta en la base de datos
+         // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+         // $generalConCertificados->save();
+         $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+     } else {
+         if($request->input('Factura') == null)
+     {
+         $general->Factura = 'N/A';
+     }
+         // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
+         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
+     }
+     /*Ficha Tecnica */
+       /* if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+         $Foto = $request->file('Foto');
+         $FotoPath = $Foto->storeAs('Equipos/Fotos', $Foto->getClientOriginalName(), 'public');
+         $general->Foto = $FotoPath;
+     } else {
+         if($request->input('Foto') == null)
+     {
+         $general->Foto = 'N/A';
+     }
+     }*/
+     $general->save();
+ 
+     
+     /* Certificados */
+     $generalConCertificados = new certificados;
+     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+     if($request->input('No_certificado')==null)
+     {
+         $generalConCertificados->No_certificado = 'N/A';
+     }else{
+         $generalConCertificados->No_certificado = $request->input('No_certificado');
+     }  
+     
+         $generalConCertificados->Fecha_calibracion = '01/01/0001';
+         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+ 
+         //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+         //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+         $Certificado_Actual = $request->file('Certificado_Actual');
+         
+         $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos/Certificados', $Certificado_Actual->getClientOriginalName(), 'public');
+ 
+         $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
+     } else {
+         if($request->input('Certificado_Actual') == null)
+     {
+         $generalConCertificados->Certificado_Actual = 'N/A';
+     }
+     }
+     $generalConCertificados->save();
+ 
+ 
+     return redirect()->route('inventario');
+ }
 
 }

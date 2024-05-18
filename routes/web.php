@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
-    Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
+    Route::get('/edicion/editEyC/{id}', [solicitud::class, 'index'])->name('edicion.editEyC');
     //Route::get('/edicion/editEyCon/{id}', [general_eycController::class, 'editEyCon'])->name('edicion.editEyCon');
     
     /*EQUIPOS*/
@@ -43,14 +43,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
-    /*Ruta para borrar*/
-    Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
     /*CONSUMIBLES*/
     /*Ruta de Guardado*/
     Route::post('general_eyc/storeConsumibles', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
-      /*Ruta de Actualizar*/
-      Route::post('/edicion/updateConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
+    /*Ruta de Actualizar*/
+    Route::post('/edicion/updateConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
+
+        /*ACCESORIOS*/
+    /*Ruta de Guardado*/
+    Route::post('/general_eyc/storeAccesorios', [general_eycController::class, 'storeAccesorios'])->name('general_eyc.storeAccesorios'); 
+    /*Ruta de Actualizar*/
+    //Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
+    
+
+    /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
+    Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 });
 
 require __DIR__.'/auth.php';
