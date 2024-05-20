@@ -18,7 +18,7 @@
 <form role="form">
     <div class="box">
         <h3 align="center">Inventario de equipos</h3>
-        <br>
+            <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
@@ -35,64 +35,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                @php 
-                //dd($generalConCertificados);
-                @endphp
-                @foreach ($generalConCertificados as $general_eyc)
-                @php 
-                //dd($general_eyc->idGeneral_EyC);
-                @endphp
-                    <tr>
-                    @if($general_eyc)
-                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                        <td scope="row">{{$general_eyc->No_economico}}</td>
-                        <td scope="row">{{$general_eyc->Marca}}</td>
-                        <td scope="row">{{$general_eyc->Modelo}}</td>
-                        <td scope="row">{{$general_eyc->Serie}}</td>
-                        <td scope="row">{{$general_eyc->Destino}}</td>
-                    @else
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                @endif 
-                @php 
-                //dd($general_eyc->certificados->Fecha_calibracion);
-                /* */
-                @endphp  
+                    @foreach ($generalConCertificados as $general_eyc)
+                        <tr>
+                        @if($general_eyc)
+                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                            <td scope="row">{{$general_eyc->No_economico}}</td>
+                            <td scope="row">{{$general_eyc->Marca}}</td>
+                            <td scope="row">{{$general_eyc->Modelo}}</td>
+                            <td scope="row">{{$general_eyc->Serie}}</td>
+                            <td scope="row">{{$general_eyc->Destino}}</td>
+                        @else
+                            <td scope="row">SIN DATOS</td>
+                            <td scope="row">SIN DATOS</td>
+                            <td scope="row">SIN DATOS</td>
+                            <td scope="row">SIN DATOS</td>
+                            <td scope="row">SIN DATOS</td>
+                            <td scope="row">SIN DATOS</td>
+                        @endif 
                 @if($general_eyc->certificados)
-                @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
-                <td scope="row">SIN FECHA ASIGNADA</td>
-                @else
-                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                @endif
-                <td scope="row"> 
-                    @if ($general_eyc->Foto != 'N/A')
-                  <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
-                    @elseif($general_eyc->Foto == 'N/A')  
-                    <a target="_blank">SIN FOTO</a>                                              
+                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                    @else
+                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
                     @endif
-                </td>
-                <td>
-                @endif
-                <div class="btn-group">
-                @if($general_eyc->Tipo=='EQUIPOS')
-                        <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        @elseif($general_eyc->Tipo=='CONSUMIBLES')
-                        <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                @endif
-                @php 
-                   /*
-                   <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                     */
-                @endphp
-                    <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    </div>
-
-                </td>
+                        <td scope="row"> 
+                    @if ($general_eyc->Foto != 'N/A')
+                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                        <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
+                    @elseif($general_eyc->Foto == 'N/A')  
+                        <a target="_blank">SIN FOTO</a>                                              
+                    @endif
+                    </td>
+                    <td>
+                    @endif
+                        <div class="btn-group">
+                            <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </div>
+                    </td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -277,9 +277,10 @@ class general_eycController extends Controller
             $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
             $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
             $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
 
             // Retornar la vista con los datos obtenidos
-            return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen'));
+            return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios'));
         }
 
    /* //FUNCIONAL
@@ -630,7 +631,6 @@ class general_eycController extends Controller
      */
     public function updateConsumibles(Request $request, $id)
 {
-    
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
 
@@ -803,14 +803,14 @@ class general_eycController extends Controller
      }else{
          $general->Disponibilidad_Estado = $request->input('Proveedor');
      }
-         $general->Foto = 'N/A';
-
      if($request->input('Tipo')==null)
      {
          $general->Tipo = 'N/A';
      }else{
          $general->Tipo = $request->input('Tipo');
-     }  
+     } 
+         $general->Foto = 'N/A';
+  
      // Validar que se ha enviado el archivo de factura
      if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
          // Obtener el archivo PDF de la solicitud
@@ -827,35 +827,17 @@ class general_eycController extends Controller
      {
          $general->Factura = 'N/A';
      }
-         // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
-         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
-     }
-     /*Ficha Tecnica */
-       /* if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
-         $Foto = $request->file('Foto');
-         $FotoPath = $Foto->storeAs('Equipos/Fotos', $Foto->getClientOriginalName(), 'public');
-         $general->Foto = $FotoPath;
-     } else {
-         if($request->input('Foto') == null)
-     {
-         $general->Foto = 'N/A';
-     }
-     }*/
+    }
      $general->save();
  
      
      /* Certificados */
      $generalConCertificados = new certificados;
      $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-     if($request->input('No_certificado')==null)
-     {
-         $generalConCertificados->No_certificado = 'N/A';
-     }else{
-         $generalConCertificados->No_certificado = $request->input('No_certificado');
-     }  
-     
-         $generalConCertificados->Fecha_calibracion = '01/01/0001';
-         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+ 
+     $generalConCertificados->No_certificado = 'N/A';
+     $generalConCertificados->Fecha_calibracion = '01/01/0001';
+     $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
  
          //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
          //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
@@ -872,9 +854,19 @@ class general_eycController extends Controller
      }
      }
      $generalConCertificados->save();
- 
- 
-     return redirect()->route('inventario');
- }
 
-}
+      /* Accesorios */
+      $generalConAccesorios = new accesorios;
+      $generalConAccesorios->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+      if($request->input('Proveedor')==null)
+     {
+         $generalConAccesorios->Proveedor = 'N/A';
+     }else{
+         $generalConAccesorios->Proveedor = $request->input('Proveedor');
+     } 
+     $generalConAccesorios->save();
+
+     return redirect()->route('inventario');
+    }
+
+    }

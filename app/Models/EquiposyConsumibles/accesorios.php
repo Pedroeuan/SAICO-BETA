@@ -11,6 +11,7 @@ class accesorios extends Model
         'idGeneral_EyC',
         'Proveedor',
     ];
+    //protected $table = 'accesorios';
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;

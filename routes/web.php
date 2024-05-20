@@ -33,10 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
 
     /*Rutas de Vistas Equipos*/
-    Route::get('registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
-    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
-    Route::get('/edicion/editEyC/{id}', [solicitud::class, 'index'])->name('edicion.editEyC');
-    //Route::get('/edicion/editEyCon/{id}', [general_eycController::class, 'editEyCon'])->name('edicion.editEyCon');
+    Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
+    Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
     
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -48,13 +46,13 @@ Route::middleware('auth')->group(function () {
     /*Ruta de Guardado*/
     Route::post('general_eyc/storeConsumibles', [general_eycController::class, 'storeConsumibles'])->name('general_eyc.storeConsumibles'); 
     /*Ruta de Actualizar*/
-    Route::post('/edicion/updateConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
+    Route::post('/edicion/editConsumibles/{id}', [general_eycController::class, 'updateConsumibles'])->name('editConsumibles.update');
 
-        /*ACCESORIOS*/
+    /*ACCESORIOS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeAccesorios', [general_eycController::class, 'storeAccesorios'])->name('general_eyc.storeAccesorios'); 
     /*Ruta de Actualizar*/
-    //Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
+    Route::post('/edicion/editAccesorios/{id}', [general_eycController::class, 'updateAccesorios'])->name('editAccesorios.update');
     
 
     /*Ruta para borrar, equipos, comsumibles, block, herramientas*/

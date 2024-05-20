@@ -329,6 +329,7 @@
                         <!--ACCESORIOS -->
                         <div class="tab-pane" id="tab_3">
                         <form action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
+                            @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -405,7 +406,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado</label>
-                                            <input type="file" class="form-control inputForm" name="No_certificado" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
