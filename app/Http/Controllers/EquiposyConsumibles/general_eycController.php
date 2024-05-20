@@ -405,6 +405,7 @@ class general_eycController extends Controller
         $generalConCertificado = certificados::find($id);
         $generalConConsumible = consumibles::find($id);
         $generalConAlmacen = almacen::find($id);
+        $generalConAcesorios = accesorios::find($id);
         // Verifica si el registro existe antes de intentar eliminarlo
         if ($generalConEquipos) {
             // Elimina el registro de la tabla 'equipos'
@@ -420,6 +421,9 @@ class general_eycController extends Controller
 
             if ($generalConAlmacen) {
                 $generalConAlmacen->delete();
+            }
+            if ($generalConAcesorios) {
+                $generalConAcesorios->delete();
             }
 
             $general = general_eyc::find($id);
@@ -868,5 +872,86 @@ class general_eycController extends Controller
 
      return redirect()->route('inventario');
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateAccesorios(Request $request, $id)
+{
+    // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+        'No_economico' => $request->input('No_economico'),
+        'Serie' => $request->input('Serie'),
+        'Marca' => $request->input('Marca'),
+        'Modelo' => $request->input('Modelo'),
+        'Ubicacion' => $request->input('Ubicacion'),
+        'Almacenamiento' => $request->input('Almacenamiento'),
+        'Comentario' => $request->input('Comentario'),
+        'SAT' => $request->input('SAT'),
+        'BMPRO' => $request->input('BMPRO'),
+        'Destino' => $request->input('Destino'),
+        'Tipo' => $request->input('Tipo'),
+        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+    ]);
+
+    // Actualizar los datos del equipo asociado
+    /*$generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+    $generalConEquipos->update([
+        'Proceso' => $request->input('Proceso'),
+        'Metodo' => $request->input('Metodo'),
+        'Tipo_E' => $request->input('Tipo_E'),
+    ]);*/
+
+    // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Factura;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+
+        // Guardar el nuevo archivo PDF
+        $pdf = $request->file('Factura');
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+
+        // Actualizar la ruta de la factura en la base de datos
+        $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+     // Actualizar los datos del certificado asociado
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+     $generalConCertificado->update([
+         'No_certificado' => $request->input('No_certificado'),
+         //'Fecha_calibracion' => $request->input('Fecha_calibracion'),
+         //'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
+     ]);
+
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Certificado_Actual');
+        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+        $generalConCertificado->save();
+    }
+
+     // Actualizar los datos del Almacen asociado
+     $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
+     $generalConAccesorios->update([
+         'Proveedor' => $request->input('Proveedor'),
+     ]);
+
+
+    return redirect()->route('inventario');
+}
 
     }
