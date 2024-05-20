@@ -5,7 +5,7 @@
 
 @section('content')
 <br>
-<h3 align="center"> Registro de equipos</h3>
+<h3 align="center"> Registro de Equipos</h3>
 <br>
 
 <div class="container">
@@ -328,7 +328,8 @@
                         </div>
                         <!--ACCESORIOS -->
                         <div class="tab-pane" id="tab_3">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
+                            @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -399,13 +400,13 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -434,7 +435,8 @@
                         </div>
                         <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">

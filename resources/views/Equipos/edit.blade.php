@@ -412,90 +412,121 @@
                     @endif
                     @if($generalEyC->Tipo=='ACCESORIOS')
                         <div class="tab-pane" id="tab_3">
-                            <form action="">
+                        <form action="{{ route('editAccesorios.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Nombre_E_P_BP }}" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Marca }}" name="Marca" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Modelo }}" name="Modelo" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Serie }}" name="Serie" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Ubicacion }}" name="Ubicacion" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Almacenamiento }}" name="Almacenamiento" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
+                                            <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
+                                    @if ($generalEyC->Factura != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Factura == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN FACTURA</a>                                                
+                                        </div>
+                                    </div>
+                                   @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Destino }}" name="Destino" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
+                                            <input type="file" class="form-control inputForm"  name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
-                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalConAccesorios->Proveedor }}" name="Proveedor" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -507,7 +538,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
+                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ...">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
                                     <div>
