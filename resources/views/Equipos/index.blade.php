@@ -63,7 +63,7 @@
                     <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                         <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
                     @elseif($general_eyc->Foto == 'N/A')  
-                        <a target="_blank">SIN FOTO</a>                                              
+                        <a target="_blank">SIN FOTO / N/A</a>                                              
                     @endif
                     </td>
                     <td>

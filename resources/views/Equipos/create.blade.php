@@ -435,7 +435,8 @@
                         </div>
                         <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
