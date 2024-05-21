@@ -560,7 +560,8 @@
                         </div>
                         <!--HERRAMIENTAS -->
                         <div class="tab-pane" id="tab_5">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeHerramientas')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -631,31 +632,31 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Garantía</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Garantia" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
-                                            <input type="file" class="form-control inputForm" name="" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
-                                            <input type="file" class="form-control inputForm" name="Num_certificado_calibracion" placeholder="Enter ..." multiple>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="COMPLEMENTOS">
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
                                     </div>
                                     <div class="col-sm-12">

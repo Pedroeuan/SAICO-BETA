@@ -56,6 +56,22 @@ class general_eyc extends Model
         return $this->hasOne(almacen::class, 'idGeneral_EyC');
     }
 
+    public function accesorios()
+    {
+        return $this->hasOne(accesorios::class, 'idGeneral_EyC');
+    }
+
+    public function blocks()
+    {
+        return $this->hasOne(block_y_probeta::class, 'idGeneral_EyC');
+    }
+
+    public function herramientas()
+    {
+        return $this->hasOne(herramientas::class, 'idGeneral_EyC');
+    }
+
+
 
     use HasFactory;
 }
