@@ -13,6 +13,7 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\accesorios;
+use App\Models\EquiposyConsumibles\block_y_probeta;
 
 
 class general_eycController extends Controller
@@ -1074,9 +1075,25 @@ public function storeBlocks(Request $request)
     $generalConCertificados = new certificados;
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
 
-    $generalConCertificados->No_certificado = 'N/A';
-    $generalConCertificados->Fecha_calibracion = '01/01/0001';
-    $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    if($request->input('No_certificado')==null)
+    {
+        $generalConCertificados->No_certificado = 'N/A';
+    }else{
+        $generalConCertificados->No_certificado = $request->input('No_certificado');
+    }  
+    if($request->input('Fecha_calibracion')==null)
+    {
+        $generalConCertificados->Fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+    }  
+
+    if($request->input('Prox_fecha_calibracion')==null)
+    {
+        $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }  
 
         //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
         //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
@@ -1094,16 +1111,10 @@ public function storeBlocks(Request $request)
     }
     $generalConCertificados->save();
 
-     /* Accesorios */
-     $generalConAccesorios = new accesorios;
-     $generalConAccesorios->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-     if($request->input('Proveedor')==null)
-    {
-        $generalConAccesorios->Proveedor = 'N/A';
-    }else{
-        $generalConAccesorios->Proveedor = $request->input('Proveedor');
-    } 
-    $generalConAccesorios->save();
+     /* Block y Probeta */
+     $generalConBlockyprobeta = new block_y_probeta;
+     $generalConBlockyprobeta->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+     $generalConBlockyprobeta->save();
 
     return redirect()->route('inventario');
    }
