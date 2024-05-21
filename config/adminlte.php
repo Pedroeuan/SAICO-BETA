@@ -440,7 +440,7 @@ return [
                         [
                             'text' => 'Registro',
                             'icon' => 'fas fa-vials',
-                            'url' => 'registro/create',
+                            'url' => 'registros/createEyC',
                         ],
                         [
                             'text' => 'Kits',
@@ -450,7 +450,7 @@ return [
                         [
                             'text' => 'Solicitud E y C',
                             'icon' => 'fas fa-file-alt',
-                            'url' => '#',
+                            'url' => 'registros/SolicitudEyC',
                         ],
                         /*[
                             'text' => 'level_one',
@@ -612,7 +612,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

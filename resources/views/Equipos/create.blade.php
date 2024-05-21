@@ -5,7 +5,7 @@
 
 @section('content')
 <br>
-<h3 align="center"> Registro de equipos</h3>
+<h3 align="center"> Registro de Equipos</h3>
 <br>
 
 <div class="container">
@@ -13,12 +13,13 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-2">
-                    <ul class="nav nav-pills">
+                <ul class="nav nav-pills justify-content-center">
+
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Blocks</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Complementos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Herramientas</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header -->
@@ -27,12 +28,12 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
                             <form action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
-                              @csrf 
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
 
@@ -103,26 +104,28 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Ejemplo: SI/NO">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                          <label class="col-form-label" for="inputSuccess">Proceso</label>
-                                          <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
-                                          <select class="form-control select2" style="width: 100%;" name="Proceso">
-                                            <option selected="selected">Elige un Proceso</option>
-                                            <option value="EQUIPOS">TODOS</option>
-                                            <option value="BLOCK Y PROBETA">PINS</option>
-                                            <option value="ACCESORIOS">PIMP</option>
-                                            <option value="COMPLEMENTOS">PISO</option>
-                                          </select>
+                                            <label class="col-form-label" for="inputSuccess">Proceso</label>
+                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
+                                            <select class="form-control select2" style="width: 100%;" name="Proceso">
+                                                <option selected="selected">Elige un Proceso</option>
+                                                <option value="TODOS">TODOS</option>
+                                                <option value="PINS">PINS</option>
+                                                <option value="PIMP">PIMP</option>
+                                                <option value="PISO">PISO</option>
+                                                <option value="Q.C">Q.C</option>
+                                                <option value="N/A">N/A</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -131,18 +134,56 @@
                                             <input type="text" class="form-control inputForm" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
+                                            <input type="text" class="form-control inputForm" name="Tipo_E" placeholder="Electro Magnetico">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
                                         </div>
                                     </div>
+
                                     <div>
                                         <button type="submit" class="btn btn-info bg-success">Guardar</button>
                                     </div>
@@ -151,12 +192,13 @@
                         </div>
                             <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane" id="tab_2">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -222,7 +264,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -233,10 +275,39 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <input type="number" class="form-control inputForm" name="Stock" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
+                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
+                                            <!--<select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="TIERRA">TIERRA</option>
+                                                <option value="COSTA FUERA">COSTA FUERA</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -255,13 +326,15 @@
                                 </div>
                             </form>
                         </div>
+                        <!--ACCESORIOS -->
                         <div class="tab-pane" id="tab_3">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
+                            @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -327,13 +400,13 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -360,13 +433,15 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -437,7 +512,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
@@ -449,8 +524,20 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración</label>
-                                            <input type="file" class="form-control inputForm" name="Num_certificado_calibracion" placeholder="Enter ...">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No Certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_Certificado" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -471,13 +558,15 @@
                                 </div>
                             </form>
                         </div>
+                        <!--HERRAMIENTAS -->
                         <div class="tab-pane" id="tab_5">
-                            <form action="">
+                        <form action="{{route('general_eyc.storeHerramientas')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" onclick="cambiarColor(this.value)" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -543,25 +632,31 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Garantía</label>
+                                            <input type="file" class="form-control inputForm" name="Garantia" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración</label>
-                                            <input type="file" class="form-control inputForm" name="Num_certificado_calibracion" placeholder="Enter ...">
+                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="COMPLEMENTOS">
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
                                     </div>
                                     <div class="col-sm-12">

@@ -5,17 +5,10 @@ namespace App\Models\EquiposyConsumibles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class certificados extends Model
+class block_y_probeta extends Model
 {
-    protected $fillable = [
-        'idGeneral_EyC',
-        'No_certificado',
-        'Certificado_Actual',
-        'Fecha_calibracion',
-        'Prox_fecha_calibracion'
-    ];
+    protected $table = 'block_probeta';
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
-
 }
