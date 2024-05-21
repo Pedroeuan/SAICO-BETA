@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeBlocks', [general_eycController::class, 'storeBlocks'])->name('general_eyc.storeBlocks'); 
     /*Ruta de Actualizar*/
-    //Route::post('/edicion/editBlocks/{id}', [general_eycController::class, 'updateBlocks'])->name('editBlocks.update');
+    Route::post('/edicion/editBlocks/{id}', [general_eycController::class, 'updateBlocks'])->name('editBlocks.update');
     
 
     /*Ruta para borrar, equipos, comsumibles, block, herramientas*/

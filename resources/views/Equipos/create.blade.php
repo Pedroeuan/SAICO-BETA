@@ -18,7 +18,7 @@
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Blocks</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Herramientas</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
@@ -522,11 +522,22 @@
                                             <input type="date" class="form-control inputForm" name="Fecha_calibracion" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    <!--SE PUEDE SELECCIONAR MAS DE 1 PDF-->
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No Certificado</label>
+                                            <input type="text" class="form-control inputForm" name="No_Certificado" placeholder="Enter ...">
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado de calibración / Plano</label>
-                                            <input type="file" class="form-control inputForm" name="Num_certificado_calibracion" placeholder="Enter ..." multiple>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
