@@ -1350,23 +1350,6 @@ public function storeHerramientas(Request $request)
     }
     $generalConCertificados->save();
 
-     /* Herramientas */
-    /*$generalConHerramientas = new herramientas;
-    $generalConHerramientas->idGeneral_EyC = $general->idGeneral_EyC;
-
-    if ($request->hasFile('Garantia')) {
-        $garantiaFile = $request->file('Garantia');
-        if ($garantiaFile->isValid()) {
-            $garantiaFilePath = $garantiaFile->storeAs('Equipos/Garantia', $garantiaFile->getClientOriginalName(), 'public');
-            $generalConHerramientas->Garantia = $garantiaFilePath;
-        } else {
-            if ($request->input('Garantia') == null) {
-                $generalConHerramientas->Garantia = 'N/A';
-            }
-        }
-    }
-    $generalConHerramientas->save();*/
-    /* Herramientas */
     $generalConHerramientas = new herramientas;
     $generalConHerramientas->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
 
@@ -1384,5 +1367,91 @@ public function storeHerramientas(Request $request)
 
     return redirect()->route('inventario');
    }
+
+      /**
+     * Update the specified resource in storage.
+     */
+    public function updateHerramientas(Request $request, $id)
+{
+    // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+        'No_economico' => $request->input('No_economico'),
+        'Serie' => $request->input('Serie'),
+        'Marca' => $request->input('Marca'),
+        'Modelo' => $request->input('Modelo'),
+        'Ubicacion' => $request->input('Ubicacion'),
+        'Almacenamiento' => $request->input('Almacenamiento'),
+        'Comentario' => $request->input('Comentario'),
+        'SAT' => $request->input('SAT'),
+        'BMPRO' => $request->input('BMPRO'),
+        'Destino' => $request->input('Destino'),
+        'Tipo' => $request->input('Tipo'),
+        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+    ]);
+
+    // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        $rutaAnterior = $generalEyC->Factura;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $pdf = $request->file('Factura');
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+        $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+    // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Foto;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        // Guardar el nuevo archivo de imagen
+        $imagen = $request->file('Foto');
+        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+        // Actualizar la ruta de la imagen en la base de datos
+        $generalEyC->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+     // Actualizar los datos del certificado asociado
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Certificado_Actual');
+        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+
+        $generalConCertificado->save();
+    }
+
+    /*HERRAMIENTAS*/
+    $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
+
+    if ($request->hasFile('Garantia') && $request->file('Garantia')->isValid()) {
+        $rutaAnterior = $generalConHerramientas->Garantia;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Garantia');
+        $imagenPath = $imagen->storeAs('Equipos/Garantia', $imagen->getClientOriginalName(), 'public');
+        $generalConHerramientas->Garantia = 'Equipos/Garantia/' . $imagen->getClientOriginalName();
+
+        $generalConHerramientas->save();
+    }
+    return redirect()->route('inventario');
+}
 
     }
