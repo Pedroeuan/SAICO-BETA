@@ -14,7 +14,6 @@
             <div class="card">
                 <div class="card-header p-2">
                 <ul class="nav nav-pills justify-content-center">
-
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
@@ -36,23 +35,18 @@
                                             <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
                                             <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
@@ -79,26 +73,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: Swiber Quetzal">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -115,77 +91,56 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Proceso</label>
-                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
-                                            <select class="form-control select2" style="width: 100%;" name="Proceso">
-                                                <option selected="selected">Elige un Proceso</option>
-                                                <option value="TODOS">TODOS</option>
-                                                <option value="PINS">PINS</option>
-                                                <option value="PIMP">PIMP</option>
-                                                <option value="PISO">PISO</option>
-                                                <option value="Q.C">Q.C</option>
-                                                <option value="N/A">N/A</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Método</label>
-                                            <input type="text" class="form-control inputForm" name="Metodo" placeholder="Ejemplo: Verif. de Maq. de Soldar">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo Equipo</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_E" placeholder="Electro Magnetico">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No de certificado</label>
                                             <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
                                             <input type="date" class="form-control inputForm" name="Fecha_calibracion">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
                                         </div>
                                     </div>
-
-                                    <div>
-                                        <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -203,12 +158,6 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
                                         </div>
@@ -217,6 +166,12 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
                                             <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -239,26 +194,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -291,12 +228,6 @@
                                             <input type="number" class="form-control inputForm" name="Stock" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lote</label>
-                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Enter ...">
-                                        </div>
-                                    </div>
                                     <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
@@ -310,6 +241,18 @@
                                     </div>-->
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="CONSUMIBLES">
                                         </div>
@@ -320,8 +263,10 @@
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -375,26 +320,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -417,6 +344,18 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="ACCESORIOS">
                                         </div>
@@ -427,9 +366,12 @@
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
@@ -482,26 +424,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -542,6 +466,18 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="BLOCK Y PROBETA">
                                         </div>
@@ -552,9 +488,12 @@
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
@@ -607,26 +546,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -655,6 +576,18 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
@@ -665,9 +598,12 @@
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>

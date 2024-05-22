@@ -28,9 +28,9 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
-                        <th>Destino</th>
+                        <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
-                        <th>Foto</th>
+                        <th>Foto/F.T/H.P</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -43,7 +43,7 @@
                             <td scope="row">{{$general_eyc->Marca}}</td>
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
-                            <td scope="row">{{$general_eyc->Destino}}</td>
+                            <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
                         @else
                             <td scope="row">SIN DATOS</td>
                             <td scope="row">SIN DATOS</td>
@@ -53,28 +53,32 @@
                             <td scope="row">SIN DATOS</td>
                         @endif 
                 @if($general_eyc->certificados)
-                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
-                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
-                    @else
-                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                        @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                            <td scope="row">SIN FECHA ASIGNADA</td>
+                        @else
+                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                        @endif
+                        @else
+                        <td scope="row">N/A</td>
                     @endif
-                        <td scope="row"> 
-                    @if ($general_eyc->Foto != 'N/A')
-                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                        <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
-                    @elseif($general_eyc->Foto == 'N/A')  
-                        <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
-                    @endif
-                        </td>
-                        <td>
-                    @endif
+                            <td scope="row"> 
+                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                            <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
+                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                            <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                        @endif
+                            </td>
+                            <td>
+                @endif
                         <div class="btn-group">
                             <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </td>
                     </tr>
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
         </div>
@@ -160,31 +164,3 @@
 });
 
 </script>
-<!--
-<script>
-    // funcion borrar 
-    $(".btnEliminarEquipo").on("click", function(){
-        //valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-        console.log(idGeneral_EyC);
-            Swal.fire({
-                title: "Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire("Eliminado!", "", "success");
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
-                }
-            });
-    })
-
-    //mostrar datatable
-    new DataTable('#tablaJs');
-</script>-->
-
-@endsection
-
