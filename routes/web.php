@@ -27,8 +27,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });
-
-
+    
     /*Equipos y Consumibles*/ 
     Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos y Consumibles Tabla General*/
@@ -39,13 +38,9 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     /*Rutas de Vistas Equipos y Consumibles-Edición*/
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
 
-
     Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
 
- 
-  
 
-    
     /*EQUIPOS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
