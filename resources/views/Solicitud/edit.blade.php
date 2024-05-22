@@ -17,69 +17,30 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Inventario de equipos</h3>
+        <h3 align="center">Solicitudes registradas</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Num. Económico</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>NS</th>
-                        <th>Destino</th>
-                        <th>Fecha calibración</th>
-                        <th>Foto</th>
+                        <th>Técnico</th>
+                        <th>Fecha de solicitud</th>
+                        <th>Estatus</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($generalConCertificados as $general_eyc)
                     <tr>
-                    @if($generalConCertificados)
-                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                        <td scope="row">{{$general_eyc->No_economico}}</td>
-                        <td scope="row">{{$general_eyc->Marca}}</td>
-                        <td scope="row">{{$general_eyc->Modelo}}</td>
-                        <td scope="row">{{$general_eyc->Serie}}</td>
-                        <td scope="row">{{$general_eyc->Destino}}</td>
-                    @else
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                @endif
-                @if($general_eyc->certificados==null)
-                <td scope="row">SIN FECHA ASIGNADA</td>
-                @else
-                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                @endif
-                <td scope="row"> 
-                    @if ($general_eyc->Foto != 'N/A')
-                  <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
-                    @elseif($general_eyc->Foto == 'N/A')  
-                    <a target="_blank">SIN FOTO</a>                                              
-                    @endif
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </a>
-                        <!--Yacziry-->
-                          @php
-                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        @endphp
-                    </div>
-                </td>
+                        <td scope="row">Irving alfonso</td>
+                        <td scope="row">17/05/24</td>
+                        <td scope="row">Pendiente</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
+                            </div>
+                        </td>
                     </tr>
-                    @endforeach
                 </tbody>
             </table>
         </div>

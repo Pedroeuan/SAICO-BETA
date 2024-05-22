@@ -7,6 +7,7 @@ use App\Http\Controllers\PDFController;
 
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+use App\Http\Controllers\Solicitudes\SolicitudesController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -28,14 +29,16 @@ Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf')
 });
 
 /*Equipos y Consumibles*/ 
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos Tabla General*/
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
 
     /*Rutas de Vistas Equipos*/
     Route::get('registros/createEquipos', [general_eycController::class, 'createEquipos'])->name('registros/createEquipos');
-    Route::get('registros/SolicitudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
     Route::get('edicion/editEquipos/{general_eyc}', [general_eycController::class, 'editEquipos'])->name('editEquipos');
+ 
+  
     
 
     /*Ruta de Guardado*/
@@ -44,6 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::post('edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
     /*Ruta para borrar*/
     Route::delete('destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('destroyEquipos.destroy');
+
+
+    Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+    Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
 });
 
 require __DIR__.'/auth.php';
