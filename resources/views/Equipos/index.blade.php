@@ -56,12 +56,12 @@
                         @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                             @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
                             <td scope="row">SIN FECHA ASIGNADA</td>
-                        @else
+                            @else
                             <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                        @endif
+                            @endif
                         @else
-                        <td scope="row">N/A</td>
-                    @endif
+                            <td scope="row">N/A</td>
+                        @endif
                             <td scope="row"> 
                         @if ($general_eyc->Foto != 'ESPERA DE DATO')
                         <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
