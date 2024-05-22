@@ -442,15 +442,20 @@ return [
                             'icon' => 'fas fa-vials',
                             'url' => 'registros/createEyC',
                         ],
-                        [
+                        /*[
                             'text' => 'Kits',
                             'icon' => 'fas fa-suitcase',
                             'url' => '#',
+                        ],*/
+                        [
+                            'text' => ' Crear solicitud E y C',
+                            'icon' => 'fas fa-file-alt',
+                            'url' => 'solicitud/index',
                         ],
                         [
-                            'text' => 'Solicitud E y C',
-                            'icon' => 'fas fa-file-alt',
-                            'url' => 'registros/SolicitudEyC',
+                            'text' => ' Ver solicitudes',
+                            'icon' => 'fas fa-clipboard-check',
+                            'url' => 'solicitud/create',
                         ],
                         /*[
                             'text' => 'level_one',

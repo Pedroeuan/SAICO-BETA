@@ -7,6 +7,7 @@ use App\Http\Controllers\PDFController;
 
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+use App\Http\Controllers\Solicitudes\SolicitudesController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -27,6 +28,7 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });
 
+
     /*Equipos y Consumibles*/ 
     Route::middleware('auth')->group(function () {
     /*Rutas de Vistas Equipos y Consumibles Tabla General*/
@@ -36,6 +38,13 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
     Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     /*Rutas de Vistas Equipos y Consumibles-Edición*/
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
+
+
+    Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+
+ 
+  
+
     
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -53,6 +62,7 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeAccesorios', [general_eycController::class, 'storeAccesorios'])->name('general_eyc.storeAccesorios'); 
     /*Ruta de Actualizar*/
+
     Route::post('/edicion/editAccesorios/{id}', [general_eycController::class, 'updateAccesorios'])->name('editAccesorios.update');
 
       /*BLOCKS*/
@@ -69,6 +79,10 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 
     /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
+
+
+    Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+    Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
 });
 
 require __DIR__.'/auth.php';
