@@ -80,7 +80,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
-
+    /*Solicitud de Equipos */
     Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
 });
