@@ -62,6 +62,7 @@
                         @else
                         <td scope="row">N/A</td>
                     @endif
+
                             <td scope="row"> 
                         @if ($general_eyc->Foto != 'ESPERA DE DATO')
                         <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -77,6 +78,7 @@
                             <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </td>
+
                     </tr>
                 @endforeach
                 </tbody>

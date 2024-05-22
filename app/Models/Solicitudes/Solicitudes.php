@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\EquipoyConsumible;
+namespace App\Models\Solicitudes;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class solicitudEquipos extends Model
+class Solicitudes extends Model
 {
     use HasFactory;
 }
