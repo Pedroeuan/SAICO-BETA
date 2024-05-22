@@ -403,6 +403,19 @@ class general_eycController extends Controller
             if ($generalConBlockyprobeta) {
                 $generalConBlockyprobeta->delete();
             }
+
+            // Elimina archivos asociados si existen
+        if ($generalConCertificados->Certificado_Actual) {
+            $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
+            if (is_array($certificadosPaths)) {
+                foreach ($certificadosPaths as $certificadoPath) {
+                    if (Storage::disk('public')->exists($certificadoPath)) {
+                        Storage::disk('public')->delete($certificadoPath);
+                    }
+                }
+            }
+        }
+        $generalConCertificados->delete();
             //$generalConCertificados = certificados::find($id);
             // Verifica si el registro existe antes de intentar eliminarlo
             if ($generalConCertificados) {
@@ -1303,7 +1316,31 @@ public function storeHerramientas(Request $request)
         $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
     }  
 
-    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+    if ($request->hasFile('Certificado_Actual')) {
+        $certificadosPaths = []; // Array to store paths of uploaded files
+        
+        foreach ($request->file('Certificado_Actual') as $certificado) {
+            if ($certificado->isValid()) {
+                $certificadoPath = $certificado->storeAs(
+                    'Equipos/Certificados', 
+                    $certificado->getClientOriginalName(), 
+                    'public'
+                );
+                $certificadosPaths[] = $certificadoPath; // Add the path to the array
+            }
+        }
+        // Convert the array to a JSON string to store in the database
+        $generalConCertificados->Certificado_Actual = json_encode($certificadosPaths);
+    } else {
+        if ($request->input('Certificado_Actual') == null) {
+            $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        }
+    }
+    
+    $generalConCertificados->save();
+
+
+   /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $Certificado_Actual = $request->file('Certificado_Actual');
         
         $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos/Certificados', $Certificado_Actual->getClientOriginalName(), 'public');
@@ -1315,7 +1352,8 @@ public function storeHerramientas(Request $request)
         $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
     }
     }
-    $generalConCertificados->save();
+
+    $generalConCertificados->save();*/
 
     $generalConHerramientas = new herramientas;
     $generalConHerramientas->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -1388,8 +1426,48 @@ public function storeHerramientas(Request $request)
         $generalEyC->save();
     }
 
+    $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
+
+    if ($request->hasFile('Certificado_Actual')) {
+    // Eliminar archivos existentes si los hay
+    $existingPaths = json_decode($generalConCertificados->Certificado_Actual, true);
+    if (is_array($existingPaths)) {
+        foreach ($existingPaths as $path) {
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+    }
+    
+    $certificadosPaths = []; // Array to store paths of uploaded files
+    
+    foreach ($request->file('Certificado_Actual') as $certificado) {
+        if ($certificado->isValid()) {
+            $certificadoPath = $certificado->storeAs(
+                'Equipos/Certificados', 
+                $certificado->getClientOriginalName(), 
+                'public'
+            );
+            $certificadosPaths[] = $certificadoPath; // Add the path to the array
+        }
+    }
+
+    // Convert the array to a JSON string to store in the database
+    $generalConCertificados->Certificado_Actual = json_encode($certificadosPaths);
+} else {
+    if ($request->input('Certificado_Actual') == null) {
+        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+    }
+}
+
+$generalConCertificados->save();
+
+    
+    $generalConCertificados->save();
+    
+
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+  /*   $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
@@ -1401,7 +1479,7 @@ public function storeHerramientas(Request $request)
         $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
 
         $generalConCertificado->save();
-    }
+    }*/
 
     /*HERRAMIENTAS*/
     $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();

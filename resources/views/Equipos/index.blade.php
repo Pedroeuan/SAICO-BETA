@@ -30,7 +30,7 @@
                         <th>NS</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
-                        <th>Foto/F.T/H.P</th>
+                        <th>Hoja de Presentación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
