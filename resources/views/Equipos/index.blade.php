@@ -52,9 +52,9 @@
                             <td scope="row">SIN DATOS</td>
                             <td scope="row">SIN DATOS</td>
                         @endif 
-                @if($general_eyc->certificados)
-                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                        @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                    @if($general_eyc->certificados)
+                        @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
                             <td scope="row">SIN FECHA ASIGNADA</td>
                         @else
                             <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
@@ -62,7 +62,6 @@
                         @else
                         <td scope="row">N/A</td>
                     @endif
-
                             <td scope="row"> 
                         @if ($general_eyc->Foto != 'ESPERA DE DATO')
                         <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -72,7 +71,7 @@
                         @endif
                             </td>
                             <td>
-                @endif
+                    @endif
                         <div class="btn-group">
                             <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
