@@ -15,6 +15,7 @@ use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
+use App\Models\EquiposyConsumibles\historial_certificado;
 
 
 class general_eycController extends Controller
@@ -373,6 +374,109 @@ class general_eycController extends Controller
     return redirect()->route('inventario');
 }
 
+/*Update Equipos---Historial */
+public function updateEquiposH(Request $request, $id)
+{
+    
+    // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+        'No_economico' => $request->input('No_economico'),
+        'Serie' => $request->input('Serie'),
+        'Marca' => $request->input('Marca'),
+        'Modelo' => $request->input('Modelo'),
+        'Ubicacion' => $request->input('Ubicacion'),
+        'Almacenamiento' => $request->input('Almacenamiento'),
+        'Comentario' => $request->input('Comentario'),
+        'SAT' => $request->input('SAT'),
+        'BMPRO' => $request->input('BMPRO'),
+        'Tipo' => $request->input('Tipo'),
+        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+    ]);
+
+    // Actualizar los datos del equipo asociado
+    $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+    $generalConEquipos->update([
+        'Proceso' => $request->input('Proceso'),
+        'Metodo' => $request->input('Metodo'),
+        'Tipo_E' => $request->input('Tipo_E'),
+    ]);
+
+        // Guardar el nuevo archivo PDF
+        $pdf = $request->file('Factura');
+        $pdfPath = $pdf->storeAs('Equipos/Facturas', $pdf->getClientOriginalName(), 'public');
+
+        // Actualizar la ruta de la factura en la base de datos
+        $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
+        $generalEyC->save();
+    
+
+    // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Foto;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        // Guardar el nuevo archivo de imagen
+        $imagen = $request->file('Foto');
+        $imagenPath = $imagen->storeAs('Equipos/Fotos', $imagen->getClientOriginalName(), 'public');
+        // Actualizar la ruta de la imagen en la base de datos
+        $generalEyC->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
+        $generalEyC->save();
+    }
+
+     // Actualizar los datos del certificado asociado
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+     $generalConCertificado->Fecha_calibracion = $TempgeneralConCertificado;
+     $generalConCertificado->update([
+         'No_certificado' => $request->input('No_certificado'),
+         'Fecha_calibracion' => $request->input('Fecha_calibracion'),
+         'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
+     ]);
+
+     $generalConCertificadoHistorial = new historial_certificado;
+     $generalConCertificadoHistorial->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+     $generalConCertificadoHistorial->idCertificados = $general->idGeneral_EyC;
+ 
+     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+         // Obtener la ruta del archivo anterior desde la base de datos
+         $rutaAnterior = $generalEyC->Factura;
+         $sindato='SIN DATO';
+
+         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior))
+         {
+            $generalConCertificadoHistorial->update([
+                'Certificado_Caducado' => $rutaAnterior,
+                'Tipo' => $sindato,
+                'Ultima_Fecha_calibracion' => $TempgeneralConCertificado,
+            ]);
+         }
+        }
+ 
+         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+             Storage::disk('public')->delete($rutaAnterior);
+         }*/
+
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        $imagen = $request->file('Certificado_Actual');
+        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+        $generalConCertificado->save();
+    }
+
+    return redirect()->route('inventario');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -1426,11 +1530,11 @@ public function storeHerramientas(Request $request)
         $generalEyC->save();
     }
 
-    $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
     if ($request->hasFile('Certificado_Actual')) {
     // Eliminar archivos existentes si los hay
-    $existingPaths = json_decode($generalConCertificados->Certificado_Actual, true);
+    $existingPaths = json_decode($generalConCertificado->Certificado_Actual, true);
     if (is_array($existingPaths)) {
         foreach ($existingPaths as $path) {
             if (Storage::disk('public')->exists($path)) {
@@ -1453,7 +1557,7 @@ public function storeHerramientas(Request $request)
     }
 
     // Convert the array to a JSON string to store in the database
-    $generalConCertificados->Certificado_Actual = json_encode($certificadosPaths);
+    $generalConCertificado->Certificado_Actual = json_encode($certificadosPaths);
 } else {
     if ($request->input('Certificado_Actual') == null) {
         $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
