@@ -45,7 +45,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
-    Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
+    Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquiposH'])->name('editEquipos.update');
 
     /*CONSUMIBLES*/
     /*Ruta de Guardado*/

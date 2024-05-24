@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class block_y_probeta extends Model
 {
     protected $table = 'block_probeta';
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idBlock_probeta';
     public $timestamps = false; 
     use HasFactory;
 }

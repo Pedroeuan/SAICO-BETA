@@ -193,7 +193,7 @@ class general_eycController extends Controller
     /* Equipos */
     $generalConEquipos = new equipos;
     $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-    if($request->input('Proceso')==null)
+    /*if($request->input('Proceso')==null)
     {
         $generalConEquipos->Proceso = 'ESPERA DE DATO';
     }else{
@@ -210,7 +210,7 @@ class general_eycController extends Controller
         $generalConEquipos->Tipo_E = 'ESPERA DE DATO';
     }else{
         $generalConEquipos->Tipo_E = $request->input('Tipo_E');
-    }   
+    }   */
     $generalConEquipos->save();
 
     /* Certificados */
@@ -310,11 +310,11 @@ class general_eycController extends Controller
 
     // Actualizar los datos del equipo asociado
     $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-    $generalConEquipos->update([
+   /* $generalConEquipos->update([
         'Proceso' => $request->input('Proceso'),
         'Metodo' => $request->input('Metodo'),
         'Tipo_E' => $request->input('Tipo_E'),
-    ]);
+    ]);*/
 
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
@@ -352,8 +352,20 @@ class general_eycController extends Controller
         $generalEyC->save();
     }
 
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    if($request->input('Fecha_calibracion')==null)
+    {
+        $generalConCertificados->Fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+    }
+    if($request->input('Prox_fecha_calibracion')==null)
+    {
+        $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
      $generalConCertificado->update([
          'No_certificado' => $request->input('No_certificado'),
          'Fecha_calibracion' => $request->input('Fecha_calibracion'),
@@ -399,11 +411,21 @@ public function updateEquiposH(Request $request, $id)
 
     // Actualizar los datos del equipo asociado
     $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-    $generalConEquipos->update([
+   /* $generalConEquipos->update([
         'Proceso' => $request->input('Proceso'),
         'Metodo' => $request->input('Metodo'),
         'Tipo_E' => $request->input('Tipo_E'),
-    ]);
+    ]);*/
+
+    // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalEyC->Factura;
+
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
 
         // Guardar el nuevo archivo PDF
         $pdf = $request->file('Factura');
@@ -412,7 +434,7 @@ public function updateEquiposH(Request $request, $id)
         // Actualizar la ruta de la factura en la base de datos
         $generalEyC->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
         $generalEyC->save();
-    
+    }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
@@ -430,39 +452,89 @@ public function updateEquiposH(Request $request, $id)
         $generalEyC->Foto = 'Equipos/Fotos/' . $imagen->getClientOriginalName();
         $generalEyC->save();
     }
+    // Obtener el certificado actual asociado al equipo
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    // Verificar si se ha proporcionado un nuevo certificado actual
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        // Obtener la ruta del certificado actual desde la base de datos
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+
+        // Guardar el nuevo certificado en la carpeta original
+        $certificado = $request->file('Certificado_Actual');
+        $certificadoPath = $certificado->storeAs('Equipos/Certificados', $certificado->getClientOriginalName(), 'public');
+
+        // Actualizar la ruta del certificado en la base de datos
+        $generalConCertificado->Certificado_Actual = $certificadoPath;
+        $generalConCertificado->save();
+
+        // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            // Obtener el nombre del archivo
+            $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
+            // Construir la nueva ruta para mover el archivo
+            $nuevaRuta = 'Equipos/Certificados Caducados/' . $nombreArchivo;
+            // Mover el archivo
+            Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
+        }
+    }
+
+
+   /*  $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+   if($request->input('Fecha_calibracion')==null)
+    {
+        $generalConCertificados->Fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
+    }
+    if($request->input('Prox_fecha_calibracion')==null)
+    {
+        $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    }else{
+        $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+    }*/
 
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-     $generalConCertificado->Fecha_calibracion = $TempgeneralConCertificado;
      $generalConCertificado->update([
          'No_certificado' => $request->input('No_certificado'),
          'Fecha_calibracion' => $request->input('Fecha_calibracion'),
          'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
      ]);
 
-     $generalConCertificadoHistorial = new historial_certificado;
-     $generalConCertificadoHistorial->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-     $generalConCertificadoHistorial->idCertificados = $general->idGeneral_EyC;
- 
-     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-         // Obtener la ruta del archivo anterior desde la base de datos
-         $rutaAnterior = $generalEyC->Factura;
-         $sindato='SIN DATO';
-
-         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior))
-         {
-            $generalConCertificadoHistorial->update([
-                'Certificado_Caducado' => $rutaAnterior,
-                'Tipo' => $sindato,
-                'Ultima_Fecha_calibracion' => $TempgeneralConCertificado,
-            ]);
-         }
+        // Si no se ha proporcionado una fecha de calibración, asignar una fecha por defecto
+        if (!$request->input('Fecha_calibracion')) {
+            $generalConCertificado->Fecha_calibracion = '01/01/0001';
         }
- 
-         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
-        /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-             Storage::disk('public')->delete($rutaAnterior);
-         }*/
+
+        // Si no se ha proporcionado una próxima fecha de calibración, asignar una fecha por defecto
+        if (!$request->input('Prox_fecha_calibracion')) {
+            $generalConCertificado->Prox_fecha_calibracion = '01/01/0001';
+        }
+
+        // Guardar la ruta anterior en la tabla historial_certificados
+         /*   HistorialCertificados::create([
+                'idCertificados' => $generalConCertificado->id, // Reemplaza por la columna correcta de tu tabla
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC, // Reemplaza por la columna correcta de tu tabla
+                'Certificado_Caducado' => $rutaAnteriorCertificado,
+                'Tipo' => 'Certificado Actual', // Define el tipo según corresponda
+                'Ultima_Fecha_calibracion' => $generalConCertificado->Fecha_calibracion, // Reemplaza por la columna correcta de tu tabla
+            ]);*/
+            $Espera_Dato='ESPERA DE DATO';
+            //$generalConCertificado = certificados::::find($id);
+            $CertificadosHistorialCertificados  = historial_certificado::find($id);
+
+            $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
+            $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
+            $CertificadosHistorialCertificados->Certificado_Caducado = $rutaAnteriorCertificado;
+            $CertificadosHistorialCertificados->Tipo = $Espera_Dato;
+            $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
+
+           /* $CertificadosHistorialCertificados->update([
+                'idCertificados' => $generalConCertificado->idCertificados, // Reemplaza por la columna correcta de tu tabla
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC, // Reemplaza por la columna correcta de tu tabla
+                'Certificado_Caducado' => $rutaAnteriorCertificado,
+                'Tipo' => $Espera_Dato, 
+                'Ultima_Fecha_calibracion' => $generalConCertificado->Fecha_calibracion, // Reemplaza por la columna correcta de tu tabla
+    ]);*/
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;

@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class herramientas extends Model
 {
     protected $fillable = [
+        'idEquipos_Tools_Complementos',
         'idGeneral_EyC',
         'Garantia',
     ];
     protected $table = 'equipos_tools_complementos';
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idEquipos_Tools_Complementos';
     public $timestamps = false; 
     use HasFactory;
 }

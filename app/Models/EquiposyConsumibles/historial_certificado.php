@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class historial_certificado extends Model
 {
     protected $fillable = [
+        'idHistorial_certificados',
         'idGeneral_EyC',
         'Certificado_Caducado',
         'Tipo',
         'Ultima_Fecha_calibracion',
     ];
     protected $table = 'historial_certificados';
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idHistorial_certificados';
     public $timestamps = false; 
     use HasFactory;
 }

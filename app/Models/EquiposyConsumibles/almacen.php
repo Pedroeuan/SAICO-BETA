@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class almacen extends Model
 {
     protected $fillable = [
+        'idAlmacen',
         'idGeneral_EyC',
         'No_certificado',
         'Lote',
         'Stock',
     ];
     protected $table = 'almacen';
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idAlmacen';
     public $timestamps = false; 
     use HasFactory;
 }
