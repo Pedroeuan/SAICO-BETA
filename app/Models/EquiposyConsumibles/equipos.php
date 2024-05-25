@@ -15,7 +15,7 @@ class equipos extends Model
         'Metodo',
         'Tipo_E',
     ];
-    protected $primaryKey = 'idEquipos';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 }

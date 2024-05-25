@@ -15,7 +15,7 @@ class almacen extends Model
         'Stock',
     ];
     protected $table = 'almacen';
-    protected $primaryKey = 'idAlmacen';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 }

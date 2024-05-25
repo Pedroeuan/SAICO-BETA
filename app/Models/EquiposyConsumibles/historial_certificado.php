@@ -15,7 +15,7 @@ class historial_certificado extends Model
         'Ultima_Fecha_calibracion',
     ];
     protected $table = 'historial_certificados';
-    protected $primaryKey = 'idHistorial_certificados';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 }

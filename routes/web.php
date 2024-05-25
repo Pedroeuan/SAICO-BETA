@@ -37,15 +37,16 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     /*Rutas de Vistas Equipos y Consumibles-Edición*/
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
-
+    /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
     Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
-
+    /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
+    Route::get('Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
 
     /*EQUIPOS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeEquipos', [general_eycController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
-    Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquiposH'])->name('editEquipos.update');
+    Route::post('/edicion/editEquipos/{id}', [general_eycController::class, 'updateEquipos'])->name('editEquipos.update');
 
     /*CONSUMIBLES*/
     /*Ruta de Guardado*/

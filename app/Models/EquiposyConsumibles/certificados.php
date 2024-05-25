@@ -15,7 +15,7 @@ class certificados extends Model
         'Fecha_calibracion',
         'Prox_fecha_calibracion'
     ];
-    protected $primaryKey = 'idcertificados';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 

@@ -13,7 +13,7 @@ class herramientas extends Model
         'Garantia',
     ];
     protected $table = 'equipos_tools_complementos';
-    protected $primaryKey = 'idEquipos_Tools_Complementos';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 }

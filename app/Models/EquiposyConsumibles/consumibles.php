@@ -13,7 +13,7 @@ class consumibles extends Model
         'Proveedor',
         'Tipo',
     ];
-    protected $primaryKey = 'idConsumibles';
+    protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
 }
