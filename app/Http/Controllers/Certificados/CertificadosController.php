@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Solicitudes;
+namespace App\Http\Controllers\Certificados;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Solicitudes\Solicitudes;
-class SolicitudesController extends Controller
+
+
+class CertificadosController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view("Solicitud.index");
+        return view("Certificados.index");
     }
 
     /**
@@ -20,7 +21,7 @@ class SolicitudesController extends Controller
      */
     public function create()
     {
-        return view("Solicitud.edit");
+        //
     }
 
     /**
@@ -34,7 +35,7 @@ class SolicitudesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Solicitudes $solicitudes)
+    public function show(certificados $certificados)
     {
         //
     }
@@ -42,15 +43,15 @@ class SolicitudesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit(certificados $certificados)
     {
-        return view("Solicitud.aprobacion");
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Solicitudes $solicitudes)
+    public function update(Request $request, certificados $certificados)
     {
         //
     }
@@ -58,7 +59,7 @@ class SolicitudesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Solicitudes $solicitudes)
+    public function destroy(certificados $certificados)
     {
         //
     }

@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Certificados')
 
 @section('css')
 <!--datatable -->
@@ -17,23 +17,27 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Solicitudes registradas</h3>
+        <h3 align="center">Historial de certificados</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Técnico</th>
-                        <th>Fecha de solicitud</th>
-                        <th>Estatus</th>
+                        <th>Número de certificado</th>
+                        <th>Tipo (equipo) </th>
+                        <th>certificado</th>
+                        <th>Última calibración</th>
+                        <th>Asignado a:</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="row">Irving alfonso</td>
-                        <td scope="row">17/05/24</td>
-                        <td scope="row">Pendiente</td>
+                        <td scope="row">23444323</td>
+                        <td scope="row">Block</td>
+                        <td scope="row">archivo</td>
+                        <td scope="row">12/05/24</td>
+                        <td scope="row">ultrasonido</td>
                         <td>
                             <div class="btn-group">
                                 <a  class="btn btn-warning" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fas fa-edit"></i></a>
