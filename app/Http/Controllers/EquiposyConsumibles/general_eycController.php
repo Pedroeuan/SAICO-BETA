@@ -388,6 +388,7 @@ public function updateEquipos(Request $request, $id)
    // Verificar si se ha proporcionado una nueva fecha de calibración y próxima fecha de calibración
     $fechaCalibracion = $request->input('Fecha_calibracion', '01/01/2001');
     $proxFechaCalibracion = $request->input('Prox_fecha_calibracion', '01/01/2001');
+    //dd($proxFechaCalibracion);
 
     // Actualizar los datos del certificado asociado
     $generalConCertificado->update([

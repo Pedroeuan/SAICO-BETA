@@ -176,7 +176,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
                                             @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
-                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
                                             @else
                                             <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Prox_fecha_calibracion }}" name="Prox_fecha_calibracion">
                                             @endif
@@ -757,15 +757,13 @@
                                     </div>
                                     @if ($generalConHerramientas->Garantia != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                              
                                                 <a href="{{ asset('storage/' . $generalConHerramientas->Garantia) }}" target="_blank">VER GARANTIA</a>                                                
                                         </div>
                                     </div>
                                     @elseif($generalConHerramientas->Garantia == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                               
                                                 <a target="_blank">SIN Garantia</a>                                                
                                         </div>
                                     </div>
@@ -778,19 +776,40 @@
                                     </div>
                                     @if ($generalEyC->Foto != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                             
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
                                     @elseif($generalEyC->Foto == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                            
                                                 <a target="_blank">SIN FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
                                     @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                             
+                                                <a href="{{ asset('storage/' . $generalEyC->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                                <a target="_blank">SIN CERTIFICADO ACTUAL</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
+                                    @php
+                                    /*
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
@@ -798,10 +817,10 @@
                                         </div>
                                     </div>
 
-                                    @php
+                                    
                                         // Decode the JSON string to get the array of file paths
-                                        $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
-                                    @endphp
+                                    /*    $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
+                                   
                                     @if($certificadosPaths && is_array($certificadosPaths))
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -819,7 +838,8 @@
                                             </div>
                                         </div>
                                     @endif
-
+                                    */
+                                    @endphp
                                     
                                     <div class="col-sm-4">
                                         <div class="form-group">
