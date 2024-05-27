@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class almacen extends Model
 {
     protected $fillable = [
+        'idAlmacen',
         'idGeneral_EyC',
         'No_certificado',
         'Lote',
