@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class herramientas extends Model
 {
     protected $fillable = [
+        'idEquipos_Tools_Complementos',
         'idGeneral_EyC',
         'Garantia',
     ];

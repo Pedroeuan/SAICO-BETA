@@ -39,6 +39,10 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*Rutas de Vistas Equipos y Consumibles-Edición*/
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
 
+    /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
+    Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
+    Route::get('Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
 
 
     /*EQUIPOS*/

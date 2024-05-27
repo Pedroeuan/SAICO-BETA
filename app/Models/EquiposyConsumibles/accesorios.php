@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class accesorios extends Model
 {
     protected $fillable = [
+        'idAccesorios',
         'idGeneral_EyC',
+        'Proveedor',
     ];
     //protected $table = 'accesorios';
     protected $primaryKey = 'idGeneral_EyC';
