@@ -17,26 +17,46 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Solicitudes registradas</h3>
+        <h3 align="center">Aprobar solicitudes</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Técnico</th>
-                        <th>Fecha de solicitud</th>
-                        <th>Estatus</th>
+                        <th>Nombre</th>
+                        <th>No.ECO</th>
+                        <th>Marca</th>
+                        <th>Ultima calibración</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td>Removedor</td>
                         <td scope="row">Irving alfonso</td>
                         <td scope="row">17/05/24</td>
                         <td scope="row">Pendiente</td>
+                        <td>2</td>
+                        <td>pieza</td>
                         <td>
                             <div class="btn-group">
-                                <a  class="btn btn-warning" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Durometro</td>
+                        <td scope="row">mike alfonso</td>
+                        <td scope="row">17/05/24</td>
+                        <td scope="row">Pendiente</td>
+                        <td>1</td>
+                        <td>caja</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
                                 <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
                             </div>
                         </td>
@@ -45,7 +65,82 @@
             </table>
         </div>
     </div>
+    <br><br>
+    
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>No.ECO</th>
+                    <th>No.Serie</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Comentario</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                    <td>Update software</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>Clean database</td>
+                    <td>
+                        <div class="progress progress-xs">
+                        <div class="progress-bar bg-warning" style="width: 70%"></div>
+                        </div>
+                    </td>
+                    <td><span class="badge bg-warning">Clean database</span></td>
+                    <td>Clean database</td>
+                    <td>Clean database</td>
+                    <td>Clean database</td>
+                    <td>Clean database</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>Cron job running</td>
+                    <td>
+                        <div class="progress progress-xs progress-striped active">
+                        <div class="progress-bar bg-primary" style="width: 30%"></div>
+                        </div>
+                    </td>
+                    <td><span class="badge bg-primary">30%</span></td>
+                    <td>Cron job running</td>
+                    <td>Cron job running</td>
+                    <td>Cron job running</td>
+                    <td>Cron job running</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>Fix and squish bugs</td>
+                    <td>
+                        <div class="progress progress-xs progress-striped active">
+                        <div class="progress-bar bg-success" style="width: 90%"></div>
+                        </div>
+                    </td>
+                    <td><span class="badge bg-success">90%</span></td>
+                    <td>Fix and squish bugs</td>
+                    <td>Fix and squish bugs</td>
+                    <td>Fix and squish bugs</td>
+                    <td>Fix and squish bugs</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <button type="button" class="btn btn-success">Crear manifiesto</button>
 </form>
+<br>
 @stop
 
 @section('js')
