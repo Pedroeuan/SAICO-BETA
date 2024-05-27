@@ -1388,7 +1388,20 @@ public function storeHerramientas(Request $request)
         $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
     }  
 
-    if ($request->hasFile('Certificado_Actual')) {
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $Certificado_Actual = $request->file('Certificado_Actual');
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Herramientas', $Certificado_Actual->getClientOriginalName(), 'public');
+        $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
+    } else {
+        if($request->input('Certificado_Actual') == null)
+    {
+        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+    }
+    }
+
+    $generalConCertificados->save();
+
+    /*if ($request->hasFile('Certificado_Actual')) {
         $certificadosPaths = []; // Array to store paths of uploaded files
         
         foreach ($request->file('Certificado_Actual') as $certificado) {
@@ -1405,25 +1418,7 @@ public function storeHerramientas(Request $request)
         if ($request->input('Certificado_Actual') == null) {
             $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
         }
-    }
-    
-    $generalConCertificados->save();
-
-
-   /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
-        $Certificado_Actual = $request->file('Certificado_Actual');
-        
-        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos/Certificados', $Certificado_Actual->getClientOriginalName(), 'public');
-
-        $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
-    } else {
-        if($request->input('Certificado_Actual') == null)
-    {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
-    }
-    }
-
-    $generalConCertificados->save();*/
+    }*/
 
     $generalConHerramientas = new herramientas;
     $generalConHerramientas->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -1435,6 +1430,16 @@ public function storeHerramientas(Request $request)
     } else {
         if($request->input('Garantia') == null) {
             $generalConHerramientas->Garantia = 'ESPERA DE DATO';
+        }
+    }
+
+    if ($request->hasFile('Plano') && $request->file('Plano')->isValid()) {
+        $Plano = $request->file('Plano');
+        $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $Plano->getClientOriginalName(), 'public');
+        $generalConHerramientas->Plano = $PlanoPath; // Guarda la ruta del archivo de garantía
+    } else {
+        if($request->input('Plano') == null) {
+            $generalConHerramientas->Plano = 'ESPERA DE DATO';
         }
     }
 
@@ -1498,7 +1503,7 @@ public function storeHerramientas(Request $request)
 
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
-    if ($request->hasFile('Certificado_Actual')) {
+   /*if ($request->hasFile('Certificado_Actual')) {
     // Eliminar archivos existentes si los hay
     $existingPaths = json_decode($generalConCertificado->Certificado_Actual, true);
     if (is_array($existingPaths)) {
@@ -1527,14 +1532,11 @@ public function storeHerramientas(Request $request)
         }
     }
 
-    $generalConCertificados->save();
-
-    
-    $generalConCertificados->save();
+    $generalConCertificados->save();*/
     
 
      // Actualizar los datos del certificado asociado
-  /*   $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
@@ -1542,11 +1544,11 @@ public function storeHerramientas(Request $request)
             Storage::disk('public')->delete($rutaAnterior);
         }
         $imagen = $request->file('Certificado_Actual');
-        $imagenPath = $imagen->storeAs('Equipos/Certificados', $imagen->getClientOriginalName(), 'public');
-        $generalConCertificado->Certificado_Actual = 'Equipos/Certificados/' . $imagen->getClientOriginalName();
+        $imagenPath = $imagen->storeAs('Equipos y Consumibles/Certificados/Herramientas', $imagen->getClientOriginalName(), 'public');
+        $generalConCertificado->Certificado_Actual = 'Equipos y Consumibles/Certificados/Herramientas' . $imagen->getClientOriginalName();
 
         $generalConCertificado->save();
-    }*/
+    }
 
     /*HERRAMIENTAS*/
     $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
@@ -1561,8 +1563,21 @@ public function storeHerramientas(Request $request)
         $generalConHerramientas->Garantia = 'Equipos y Consumibles/Garantia/Herramientas/' . $imagen->getClientOriginalName();
 
         $generalConHerramientas->save();
-    }
-    return redirect()->route('inventario');
-}
+        }
 
+        if ($request->hasFile('Plano') && $request->file('Plano')->isValid()) {
+            $rutaAnteriorP = $generalConHerramientas->Plano;
+            if ($rutaAnteriorP && Storage::disk('public')->exists($rutaAnteriorP)) {
+                Storage::disk('public')->delete($rutaAnteriorP);
+            }
+            $Plano = $request->file('Plano');
+            $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $Plano->getClientOriginalName(), 'public');
+            $generalConHerramientas->Plano = 'Equipos y Consumibles/Planos/Herramientas/' . $Plano->getClientOriginalName();
+    
+            $generalConHerramientas->save();
+            }
+
+        return redirect()->route('inventario');
+    }
+    
     }
