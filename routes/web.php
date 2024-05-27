@@ -8,6 +8,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
+use App\Http\Controllers\Certificados\CertificadosController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -37,10 +38,12 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     /*Rutas de Vistas Equipos y Consumibles-Edición*/
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
+
     /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
     Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
     /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
     Route::get('Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
+
 
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -75,9 +78,14 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
     /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
-
+    /*Ruta de solicitudes de manifiesto*/
     Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
+    Route::get('solicitud/aprobacion', [SolicitudesController::class, 'edit'])->name('solicitud.aprobacion');
+    
+    /*Ruta de certificados*/
+    Route::get('certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
+
 });
 
 require __DIR__.'/auth.php';

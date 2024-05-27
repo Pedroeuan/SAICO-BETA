@@ -457,6 +457,11 @@ return [
                             'icon' => 'fas fa-clipboard-check',
                             'url' => 'solicitud/create',
                         ],
+                        [
+                            'text' => ' Certificados',
+                            'icon' => 'fas fa-clipboard-check',
+                            'url' => 'certificados/index',
+                        ],
                         /*[
                             'text' => 'level_one',
                             'url' => '#',
