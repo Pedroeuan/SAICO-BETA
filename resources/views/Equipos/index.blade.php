@@ -44,13 +44,6 @@
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
                             <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
-                        @else
-                            <td scope="row">SIN DATOS</td>
-                            <td scope="row">SIN DATOS</td>
-                            <td scope="row">SIN DATOS</td>
-                            <td scope="row">SIN DATOS</td>
-                            <td scope="row">SIN DATOS</td>
-                            <td scope="row">SIN DATOS</td>
                         @endif 
                     @if($general_eyc->certificados)
                         @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
@@ -64,8 +57,8 @@
                         @endif
                             <td scope="row"> 
                         @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                            <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
+                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
                             <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
                         @endif

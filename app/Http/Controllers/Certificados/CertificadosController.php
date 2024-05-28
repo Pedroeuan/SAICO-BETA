@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Certificados;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\equipos;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Models\EquiposyConsumibles\historial_certificado;
 
 
 class CertificadosController extends Controller
@@ -13,7 +20,27 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-        return view("Certificados.index");
+      /*  $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->get();
+        $CertificadosConHistorial = certificados::with('historial_certificados')->get();
+        $CertificadosConHistorialPrueba = historial_certificado::get();
+        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificados'])->get();
+        //dd($CertificadosConHistorialPrueba);
+        return view("Certificados.index", compact('general','generalConCertificados','CertificadosConHistorial','CertificadosConHistorialPrueba','generalConCertificadosConHistorial'));
+        */
+        /*
+        // Obtén todos los registros de general_eyc con sus certificados e historial de certificados
+        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificados'])->get();
+
+        // Pasa los datos a la vista
+        return view('Certificados.index', compact('generalConCertificadosConHistorial')); 
+        */
+
+        // Obtén todos los registros de general_eyc con sus certificados e historial de certificados
+        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+
+        // Pasa los datos a la vista
+        return view('Certificados.index', compact('generalConCertificadosConHistorial')); 
     }
 
     /**

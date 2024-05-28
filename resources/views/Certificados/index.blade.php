@@ -23,28 +23,30 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Número de certificado</th>
+                        <th>Número Economico</th>
                         <th>Tipo (equipo) </th>
-                        <th>certificado</th>
                         <th>Última calibración</th>
-                        <th>Asignado a:</th>
-                        <th>Acciones</th>
+                        <th>Ver Certificado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td scope="row">23444323</td>
-                        <td scope="row">Block</td>
-                        <td scope="row">archivo</td>
-                        <td scope="row">12/05/24</td>
-                        <td scope="row">ultrasonido</td>
-                        <td>
-                            <div class="btn-group">
-                                <a  class="btn btn-warning" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($generalConCertificadosConHistorial as $general_eyc)
+                        @if($general_eyc && $general_eyc->certificado)
+                            @foreach ($general_eyc->certificado->historialCertificados as $historial)
+                                <tr>
+                                    <td scope="row">{{$general_eyc->No_economico}}</td>
+                                    <td scope="row">{{$general_eyc->Tipo}}</td>  
+                                    <td scope="row">{{$historial->Ultima_Fecha_calibracion}}</td>
+                                    <td scope="row">{{$historial->Certificado_Caducado}}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a  class="btn btn-primary" href="{{ route('certificados.show', $historial->id) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    @endforeach
                 </tbody>
             </table>
         </div>

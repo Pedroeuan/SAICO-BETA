@@ -19,4 +19,13 @@ class certificados extends Model
     public $timestamps = false; 
     use HasFactory;
 
+    /*En el modelo certificados, define una función para la relación. 
+    Si la relación es uno a muchos (un certificado puede tener muchos historiales), 
+    puedes definirla de la siguiente manera:
+ */
+    public function historial_certificado()
+    {
+        return $this->hasMany(historial_certificado::class, 'idCertificados');
+    }
+
 }
