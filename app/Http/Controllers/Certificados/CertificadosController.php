@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Certificados;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\equipos;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Models\EquiposyConsumibles\historial_certificado;
 
 
 class CertificadosController extends Controller
@@ -13,7 +20,9 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-        return view("Certificados.index");
+        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+        return view("Certificados.index", compact('generalConCertificadosConHistorial'));
+        
     }
 
     /**
