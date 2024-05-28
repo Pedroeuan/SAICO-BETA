@@ -19,6 +19,7 @@ class historial_certificado extends Model
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
+    
     public function certificado()
     {
         return $this->belongsTo(Certificado::class, 'idCertificados');

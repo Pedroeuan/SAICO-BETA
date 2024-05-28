@@ -20,27 +20,9 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-      /*  $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->get();
-        $CertificadosConHistorial = certificados::with('historial_certificados')->get();
-        $CertificadosConHistorialPrueba = historial_certificado::get();
-        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificados'])->get();
-        //dd($CertificadosConHistorialPrueba);
-        return view("Certificados.index", compact('general','generalConCertificados','CertificadosConHistorial','CertificadosConHistorialPrueba','generalConCertificadosConHistorial'));
-        */
-        /*
-        // Obtén todos los registros de general_eyc con sus certificados e historial de certificados
-        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificados'])->get();
-
-        // Pasa los datos a la vista
-        return view('Certificados.index', compact('generalConCertificadosConHistorial')); 
-        */
-
-        // Obtén todos los registros de general_eyc con sus certificados e historial de certificados
         $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
-
-        // Pasa los datos a la vista
-        return view('Certificados.index', compact('generalConCertificadosConHistorial')); 
+        return view("Certificados.index", compact('generalConCertificadosConHistorial'));
+        
     }
 
     /**
