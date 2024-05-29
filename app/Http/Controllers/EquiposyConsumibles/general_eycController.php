@@ -20,7 +20,7 @@ use App\Models\EquiposyConsumibles\historial_certificado;
 
 class general_eycController extends Controller
 {
-   /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -34,10 +34,8 @@ class general_eycController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-
      /*APARTADO DE EQUIPOS */
-
-      /**
+    /**
      * Show the form for creating a new resource.
      */
     public function index()
@@ -47,7 +45,7 @@ class general_eycController extends Controller
         $generalConCertificados = general_eyc::with('certificados')->get();
         //$generalConEquipos = general_eyc::with('Equipos')->get();
         return view('Equipos.index', compact('general','generalConCertificados'));
-                       /*vista*/    /*variable donde se guardan los datos*/
+                    /*vista*/    /*variable donde se guardan los datos*/
     }
     /**
      * Show the form for creating a new resource.
@@ -137,12 +135,9 @@ class general_eycController extends Controller
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
     $general->save();
-
-
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         $pdf = $request->file('Factura');
-
         // Obtener el último número consecutivo
         $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Equipos'))
             ->filter(function ($file) {
@@ -157,21 +152,17 @@ class general_eycController extends Controller
         // Incrementar el número consecutivo
         $newNumber = $lastNumber + 1;
         $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
-
         // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Equipos', $newFileNameFactura, 'public');
-
         // Guardar la ruta en la base de datos
         $general->Factura = $pdfPath;
     } else {
         $general->Factura = 'ESPERA DE DATO';
     }
     $general->save();
-
     // Validar que se ha enviado el archivo de foto
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         $foto = $request->file('Foto');
-
         // Obtener el último número consecutivo
         $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Equipos'))
             ->filter(function ($file) {
@@ -186,7 +177,6 @@ class general_eycController extends Controller
         // Incrementar el número consecutivo
         $newNumber = $lastNumber + 1;
         $newFileNameFoto = $newNumber . '_' . $foto->getClientOriginalName();
-
         // Guardar el archivo en la carpeta "public/Equipos/Fotos"
         $fotoPath = $foto->storeAs('Equipos y Consumibles/Fotos/Equipos', $newFileNameFoto, 'public');
         $general->Foto = $fotoPath;
@@ -194,12 +184,10 @@ class general_eycController extends Controller
         $general->Foto = 'ESPERA DE DATO';
     }
     $general->save();
-
     // Equipos
     $generalConEquipos = new equipos;
     $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     $generalConEquipos->save();
-
     /* Certificados */
     $generalConCertificados = new certificados;
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -209,14 +197,12 @@ class general_eycController extends Controller
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }   
-
     if($request->input('Fecha_calibracion')==null)
     {
         $generalConCertificados->Fecha_calibracion = '01/01/0001';
     }else{
         $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
     }  
-
     if($request->input('Prox_fecha_calibracion')==null)
     {
         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
@@ -251,6 +237,19 @@ class general_eycController extends Controller
     }
     $generalConCertificados->save();
 
+     /*Almacen */
+    $generalConAlmacen = new almacen;
+     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    if($request->input('Lote')==null)
+    {
+        $generalConAlmacen->Lote = 'N/A';
+    }
+    if($request->input('Stock')==null)
+    {
+        $generalConAlmacen->Stock = 1;
+    }
+    $generalConAlmacen->save();
+
     return redirect()->route('inventario');
 }
 
@@ -278,11 +277,9 @@ class general_eycController extends Controller
             $generalConBlocks = block_y_probeta::where('idGeneral_EyC', $id)->first();
             $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
             $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
-
             // Retornar la vista con los datos obtenidos
             return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados'));
         }
-
     /**
      * Update the specified resource in storage.
      */
@@ -312,17 +309,10 @@ public function updateEquipos(Request $request, $id)
 
     // Actualizar los datos del equipo asociado
     $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-   /* $generalConEquipos->update([
-        'Proceso' => $request->input('Proceso'),
-        'Metodo' => $request->input('Metodo'),
-        'Tipo_E' => $request->input('Tipo_E'),
-    ]);*/
-
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
         $rutaAnterior = $generalEyC->Factura;
-
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             Storage::disk('public')->delete($rutaAnterior);
@@ -343,15 +333,12 @@ public function updateEquipos(Request $request, $id)
         // Incrementar el número consecutivo
         $newNumber = $lastNumber + 1;
         $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
-
         
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Equipos/', $newFileNameFactura, 'public');
-
         // Actualizar la ruta de la factura en la base de datos
         $generalEyC->Factura = $pdfPath;
         $generalEyC->save();
     }
-
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
@@ -384,13 +371,18 @@ public function updateEquipos(Request $request, $id)
     }
 
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-
-   // Verificar si se ha proporcionado una nueva fecha de calibración y próxima fecha de calibración
-    $fechaCalibracion = $request->input('Fecha_calibracion', '01/01/2001');
-    $proxFechaCalibracion = $request->input('Prox_fecha_calibracion', '01/01/2001');
-    //dd($proxFechaCalibracion);
-
-    // Actualizar los datos del certificado asociado
+    if($request->input('Fecha_calibracion')==null)
+    {
+        $fechaCalibracion = '2001-01-01';
+    }else{
+        $fechaCalibracion = $request->input('Fecha_calibracion');
+    }  
+    if($request->input('Prox_fecha_calibracion')==null)
+    {
+        $proxFechaCalibracion = '2001-01-01';
+    }else{
+            $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
+    }  
     $generalConCertificado->update([
         'No_certificado' => $request->input('No_certificado'),
         'Fecha_calibracion' => $fechaCalibracion,
@@ -431,7 +423,6 @@ public function updateEquipos(Request $request, $id)
             $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Equipos/' . $nombreArchivo;
             // Mover el archivo
             Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
-
             /* Tabla Historial_certificados */
             $CertificadosHistorialCertificados = new historial_certificado;
             $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
@@ -441,11 +432,10 @@ public function updateEquipos(Request $request, $id)
             $CertificadosHistorialCertificados->Tipo = $Espera_Dato;
             $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
             $CertificadosHistorialCertificados->save();
+            }
         }
+        return redirect()->route('inventario');
     }
-
-    return redirect()->route('inventario');
-}
     /**
      * Remove the specified resource from storage.
      */
@@ -458,6 +448,7 @@ public function updateEquipos(Request $request, $id)
         $generalConAcesorios = accesorios::find($id);
         $generalConBlockyprobeta = block_y_probeta::find($id);
         $generalConHerramientas = herramientas::find($id);
+        $generalConCertificadosConHistorialCertificados = historial_certificado::find($id);
             // Verifica si el registro existe antes de intentar eliminarlo
             if ($generalConEquipos) {
             // Elimina el registro de la tabla 'equipos'
@@ -475,7 +466,9 @@ public function updateEquipos(Request $request, $id)
             if ($generalConBlockyprobeta) {
                 $generalConBlockyprobeta->delete();
             }
-
+            if ($generalConCertificadosConHistorialCertificados) {
+                $generalConCertificadosConHistorialCertificados->delete();
+            }
             // Elimina archivos asociados si existen
         if ($generalConCertificados->Certificado_Actual) {
             $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
@@ -521,15 +514,11 @@ public function updateEquipos(Request $request, $id)
                 // Elimina el registro de la tabla 'general_eyc'
                 $general->delete();
             }
-        
-
         return redirect()->route('inventario');
     }
-
-
-         /*APARTADO DE CONSUMIBLES*/
-         public function storeConsumibles(Request $request)
-{
+        /*APARTADO DE CONSUMIBLES*/
+        public function storeConsumibles(Request $request)
+    {
     /* Tabla General_EyC */
     $general = new general_eyc;
     if($request->input('Nombre_E_P_BP')==null)
@@ -608,14 +597,24 @@ public function updateEquipos(Request $request, $id)
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener el archivo PDF de la solicitud
         $pdf = $request->file('Factura');
-        
-        // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
+         // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Consumibles/'))
+        ->filter(function ($file) {
+            return preg_match('/^\d+_/', basename($file));
+        })
+        ->sort()
+        ->last();
+    $lastNumber = 0;
+    if ($lastFile) {
+        $lastNumber = (int)explode('_', basename($lastFile))[0];
+    }
+     // Incrementar el número consecutivo
+    $newNumber = $lastNumber + 1;
+    $newFileName = $newNumber . '_' . $pdf->getClientOriginalName();
+        // Guardar el archivo PDF en la carpeta "Equipos y Consumibles/Facturas/Consumibles/ "
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Consumibles/', $pdf->getClientOriginalName(), 'public');
-
         // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        // $generalConCertificados->save();
-        $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
+        $general->Factura = $pdfPath;// Guarda la ruta del archivo de factura
     } else {
         if($request->input('Factura') == null)
     {
@@ -625,9 +624,24 @@ public function updateEquipos(Request $request, $id)
         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
     }
     /*Ficha Tecnica */
-       if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+    if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         $Foto = $request->file('Foto');
-        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Consumibles/', $Foto->getClientOriginalName(), 'public');
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Consumibles/'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileName = $newNumber . '_' . $Foto->getClientOriginalName();
+        // Guardar el archivo PDF en la carpeta "Equipos y Consumibles/Facturas/Consumibles/"
+        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Consumibles/', $newFileName, 'public'); 
         $general->Foto = $FotoPath;
     } else {
         if($request->input('Foto') == null)
@@ -636,7 +650,6 @@ public function updateEquipos(Request $request, $id)
     }
     }
     $general->save();
-
         /*Consumibles */
         $generalConConsumible = new consumibles;
         $generalConConsumible->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -663,17 +676,25 @@ public function updateEquipos(Request $request, $id)
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }  
-    
         $generalConCertificados->Fecha_calibracion = '01/01/0001';
         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
-
-        //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
-        //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $Certificado_Actual = $request->file('Certificado_Actual');
-        
-        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Consumibles/', $Certificado_Actual->getClientOriginalName(), 'public');
-
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Consumibles/'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileName = $newNumber . '_' . $pdf->getClientOriginalName();
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Consumibles/', $newFileName, 'public');
         $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
     } else {
         if($request->input('Certificado_Actual') == null)
@@ -682,30 +703,26 @@ public function updateEquipos(Request $request, $id)
     }
     }
     $generalConCertificados->save();
-
      /*Almacen */
-     $generalConAlmacen = new almacen;
-     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-     if($request->input('Lote')==null)
-     {
+    $generalConAlmacen = new almacen;
+    $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    if($request->input('Lote')==null)
+    {
         $generalConAlmacen->Lote = 'ESPERA DE DATO';
-     }else{
+    }else{
         $generalConAlmacen->Lote = $request->input('Lote');
-     }
-
-     if($request->input('Stock')==null)
-     {
+    }
+    if($request->input('Stock')==null)
+    {
         $generalConAlmacen->Stock = 0;
-     }else{
+    }else{
         $generalConAlmacen->Stock = $request->input('Stock');
-     }
-
-     $generalConAlmacen->save();
-
+    }
+    $generalConAlmacen->save();
     return redirect()->route('inventario');
 }
 
-   /**
+    /**
      * Update the specified resource in storage.
      */
     public function updateConsumibles(Request $request, $id)
@@ -728,15 +745,6 @@ public function updateEquipos(Request $request, $id)
         'Tipo' => $request->input('Tipo'),
         'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
     ]);
-
-    // Actualizar los datos del equipo asociado
-    /*$generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-    $generalConEquipos->update([
-        'Proceso' => $request->input('Proceso'),
-        'Metodo' => $request->input('Metodo'),
-        'Tipo_E' => $request->input('Tipo_E'),
-    ]);*/
-
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
@@ -773,13 +781,13 @@ public function updateEquipos(Request $request, $id)
         $generalEyC->save();
     }
 
-     // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-     $generalConCertificado->update([
-         'No_certificado' => $request->input('No_certificado'),
+    // Actualizar los datos del certificado asociado
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    $generalConCertificado->update([
+        'No_certificado' => $request->input('No_certificado'),
          //'Fecha_calibracion' => $request->input('Fecha_calibracion'),
          //'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
-     ]);
+    ]);
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
@@ -793,152 +801,150 @@ public function updateEquipos(Request $request, $id)
     }
 
      // Actualizar los datos del Almacen asociado
-     $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
-     $generalConAlmacen->update([
-         'Lote' => $request->input('Lote'),
-         'Stock' => $request->input('Stock'),
-     ]);
+    $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+    $generalConAlmacen->update([
+        'Lote' => $request->input('Lote'),
+        'Stock' => $request->input('Stock'),
+    ]);
 
 
     return redirect()->route('inventario');
 }
 
 
- /*ACCESORIOS*/
- public function storeAccesorios(Request $request)
- {
+    /*ACCESORIOS*/
+    public function storeAccesorios(Request $request)
+    {
      /* Tabla General_EyC */
-     $general = new general_eyc;
-     if($request->input('Nombre_E_P_BP')==null)
-     {
-         $general->Nombre_E_P_BP = 'ESPERA DE DATO';
-     }else{
-         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
-     }
-     if($request->input('No_economico')==null)
-     {
-         $general->No_economico = 'ESPERA DE DATO';
-     }else{
-         $general->No_economico = $request->input('No_economico');
-     }
-     if($request->input('Serie')==null)
-     {
-         $general->Serie = 'ESPERA DE DATO';
-     }else{
-         $general->Serie = $request->input('Serie');
-     }
-     if($request->input('Marca')==null)
-     {
-         $general->Marca = 'ESPERA DE DATO';
-     }else{
-         $general->Marca = $request->input('Marca');
-     }
-     if($request->input('Modelo')==null)
-     {
-         $general->Modelo = 'ESPERA DE DATO';
-     }else{
-         $general->Modelo = $request->input('Modelo');
-     }
-     if($request->input('Ubicacion')==null)
-     {
-         $general->Ubicacion = 'ESPERA DE DATO';
-     }else{
-         $general->Ubicacion = $request->input('Ubicacion');
-     }
-     if($request->input('Almacenamiento')==null)
-     {
-         $general->Almacenamiento = 'ESPERA DE DATO';
-     }else{
-         $general->Almacenamiento = $request->input('Almacenamiento');
-     }
-     if($request->input('Comentario')==null)
-     {
-         $general->Comentario = 'ESPERA DE DATO';
-     }else{
-         $general->Comentario = $request->input('Comentario');
-     }
-     if($request->input('SAT')==null)
-     {
-         $general->SAT = 'ESPERA DE DATO';
-     }else{
-         $general->SAT = $request->input('SAT');
-     }
-     if($request->input('BMPRO')==null)
-     {
-         $general->BMPRO = 'ESPERA DE DATO';
-     }else{
-         $general->BMPRO = $request->input('BMPRO');
-     }
-     if($request->input('Disponibilidad_Estado')==null)
-     {
-         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
-     }else{
-         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-     }
-     if($request->input('Tipo')==null)
-     {
-         $general->Tipo = 'ESPERA DE DATO';
-     }else{
-         $general->Tipo = $request->input('Tipo');
-     } 
-         $general->Foto = 'ESPERA DE DATO';
-  
+    $general = new general_eyc;
+    if($request->input('Nombre_E_P_BP')==null)
+    {
+        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+    }else{
+        $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+    }
+    if($request->input('No_economico')==null)
+    {
+        $general->No_economico = 'ESPERA DE DATO';
+    }else{
+        $general->No_economico = $request->input('No_economico');
+    }
+    if($request->input('Serie')==null)
+    {
+        $general->Serie = 'ESPERA DE DATO';
+    }else{
+        $general->Serie = $request->input('Serie');
+    }
+    if($request->input('Marca')==null)
+    {
+        $general->Marca = 'ESPERA DE DATO';
+    }else{
+        $general->Marca = $request->input('Marca');
+    }
+    if($request->input('Modelo')==null)
+    {
+        $general->Modelo = 'ESPERA DE DATO';
+    }else{
+        $general->Modelo = $request->input('Modelo');
+    }
+    if($request->input('Ubicacion')==null)
+    {
+        $general->Ubicacion = 'ESPERA DE DATO';
+    }else{
+        $general->Ubicacion = $request->input('Ubicacion');
+    }
+    if($request->input('Almacenamiento')==null)
+    {
+        $general->Almacenamiento = 'ESPERA DE DATO';
+    }else{
+        $general->Almacenamiento = $request->input('Almacenamiento');
+    }
+    if($request->input('Comentario')==null)
+    {
+        $general->Comentario = 'ESPERA DE DATO';
+    }else{
+        $general->Comentario = $request->input('Comentario');
+    }
+    if($request->input('SAT')==null)
+    {
+        $general->SAT = 'ESPERA DE DATO';
+    }else{
+        $general->SAT = $request->input('SAT');
+    }
+    if($request->input('BMPRO')==null)
+    {
+        $general->BMPRO = 'ESPERA DE DATO';
+    }else{
+        $general->BMPRO = $request->input('BMPRO');
+    }
+    if($request->input('Disponibilidad_Estado')==null)
+    {
+        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+    }else{
+        $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    }
+    if($request->input('Tipo')==null)
+    {
+        $general->Tipo = 'ESPERA DE DATO';
+    }else{
+        $general->Tipo = $request->input('Tipo');
+    } 
+        $general->Foto = 'ESPERA DE DATO';
+
      // Validar que se ha enviado el archivo de factura
-     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-         // Obtener el archivo PDF de la solicitud
-         $pdf = $request->file('Factura');
-         
+    if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+        // Obtener el archivo PDF de la solicitud
+        $pdf = $request->file('Factura');
+        
          // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Accesorios/', $pdf->getClientOriginalName(), 'public');
+        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Accesorios/', $pdf->getClientOriginalName(), 'public');
          // Opcional: guardar la ruta en la base de datos
          // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
          // $generalConCertificados->save();
          $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
-     } else {
-         if($request->input('Factura') == null)
-     {
-         $general->Factura = 'ESPERA DE DATO';
-     }
+    } else {
+        if($request->input('Factura') == null)
+    {
+        $general->Factura = 'ESPERA DE DATO';
     }
-     $general->save();
- 
-     
+    }
+    $general->save();
+    
      /* Certificados */
-     $generalConCertificados = new certificados;
+    $generalConCertificados = new certificados;
      $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
- 
-     $generalConCertificados->No_certificado = 'ESPERA DE DATO';
-     $generalConCertificados->Fecha_calibracion = '01/01/0001';
-     $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
- 
+
+    $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+    $generalConCertificados->Fecha_calibracion = '01/01/0001';
+    $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
+    
          //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
          //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
-     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
-         $Certificado_Actual = $request->file('Certificado_Actual');
-         
-         $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Accesorios/', $Certificado_Actual->getClientOriginalName(), 'public');
- 
+    if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        $Certificado_Actual = $request->file('Certificado_Actual');
+        
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Accesorios/', $Certificado_Actual->getClientOriginalName(), 'public');
          $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
-     } else {
-         if($request->input('Certificado_Actual') == null)
-     {
-         $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
-     }
-     }
-     $generalConCertificados->save();
+    } else {
+        if($request->input('Certificado_Actual') == null)
+    {
+        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+    }
+    }
+    $generalConCertificados->save();
 
       /* Accesorios */
-      $generalConAccesorios = new accesorios;
-      $generalConAccesorios->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-      if($request->input('Proveedor')==null)
-     {
-         $generalConAccesorios->Proveedor = 'ESPERA DE DATO';
-     }else{
-         $generalConAccesorios->Proveedor = $request->input('Proveedor');
-     } 
-     $generalConAccesorios->save();
+    $generalConAccesorios = new accesorios;
+    $generalConAccesorios->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    if($request->input('Proveedor')==null)
+    {
+        $generalConAccesorios->Proveedor = 'ESPERA DE DATO';
+    }else{
+        $generalConAccesorios->Proveedor = $request->input('Proveedor');
+    } 
+    $generalConAccesorios->save();
 
-     return redirect()->route('inventario');
+    return redirect()->route('inventario');
     }
 
     /**
@@ -993,12 +999,12 @@ public function updateEquipos(Request $request, $id)
     }
 
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-     $generalConCertificado->update([
-         'No_certificado' => $request->input('No_certificado'),
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    $generalConCertificado->update([
+        'No_certificado' => $request->input('No_certificado'),
          //'Fecha_calibracion' => $request->input('Fecha_calibracion'),
          //'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
-     ]);
+    ]);
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
@@ -1012,10 +1018,10 @@ public function updateEquipos(Request $request, $id)
     }
 
      // Actualizar los datos del Almacen asociado
-     $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
-     $generalConAccesorios->update([
-         'Proveedor' => $request->input('Proveedor'),
-     ]);
+    $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
+    $generalConAccesorios->update([
+        'Proveedor' => $request->input('Proveedor'),
+    ]);
 
 
     return redirect()->route('inventario');
@@ -1099,7 +1105,7 @@ public function storeBlocks(Request $request)
         $general->Tipo = $request->input('Tipo');
     } 
         $general->Foto = 'ESPERA DE DATO';
- 
+
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener el archivo PDF de la solicitud
@@ -1116,7 +1122,7 @@ public function storeBlocks(Request $request)
     {
         $general->Factura = 'ESPERA DE DATO';
     }
-   }
+    }
 
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         $Foto = $request->file('Foto');
@@ -1172,14 +1178,14 @@ public function storeBlocks(Request $request)
     $generalConCertificados->save();
 
      /* Block y Probeta */
-     $generalConBlockyprobeta = new block_y_probeta;
+    $generalConBlockyprobeta = new block_y_probeta;
      $generalConBlockyprobeta->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-     $generalConBlockyprobeta->save();
+    $generalConBlockyprobeta->save();
 
     return redirect()->route('inventario');
-   }
+    }
 
-      /**
+    /**
      * Update the specified resource in storage.
      */
     public function updateBlocks(Request $request, $id)
@@ -1233,12 +1239,12 @@ public function storeBlocks(Request $request)
     }
 
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-     $generalConCertificado->update([
-         'No_certificado' => $request->input('No_certificado'),
-         'Fecha_calibracion' => $request->input('Fecha_calibracion'),
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    $generalConCertificado->update([
+        'No_certificado' => $request->input('No_certificado'),
+        'Fecha_calibracion' => $request->input('Fecha_calibracion'),
          //'Prox_fecha_calibracion' => $request->input('Prox_fecha_calibracion'),
-     ]);
+    ]);
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
@@ -1332,7 +1338,7 @@ public function storeHerramientas(Request $request)
         $general->Tipo = $request->input('Tipo');
     } 
         $general->Foto = 'ESPERA DE DATO';
- 
+
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener el archivo PDF de la solicitud
@@ -1349,7 +1355,7 @@ public function storeHerramientas(Request $request)
     {
         $general->Factura = 'ESPERA DE DATO';
     }
-   }
+    }
 
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         $Foto = $request->file('Foto');
@@ -1446,9 +1452,9 @@ public function storeHerramientas(Request $request)
     $generalConHerramientas->save();
 
     return redirect()->route('inventario');
-   }
+    }
 
-      /**
+    /**
      * Update the specified resource in storage.
      */
     public function updateHerramientas(Request $request, $id)
@@ -1503,7 +1509,8 @@ public function storeHerramientas(Request $request)
 
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
-   /*if ($request->hasFile('Certificado_Actual')) {
+
+    /*if ($request->hasFile('Certificado_Actual')) {
     // Eliminar archivos existentes si los hay
     $existingPaths = json_decode($generalConCertificado->Certificado_Actual, true);
     if (is_array($existingPaths)) {
@@ -1536,7 +1543,7 @@ public function storeHerramientas(Request $request)
     
 
      // Actualizar los datos del certificado asociado
-     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $rutaAnterior = $generalConCertificado->Certificado_Actual;

@@ -45,34 +45,33 @@
                             <td scope="row">{{$general_eyc->Serie}}</td>
                             <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
                         @endif 
-                    @if($general_eyc->certificados)
-                        @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
-                            <td scope="row">SIN FECHA ASIGNADA</td>
-                            @else
-                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                            @if($general_eyc->certificados)
+                                @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                        @else
+                                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                    @endif
+                                @else
+                                    <td scope="row">N/A</td>
+                                @endif
+                                    <td scope="row"> 
+                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                                        <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                                @endif
+                                    </td>
+                                    <td>
                             @endif
-                        @else
-                            <td scope="row">N/A</td>
-                        @endif
-                            <td scope="row"> 
-                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
-                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                            <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
-                        @endif
-                            </td>
-                            <td>
-                    @endif
-                        <div class="btn-group">
-                            <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                            <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </div>
-                    </td>
-
+                            <div class="btn-group">
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </div>
+                        </td>
                     </tr>
-                @endforeach
+                    @endforeach
                 </tbody>
             </table>
         </div>

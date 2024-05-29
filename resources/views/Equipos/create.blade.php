@@ -224,6 +224,18 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
                                             <input type="number" class="form-control inputForm" name="Stock" placeholder="Enter ...">
                                         </div>
