@@ -824,15 +824,45 @@ public function updateEquipos(Request $request, $id)
     $generalConCertificado->update([
         'No_certificado' => $request->input('No_certificado'),
         'Fecha_calibracion' => $fechaCalibracion,
-        'Prox_fecha_calibracion' => $proxFechaCalibracion,
+        //'Prox_fecha_calibracion' => $proxFechaCalibracion,
     ]);
 
-     // Verificar si se ha proporcionado un nuevo certificado actual
+    // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        // Obtener la ruta del archivo anterior desde la base de datos
+        $rutaAnterior = $generalConCertificado->Certificado_Actual;
+        // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            Storage::disk('public')->delete($rutaAnterior);
+        }
+        // Guardar el nuevo archivo de imagen
+        $Certificado_Actual = $request->file('Certificado_Actual');
+
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Consumibles'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameCertificado_Actual = $newNumber . '_' .  $Certificado_Actual->getClientOriginalName();  
+        
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Consumibles/', $newFileNameCertificado_Actual, 'public');
+        // Actualizar la ruta de la imagen en la base de datos
+        $generalConCertificado->Certificado_Actual = $Certificado_ActualPath;
+        $generalConCertificado->save();
+    }
+     // Verificar si se ha proporcionado un nuevo certificado actual
+   /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         // Obtener la ruta del certificado actual desde la base de datos
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
         // Guardar el nuevo certificado en la carpeta origina
-
         $certificado = $request->file('Certificado_Actual');
 
         // Obtener el último número consecutivo
@@ -852,10 +882,10 @@ public function updateEquipos(Request $request, $id)
         
         $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Consumibles', $newFileNameCertificado, 'public');
         // Actualizar la ruta del certificado en la base de datos
-        $generalConCertificado->Certificado_Actual = $certificadoPath;
+        $generalConCertificado->Certificado_Actual = $certificadoPath;*/
 
         // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
-        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+       /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             // Obtener el nombre del archivo
             $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
             // Construir la nueva ruta para mover el archivo
@@ -863,16 +893,16 @@ public function updateEquipos(Request $request, $id)
             // Mover el archivo
             Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
             /* Tabla Historial_certificados */
-            $CertificadosHistorialCertificados = new historial_certificado;
+            /*$CertificadosHistorialCertificados = new historial_certificado;
             $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
             $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
             $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
             /*$Espera_Dato='ESPERA DE DATO';
             $CertificadosHistorialCertificados->Tipo = $Espera_Dato;*/
-            $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
+           /* $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
             $CertificadosHistorialCertificados->save();
             }
-        }
+        }*/
     $generalConCertificado->save();
 
      // Actualizar los datos del Almacen asociado
