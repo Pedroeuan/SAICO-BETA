@@ -697,14 +697,14 @@
                                     @if ($generalConBlocks->Plano != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalConBlocks->Plano) }}" target="_blank">VER PLANO</a>                                                
                                         </div>
                                     </div>
                                     @elseif($generalConBlocks->Plano == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a target="_blank">SIN PLANO</a>                                                
                                         </div>
                                     </div>
@@ -871,6 +871,30 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">                                            
                                                 <a target="_blank">SIN CERTIFICADO ACTUAL</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
+                                        </div>
+                                    </div>
+                                    @php 
+                                    //dd($generalConHerramientas);
+                                    @endphp
+                                    @if ($generalConHerramientas->Plano != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConHerramientas->Plano) }}" target="_blank">VER PLANO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConHerramientas->Plano == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN PLANO</a>                                                
                                         </div>
                                     </div>
                                     @endif

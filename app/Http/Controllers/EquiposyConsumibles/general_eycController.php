@@ -756,7 +756,6 @@ public function updateEquipos(Request $request, $id)
         }
         // Guardar el nuevo archivo PDF
         $pdf = $request->file('Factura');
-
         // Obtener el último número consecutivo
         $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Consumibles'))
             ->filter(function ($file) {
@@ -773,6 +772,7 @@ public function updateEquipos(Request $request, $id)
         $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
         // Actualizar la ruta de la factura en la base de datos
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Consumibles', $newFileNameFactura, 'public');
+        $generalEyC->Factura = $pdfPath;
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
@@ -803,7 +803,7 @@ public function updateEquipos(Request $request, $id)
         $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName();  
         // Actualizar la ruta de la imagen en la base de datos
         $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Consumibles',  $newFileNameFoto, 'public');
-
+        $generalEyC->Foto = $imagenPath;
     }
     $generalEyC->save();
 
@@ -1037,7 +1037,6 @@ public function updateEquipos(Request $request, $id)
         $newNumber = $lastNumber + 1;
         $newFileNameCertificado = $newNumber . '_' . $Certificado_Actual->getClientOriginalName();
 
-
         $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Accesorios', $newFileNameCertificado, 'public');
          $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
     } else {
@@ -1103,14 +1102,6 @@ public function updateEquipos(Request $request, $id)
         'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
     ]);
 
-    // Actualizar los datos del equipo asociado
-    /*$generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-    $generalConEquipos->update([
-        'Proceso' => $request->input('Proceso'),
-        'Metodo' => $request->input('Metodo'),
-        'Tipo_E' => $request->input('Tipo_E'),
-    ]);*/
-
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
@@ -1139,9 +1130,9 @@ public function updateEquipos(Request $request, $id)
 
         // Actualizar la ruta de la factura en la base de datos
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Accesorios/', $newFileNameFactura, 'public');
-        $generalEyC->save();
+        $generalEyC->Factura = $pdfPath; 
     }
-    
+    $generalEyC->save();
      // Actualizar los datos del certificado asociado
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
     if($request->input('Fecha_calibracion')==null)
@@ -1409,7 +1400,7 @@ public function storeBlocks(Request $request)
 
      /* Block y Probeta */
     $generalConBlockyprobeta = new block_y_probeta;
-     $generalConBlockyprobeta->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    $generalConBlockyprobeta->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
 
     /*Factura*/
 // Validar que se ha enviado el archivo de factura
@@ -1508,6 +1499,7 @@ public function storeBlocks(Request $request)
     $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
 
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Block y Probeta/', $newFileNameFactura, 'public');
+        $generalEyC->Factura = $pdfPath;
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
@@ -1539,6 +1531,7 @@ public function storeBlocks(Request $request)
 
         $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Block y Probeta/', $newFileNameFoto, 'public');
         // Actualizar la ruta de la imagen en la base de datos
+        $generalEyC->Foto = $imagenPath;
     }
     $generalEyC->save();
 
@@ -1746,7 +1739,7 @@ public function storeHerramientas(Request $request)
         $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
 
         // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $newFileNameFactura, 'public');
+        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas', $newFileNameFactura, 'public');
         $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
     } else {
         if($request->input('Factura') == null)
@@ -1773,7 +1766,7 @@ public function storeHerramientas(Request $request)
         $newNumber = $lastNumber + 1;
         $newFileNameFoto = $newNumber . '_' . $Foto->getClientOriginalName();
 
-        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $newFileNameFoto, 'public');
+        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Herramientas', $newFileNameFoto, 'public');
         $general->Foto = $FotoPath;
     } else {
         if($request->input('Foto') == null)
@@ -1835,25 +1828,6 @@ public function storeHerramientas(Request $request)
     }
     $generalConCertificados->save();
 
-    /*if ($request->hasFile('Certificado_Actual')) {
-        $certificadosPaths = []; // Array to store paths of uploaded files
-        
-        foreach ($request->file('Certificado_Actual') as $certificado) {
-            if ($certificado->isValid()) {
-                $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $certificado->getClientOriginalName(), 
-                    'public'
-                );
-                $certificadosPaths[] = $certificadoPath; // Add the path to the array
-            }
-        }
-        // Convert the array to a JSON string to store in the database
-        $generalConCertificados->Certificado_Actual = json_encode($certificadosPaths);
-    } else {
-        if ($request->input('Certificado_Actual') == null) {
-            $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
-        }
-    }*/
-
     $generalConHerramientas = new herramientas;
     $generalConHerramientas->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
 
@@ -1873,7 +1847,6 @@ public function storeHerramientas(Request $request)
         // Incrementar el número consecutivo
         $newNumber = $lastNumber + 1;
         $newFileNameFactura = $newNumber . '_' . $Garantia->getClientOriginalName();
-
 
         $GarantiaPath = $Garantia->storeAs('Equipos y Consumibles/Garantia/Herramientas', $newFileNameFactura, 'public');
         $generalConHerramientas->Garantia = $GarantiaPath; // Guarda la ruta del archivo de garantía
@@ -1900,8 +1873,7 @@ public function storeHerramientas(Request $request)
         $newNumber = $lastNumber + 1;
         $newFileNameFactura = $newNumber . '_' . $Plano->getClientOriginalName();
 
-
-        $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $newFileNameFactura, 'public');
+        $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas', $newFileNameFactura, 'public');
         $generalConHerramientas->Plano = $PlanoPath; // Guarda la ruta del archivo de garantía
     } else {
         if($request->input('Plano') == null) {
@@ -1976,6 +1948,8 @@ public function storeHerramientas(Request $request)
         $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
 
         $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $newFileNameFactura, 'public');
+        $generalEyC->Factura = $pdfPath;
+        
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
@@ -2004,44 +1978,10 @@ public function storeHerramientas(Request $request)
         $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName(); 
         $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $newFileNameFoto, 'public');
         // Actualizar la ruta de la imagen en la base de datos
+        $generalEyC->Foto = $imagenPath;
     }
 
     $generalEyC->save();
-
-    $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-    
-    /*if ($request->hasFile('Certificado_Actual')) {
-    // Eliminar archivos existentes si los hay
-    $existingPaths = json_decode($generalConCertificado->Certificado_Actual, true);
-    if (is_array($existingPaths)) {
-        foreach ($existingPaths as $path) {
-            if (Storage::disk('public')->exists($path)) 
-            {
-                Storage::disk('public')->delete($path);
-            }
-        }
-    }
-    
-    $certificadosPaths = []; // Array to store paths of uploaded files
-    
-    foreach ($request->file('Certificado_Actual') as $certificado) {
-        if ($certificado->isValid()) {
-            $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $certificado->getClientOriginalName(), 'public');
-            $certificadosPaths[] = $certificadoPath; // Add the path to the array
-        }
-    }
-
-    // Convert the array to a JSON string to store in the database
-    $generalConCertificado->Certificado_Actual = json_encode($certificadosPaths);
-    } else {
-        if ($request->input('Certificado_Actual') == null) {
-            $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
-        }
-    }
-
-    $generalConCertificados->save();*/
-    
-
      // Actualizar los datos del certificado asociado
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
@@ -2068,7 +2008,7 @@ public function storeHerramientas(Request $request)
         $newNumber = $lastNumber + 1;
         $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
         
-        $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $newFileNameCertificado, 'public');
+        $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas', $newFileNameCertificado, 'public');
         // Actualizar la ruta del certificado en la base de datos
         $generalConCertificado->Certificado_Actual = $certificadoPath;
         $generalConCertificado->save();
@@ -2103,12 +2043,12 @@ public function storeHerramientas(Request $request)
         }
         $Garantia = $request->file('Garantia');
          // Obtener el último número consecutivo
-         $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
-         ->filter(function ($file) {
-             return preg_match('/^\d+_/', basename($file));
-         })
-         ->sort()
-         ->last();
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+        ->filter(function ($file) {
+            return preg_match('/^\d+_/', basename($file));
+        })
+        ->sort()
+        ->last();
         $lastNumber = 0;
         if ($lastFile) {
             $lastNumber = (int)explode('_', basename($lastFile))[0];
@@ -2117,6 +2057,7 @@ public function storeHerramientas(Request $request)
         $newNumber = $lastNumber + 1;
         $newFileNameFactura = $newNumber . '_' . $Garantia->getClientOriginalName();
         $imagenPath = $Garantia->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $newFileNameFactura, 'public');
+        $generalConHerramientas->Garantia = $imagenPath;
         $generalConHerramientas->save();
         }
 
@@ -2141,6 +2082,7 @@ public function storeHerramientas(Request $request)
             $newNumber = $lastNumber + 1;
             $newFileNameFactura = $newNumber . '_' . $Plano->getClientOriginalName();
             $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $newFileNameFactura, 'public');
+            $generalConHerramientas->Plano = $PlanoPath;
             $generalConHerramientas->save();
             }
 

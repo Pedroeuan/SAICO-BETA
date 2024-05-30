@@ -30,21 +30,7 @@
                         @if($general_eyc->certificados)
                             @foreach ($general_eyc->certificados->historial_certificado as $historial)
                                 <tr>
-                                    @if($general_eyc->Tipo = 'CONSUMIBLES')
-                                    <td>{{$general_eyc->almacen->Lote}}</td>
-                                    <td>{{$general_eyc->Tipo}}</td>
-                                    <td>{{$historial->Ultima_Fecha_calibracion}}</td>
-                                    <td>
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $historial->Certificado_Caducado) }}" role="button" target="_blank">
-                                            <i class="fa fa-eye">
-                                            </i>
-                                        </a>
-                                    </td>
-                                    @else
                                     <td>{{$general_eyc->No_economico}}</td>
-                                    @php 
-                                    dd($general_eyc->Tipo);
-                                    @endphp
                                     <td>{{$general_eyc->Tipo}}</td>
                                     <td>{{$historial->Ultima_Fecha_calibracion}}</td>
                                     <td>
@@ -53,9 +39,6 @@
                                             </i>
                                         </a>
                                     </td>
-                                    @endif
-                                    
-
                                 </tr>
                             @endforeach
                         @endif
