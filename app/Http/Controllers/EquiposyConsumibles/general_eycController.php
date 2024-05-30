@@ -1596,6 +1596,7 @@ public function storeBlocks(Request $request)
 
         $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Block y Probeta/', $newFileNamePlano, 'public');
         // Actualizar la ruta de la imagen en la base de datos
+        $generalConBlockyprobeta->Plano = $PlanoPath;
     }
     $generalConBlockyprobeta->save();
 
