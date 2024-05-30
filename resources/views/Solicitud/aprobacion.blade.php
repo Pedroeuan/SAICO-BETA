@@ -88,7 +88,7 @@
                     <td>Update software</td>
                     <td>Update software</td>
                     <td>Update software</td>
-                    <td>Update software</td>
+                    <td><input type="text" class="form-control inputForm" name="comentario"></td>
                     <td>Update software</td>
                     <td>Update software</td>
                 </tr>
