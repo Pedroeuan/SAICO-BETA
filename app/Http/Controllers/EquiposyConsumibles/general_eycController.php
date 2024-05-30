@@ -1064,7 +1064,7 @@ public function updateEquipos(Request $request, $id)
     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Lote')==null)
     {
-        $generalConAlmacen->Lote = 'ESPERA DE DATO';
+        $generalConAlmacen->Lote = 'N/A';
     }else{
         $generalConAlmacen->Lote = $request->input('Lote');
     }
@@ -1915,7 +1915,7 @@ public function storeHerramientas(Request $request)
     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Lote')==null)
     {
-        $generalConAlmacen->Lote = 'ESPERA DE DATO';
+        $generalConAlmacen->Lote = 'N/A';
     }else{
         $generalConAlmacen->Lote = $request->input('Lote');
     }
@@ -1937,7 +1937,6 @@ public function storeHerramientas(Request $request)
 {
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
-
     // Actualizar los datos del equipo
     $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),

@@ -883,7 +883,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->BMPRO }}" name="BMPRO" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

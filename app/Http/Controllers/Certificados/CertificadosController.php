@@ -24,11 +24,12 @@ class CertificadosController extends Controller
         $historialCertificados = historial_certificado::get();
         $certificadosHistorialCertificados = certificados::with(['historial_certificado'])->get();
         $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+        $generalConCertificadosConHistorialYAlmacen = general_eyc::with(['certificados.historial_certificado','almacen'])->get();
         foreach ($historialCertificados as $general) {
             //dd($general);
         }
-        //$generalConCertificadosConHistorialYAlmacen = general_eyc::with(['certificados.historial_certificado','almacen'])->get();
-        return view("Certificados.index", compact('generalConCertificadosConHistorial','generalConAlmacen','certificadosHistorialCertificados'));
+        
+        return view("Certificados.index", compact('generalConCertificadosConHistorial','generalConAlmacen','certificadosHistorialCertificados','generalConCertificadosConHistorialYAlmacen'));
         //return view("Certificados.index", compact('generalConCertificadosConHistorialYAlmacen'));
         
     }
