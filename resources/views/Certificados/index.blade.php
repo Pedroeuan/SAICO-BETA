@@ -19,24 +19,29 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Número Economico</th>
-                        <th>Tipo (equipo) </th>
+                        <th>Lote / Número Económico</th>
+                        <th>Tipo (equipo)</th>
                         <th>Última calibración</th>
                         <th>Ver Certificado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($generalConCertificadosConHistorial as $general_eyc)
+                    @foreach ($generalConCertificadosConHistorialYAlmacen as $general_eyc)
                         @if($general_eyc->certificados)
                             @foreach ($general_eyc->certificados->historial_certificado as $historial)
                                 <tr>
-                                    <td>{{$general_eyc->No_economico}}</td>
-                                    <td>{{$general_eyc->Tipo}}</td>
-                                    <td>{{$historial->Ultima_Fecha_calibracion}}</td>
+                                    <td>
+                                        @if ($general_eyc->Tipo == 'CONSUMIBLES')
+                                            {{ $general_eyc->almacen->Lote ?? 'N/A' }}
+                                        @else
+                                            {{ $general_eyc->No_economico ?? 'N/A' }}
+                                        @endif
+                                    </td>
+                                    <td>{{ $general_eyc->Tipo }}</td>
+                                    <td>{{ $historial->Ultima_Fecha_calibracion }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ asset('storage/' . $historial->Certificado_Caducado) }}" role="button" target="_blank">
-                                            <i class="fa fa-eye">
-                                            </i>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </td>
                                 </tr>
