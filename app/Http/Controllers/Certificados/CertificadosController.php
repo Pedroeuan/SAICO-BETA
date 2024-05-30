@@ -20,11 +20,17 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-        /*$generalConAlmacen = general_eyc::with(['almacen'])->get();
-        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();*/
-        $generalConCertificadosConHistorialYAlmacen = general_eyc::with(['certificados.historial_certificado','almacen'])->get();
-        //return view("Certificados.index", compact('generalConCertificadosConHistorial','generalConAlmacen'));
-        return view("Certificados.index", compact('generalConCertificadosConHistorialYAlmacen'));
+        $generalConAlmacen = general_eyc::with(['almacen'])->get();
+        $historialCertificados = historial_certificado::get();
+        $certificadosHistorialCertificados = certificados::with(['historial_certificado'])->get();
+        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+        foreach ($historialCertificados as $general) {
+            //dd($general);
+        }
+        //$generalConCertificadosConHistorialYAlmacen = general_eyc::with(['certificados.historial_certificado','almacen'])->get();
+        return view("Certificados.index", compact('generalConCertificadosConHistorial','generalConAlmacen','certificadosHistorialCertificados'));
+        //return view("Certificados.index", compact('generalConCertificadosConHistorialYAlmacen'));
+        
     }
 
     /**

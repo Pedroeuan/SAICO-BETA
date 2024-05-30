@@ -230,7 +230,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
+                                            <label class="col-form-label" for="inputSuccess">Fecha Caducidad</label>
                                             <input type="date" class="form-control inputForm" name="Fecha_calibracion">
                                         </div>
                                     </div>
@@ -460,20 +460,20 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
-                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No Certificado</label>
                                             <input type="text" class="form-control inputForm" name="No_Certificado" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Plano</label>
+                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración</label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

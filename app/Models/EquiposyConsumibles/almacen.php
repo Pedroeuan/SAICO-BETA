@@ -21,6 +21,6 @@ class almacen extends Model
 
     public function general_eyc()
     {
-        return $this->hasOne(general_eyc::class, 'idGeneral_EyC');
+        return $this->belongsTo(general_eyc::class, 'idGeneral_EyC');
     }
 }

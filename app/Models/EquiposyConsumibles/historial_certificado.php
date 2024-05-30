@@ -22,7 +22,7 @@ class historial_certificado extends Model
     
     public function certificado()
     {
-        return $this->belongsTo(Certificado::class, 'idCertificados');
+        return $this->belongsTo(certificados::class, 'idCertificados');
     }
 
 }
