@@ -5,7 +5,23 @@
 
 @section('content')
 <br>
-<h3 align="center"> Edición de equipos</h3>
+    <h3 align="center"> Edición de 
+                    @if($generalEyC->Tipo=='EQUIPOS')
+                        Equipos
+                    @endif
+                    @if($generalEyC->Tipo=='CONSUMIBLES')
+                        Consumibles
+                    @endif
+                    @if($generalEyC->Tipo=='ACCESORIOS')
+                        Accesorios
+                    @endif
+                    @if($generalEyC->Tipo=='BLOCK Y PROBETA')
+                        Block y Probeta
+                    @endif
+                    @if($generalEyC->Tipo=='HERRAMIENTAS')
+                        Herramientas
+                    @endif
+    </h3>
 <br>
 
 <div class="container">
@@ -27,7 +43,7 @@
                         <li class="nav-item"><a class="nav-link active" href="#tab_4" data-toggle="tab">Block y Probeta</a></li>
                     @endif
                     @if($generalEyC->Tipo=='HERRAMIENTAS')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">HERRAMIENTAS</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">Herramientas</a></li>
                     @endif
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
@@ -92,14 +108,14 @@
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'N/A')
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Factura == 'N/A')
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -119,14 +135,14 @@
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Foto != 'N/A')
+                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FOTO</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Foto == 'N/A')
+                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -146,14 +162,14 @@
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -164,14 +180,22 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            @else
                                             <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Fecha_calibracion }}" name="Fecha_calibracion">
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
+                                            @else
                                             <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Prox_fecha_calibracion }}" name="Prox_fecha_calibracion">
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -262,14 +286,14 @@
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'N/A')
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Factura == 'N/A')
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -295,17 +319,17 @@
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Foto != 'N/A')
+                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Foto == 'N/A')
+                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a target="_blank">SIN FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
@@ -316,7 +340,37 @@
                                             <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado">
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha Caducidad</label>
+                                            @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            @else
+                                            <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Fecha_calibracion }}" name="Fecha_calibracion">
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
@@ -327,7 +381,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
                                             <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
-                                           <!-- <select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
+                                            <!-- <select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="TIERRA" @if ($generalConConsumibles->Tipo == 'TIERRA') selected="selected" @endif>TIERRA</option>
                                                 <option value="COSTA FUERA" @if ($generalConConsumibles->Tipo == 'COSTA FUERA') selected="selected" @endif>COSTA FUERA</option>
@@ -421,14 +475,14 @@
                                             <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'N/A')
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Factura == 'N/A')
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -448,14 +502,14 @@
                                             <input type="file" class="form-control inputForm"  name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -555,14 +609,14 @@
                                             <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'N/A')
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Factura == 'N/A')
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -582,14 +636,14 @@
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Foto != 'N/A')
+                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER HOJA DE PRESENTACIÓN</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Foto == 'N/A')
+                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -600,7 +654,11 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha de calibración</label>
+                                            @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
+                                            <input type="date" class="form-control inputForm"  name="Fecha_calibracion" placeholder="Enter ...">
+                                            @else
                                             <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Fecha_calibracion }}" name="Fecha_calibracion" placeholder="Enter ...">
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -611,22 +669,43 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Plano</label>
+                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración </label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
+                                        </div>
+                                    </div>
+                                    @if ($generalConBlocks->Plano != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConBlocks->Plano) }}" target="_blank">VER PLANO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConBlocks->Plano == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN PLANO</a>                                                
                                         </div>
                                     </div>
                                     @endif
@@ -716,14 +795,14 @@
                                             <input type="file" class="form-control inputForm" value="{{ $generalEyC->Factura }}" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'N/A')
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank">VER FACTURA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Factura == 'N/A')
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
@@ -743,17 +822,15 @@
                                             <input type="file" class="form-control inputForm" name="Garantia" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalConHerramientas->Garantia != 'N/A')
+                                    @if ($generalConHerramientas->Garantia != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                              
                                                 <a href="{{ asset('storage/' . $generalConHerramientas->Garantia) }}" target="_blank">VER GARANTIA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalConHerramientas->Garantia == 'N/A')
+                                    @elseif($generalConHerramientas->Garantia == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                               
                                                 <a target="_blank">SIN Garantia</a>                                                
                                         </div>
                                     </div>
@@ -764,39 +841,60 @@
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Foto != 'N/A')
+                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                        <div class="form-group">                                             
                                                 <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalEyC->Foto == 'N/A')
+                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                                <a target="_blank">SIN FICHA TÉCNICA</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN FICHA TÉCNICA</a>                                                
+                                            <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                             
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                                <a target="_blank">SIN CERTIFICADO ACTUAL</a>                                                
                                         </div>
                                     </div>
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'N/A')
+                                    @php 
+                                    //dd($generalConHerramientas);
+                                    @endphp
+                                    @if ($generalConHerramientas->Plano != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO/PLANO</a>                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConHerramientas->Plano) }}" target="_blank">VER PLANO</a>                                                
                                         </div>
                                     </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'N/A')
+                                    @elseif($generalConHerramientas->Plano == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN CERTIFICADO/PLANO</a>                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN PLANO</a>                                                
                                         </div>
                                     </div>
                                     @endif
@@ -809,7 +907,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->BMPRO }}" name="BMPRO" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

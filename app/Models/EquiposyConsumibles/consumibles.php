@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class consumibles extends Model
 {
     protected $fillable = [
+        'idConsumibles',
         'idGeneral_EyC',
         'Proveedor',
         'Tipo',
