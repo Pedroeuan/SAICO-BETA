@@ -23,25 +23,20 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Número de certificado</th>
-                        <th>Tipo (equipo) </th>
-                        <th>certificado</th>
+                        <th>No.ECO</th>
+                        <th>Categoría</th>
                         <th>Última calibración</th>
-                        <th>Asignado a:</th>
-                        <th>Acciones</th>
+                        <th>Ver Certificado</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td scope="row">23444323</td>
                         <td scope="row">Block</td>
-                        <td scope="row">archivo</td>
                         <td scope="row">12/05/24</td>
-                        <td scope="row">ultrasonido</td>
                         <td>
                             <div class="btn-group">
-                                <a  class="btn btn-warning" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fas fa-edit"></i></a>
-                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
+                                <a  class="btn btn-primary" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fa fa-eye"></i></a>     
                             </div>
                         </td>
                     </tr>
