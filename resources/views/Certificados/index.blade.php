@@ -19,7 +19,8 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Lote / Número Económico</th>
+                        <!--<th>Lote / Número Económico</th>-->
+                        <th>Número Económico</th>
                         <th>Tipo (equipo)</th>
                         <th>Última calibración</th>
                         <th>Ver Certificado</th>
