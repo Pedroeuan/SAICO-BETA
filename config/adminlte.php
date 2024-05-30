@@ -63,9 +63,9 @@ return [
     |
     */
 
-    'logo' => '<H4><b>S/AICO</b></H4>',
-    'logo_img' => 'vendor/adminlte\dist/img/Logos/Logo_AICO.png',
-    'logo_img_class' => 'brand-image img-rounded elevation-3',
+    'logo' => null,
+    'logo_img' => 'vendor/adminlte\dist/img/Logos/Imagen3.png',
+    'logo_img_class' => 'brand-image img-rounded elevation-9',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'AICO',
@@ -440,17 +440,27 @@ return [
                         [
                             'text' => 'Registro',
                             'icon' => 'fas fa-vials',
-                            'url' => 'registros/createEquipos',
+                            'url' => 'registros/createEyC',
                         ],
-                        [
+                        /*[
                             'text' => 'Kits',
                             'icon' => 'fas fa-suitcase',
                             'url' => '#',
+                        ],*/
+                        [
+                            'text' => ' Crear solicitud E y C',
+                            'icon' => 'fas fa-file-alt',
+                            'url' => 'solicitud/index',
                         ],
                         [
-                            'text' => 'Solicitud E y C',
-                            'icon' => 'fas fa-file-alt',
-                            'url' => 'registros/SolicitudEyC',
+                            'text' => ' Ver solicitudes',
+                            'icon' => 'fas fa-clipboard-check',
+                            'url' => 'solicitud/create',
+                        ],
+                        [
+                            'text' => ' Certificados obsoletos',
+                            'icon' => 'fas fa-clipboard-check',
+                            'url' => 'certificados/index',
                         ],
                         /*[
                             'text' => 'level_one',

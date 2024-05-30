@@ -18,7 +18,7 @@
 <form role="form">
     <div class="box">
         <h3 align="center">Inventario de equipos</h3>
-        <br>
+            <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
@@ -28,56 +28,48 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
-                        <th>Destino</th>
+                        <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
-                        <th>Foto</th>
+                        <th>Hoja de Presentación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($generalConCertificados as $general_eyc)
-                    <tr>
-                    @if($generalConCertificados)
-                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                        <td scope="row">{{$general_eyc->No_economico}}</td>
-                        <td scope="row">{{$general_eyc->Marca}}</td>
-                        <td scope="row">{{$general_eyc->Modelo}}</td>
-                        <td scope="row">{{$general_eyc->Serie}}</td>
-                        <td scope="row">{{$general_eyc->Destino}}</td>
-                    @else
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                        <td scope="row">SIN DATOS</td>
-                @endif
-                @if($general_eyc->certificados==null)
-                <td scope="row">SIN FECHA ASIGNADA</td>
-                @else
-                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                @endif
-                <td scope="row"> 
-                    @if ($general_eyc->Foto != 'N/A')
-                  <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                    <a href="{{ asset('storage/' . $general_eyc->Foto) }}" target="_blank">VER FOTO</a> 
-                    @elseif($general_eyc->Foto == 'N/A')  
-                    <a target="_blank">SIN FOTO</a>                                              
-                    @endif
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <a href="{{ route('editEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $general_eyc->idGeneral_EyC }});" class="btn btn-danger" role="button">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </a>
-                        <!-Yacziry-->
-                          @php
-                          //<button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        //<a href="{{ route('destroyEquipos', ['general_eyc' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-danger" role="button"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        @endphp
-                    </div>
-                </td>
+                    @foreach ($generalConCertificados as $general_eyc)
+                        <tr>
+                        @if($general_eyc)
+                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                            <td scope="row">{{$general_eyc->No_economico}}</td>
+                            <td scope="row">{{$general_eyc->Marca}}</td>
+                            <td scope="row">{{$general_eyc->Modelo}}</td>
+                            <td scope="row">{{$general_eyc->Serie}}</td>
+                            <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
+                        @endif 
+                            @if($general_eyc->certificados)
+                                @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                        @else
+                                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                    @endif
+                                @else
+                                    <td scope="row">N/A</td>
+                                @endif
+                                    <td scope="row"> 
+                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                                        <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                                @endif
+                                    </td>
+                                    <td>
+                            @endif
+                            <div class="btn-group">
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -94,25 +86,30 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    let dataTable;
+    new DataTable('#tablaJs');
+   
+   let dataTable;
 
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-        // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
+   function initializeDataTable() {
+       // Destruir el DataTable si ya está inicializado
+       if ($.fn.DataTable.isDataTable('#tablaJs')) {
+           dataTable.destroy();
+       }
+       // Inicializar el DataTable
+       dataTable = new DataTable('#tablaJs');
+   }
 
-    // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
-    });
+   // Inicializar el DataTable al cargar la página
+   $(document).ready(function() {
+       initializeDataTable();
+   });
 
-    function confirmDelete(id) {
+    $(".btnEliminarEquipo").on("click", function(){
+    //valor del id a eliminar
+    var idGeneral_EyC = $(this).attr("idGeneral_EyC");
+    console.log(idGeneral_EyC);
     Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -121,7 +118,7 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                url: '/eliminar/destroyEquipos/' + idGeneral_EyC, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
@@ -133,11 +130,11 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
                     }
                 },
                 error: function() {
-                    // Manejar errores de la solicitud AJAX
+                     // Manejar errores de la solicitud AJAX
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
@@ -157,34 +154,8 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
-}
+});
 
 </script>
-<!--
-<script>
-    // funcion borrar 
-    $(".btnEliminarEquipo").on("click", function(){
-        //valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-        console.log(idGeneral_EyC);
-            Swal.fire({
-                title: "Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire("Eliminado!", "", "success");
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
-                }
-            });
-    })
-
-    //mostrar datatable
-    new DataTable('#tablaJs');
-</script>-->
 
 @endsection
-

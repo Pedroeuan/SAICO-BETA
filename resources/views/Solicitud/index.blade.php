@@ -36,7 +36,8 @@
                         <th>Destino</th>
                         <th>Fecha calibración</th>
                         <!--<th>Foto</th>-->
-                        <th>Solicitar cantidad</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,13 @@
                         <td scope="row">SIN DATOS</td>
                         <td>
                             <div class="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Cantidad">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                        <div class="row">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="Cantidad">
                                 </div>

@@ -5,16 +5,14 @@ namespace App\Models\EquiposyConsumibles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class equipos extends Model
+class accesorios extends Model
 {
     protected $fillable = [
-        // Agrega aquí otros campos que necesites permitir en asignación masiva
+        'idAccesorios',
         'idGeneral_EyC',
-        'Proceso',
-        'idGeneral_EyC',
-        'Metodo',
-        'Tipo_E',
+        'Proveedor',
     ];
+    //protected $table = 'accesorios';
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
