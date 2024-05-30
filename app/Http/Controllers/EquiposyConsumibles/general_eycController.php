@@ -1370,7 +1370,6 @@ public function storeBlocks(Request $request)
     }else{
         $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
     }  
-
     if($request->input('Prox_fecha_calibracion')==null)
     {
         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
@@ -1644,7 +1643,6 @@ public function storeBlocks(Request $request)
             $CertificadosHistorialCertificados->save();
             }
         }
-
     return redirect()->route('inventario');
 }
 
@@ -1732,11 +1730,23 @@ public function storeHerramientas(Request $request)
         // Obtener el archivo PDF de la solicitud
         $pdf = $request->file('Factura');
         
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
+
         // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $pdf->getClientOriginalName(), 'public');
-        // Opcional: guardar la ruta en la base de datos
-        // $generalConCertificados->Factura = 'Equipos/Facturas/' . $pdf->getClientOriginalName();
-        // $generalConCertificados->save();
+        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $newFileNameFactura, 'public');
         $general->Factura = $pdfPath; // Guarda la ruta del archivo de factura
     } else {
         if($request->input('Factura') == null)
@@ -1747,7 +1757,23 @@ public function storeHerramientas(Request $request)
 
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         $Foto = $request->file('Foto');
-        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $Foto->getClientOriginalName(), 'public');
+
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFoto = $newNumber . '_' . $Foto->getClientOriginalName();
+
+        $FotoPath = $Foto->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $newFileNameFoto, 'public');
         $general->Foto = $FotoPath;
     } else {
         if($request->input('Foto') == null)
@@ -1774,7 +1800,6 @@ public function storeHerramientas(Request $request)
     }else{
         $generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
     }  
-
     if($request->input('Prox_fecha_calibracion')==null)
     {
         $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
@@ -1784,7 +1809,23 @@ public function storeHerramientas(Request $request)
 
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         $Certificado_Actual = $request->file('Certificado_Actual');
-        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Herramientas', $Certificado_Actual->getClientOriginalName(), 'public');
+
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameCertificado = $newNumber . '_' . $Certificado_Actual->getClientOriginalName();
+
+        $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Herramientas', $newFileNameCertificado, 'public');
         $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
     } else {
         if($request->input('Certificado_Actual') == null)
@@ -1818,7 +1859,23 @@ public function storeHerramientas(Request $request)
 
     if ($request->hasFile('Garantia') && $request->file('Garantia')->isValid()) {
         $Garantia = $request->file('Garantia');
-        $GarantiaPath = $Garantia->storeAs('Equipos y Consumibles/Garantia/Herramientas/', $Garantia->getClientOriginalName(), 'public');
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Garantia/Herramienta'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFactura = $newNumber . '_' . $Garantia->getClientOriginalName();
+
+
+        $GarantiaPath = $Garantia->storeAs('Equipos y Consumibles/Garantia/Herramientas', $newFileNameFactura, 'public');
         $generalConHerramientas->Garantia = $GarantiaPath; // Guarda la ruta del archivo de garantía
     } else {
         if($request->input('Garantia') == null) {
@@ -1828,15 +1885,47 @@ public function storeHerramientas(Request $request)
 
     if ($request->hasFile('Plano') && $request->file('Plano')->isValid()) {
         $Plano = $request->file('Plano');
-        $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $Plano->getClientOriginalName(), 'public');
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Equipos'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFactura = $newNumber . '_' . $Plano->getClientOriginalName();
+
+
+        $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $newFileNameFactura, 'public');
         $generalConHerramientas->Plano = $PlanoPath; // Guarda la ruta del archivo de garantía
     } else {
         if($request->input('Plano') == null) {
             $generalConHerramientas->Plano = 'ESPERA DE DATO';
         }
     }
-
     $generalConHerramientas->save();
+
+    /*Almacen */
+    $generalConAlmacen = new almacen;
+    $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+    if($request->input('Lote')==null)
+    {
+        $generalConAlmacen->Lote = 'ESPERA DE DATO';
+    }else{
+        $generalConAlmacen->Lote = $request->input('Lote');
+    }
+    if($request->input('Stock')==null)
+    {
+        $generalConAlmacen->Stock = 1;
+    }else{
+        $generalConAlmacen->Stock = $request->input('Stock');
+    }
+    $generalConAlmacen->save();
 
     return redirect()->route('inventario');
     }
@@ -1872,31 +1961,56 @@ public function storeHerramientas(Request $request)
             Storage::disk('public')->delete($rutaAnterior);
         }
         $pdf = $request->file('Factura');
-        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $pdf->getClientOriginalName(), 'public');
-        $generalEyC->Factura = 'Equipos y Consumibles/Facturas/Herramientas/' . $pdf->getClientOriginalName();
-        $generalEyC->save();
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
+
+        $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $newFileNameFactura, 'public');
     }
 
     // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
         // Obtener la ruta del archivo anterior desde la base de datos
         $rutaAnterior = $generalEyC->Foto;
-
         // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             Storage::disk('public')->delete($rutaAnterior);
         }
         // Guardar el nuevo archivo de imagen
         $imagen = $request->file('Foto');
-        $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $imagen->getClientOriginalName(), 'public');
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName(); 
+        $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $newFileNameFoto, 'public');
         // Actualizar la ruta de la imagen en la base de datos
-        $generalEyC->Foto = 'Equipos y Consumibles/Fotos/Herramientas/' . $imagen->getClientOriginalName();
-        $generalEyC->save();
     }
 
+    $generalEyC->save();
+
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-
-
+    
     /*if ($request->hasFile('Certificado_Actual')) {
     // Eliminar archivos existentes si los hay
     $existingPaths = json_decode($generalConCertificado->Certificado_Actual, true);
@@ -1932,17 +2046,53 @@ public function storeHerramientas(Request $request)
      // Actualizar los datos del certificado asociado
     $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
 
+    // Verificar si se ha proporcionado un nuevo certificado actual
     if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+        // Obtener la ruta del certificado actual desde la base de datos
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
-        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-            Storage::disk('public')->delete($rutaAnterior);
-        }
-        $imagen = $request->file('Certificado_Actual');
-        $imagenPath = $imagen->storeAs('Equipos y Consumibles/Certificados/Herramientas', $imagen->getClientOriginalName(), 'public');
-        $generalConCertificado->Certificado_Actual = 'Equipos y Consumibles/Certificados/Herramientas' . $imagen->getClientOriginalName();
+        // Guardar el nuevo certificado en la carpeta origina
 
+        $certificado = $request->file('Certificado_Actual');
+
+        // Obtener el último número consecutivo
+        $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
+        
+        $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $newFileNameCertificado, 'public');
+        // Actualizar la ruta del certificado en la base de datos
+        $generalConCertificado->Certificado_Actual = $certificadoPath;
         $generalConCertificado->save();
-    }
+
+        // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
+        if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+            // Obtener el nombre del archivo
+            $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
+            // Construir la nueva ruta para mover el archivo
+            $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Herramientas/' . $nombreArchivo;
+            // Mover el archivo
+            Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
+            /* Tabla Historial_certificados */
+            $CertificadosHistorialCertificados = new historial_certificado;
+            $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
+            $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
+            $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
+            /*$Espera_Dato='ESPERA DE DATO';
+            $CertificadosHistorialCertificados->Tipo = $Espera_Dato;*/
+            $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
+            $CertificadosHistorialCertificados->save();
+            }
+        }
 
     /*HERRAMIENTAS*/
     $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
@@ -1952,10 +2102,22 @@ public function storeHerramientas(Request $request)
         if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             Storage::disk('public')->delete($rutaAnterior);
         }
-        $imagen = $request->file('Garantia');
-        $imagenPath = $imagen->storeAs('Equipos y Consumibles/Garantia/Herramientas/', $imagen->getClientOriginalName(), 'public');
-        $generalConHerramientas->Garantia = 'Equipos y Consumibles/Garantia/Herramientas/' . $imagen->getClientOriginalName();
-
+        $Garantia = $request->file('Garantia');
+         // Obtener el último número consecutivo
+         $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+         ->filter(function ($file) {
+             return preg_match('/^\d+_/', basename($file));
+         })
+         ->sort()
+         ->last();
+        $lastNumber = 0;
+        if ($lastFile) {
+            $lastNumber = (int)explode('_', basename($lastFile))[0];
+        }
+        // Incrementar el número consecutivo
+        $newNumber = $lastNumber + 1;
+        $newFileNameFactura = $newNumber . '_' . $Garantia->getClientOriginalName();
+        $imagenPath = $Garantia->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $newFileNameFactura, 'public');
         $generalConHerramientas->save();
         }
 
@@ -1965,9 +2127,21 @@ public function storeHerramientas(Request $request)
                 Storage::disk('public')->delete($rutaAnteriorP);
             }
             $Plano = $request->file('Plano');
-            $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $Plano->getClientOriginalName(), 'public');
-            $generalConHerramientas->Plano = 'Equipos y Consumibles/Planos/Herramientas/' . $Plano->getClientOriginalName();
-    
+             // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Planos/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameFactura = $newNumber . '_' . $Plano->getClientOriginalName();
+            $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $newFileNameFactura, 'public');
             $generalConHerramientas->save();
             }
 

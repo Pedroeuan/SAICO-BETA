@@ -864,7 +864,7 @@
                                     @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">                                             
-                                                <a href="{{ asset('storage/' . $generalEyC->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
                                         </div>
                                     </div>
                                     @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
@@ -874,40 +874,6 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
-                                    @php
-                                    /*
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual[]" placeholder="Enter ..." multiple>
-                                        </div>
-                                    </div>
-
-                                    
-                                        // Decode the JSON string to get the array of file paths
-                                    /*    $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
-                                   
-                                    @if($certificadosPaths && is_array($certificadosPaths))
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            @foreach ($certificadosPaths as $certificadoPath)
-                                                <a href="{{ asset('storage/' . $certificadoPath) }}" target="_blank">VER CERTIFICADO/PLANO</a>
-                                                <br> <!-- Salto de línea -->
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                        @else
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN CERTIFICADO/PLANO</a>                                                
-                                            </div>
-                                        </div>
-                                    @endif
-                                    */
-                                    @endphp
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
