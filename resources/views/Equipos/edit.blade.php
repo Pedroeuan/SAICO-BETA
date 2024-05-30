@@ -5,7 +5,23 @@
 
 @section('content')
 <br>
-<h3 align="center"> Edición de equipos</h3>
+    <h3 align="center"> Edición de 
+                    @if($generalEyC->Tipo=='EQUIPOS')
+                        Equipos
+                    @endif
+                    @if($generalEyC->Tipo=='CONSUMIBLES')
+                        Consumibles
+                    @endif
+                    @if($generalEyC->Tipo=='ACCESORIOS')
+                        Accesorios
+                    @endif
+                    @if($generalEyC->Tipo=='BLOCK Y PROBETA')
+                        Block y Probeta
+                    @endif
+                    @if($generalEyC->Tipo=='HERRAMIENTAS')
+                        Herramientas
+                    @endif
+    </h3>
 <br>
 
 <div class="container">
@@ -27,7 +43,7 @@
                         <li class="nav-item"><a class="nav-link active" href="#tab_4" data-toggle="tab">Block y Probeta</a></li>
                     @endif
                     @if($generalEyC->Tipo=='HERRAMIENTAS')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">HERRAMIENTAS</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">Herramientas</a></li>
                     @endif
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
@@ -313,7 +329,7 @@
                                     @elseif($generalEyC->Foto == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a target="_blank">SIN FICHA TÉCNICA</a>                                                
                                         </div>
                                     </div>
@@ -324,7 +340,37 @@
                                             <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado">
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                        </div>
+                                    </div>
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha Caducidad</label>
+                                            @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            @else
+                                            <input type="date" class="form-control inputForm" value="{{ $generalConCertificados->Fecha_calibracion }}" name="Fecha_calibracion">
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
@@ -335,7 +381,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
                                             <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
-                                           <!-- <select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
+                                            <!-- <select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="TIERRA" @if ($generalConConsumibles->Tipo == 'TIERRA') selected="selected" @endif>TIERRA</option>
                                                 <option value="COSTA FUERA" @if ($generalConConsumibles->Tipo == 'COSTA FUERA') selected="selected" @endif>COSTA FUERA</option>
@@ -623,7 +669,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Plano</label>
+                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración </label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
@@ -639,6 +685,27 @@
                                         <div class="form-group">
                                              <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                                 <a target="_blank">SIN CERTIFICADO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
+                                        </div>
+                                    </div>
+                                    @if ($generalConBlocks->Plano != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConBlocks->Plano) }}" target="_blank">VER PLANO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConBlocks->Plano == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN PLANO</a>                                                
                                         </div>
                                     </div>
                                     @endif
@@ -797,7 +864,7 @@
                                     @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">                                             
-                                                <a href="{{ asset('storage/' . $generalEyC->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
                                         </div>
                                     </div>
                                     @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
@@ -807,40 +874,30 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
-                                    @php
-                                    /*
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual[]" placeholder="Enter ..." multiple>
+                                            <label class="col-form-label" for="inputSuccess">Plano</label>
+                                            <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
-
-                                    
-                                        // Decode the JSON string to get the array of file paths
-                                    /*    $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
-                                   
-                                    @if($certificadosPaths && is_array($certificadosPaths))
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            @foreach ($certificadosPaths as $certificadoPath)
-                                                <a href="{{ asset('storage/' . $certificadoPath) }}" target="_blank">VER CERTIFICADO/PLANO</a>
-                                                <br> <!-- Salto de línea -->
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                        @else
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN CERTIFICADO/PLANO</a>                                                
-                                            </div>
-                                        </div>
-                                    @endif
-                                    */
+                                    @php 
+                                    //dd($generalConHerramientas);
                                     @endphp
-                                    
+                                    @if ($generalConHerramientas->Plano != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a href="{{ asset('storage/' . $generalConHerramientas->Plano) }}" target="_blank">VER PLANO</a>                                                
+                                        </div>
+                                    </div>
+                                    @elseif($generalConHerramientas->Plano == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
+                                                <a target="_blank">SIN PLANO</a>                                                
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
@@ -850,7 +907,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->BMPRO }}" name="BMPRO" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
