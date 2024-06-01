@@ -63,27 +63,31 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*Ruta de Actualizar*/
     Route::post('/edicion/editAccesorios/{id}', [general_eycController::class, 'updateAccesorios'])->name('editAccesorios.update');
 
-      /*BLOCKS*/
+    /*BLOCKS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeBlocks', [general_eycController::class, 'storeBlocks'])->name('general_eyc.storeBlocks'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editBlocks/{id}', [general_eycController::class, 'updateBlocks'])->name('editBlocks.update');
 
-          /*HERRAMIENTAS*/
+    /*HERRAMIENTAS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeHerramientas', [general_eycController::class, 'storeHerramientas'])->name('general_eyc.storeHerramientas'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editHerramientas/{id}', [general_eycController::class, 'updateHerramientas'])->name('editHerramientas.update');
 
-    /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
+    /*Ruta para borrar, equipos, comsumibles, block, herramientas---NO HABILITAR*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
-    /*Ruta de solicitudes de manifiesto*/
+    /*Ruta de Vista de solicitudes de manifiesto*/
     Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
     Route::get('solicitud/aprobacion', [SolicitudesController::class, 'edit'])->name('solicitud.aprobacion');
-    
-    /*Ruta de certificados*/
+
+        /*SOLICITUD*/
+    /*Ruta de Guardado*/
+    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud'); 
+
+    /*Ruta de Vista de historial de certificados*/
     Route::get('certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
 
 });

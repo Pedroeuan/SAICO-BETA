@@ -5,6 +5,17 @@ namespace App\Http\Controllers\Solicitudes;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Solicitudes\Solicitudes;
+
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\equipos;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Models\EquiposyConsumibles\consumibles;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\accesorios;
+use App\Models\EquiposyConsumibles\block_y_probeta;
+use App\Models\EquiposyConsumibles\herramientas;
+use App\Models\EquiposyConsumibles\historial_certificado;
+
 class SolicitudesController extends Controller
 {
     /**
@@ -12,7 +23,10 @@ class SolicitudesController extends Controller
      */
     public function index()
     {
-        return view("Solicitud.index");
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->get();
+        //$generalConEquipos = general_eyc::with('Equipos')->get();
+        return view('Solicitud.index', compact('general','generalConCertificados'));
     }
 
     /**
@@ -26,9 +40,25 @@ class SolicitudesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeSolicitud(Request $request)
     {
-        //
+        dd('dentro');
+       // Iterar sobre los datos recibidos y guardarlos en la base de datos
+       foreach ($request->input('cantidad') as $id => $cantidad) {
+        $unidad = $request->input("unidad.$id");
+        $destino = $request->input("destino.$id");
+
+        // Validar y guardar los datos
+        // Aquí puedes agregar tu lógica para guardar los datos en la base de datos
+        // Ejemplo:
+        // $equipo = Equipo::find($id);
+        // $equipo->cantidad = $cantidad;
+        // $equipo->unidad = $unidad;
+        // $equipo->destino = $destino;
+        // $equipo->save();
+    }
+    return view("Solicitud.index");
+
     }
 
     /**
