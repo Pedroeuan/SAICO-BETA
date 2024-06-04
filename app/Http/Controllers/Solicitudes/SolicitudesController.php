@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Solicitudes;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Solicitudes\Solicitudes;
+use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
@@ -15,6 +16,7 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\Solicitudes\detalles_solicitud;
 
 class SolicitudesController extends Controller
 {
@@ -42,20 +44,43 @@ class SolicitudesController extends Controller
      */
     public function storeSolicitud(Request $request)
     {
-        dd('dentro');
-       // Iterar sobre los datos recibidos y guardarlos en la base de datos
-       foreach ($request->input('cantidad') as $id => $cantidad) {
-        $unidad = $request->input("unidad.$id");
-        $destino = $request->input("destino.$id");
+        $now = Carbon::now();
+        $Solicitud = new Solicitudes();
+        $tecnico = 'Pedro-Cambiar a futuro esto';
+        //$Fecha =$now->format('Y-m-d'); // 2024-06-03
+        $Fecha = date('Y-m-d H:i:s');
+        $Solicitud->tecnico=$tecnico;
+        $Solicitud->Fecha=$Fecha;
+        $Solicitud->save();
 
-        // Validar y guardar los datos
-        // Aquí puedes agregar tu lógica para guardar los datos en la base de datos
-        // Ejemplo:
-        // $equipo = Equipo::find($id);
-        // $equipo->cantidad = $cantidad;
-        // $equipo->unidad = $unidad;
-        // $equipo->destino = $destino;
-        // $equipo->save();
+    // Obtener los datos de los inputs
+    $generalEycIds = $request->input('general_eyc_id');
+    $destinos = $request->input('Destino');
+    $cantidades = $request->input('Cantidad');
+    $unidades = $request->input('Unidad');
+    //dd($generalEycIds);
+    // Iterar sobre los datos y guardarlos en la base de datos
+    foreach ($generalEycIds as $index => $generalEycId) {
+        //$generaleyc = $generalEycId[$index];
+        $destino = $destinos[$index];
+        $cantidad = $cantidades[$index];
+        $unidad = $unidades[$index];
+        
+        // Crear una nueva instancia del modelo Solicitud y general
+        $detallesolicitud = new detalles_solicitud();
+        $generaleyc = new general_eyc();
+
+        $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
+        $detallesolicitud->idGeneral_EyC = $generalEycId;
+        $detallesolicitud->cantidad = $cantidad;
+        $detallesolicitud->unidad = $unidad;
+        $detallesolicitud->save();
+
+        $generaleyc = general_eyc::find($generalEycId);
+        if ($generaleyc) {
+            $generaleyc->Disponibilidad_Estado = $destino;
+            $generaleyc->save();
+        }
     }
     return view("Solicitud.index");
 
@@ -86,6 +111,7 @@ class SolicitudesController extends Controller
     }
 
     /**
+     * 
      * Remove the specified resource from storage.
      */
     public function destroy(Solicitudes $solicitudes)
