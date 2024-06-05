@@ -19,7 +19,7 @@ class Solicitudes extends Model
     use HasFactory;
 
       // Definir la relación de uno a muchos con DetalleSolicitud
-    public function detalles()
+    public function detalles_solicitud()
     {
         return $this->hasMany(detalles_solicitud::class, 'idSolicitud');
     }

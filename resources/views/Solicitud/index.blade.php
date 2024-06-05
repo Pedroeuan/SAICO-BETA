@@ -45,9 +45,6 @@
                 @foreach ($generalConCertificados as $general_eyc)
                     <tr>
                         @if($general_eyc)
-                        @php
-                        //dump($general_eyc->idGeneral_EyC);
-                        @endphp
                             <input type="hidden" name="general_eyc_id[]" value="{{$general_eyc->idGeneral_EyC}}">
                             <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                             <td scope="row">{{$general_eyc->No_economico}}</td>

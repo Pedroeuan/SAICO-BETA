@@ -30,10 +30,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($Solicitud as $solicitud)
                     <tr>
-                        <td scope="row">Irving alfonso</td>
-                        <td scope="row">17/05/24</td>
-                        <td scope="row">Pendiente</td>
+                        <td scope="row">{{$solicitud->tecnico}}</td>
+                        <td scope="row">{{$solicitud->Fecha}}</td>
+                        <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
                             <div class="btn-group">
                                 <a  class="btn btn-warning" href="{{ route('solicitud.aprobacion') }}" role="button"><i class="fas fa-edit"></i></a>
@@ -41,6 +42,7 @@
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

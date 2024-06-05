@@ -27,7 +27,6 @@ class SolicitudesController extends Controller
     {
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->get();
-        //$generalConEquipos = general_eyc::with('Equipos')->get();
         return view('Solicitud.index', compact('general','generalConCertificados'));
     }
 
@@ -36,7 +35,8 @@ class SolicitudesController extends Controller
      */
     public function create()
     {
-        return view("Solicitud.edit");
+        $Solicitud = Solicitudes::get();
+        return view("Solicitud.edit",compact('Solicitud'));
     }
 
     /**
@@ -47,10 +47,12 @@ class SolicitudesController extends Controller
         $now = Carbon::now();
         $Solicitud = new Solicitudes();
         $tecnico = 'Pedro-Cambiar a futuro esto';
+        $Estatus = 'PENDIENTE';
         //$Fecha =$now->format('Y-m-d'); // 2024-06-03
         $Fecha = date('Y-m-d H:i:s');
         $Solicitud->tecnico=$tecnico;
         $Solicitud->Fecha=$Fecha;
+        $Solicitud->Estatus=$Estatus;
         $Solicitud->save();
 
     // Obtener los datos de los inputs
@@ -61,6 +63,9 @@ class SolicitudesController extends Controller
     //dd($generalEycIds);
     // Iterar sobre los datos y guardarlos en la base de datos
     foreach ($generalEycIds as $index => $generalEycId) {
+    // Verificar si la información está presente en los inputs
+    //if (isset($destinos[$index]) && isset($cantidades[$index]) && isset($unidades[$index])) {
+    if (isset($cantidades[$index]) && isset($unidades[$index])) {
         //$generaleyc = $generalEycId[$index];
         $destino = $destinos[$index];
         $cantidad = $cantidades[$index];
@@ -80,11 +85,12 @@ class SolicitudesController extends Controller
         if ($generaleyc) {
             $generaleyc->Disponibilidad_Estado = $destino;
             $generaleyc->save();
-        }
+                }
+            }
+        }   
+    return view("solicitud.edit");
     }
-    return view("Solicitud.index");
 
-    }
 
     /**
      * Display the specified resource.
