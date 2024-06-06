@@ -16,6 +16,7 @@ class herramientas extends Model
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
+    
     public function general_eyc()
     {
         return $this->belongsTo(general_eyc::class, 'idGeneral_EyC');
