@@ -4,8 +4,8 @@
 @section('title', 'Equipos')
 
 @section('content')
-<br><br><br>
-<h3 align="center"> Formulario de Alta de datos</h3>
+<br>
+<h3 align="center"> Registro de Equipos</h3>
 <br>
 
 <div class="container">

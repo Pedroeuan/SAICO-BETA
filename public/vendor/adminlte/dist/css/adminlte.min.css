@@ -66,19 +66,7 @@
     line-height: 1.5;
     color: #212529;
     text-align: left;
-    background: url('/vendor/adminlte/dist/img/Logos/fondo.png') no-repeat center center fixed;
-    background-size: 100% 100%;
-  }
-
-  body::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.75); /* Cambia el último valor para ajustar la opacidad (0.5 = 50% de opacidad) */
-    
+    background-color: #fff;
   }
   
   [tabindex="-1"]:focus:not(:focus-visible) {
@@ -10880,7 +10868,7 @@
     margin-top: 0; /* Eliminamos el margen superior */
     margin-right: auto; /* Centramos el logo horizontalmente */
     margin-left: auto; /* Centramos el logo horizontalmente */
-    height: 70px; /*tamaño del logo */
+    height: 33px;
     display: block; /* Aseguramos que el logo sea un bloque para que se pueda centrar horizontalmente */
 }
 
@@ -11517,9 +11505,9 @@
   .dark-mode .content-wrapper .content-header {
     color: #fff;
   }
-  /*linea de nav*/
+  
   .main-header {
-    border-bottom: 3px solid #b4b5b6;
+    border-bottom: 1px solid #dee2e6;
     z-index: 1034;
   }
   
