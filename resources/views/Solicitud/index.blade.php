@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'Equipos')
@@ -14,56 +13,36 @@
 <br>  
 <br>
 <br>
-<div class="box-header with-border">
-    <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
-    Solicitar
-    </button>
-</div>
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Inventario de equipos</h3>
+        <h3 align="center">Solicitudes registradas</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Num. Económico</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>NS</th>
-                        <th>Destino</th>
-                        <th>Fecha calibración</th>
-                        <!--<th>Foto</th>-->
-                        <th>Cantidad</th>
-                        <th>Unidad</th>
+                        <th>Técnico</th>
+                        <th>Fecha de solicitud</th>
+                        <th>Estatus</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($Solicitud as $solicitud)
                     <tr>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">as</td>
-                        <td scope="row">SIN DATOS</td>
+                        <td scope="row">{{$solicitud->tecnico}}</td>
+                        <td scope="row">{{$solicitud->Fecha}}</td>
+                        <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
-                            <div class="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                        <div class="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad">
-                                </div>
+                            <div class="btn-group">
+                                
+                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -78,28 +57,71 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // funcion borrar 
-    $(".btnEliminarEquipo").on("click", function(){
-        //valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-            Swal.fire({
-                title: "Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire("Eliminado!", "", "success");
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
+    let dataTable;
+
+    function initializeDataTable() {
+        // Destruir el DataTable si ya está inicializado
+        if ($.fn.DataTable.isDataTable('#tablaJs')) {
+            dataTable.destroy();
+        }
+        // Inicializar el DataTable
+        dataTable = new DataTable('#tablaJs');
+    }
+
+    // Inicializar el DataTable al cargar la página
+    $(document).ready(function() {
+        initializeDataTable();
+    });
+
+    function confirmDelete(id) {
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Enviar la solicitud DELETE al servidor
+            $.ajax({
+                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                type: 'DELETE', // Método HTTP DELETE
+                data: {
+                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                },
+                success: function(response) {
+                    // Manejar la respuesta del servidor si es necesario
+                    if (response.success) {
+                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
+                        location.reload();
+                    } else {
+                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                    }
+                },
+                error: function() {
+                    // Manejar errores de la solicitud AJAX
+                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
+                    Swal.fire({
+                        title: "Confirmado!",
+                        text: "Equipo Eliminado Correctamente!",
+                        icon: "success",
+                        didClose: function() {
+                            location.reload();
+                            }
+                        });
+                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
+                      /*  setTimeout(function() {
+                            location.reload();
+                        }, 3000);*/
                 }
             });
-    })
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
+    });
+}
 
-    //mostrar datatable
-    new DataTable('#tablaJs');
 </script>
 
 @endsection
-
