@@ -77,7 +77,8 @@
         </div>
     </div>
     <br><br>
-    
+
+    <h5 align="center">Solicitud</h5>
     <div class="card-body">
         <table class="table table-bordered">
             <thead>
