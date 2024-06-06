@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'Equipos')
@@ -201,4 +200,3 @@
 </script>
 
 @endsection
-
