@@ -16,7 +16,7 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Aprobar solicitudes</h3>
+        <h3 align="center">Aprobación de manifiesto</h3>
         <br>
         <h5 align="center">Inventario</h5>
         <div class="box-body">
