@@ -340,7 +340,7 @@ return [
         ],
 
                // Sidebar Operativos:
-                [
+               [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 //'topnav' => true,
@@ -384,7 +384,7 @@ return [
             ],
 
              // Sidebar Clientes:
-            [
+             [
                 'text' => 'Ventas',
                 'icon' => 'fas fa-money-bill-wave',
                 //'topnav' => true,
