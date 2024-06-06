@@ -5,7 +5,7 @@
 
 @section('content')
 <br>
-<h3 align="center"> Registro de Equipos</h3>
+<h3 align="center"> Formulario de Alta de datos</h3>
 <br>
 
 <div class="container">
