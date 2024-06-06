@@ -28,9 +28,9 @@ use App\Http\Controllers\Certificados\CertificadosController;
     Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });
-    
     /*Equipos y Consumibles*/ 
     Route::middleware('auth')->group(function () {
+
     /*Rutas de Vistas Equipos y Consumibles Tabla General*/
     Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
 
@@ -40,10 +40,9 @@ use App\Http\Controllers\Certificados\CertificadosController;
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
 
     /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
-    Route::get('registros/Solic tudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    Route::get('registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
     /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
     Route::get('Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
-
 
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -63,29 +62,37 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*Ruta de Actualizar*/
     Route::post('/edicion/editAccesorios/{id}', [general_eycController::class, 'updateAccesorios'])->name('editAccesorios.update');
 
-      /*BLOCKS*/
+    /*BLOCKS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeBlocks', [general_eycController::class, 'storeBlocks'])->name('general_eyc.storeBlocks'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editBlocks/{id}', [general_eycController::class, 'updateBlocks'])->name('editBlocks.update');
 
-          /*HERRAMIENTAS*/
+    /*HERRAMIENTAS*/
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeHerramientas', [general_eycController::class, 'storeHerramientas'])->name('general_eyc.storeHerramientas'); 
     /*Ruta de Actualizar*/
     Route::post('/edicion/editHerramientas/{id}', [general_eycController::class, 'updateHerramientas'])->name('editHerramientas.update');
 
-    /*Ruta para borrar, equipos, comsumibles, block, herramientas*/
+    /*Ruta para borrar, equipos, comsumibles, block, herramientas---NO HABILITAR*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
-    /*Ruta de solicitudes de manifiesto*/
-    Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+    /*SOLICITUDES*/
+    /*Rutas de Vistas de Solicitudes-Registro*/
     Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
-    Route::get('solicitud/aprobacion', [SolicitudesController::class, 'edit'])->name('solicitud.aprobacion');
+    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
+    Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     
-    /*Ruta de certificados*/
-    Route::get('certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
+    /*Rutas de Vistas de Solicitudes-Edición*/
+    Route::get('solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
 
+    /*SOLICITUD*/
+    /*Ruta de Guardado*/
+    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud'); 
+
+    /*HISTORIAL CERTIFICADOS*/
+    /*Ruta de Vista de historial de certificados*/
+    Route::get('certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
 });
 
 require __DIR__.'/auth.php';
