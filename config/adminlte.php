@@ -64,8 +64,8 @@ return [
     */
 
     'logo' => null,
-    'logo_img' => 'vendor/adminlte\dist/img/Logos/Imagen3.png',
-    'logo_img_class' => 'brand-image img-rounded elevation-9',
+    'logo_img' => 'vendor/adminlte\dist/img/Logos/LOGO-2.png',
+    'logo_img_class' => 'brand-image elevation-9',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'AICO',
@@ -296,7 +296,8 @@ return [
         // Sidebar Administrativo:
         [
             'text' => 'Planeacion',
-            'icon' => 'fas fa-chalkboard-teacher',
+            'icon' => 'fas fa-calendar-alt',
+            
             //'topnav' => true,
             'submenu' => [
                 [
@@ -339,9 +340,9 @@ return [
         ],
 
                // Sidebar Operativos:
-               [
+                [
                 'text' => 'Operativos',
-                'icon' => 'fas fa-id-card-alt',
+                'icon' => 'fas fa-clipboard',
                 //'topnav' => true,
                 'submenu' => [
                     [
@@ -383,9 +384,9 @@ return [
             ],
 
              // Sidebar Clientes:
-             [
+            [
                 'text' => 'Ventas',
-                'icon' => 'far fa-handshake',
+                'icon' => 'fas fa-money-bill-wave',
                 //'topnav' => true,
                 'submenu' => [
                     [
@@ -429,17 +430,17 @@ return [
                 // Sidebar Equipos y Consumibles:
                 [
                     'text' => 'Equipos',
-                    'icon' => 'fas fa-luggage-cart',
+                    'icon' => 'fa fa-suitcase',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
-                            'icon' => 'fas fa-tools',
+                            'icon' => 'far fa-folder-open',
                             'url' => 'inventario',
                         ],
                         [
-                            'text' => 'Registro',
-                            'icon' => 'fas fa-vials',
+                            'text' => 'Registro de altas',
+                            'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
                         ],
                         /*[
@@ -448,18 +449,18 @@ return [
                             'url' => '#',
                         ],*/
                         [
-                            'text' => ' Crear solicitud E y C',
-                            'icon' => 'fas fa-file-alt',
-                            'url' => 'solicitud/create',
-                        ],
-                        [
-                            'text' => ' Ver solicitudes',
-                            'icon' => 'fas fa-clipboard-check',
+                            'text' => 'Solicitar E y C',
+                            'icon' => 'far fa-file-alt',
                             'url' => 'solicitud/index',
                         ],
                         [
+                            'text' => ' Ver solicitudes',
+                            'icon' => 'far fa-eye',
+                            'url' => 'solicitud/create',
+                        ],
+                        [
                             'text' => ' Certificados obsoletos',
-                            'icon' => 'fas fa-clipboard-check',
+                            'icon' => 'fa fa-certificate',
                             'url' => 'certificados/index',
                         ],
                         /*[
