@@ -19,48 +19,59 @@
     <div class="box">
         <h3 align="center">Aprobar solicitudes</h3>
         <br>
+        <h5 align="center">Inventario</h5>
         <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+        <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>No.ECO</th>
+                        <th>Num. Económico</th>
                         <th>Marca</th>
-                        <th>Ultima calibración</th>
-                        <th>Cantidad</th>
-                        <th>Unidad</th>
+                        <th>Modelo</th>
+                        <th>NS</th>
+                        <th>Disponibilidad</th>
+                        <th>Fecha calibración</th>
+                        <th>Hoja de Presentación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Removedor</td>
-                        <td scope="row">Irving alfonso</td>
-                        <td scope="row">17/05/24</td>
-                        <td scope="row">Pendiente</td>
-                        <td>2</td>
-                        <td>pieza</td>
-                        <td>
+                    @foreach ($generalConCertificados as $general_eyc)
+                        <tr>
+                        @if($general_eyc)
+                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                            <td scope="row">{{$general_eyc->No_economico}}</td>
+                            <td scope="row">{{$general_eyc->Marca}}</td>
+                            <td scope="row">{{$general_eyc->Modelo}}</td>
+                            <td scope="row">{{$general_eyc->Serie}}</td>
+                            <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
+                        @endif 
+                            @if($general_eyc->certificados)
+                                @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                        @else
+                                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                    @endif
+                                @else
+                                    <td scope="row">N/A</td>
+                                @endif
+                                    <td scope="row"> 
+                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                                        <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                                @endif
+                                    </td>
+                                    <td>
+                            @endif
                             <div class="btn-group">
-                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-circle" aria-hidden="true"></i></a>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>Durometro</td>
-                        <td scope="row">mike alfonso</td>
-                        <td scope="row">17/05/24</td>
-                        <td scope="row">Pendiente</td>
-                        <td>1</td>
-                        <td>caja</td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -71,69 +82,40 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Descripción</th>
+                    <th>Nombre</th>
                     <th>No.ECO</th>
-                    <th>No.Serie</th>
                     <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Comentario</th>
+                    <th>Ultima calibración</th>
                     <th>Cantidad</th>
                     <th>Unidad</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1.</td>
-                    <td>Update software</td>
-                    <td>Update software</td>
-                    <td>Update software</td>
-                    <td>Update software</td>
-                    <td><input type="text" class="form-control inputForm" name="comentario"></td>
-                    <td>Update software</td>
-                    <td>Update software</td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>Clean database</td>
-                    <td>
-                        <div class="progress progress-xs">
-                        <div class="progress-bar bg-warning" style="width: 70%"></div>
-                        </div>
-                    </td>
-                    <td><span class="badge bg-warning">Clean database</span></td>
-                    <td>Clean database</td>
-                    <td>Clean database</td>
-                    <td>Clean database</td>
-                    <td>Clean database</td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td>Cron job running</td>
-                    <td>
-                        <div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar bg-primary" style="width: 30%"></div>
-                        </div>
-                    </td>
-                    <td><span class="badge bg-primary">30%</span></td>
-                    <td>Cron job running</td>
-                    <td>Cron job running</td>
-                    <td>Cron job running</td>
-                    <td>Cron job running</td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td>Fix and squish bugs</td>
-                    <td>
-                        <div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar bg-success" style="width: 90%"></div>
-                        </div>
-                    </td>
-                    <td><span class="badge bg-success">90%</span></td>
-                    <td>Fix and squish bugs</td>
-                    <td>Fix and squish bugs</td>
-                    <td>Fix and squish bugs</td>
-                    <td>Fix and squish bugs</td>
-                </tr>
+                @foreach ($DetallesSolicitud as $detalle)
+                    @php
+                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                    @endphp
+                    <tr>
+                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                        <td>{{ $general->Marca ?? 'N/A' }}</td>
+                        <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
+                        <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                </div>
+                        </td>
+                        <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                                </div>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -204,7 +186,7 @@
                             }
                         });
                     // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                      /*  setTimeout(function() {
+                    /*  setTimeout(function() {
                             location.reload();
                         }, 3000);*/
                 }
@@ -216,31 +198,6 @@
 }
 
 </script>
-<!--
-<script>
-    // funcion borrar 
-    $(".btnEliminarEquipo").on("click", function(){
-        //valor del id a eliminar
-        var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-        console.log(idGeneral_EyC);
-            Swal.fire({
-                title: "Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire("Eliminado!", "", "success");
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
-                }
-            });
-    })
-
-    //mostrar datatable
-    new DataTable('#tablaJs');
-</script>-->
 
 @endsection
 

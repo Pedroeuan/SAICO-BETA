@@ -12,6 +12,7 @@ class Solicitudes extends Model
         'idSolicitud',
         'tecnico',
         'Fecha',
+        'Estatus',
     ];
     protected $table = 'solicitud';
     protected $primaryKey = 'idSolicitud';

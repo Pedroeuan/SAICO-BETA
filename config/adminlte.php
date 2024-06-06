@@ -450,12 +450,12 @@ return [
                         [
                             'text' => ' Crear solicitud E y C',
                             'icon' => 'fas fa-file-alt',
-                            'url' => 'solicitud/index',
+                            'url' => 'solicitud/create',
                         ],
                         [
                             'text' => ' Ver solicitudes',
                             'icon' => 'fas fa-clipboard-check',
-                            'url' => 'solicitud/create',
+                            'url' => 'solicitud/index',
                         ],
                         [
                             'text' => ' Certificados obsoletos',
