@@ -451,12 +451,12 @@ return [
                         [
                             'text' => 'Solicitar E y C',
                             'icon' => 'far fa-file-alt',
-                            'url' => 'solicitud/index',
+                            'url' => 'solicitud/create',
                         ],
                         [
                             'text' => ' Ver solicitudes',
                             'icon' => 'far fa-eye',
-                            'url' => 'solicitud/create',
+                            'url' => 'solicitud/index',
                         ],
                         [
                             'text' => ' Certificados obsoletos',
