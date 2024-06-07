@@ -83,26 +83,27 @@
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     new DataTable('#tablaJs');
-   
-   let dataTable;
 
-   function initializeDataTable() {
+    let dataTable;
+
+    function initializeDataTable() {
        // Destruir el DataTable si ya está inicializado
-       if ($.fn.DataTable.isDataTable('#tablaJs')) {
-           dataTable.destroy();
-       }
+        if ($.fn.DataTable.isDataTable('#tablaJs')) {
+            dataTable.destroy();
+        }
        // Inicializar el DataTable
-       dataTable = new DataTable('#tablaJs');
-   }
+        dataTable = new DataTable('#tablaJs');
+    }
 
    // Inicializar el DataTable al cargar la página
-   $(document).ready(function() {
-       initializeDataTable();
-   });
+    $(document).ready(function() {
+        initializeDataTable();
+    });
 
     $(".btnEliminarEquipo").on("click", function(){
     //valor del id a eliminar
@@ -145,7 +146,7 @@
                             }
                         });
                     // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                      /*  setTimeout(function() {
+                        /*  setTimeout(function() {
                             location.reload();
                         }, 3000);*/
                 }
@@ -155,7 +156,6 @@
         }
     });
 });
-
 </script>
 
 @endsection

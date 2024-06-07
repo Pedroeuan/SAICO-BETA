@@ -122,8 +122,14 @@ class SolicitudesController extends Controller
      * 
      * Remove the specified resource from storage.
      */
-    public function destroy(Solicitudes $solicitudes)
+    public function destroy($id)
     {
-        //
+        
+        $detalle = detalles_solicitud::find($id);
+        dd($detalle);
+        $detalle->delete();
+    
+        return response()->json(['success' => 'Record deleted successfully!']);
     }
+
 }

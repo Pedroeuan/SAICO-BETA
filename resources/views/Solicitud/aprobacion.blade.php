@@ -57,7 +57,6 @@
                                 @endif
                                     <td scope="row"> 
                                 @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
                                         <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
                                         <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
@@ -75,7 +74,8 @@
             </table>
         </div>
     </div>
-    <br><br>
+    <br>
+    <br>
     <h5 align="center">Solicitud</h5>
     <div class="card-body">
         <table class="table table-bordered">
@@ -95,23 +95,23 @@
                     @php
                         $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     @endphp
-                    <tr>
+                    <tr id="row-{{ $detalle->id }}">
                         <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                         <td>{{ $general->No_economico ?? 'N/A' }}</td>
                         <td>{{ $general->Marca ?? 'N/A' }}</td>
                         <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
                         <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
-                                </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                            </div>
                         </td>
                         <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
-                                </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                            </div>
                         </td>
                         <td>
-                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -128,74 +128,44 @@
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    let dataTable;
-
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-        // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
-
-    // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
-    });
-
-    function confirmDelete(id) {
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Enviar la solicitud DELETE al servidor
+$(document).ready(function() {
+    $('.btnEliminarDetallesSolicitud').on('click', function() {
+        var idDetalles_Solicitud = $(this).data('id');
+        var token = '{{ csrf_token() }}';
+        console.log(idDetalles_Solicitud);
+        if(confirm("Are you sure you want to delete this record?")) {
             $.ajax({
-                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
-                type: 'DELETE', // Método HTTP DELETE
+                url: '/solicitudes/eliminar/' + idDetalles_Solicitud,
+                type: 'DELETE',
                 data: {
-                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                    "_token": token,
                 },
                 success: function(response) {
-                    // Manejar la respuesta del servidor si es necesario
-                    if (response.success) {
-                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
-                        location.reload();
-                    } else {
-                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                    if(response.success) {
+                        $('#row-' + idDetalles_Solicitud).remove();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: response.success,
+                        });
                     }
                 },
-                error: function() {
-                    // Manejar errores de la solicitud AJAX
-                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
+                error: function(xhr) {
                     Swal.fire({
-                        title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
-                        icon: "success",
-                        didClose: function() {
-                            location.reload();
-                            }
-                        });
-                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                    /*  setTimeout(function() {
-                            location.reload();
-                        }, 3000);*/
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error occurred while deleting the record.',
+                    });
                 }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
         }
     });
-}
+});
 
 </script>
-
 @endsection
