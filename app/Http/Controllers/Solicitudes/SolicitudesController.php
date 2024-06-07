@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Solicitudes;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Carbon\Carbon;
-use App\Models\Solicitudes\Solicitudes;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 
 class SolicitudesController extends Controller
@@ -122,14 +123,18 @@ class SolicitudesController extends Controller
      * 
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroyDetallesSolicitud($id)
     {
-        
-        $detalle = detalles_solicitud::find($id);
-        dd($detalle);
-        $detalle->delete();
+        try {
+            $detalle = detalles_solicitud::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
+            $detalle->delete();
     
-        return response()->json(['success' => 'Record deleted successfully!']);
+            return response()->json(['success' => 'Record deleted successfully!']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while deleting the record.'], 500);
+        }
     }
 
 }

@@ -22,6 +22,6 @@ class Solicitudes extends Model
       // Definir la relación de uno a muchos con DetalleSolicitud
     public function detalles_solicitud()
     {
-        return $this->hasMany(detalles_solicitud::class, 'idSolicitud');
+        return $this->hasMany(detalles_solicitud::class, 'idSolicitud', 'idSolicitud');
     }
 }

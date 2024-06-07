@@ -104,11 +104,10 @@
     $(document).ready(function() {
         initializeDataTable();
     });
-
     $(".btnEliminarEquipo").on("click", function(){
     //valor del id a eliminar
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
-    console.log(idGeneral_EyC);
+
     Swal.fire({
         title: "Seguro de eliminar este elemento?",
         showDenyButton: true,
@@ -151,7 +150,8 @@
                         }, 3000);*/
                 }
             });
-        } else if (result.isDenied) {
+        } 
+        else if (result.isDenied) {
             Swal.fire("Cancelado", "", "error");
         }
     });

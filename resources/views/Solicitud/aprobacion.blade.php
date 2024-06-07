@@ -77,49 +77,51 @@
     <br>
     <br>
     <h5 align="center">Solicitud</h5>
-    <div class="card-body">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>No.ECO</th>
-                    <th>Marca</th>
-                    <th>Ultima calibración</th>
-                    <th>Cantidad</th>
-                    <th>Unidad</th>
-                    <th>Acciones</th>
+<div class="card-body">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>No.ECO</th>
+                <th>Marca</th>
+                <th>Ultima calibración</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($DetallesSolicitud as $detalle)
+                @php
+                    $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                @endphp
+                <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
+                    <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                    <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                    <td>{{ $general->Marca ?? 'N/A' }}</td>
+                    <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
+                    <td scope="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                        </div>
+                    </td>
+                    <td scope="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($DetallesSolicitud as $detalle)
-                    @php
-                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                    @endphp
-                    <tr id="row-{{ $detalle->id }}">
-                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
-                            </div>
-                        </td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <button type="button" class="btn btn-success">Crear manifiesto</button>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<br>
+<button type="button" class="btn btn-success">Crear manifiesto</button>
 </form>
 <br>
 @stop
@@ -133,12 +135,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    new DataTable('#tablaJs');
+
+let dataTable;
+
+function initializeDataTable() {
+   // Destruir el DataTable si ya está inicializado
+    if ($.fn.DataTable.isDataTable('#tablaJs')) {
+        dataTable.destroy();
+    }
+   //Inicializar el DataTable
+   dataTable = new DataTable('#tablaJs');
+}
 $(document).ready(function() {
     $('.btnEliminarDetallesSolicitud').on('click', function() {
         var idDetalles_Solicitud = $(this).data('id');
         var token = '{{ csrf_token() }}';
-        console.log(idDetalles_Solicitud);
-        if(confirm("Are you sure you want to delete this record?")) {
+  Swal.fire({
+        title: "Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        
+        if(result.isConfirmed) {
             $.ajax({
                 url: '/solicitudes/eliminar/' + idDetalles_Solicitud,
                 type: 'DELETE',
@@ -156,16 +177,21 @@ $(document).ready(function() {
                     }
                 },
                 error: function(xhr) {
+                    var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error occurred while deleting the record.',
-                    });
-                }
-            });
+                        text: errorMessage,
+                        });
+                    }
+                });
+            }
+            else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
         }
+        });
     });
 });
-
 </script>
 @endsection
+

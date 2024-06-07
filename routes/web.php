@@ -90,7 +90,7 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*Ruta de Guardado*/
     Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
     /*Ruta de Eliminación-detalles_Solicitud*/
-    Route::delete('/solicitudes/eliminar/{id}', [GeneralEyCController::class, 'destroy'])->name('solicitudes.eliminar');
+    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
 
     /*HISTORIAL CERTIFICADOS*/
