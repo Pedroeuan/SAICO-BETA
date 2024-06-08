@@ -21,20 +21,20 @@
         <h5 align="center">Inventario</h5>
         <div class="box-body">
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Num. Económico</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>NS</th>
-                        <th>Disponibilidad</th>
-                        <th>Fecha calibración</th>
-                        <th>Hoja de Presentación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Num. Económico</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>NS</th>
+            <th>Disponibilidad</th>
+            <th>Fecha calibración</th>
+            <th>Hoja de Presentación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
                     @foreach ($generalConCertificados as $general_eyc)
                         <tr>
                         @if($general_eyc)
@@ -47,32 +47,33 @@
                         @endif 
                             @if($general_eyc->certificados)
                                 @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
-                                        <td scope="row">SIN FECHA ASIGNADA</td>
-                                        @else
-                                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                                    @endif
-                                @else
-                                    <td scope="row">N/A</td>
+                                        @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                            <td scope="row">SIN FECHA ASIGNADA</td>
+                                            @else
+                                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                        @endif
+                                    @else
+                                        <td scope="row">N/A</td>
                                 @endif
                                     <td scope="row"> 
-                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
-                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                        <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
-                                @endif
+                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                                @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                                        @endif
                                     </td>
-                                    <td>
+                                <td>
                             @endif
                             <div class="btn-group">
-                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-circle" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}" data-id-solicitud="{{ $Solicitud->idSolicitud }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
-            </table>
-        </div>
+        </table>
+    </div>
     </div>
     <br>
     <br>
@@ -111,8 +112,7 @@
                         </div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                        <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}"><i class="fa fa-times" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -135,30 +135,30 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    /*Solicitud*/
     new DataTable('#tablaJs');
 
-let dataTable;
+    let dataTable;
 
-function initializeDataTable() {
-   // Destruir el DataTable si ya está inicializado
-    if ($.fn.DataTable.isDataTable('#tablaJs')) {
-        dataTable.destroy();
-    }
-   //Inicializar el DataTable
-   dataTable = new DataTable('#tablaJs');
-}
-$(document).ready(function() {
-    $('.btnEliminarDetallesSolicitud').on('click', function() {
-        var idDetalles_Solicitud = $(this).data('id');
-        var token = '{{ csrf_token() }}';
-  Swal.fire({
-        title: "Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        
+        function initializeDataTable() {
+        // Destruir el DataTable si ya está inicializado
+            if ($.fn.DataTable.isDataTable('#tablaJs')) {
+                dataTable.destroy();
+            }
+        //Inicializar el DataTable
+        dataTable = new DataTable('#tablaJs');
+        }
+    $(document).ready(function() {
+        $('.btnEliminarDetallesSolicitud').on('click', function() {
+            var idDetalles_Solicitud = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+    Swal.fire({
+            title: "Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
         if(result.isConfirmed) {
             $.ajax({
                 url: '/solicitudes/eliminar/' + idDetalles_Solicitud,
@@ -169,10 +169,10 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success) {
                         $('#row-' + idDetalles_Solicitud).remove();
-                        Swal.fire({
+                        Swal.fire({                 
                             icon: 'success',
-                            title: 'Deleted!',
-                            text: response.success,
+                            title: 'Confirmado!',
+                            text: "Equipo Eliminado Correctamente!",
                         });
                     }
                 },
@@ -192,6 +192,47 @@ $(document).ready(function() {
         });
     });
 });
+
+/* AGREGAR */
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btnAgregar').forEach(button => {
+        button.addEventListener('click', function() {
+            // Obtiene el ID de la fila y el ID de la solicitud
+            let idFila = this.getAttribute('data-id');
+            let idSolicitud = this.getAttribute('data-id-solicitud');
+
+            // Aquí puedes manejar los datos según tus necesidades
+            console.log('ID de la Fila:', idFila);
+            console.log('ID de la Solicitud:', idSolicitud);
+
+            // Puedes enviar estos datos a tu servidor o manejarlos como necesites
+            // Ejemplo: Hacer una petición AJAX para agregar el detalle a la solicitud
+            fetch('/ruta/para/guardar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    idFila: idFila,
+                    idSolicitud: idSolicitud
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Detalle agregado exitosamente.');
+                    // Opcional: Actualiza la UI según sea necesario
+                } else {
+                    alert('Hubo un error al agregar el detalle.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
 </script>
 @endsection
 

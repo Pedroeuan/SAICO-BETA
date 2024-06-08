@@ -137,4 +137,10 @@ class SolicitudesController extends Controller
         }
     }
 
+    public function agregarDetallesSolicitud(Request $request)
+    {
+        
+    }
+
+
 }

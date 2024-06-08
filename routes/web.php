@@ -89,6 +89,8 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*SOLICITUD*/
     /*Ruta de Guardado*/
     Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
+    /*Ruta de Agregar-datos a detalles solicitud*/
+    Route::post('/solicitudes/agregar/{id}', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');;
     /*Ruta de Eliminación-detalles_Solicitud*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
