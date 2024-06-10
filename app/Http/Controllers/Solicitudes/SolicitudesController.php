@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Solicitudes;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
+
 
 use Carbon\Carbon;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -139,7 +141,28 @@ class SolicitudesController extends Controller
 
     public function agregarDetallesSolicitud(Request $request)
     {
-        
+        // Obtén las variables de la solicitud
+        $idFila = $request->input('idFila');
+        $idSolicitud = $request->input('idSolicitud');
+        $cantidad=0;
+        $unidad='ESPERA DE DATO';
+
+         // Registra los valores en el archivo de log
+        //Log::info('ID de Fila:', ['idFila' => $idFila]);
+        //Log::info('ID de Solicitud:', ['idSolicitud' => $idSolicitud]);
+        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+
+        // Procesa los datos según tus necesidades
+        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
+        $DetallesSolicitud = new detalles_solicitud();
+        $DetallesSolicitud->idSolicitud = $idSolicitud;
+        $DetallesSolicitud->idGeneral_EyC = $idFila;
+        $DetallesSolicitud->cantidad = $cantidad;
+        $DetallesSolicitud->Unidad = $unidad;
+        $DetallesSolicitud->save();
+
+        // Ejemplo de respuesta
+        return response()->json(['status' => 'success']);
     }
 
 
