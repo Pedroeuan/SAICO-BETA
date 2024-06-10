@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', 'Equipos')
@@ -16,10 +17,10 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Aprobación de manifiesto</h3>
-        <br>
+        <h3 align="center">Inventario</h3>
+            <br>
         <div class="box-body">
-        <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -65,7 +66,8 @@
                                     <td>
                             @endif
                             <div class="btn-group">
-                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-circle" aria-hidden="true"></i></a>
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -74,54 +76,7 @@
             </table>
         </div>
     </div>
-    <br><br>
-    <h3 align="center">Pre Manifiesto</h3>
-    <br>
-    <div class="card-body">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>No.ECO</th>
-                    <th>Marca</th>
-                    <th>Ultima calibración</th>
-                    <th>Cantidad</th>
-                    <th>Unidad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($DetallesSolicitud as $detalle)
-                    @php
-                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                    @endphp
-                    <tr>
-                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                        <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
-                                </div>
-                        </td>
-                        <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
-                                </div>
-                        </td>
-                        <td>
-                        <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <button type="button" class="btn btn-success">Crear manifiesto</button>
 </form>
-<br>
 @stop
 
 @section('js')
@@ -131,25 +86,30 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    let dataTable;
+    new DataTable('#tablaJs');
+   
+   let dataTable;
 
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-        // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
+   function initializeDataTable() {
+       // Destruir el DataTable si ya está inicializado
+       if ($.fn.DataTable.isDataTable('#tablaJs')) {
+           dataTable.destroy();
+       }
+       // Inicializar el DataTable
+       dataTable = new DataTable('#tablaJs');
+   }
 
-    // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
-    });
+   // Inicializar el DataTable al cargar la página
+   $(document).ready(function() {
+       initializeDataTable();
+   });
 
-    function confirmDelete(id) {
+    $(".btnEliminarEquipo").on("click", function(){
+    //valor del id a eliminar
+    var idGeneral_EyC = $(this).attr("idGeneral_EyC");
+    console.log(idGeneral_EyC);
     Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -158,7 +118,7 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                url: '/eliminar/destroyEquipos/' + idGeneral_EyC, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
@@ -170,11 +130,11 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
                     }
                 },
                 error: function() {
-                    // Manejar errores de la solicitud AJAX
+                     // Manejar errores de la solicitud AJAX
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
@@ -185,7 +145,7 @@
                             }
                         });
                     // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                    /*  setTimeout(function() {
+                      /*  setTimeout(function() {
                             location.reload();
                         }, 3000);*/
                 }
@@ -194,7 +154,7 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
-}
+});
 
 </script>
 
