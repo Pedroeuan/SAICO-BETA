@@ -79,7 +79,7 @@
     <br>
     <h5 align="center">Solicitud</h5>
 <div class="card-body">
-    <table class="table table-bordered">
+    <table id="TablaSolicitud" class="table table-bordered" >
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -194,43 +194,74 @@
 });
 
     /* AGREGAR */
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.btnAgregar').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Obtiene el ID de la fila y el ID de la solicitud
-                    let idFila = this.getAttribute('data-id');
-                    let idSolicitud = this.getAttribute('data-id-solicitud');
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btnAgregar').forEach(button => {
+        button.addEventListener('click', function() {
+            // Obtiene el ID de la fila y el ID de la solicitud
+            let idFila = this.getAttribute('data-id');
+            let idSolicitud = this.getAttribute('data-id-solicitud');
 
-                    // Aquí puedes manejar los datos según tus necesidades
-                    console.log('ID de la Fila:', idFila);
-                    console.log('ID de la Solicitud:', idSolicitud);
+            // Aquí puedes manejar los datos según tus necesidades
+            console.log('ID de la Fila:', idFila);
+            console.log('ID de la Solicitud:', idSolicitud);
 
-                    // Hacer una petición AJAX para agregar el detalle a la solicitud
-                    fetch('/solicitudes/agregar', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            idFila: idFila,
-                            idSolicitud: idSolicitud
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            alert('Detalle agregado exitosamente.');
-                            // Eliminar la fila de la tabla
-                            document.getElementById('row-' + idFila).remove();
-                        } else {
-                            alert('Hubo un error al agregar el detalle.');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                });
-            });
+            // Hacer una petición AJAX para agregar el detalle a la solicitud
+            fetch('/solicitudes/agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    idFila: idFila,
+                    idSolicitud: idSolicitud
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Detalle agregado exitosamente.');
+
+                    // Eliminar la fila de la primera tabla
+                    let row = document.getElementById('row-' + idFila);
+                    let nombre = row.querySelector('td:nth-child(1)').innerText;
+                    let noEco = row.querySelector('td:nth-child(2)').innerText;
+                    let marca = row.querySelector('td:nth-child(3)').innerText;
+                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+
+                    row.remove();
+
+                    // Crear una nueva fila en la segunda tabla
+                    let newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${nombre}</td>
+                        <td>${noEco}</td>
+                        <td>${marca}</td>
+                        <td>${ultimaCalibracion}</td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Cantidad[]" value="0">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idFila}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    `;
+                    document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
+                } else {
+                    alert('Hubo un error al agregar el detalle.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
+    });
+});
+
 </script>
 @endsection
 
