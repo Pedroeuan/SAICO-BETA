@@ -139,6 +139,15 @@ class SolicitudesController extends Controller
         }
     }
 
+    public function destroySolicitud($id)
+    {
+        // Eliminar los detalles relacionados con el idSolicitud
+        detalles_solicitud::where('idSolicitud', $id)->delete();
+        Solicitudes::where('idSolicitud', $id)->delete();
+            
+        return redirect()->route('solicitud.index');
+    }
+
     public function agregarDetallesSolicitud(Request $request)
     {
         // Obtén las variables de la solicitud

@@ -40,7 +40,7 @@ use App\Http\Controllers\Certificados\CertificadosController;
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
 
     /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
-    Route::get('/registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    Route::get('/registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
     /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
     Route::get('/Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
 
@@ -85,8 +85,8 @@ use App\Http\Controllers\Certificados\CertificadosController;
     
     /*Rutas de Vistas de Solicitudes-Edición*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
-    /*Ruta de Eliminación-detalles_Solicitud*/
-    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroyDetallesSolicitud');
+    /*Ruta de Eliminación-de Solicitud*/
+    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
     /*SOLICITUD*/
     /*Ruta de Guardado*/
