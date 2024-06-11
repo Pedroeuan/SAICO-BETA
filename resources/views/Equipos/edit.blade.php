@@ -867,8 +867,11 @@
                                     @elseif($generalEyC->Factura == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN FACTURA</a>                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
+                                            <label class="col-form-label" for="inputSuccess">No hay Factura</label>
+                                            <div>                                             
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
+                                            </div>
                                         </div>
                                     </div>
                                     @endif
@@ -895,51 +898,62 @@
                                     </div>
                                     @elseif($generalConHerramientas->Garantia == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
+                                        <label class="col-form-label" for="inputSuccess">No hay Garantía</label>
                                         <div class="form-group">                                               
-                                                <a target="_blank">SIN Garantia</a>                                                
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
                                         </div>
                                     </div>
                                     @endif
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     @if ($generalEyC->Foto != 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                             
-                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank">VER FICHA TÉCNICA</a>                                                
+                                    <div class="col-sm-6">
+                                        <div class="form-group">   
+                                            <label class="col-form-label" for="inputSuccess">Ver Ficha técnica</label> 
+                                            <div>                                         
+                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                          
+                                            </div>
                                         </div>
                                     </div>
                                     @elseif($generalEyC->Foto == 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                            
-                                                <a target="_blank">SIN FICHA TÉCNICA</a>                                                
+                                    <div class="col-sm-6">
+                                        <div class="form-group"> 
+                                            <label class="col-form-label" for="inputSuccess">No hay Ficha técnica</label> 
+                                            <div>                                          
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                              
+                                            </div>
                                         </div>
                                     </div>
                                     @endif
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
                                     @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                             
-                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank">VER CERTIFICADO ACTUAL</a>                                                
+                                    <div class="col-sm-6">
+                                        <div class="form-group">  
+                                            <label class="col-form-label" for="inputSuccess">Ver Certificado Actual</label>
+                                            <div>                                        
+                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
+                                            </div>   
                                         </div>
                                     </div>
                                     @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
+                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label>
                                         <div class="form-group">                                            
-                                                <a target="_blank">SIN CERTIFICADO ACTUAL</a>                                                
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
                                         </div>
                                     </div>
                                     @endif
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Plano</label>
                                             <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
@@ -951,15 +965,21 @@
                                     @if ($generalConHerramientas->Plano != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a href="{{ asset('storage/' . $generalConHerramientas->Plano) }}" target="_blank">VER PLANO</a>                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                            <label class="col-form-label" for="inputSuccess">Ver Plano</label>   
+                                            <div>
+                                                <a href="{{ asset('storage/' . $generalConHerramientas->Plano) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
+                                            </div>                                            
                                         </div>
                                     </div>
                                     @elseif($generalConHerramientas->Plano == 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
-                                                <a target="_blank">SIN PLANO</a>                                                
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
+                                            <label class="col-form-label" for="inputSuccess">No hay Plano</label>   
+                                            <div>                                            
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
+                                            </div> 
                                         </div>
                                     </div>
                                     @endif
