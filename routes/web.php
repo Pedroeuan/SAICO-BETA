@@ -85,6 +85,8 @@ use App\Http\Controllers\Certificados\CertificadosController;
     
     /*Rutas de Vistas de Solicitudes-Edición*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
+    /*Ruta de Eliminación-detalles_Solicitud*/
+    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
     /*SOLICITUD*/
     /*Ruta de Guardado*/
@@ -92,7 +94,7 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*Ruta de Agregar-datos a detalles solicitud*/
     Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
     /*Ruta de Eliminación-detalles_Solicitud*/
-    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
+    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
 
     /*HISTORIAL CERTIFICADOS*/

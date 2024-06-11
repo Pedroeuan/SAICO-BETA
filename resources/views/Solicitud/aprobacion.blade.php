@@ -161,7 +161,7 @@
         }).then((result) => {
         if(result.isConfirmed) {
             $.ajax({
-                url: '/solicitudes/eliminar/' + idDetalles_Solicitud,
+                url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
                 type: 'DELETE',
                 data: {
                     "_token": token,
