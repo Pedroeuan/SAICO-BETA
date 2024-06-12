@@ -115,7 +115,7 @@
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
 
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de dar de BAJA este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -136,7 +136,7 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo dar de BAJA el elemento.", "error");
                     }
                 },
                 error: function() {
@@ -144,7 +144,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
+                        text: "Elemento DE BAJA Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();

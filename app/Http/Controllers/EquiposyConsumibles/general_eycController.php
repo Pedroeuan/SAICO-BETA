@@ -436,7 +436,15 @@ public function updateEquipos(Request $request, $id)
      */
     public function destroyEquipos($id)
     {
-        $generalConEquipos = equipos::find($id);
+        // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+    $Baja='FUERA DE SERVICIO/BAJA';
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Disponibilidad_Estado' => $Baja,
+    ]);
+    return redirect()->route('inventario');
+       /* $generalConEquipos = equipos::find($id);
         $generalConCertificados = certificados::find($id);
         $generalConConsumible = consumibles::find($id);
         $generalConAlmacen = almacen::find($id);
@@ -509,7 +517,7 @@ public function updateEquipos(Request $request, $id)
                 // Elimina el registro de la tabla 'general_eyc'
                 $general->delete();
             }
-        return redirect()->route('inventario');
+        return redirect()->route('inventario');*/
     }
     /*CONSUMIBLES*/
     public function storeConsumibles(Request $request)
