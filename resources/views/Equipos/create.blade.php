@@ -80,7 +80,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE">DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
