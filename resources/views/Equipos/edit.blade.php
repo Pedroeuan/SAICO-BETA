@@ -4,25 +4,25 @@
 @section('title', 'Equipos')
 
 @section('content')
-<br>
-    <h3 align="center"> Edición de 
-                    @if($generalEyC->Tipo=='EQUIPOS')
-                        Equipos
-                    @endif
-                    @if($generalEyC->Tipo=='CONSUMIBLES')
-                        Consumibles
-                    @endif
-                    @if($generalEyC->Tipo=='ACCESORIOS')
-                        Accesorios
-                    @endif
-                    @if($generalEyC->Tipo=='BLOCK Y PROBETA')
-                        Block y Probeta
-                    @endif
-                    @if($generalEyC->Tipo=='HERRAMIENTAS')
-                        Herramientas
-                    @endif
-    </h3>
-<br>
+    <br>
+        <h3 align="center"> Edición de 
+                        @if($generalEyC->Tipo=='EQUIPOS')
+                            Equipos
+                        @endif
+                        @if($generalEyC->Tipo=='CONSUMIBLES')
+                            Consumibles
+                        @endif
+                        @if($generalEyC->Tipo=='ACCESORIOS')
+                            Accesorios
+                        @endif
+                        @if($generalEyC->Tipo=='BLOCK Y PROBETA')
+                            Block y Probeta
+                        @endif
+                        @if($generalEyC->Tipo=='HERRAMIENTAS')
+                            Herramientas
+                        @endif
+        </h3>
+    <br>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -49,11 +49,11 @@
                     </ul>
                 </div><!-- /.card-header -->  
                 <div class="card-body">
-                 @if($generalEyC->Tipo=='EQUIPOS')  
+                @if($generalEyC->Tipo=='EQUIPOS')  
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                              <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-                              @csrf
+                            <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -61,23 +61,18 @@
                                             <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
                                             <input type="text" class="form-control inputForm" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" value="{{ $generalEyC->Marca }}" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
@@ -132,7 +127,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -326,7 +326,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Ejemplo: SI/NO">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     
@@ -520,11 +525,16 @@
                                             </div> 
                                         </div>
                                     </div>
-                                   @endif
-                                    <div class="col-sm-4">
+                                @endif
+                                <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -670,7 +680,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -857,7 +872,6 @@
                                     @if ($generalEyC->Factura != 'ESPERA DE DATO')
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->                                                
                                             <label class="col-form-label" for="inputSuccess">Ver Factura</label>
                                             <div>
                                                 <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
@@ -878,7 +892,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Disponibilidad_Estado }}" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -929,7 +948,6 @@
                                         </div>
                                     </div>
                                     @endif
-
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
@@ -1021,18 +1039,6 @@
                 </div><!-- /.card-body -->
             </div><!-- /.card -->       
 @stop
-
-
-<!--@push('scripts')
-    <script>
-        function cambiarColor(input){
-            $('.inputForm')keypress(function(event){
-                console.log("hola");
-            })
-            console.log(inputForm);
-        }
-    </script>
-@endpush-->
 
 @section('css')
     {{-- Add here extra stylesheets --}}

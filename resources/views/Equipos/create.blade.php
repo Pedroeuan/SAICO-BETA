@@ -206,7 +206,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE">DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -245,17 +250,6 @@
                                             <input type="number" class="form-control inputForm" name="Stock" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tierra/Costa Fuera</label>
-                                            <!--<input type="text" class="form-control inputForm" name="Proceso" placeholder="Enter ...">-->
-                                            <!--<select class="form-control select2" style="width: 100%;" name="Tipo_TI_CO">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="TIERRA">TIERRA</option>
-                                                <option value="COSTA FUERA">COSTA FUERA</option>
-                                            </select>
-                                        </div>
-                                    </div>-->
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
@@ -344,7 +338,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE">DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -448,7 +447,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE">DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -570,7 +574,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" placeholder="Enter ...">
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE">DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -635,8 +644,6 @@
 
                                 </div>
                             </form>
-                        </div>
-                        
                         <!-- Agrega más paneles de tabs según sea necesario -->
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
@@ -644,20 +651,6 @@
 
 @stop
 
-
-<!--@push('scripts')
-    <script>
-        function cambiarColor(input){
-            $('.inputForm')keypress(function(event){
-                console.log("hola");
-            })
-            console.log(inputForm);
-        }
-    </script>
-@endpush-->
-
 @section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-    {{--<link rel="stylesheet" href="vendor/adminlte\dist/css/Equipos.scss">--}}
+
 @stop

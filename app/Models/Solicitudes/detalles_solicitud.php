@@ -16,13 +16,13 @@ class detalles_solicitud extends Model
         'Unidad',
     ];
     protected $table = 'detalles_solicitud';
-    protected $primaryKey = 'idSolicitud';
+    protected $primaryKey = 'idDetalles_Solicitud';
     public $timestamps = false; 
 
        // Definir la relación inversa de muchos a uno con Solicitud
     public function solicitud()
     {
-        return $this->belongsTo(Solicitud::class, 'solicitud_id');
+        return $this->belongsTo(Solicitud::class, 'idSolicitud', 'idSolicitud');
     }
     
     use HasFactory;
