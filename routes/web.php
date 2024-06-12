@@ -3,12 +3,12 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PDFController;
 
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
+use App\Http\Controllers\Manifiesto\PDFController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -100,6 +100,10 @@ use App\Http\Controllers\Certificados\CertificadosController;
     /*HISTORIAL CERTIFICADOS*/
     /*Ruta de Vista de historial de certificados*/
     Route::get('/certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
+
+    /*MANIFIESTO PDF*/
+    /*Ruta para ver el manifiesto pdf*/
+    Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 });
 
 require __DIR__.'/auth.php';

@@ -23,7 +23,7 @@
     </div>
 
     <div class="box">
-        <h3 align="center">Formulario para solicitar equipos y/o consumibles</h3>
+        <h3 align="center">Formulario para solicitar equipos y consumibles</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
