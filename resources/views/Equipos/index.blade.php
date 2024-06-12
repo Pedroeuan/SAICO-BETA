@@ -47,7 +47,7 @@
                                 <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
                             @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
                                 <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @else($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
                                 <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
                             @endif
                         @endif 
