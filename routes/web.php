@@ -32,7 +32,7 @@ use App\Http\Controllers\Certificados\CertificadosController;
     Route::middleware('auth')->group(function () {
 
     /*Rutas de Vistas Equipos y Consumibles Tabla General*/
-    Route::get('inventario', [general_eycController::class, 'index'])->name('inventario');
+    Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
 
     /*Rutas de Vistas Equipos y Consumibles-Registro*/
     Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
@@ -40,9 +40,9 @@ use App\Http\Controllers\Certificados\CertificadosController;
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
 
     /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
-    Route::get('registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros/SolicitudEyC');
+    Route::get('/registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
     /*Rutas de Vistas Equipos y Consumibles-Historial Certificados*/
-    Route::get('Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
+    Route::get('/Historial-Certificados', [historial_certificadoController::class, 'index'])->name('Historial-Certificados');
 
     /*EQUIPOS*/
     /*Ruta de Guardado*/
@@ -79,20 +79,27 @@ use App\Http\Controllers\Certificados\CertificadosController;
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
-    Route::get('solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
+    Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
-    Route::get('solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+    Route::get('/solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     
     /*Rutas de Vistas de Solicitudes-Edición*/
-    Route::get('solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
+    Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
+    /*Ruta de Eliminación-de Solicitud*/
+    Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
     /*SOLICITUD*/
     /*Ruta de Guardado*/
-    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud'); 
+    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
+    /*Ruta de Agregar-datos a detalles solicitud*/
+    Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
+    /*Ruta de Eliminación-detalles_Solicitud*/
+    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
+
 
     /*HISTORIAL CERTIFICADOS*/
     /*Ruta de Vista de historial de certificados*/
-    Route::get('certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
+    Route::get('/certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
 });
 
 require __DIR__.'/auth.php';
