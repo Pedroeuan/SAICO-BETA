@@ -76,6 +76,7 @@
     </div>
     </div>
     <br>
+    <h3 align="center">Pre Manifiesto</h3>
     <br>
     <h5 align="center">Solicitud</h5>
 <div class="card-body">
