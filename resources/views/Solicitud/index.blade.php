@@ -23,7 +23,7 @@
                 <thead>
                     <tr>
                         <th>Técnico</th>
-                        <th>Fecha de solicitud</th>
+                        <th>Fecha de servicio</th>
                         <th>Estatus</th>
                         <th>Acciones</th>
                     </tr>
