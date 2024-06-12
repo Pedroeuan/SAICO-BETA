@@ -43,7 +43,8 @@ class SolicitudesController extends Controller
         $Solicitud = new Solicitudes();
         $tecnico = 'Pedro-Cambiar a futuro esto';
         $Estatus = 'PENDIENTE';
-        $Fecha =$now->format('Y-m-d'); // 2024-06-03
+        $Fecha = $request->input('Fecha_Servicio');
+        //$Fecha =$now->format('Y-m-d'); // 2024-06-03
         //$Fecha = date('Y-m-d H:i:s');
         $Solicitud->tecnico=$tecnico;
         $Solicitud->Fecha=$Fecha;
