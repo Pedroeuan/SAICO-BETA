@@ -18,6 +18,7 @@
     <div class="box">
         <h3 align="center">Aprobación de manifiesto</h3>
         <br>
+        <h5 align="center">Inventario</h5>
         <div class="box-body">
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
@@ -75,6 +76,7 @@
     </div>
     </div>
     <br>
+    <h3 align="center">Pre Manifiesto</h3>
     <br>
     <h5 align="center">Solicitud</h5>
 <div class="card-body">
