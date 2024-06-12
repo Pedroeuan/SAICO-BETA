@@ -16,14 +16,26 @@
 <!-- form start -->
 <form role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
     @csrf
-    <div class="box-header with-border">
-        <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
         Solicitar
-        </button>
+    </button>
+    <div class="form-group mb-0">
+        <label class="col-form-label mr-2" for="inputSuccess">Fecha de Servicio</label>
+        <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" style="width: auto;">
     </div>
-
+</div>
+    <!-- 
+    La clase d-flex se utiliza para hacer que el contenedor use Flexbox, lo que facilita la alineación de elementos hijos.
+    justify-content-between se usa para espaciar los elementos (botón y fecha) de manera que estén en los extremos opuestos del contenedor.
+    align-items-center alinea verticalmente los elementos al centro.
+    mb-3 agrega un margen inferior de 3 unidades para separar este grupo de otros elementos.
+    form-group mb-0 asegura que no haya margen inferior en el grupo de formulario para que los elementos estén alineados correctamente.
+    col-form-label mr-2 asegura que la etiqueta tenga un margen derecho para espaciarla del campo de fecha.
+    d-inline-block y style="width: auto;" aseguran que el campo de fecha no ocupe todo el ancho disponible y se alinee correctamente.
+    -->
     <div class="box">
-        <h3 align="center">Solicitud</h3>
+        <h3 align="center">Formulario para solicitar equipos y consumibles</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">

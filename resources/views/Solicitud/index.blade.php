@@ -16,14 +16,14 @@
 <!-- form start -->
 <form role="form">
     <div class="box">
-        <h3 align="center">Formulario para solicitar equipos y/o consumibles</h3>
+        <h3 align="center">Historial de solicitudes de equipos y consumibles</h3>
         <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Técnico</th>
-                        <th>Fecha de solicitud</th>
+                        <th>Fecha de servicio</th>
                         <th>Estatus</th>
                         <th>Acciones</th>
                     </tr>
@@ -38,7 +38,7 @@
                             <div class="btn-group">
                                 
                                 <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button class="btn btn-danger"><i class="fa fa-times"></i></button>     
+                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                             </div>
                         </td>
                     </tr>
@@ -72,10 +72,11 @@
     $(document).ready(function() {
         initializeDataTable();
     });
-
-    function confirmDelete(id) {
+    $(".btnEliminarSolicitud").on("click", function(){
+    //valor del id a eliminar
+    var idSolicitud = $(this).attr("id-Solicitud");
     Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -84,7 +85,7 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/destroyEquipos/' + id, // URL del endpoint de eliminación
+                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
@@ -96,11 +97,11 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.1", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
                     }
                 },
                 error: function() {
-                    // Manejar errores de la solicitud AJAX
+                     // Manejar errores de la solicitud AJAX
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
@@ -111,17 +112,17 @@
                             }
                         });
                     // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                      /*  setTimeout(function() {
+                        /*  setTimeout(function() {
                             location.reload();
                         }, 3000);*/
                 }
             });
-        } else if (result.isDenied) {
+        } 
+        else if (result.isDenied) {
             Swal.fire("Cancelado", "", "error");
         }
     });
-}
-
+});
 </script>
 
 @endsection
