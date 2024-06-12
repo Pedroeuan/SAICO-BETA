@@ -101,8 +101,7 @@ class SolicitudesController extends Controller
     public function edit($id)
     {
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->get();
-
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud

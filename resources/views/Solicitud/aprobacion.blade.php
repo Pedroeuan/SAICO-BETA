@@ -46,8 +46,8 @@
                         <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
                     @endif 
                         @if($general_eyc->certificados)
-                            @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                            @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                    @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                         <td scope="row">SIN FECHA ASIGNADA</td>
                                     @else
                                         <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
