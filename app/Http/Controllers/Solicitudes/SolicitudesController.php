@@ -30,7 +30,7 @@ class SolicitudesController extends Controller
     public function create()
     {
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         return view('Solicitud.create', compact('general','generalConCertificados'));
     }
 
@@ -41,7 +41,7 @@ class SolicitudesController extends Controller
     {
         $now = Carbon::now();
         $Solicitud = new Solicitudes();
-        $tecnico = 'Pedro-Cambiar a futuro esto';
+        $tecnico = 'Pedro-Cambiar a futuro esto por el nombre de usuario o rol';
         $Estatus = 'PENDIENTE';
         $Fecha = $request->input('Fecha_Servicio');
         //$Fecha =$now->format('Y-m-d'); // 2024-06-03
