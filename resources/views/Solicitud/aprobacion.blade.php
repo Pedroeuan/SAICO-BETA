@@ -141,128 +141,163 @@
 
     let dataTable;
 
-        function initializeDataTable() {
+    function initializeDataTable() {
         // Destruir el DataTable si ya está inicializado
-            if ($.fn.DataTable.isDataTable('#tablaJs')) {
-                dataTable.destroy();
-            }
+        if ($.fn.DataTable.isDataTable('#tablaJs')) {
+            dataTable.destroy();
+        }
         //Inicializar el DataTable
         dataTable = new DataTable('#tablaJs');
-        }
+    }
+
     $(document).ready(function() {
-        $('.btnEliminarDetallesSolicitud').on('click', function() {
+        // Delegación de eventos para los botones de eliminación
+        $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
             var idDetalles_Solicitud = $(this).data('id');
             var token = '{{ csrf_token() }}';
-    Swal.fire({
-            title: "Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-        if(result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if(response.success) {
-                        $('#row-' + idDetalles_Solicitud).remove();
-                        Swal.fire({                 
+
+            Swal.fire({
+                title: "¿Seguro de eliminar este elemento?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "Sí",
+                denyButtonText: "No"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
+                        type: 'DELETE',
+                        data: {
+                            "_token": token,
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#row-' + idDetalles_Solicitud).remove();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Confirmado!',
+                                    text: "Equipo Eliminado Correctamente!",
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: errorMessage,
+                            });
+                        }
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Cancelado", "", "error");
+                }
+            });
+        });
+
+          /* AGREGAR */
+        document.querySelectorAll('.btnAgregar').forEach(button => {
+            button.addEventListener('click', function() {
+                // Deshabilitar el botón para evitar múltiples clics
+                this.disabled = true;
+
+                // Mostrar un indicador de carga
+                /* Swal.fire({
+                    title: 'Agregando...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });*/
+
+                let idFila = this.getAttribute('data-id');
+                let idSolicitud = this.getAttribute('data-id-solicitud');
+
+                fetch('/solicitudes/agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        idFila: idFila,
+                        idSolicitud: idSolicitud
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
                             icon: 'success',
-                            title: 'Confirmado!',
-                            text: "Equipo Eliminado Correctamente!",
+                            title: 'Detalle agregado exitosamente.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                        // Obtén el ID del detalle agregado desde la respuesta
+                        let idDetalles_Solicitud = data.idDetalles_Solicitud;
+
+                        // Eliminar la fila de la primera tabla
+                        let row = document.getElementById('row-' + idFila);
+                        let nombre = row.querySelector('td:nth-child(1)').innerText;
+                        let noEco = row.querySelector('td:nth-child(2)').innerText;
+                        let marca = row.querySelector('td:nth-child(3)').innerText;
+                        let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+
+                        row.remove();
+
+                        // Crear una nueva fila en la segunda tabla
+                        let newRow = document.createElement('tr');
+                        newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
+                        newRow.innerHTML = `
+                            <td>${nombre}</td>
+                            <td>${noEco}</td>
+                            <td>${marca}</td>
+                            <td>${ultimaCalibracion}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Cantidad[]" value="0">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </td>
+                        `;
+                        document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
+
+                        // Animar la nueva fila
+                        newRow.classList.add('table-success');
+                        setTimeout(() => {
+                            newRow.classList.remove('table-success');
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hubo un error al agregar el detalle.',
+                            text: data.message,
                         });
                     }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: errorMessage,
-                        });
-                    }
-                });
-            }
-            else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
-        });
-    });
-});
-
-    /* AGREGAR */
-    document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btnAgregar').forEach(button => {
-        button.addEventListener('click', function() {
-            // Obtiene el ID de la fila y el ID de la solicitud
-            let idFila = this.getAttribute('data-id');
-            let idSolicitud = this.getAttribute('data-id-solicitud');
-
-            // Aquí puedes manejar los datos según tus necesidades
-            console.log('ID de la Fila:', idFila);
-            console.log('ID de la Solicitud:', idSolicitud);
-
-            // Hacer una petición AJAX para agregar el detalle a la solicitud
-            fetch('/solicitudes/agregar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    idFila: idFila,
-                    idSolicitud: idSolicitud
+                        text: 'Hubo un error al agregar el detalle.',
+                    });
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('Detalle agregado exitosamente.');
-
-                    // Eliminar la fila de la primera tabla
-                    let row = document.getElementById('row-' + idFila);
-                    let nombre = row.querySelector('td:nth-child(1)').innerText;
-                    let noEco = row.querySelector('td:nth-child(2)').innerText;
-                    let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
-
-                    row.remove();
-
-                    // Crear una nueva fila en la segunda tabla
-                    let newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>${nombre}</td>
-                        <td>${noEco}</td>
-                        <td>${marca}</td>
-                        <td>${ultimaCalibracion}</td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Cantidad[]" value="0">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idFila}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    `;
-                    document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
-                } else {
-                    alert('Hubo un error al agregar el detalle.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .finally(() => {
+                    // Habilitar el botón nuevamente
+                    this.disabled = false;
+                });
+            });
         });
     });
-});
-
 </script>
 @endsection
 

@@ -170,8 +170,11 @@ class SolicitudesController extends Controller
         $DetallesSolicitud->Unidad = $unidad;
         $DetallesSolicitud->save();
 
-        // Ejemplo de respuesta
-        return response()->json(['status' => 'success']);
+        // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado
+        return response()->json([
+            'status' => 'success',
+            'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
+        ]);
     }
 
 

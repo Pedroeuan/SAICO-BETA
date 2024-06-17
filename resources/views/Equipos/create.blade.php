@@ -19,6 +19,7 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Herramientas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Kits</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header -->
@@ -644,6 +645,14 @@
 
                                 </div>
                             </form>
+                        <!-- Agrega más paneles de tabs según sea necesario -->
+                        <!--KITS -->
+                        <div class="tab-pane" id="tab_5">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                @csrf
+                                
+                            </form>
+                        </div>
                         <!-- Agrega más paneles de tabs según sea necesario -->
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
