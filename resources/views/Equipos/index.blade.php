@@ -48,6 +48,8 @@
                                 <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
                             @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
                                 <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
                         @endif 
                             @if($general_eyc->certificados)

@@ -128,7 +128,7 @@ class general_eycController extends Controller
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
@@ -444,7 +444,7 @@ public function updateEquipos(Request $request, $id)
         'Disponibilidad_Estado' => $Baja,
     ]);
     return redirect()->route('inventario');
-       /* $generalConEquipos = equipos::find($id);
+        /* $generalConEquipos = equipos::find($id);
         $generalConCertificados = certificados::find($id);
         $generalConConsumible = consumibles::find($id);
         $generalConAlmacen = almacen::find($id);
@@ -584,12 +584,12 @@ public function updateEquipos(Request $request, $id)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
-        $general->Disponibilidad_Estado = $request->input('Proveedor');
-    }
+        $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -990,12 +990,12 @@ public function updateEquipos(Request $request, $id)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -1311,12 +1311,12 @@ public function storeBlocks(Request $request)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -1743,12 +1743,12 @@ public function storeHerramientas(Request $request)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     } 
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
