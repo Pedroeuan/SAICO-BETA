@@ -459,7 +459,7 @@ return [
                             'url' => 'solicitud/index',
                         ],
                         [
-                            'text' => ' Certificados obsoletos',
+                            'text' => ' Certificados vencidos',
                             'icon' => 'fa fa-certificate',
                             'url' => 'certificados/index',
                         ],

@@ -107,9 +107,18 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
-                                        <div class="form-group">
+                                        <!--div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion">
+                                        </div-->
+                                        <div class="form-group">
+                                            <label>Date:</label>
+                                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -143,8 +152,11 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -647,7 +659,11 @@
                         <!-- Agrega más paneles de tabs según sea necesario -->
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
-            </div><!-- /.card -->       
+            </div><!-- /.card -->     
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+            
 
 @stop
 
