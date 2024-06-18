@@ -708,7 +708,7 @@
                                                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
                                                                                 <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
                                                                                 @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
+                                                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                            
                                                                         @endif
                                                                     </td>
                                                                 <td>
@@ -840,6 +840,7 @@
                         });
 
                         // Obtén el ID del detalle agregado desde la respuesta
+
                         let idDetalles_Solicitud = data.idDetalles_Solicitud;
 
                         // Eliminar la fila de la primera tabla
