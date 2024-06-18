@@ -16,6 +16,8 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
 
 
 class general_eycController extends Controller
@@ -52,8 +54,58 @@ class general_eycController extends Controller
      */
     public function createEquipos()
     {
-        return view('Equipos.create'); /*Muestra la vista de equipos*/
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+
+        return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
+
+
+    public function agregarKits(Request $request)
+    {
+        $kit = new kits();
+        if($request->input('Nombre')==null)
+        {
+            $kit->Nombre = 'ESPERA DE DATO';
+        }else{
+            $kit->Nombre = $request->input('Nombre');
+        }
+
+        if($request->input('Prueba')==null)
+        {
+            $kit->Nombre = 'ESPERA DE DATO';
+        }else{
+            $kit->Nombre = $request->input('Prueba');
+        }
+        $kit->save();
+
+        // Obtén las variables de la solicitud
+        $idFila = $request->input('idFila');
+        $idSolicitud = $request->input('idSolicitud');
+        $cantidad=0;
+        $unidad='ESPERA DE DATO';
+
+         // Registra los valores en el archivo de log
+        //Log::info('ID de Fila:', ['idFila' => $idFila]);
+        //Log::info('ID de Solicitud:', ['idSolicitud' => $idSolicitud]);
+        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+
+        // Procesa los datos según tus necesidades
+        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
+        $DetallesKits = new detalles_kits();
+        $DetallesKits->idSolicitud = $idSolicitud;
+        $DetallesKits->idGeneral_EyC = $idFila;
+        $DetallesKits->cantidad = $cantidad;
+        $DetallesKits->Unidad = $unidad;
+        $DetallesKits->save();
+
+        // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado
+        return response()->json([
+            'status' => 'success',
+            'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
+        ]);
+    }
+
 
     /**
      * Store a newly created resource in storage.

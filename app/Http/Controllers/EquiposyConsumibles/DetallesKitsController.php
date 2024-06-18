@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\EquiposyConsumibles;
 
-use App\Http\Controllers\Controller;
+use App\Models\EquiposyConsumibles\detalles_kits;
 use Illuminate\Http\Request;
 
-class equiposController extends Controller
+class DetallesKitsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //return view('Equipos.index');
+        //
     }
 
     /**
@@ -34,7 +34,7 @@ class equiposController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(equipos $equipos)
+    public function show(detalles_kits $detalles_kits)
     {
         //
     }
@@ -42,7 +42,7 @@ class equiposController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(equipos $equipos)
+    public function edit(detalles_kits $detalles_kits)
     {
         //
     }
@@ -50,7 +50,7 @@ class equiposController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, equipos $equipos)
+    public function update(Request $request, detalles_kits $detalles_kits)
     {
         //
     }
@@ -58,7 +58,7 @@ class equiposController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(equipos $equipos)
+    public function destroy(detalles_kits $detalles_kits)
     {
         //
     }
