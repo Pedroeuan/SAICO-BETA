@@ -63,6 +63,7 @@ class general_eycController extends Controller
 
     public function agregarKits(Request $request)
     {
+        try {
         $kit = new kits();
         if($request->input('Nombre')==null)
         {
@@ -73,37 +74,26 @@ class general_eycController extends Controller
 
         if($request->input('Prueba')==null)
         {
-            $kit->Nombre = 'ESPERA DE DATO';
+            $kit->Prueba = 'ESPERA DE DATO';
         }else{
-            $kit->Nombre = $request->input('Prueba');
+            $kit->Prueba = $request->input('Prueba');
         }
         $kit->save();
 
-        // Obtén las variables de la solicitud
-        $idFila = $request->input('idFila');
-        $idSolicitud = $request->input('idSolicitud');
-        $cantidad=0;
-        $unidad='ESPERA DE DATO';
+        foreach ($request->idGeneral_EyC as $index => $idGeneral_EyC) {
+            $detalleKit = new detalles_Kits();
+            $detalleKit->idGeneral_EyC = $idGeneral_EyC;
+            $detalleKit->idKit = $idKit;
+            $detalleKit->cantidad = $request->cantidad[$index];
+            $detalleKit->unidad = $request->unidad[$index];
+            $detalleKit->save();
+        }
 
-         // Registra los valores en el archivo de log
-        //Log::info('ID de Fila:', ['idFila' => $idFila]);
-        //Log::info('ID de Solicitud:', ['idSolicitud' => $idSolicitud]);
-        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
+    }
 
-        // Procesa los datos según tus necesidades
-        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        $DetallesKits = new detalles_kits();
-        $DetallesKits->idSolicitud = $idSolicitud;
-        $DetallesKits->idGeneral_EyC = $idFila;
-        $DetallesKits->cantidad = $cantidad;
-        $DetallesKits->Unidad = $unidad;
-        $DetallesKits->save();
-
-        // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado
-        return response()->json([
-            'status' => 'success',
-            'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
-        ]);
     }
 
 
