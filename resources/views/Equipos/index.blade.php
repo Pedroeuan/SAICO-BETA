@@ -7,7 +7,6 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
-
 @endsection
 
 @section('content')
@@ -47,8 +46,10 @@
                                 <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
                             @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
                                 <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @else($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
                                 <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
                         @endif 
                             @if($general_eyc->certificados)
@@ -92,6 +93,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
     new DataTable('#tablaJs');
 
@@ -115,7 +118,7 @@
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
 
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de dar de BAJA este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -136,7 +139,7 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo dar de BAJA el elemento.", "error");
                     }
                 },
                 error: function() {
@@ -144,7 +147,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
+                        text: "Elemento DE BAJA Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();

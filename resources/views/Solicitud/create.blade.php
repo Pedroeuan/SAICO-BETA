@@ -16,6 +16,15 @@
 <!-- form start -->
 <form role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
     @csrf
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+            Solicitar
+        </button>
+        <div class="form-group mb-0">
+            <label class="col-form-label mr-2" for="inputSuccess">Fecha de Servicio</label>
+            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" style="width: auto;">
+        </div>
+    </div>
     <!-- 
     La clase d-flex se utiliza para hacer que el contenedor use Flexbox, lo que facilita la alineación de elementos hijos.
     justify-content-between se usa para espaciar los elementos (botón y fecha) de manera que estén en los extremos opuestos del contenedor.
@@ -104,6 +113,9 @@
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+
 <script>
     // funcion borrar 
     $(".btnEliminarEquipo").on("click", function(){

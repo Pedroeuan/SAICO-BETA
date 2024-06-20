@@ -74,8 +74,12 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta de Actualizar*/
     Route::post('/edicion/editHerramientas/{id}', [general_eycController::class, 'updateHerramientas'])->name('editHerramientas.update');
 
-    /*Ruta para borrar, equipos, comsumibles, block, herramientas---NO HABILITAR*/
+    /*Ruta para dar de BAJA, equipos, comsumibles, block, herramientas-HABILITADO*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
+
+    /*KITS*/
+    /*Ruta de Guardado*/
+    Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
