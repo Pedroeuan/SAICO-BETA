@@ -56,15 +56,15 @@ class general_eycController extends Controller
     {
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
 
         return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
 
 
-    public function agregarKits(Request $request)
+    public function GuardarKits(Request $request)
     {
-        try {
-        $kit = new kits();
+        /* $kit = new kits();
         if($request->input('Nombre')==null)
         {
             $kit->Nombre = 'ESPERA DE DATO';
@@ -78,22 +78,29 @@ class general_eycController extends Controller
         }else{
             $kit->Prueba = $request->input('Prueba');
         }
-        $kit->save();
+        $kit->save();*/
+        $kitData = $request->input('kitData');
+    
+        // Crear el kit
+        $kit = Kits::create([
+            'Nombre' => 'ESPERA DE DATO', // Ajusta según tu lógica
+            'Prueba' => 'ESPERA DE DATO', // Ajusta según tu lógica
+        ]);
 
-        foreach ($request->idGeneral_EyC as $index => $idGeneral_EyC) {
-            $detalleKit = new detalles_Kits();
-            $detalleKit->idGeneral_EyC = $idGeneral_EyC;
-            $detalleKit->idKit = $idKit;
-            $detalleKit->cantidad = $request->cantidad[$index];
-            $detalleKit->unidad = $request->unidad[$index];
-            $detalleKit->save();
+        // Obtener el id del kit recién creado
+        $idKit = $kit->idKits;
+
+        // Crear los detalles del kit
+        foreach ($kitData as $data) {
+            detalles_Kits::create([
+                'idGeneral_EyC' => $data['idGeneral_EyC'],
+                'idKits' => $idKit,
+                'Cantidad' => $data['cantidad'],
+                'Unidad' => $data['unidad'],
+            ]);
         }
 
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'error' => $e->getMessage()]);
-    }
-
+        return redirect()->route('inventario');
     }
 
 

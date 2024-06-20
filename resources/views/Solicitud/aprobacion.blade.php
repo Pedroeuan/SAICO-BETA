@@ -113,7 +113,8 @@
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}"><i class="fa fa-times" aria-hidden="true"></i>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
                             </button>
                         </td>
                     </tr>
