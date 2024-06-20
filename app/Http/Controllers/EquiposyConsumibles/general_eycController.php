@@ -16,6 +16,8 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
 
 
 class general_eycController extends Controller
@@ -52,8 +54,55 @@ class general_eycController extends Controller
      */
     public function createEquipos()
     {
-        return view('Equipos.create'); /*Muestra la vista de equipos*/
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
+
+        return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
+
+
+    public function GuardarKits(Request $request)
+    {
+        /* $kit = new kits();
+        if($request->input('Nombre')==null)
+        {
+            $kit->Nombre = 'ESPERA DE DATO';
+        }else{
+            $kit->Nombre = $request->input('Nombre');
+        }
+
+        if($request->input('Prueba')==null)
+        {
+            $kit->Prueba = 'ESPERA DE DATO';
+        }else{
+            $kit->Prueba = $request->input('Prueba');
+        }
+        $kit->save();*/
+        $kitData = $request->input('kitData');
+    
+        // Crear el kit
+        $kit = Kits::create([
+            'Nombre' => 'ESPERA DE DATO', // Ajusta según tu lógica
+            'Prueba' => 'ESPERA DE DATO', // Ajusta según tu lógica
+        ]);
+
+        // Obtener el id del kit recién creado
+        $idKit = $kit->idKits;
+
+        // Crear los detalles del kit
+        foreach ($kitData as $data) {
+            detalles_Kits::create([
+                'idGeneral_EyC' => $data['idGeneral_EyC'],
+                'idKits' => $idKit,
+                'Cantidad' => $data['cantidad'],
+                'Unidad' => $data['unidad'],
+            ]);
+        }
+
+        return redirect()->route('inventario');
+    }
+
 
     /**
      * Store a newly created resource in storage.
