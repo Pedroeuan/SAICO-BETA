@@ -15,7 +15,7 @@
 <br>
 <!-- form start -->
 <form role="form">
-    <div class="box">
+    <div class="box ">
         <h3 align="center">Inventario</h3>
             <br>
         <div class="box-body">
@@ -65,7 +65,7 @@
                                     <td scope="row"> 
                                 @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                     <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
                                         <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                 @endif
@@ -73,8 +73,8 @@
                                     <td>
                             @endif
                             <div class="btn-group">
-                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-light btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
