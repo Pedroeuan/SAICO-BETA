@@ -16,9 +16,8 @@
 <!-- form start -->
     <form role="form">
         <div class="box">
-            <h3 align="center">Aprobación de manifiesto</h3>
+            <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
             <br>
-            <h5 align="center">Inventario</h5>
             <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
@@ -81,47 +80,60 @@
     <h5 align="center">Solicitud</h5>
     <div class="card-body">
         <table id="TablaSolicitud" class="table table-bordered" >
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>No.ECO</th>
-                    <th>Marca</th>
-                    <th>Ultima calibración</th>
-                    <th>Cantidad</th>
-                    <th>Unidad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($DetallesSolicitud as $detalle)
-                    @php
-                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                    @endphp
-                    <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
-                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
-                            </div>
-                        </td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+<form role="form">
+    <div class="box">
+        <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
+        <br>
+        <div class="box-body">
+        <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
     </div>
+    <br>
+    <h3 align="center">Equipos y consumibles aprobados</h3>
+    <br>
+    <div class="card-body">
+    <table id="TablaSolicitud" class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>No.ECO</th>
+                <th>Marca</th>
+                <th>Ultima calibración</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($DetallesSolicitud as $detalle)
+                @php
+                    $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                @endphp
+                <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
+                    <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                    <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                    <td>{{ $general->Marca ?? 'N/A' }}</td>
+                    <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
+                    <td scope="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                        </div>
+                    </td>
+                    <td scope="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}"><i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 <br>
 <button type="button" class="btn btn-success">Crear manifiesto</button>
 </form>

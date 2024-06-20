@@ -110,8 +110,17 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion">
                                         </div>
+                                        <!--div class="form-group">
+                                            <label>Date:</label>
+                                            <div class="input-group datetime" id="datetimepicker1">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div-->
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -144,8 +153,11 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -276,8 +288,11 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -384,11 +399,13 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -511,11 +528,13 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -638,11 +657,13 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
