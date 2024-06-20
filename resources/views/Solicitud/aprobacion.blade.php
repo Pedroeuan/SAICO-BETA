@@ -42,7 +42,15 @@
                             <td scope="row">{{$general_eyc->Marca}}</td>
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
-                            <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
+                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                            @endif
                         @endif 
                             @if($general_eyc->certificados)
                                 @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
