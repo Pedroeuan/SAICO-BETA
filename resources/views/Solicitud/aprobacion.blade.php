@@ -13,7 +13,7 @@
 <br>  
 <br>
 <br>
-<!-- form start -->
+<!-- form start  -->
     <form role="form">
         <div class="box">
             <h3 align="center">Aprobación de manifiesto</h3>
