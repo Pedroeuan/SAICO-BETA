@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
+                            <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -157,7 +157,7 @@
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +165,7 @@
                         </div>
                             <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane" id="tab_2">
-                        <form action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
+                        <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -292,7 +292,7 @@
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarConsumibles">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -300,7 +300,7 @@
                         </div>
                         <!--ACCESORIOS -->
                         <div class="tab-pane" id="tab_3">
-                        <form action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
+                        <form id="accesoriosForm" action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
                             @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -403,7 +403,7 @@
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarAccesorios">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -411,7 +411,7 @@
                         </div>
                         <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
-                        <form action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
+                        <form id="blocksForm" action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
                             @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -532,7 +532,7 @@
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarBlocks">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -540,8 +540,8 @@
                         </div>
                         <!--HERRAMIENTAS -->
                         <div class="tab-pane" id="tab_5">
-                        <form action="{{route('general_eyc.storeHerramientas')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+                            <form id="herramientasForm" action="{{ route('general_eyc.storeHerramientas') }}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -660,10 +660,12 @@
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
+
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarHerramientas">Guardar y continuar</button>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
@@ -778,6 +780,208 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
+<!--GUARDAR Y CONTINUAR-->
+<script>
+    /*HERRAMIENTAS*/
+    document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarHerramientas').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('herramientasForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                // Usar SweetAlert2 para mostrar una alerta de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
+/*BLOCKS*/
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarBlocks').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('blocksForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                // Usar SweetAlert2 para mostrar una alerta de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
+/*ACCESORIOS*/
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarAccesorios').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('accesoriosForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                // Usar SweetAlert2 para mostrar una alerta de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
+/*CONSUMIBLES*/
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarConsumibles').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('consumiblesForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                // Usar SweetAlert2 para mostrar una alerta de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
+/*Equipos*/
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarEquipos').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('equiposForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                // Usar SweetAlert2 para mostrar una alerta de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+</script>
+
 
 <script>
     /*Solicitud*/
