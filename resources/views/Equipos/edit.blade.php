@@ -1045,3 +1045,10 @@
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
     {{--<link rel="stylesheet" href="vendor/adminlte\dist/css/Equipos.scss">--}}
 @stop
+
+@section('js')
+<!--sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+@endsection
