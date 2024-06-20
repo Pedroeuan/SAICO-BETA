@@ -49,6 +49,15 @@ class general_eycController extends Controller
         return view('Equipos.index', compact('general','generalConCertificados'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
+
+    public function indexKits()
+    {
+        // Obtener todos los Kits con sus detalles_kits
+        $kitsConDetalles = Kits::with('detalles_kits')->get();
+
+        return view('Equipos.indexKits', compact('kitsConDetalles'));
+                    /*vista*/    /*variable donde se guardan los datos*/
+    }
     /**
      * Show the form for creating a new resource.
      */

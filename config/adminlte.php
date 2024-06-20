@@ -465,8 +465,8 @@ return [
                         ],
                         [
                             'text' => ' Ver Kits',
-                            'icon' => 'fa fa-certificate',
-                            'url' => '',
+                            'icon' => 'fas fa-box',
+                            'url' => '/index/Kits',
                         ],
                         /*[
                             'text' => 'level_one',
