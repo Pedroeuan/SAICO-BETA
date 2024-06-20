@@ -37,6 +37,11 @@
     <div class="box">
         <h3 align="center">Formulario para solicitar equipos y consumibles</h3>
         <br>
+        <div class="left-align">
+            <label class="col-form-label mr-2" for="inputSuccess">Fecha de Servicio</label>
+            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" style="width: auto;">
+        </div>
+        <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
@@ -92,6 +97,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="col text-center">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+                Finalizar solicitud
+            </button>
+        </div>
+        <br>
     </div>
 </form>
 @stop
@@ -102,6 +113,9 @@
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+
 <script>
     // funcion borrar 
     $(".btnEliminarEquipo").on("click", function(){

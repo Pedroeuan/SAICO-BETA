@@ -110,8 +110,17 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion">
                                         </div>
+                                        <!--div class="form-group">
+                                            <label>Date:</label>
+                                            <div class="input-group datetime" id="datetimepicker1">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div-->
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -144,8 +153,11 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -276,8 +288,11 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -384,11 +399,13 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -511,11 +528,13 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -638,99 +657,117 @@
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
                         <!-- Agrega más paneles de tabs según sea necesario -->
                         <!--KITS -->
-                        <div class="tab-pane" id="tab_6">
-                        <form action="" method="post" enctype="multipart/form-data">
-                                @csrf 
-                                        <div class="box">
-                                            <h5 align="center">Inventario</h5>
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                                            <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <label class="col-form-label" for="inputSuccess">Prueba</label>
-                                                            <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
-                                                        </div>
-                                                    </div>
+                            <div class="tab-pane" id="tab_6">
+                                <form id="kitForm" method="post" enctype="multipart/form-data" action="{{ route('GuardarKits.agregarKits') }}">
+                                    @csrf
+                                    <div class="box">
+                                        <h5 align="center">Inventario</h5>
+
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess">Nombre</label>
+                                                    <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
                                                 </div>
-                                            <div class="box-body">
-                                            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Num. Económico</th>
-                                                        <th>Marca</th>
-                                                        <th>Modelo</th>
-                                                        <th>NS</th>
-                                                        <th>Disponibilidad</th>
-                                                        <th>Fecha calibración</th>
-                                                        <th>Hoja de Presentación</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($generalConCertificados as $general_eyc)
-                                                        <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
-                                                        @if($general_eyc)
-                                                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                                                            <td scope="row">{{$general_eyc->No_economico}}</td>
-                                                            <td scope="row">{{$general_eyc->Marca}}</td>
-                                                            <td scope="row">{{$general_eyc->Modelo}}</td>
-                                                            <td scope="row">{{$general_eyc->Serie}}</td>
-                                                            <td scope="row">{{$general_eyc->Disponibilidad_Estado}}</td>
-                                                        @endif 
-                                                            @if($general_eyc->certificados)
-                                                                @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
-                                                                        @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                                            <td scope="row">SIN FECHA ASIGNADA</td>
-                                                                        @else
-                                                                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
-                                                                        @endif
-                                                                    @else
-                                                                        <td scope="row">N/A</td>
-                                                                @endif
-                                                                    <td scope="row"> 
-                                                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
-                                                                                @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                            
-                                                                        @endif
-                                                                    </td>
-                                                                <td>
-                                                            @endif
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"  data-id-solicitud=""><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess">Prueba</label>
+                                                    <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                <br>
-                            </form>
-                        </div>
+
+                                    <!-- Tabla de Elementos Disponibles -->
+                                    <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Num. Económico</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>NS</th>
+                                                <th>Disponibilidad</th>
+                                                <th>Fecha calibración</th>
+                                                <th>Hoja de Presentación</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($generalConCertificados as $general_eyc)
+                                            <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
+                                                <td>{{ $general_eyc->Nombre_E_P_BP }}</td>
+                                                <td>{{ $general_eyc->No_economico }}</td>
+                                                <td>{{ $general_eyc->Marca }}</td>
+                                                <td>{{ $general_eyc->Modelo }}</td>
+                                                <td>{{ $general_eyc->Serie }}</td>
+                                                <td>
+                                                    @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
+                                                <td>
+                                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    @else
+                                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <!-- Tabla de Elementos Seleccionados -->
+                                    <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Num. Económico</th>
+                                                <th>Marca</th>
+                                                <th>Ultima calibración</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+
+                                    <!-- Botón para guardar -->
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </form>
+                            </div><!--"class="tab-pane" id="tab_6""-->
+
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
             </div><!-- /.card -->       
-
-@stop
+        @stop
 
 @section('js')
 <!--datatable -->
@@ -739,6 +776,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
 
 <script>
     /*Solicitud*/
@@ -755,154 +794,93 @@
         dataTable = new DataTable('#tablaJs');
     }
 
-    $(document).ready(function() {
-        // Delegación de eventos para los botones de eliminación
-        $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
-            var idDetalles_Solicitud = $(this).data('id');
-            var token = '{{ csrf_token() }}';
+        document.addEventListener('DOMContentLoaded', function() {
+        function attachAddListeners() {
+            document.querySelectorAll('.btnAgregar').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let row = this.closest('tr');
+                    let id = this.dataset.id;
 
-            Swal.fire({
-                title: "¿Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                        type: 'DELETE',
-                        data: {
-                            "_token": token,
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                $('#row-' + idDetalles_Solicitud).remove();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Confirmado!',
-                                    text: "Equipo Eliminado Correctamente!",
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: errorMessage,
-                            });
-                        }
-                    });
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
-                }
-            });
-        });
-
-          /* AGREGAR */
-        document.querySelectorAll('.btnAgregar').forEach(button => {
-            button.addEventListener('click', function() {
-                // Deshabilitar el botón para evitar múltiples clics
-                this.disabled = true;
-
-                // Mostrar un indicador de carga
-                /* Swal.fire({
-                    title: 'Agregando...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
+                    // Verificar si el elemento ya está en la tabla de seleccionados
+                    if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                        return; // Si ya está, no hacemos nada
                     }
-                });*/
 
-                let idFila = this.getAttribute('data-id');
-                let idSolicitud = this.getAttribute('data-id-solicitud');
+                    // Clonar la fila y agregar campos de cantidad y unidad
+                    let newRow = document.createElement('tr');
+                    newRow.setAttribute('data-id', id);
+                    newRow.innerHTML = `
+                        <td>${row.cells[0].innerText}</td>
+                        <td>${row.cells[1].innerText}</td>
+                        <td>${row.cells[2].innerText}</td>
+                        <td>${row.cells[6].innerText}</td>
+                        <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
+                        <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+                    `;
 
-                fetch('/AgregarKits/agregarKits', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        idFila: idFila,
-                        idSolicitud: idSolicitud
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Detalle agregado exitosamente.',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
+                    // Agregar la nueva fila a la tabla de seleccionados
+                    document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
 
-                        // Obtén el ID del detalle agregado desde la respuesta
-
-                        let idDetalles_Solicitud = data.idDetalles_Solicitud;
-
-                        // Eliminar la fila de la primera tabla
-                        let row = document.getElementById('row-' + idFila);
-                        let nombre = row.querySelector('td:nth-child(1)').innerText;
-                        let noEco = row.querySelector('td:nth-child(2)').innerText;
-                        let marca = row.querySelector('td:nth-child(3)').innerText;
-                        let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
-
-                        row.remove();
-
-                        // Crear una nueva fila en la segunda tabla
-                        let newRow = document.createElement('tr');
-                        newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
-                        newRow.innerHTML = `
-                            <td>${nombre}</td>
-                            <td>${noEco}</td>
-                            <td>${marca}</td>
-                            <td>${ultimaCalibracion}</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="0">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        `;
-                        document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
-
-                        // Animar la nueva fila
-                        newRow.classList.add('table-success');
-                        setTimeout(() => {
-                            newRow.classList.remove('table-success');
-                        }, 1500);
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hubo un error al agregar el detalle.',
-                            text: data.message,
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Hubo un error al agregar el detalle.',
-                    });
-                })
-                .finally(() => {
-                    // Habilitar el botón nuevamente
-                    this.disabled = false;
+                    // Re-attach the delete listeners to the new button
+                    attachDeleteListeners();
                 });
+            });
+        }
+
+        function attachDeleteListeners() {
+            document.querySelectorAll('.btnEliminar').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let row = this.closest('tr');
+                    row.remove();
+                });
+            });
+        }
+
+        // Attach listeners when the DOM content is loaded
+        attachAddListeners();
+        attachDeleteListeners();
+
+        // Manejar el envío del formulario
+        document.querySelector('#kitForm').addEventListener('submit', function(event) {
+            let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+            let kitData = [];
+
+            selectedRows.forEach(function(row) {
+                let id = row.dataset.id;
+                let cantidad = row.querySelector('.cantidad').value;
+                let unidad = row.querySelector('.unidad').value;
+
+                kitData.push({
+                    idGeneral_EyC: id,
+                    cantidad: cantidad,
+                    unidad: unidad
+                });
+
+                // Crear inputs ocultos para enviar los datos de cantidad y unidad
+                let inputCantidad = document.createElement('input');
+                inputCantidad.type = 'hidden';
+                inputCantidad.name = `kitData[${id}][cantidad]`;
+                inputCantidad.value = cantidad;
+                document.querySelector('#kitForm').appendChild(inputCantidad);
+
+                let inputUnidad = document.createElement('input');
+                inputUnidad.type = 'hidden';
+                inputUnidad.name = `kitData[${id}][unidad]`;
+                inputUnidad.value = unidad;
+                document.querySelector('#kitForm').appendChild(inputUnidad);
+            });
+
+            // Añadir los datos al formulario como campos ocultos
+            kitData.forEach(function(item) {
+                let inputId = document.createElement('input');
+                inputId.type = 'hidden';
+                inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
+                inputId.value = item.idGeneral_EyC;
+                document.querySelector('#kitForm').appendChild(inputId);
             });
         });
     });
 </script>
+
 @endsection

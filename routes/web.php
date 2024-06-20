@@ -79,7 +79,7 @@ use App\Http\Controllers\Manifiesto\PDFController;
 
     /*KITS*/
     /*Ruta de Guardado*/
-    Route::post('/AgregarKits/agregarKits', [general_eycController::class, 'agregarKits'])->name('AgregarKits.agregarKits');
+    Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
