@@ -73,15 +73,21 @@ class general_eycController extends Controller
 
     public function GuardarKits(Request $request)
     {
-        $nombre = $request->input('Nombre', 'ESPERA DE DATO'); // Utiliza el valor del request o 'ESPERA DE DATO' si es null
-        $prueba = $request->input('Prueba', 'ESPERA DE DATO'); // Utiliza el valor del request o 'ESPERA DE DATO' si es null
-    
-        // Crear el kit
-        $kit = Kits::create([
-            'Nombre' => $nombre,
-            'Prueba' => $prueba,
-        ]);
-    
+        $kit = new kits();
+            if($request->input('Nombre')==null)
+        {
+            $kit->Nombre = 'ESPERA DE DATO';
+        }else{
+            $kit->Nombre = $request->input('Nombre');
+        }
+        if($request->input('Prueba')==null)
+        {
+            $kit->Prueba = 'ESPERA DE DATO';
+        }else{
+            $kit->Prueba = $request->input('Prueba');
+        }
+
+        $kit->save();
         // Obtener el id del kit recién creado
         $idKit = $kit->idKits;
     

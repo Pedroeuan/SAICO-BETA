@@ -761,8 +761,15 @@
                                         </tbody>
                                     </table>
 
-                                    <!-- Botón para guardar -->
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    <div class="container">
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarKits">Guardar y continuar</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div><!--"class="tab-pane" id="tab_6""-->
 
@@ -783,6 +790,50 @@
 
 <!--GUARDAR Y CONTINUAR-->
 <script>
+    /*KITS*/
+    document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarKits').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('kitForm');
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Usar SweetAlert2 para mostrar una alerta atractiva
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                // Limpiar el formulario
+                form.reset();
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage += ' - ' + xhr.responseJSON.message;
+                }
+                console.error('Error al enviar formulario:', errorMessage);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
     /*HERRAMIENTAS*/
     document.addEventListener('DOMContentLoaded', function() {
     // Evento click para el botón "Guardar y continuar"
