@@ -799,6 +799,18 @@
         var form = document.getElementById('kitForm');
         var formData = new FormData(form);
 
+        // Agregar datos de los kits seleccionados
+        let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+        selectedRows.forEach(function(row, index) {
+            let id = row.getAttribute('data-id');
+            let cantidad = row.querySelector('.cantidad').value;
+            let unidad = row.querySelector('.unidad').value;
+
+            formData.append(`kitData[${index}][idGeneral_EyC]`, id);
+            formData.append(`kitData[${index}][cantidad]`, cantidad);
+            formData.append(`kitData[${index}][unidad]`, unidad);
+        });
+
         $.ajax({
             url: form.action,
             type: form.method,
@@ -806,7 +818,6 @@
             processData: false,
             contentType: false,
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
                 Swal.fire({
                     title: 'Datos guardados',
                     text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
@@ -1093,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Attach listeners when the DOM content is loaded
     attachAddListeners();
     attachDeleteListeners();
-
+    
     // Manejar el envío del formulario
     document.querySelector('#kitForm').addEventListener('submit', function(event) {
         let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
