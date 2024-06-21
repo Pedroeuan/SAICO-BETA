@@ -465,7 +465,7 @@ return [
                         ],
                         [
                             'text' => ' Ver Kits',
-                            'icon' => 'fa fa-certificate',
+                            'icon' => 'fa fa-briefcase',
                             'url' => '',
                         ],
                         /*[
