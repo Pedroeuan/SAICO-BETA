@@ -23,13 +23,7 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Num. Económico</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>NS</th>
-                        <th>Disponibilidad</th>
-                        <th>Fecha calibración</th>
-                        <th>Hoja de Presentación</th>
+                        <th>Prueba</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -73,8 +67,8 @@
                                     <td>
                             @endif
                             <div class="btn-group">
-                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-light btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <a href="" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits=""><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
