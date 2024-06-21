@@ -73,36 +73,37 @@ class general_eycController extends Controller
 
     public function GuardarKits(Request $request)
     {
-        $kit = new kits();
-            if($request->input('Nombre')==null)
-        {
-            $kit->Nombre = 'ESPERA DE DATO';
-        }else{
-            $kit->Nombre = $request->input('Nombre');
-        }
-        if($request->input('Prueba')==null)
-        {
-            $kit->Prueba = 'ESPERA DE DATO';
-        }else{
-            $kit->Prueba = $request->input('Prueba');
-        }
-
-        $kit->save();
-        // Obtener el id del kit recién creado
-        $idKit = $kit->idKits;
+        try {
+            // Crear el kit principal
+            $kit = new kits();
+            $kit->Nombre = $request->input('Nombre') ?? 'ESPERA DE DATO';
+            $kit->Prueba = $request->input('Prueba') ?? 'ESPERA DE DATO';
+            $kit->save();
     
-        // Crear los detalles del kit
-        $kitData = $request->input('kitData');
-        foreach ($kitData as $data) {
-            detalles_Kits::create([
-                'idGeneral_EyC' => $data['idGeneral_EyC'],
-                'idKits' => $idKit,
-                'Cantidad' => $data['cantidad'],
-                'Unidad' => $data['unidad'],
-            ]);
-        }
+            // Obtener el id del kit recién creado
+            $idKit = $kit->idKits;
     
-        return redirect()->route('index.Kits');
+            // Crear los detalles del kit si hay datos
+            $kitData = $request->input('kitData');
+            
+            if (!empty($kitData)) {
+                foreach ($kitData as $data) {
+                    detalles_Kits::create([
+                        'idGeneral_EyC' => $data['idGeneral_EyC'],
+                        'idKits' => $idKit,
+                        'Cantidad' => $data['cantidad'],
+                        'Unidad' => $data['unidad'],
+                    ]);
+                }
+            } else {
+                \Log::warning('No se recibieron datos válidos en kitData');
+            }
+    
+            return redirect()->route('index.Kits');
+        } catch (\Exception $e) {
+            \Log::error('Error en GuardarKits: ' . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud.'], 500);
+        }
     }
 
 
