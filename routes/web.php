@@ -82,6 +82,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
     /*Ruta de Guardado*/
     Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
+    /*Ruta de Eliminación-de Kits*/
+    Route::delete('/eliminar/Kits/{id}', [general_eycController::class, 'destroyKits'])->name('eliminar.Kits');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/

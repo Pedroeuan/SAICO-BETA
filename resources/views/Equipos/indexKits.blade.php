@@ -16,7 +16,7 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-        <h3 align="center">Inventario</h3>
+        <h3 align="center">KITS</h3>
             <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
@@ -31,12 +31,15 @@
                     @foreach ($kitsConDetalles as $kits)
                         <tr>
                         @if($kits)
+                        @php 
+                        //dd($kits);
+                        @endphp
                             <td scope="row">{{$kits->Nombre}}</td>
                             <td scope="row">{{$kits->Prueba}}</td>
                             <td>
                             <div class="btn-group">
                                 <a href="" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -78,10 +81,10 @@
     });
     $(".btnEliminarEquipo").on("click", function(){
     //valor del id a eliminar
-    var idGeneral_EyC = $(this).attr("idGeneral_EyC");
+    var idDetallesKits = $(this).attr("idDetallesKits");
 
     Swal.fire({
-        title: "Seguro de dar de BAJA este elemento?",
+        title: "Seguro de ELIMINAR este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -90,7 +93,7 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/eliminar/destroyEquipos/' + idGeneral_EyC, // URL del endpoint de eliminación
+                url: '/eliminar/Kits/' + idDetallesKits, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
