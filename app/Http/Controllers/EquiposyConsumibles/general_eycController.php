@@ -73,33 +73,20 @@ class general_eycController extends Controller
 
     public function GuardarKits(Request $request)
     {
-        /* $kit = new kits();
-        if($request->input('Nombre')==null)
-        {
-            $kit->Nombre = 'ESPERA DE DATO';
-        }else{
-            $kit->Nombre = $request->input('Nombre');
-        }
-
-        if($request->input('Prueba')==null)
-        {
-            $kit->Prueba = 'ESPERA DE DATO';
-        }else{
-            $kit->Prueba = $request->input('Prueba');
-        }
-        $kit->save();*/
-        $kitData = $request->input('kitData');
+        $nombre = $request->input('Nombre', 'ESPERA DE DATO'); // Utiliza el valor del request o 'ESPERA DE DATO' si es null
+        $prueba = $request->input('Prueba', 'ESPERA DE DATO'); // Utiliza el valor del request o 'ESPERA DE DATO' si es null
     
         // Crear el kit
         $kit = Kits::create([
-            'Nombre' => 'ESPERA DE DATO', // Ajusta según tu lógica
-            'Prueba' => 'ESPERA DE DATO', // Ajusta según tu lógica
+            'Nombre' => $nombre,
+            'Prueba' => $prueba,
         ]);
-
+    
         // Obtener el id del kit recién creado
         $idKit = $kit->idKits;
-
+    
         // Crear los detalles del kit
+        $kitData = $request->input('kitData');
         foreach ($kitData as $data) {
             detalles_Kits::create([
                 'idGeneral_EyC' => $data['idGeneral_EyC'],
@@ -108,8 +95,8 @@ class general_eycController extends Controller
                 'Unidad' => $data['unidad'],
             ]);
         }
-
-        return redirect()->route('inventario');
+    
+        return redirect()->route('index.Kits');
     }
 
 
