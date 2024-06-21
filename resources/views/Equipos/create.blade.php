@@ -816,6 +816,9 @@
 
                 // Limpiar el formulario
                 form.reset();
+
+                // Limpiar la tabla de elementos seleccionados
+                document.querySelector('#tablaSeleccionados tbody').innerHTML = '';
             },
             error: function(xhr, status, error) {
                 var errorMessage = xhr.status + ': ' + xhr.statusText;
@@ -832,7 +835,6 @@
             }
         });
     });
-});
 
     /*HERRAMIENTAS*/
     document.addEventListener('DOMContentLoaded', function() {
@@ -1031,10 +1033,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script>
 
-
-<script>
     /*Solicitud*/
     new DataTable('#tablaJs');
 
@@ -1049,93 +1048,92 @@ document.addEventListener('DOMContentLoaded', function() {
         dataTable = new DataTable('#tablaJs');
     }
 
-        document.addEventListener('DOMContentLoaded', function() {
-        function attachAddListeners() {
-            document.querySelectorAll('.btnAgregar').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    let row = this.closest('tr');
-                    let id = this.dataset.id;
+    function attachAddListeners() {
+        document.querySelectorAll('.btnAgregar').forEach(function(button) {
+            button.addEventListener('click', function() {
+                let row = this.closest('tr');
+                let id = this.dataset.id;
 
-                    // Verificar si el elemento ya está en la tabla de seleccionados
-                    if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
-                        return; // Si ya está, no hacemos nada
-                    }
+                // Verificar si el elemento ya está en la tabla de seleccionados
+                if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                    return; // Si ya está, no hacemos nada
+                }
 
-                    // Clonar la fila y agregar campos de cantidad y unidad
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('data-id', id);
-                    newRow.innerHTML = `
-                        <td>${row.cells[0].innerText}</td>
-                        <td>${row.cells[1].innerText}</td>
-                        <td>${row.cells[2].innerText}</td>
-                        <td>${row.cells[6].innerText}</td>
-                        <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
-                        <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
-                    `;
+                // Clonar la fila y agregar campos de cantidad y unidad
+                let newRow = document.createElement('tr');
+                newRow.setAttribute('data-id', id);
+                newRow.innerHTML = `
+                    <td>${row.cells[0].innerText}</td>
+                    <td>${row.cells[1].innerText}</td>
+                    <td>${row.cells[2].innerText}</td>
+                    <td>${row.cells[6].innerText}</td>
+                    <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
+                    <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+                `;
 
-                    // Agregar la nueva fila a la tabla de seleccionados
-                    document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+                // Agregar la nueva fila a la tabla de seleccionados
+                document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
 
-                    // Re-attach the delete listeners to the new button
-                    attachDeleteListeners();
-                });
-            });
-        }
-
-        function attachDeleteListeners() {
-            document.querySelectorAll('.btnEliminar').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    let row = this.closest('tr');
-                    row.remove();
-                });
-            });
-        }
-
-        // Attach listeners when the DOM content is loaded
-        attachAddListeners();
-        attachDeleteListeners();
-
-        // Manejar el envío del formulario
-        document.querySelector('#kitForm').addEventListener('submit', function(event) {
-            let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
-            let kitData = [];
-
-            selectedRows.forEach(function(row) {
-                let id = row.dataset.id;
-                let cantidad = row.querySelector('.cantidad').value;
-                let unidad = row.querySelector('.unidad').value;
-
-                kitData.push({
-                    idGeneral_EyC: id,
-                    cantidad: cantidad,
-                    unidad: unidad
-                });
-
-                // Crear inputs ocultos para enviar los datos de cantidad y unidad
-                let inputCantidad = document.createElement('input');
-                inputCantidad.type = 'hidden';
-                inputCantidad.name = `kitData[${id}][cantidad]`;
-                inputCantidad.value = cantidad;
-                document.querySelector('#kitForm').appendChild(inputCantidad);
-
-                let inputUnidad = document.createElement('input');
-                inputUnidad.type = 'hidden';
-                inputUnidad.name = `kitData[${id}][unidad]`;
-                inputUnidad.value = unidad;
-                document.querySelector('#kitForm').appendChild(inputUnidad);
-            });
-
-            // Añadir los datos al formulario como campos ocultos
-            kitData.forEach(function(item) {
-                let inputId = document.createElement('input');
-                inputId.type = 'hidden';
-                inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
-                inputId.value = item.idGeneral_EyC;
-                document.querySelector('#kitForm').appendChild(inputId);
+                // Re-attach the delete listeners to the new button
+                attachDeleteListeners();
             });
         });
+    }
+
+    function attachDeleteListeners() {
+        document.querySelectorAll('.btnEliminar').forEach(function(button) {
+            button.addEventListener('click', function() {
+                let row = this.closest('tr');
+                row.remove();
+            });
+        });
+    }
+
+    // Attach listeners when the DOM content is loaded
+    attachAddListeners();
+    attachDeleteListeners();
+
+    // Manejar el envío del formulario
+    document.querySelector('#kitForm').addEventListener('submit', function(event) {
+        let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+        let kitData = [];
+
+        selectedRows.forEach(function(row) {
+            let id = row.dataset.id;
+            let cantidad = row.querySelector('.cantidad').value;
+            let unidad = row.querySelector('.unidad').value;
+
+            kitData.push({
+                idGeneral_EyC: id,
+                cantidad: cantidad,
+                unidad: unidad
+            });
+
+            // Crear inputs ocultos para enviar los datos de cantidad y unidad
+            let inputCantidad = document.createElement('input');
+            inputCantidad.type = 'hidden';
+            inputCantidad.name = `kitData[${id}][cantidad]`;
+            inputCantidad.value = cantidad;
+            document.querySelector('#kitForm').appendChild(inputCantidad);
+
+            let inputUnidad = document.createElement('input');
+            inputUnidad.type = 'hidden';
+            inputUnidad.name = `kitData[${id}][unidad]`;
+            inputUnidad.value = unidad;
+            document.querySelector('#kitForm').appendChild(inputUnidad);
+        });
+
+        // Añadir los datos al formulario como campos ocultos
+        kitData.forEach(function(item) {
+            let inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
+            inputId.value = item.idGeneral_EyC;
+            document.querySelector('#kitForm').appendChild(inputId);
+        });
     });
+});
 </script>
 
 @endsection

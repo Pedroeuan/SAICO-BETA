@@ -106,6 +106,15 @@ class general_eycController extends Controller
         }
     }
 
+    public function destroyKits($id)
+    {
+        // Eliminar los detalles relacionados con el idSolicitud
+
+        detalles_kits::where('idKits', $id)->delete();
+        kits::where('idKits', $id)->delete();
+            
+        return redirect()->route('index.Kits');
+    }
 
     /**
      * Store a newly created resource in storage.
