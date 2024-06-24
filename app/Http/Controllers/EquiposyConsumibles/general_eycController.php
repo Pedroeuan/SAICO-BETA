@@ -334,8 +334,19 @@ class general_eycController extends Controller
             $generalConBlocks = block_y_probeta::where('idGeneral_EyC', $id)->first();
             $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
             $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
+            $kitsConDetalles = detalles_kits::where('idKits', $id)->first();
             // Retornar la vista con los datos obtenidos
-            return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados'));
+            return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','kitsConDetalles'));
+        }
+
+        public function editKits($id)
+        {
+            /*devuelven los datos de la tabla a la que estan ligados */
+            //$general = general_eyc::get();
+            $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+            $kitsConDetalles = Kits::with('detalles_Kits')->findOrFail($id);
+            // Retornar la vista con los datos obtenidos
+            return view('Equipos.editKits', compact('id','kitsConDetalles','generalConCertificados'));
         }
     /**
      * Update the specified resource in storage.

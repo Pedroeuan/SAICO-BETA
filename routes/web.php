@@ -80,6 +80,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*KITS*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla KITS*/
     Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
+    /*Rutas de Vistas Equipos y Consumibles-Edición*/
+    Route::get('/edicion/editKits/{id}', [general_eycController::class, 'editKits'])->name('edicion.editKits');
     /*Ruta de Guardado*/
     Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
     /*Ruta de Eliminación-de Kits*/
