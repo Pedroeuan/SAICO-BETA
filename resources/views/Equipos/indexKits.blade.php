@@ -28,6 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!--Tabla body-->
                     @foreach ($kitsConDetalles as $kits)
                         <tr>
                         @if($kits)
