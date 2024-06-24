@@ -31,9 +31,6 @@
                     @foreach ($kitsConDetalles as $kits)
                         <tr>
                         @if($kits)
-                        @php 
-                        //dd($kits);
-                        @endphp
                             <td scope="row">{{$kits->Nombre}}</td>
                             <td scope="row">{{$kits->Prueba}}</td>
                             <td>
