@@ -7,7 +7,6 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
-
 @endsection
 
 @section('content')
@@ -16,7 +15,7 @@
 <br>
 <!-- form start -->
 <form role="form">
-    <div class="box">
+    <div class="box ">
         <h3 align="center">Inventario</h3>
             <br>
         <div class="box-body">
@@ -47,8 +46,10 @@
                                 <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
                             @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
                                 <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @else($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
                                 <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
                         @endif 
                             @if($general_eyc->certificados)
@@ -64,7 +65,7 @@
                                     <td scope="row"> 
                                 @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                     <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
                                         <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                 @endif
@@ -72,8 +73,8 @@
                                     <td>
                             @endif
                             <div class="btn-group">
-                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-light btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -92,6 +93,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
     new DataTable('#tablaJs');
 
@@ -115,7 +118,7 @@
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
 
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de dar de BAJA este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -136,7 +139,7 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo dar de BAJA el elemento.", "error");
                     }
                 },
                 error: function() {
@@ -144,7 +147,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
+                        text: "Elemento DE BAJA Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();

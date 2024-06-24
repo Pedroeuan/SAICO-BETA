@@ -455,13 +455,18 @@ return [
                         ],
                         [
                             'text' => ' Ver solicitudes',
-                            'icon' => 'far fa-eye',
+                            'icon' => 'far fa-clipboard',
                             'url' => 'solicitud/index',
                         ],
                         [
-                            'text' => ' Certificados obsoletos',
+                            'text' => ' Certificados vencidos',
                             'icon' => 'fa fa-certificate',
                             'url' => 'certificados/index',
+                        ],
+                        [
+                            'text' => ' Ver Kits',
+                            'icon' => 'fas fa-box',
+                            'url' => '/index/Kits',
                         ],
                         /*[
                             'text' => 'level_one',

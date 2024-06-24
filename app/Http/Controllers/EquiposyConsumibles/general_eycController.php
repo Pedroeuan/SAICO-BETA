@@ -16,6 +16,8 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
 
 
 class general_eycController extends Controller
@@ -47,12 +49,72 @@ class general_eycController extends Controller
         return view('Equipos.index', compact('general','generalConCertificados'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
+
+    public function indexKits()
+    {
+        // Obtener todos los Kits con sus detalles_kits
+        $kitsConDetalles = Kits::with('detalles_kits')->get();
+
+        return view('Equipos.indexKits', compact('kitsConDetalles'));
+                    /*vista*/    /*variable donde se guardan los datos*/
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function createEquipos()
     {
-        return view('Equipos.create'); /*Muestra la vista de equipos*/
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
+
+        return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
+    }
+
+
+    public function GuardarKits(Request $request)
+{
+    try {
+        // Crear el kit principal
+        $kit = new kits();
+        $kit->Nombre = $request->input('Nombre') ?? 'ESPERA DE DATO';
+        $kit->Prueba = $request->input('Prueba') ?? 'ESPERA DE DATO';
+        $kit->save();
+
+        // Obtener el id del kit recién creado
+        $idKit = $kit->idKits;
+
+        // Crear los detalles del kit si hay datos
+        $kitData = $request->input('kitData');
+        
+        if (!empty($kitData)) {
+            foreach ($kitData as $data) {
+                detalles_Kits::create([
+                    'idGeneral_EyC' => $data['idGeneral_EyC'],
+                    'idKits' => $idKit,
+                    'Cantidad' => $data['cantidad'],
+                    'Unidad' => $data['unidad'],
+                ]);
+            }
+        } else {
+            \Log::warning('No se recibieron datos válidos en kitData');
+        }
+
+        return redirect()->route('index.Kits');
+    } catch (\Exception $e) {
+        \Log::error('Error en GuardarKits: ' . $e->getMessage());
+        return response()->json(['error' => 'Ocurrió un error al procesar la solicitud.'], 500);
+    }
+}
+
+
+    public function destroyKits($id)
+    {
+        // Eliminar los detalles relacionados con el idSolicitud
+
+        detalles_kits::where('idKits', $id)->delete();
+        kits::where('idKits', $id)->delete();
+            
+        return redirect()->route('index.Kits');
     }
 
     /**
@@ -128,7 +190,7 @@ class general_eycController extends Controller
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
@@ -436,7 +498,15 @@ public function updateEquipos(Request $request, $id)
      */
     public function destroyEquipos($id)
     {
-        $generalConEquipos = equipos::find($id);
+        // Obtener el equipo existente
+    $generalEyC  = general_eyc::find($id);
+    $Baja='FUERA DE SERVICIO/BAJA';
+    // Actualizar los datos del equipo
+    $generalEyC ->update([
+        'Disponibilidad_Estado' => $Baja,
+    ]);
+    return redirect()->route('inventario');
+        /* $generalConEquipos = equipos::find($id);
         $generalConCertificados = certificados::find($id);
         $generalConConsumible = consumibles::find($id);
         $generalConAlmacen = almacen::find($id);
@@ -509,7 +579,7 @@ public function updateEquipos(Request $request, $id)
                 // Elimina el registro de la tabla 'general_eyc'
                 $general->delete();
             }
-        return redirect()->route('inventario');
+        return redirect()->route('inventario');*/
     }
     /*CONSUMIBLES*/
     public function storeConsumibles(Request $request)
@@ -576,12 +646,12 @@ public function updateEquipos(Request $request, $id)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
-        $general->Disponibilidad_Estado = $request->input('Proveedor');
-    }
+        $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -982,12 +1052,12 @@ public function updateEquipos(Request $request, $id)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -1303,12 +1373,12 @@ public function storeBlocks(Request $request)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';
@@ -1735,12 +1805,12 @@ public function storeHerramientas(Request $request)
     }else{
         $general->BMPRO = $request->input('BMPRO');
     } 
-    if($request->input('Disponibilidad_Estado')==null)
+    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
         $general->Disponibilidad_Estado = 'ESPERA DE DATO';
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    }
+    } 
     if($request->input('Tipo')==null)
     {
         $general->Tipo = 'ESPERA DE DATO';

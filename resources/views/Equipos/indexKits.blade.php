@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', 'Equipos')
@@ -6,7 +7,6 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
-
 @endsection
 
 @section('content')
@@ -15,33 +15,32 @@
 <br>
 <!-- form start -->
 <form role="form">
-    <div class="box">
-        <h3 align="center">Historial de solicitudes de equipos y consumibles</h3>
-        <br>
+    <div class="box ">
+        <h3 align="center">KITS</h3>
+            <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Técnico</th>
-                        <th>Fecha de servicio</th>
-                        <th>Estatus</th>
+                        <th>Nombre</th>
+                        <th>Prueba</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($Solicitud as $solicitud)
-                    <tr>
-                        <td scope="row">{{$solicitud->tecnico}}</td>
-                        <td scope="row">{{$solicitud->Fecha}}</td>
-                        <td scope="row">{{$solicitud->Estatus}}</td>
-                        <td>
+                    @foreach ($kitsConDetalles as $kits)
+                        <tr>
+                        @if($kits)
+                            <td scope="row">{{$kits->Nombre}}</td>
+                            <td scope="row">{{$kits->Prueba}}</td>
+                            <td>
                             <div class="btn-group">
-                                
-                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                <a href="" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
                     </tr>
+                    @endif
                     @endforeach
                 </tbody>
             </table>
@@ -51,35 +50,38 @@
 @stop
 
 @section('js')
-
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
+    new DataTable('#tablaJs');
+
     let dataTable;
 
     function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
+       // Destruir el DataTable si ya está inicializado
         if ($.fn.DataTable.isDataTable('#tablaJs')) {
             dataTable.destroy();
         }
-        // Inicializar el DataTable
+       // Inicializar el DataTable
         dataTable = new DataTable('#tablaJs');
     }
 
-    // Inicializar el DataTable al cargar la página
+   // Inicializar el DataTable al cargar la página
     $(document).ready(function() {
         initializeDataTable();
     });
-    $(".btnEliminarSolicitud").on("click", function(){
+    $(".btnEliminarEquipo").on("click", function(){
     //valor del id a eliminar
-    var idSolicitud = $(this).attr("id-Solicitud");
+    var idDetallesKits = $(this).attr("idDetallesKits");
+
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de ELIMINAR este elemento?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -88,7 +90,7 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
+                url: '/eliminar/Kits/' + idDetallesKits, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario
@@ -100,7 +102,7 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo dar de BAJA el elemento.", "error");
                     }
                 },
                 error: function() {
@@ -108,7 +110,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
+                        text: "Elemento DE BAJA Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();

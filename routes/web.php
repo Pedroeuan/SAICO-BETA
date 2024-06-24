@@ -31,7 +31,7 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Equipos y Consumibles*/ 
     Route::middleware('auth')->group(function () {
 
-    /*Rutas de Vistas Equipos y Consumibles Tabla General*/
+    /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
 
     /*Rutas de Vistas Equipos y Consumibles-Registro*/
@@ -74,8 +74,16 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta de Actualizar*/
     Route::post('/edicion/editHerramientas/{id}', [general_eycController::class, 'updateHerramientas'])->name('editHerramientas.update');
 
-    /*Ruta para borrar, equipos, comsumibles, block, herramientas---NO HABILITAR*/
+    /*Ruta para dar de BAJA, equipos, comsumibles, block, herramientas-HABILITADO*/
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
+
+    /*KITS*/
+    /*Rutas de Vistas Equipos y Consumibles-Tabla KITS*/
+    Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
+    /*Ruta de Guardado*/
+    Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
+    /*Ruta de Eliminación-de Kits*/
+    Route::delete('/eliminar/Kits/{id}', [general_eycController::class, 'destroyKits'])->name('eliminar.Kits');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
