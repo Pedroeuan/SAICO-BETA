@@ -91,6 +91,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::post('/kits/agregar', [general_eycController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
     /*Ruta de botón Eliminación-detalles_Kits*/
     Route::delete('/Detalles_Kits/eliminar/{id}', [general_eycController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
+    /*Ruta de botón Guardar-updateKits*/
+    Route::post('Update/kits/{id}', [general_eycController::class, 'updateKits'])->name('kits.update');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
