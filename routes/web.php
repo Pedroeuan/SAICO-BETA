@@ -78,9 +78,9 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
     /*KITS*/
-    /*Rutas de Vistas Equipos y Consumibles-Tabla KITS*/
+    /*Rutas de Vistas KITS-Tabla KITS*/
     Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
-    /*Rutas de Vistas Equipos y Consumibles-Edición*/
+    /*Rutas de Vistas KITS-Edición*/
     Route::get('/edicion/editKits/{id}', [general_eycController::class, 'editKits'])->name('edicion.editKits');
     /*Ruta de Guardado*/
     Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
