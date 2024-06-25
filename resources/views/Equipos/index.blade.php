@@ -16,9 +16,9 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-        <h3 align="center">Inventario</h3>
             <br>
         <div class="box-body">
+        <h3 align="center">Inventario</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
