@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
-                                <form id="kitForm" method="post" enctype="multipart/form-data" action="">
+                                <form id="kitForm" method="post" enctype="multipart/form-data" action="{{ route('kits.update', $Kit->idKits) }}">
                                     @csrf
                                     <div class="box">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -62,22 +62,22 @@
                                         <tbody>
                                             @foreach ($generalConCertificados as $general_eyc)
                                                 <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
-                                                @if($general_eyc)
-                                                    <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                                                    <td scope="row">{{$general_eyc->No_economico}}</td>
-                                                    <td scope="row">{{$general_eyc->Marca}}</td>
-                                                    <td scope="row">{{$general_eyc->Modelo}}</td>
-                                                    <td scope="row">{{$general_eyc->Serie}}</td>
-                                                    @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                        <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                        <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                        <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                        <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
-                                                    @endif
-                                                @endif 
+                                                    @if($general_eyc)
+                                                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                                        <td scope="row">{{$general_eyc->No_economico}}</td>
+                                                        <td scope="row">{{$general_eyc->Marca}}</td>
+                                                        <td scope="row">{{$general_eyc->Modelo}}</td>
+                                                        <td scope="row">{{$general_eyc->Serie}}</td>
+                                                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                                            <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                                            <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                            <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                            <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                                                        @endif
+                                                    @endif 
                                                     @if($general_eyc->certificados)
                                                         @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
                                                                 @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
@@ -98,10 +98,10 @@
                                                             </td>
                                                         <td>
                                                     @endif
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}" data-id-kits="{{ $Kit->idKits }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
-                                                    </div>
-                                                </td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}" data-id-kits="{{ $Kit->idKits }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
+                                                        </div>
+                                                    </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -134,14 +134,14 @@
                                                     <td>{{ $general->No_economico ?? 'N/A' }}</td>
                                                     <td>{{ $general->Marca ?? 'N/A' }}</td>
                                                     <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                                                    <td scope="row">
+                                                    <td>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                                            <input type="text" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
                                                         </div>
                                                     </td>
-                                                    <td scope="row">
+                                                    <td>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                                                            <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'N/A' }}">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -154,10 +154,9 @@
                                         </tbody>
                                     </table>
                                     </div>
-                                    <br>
-                                    <button type="button" class="btn btn-success">Guardar</button>
-                                </div>
-                                    
+                                        <br>
+                                        <button type="submit" class="btn btn-info bg-primary">Guardar</button>
+                                    </div>
                                 </form>
                             </div><!--"class="tab-pane active" id="tab_1"-->
                     </div><!-- /.tab-content -->
