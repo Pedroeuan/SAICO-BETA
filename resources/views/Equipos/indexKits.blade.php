@@ -36,7 +36,7 @@
                             <td scope="row">{{$kits->Prueba}}</td>
                             <td>
                             <div class="btn-group">
-                                <a href="" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                 <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                         </td>
@@ -52,9 +52,8 @@
 
 @section('js')
 <!--datatable -->
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
@@ -103,7 +102,7 @@
                         location.reload();
                     } else {
                         // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo dar de BAJA el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo ELIMINAR el elemento.", "error");
                     }
                 },
                 error: function() {
@@ -111,7 +110,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Elemento DE BAJA Correctamente!",
+                        text: "Elemento ELIMINADO Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();

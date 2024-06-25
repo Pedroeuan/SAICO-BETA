@@ -78,12 +78,19 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::delete('/eliminar/destroyEquipos/{id}', [general_eycController::class, 'destroyEquipos'])->name('eliminar.destroyEquipos');
 
     /*KITS*/
-    /*Rutas de Vistas Equipos y Consumibles-Tabla KITS*/
+    /*Rutas de Vistas KITS-Tabla KITS*/
     Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
-    /*Ruta de Guardado*/
+    /*Rutas de Vistas KITS-Edición*/
+    Route::get('/edicion/editKits/{id}', [general_eycController::class, 'editKits'])->name('edicion.editKits');
+    /*Ruta de Guardado-Alta*/
     Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
-    /*Ruta de Eliminación-de Kits*/
+    /*Ruta de Eliminación-de Kits-Index*/
     Route::delete('/eliminar/Kits/{id}', [general_eycController::class, 'destroyKits'])->name('eliminar.Kits');
+
+    /*Ruta de botón Agregar-datos a detalles kits*/
+    Route::post('/kits/agregar', [general_eycController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
+    /*Ruta de botón Eliminación-detalles_Kits*/
+    Route::delete('/Detalles_Kits/eliminar/{id}', [general_eycController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
@@ -99,9 +106,9 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*SOLICITUD*/
     /*Ruta de Guardado*/
     Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
-    /*Ruta de Agregar-datos a detalles solicitud*/
+    /*Ruta de botón Agregar-datos a detalles solicitud*/
     Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
-    /*Ruta de Eliminación-detalles_Solicitud*/
+    /*Ruta de botón Eliminación-detalles_Solicitud*/
     Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
 

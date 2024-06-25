@@ -185,12 +185,12 @@
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Confirmado!',
-                                    text: "Equipo Eliminado Correctamente!",
+                                    text: "Elemento Eliminado Correctamente!",
                                 });
                             }
                         },
                         error: function(xhr) {
-                            var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+                            var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
@@ -238,7 +238,7 @@
                     if (data.status === 'success') {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Detalle agregado exitosamente.',
+                            title: 'Elemento Agregado Exitosamente.',
                             showConfirmButton: false,
                             timer: 2000
                         });
