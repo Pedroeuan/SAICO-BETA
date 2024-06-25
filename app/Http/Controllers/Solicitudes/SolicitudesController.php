@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
 
 class SolicitudesController extends Controller
 {
@@ -29,9 +31,23 @@ class SolicitudesController extends Controller
      */
     public function create()
     {
+
+        // Obtener todos los Kits con sus detalles_kits
+        $kitsConDetalles = Kits::with('detalles_kits')->get();
+
+        /*Inventario */
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-        return view('Solicitud.create', compact('general','generalConCertificados'));
+        /*Kits */
+        /*$Kit = kits::findOrFail($id);
+        $DetallesKits = detalles_kits::where('idKits', $id)->get();
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesKits->pluck('idGeneral_EyC');
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
+
+        return view('Solicitud.create', compact('general','generalConCertificados','kitsConDetalles'));
+                                    /*vista*/    /*variable donde se guardan los datos*/
     }
 
     /**

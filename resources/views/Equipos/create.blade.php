@@ -743,13 +743,13 @@
                                                 <td>{{ $general_eyc->Serie }}</td>
                                                 <td>
                                                     @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                                                        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                                        <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                        <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                        <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
                                                     @endif
                                                 </td>
                                                 <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
@@ -768,7 +768,7 @@
                                         </tbody>
                                 </table>
 
-                                    <!-- Tabla de Elementos Seleccionados -->
+                                <!-- Tabla de Elementos Seleccionados -->
                                 <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
