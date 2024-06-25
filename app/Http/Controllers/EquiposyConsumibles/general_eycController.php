@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
@@ -18,6 +19,7 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+
 
 
 class general_eycController extends Controller
@@ -351,6 +353,50 @@ class general_eycController extends Controller
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
         
         return view("Equipos.editKits", compact('id', 'Kit', 'DetallesKits', 'generalEyC','general','generalConCertificados'));
+        }
+
+        /*Boton agregar */
+        public function agregarDetallesKits(Request $request)
+        {
+            // Obtén las variables de la solicitud
+            $idFila = $request->input('idFila');
+            $idKits = $request->input('idKits');
+            $cantidad=0;
+            $unidad='ESPERA DE DATO';
+
+            // Registra los valores en el archivo de log
+            //Log::info('ID de Fila:', ['idFila' => $idFila]);
+            //Log::info('ID de Kits:', ['idKits' => $idKits]);
+            /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+
+            // Procesa los datos según tus necesidades
+            // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
+            $DetallesKits = new detalles_kits();
+            $DetallesKits->idKits = $idKits;
+            $DetallesKits->idGeneral_EyC = $idFila;
+            $DetallesKits->cantidad = $cantidad;
+            $DetallesKits->Unidad = $unidad;
+            $DetallesKits->save();
+
+            // Retornar una respuesta JSON con el idDetalles_Kits recién creado
+            return response()->json([
+                'status' => 'success',
+                'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
+            ]);
+        }
+            /*Botón Eliminar */
+            public function destroyDetallesKits($id)
+        {
+            try {
+                $detalle = detalles_kits::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
+                $detalle->delete();
+        
+                return response()->json(['success' => 'Record deleted successfully!']);
+            } catch (ModelNotFoundException $e) {
+                return response()->json(['error' => 'Record not found.'], 404);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'An error occurred while deleting the record.'], 500);
+            }
         }
     /**
      * Update the specified resource in storage.
