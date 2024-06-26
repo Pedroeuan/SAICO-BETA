@@ -93,6 +93,11 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::delete('/Detalles_Kits/eliminar/{id}', [general_eycController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
     /*Ruta de botón Guardar-updateKits*/
     Route::post('Update/kits/{id}', [general_eycController::class, 'updateKits'])->name('kits.update');
+    /*Ruta de botón obtener-datos de detalles kits*/
+    Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
+    /*Ruta de botón obtener-datos de general_EyC para kits*/
+    Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/

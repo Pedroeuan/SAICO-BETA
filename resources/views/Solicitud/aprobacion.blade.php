@@ -62,14 +62,14 @@
                                     @else
                                         <td scope="row">N/A</td>
                                 @endif
-                                    <td scope="row"> 
-                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                <td scope="row"> 
+                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                                 @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
-                                        @endif
-                                    </td>
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td>
                                 <td>
                             @endif
                             <div class="btn-group">

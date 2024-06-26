@@ -31,17 +31,17 @@
                     <!--Tabla body-->
                     @foreach ($kitsConDetalles as $kits)
                         <tr>
-                        @if($kits)
-                            <td scope="row">{{$kits->Nombre}}</td>
-                            <td scope="row">{{$kits->Prueba}}</td>
-                            <td>
-                            <div class="btn-group">
-                                <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endif
+                            @if($kits)
+                                <td scope="row">{{$kits->Nombre}}</td>
+                                <td scope="row">{{$kits->Prueba}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                        <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </div>
+                                </td>
+                            @endif
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
