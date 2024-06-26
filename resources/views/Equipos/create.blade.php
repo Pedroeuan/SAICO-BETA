@@ -687,81 +687,7 @@
                                             </div>
                                         </div>
                                     </div>
-<<<<<<< Updated upstream
 
-                                    <!-- Tabla de Elementos Disponibles -->
-                                    <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Num. Económico</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
-                                                <th>NS</th>
-                                                <th>Disponibilidad</th>
-                                                <th>Fecha calibración</th>
-                                                <th>Hoja de Presentación</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($generalConCertificados as $general_eyc)
-                                            <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
-                                                <td>{{ $general_eyc->Nombre_E_P_BP }}</td>
-                                                <td>{{ $general_eyc->No_economico }}</td>
-                                                <td>{{ $general_eyc->Marca }}</td>
-                                                <td>{{ $general_eyc->Modelo }}</td>
-                                                <td>{{ $general_eyc->Serie }}</td>
-                                                <td>
-                                                    @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
-                                                <td>
-                                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
-                                                    @else
-                                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-
-                                    <!-- Tabla de Elementos Seleccionados -->
-                                    <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Num. Económico</th>
-                                                <th>Marca</th>
-                                                <th>Ultima calibración</th>
-                                                <th>Cantidad</th>
-                                                <th>Unidad</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-
-                                    <!-- Botón para guardar -->
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
-                                </form>
-                            </div><!--"class="tab-pane" id="tab_6""-->
-
-=======
                                 </div>
                                 <!-- Tabla de Elementos Disponibles -->
                                 <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
@@ -838,7 +764,6 @@
                                 </div>
                             </form>
                         </div><!--"class="tab-pane" id="tab_6""-->
->>>>>>> Stashed changes
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
             </div><!-- /.card -->       
