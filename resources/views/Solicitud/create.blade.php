@@ -53,7 +53,7 @@
                                         <td scope="row">{{$kits->Prueba}}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->id }}"><i class="fas fa-plus-circle"></i></button>
+                                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
                                             </div>
                                         </td>
                                     @endif
@@ -65,7 +65,7 @@
             </div>
             <br>
             <div class="box-body">
-                <h3 align="center">Inventario</h3>
+                    <h3 align="center">Inventario</h3>
                 <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
                         <thead>
                             <tr>
@@ -83,76 +83,74 @@
                         <tbody>
                             @foreach ($generalConCertificados as $general_eyc)
                                 <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
-                                @if($general_eyc)
                                     <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                     <td scope="row">{{$general_eyc->No_economico}}</td>
                                     <td scope="row">{{$general_eyc->Marca}}</td>
                                     <td scope="row">{{$general_eyc->Modelo}}</td>
                                     <td scope="row">{{$general_eyc->Serie}}</td>
-                                    @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                            <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                    <td scope="row">
+                                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                            <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
                                         @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                            <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                            <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
                                         @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                            <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                            <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
                                         @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                            <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
-                                    @endif
-                                @endif 
-                                    @if($general_eyc->certificados)
-                                        @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                            <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                                        @endif
+                                    </td>
+                                    <td scope="row">
+                                        @if($general_eyc->certificados)
+                                            @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
                                                 @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    SIN FECHA ASIGNADA
                                                 @else
-                                                    <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                                    {{$general_eyc->certificados->Fecha_calibracion}}
                                                 @endif
                                             @else
-                                                <td scope="row">N/A</td>
-                                        @endif
-                                        <td scope="row"> 
-                                            @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                                N/A
                                             @endif
-                                        </td>
-                                        <td>
-                                    @endif
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                                        @endif
+                                    </td>
+                                    <td scope="row">
+                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
-                </table>
-            </div>
+                    </table>
+                </div>
 
-                            <div class="box">
-                        <h3 align="center">Elementos Agregados</h3>
-                        <div class="box-body">
-                            <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Prueba</th>
-                                        <th>Num. Económico</th>
-                                        <th>Marca</th>
-                                        <th>Modelo</th>
-                                        <th>NS</th>
-                                        <th>Disponibilidad</th>
-                                        <th>Fecha calibración</th>
-                                        <th>Hoja de Presentación</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Elementos agregados se mostrarán aquí -->
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="box">
+                    <h3 align="center">Elementos Solicitados</h3>
+                    <div class="box-body">
+                        <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Num. Económico</th>
+                                    <th>Marca</th>
+                                    <th>Ultima Calibración</th>
+                                    <th>Cantidad</th>
+                                    <th>Unidad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Elementos agregados se mostrarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
+                </div>
 
                     <div class="col text-center">
                         <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
@@ -170,6 +168,8 @@
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--Ajax-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 
@@ -205,43 +205,32 @@
     }
 
     //Agregar-INVENTARIO
-    document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btnAgregarInventario').forEach(button => {
-            button.addEventListener('click', function() {
-                let row = this.closest('tr');
-                let nombre = row.children[0].innerText;
-                let numEconomico = row.children[1].innerText;
-                let marca = row.children[2].innerText;
-                let modelo = row.children[3].innerText;
-                let ns = row.children[4].innerText;
-                let disponibilidad = row.children[5].innerText;
-                let fechaCalibracion = row.children[6].innerText;
-                let hojaPresentacion = row.children[7].innerText;
+    $(document).ready(function() {
+        $('.btnAgregarInventario').click(function() {
+            var rowId = $(this).data('id');
+            var row = $('#row-' + rowId);
+            var nombre = row.find('td:eq(0)').text();
+            var numEconomico = row.find('td:eq(1)').text();
+            var marca = row.find('td:eq(2)').text();
+            var ultimaCalibracion = row.find('td:eq(6)').text();
 
-                let newRow = document.createElement('tr');
-                newRow.innerHTML = `
+            var newRow = `
+                <tr>
                     <td>${nombre}</td>
-                    <td></td>
                     <td>${numEconomico}</td>
                     <td>${marca}</td>
-                    <td>${modelo}</td>
-                    <td>${ns}</td>
-                    <td>${disponibilidad}</td>
-                    <td>${fechaCalibracion}</td>
-                    <td>${hojaPresentacion}</td>
-                    <td>
-                        <button type="button" class="btn btn-danger btnQuitar"><i class="fas fa-minus-circle"></i></button>
-                    </td>
-                `;
-                document.querySelector('#tablaAgregados tbody').appendChild(newRow);
-            });
+                    <td>${ultimaCalibracion}</td>
+                    <td><input type="number" class="form-control" name="cantidad"></td>
+                    <td><input type="text" class="form-control" name="unidad"></td>
+                    <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
+                </tr>
+            `;
+
+            $('#tablaAgregados tbody').append(newRow);
         });
 
-        document.querySelector('#tablaAgregados').addEventListener('click', function(e) {
-            if (e.target.classList.contains('btnQuitar')) {
-                let row = e.target.closest('tr');
-                row.remove();
-            }
+        $(document).on('click', '.btnQuitarElemento', function() {
+            $(this).closest('tr').remove();
         });
     });
 </script>
