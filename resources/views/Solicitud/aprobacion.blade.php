@@ -62,14 +62,14 @@
                                     @else
                                         <td scope="row">N/A</td>
                                 @endif
-                                    <td scope="row"> 
-                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>                                              
+                                <td scope="row"> 
+                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                                 @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                                <a target="_blank">SIN FOTO/H.P/F.T</a>                                              
-                                        @endif
-                                    </td>
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td>
                                 <td>
                             @endif
                             <div class="btn-group">
@@ -185,12 +185,12 @@
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Confirmado!',
-                                    text: "Equipo Eliminado Correctamente!",
+                                    text: "Elemento Eliminado Correctamente!",
                                 });
                             }
                         },
                         error: function(xhr) {
-                            var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+                            var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
@@ -238,7 +238,7 @@
                     if (data.status === 'success') {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Detalle agregado exitosamente.',
+                            title: 'Elemento Agregado Exitosamente.',
                             showConfirmButton: false,
                             timer: 2000
                         });

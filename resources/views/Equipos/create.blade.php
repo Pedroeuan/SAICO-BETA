@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-2">
-                <ul class="nav nav-pills justify-content-center">
+                    <ul class="nav nav-pills justify-content-center">
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
@@ -22,62 +22,70 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Kits</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
-                </div><!-- /.card-header -->
-
+                </div><!-- /.card-header p-2-->
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
                                             <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
                                             <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
                                             <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
                                             <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
                                             <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
                                             <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" ></input>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
@@ -89,69 +97,70 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No de certificado</label>
                                             <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
                                             <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion">
                                         </div>
-                                        <!--div class="form-group">
-                                            <label>Date:</label>
-                                            <div class="input-group datetime" id="datetimepicker1">
-                                                <input type="text" class="form-control">
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div-->
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
                                             <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
                                             <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
                                         </div>
                                     </div>
+
                                     <div class="container">
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -160,12 +169,13 @@
                                             <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
                             <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane" id="tab_2">
-                        <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
+                            <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -300,8 +310,8 @@
                         </div>
                         <!--ACCESORIOS -->
                         <div class="tab-pane" id="tab_3">
-                        <form id="accesoriosForm" action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
-                            @csrf 
+                            <form id="accesoriosForm" action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
+                                @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -406,13 +416,14 @@
                                             <button type="button" class="btn btn-info bg-success" id="guardarContinuarAccesorios">Guardar y continuar</button>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
                         <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
-                        <form id="blocksForm" action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+                            <form id="blocksForm" action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -543,54 +554,63 @@
                             <form id="herramientasForm" action="{{ route('general_eyc.storeHerramientas') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
                                             <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
                                             <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
                                             <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
                                             <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
                                             <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
                                             <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
@@ -602,60 +622,63 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Garantía</label>
                                             <input type="file" class="form-control inputForm" name="Garantia" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
                                             <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de calibración / Planos</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual[]" placeholder="Enter ..." multiple>
-                                        </div>
-                                    </div>-->
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Plano</label>
                                             <input type="file" class="form-control inputForm" name="Plano" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
                                             <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
                                             <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
+                                    
                                     <div class="container">
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -671,13 +694,11 @@
                         </div>
                         <!-- Agrega más paneles de tabs según sea necesario -->
                         <!--KITS -->
-                            <div class="tab-pane" id="tab_6">
-                                <form id="kitForm" method="post" enctype="multipart/form-data" action="{{ route('GuardarKits.agregarKits') }}">
-                                    @csrf
-                                    <div class="box">
-                                        <h5 align="center">Inventario</h5>
-
+                        <div class="tab-pane" id="tab_6">
+                            <form id="kitForm" action="{{ route('GuardarKits.agregarKits') }}" method="post" enctype="multipart/form-data" >
+                                @csrf
                                         <div class="d-flex justify-content-between align-items-center mb-3">
+
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Nombre</label>
@@ -691,11 +712,14 @@
                                                     <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
+                                        </div>
+
+                                </div> <!-- DIV IMPORTANTE, no quitar, se desajusta la tabla del inventario-->
+                                
+                                <h5 align="center">Inventario Disponible</h5>
                                     <!-- Tabla de Elementos Disponibles -->
-                                    <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -719,13 +743,13 @@
                                                 <td>{{ $general_eyc->Serie }}</td>
                                                 <td>
                                                     @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                                                        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                                        <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                        <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                        <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
                                                     @endif
                                                 </td>
                                                 <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
@@ -742,10 +766,10 @@
                                             </tr>
                                             @endforeach
                                         </tbody>
-                                    </table>
+                                </table>
 
-                                    <!-- Tabla de Elementos Seleccionados -->
-                                    <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
+                                <!-- Tabla de Elementos Seleccionados -->
+                                <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -759,17 +783,28 @@
                                         </thead>
                                         <tbody>
                                         </tbody>
-                                    </table>
+                                </table>
 
-                                    <!-- Botón para guardar -->
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
-                                </form>
-                            </div><!--"class="tab-pane" id="tab_6""-->
+                                <div class="container">
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+
+                                        <div class="float-left">
+                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarKits">Guardar y continuar</button>
+                                        </div>
+                                </div>
+
+                            </form>
+                        </div><!--"class="tab-pane" id="tab_6""-->
 
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
-            </div><!-- /.card -->       
-        @stop
+            </div><!-- /.card -->   
+        </div><!-- class="col-sm-12" -->
+    </div><!--  class="row justify-content-center" -->
+</div><!-- class="container" -->     
+@stop
 
 @section('js')
 <!--datatable -->
@@ -781,8 +816,167 @@
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 
-<!--GUARDAR Y CONTINUAR-->
+
 <script>
+/*Solicitud*/
+new DataTable('#tablaJs');
+
+let dataTable;
+
+function initializeDataTable() {
+    // Destruir el DataTable si ya está inicializado
+    if ($.fn.DataTable.isDataTable('#tablaJs')) {
+        dataTable.destroy();
+    }
+    //Inicializar el DataTable
+    dataTable = new DataTable('#tablaJs');
+}
+
+function attachAddListeners() {
+    document.querySelectorAll('.btnAgregar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            let id = this.dataset.id;
+
+            // Verificar si el elemento ya está en la tabla de seleccionados
+            if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                return; // Si ya está, no hacemos nada
+            }
+
+            // Clonar la fila y agregar campos de cantidad y unidad
+            let newRow = document.createElement('tr');
+            newRow.setAttribute('data-id', id);
+            newRow.innerHTML = `
+                <td>${row.cells[0].innerText}</td>
+                <td>${row.cells[1].innerText}</td>
+                <td>${row.cells[2].innerText}</td>
+                <td>${row.cells[6].innerText}</td>
+                <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
+                <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+            `;
+
+            // Agregar la nueva fila a la tabla de seleccionados
+            document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+
+            // Re-attach the delete listeners to the new button
+            attachDeleteListeners();
+        });
+    });
+}
+
+function attachDeleteListeners() {
+    document.querySelectorAll('.btnEliminar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            row.remove();
+        });
+    });
+}
+
+// Attach listeners when the DOM content is loaded
+attachAddListeners();
+attachDeleteListeners();
+
+// Manejar el envío del formulario
+document.querySelector('#kitForm').addEventListener('submit', function(event) {
+    let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+    let kitData = [];
+
+    selectedRows.forEach(function(row) {
+        let id = row.dataset.id;
+        let cantidad = row.querySelector('.cantidad').value;
+        let unidad = row.querySelector('.unidad').value;
+
+        kitData.push({
+            idGeneral_EyC: id,
+            cantidad: cantidad,
+            unidad: unidad
+        });
+
+        // Crear inputs ocultos para enviar los datos de cantidad y unidad
+        let inputCantidad = document.createElement('input');
+        inputCantidad.type = 'hidden';
+        inputCantidad.name = `kitData[${id}][cantidad]`;
+        inputCantidad.value = cantidad;
+        document.querySelector('#kitForm').appendChild(inputCantidad);
+
+        let inputUnidad = document.createElement('input');
+        inputUnidad.type = 'hidden';
+        inputUnidad.name = `kitData[${id}][unidad]`;
+        inputUnidad.value = unidad;
+        document.querySelector('#kitForm').appendChild(inputUnidad);
+    });
+
+    // Añadir los datos al formulario como campos ocultos
+    kitData.forEach(function(item) {
+        let inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
+        inputId.value = item.idGeneral_EyC;
+        document.querySelector('#kitForm').appendChild(inputId);
+    });
+});
+
+//<!--GUARDAR Y CONTINUAR-->
+    /*KITS*/
+    document.addEventListener('DOMContentLoaded', function() {
+    // Evento click para el botón "Guardar y continuar"
+    document.getElementById('guardarContinuarKits').addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        var form = document.getElementById('kitForm');
+        var formData = new FormData(form);
+
+        // Agregar datos de los kits seleccionados
+        let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+        selectedRows.forEach(function(row, index) {
+            let id = row.getAttribute('data-id');
+            let cantidad = row.querySelector('.cantidad').value;
+            let unidad = row.querySelector('.unidad').value;
+
+            formData.append(`kitData[${index}][idGeneral_EyC]`, id);
+            formData.append(`kitData[${index}][cantidad]`, cantidad);
+            formData.append(`kitData[${index}][unidad]`, unidad);
+        });
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                Swal.fire({
+                    title: 'Datos guardados',
+                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                // Limpiar el formulario
+                form.reset();
+
+                // Limpiar la tabla de elementos seleccionados
+                document.querySelector('#tablaSeleccionados tbody').innerHTML = '';
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage += ' - ' + xhr.responseJSON.message;
+                }
+                console.error('Error al enviar formulario:', errorMessage);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al guardar los datos.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+});
+
     /*HERRAMIENTAS*/
     document.addEventListener('DOMContentLoaded', function() {
     // Evento click para el botón "Guardar y continuar"
@@ -980,111 +1174,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script>
-
-
-<script>
-    /*Solicitud*/
-    new DataTable('#tablaJs');
-
-    let dataTable;
-
-    function initializeDataTable() {
-        // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-        //Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
-
-        document.addEventListener('DOMContentLoaded', function() {
-        function attachAddListeners() {
-            document.querySelectorAll('.btnAgregar').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    let row = this.closest('tr');
-                    let id = this.dataset.id;
-
-                    // Verificar si el elemento ya está en la tabla de seleccionados
-                    if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
-                        return; // Si ya está, no hacemos nada
-                    }
-
-                    // Clonar la fila y agregar campos de cantidad y unidad
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('data-id', id);
-                    newRow.innerHTML = `
-                        <td>${row.cells[0].innerText}</td>
-                        <td>${row.cells[1].innerText}</td>
-                        <td>${row.cells[2].innerText}</td>
-                        <td>${row.cells[6].innerText}</td>
-                        <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
-                        <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
-                    `;
-
-                    // Agregar la nueva fila a la tabla de seleccionados
-                    document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
-
-                    // Re-attach the delete listeners to the new button
-                    attachDeleteListeners();
-                });
-            });
-        }
-
-        function attachDeleteListeners() {
-            document.querySelectorAll('.btnEliminar').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    let row = this.closest('tr');
-                    row.remove();
-                });
-            });
-        }
-
-        // Attach listeners when the DOM content is loaded
-        attachAddListeners();
-        attachDeleteListeners();
-
-        // Manejar el envío del formulario
-        document.querySelector('#kitForm').addEventListener('submit', function(event) {
-            let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
-            let kitData = [];
-
-            selectedRows.forEach(function(row) {
-                let id = row.dataset.id;
-                let cantidad = row.querySelector('.cantidad').value;
-                let unidad = row.querySelector('.unidad').value;
-
-                kitData.push({
-                    idGeneral_EyC: id,
-                    cantidad: cantidad,
-                    unidad: unidad
-                });
-
-                // Crear inputs ocultos para enviar los datos de cantidad y unidad
-                let inputCantidad = document.createElement('input');
-                inputCantidad.type = 'hidden';
-                inputCantidad.name = `kitData[${id}][cantidad]`;
-                inputCantidad.value = cantidad;
-                document.querySelector('#kitForm').appendChild(inputCantidad);
-
-                let inputUnidad = document.createElement('input');
-                inputUnidad.type = 'hidden';
-                inputUnidad.name = `kitData[${id}][unidad]`;
-                inputUnidad.value = unidad;
-                document.querySelector('#kitForm').appendChild(inputUnidad);
-            });
-
-            // Añadir los datos al formulario como campos ocultos
-            kitData.forEach(function(item) {
-                let inputId = document.createElement('input');
-                inputId.type = 'hidden';
-                inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
-                inputId.value = item.idGeneral_EyC;
-                document.querySelector('#kitForm').appendChild(inputId);
-            });
-        });
-    });
 </script>
 
 @endsection

@@ -16,9 +16,9 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-        <h3 align="center">Inventario</h3>
             <br>
         <div class="box-body">
+        <h3 align="center">Inventario</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -36,41 +36,41 @@
                 <tbody>
                     @foreach ($generalConCertificados as $general_eyc)
                         <tr>
-                        @if($general_eyc)
-                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                            <td scope="row">{{$general_eyc->No_economico}}</td>
-                            <td scope="row">{{$general_eyc->Marca}}</td>
-                            <td scope="row">{{$general_eyc->Modelo}}</td>
-                            <td scope="row">{{$general_eyc->Serie}}</td>
-                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
-                            @endif
-                        @endif 
+                            @if($general_eyc)
+                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                <td scope="row">{{$general_eyc->No_economico}}</td>
+                                <td scope="row">{{$general_eyc->Marca}}</td>
+                                <td scope="row">{{$general_eyc->Modelo}}</td>
+                                <td scope="row">{{$general_eyc->Serie}}</td>
+                                @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                    <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                    <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                    <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                    <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                                @endif
+                            @endif 
                             @if($general_eyc->certificados)
-                                @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                    @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
-                                        <td scope="row">SIN FECHA ASIGNADA</td>
-                                        @else
-                                        <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                        @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                            <td scope="row">SIN FECHA ASIGNADA</td>
+                                            @else
+                                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                        @endif
+                                    @else
+                                            <td scope="row">N/A</td>
+                            @endif
+                                <td scope="row"> 
+                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                        <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                                @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
-                                @else
-                                    <td scope="row">N/A</td>
-                                @endif
-                                    <td scope="row"> 
-                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
-                                @endif
-                                    </td>
-                                    <td>
+                                </td>
+                            <td>
                             @endif
                             <div class="btn-group">
                                 <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
