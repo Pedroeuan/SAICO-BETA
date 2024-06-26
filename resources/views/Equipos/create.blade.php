@@ -181,7 +181,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="xx ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -423,7 +423,7 @@
                         <!-- BLOCKS -->
                         <div class="tab-pane" id="tab_4">
                             <form id="blocksForm" action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
-                                @csrf
+                            @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -683,12 +683,10 @@
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
-
                                         <div class="float-left">
                                             <button type="button" class="btn btn-info bg-success" id="guardarContinuarHerramientas">Guardar y continuar</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -706,12 +704,11 @@
                                                     <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
                                                 </div>
                                             </div>
-
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="col-form-label" for="inputSuccess">Prueba</label>
-                                                    <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
-                                                </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Prueba</label>
+                                                <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
                                             </div>
 
                                         </div>
@@ -720,7 +717,7 @@
                                 
                                 <h5 align="center">Inventario Disponible</h5>
                                     <!-- Tabla de Elementos Disponibles -->
-                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>

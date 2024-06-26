@@ -465,8 +465,13 @@ return [
                         ],
                         [
                             'text' => ' Ver Kits',
+<<<<<<< HEAD
+                            'icon' => 'fa fa-briefcase',
+                            'url' => '',
+=======
                             'icon' => 'fas fa-box',
                             'url' => '/index/Kits',
+>>>>>>> 34ea2420d052f9c7980c96c69d4f0a5035b92989
                         ],
                         /*[
                             'text' => 'level_one',
