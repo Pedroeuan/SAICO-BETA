@@ -14,7 +14,7 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
+<form id="solicitudForm" role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
     @csrf
     <!-- 
     La clase d-flex se utiliza para hacer que el contenedor use Flexbox, lo que facilita la alineación de elementos hijos.
@@ -28,12 +28,12 @@
     <div class="box">
             <h3 align="center">Formulario para solicitar equipos y consumibles</h3>
             <br>
-        <div class="left-align">
-            <label class="col-form-label mr-2" for="inputSuccess">Fecha de Servicio</label>
-            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" style="width: auto;">
+            <div class="left-align">
+            <label class="col-form-label mr-2" for="Fecha_Servicio">Fecha de Servicio</label>
+            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" id="Fecha_Servicio" style="width: auto;">
         </div>
             <br>
-            <div class="box ">
+            <div class="box">
                 <h3 align="center">Kits</h3>
                 <div class="box-body">
                     <table id="tablaKits" class="table table-bordered table-striped dt-responsive tablas">
@@ -45,7 +45,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!--Tabla body-->
                             @foreach ($kitsConDetalles as $kits)
                                 <tr>
                                     @if($kits)
@@ -63,6 +62,7 @@
                     </table>
                 </div>
             </div>
+
             <br>
             <div class="box-body">
                     <h3 align="center">Inventario</h3>
@@ -130,27 +130,27 @@
                     </table>
                 </div>
 
-                <div class="box">
-                    <h3 align="center">Elementos Solicitados</h3>
-                    <div class="box-body">
-                        <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Num. Económico</th>
-                                    <th>Marca</th>
-                                    <th>Ultima Calibración</th>
-                                    <th>Cantidad</th>
-                                    <th>Unidad</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Elementos agregados se mostrarán aquí -->
-                            </tbody>
-                        </table>
+                    <div class="box">
+                        <h3 align="center">Elementos Solicitados</h3>
+                        <div class="box-body">
+                            <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Num. Económico</th>
+                                        <th>Marca</th>
+                                        <th>Ultima Calibración</th>
+                                        <th>Cantidad</th>
+                                        <th>Unidad</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Elementos agregados se mostrarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
                     <div class="col text-center">
                         <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
@@ -159,7 +159,7 @@
                     </div>
                 <br>
         </div>
-    </form>
+</form>
 @stop
 
 @section('js')
@@ -204,8 +204,8 @@
         dataTableI = new DataTable('#tablaInventario');
     }
 
-    //Agregar-INVENTARIO
-    $(document).ready(function() {
+        $(document).ready(function() {
+        // Agregar elemento de inventario
         $('.btnAgregarInventario').click(function() {
             var rowId = $(this).data('id');
             var row = $('#row-' + rowId);
@@ -220,8 +220,9 @@
                     <td>${numEconomico}</td>
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
-                    <td><input type="number" class="form-control" name="cantidad"></td>
-                    <td><input type="text" class="form-control" name="unidad"></td>
+                    <td><input type="number" class="form-control" name="cantidad[]" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" required></td>
+                    <td><input type="hidden" name="general_eyc_id[]" value="${rowId}"></td>
                     <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
                 </tr>
             `;
@@ -229,10 +230,65 @@
             $('#tablaAgregados tbody').append(newRow);
         });
 
+        // Agregar elemento de kits
+        $('.btnAgregarKit').click(function() {
+            var kitId = $(this).data('id');
+
+            $.ajax({
+                url: '/Obtener/Kits/' + kitId,
+                method: 'GET',
+                success: function(detallesKits) {
+                    detallesKits.forEach(function(detalle) {
+                        $.ajax({
+                            url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
+                            method: 'GET',
+                            success: function(generalEyC) {
+                                var newRow = `
+                                    <tr>
+                                        <td>${generalEyC.Nombre_E_P_BP}</td>
+                                        <td>${generalEyC.No_economico}</td>
+                                        <td>${generalEyC.Marca}</td>
+                                        <td>${generalEyC.certificados.Fecha_calibracion}</td>
+                                        <td><input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required></td>
+                                        <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
+                                        <td><input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}"></td>
+                                        <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
+                                    </tr>
+                                `;
+                                $('#tablaAgregados tbody').append(newRow);
+                            },
+                            error: function() {
+                                alert('Error al obtener detalles de General_EyC.');
+                            }
+                        });
+                    });
+                },
+                error: function() {
+                    alert('Error al obtener detalles de Kits.');
+                }
+            });
+        });
+
+        // Eliminar elemento
         $(document).on('click', '.btnQuitarElemento', function() {
             $(this).closest('tr').remove();
         });
     });
+
+    $(document).ready(function() {
+    $('#solicitudForm').on('submit', function(event) {
+        var fechaServicio = $('#Fecha_Servicio').val();
+
+        if (!fechaServicio) {
+            event.preventDefault(); // Previene el envío del formulario
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Por favor, completa el campo de Fecha de Servicio antes de enviar la solicitud.'
+            });
+        }
+    });
+});
 </script>
 
 @endsection

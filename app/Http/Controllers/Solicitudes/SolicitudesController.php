@@ -26,6 +26,18 @@ class SolicitudesController extends Controller
         return view("Solicitud.index",compact('Solicitud'));
     }
 
+    public function obtenerDetallesKits($id)
+    {
+        $detallesKits = detalles_kits::where('idKits', $id)->get();
+        return response()->json($detallesKits);
+    }
+
+    public function obtenerGeneralKits($id)
+    {
+        $generalEyC = general_eyc::with('Certificados')->find($id);
+        return response()->json($generalEyC);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -57,52 +69,37 @@ class SolicitudesController extends Controller
     {
         $now = Carbon::now();
         $Solicitud = new Solicitudes();
-        $tecnico = 'Pedro-Cambiar a futuro esto por el nombre de usuario o rol';
+        $tecnico = 'Pedro'; // Cambia esto a futuro por el nombre de usuario o rol
         $Estatus = 'PENDIENTE';
         $Fecha = $request->input('Fecha_Servicio');
-        //$Fecha =$now->format('Y-m-d'); // 2024-06-03
-        //$Fecha = date('Y-m-d H:i:s');
-        $Solicitud->tecnico=$tecnico;
-        $Solicitud->Fecha=$Fecha;
-        $Solicitud->Estatus=$Estatus;
+        $Solicitud->tecnico = $tecnico;
+        $Solicitud->Fecha = $Fecha;
+        $Solicitud->Estatus = $Estatus;
         $Solicitud->save();
 
-    // Obtener los datos de los inputs
-    $generalEycIds = $request->input('general_eyc_id');
-    $destinos = $request->input('Destino');
-    $cantidades = $request->input('Cantidad');
-    $unidades = $request->input('Unidad');
-    //dd($generalEycIds);
-    // Iterar sobre los datos y guardarlos en la base de datos
-    foreach ($generalEycIds as $index => $generalEycId) {
-    // Verificar si la información está presente en los inputs
-    //if (isset($destinos[$index]) && isset($cantidades[$index]) && isset($unidades[$index])) {
-    if (isset($cantidades[$index]) && isset($unidades[$index])) {
-        //$generaleyc = $generalEycId[$index];
-        //$destino = $destinos[$index];
-        $cantidad = $cantidades[$index];
-        $unidad = $unidades[$index];
-        
-        // Crear una nueva instancia del modelo Solicitud y general
-        $detallesolicitud = new detalles_solicitud();
-        $generaleyc = new general_eyc();
+        // Obtener los datos de los inputs
+        $generalEycIds = $request->input('general_eyc_id');
+        $cantidades = $request->input('cantidad');
+        $unidades = $request->input('unidad');
 
-        $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
-        $detallesolicitud->idGeneral_EyC = $generalEycId;
-        $detallesolicitud->cantidad = $cantidad;
-        $detallesolicitud->unidad = $unidad;
-        $detallesolicitud->save();
+        // Iterar sobre los datos y guardarlos en la base de datos
+        foreach ($generalEycIds as $index => $generalEycId) {
+            if (isset($cantidades[$index]) && isset($unidades[$index])) {
+                $cantidad = $cantidades[$index];
+                $unidad = $unidades[$index];
 
-        /* $generaleyc = general_eyc::find($generalEycId);
-        if ($generaleyc) {
-            $generaleyc->Disponibilidad_Estado = $destino;
-            $generaleyc->save();
-                }*/
+                // Crear una nueva instancia del modelo detalles_solicitud
+                $detallesolicitud = new detalles_solicitud();
+                $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
+                $detallesolicitud->idGeneral_EyC = $generalEycId;
+                $detallesolicitud->Cantidad = $cantidad;
+                $detallesolicitud->Unidad = $unidad;
+                $detallesolicitud->save();
             }
         }
+
         return redirect()->route('solicitud.index');
     }
-
 
     /**
      * Display the specified resource.
@@ -111,6 +108,7 @@ class SolicitudesController extends Controller
     {
         //
     }
+    
 
     /**
      * Show the form for editing the specified resource.
