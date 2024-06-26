@@ -697,6 +697,7 @@
                         <div class="tab-pane" id="tab_6">
                             <form id="kitForm" action="{{ route('GuardarKits.agregarKits') }}" method="post" enctype="multipart/form-data" >
                                 @csrf
+                                <div class="box">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
 
                                             <div class="col-sm-4">
@@ -715,7 +716,7 @@
 
                                         </div>
 
-                                </div> <!-- DIV IMPORTANTE, no quitar, se desajusta la tabla del inventario-->
+                                </div>
                                 
                                 <h5 align="center">Inventario Disponible</h5>
                                     <!-- Tabla de Elementos Disponibles -->

@@ -437,6 +437,11 @@ public function updateEquipos(Request $request, $id)
     
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
+    // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+    if ($disponibilidadEstado == 'Elige un Tipo') {
+        $disponibilidadEstado = 'ESPERA DE DATO';
+    }
 
     // Actualizar los datos del equipo
     $generalEyC ->update([
@@ -451,7 +456,7 @@ public function updateEquipos(Request $request, $id)
         'SAT' => $request->input('SAT'),
         'BMPRO' => $request->input('BMPRO'),
         'Tipo' => $request->input('Tipo'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+        'Disponibilidad_Estado' => $disponibilidadEstado,
     ]);
 
     // Actualizar los datos del equipo asociado
@@ -596,80 +601,6 @@ public function updateEquipos(Request $request, $id)
         'Disponibilidad_Estado' => $Baja,
     ]);
     return redirect()->route('inventario');
-        /* $generalConEquipos = equipos::find($id);
-        $generalConCertificados = certificados::find($id);
-        $generalConConsumible = consumibles::find($id);
-        $generalConAlmacen = almacen::find($id);
-        $generalConAcesorios = accesorios::find($id);
-        $generalConBlockyprobeta = block_y_probeta::find($id);
-        $generalConHerramientas = herramientas::find($id);
-        $generalConCertificadosConHistorialCertificados = historial_certificado::find($id);
-            // Verifica si el registro existe antes de intentar eliminarlo
-            if ($generalConEquipos) {
-            // Elimina el registro de la tabla 'equipos'
-            $generalConEquipos->delete();
-            }
-            if ($generalConConsumible) {
-                $generalConConsumible->delete();
-            }
-            if ($generalConAlmacen) {
-                $generalConAlmacen->delete();
-            }
-            if ($generalConAcesorios) {
-                $generalConAcesorios->delete();
-            }
-            if ($generalConBlockyprobeta) {
-                $generalConBlockyprobeta->delete();
-            }
-            if ($generalConCertificadosConHistorialCertificados) {
-                $generalConCertificadosConHistorialCertificados->delete();
-            }
-            // Elimina archivos asociados si existen
-        if ($generalConCertificados->Certificado_Actual) {
-            $certificadosPaths = json_decode($generalConCertificados->Certificado_Actual, true);
-            if (is_array($certificadosPaths)) {
-                foreach ($certificadosPaths as $certificadoPath) {
-                    if (Storage::disk('public')->exists($certificadoPath)) {
-                        Storage::disk('public')->delete($certificadoPath);
-                    }
-                }
-            }
-        }
-        $generalConCertificados->delete();
-            //$generalConCertificados = certificados::find($id);
-            // Verifica si el registro existe antes de intentar eliminarlo
-            if ($generalConCertificados) {
-                // Elimina archivos asociados si existen
-                if ($generalConCertificados->Certificado_Actual && Storage::disk('public')->exists($generalConCertificados->Certificado_Actual)) {
-                    Storage::disk('public')->delete($generalConCertificados->Certificado_Actual);
-                }
-                // Elimina el registro de la tabla 'general_eyc'
-                $generalConCertificados->delete();
-            }
-            // Verifica si el registro existe antes de intentar eliminarlo
-            if ($generalConHerramientas) {
-                // Elimina archivos asociados si existen
-                if ($generalConHerramientas->Garantia && Storage::disk('public')->exists($generalConHerramientas->Garantia)) {
-                    Storage::disk('public')->delete($generalConHerramientas->Garantia);
-                }
-                // Elimina el registro de la tabla 'general_eyc'
-                $generalConHerramientas->delete();
-            }
-
-            $general = general_eyc::find($id);
-            // Verifica si el registro existe antes de intentar eliminarlo
-            if ($general) {
-                // Elimina archivos asociados si existen
-                if ($general->Factura && Storage::disk('public')->exists($general->Factura)) {
-                    Storage::disk('public')->delete($general->Factura);
-                }
-                if ($general->Foto && Storage::disk('public')->exists($general->Foto)) {
-                    Storage::disk('public')->delete($general->Foto);
-                }
-                // Elimina el registro de la tabla 'general_eyc'
-                $general->delete();
-            }
-        return redirect()->route('inventario');*/
     }
     /*CONSUMIBLES*/
     public function storeConsumibles(Request $request)
@@ -890,6 +821,11 @@ public function updateEquipos(Request $request, $id)
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
 
+     // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+    if ($disponibilidadEstado == 'Elige un Tipo') {
+        $disponibilidadEstado = 'ESPERA DE DATO';
+    }
     // Actualizar los datos del equipo
     $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -903,7 +839,7 @@ public function updateEquipos(Request $request, $id)
         'SAT' => $request->input('SAT'),
         'BMPRO' => $request->input('BMPRO'),
         //'Tipo' => $request->input('Tipo'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+        'Disponibilidad_Estado' => $disponibilidadEstado,
     ]);
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
@@ -1019,7 +955,7 @@ public function updateEquipos(Request $request, $id)
         $generalConCertificado->save();
     }
      // Verificar si se ha proporcionado un nuevo certificado actual
-   /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+    /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
         // Obtener la ruta del certificado actual desde la base de datos
         $rutaAnterior = $generalConCertificado->Certificado_Actual;
         // Guardar el nuevo certificado en la carpeta origina
@@ -1045,7 +981,7 @@ public function updateEquipos(Request $request, $id)
         $generalConCertificado->Certificado_Actual = $certificadoPath;*/
 
         // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
-       /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+        /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
             // Obtener el nombre del archivo
             $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
             // Construir la nueva ruta para mover el archivo
@@ -1059,7 +995,7 @@ public function updateEquipos(Request $request, $id)
             $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
             /*$Espera_Dato='ESPERA DE DATO';
             $CertificadosHistorialCertificados->Tipo = $Espera_Dato;*/
-           /* $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
+            /* $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
             $CertificadosHistorialCertificados->save();
             }
         }*/
@@ -1276,6 +1212,12 @@ public function updateEquipos(Request $request, $id)
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
 
+    // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+    if ($disponibilidadEstado == 'Elige un Tipo') {
+        $disponibilidadEstado = 'ESPERA DE DATO';
+    }
+
     // Actualizar los datos del equipo
     $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -1289,7 +1231,7 @@ public function updateEquipos(Request $request, $id)
         'SAT' => $request->input('SAT'),
         'BMPRO' => $request->input('BMPRO'),
         'Tipo' => $request->input('Tipo'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+        'Disponibilidad_Estado' => $disponibilidadEstado,
     ]);
 
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
@@ -1650,6 +1592,12 @@ public function storeBlocks(Request $request)
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
 
+    // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+    if ($disponibilidadEstado == 'Elige un Tipo') {
+        $disponibilidadEstado = 'ESPERA DE DATO';
+    }
+
     // Actualizar los datos del equipo
     $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -1663,7 +1611,7 @@ public function storeBlocks(Request $request)
         'SAT' => $request->input('SAT'),
         'BMPRO' => $request->input('BMPRO'),
         'Tipo' => $request->input('Tipo'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+        'Disponibilidad_Estado' => $disponibilidadEstado,
     ]);
 
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
@@ -2100,6 +2048,11 @@ public function storeHerramientas(Request $request)
 {
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
+     // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+    if ($disponibilidadEstado == 'Elige un Tipo') {
+        $disponibilidadEstado = 'ESPERA DE DATO';
+    }
     // Actualizar los datos del equipo
     $generalEyC ->update([
         'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -2113,7 +2066,7 @@ public function storeHerramientas(Request $request)
         'SAT' => $request->input('SAT'),
         'BMPRO' => $request->input('BMPRO'),
         'Tipo' => $request->input('Tipo'),
-        'Disponibilidad_Estado' => $request->input('Disponibilidad_Estado'),
+        'Disponibilidad_Estado' => $disponibilidadEstado,
     ]);
 
     // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
