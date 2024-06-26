@@ -720,7 +720,7 @@
                                 
                                 <h5 align="center">Inventario Disponible</h5>
                                     <!-- Tabla de Elementos Disponibles -->
-                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
