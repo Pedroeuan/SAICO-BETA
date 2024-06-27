@@ -4,9 +4,11 @@ namespace App\Http\Controllers\EquiposyConsumibles;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\MessageBag;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
@@ -201,7 +203,7 @@ class general_eycController extends Controller
         public function updateKits(Request $request, $id)
         {
             // Validar los datos del formulario
-            $validatedData = $request->validate([
+            $validated = $request->validate([
                 'Nombre' => 'required|string|max:255',
                 'Prueba' => 'required|string|max:255',
                 'Cantidad.*' => 'required|integer|min:0',
@@ -226,82 +228,105 @@ class general_eycController extends Controller
             return redirect()->route('index.Kits');
         }
 
+        private function validarCampos($request)
+        {
+            $validator = Validator::make($request->all(), [
+                'Nombre_E_P_BP' => 'nullable|string|max:255',
+                'No_economico' => 'nullable|string|max:255',
+                //'Serie' => 'nullable|string|max:255',
+            ]);
+    
+            // Si la validación falla, devuelve los errores en formato JSON
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+    
+            // Devuelve los datos validados
+            return $validator->validated();
+        }
+
     /**
      * Store a newly created resource in storage.
      */
     public function storeEquipos(Request $request)
 {
+     // Valida los campos
+    $validData = $this->validarCampos($request);
+    if (is_object($validData) && $validData->getStatusCode() === 422) {
+         return $validData; // Devuelve la respuesta JSON con errores
+    }
     /* Tabla General_EyC */
     $general = new general_eyc;
+    $EsperaDato ='ESPERA DE DATO';
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+        $general->Nombre_E_P_BP = $EsperaDato;
     }else{
         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
     if($request->input('No_economico')==null)
     {
-        $general->No_economico = 'ESPERA DE DATO';
+        $general->No_economico = $EsperaDato;
     }else{
         $general->No_economico = $request->input('No_economico');
     }
     if($request->input('Serie')==null)
     {
-        $general->Serie = 'ESPERA DE DATO';
+        $general->Serie = $EsperaDato;
     }else{
         $general->Serie = $request->input('Serie');
     }
     if($request->input('Marca')==null)
     {
-        $general->Marca = 'ESPERA DE DATO';
+        $general->Marca = $EsperaDato;
     }else{
         $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $general->Modelo = 'ESPERA DE DATO';
+        $general->Modelo = $EsperaDato;
     }else{
         $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $general->Ubicacion = 'ESPERA DE DATO';
+        $general->Ubicacion = $EsperaDato;
     }else{
         $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $general->Almacenamiento = 'ESPERA DE DATO';
+        $general->Almacenamiento = $EsperaDato;
     }else{
         $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $general->Comentario = 'ESPERA DE DATO';
+        $general->Comentario = $EsperaDato;
     }else{
         $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $general->SAT = 'ESPERA DE DATO';
+        $general->SAT = $EsperaDato;
     }else{
         $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $general->BMPRO = 'ESPERA DE DATO';
+        $general->BMPRO = $EsperaDato;
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
     if($request->input('Tipo')==null)
     {
-        $general->Tipo = 'ESPERA DE DATO';
+        $general->Tipo = $EsperaDato;
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
     if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+        $general->Disponibilidad_Estado = $EsperaDato;
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
