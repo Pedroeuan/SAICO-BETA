@@ -987,6 +987,42 @@ document.querySelector('#kitForm').addEventListener('submit', function(event) {
         var form = document.getElementById('herramientasForm');
         var formData = new FormData(form);
 
+        // Obtener los valores de los campos
+        var nombre = formData.get('Nombre_E_P_BP');
+            var numeroEconomico = formData.get('No_economico');
+            var marca = formData.get('Marca');
+            var modelo = formData.get('Modelo');
+            var serie = formData.get('Serie');
+
+            // Validaciones
+            var camposVacios = [];
+
+            if (!nombre) {
+                camposVacios.push('Nombre');
+            }
+            if (!numeroEconomico) {
+                camposVacios.push('Número Económico');
+            }
+            if (!marca) {
+                camposVacios.push('Marca');
+            }
+            if (!modelo) {
+                camposVacios.push('Modelo');
+            }
+            if (!serie) {
+                camposVacios.push('Número de Serie');
+            }
+
+            if (camposVacios.length > 0) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
         $.ajax({
             url: form.action,
             type: form.method,
@@ -1026,6 +1062,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var form = document.getElementById('blocksForm');
         var formData = new FormData(form);
+
+        // Obtener los valores de los campos
+        var nombre = formData.get('Nombre_E_P_BP');
+            var numeroEconomico = formData.get('No_economico');
+            var marca = formData.get('Marca');
+            var modelo = formData.get('Modelo');
+            var serie = formData.get('Serie');
+
+            // Validaciones
+            var camposVacios = [];
+
+            if (!nombre) {
+                camposVacios.push('Nombre');
+            }
+            if (!numeroEconomico) {
+                camposVacios.push('Número Económico');
+            }
+            if (!marca) {
+                camposVacios.push('Marca');
+            }
+            if (!modelo) {
+                camposVacios.push('Modelo');
+            }
+            if (!serie) {
+                camposVacios.push('Número de Serie');
+            }
+
+            if (camposVacios.length > 0) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
 
         $.ajax({
             url: form.action,
@@ -1067,6 +1139,42 @@ document.addEventListener('DOMContentLoaded', function() {
         var form = document.getElementById('accesoriosForm');
         var formData = new FormData(form);
 
+        // Obtener los valores de los campos
+        var nombre = formData.get('Nombre_E_P_BP');
+            var numeroEconomico = formData.get('No_economico');
+            var marca = formData.get('Marca');
+            var modelo = formData.get('Modelo');
+            var serie = formData.get('Serie');
+
+            // Validaciones
+            var camposVacios = [];
+
+            if (!nombre) {
+                camposVacios.push('Nombre');
+            }
+            if (!numeroEconomico) {
+                camposVacios.push('Número Económico');
+            }
+            if (!marca) {
+                camposVacios.push('Marca');
+            }
+            if (!modelo) {
+                camposVacios.push('Modelo');
+            }
+            if (!serie) {
+                camposVacios.push('Número de Serie');
+            }
+
+            if (camposVacios.length > 0) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
         $.ajax({
             url: form.action,
             type: form.method,
@@ -1107,6 +1215,38 @@ document.addEventListener('DOMContentLoaded', function() {
         var form = document.getElementById('consumiblesForm');
         var formData = new FormData(form);
 
+        // Obtener los valores de los campos
+            var nombre = formData.get('Nombre_E_P_BP');
+            var marca = formData.get('Marca');
+            var modelo = formData.get('Modelo');
+            var serie = formData.get('Serie');
+
+            // Validaciones
+            var camposVacios = [];
+
+            if (!nombre) {
+                camposVacios.push('Nombre');
+            }
+            if (!marca) {
+                camposVacios.push('Marca');
+            }
+            if (!modelo) {
+                camposVacios.push('Modelo');
+            }
+            if (!serie) {
+                camposVacios.push('Número de Serie');
+            }
+
+            if (camposVacios.length > 0) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
         $.ajax({
             url: form.action,
             type: form.method,
@@ -1146,6 +1286,43 @@ document.addEventListener('DOMContentLoaded', function() {
         var form = document.getElementById('equiposForm');
         var formData = new FormData(form);
 
+         // Obtener los valores de los campos
+            var nombre = formData.get('Nombre_E_P_BP');
+            var numeroEconomico = formData.get('No_economico');
+            var marca = formData.get('Marca');
+            var modelo = formData.get('Modelo');
+            var serie = formData.get('Serie');
+
+            // Validaciones
+            var camposVacios = [];
+
+            if (!nombre) {
+                camposVacios.push('Nombre');
+            }
+            if (!numeroEconomico) {
+                camposVacios.push('Número Económico');
+            }
+            if (!marca) {
+                camposVacios.push('Marca');
+            }
+            if (!modelo) {
+                camposVacios.push('Modelo');
+            }
+            if (!serie) {
+                camposVacios.push('Número de Serie');
+            }
+
+            if (camposVacios.length > 0) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            // Enviar el formulario usando AJAX
         $.ajax({
             url: form.action,
             type: form.method,
