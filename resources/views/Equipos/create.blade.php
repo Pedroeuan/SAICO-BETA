@@ -25,6 +25,7 @@
                 </div><!-- /.card-header p-2-->
                 <div class="card-body">
                     <div class="tab-content">
+
                         <div class="tab-pane active" id="tab_1">
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
@@ -33,56 +34,84 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
+                                            @error('Nombre_E_P_BP')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001">
+                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
+                                            @error('No_economico')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX">
+                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX" value="{{old('Marca')}}">
+                                            @error('Marca')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM">
+                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            @error('Modelo')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199">
+                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            @error('Serie')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" name="Factura" ></input>
+                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -90,10 +119,10 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE">DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                                <option value="">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -101,49 +130,55 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
-                                            <input type="file" class="form-control inputForm" name="Foto">
+                                            <input type="file" class="form-control-file inputForm" name="Foto">
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No de certificado</label>
-                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="" value="{{old('No_certificado')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                            <input type="file" class="form-control-file inputForm" name="Certificado_Actual" placeholder="">
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
-                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500">
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
                                         </div>
                                     </div>
 
@@ -157,7 +192,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto."></textarea>
+                                            <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{old('Comentario')}}</textarea>
                                         </div>
                                     </div>
 
@@ -173,118 +208,164 @@
                                 </div>
                             </form>
                         </div>
+                    
                             <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane" id="tab_2">
                             <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
+                                    <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable de Corriente" value="{{old('Nombre_E_P_BP')}}">
+                                            @error('Nombre_E_P_BP')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: KARL DEUTSCH" value="{{old('Marca')}}">
+                                            @error('Marca')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            @error('Modelo')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lote</label>
-                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
                                         </div>
                                     </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            @error('Serie')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
+                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE">DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                                <option value="">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
-                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Brüder NDT " value="{{old('Proveedor')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Foto" >
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No de certificado</label>
-                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="">
+                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="" value="{{old('No_certificado')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
+                                            <input type="file" class="form-control-file inputForm" name="Certificado_Actual" placeholder="">
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha Caducidad</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                            <input type="date" class="form-control inputForm" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
-                                            <input type="number" class="form-control inputForm" name="Stock" placeholder="Enter ...">
+                                            <input type="number" class="form-control inputForm" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -294,7 +375,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
+                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Ejemplo: LOTE AGOTADO">{{old('Comentario')}}</textarea>
                                         </div>
                                     </div>
                                     <div class="container">
@@ -313,89 +394,132 @@
                             <form id="accesoriosForm" action="{{route('general_eyc.storeAccesorios')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable DUAL con cubierta de acero inox. (uso rudo)" value="{{old('Nombre_E_P_BP')}}">
+                                            @error('Nombre_E_P_BP')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
+                                            @error('No_economico')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX" value="{{old('Marca')}}">
+                                            @error('Marca')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            @error('Modelo')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            @error('Serie')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
+                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE">DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE">NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA">FUERA DE SERVICIO/BAJA</option>
+                                                <option value="">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
+                                            <input type="file" class="form-control inputForm" name="Certificado_Actual">
+                                            @if ($errors->any())
+                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
-                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Ejemplo: ZION" value="{{ old('Proveedor') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -405,7 +529,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
-                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ..."></textarea>
+                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Ejemplo: SE REPORTA FALLA Y RUIDO CON EL CABLE.">{{old('Comentario')}}</textarea>
                                         </div>
                                     </div>
                                     <div class="container">
@@ -425,36 +549,67 @@
                             <form id="blocksForm" action="{{route('general_eyc.storeBlocks')}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: BLOCK ASME T= 3/4"" value="{{old('Nombre_E_P_BP')}}">
+                                            @error('Nombre_E_P_BP')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
+                                            @error('No_economico')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX" value="{{old('Marca')}}">
+                                            @error('Marca')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            @error('Modelo')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            @error('Serie')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>

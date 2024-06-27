@@ -231,6 +231,14 @@ class general_eycController extends Controller
      */
     public function storeEquipos(Request $request)
 {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'No_economico' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
+
     /* Tabla General_EyC */
         $general = new general_eyc;
         $EsperaDato ='ESPERA DE DATO';
