@@ -881,50 +881,62 @@ attachDeleteListeners();
 
 // Manejar el envío del formulario
 document.querySelector('#kitForm').addEventListener('submit', function(event) {
+    if (!validateForm()) {
+        event.preventDefault(); // Evitar que el formulario se envíe si no pasa la validación
+    }
+});
+
+function validateForm() {
+    let form = document.getElementById('kitForm');
+    let nombre = form.querySelector('[name="Nombre"]').value;
+    let prueba = form.querySelector('[name="Prueba"]').value;
+
     let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
-    let kitData = [];
+    let camposVacios = [];
+
+    if (!nombre) {
+        camposVacios.push('Nombre');
+    }
+    if (!prueba) {
+        camposVacios.push('Prueba');
+    }
+
+    if (selectedRows.length === 0) {
+        camposVacios.push('Elementos seleccionados');
+    }
 
     selectedRows.forEach(function(row) {
-        let id = row.dataset.id;
         let cantidad = row.querySelector('.cantidad').value;
         let unidad = row.querySelector('.unidad').value;
 
-        kitData.push({
-            idGeneral_EyC: id,
-            cantidad: cantidad,
-            unidad: unidad
+        if (!cantidad) {
+            camposVacios.push('Cantidad');
+        }
+        if (!unidad) {
+            camposVacios.push('Unidad');
+        }
+    });
+
+    if (camposVacios.length > 0) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
         });
+        return false;
+    }
+    return true;
+}
 
-        // Crear inputs ocultos para enviar los datos de cantidad y unidad
-        let inputCantidad = document.createElement('input');
-        inputCantidad.type = 'hidden';
-        inputCantidad.name = `kitData[${id}][cantidad]`;
-        inputCantidad.value = cantidad;
-        document.querySelector('#kitForm').appendChild(inputCantidad);
-
-        let inputUnidad = document.createElement('input');
-        inputUnidad.type = 'hidden';
-        inputUnidad.name = `kitData[${id}][unidad]`;
-        inputUnidad.value = unidad;
-        document.querySelector('#kitForm').appendChild(inputUnidad);
-    });
-
-    // Añadir los datos al formulario como campos ocultos
-    kitData.forEach(function(item) {
-        let inputId = document.createElement('input');
-        inputId.type = 'hidden';
-        inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
-        inputId.value = item.idGeneral_EyC;
-        document.querySelector('#kitForm').appendChild(inputId);
-    });
-});
-
-//<!--GUARDAR Y CONTINUAR-->
-    /*KITS*/
-    document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
+// Guardar y continuar
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('guardarContinuarKits').addEventListener('click', function(event) {
         event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+
+        if (!validateForm()) {
+            return; // No continuar si la validación falla
+        }
 
         var form = document.getElementById('kitForm');
         var formData = new FormData(form);
