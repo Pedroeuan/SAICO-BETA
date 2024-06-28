@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="tab-content">
 
-                    <div class="tab-pane active" id="tab_1">
+                        <div class="tab-pane active" id="tab_1">
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
@@ -1048,6 +1048,48 @@ function initializeDataTable() {
     //Inicializar el DataTable
     dataTable = new DataTable('#tablaJs');
 }
+
+/*Prevenir el Enter Equipos*/
+document.getElementById('equiposForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Consumibles*/
+document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Accesorios*/
+document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Blocks*/
+document.getElementById('blocksForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Herramientas*/
+document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Kits*/
+document.getElementById('kitForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
 
 function attachAddListeners() {
     document.querySelectorAll('.btnAgregar').forEach(function(button) {
