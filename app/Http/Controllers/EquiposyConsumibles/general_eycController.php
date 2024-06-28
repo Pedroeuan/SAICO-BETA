@@ -615,6 +615,12 @@ public function updateEquipos(Request $request, $id)
     /*CONSUMIBLES*/
     public function storeConsumibles(Request $request)
     {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
     /* Tabla General_EyC */
     $general = new general_eyc;
     $EsperaDato ='ESPERA DE DATO';
@@ -1027,6 +1033,13 @@ public function updateEquipos(Request $request, $id)
     /*ACCESORIOS*/
     public function storeAccesorios(Request $request)
     {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'No_economico' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
      /* Tabla General_EyC */
     $general = new general_eyc;
     $EsperaDato ='ESPERA DE DATO';
@@ -1356,6 +1369,13 @@ public function updateEquipos(Request $request, $id)
 /*BLOCKS*/
 public function storeBlocks(Request $request)
 {
+    $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'No_economico' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+    ]);
     /* Tabla General_EyC */
     $general = new general_eyc;
     $EsperaDato ='ESPERA DE DATO';
@@ -1795,6 +1815,14 @@ public function storeBlocks(Request $request)
 /*HERRAMIENTAS*/
 public function storeHerramientas(Request $request)
 {
+    $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'No_economico' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+    ]);
+    
     /* Tabla General_EyC */
     $general = new general_eyc;
     $EsperaDato ='ESPERA DE DATO';
