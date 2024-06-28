@@ -231,81 +231,90 @@ class general_eycController extends Controller
      */
     public function storeEquipos(Request $request)
 {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'No_economico' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
+
     /* Tabla General_EyC */
-    $general = new general_eyc;
-    if($request->input('Nombre_E_P_BP')==null)
-    {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
-    }else{
-        $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
-    }
-    if($request->input('No_economico')==null)
-    {
-        $general->No_economico = 'ESPERA DE DATO';
-    }else{
-        $general->No_economico = $request->input('No_economico');
-    }
-    if($request->input('Serie')==null)
-    {
-        $general->Serie = 'ESPERA DE DATO';
-    }else{
-        $general->Serie = $request->input('Serie');
-    }
-    if($request->input('Marca')==null)
-    {
-        $general->Marca = 'ESPERA DE DATO';
-    }else{
-        $general->Marca = $request->input('Marca');
-    }
-    if($request->input('Modelo')==null)
-    {
-        $general->Modelo = 'ESPERA DE DATO';
-    }else{
-        $general->Modelo = $request->input('Modelo');
-    }
-    if($request->input('Ubicacion')==null)
-    {
-        $general->Ubicacion = 'ESPERA DE DATO';
-    }else{
-        $general->Ubicacion = $request->input('Ubicacion');
-    }
-    if($request->input('Almacenamiento')==null)
-    {
-        $general->Almacenamiento = 'ESPERA DE DATO';
-    }else{
-        $general->Almacenamiento = $request->input('Almacenamiento');
-    }
-    if($request->input('Comentario')==null)
-    {
-        $general->Comentario = 'ESPERA DE DATO';
-    }else{
-        $general->Comentario = $request->input('Comentario');
-    }
-    if($request->input('SAT')==null)
-    {
-        $general->SAT = 'ESPERA DE DATO';
-    }else{
-        $general->SAT = $request->input('SAT');
-    }
-    if($request->input('BMPRO')==null)
-    {
-        $general->BMPRO = 'ESPERA DE DATO';
-    }else{
-        $general->BMPRO = $request->input('BMPRO');
-    }
-    if($request->input('Tipo')==null)
-    {
-        $general->Tipo = 'ESPERA DE DATO';
-    }else{
-        $general->Tipo = $request->input('Tipo');
-    } 
-    if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
-    {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
-    }else{
-        $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
-    } 
-    $general->save();
+        $general = new general_eyc;
+        $EsperaDato ='ESPERA DE DATO';
+        if($request->input('Nombre_E_P_BP')==null)
+        {
+            $general->Nombre_E_P_BP = $EsperaDato;
+        }else{
+            $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
+        }
+        if($request->input('No_economico')==null)
+        {
+            $general->No_economico = $EsperaDato;
+        }else{
+            $general->No_economico = $request->input('No_economico');
+        }
+        if($request->input('Serie')==null)
+        {
+            $general->Serie = $EsperaDato;
+        }else{
+            $general->Serie = $request->input('Serie');
+        }
+        if($request->input('Marca')==null)
+        {
+            $general->Marca = $EsperaDato;
+        }else{
+            $general->Marca = $request->input('Marca');
+        }
+        if($request->input('Modelo')==null)
+        {
+            $general->Modelo = $EsperaDato;
+        }else{
+            $general->Modelo = $request->input('Modelo');
+        }
+        if($request->input('Ubicacion')==null)
+        {
+            $general->Ubicacion = $EsperaDato;
+        }else{
+            $general->Ubicacion = $request->input('Ubicacion');
+        }
+        if($request->input('Almacenamiento')==null)
+        {
+            $general->Almacenamiento = $EsperaDato;
+        }else{
+            $general->Almacenamiento = $request->input('Almacenamiento');
+        }
+        if($request->input('Comentario')==null)
+        {
+            $general->Comentario = $EsperaDato;
+        }else{
+            $general->Comentario = $request->input('Comentario');
+        }
+        if($request->input('SAT')==null)
+        {
+            $general->SAT = $EsperaDato;
+        }else{
+            $general->SAT = $request->input('SAT');
+        }
+        if($request->input('BMPRO')==null)
+        {
+            $general->BMPRO = $EsperaDato;
+        }else{
+            $general->BMPRO = $request->input('BMPRO');
+        }
+        if($request->input('Tipo')==null)
+        {
+            $general->Tipo = $EsperaDato;
+        }else{
+            $general->Tipo = $request->input('Tipo');
+        } 
+        if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
+        {
+            $general->Disponibilidad_Estado = $EsperaDato;
+        }else{
+            $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
+        } 
+        $general->save();
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
         $pdf = $request->file('Factura');
@@ -328,7 +337,7 @@ class general_eycController extends Controller
         // Guardar la ruta en la base de datos
         $general->Factura = $pdfPath;
     } else {
-        $general->Factura = 'ESPERA DE DATO';
+        $general->Factura = $EsperaDato;
     }
     $general->save();
     // Validar que se ha enviado el archivo de foto
@@ -352,7 +361,7 @@ class general_eycController extends Controller
         $fotoPath = $foto->storeAs('Equipos y Consumibles/Fotos/Equipos', $newFileNameFoto, 'public');
         $general->Foto = $fotoPath;
     } else {
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
     }
     $general->save();
     // Equipos
@@ -364,7 +373,7 @@ class general_eycController extends Controller
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('No_certificado')==null)
     {
-        $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+        $generalConCertificados->No_certificado = $EsperaDato;
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }   
@@ -400,7 +409,7 @@ class general_eycController extends Controller
         $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Equipos', $newFileNameCertificado, 'public');
         $generalConCertificados->Certificado_Actual = $certificadoPath;
     } else {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        $generalConCertificados->Certificado_Actual = $EsperaDato;
     }
     $generalConCertificados->save();
 
@@ -437,10 +446,11 @@ public function updateEquipos(Request $request, $id)
     
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
+    $EsperaDato ='ESPERA DE DATO';
     // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
     $disponibilidadEstado = $request->input('Disponibilidad_Estado');
     if ($disponibilidadEstado == 'Elige un Tipo') {
-        $disponibilidadEstado = 'ESPERA DE DATO';
+        $disponibilidadEstado = $EsperaDato;
     }
 
     // Actualizar los datos del equipo
@@ -605,11 +615,18 @@ public function updateEquipos(Request $request, $id)
     /*CONSUMIBLES*/
     public function storeConsumibles(Request $request)
     {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
     /* Tabla General_EyC */
     $general = new general_eyc;
+    $EsperaDato ='ESPERA DE DATO';
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+        $general->Nombre_E_P_BP = $EsperaDato;
     }else{
         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
@@ -627,55 +644,55 @@ public function updateEquipos(Request $request, $id)
     }
     if($request->input('Marca')==null)
     {
-        $general->Marca = 'ESPERA DE DATO';
+        $general->Marca = $EsperaDato;
     }else{
         $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $general->Modelo = 'ESPERA DE DATO';
+        $general->Modelo = $EsperaDato;
     }else{
         $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $general->Ubicacion = 'ESPERA DE DATO';
+        $general->Ubicacion = $EsperaDato;
     }else{
         $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $general->Almacenamiento = 'ESPERA DE DATO';
+        $general->Almacenamiento = $EsperaDato;
     }else{
         $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $general->Comentario = 'ESPERA DE DATO';
+        $general->Comentario = $EsperaDato;
     }else{
         $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $general->SAT = 'ESPERA DE DATO';
+        $general->SAT = $EsperaDato;
     }else{
         $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $general->BMPRO = 'ESPERA DE DATO';
+        $general->BMPRO = $EsperaDato;
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
     if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+        $general->Disponibilidad_Estado = $EsperaDato;
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
     if($request->input('Tipo')==null)
     {
-        $general->Tipo = 'ESPERA DE DATO';
+        $general->Tipo = $EsperaDato;
     }else{
         $general->Tipo = $request->input('Tipo');
     }  
@@ -704,7 +721,7 @@ public function updateEquipos(Request $request, $id)
     } else {
         if($request->input('Factura') == null)
     {
-        $general->Factura = 'ESPERA DE DATO';
+        $general->Factura = $EsperaDato;
     }
         // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
         //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
@@ -732,7 +749,7 @@ public function updateEquipos(Request $request, $id)
     } else {
         if($request->input('Foto') == null)
     {
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
     }
     }
     $general->save();
@@ -741,7 +758,7 @@ public function updateEquipos(Request $request, $id)
     $generalConConsumible->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Proveedor')==null)
     {
-        $generalConConsumible->Proveedor = 'ESPERA DE DATO';
+        $generalConConsumible->Proveedor = $EsperaDato;
     }else{
         $generalConConsumible->Proveedor = $request->input('Proveedor');
     } 
@@ -752,7 +769,7 @@ public function updateEquipos(Request $request, $id)
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('No_certificado')==null)
     {
-        $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+        $generalConCertificados->No_certificado = $EsperaDato;
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }   
@@ -790,7 +807,7 @@ public function updateEquipos(Request $request, $id)
     } else {
         if($request->input('Certificado_Actual') == null)
     {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        $generalConCertificados->Certificado_Actual = $EsperaDato;
     }
     }
     $generalConCertificados->save();
@@ -800,7 +817,7 @@ public function updateEquipos(Request $request, $id)
     $generalConAlmacen->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Lote')==null)
     {
-        $generalConAlmacen->Lote = 'ESPERA DE DATO';
+        $generalConAlmacen->Lote = $EsperaDato;
     }else{
         $generalConAlmacen->Lote = $request->input('Lote');
     }
@@ -820,11 +837,11 @@ public function updateEquipos(Request $request, $id)
     {
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
-
      // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $EsperaDato ='ESPERA DE DATO';
     $disponibilidadEstado = $request->input('Disponibilidad_Estado');
     if ($disponibilidadEstado == 'Elige un Tipo') {
-        $disponibilidadEstado = 'ESPERA DE DATO';
+        $disponibilidadEstado = $EsperaDato;
     }
     // Actualizar los datos del equipo
     $generalEyC ->update([
@@ -1016,81 +1033,89 @@ public function updateEquipos(Request $request, $id)
     /*ACCESORIOS*/
     public function storeAccesorios(Request $request)
     {
+        $request->validate([
+            'Nombre_E_P_BP' => 'required|string|max:255',
+            'No_economico' => 'required|string|max:255',
+            'Marca' => 'required|string|max:255',
+            'Modelo' => 'required|string|max:255',
+            'Serie' => 'required|string|max:255',
+        ]);
      /* Tabla General_EyC */
     $general = new general_eyc;
+    $EsperaDato ='ESPERA DE DATO';
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+        $general->Nombre_E_P_BP = $EsperaDato;
     }else{
         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
     if($request->input('No_economico')==null)
     {
-        $general->No_economico = 'ESPERA DE DATO';
+        $general->No_economico = $EsperaDato;
     }else{
         $general->No_economico = $request->input('No_economico');
     }
     if($request->input('Serie')==null)
     {
-        $general->Serie = 'ESPERA DE DATO';
+        $general->Serie = $EsperaDato;
     }else{
         $general->Serie = $request->input('Serie');
     }
     if($request->input('Marca')==null)
     {
-        $general->Marca = 'ESPERA DE DATO';
+        $general->Marca = $EsperaDato;
     }else{
         $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $general->Modelo = 'ESPERA DE DATO';
+        $general->Modelo = $EsperaDato;
     }else{
         $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $general->Ubicacion = 'ESPERA DE DATO';
+        $general->Ubicacion = $EsperaDato;
     }else{
         $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $general->Almacenamiento = 'ESPERA DE DATO';
+        $general->Almacenamiento = $EsperaDato;
     }else{
         $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $general->Comentario = 'ESPERA DE DATO';
+        $general->Comentario = $EsperaDato;
     }else{
         $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $general->SAT = 'ESPERA DE DATO';
+        $general->SAT = $EsperaDato;
     }else{
         $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $general->BMPRO = 'ESPERA DE DATO';
+        $general->BMPRO = $EsperaDato;
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
     if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+        $general->Disponibilidad_Estado = $EsperaDato;
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
     if($request->input('Tipo')==null)
     {
-        $general->Tipo = 'ESPERA DE DATO';
+        $general->Tipo = $EsperaDato;
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
 
      // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
@@ -1116,7 +1141,7 @@ public function updateEquipos(Request $request, $id)
     } else {
         if($request->input('Factura') == null)
     {
-        $general->Factura = 'ESPERA DE DATO';
+        $general->Factura = $EsperaDato;
     }
     }
     $general->save();
@@ -1127,7 +1152,7 @@ public function updateEquipos(Request $request, $id)
 
     if($request->input('No_certificado')==null)
     {
-        $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+        $generalConCertificados->No_certificado = $EsperaDato;
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }   
@@ -1168,7 +1193,7 @@ public function updateEquipos(Request $request, $id)
     } else {
         if($request->input('Certificado_Actual') == null)
     {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        $generalConCertificados->Certificado_Actual = $EsperaDato;
     }
     }
     $generalConCertificados->save();
@@ -1178,7 +1203,7 @@ public function updateEquipos(Request $request, $id)
     $generalConAccesorios->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
     if($request->input('Proveedor')==null)
     {
-        $generalConAccesorios->Proveedor = 'ESPERA DE DATO';
+        $generalConAccesorios->Proveedor = $EsperaDato;
     }else{
         $generalConAccesorios->Proveedor = $request->input('Proveedor');
     } 
@@ -1213,9 +1238,10 @@ public function updateEquipos(Request $request, $id)
     $generalEyC  = general_eyc::find($id);
 
     // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $EsperaDato ='ESPERA DE DATO';
     $disponibilidadEstado = $request->input('Disponibilidad_Estado');
     if ($disponibilidadEstado == 'Elige un Tipo') {
-        $disponibilidadEstado = 'ESPERA DE DATO';
+        $disponibilidadEstado = $EsperaDato;
     }
 
     // Actualizar los datos del equipo
@@ -1343,81 +1369,89 @@ public function updateEquipos(Request $request, $id)
 /*BLOCKS*/
 public function storeBlocks(Request $request)
 {
+    $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'No_economico' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+    ]);
     /* Tabla General_EyC */
     $general = new general_eyc;
+    $EsperaDato ='ESPERA DE DATO';
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+        $general->Nombre_E_P_BP = $EsperaDato;
     }else{
         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
     if($request->input('No_economico')==null)
     {
-        $general->No_economico = 'ESPERA DE DATO';
+        $general->No_economico = $EsperaDato;
     }else{
         $general->No_economico = $request->input('No_economico');
     }
     if($request->input('Serie')==null)
     {
-        $general->Serie = 'ESPERA DE DATO';
+        $general->Serie = $EsperaDato;
     }else{
         $general->Serie = $request->input('Serie');
     }
     if($request->input('Marca')==null)
     {
-        $general->Marca = 'ESPERA DE DATO';
+        $general->Marca = $EsperaDato;
     }else{
         $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $general->Modelo = 'ESPERA DE DATO';
+        $general->Modelo = $EsperaDato;
     }else{
         $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $general->Ubicacion = 'ESPERA DE DATO';
+        $general->Ubicacion = $EsperaDato;
     }else{
         $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $general->Almacenamiento = 'ESPERA DE DATO';
+        $general->Almacenamiento = $EsperaDato;
     }else{
         $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $general->Comentario = 'ESPERA DE DATO';
+        $general->Comentario = $EsperaDato;
     }else{
         $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $general->SAT = 'ESPERA DE DATO';
+        $general->SAT = $EsperaDato;
     }else{
         $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $general->BMPRO = 'ESPERA DE DATO';
+        $general->BMPRO = $EsperaDato;
     }else{
         $general->BMPRO = $request->input('BMPRO');
     }
     if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+        $general->Disponibilidad_Estado = $EsperaDato;
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
     if($request->input('Tipo')==null)
     {
-        $general->Tipo = 'ESPERA DE DATO';
+        $general->Tipo = $EsperaDato;
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
 
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
@@ -1445,7 +1479,7 @@ public function storeBlocks(Request $request)
     } else {
         if($request->input('Factura') == null)
     {
-        $general->Factura = 'ESPERA DE DATO';
+        $general->Factura = $EsperaDato;
     }
     }
 
@@ -1472,7 +1506,7 @@ public function storeBlocks(Request $request)
     } else {
         if($request->input('Foto') == null)
     {
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
     }
     }
     $general->save();
@@ -1483,7 +1517,7 @@ public function storeBlocks(Request $request)
 
     if($request->input('No_certificado')==null)
     {
-        $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+        $generalConCertificados->No_certificado = $EsperaDato;
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }  
@@ -1525,7 +1559,7 @@ public function storeBlocks(Request $request)
     } else {
         if($request->input('Certificado_Actual') == null)
     {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        $generalConCertificados->Certificado_Actual = $EsperaDato;
     }
     }
     $generalConCertificados->save();
@@ -1559,7 +1593,7 @@ public function storeBlocks(Request $request)
         // Guardar la ruta en la base de datos
         $generalConBlockyprobeta->Plano = $PlanoPath;
     } else {
-        $generalConBlockyprobeta->Plano = 'ESPERA DE DATO';
+        $generalConBlockyprobeta->Plano = $EsperaDato;
     }
 
     $generalConBlockyprobeta->save();
@@ -1591,11 +1625,11 @@ public function storeBlocks(Request $request)
 {
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
-
+    $EsperaDato ='ESPERA DE DATO';
     // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
     $disponibilidadEstado = $request->input('Disponibilidad_Estado');
     if ($disponibilidadEstado == 'Elige un Tipo') {
-        $disponibilidadEstado = 'ESPERA DE DATO';
+        $disponibilidadEstado = $EsperaDato;
     }
 
     // Actualizar los datos del equipo
@@ -1781,81 +1815,90 @@ public function storeBlocks(Request $request)
 /*HERRAMIENTAS*/
 public function storeHerramientas(Request $request)
 {
+    $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'No_economico' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+    ]);
+    
     /* Tabla General_EyC */
     $general = new general_eyc;
+    $EsperaDato ='ESPERA DE DATO';
     if($request->input('Nombre_E_P_BP')==null)
     {
-        $general->Nombre_E_P_BP = 'ESPERA DE DATO';
+        $general->Nombre_E_P_BP = $EsperaDato;
     }else{
         $general->Nombre_E_P_BP = $request->input('Nombre_E_P_BP');
     }
     if($request->input('No_economico')==null)
     {
-        $general->No_economico = 'ESPERA DE DATO';
+        $general->No_economico = $EsperaDato;
     }else{
         $general->No_economico = $request->input('No_economico');
     }
     if($request->input('Serie')==null)
     {
-        $general->Serie = 'ESPERA DE DATO';
+        $general->Serie = $EsperaDato;
     }else{
         $general->Serie = $request->input('Serie');
     }
     if($request->input('Marca')==null)
     {
-        $general->Marca = 'ESPERA DE DATO';
+        $general->Marca = $EsperaDato;
     }else{
         $general->Marca = $request->input('Marca');
     }
     if($request->input('Modelo')==null)
     {
-        $general->Modelo = 'ESPERA DE DATO';
+        $general->Modelo = $EsperaDato;
     }else{
         $general->Modelo = $request->input('Modelo');
     }
     if($request->input('Ubicacion')==null)
     {
-        $general->Ubicacion = 'ESPERA DE DATO';
+        $general->Ubicacion = $EsperaDato;
     }else{
         $general->Ubicacion = $request->input('Ubicacion');
     }
     if($request->input('Almacenamiento')==null)
     {
-        $general->Almacenamiento = 'ESPERA DE DATO';
+        $general->Almacenamiento = $EsperaDato;
     }else{
         $general->Almacenamiento = $request->input('Almacenamiento');
     }
     if($request->input('Comentario')==null)
     {
-        $general->Comentario = 'ESPERA DE DATO';
+        $general->Comentario = $EsperaDato;
     }else{
         $general->Comentario = $request->input('Comentario');
     }
     if($request->input('SAT')==null)
     {
-        $general->SAT = 'ESPERA DE DATO';
+        $general->SAT = $EsperaDato;
     }else{
         $general->SAT = $request->input('SAT');
     }
     if($request->input('BMPRO')==null)
     {
-        $general->BMPRO = 'ESPERA DE DATO';
+        $general->BMPRO = $EsperaDato;
     }else{
         $general->BMPRO = $request->input('BMPRO');
     } 
     if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
     {
-        $general->Disponibilidad_Estado = 'ESPERA DE DATO';
+        $general->Disponibilidad_Estado = $EsperaDato;
     }else{
         $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
     } 
     if($request->input('Tipo')==null)
     {
-        $general->Tipo = 'ESPERA DE DATO';
+        $general->Tipo = $EsperaDato;
     }else{
         $general->Tipo = $request->input('Tipo');
     } 
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
 
     // Validar que se ha enviado el archivo de factura
     if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
@@ -1883,7 +1926,7 @@ public function storeHerramientas(Request $request)
     } else {
         if($request->input('Factura') == null)
     {
-        $general->Factura = 'ESPERA DE DATO';
+        $general->Factura = $EsperaDato;
     }
     }
 
@@ -1910,7 +1953,7 @@ public function storeHerramientas(Request $request)
     } else {
         if($request->input('Foto') == null)
     {
-        $general->Foto = 'ESPERA DE DATO';
+        $general->Foto = $EsperaDato;
     }
     }
     $general->save();
@@ -1922,7 +1965,7 @@ public function storeHerramientas(Request $request)
 
     if($request->input('No_certificado')==null)
     {
-        $generalConCertificados->No_certificado = 'ESPERA DE DATO';
+        $generalConCertificados->No_certificado = $EsperaDato;
     }else{
         $generalConCertificados->No_certificado = $request->input('No_certificado');
     }  
@@ -1962,7 +2005,7 @@ public function storeHerramientas(Request $request)
     } else {
         if($request->input('Certificado_Actual') == null)
     {
-        $generalConCertificados->Certificado_Actual = 'ESPERA DE DATO';
+        $generalConCertificados->Certificado_Actual = $EsperaDato;
     }
     }
     $generalConCertificados->save();
@@ -1991,7 +2034,7 @@ public function storeHerramientas(Request $request)
         $generalConHerramientas->Garantia = $GarantiaPath; // Guarda la ruta del archivo de garantía
     } else {
         if($request->input('Garantia') == null) {
-            $generalConHerramientas->Garantia = 'ESPERA DE DATO';
+            $generalConHerramientas->Garantia = $EsperaDato;
         }
     }
 
@@ -2016,7 +2059,7 @@ public function storeHerramientas(Request $request)
         $generalConHerramientas->Plano = $PlanoPath; // Guarda la ruta del archivo de garantía
     } else {
         if($request->input('Plano') == null) {
-            $generalConHerramientas->Plano = 'ESPERA DE DATO';
+            $generalConHerramientas->Plano = $EsperaDato;
         }
     }
     $generalConHerramientas->save();
@@ -2049,9 +2092,10 @@ public function storeHerramientas(Request $request)
     // Obtener el equipo existente
     $generalEyC  = general_eyc::find($id);
      // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+    $EsperaDato ='ESPERA DE DATO';
     $disponibilidadEstado = $request->input('Disponibilidad_Estado');
     if ($disponibilidadEstado == 'Elige un Tipo') {
-        $disponibilidadEstado = 'ESPERA DE DATO';
+        $disponibilidadEstado = $EsperaDato;
     }
     // Actualizar los datos del equipo
     $generalEyC ->update([
