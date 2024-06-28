@@ -90,29 +90,42 @@
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
-    new DataTable('#tablaJs');
 
-    let dataTable;
+let table = new DataTable('#tablaJs', {
+    // options
+    language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna ascendente",
+                        "sortDescending": ": activar para ordenar la columna descendente"
+                    }
+                }
+});
 
-    function initializeDataTable() {
-       // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaJs')) {
-            dataTable.destroy();
-        }
-       // Inicializar el DataTable
-        dataTable = new DataTable('#tablaJs');
-    }
-
-   // Inicializar el DataTable al cargar la página
-    $(document).ready(function() {
-        initializeDataTable();
-    });
     $(".btnEliminarEquipo").on("click", function(){
     //valor del id a eliminar
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
