@@ -1035,19 +1035,33 @@
 
 
 <script>
-/*Solicitud*/
-new DataTable('#tablaJs');
-
-let dataTable;
-
-function initializeDataTable() {
-    // Destruir el DataTable si ya está inicializado
-    if ($.fn.DataTable.isDataTable('#tablaJs')) {
-        dataTable.destroy();
-    }
-    //Inicializar el DataTable
-    dataTable = new DataTable('#tablaJs');
-}
+let table = new DataTable('#tablaJs', {
+    // options
+    language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna ascendente",
+                        "sortDescending": ": activar para ordenar la columna descendente"
+                    }
+                }
+});
 
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
