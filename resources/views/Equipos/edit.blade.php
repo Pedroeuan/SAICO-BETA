@@ -52,7 +52,7 @@
                 @if($generalEyC->Tipo=='EQUIPOS')  
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                            <form id="equiposForm" action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -251,7 +251,7 @@
                     @endif
                     @if($generalEyC->Tipo=='CONSUMIBLES')
                             <div class="tab-pane" id="tab_2">
-                            <form action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                            <form id="consumiblesForm" action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -454,7 +454,7 @@
                     @endif
                     @if($generalEyC->Tipo=='ACCESORIOS')
                         <div class="tab-pane" id="tab_3">
-                        <form action="{{ route('editAccesorios.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <form id="accesoriosForm" action="{{ route('editAccesorios.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -605,7 +605,7 @@
                     @endif
                     @if($generalEyC->Tipo=='BLOCK Y PROBETA')
                         <div class="tab-pane" id="tab_4">
-                        <form action="{{ route('editBlocks.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <form id="blocksForm" action="{{ route('editBlocks.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -818,7 +818,7 @@
                     @endif
                     @if($generalEyC->Tipo=='HERRAMIENTAS')
                         <div class="tab-pane" id="tab_5">
-                        <form action="{{ route('editHerramientas.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <form id="herramientasForm" action="{{ route('editHerramientas.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -1051,4 +1051,41 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
+<Script>
+    /*Prevenir el Enter Equipos*/
+document.getElementById('equiposForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Consumibles*/
+document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Accesorios*/
+document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Blocks*/
+document.getElementById('blocksForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Herramientas*/
+document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+</script>
 @endsection

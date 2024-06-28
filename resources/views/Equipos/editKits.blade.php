@@ -190,6 +190,14 @@
        // Inicializar el DataTable
         dataTable = new DataTable('#tablaJs');
     }
+    
+    /*Prevenir el Enter Kits*/
+document.getElementById('kitForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
     /*Botón de  ELIMINACIÓN */
     $(document).ready(function() {
         // Delegación de eventos para los botones de eliminación
