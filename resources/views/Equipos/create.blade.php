@@ -1138,6 +1138,7 @@ function attachAddListeners() {
     });
 }
 
+
 function attachDeleteListeners() {
     document.querySelectorAll('.btnEliminar').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -1152,6 +1153,45 @@ attachAddListeners();
 attachDeleteListeners();
 
 // Manejar el envío del formulario
+document.querySelector('#kitForm').addEventListener('submit', function(event) {
+    let selectedRows = document.querySelectorAll('#tablaSeleccionados tbody tr');
+    let kitData = [];
+
+    selectedRows.forEach(function(row) {
+        let id = row.dataset.id;
+        let cantidad = row.querySelector('.cantidad').value;
+        let unidad = row.querySelector('.unidad').value;
+
+        kitData.push({
+            idGeneral_EyC: id,
+            cantidad: cantidad,
+            unidad: unidad
+        });
+
+        // Crear inputs ocultos para enviar los datos de cantidad y unidad
+        let inputCantidad = document.createElement('input');
+        inputCantidad.type = 'hidden';
+        inputCantidad.name = `kitData[${id}][cantidad]`;
+        inputCantidad.value = cantidad;
+        document.querySelector('#kitForm').appendChild(inputCantidad);
+
+        let inputUnidad = document.createElement('input');
+        inputUnidad.type = 'hidden';
+        inputUnidad.name = `kitData[${id}][unidad]`;
+        inputUnidad.value = unidad;
+        document.querySelector('#kitForm').appendChild(inputUnidad);
+    });
+
+    // Añadir los datos al formulario como campos ocultos
+    kitData.forEach(function(item) {
+        let inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = `kitData[${item.idGeneral_EyC}][idGeneral_EyC]`;
+        inputId.value = item.idGeneral_EyC;
+        document.querySelector('#kitForm').appendChild(inputId);
+    });
+});
+
 document.querySelector('#kitForm').addEventListener('submit', function(event) {
     if (!validateForm()) {
         event.preventDefault(); // Evitar que el formulario se envíe si no pasa la validación
