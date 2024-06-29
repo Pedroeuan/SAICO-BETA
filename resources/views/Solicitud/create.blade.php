@@ -175,34 +175,61 @@
 
 <script>
 
+let tableKits = new DataTable('#tablaKits', {
+    // options
+    language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna ascendente",
+                        "sortDescending": ": activar para ordenar la columna descendente"
+                    }
+                }
+});
 
-    //mostrar datatableKits
-    new DataTable('#tablaKits');
-
-    let dataTableK;
-
-    function initializeDataTable() {
-    // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaKits')) {
-            dataTableK.destroy();
-        }
-    // Inicializar el DataTable
-        dataTableK = new DataTable('#tablaKits');
-    }
-
-    //mostrar datatableInventario
-    new DataTable('#tablaInventario');
-
-    let dataTableI;
-
-    function initializeDataTable() {
-    // Destruir el DataTable si ya está inicializado
-        if ($.fn.DataTable.isDataTable('#tablaInventario')) {
-            dataTableI.destroy();
-        }
-    // Inicializar el DataTable
-        dataTableI = new DataTable('#tablaInventario');
-    }
+let tableInventario = new DataTable('#tablaInventario', {
+    // options
+    language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna ascendente",
+                        "sortDescending": ": activar para ordenar la columna descendente"
+                    }
+                }
+});
 
         $(document).ready(function() {
         // Agregar elemento de inventario
