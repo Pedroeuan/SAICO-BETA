@@ -14,6 +14,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\Manifiesto\manifiesto;
 
 class SolicitudesController extends Controller
 {
@@ -115,16 +116,46 @@ class SolicitudesController extends Controller
      */
     public function edit($id)
     {
+        $Solicitud = Solicitudes::findOrFail($id);
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-        $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
-        
-        return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+
+        if ($Solicitud->Estatus == 'PENDIENTE') {
+            if (!$Manifiestos) {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }
+            // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
+            // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
+        }
+    
+        if ($Solicitud->Estatus == 'APROBADO') {
+            if (!$Manifiestos) {
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }
+        }
+    
+        if ($Solicitud->Estatus == 'MANIFIESTO') {
+            if ($Manifiestos) {
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+            }
+        }
+
+        /*switch ($Solicitud->Estatus) {
+            case 'PENDIENTE':
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'APROBADO':
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'MANIFIESTO':
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
+            //default:
+                //return view('solicitudes.default', compact('solicitud'));
+        }*/
     }
 
     /**
@@ -139,6 +170,7 @@ class SolicitudesController extends Controller
      * 
      * Remove the specified resource from storage.
      */
+    /*Botón de detalles solicitud */
     public function destroyDetallesSolicitud($id)
     {
         try {
@@ -153,9 +185,11 @@ class SolicitudesController extends Controller
         }
     }
 
+    /*Eliminación de Toda la Solicitud */
     public function destroySolicitud($id)
     {
         // Eliminar los detalles relacionados con el idSolicitud
+        manifiesto::where('idSolicitud',$id)->delete();
         detalles_solicitud::where('idSolicitud', $id)->delete();
         Solicitudes::where('idSolicitud', $id)->delete();
             

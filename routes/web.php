@@ -8,6 +8,7 @@ use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
+use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
 
     Route::get('/', function () {
@@ -118,14 +119,24 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta de botón Eliminación-detalles_Solicitud*/
     Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
 
+    /*MANIFIESTO*/
+    /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
+    Route::post('/solicitud/Manifiesto/{id}', [ManifiestoController::class, 'create'])->name('solicitud.manifiesto');
+    /*Rutas de Vistas de Solicitudes-Pre-Manifiesto(Botón Regresar)*/
+    Route::get('/solicitud/Manifiesto-Regresar/{id}', [ManifiestoController::class, 'BotonRegresar'])->name('solicitud.manifiesto-regresar');
+    /*Ruta de Guardado*/
+    Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
+    /*Ruta de Actualización*/
+    Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
+
+    /*MANIFIESTO PDF*/
+    /*Ruta para ver el manifiesto pdf*/
+    Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 
     /*HISTORIAL CERTIFICADOS*/
     /*Ruta de Vista de historial de certificados*/
     Route::get('/certificados/index', [CertificadosController::class, 'index'])->name('certificados/index');
 
-    /*MANIFIESTO PDF*/
-    /*Ruta para ver el manifiesto pdf*/
-    Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 });
 
 require __DIR__.'/auth.php';
