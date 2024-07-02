@@ -14,7 +14,8 @@
 <br>
 <br>
 <!-- form start -->
-    <form id="AprobacionForm" action="" method="post" enctype="multipart/form-data" role="form">
+    <form id="AprobacionForm" action="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data" role="form">
+    @csrf 
         <div class="box">
             <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
             <br>
@@ -110,12 +111,12 @@
                         <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
                         <td scope="row">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Cantidad[]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                <input type="text" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '0' }}">
                             </div>
                         </td>
                         <td scope="row">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
                             </div>
                         </td>
                         <td>
@@ -129,7 +130,7 @@
         </table>
     </div>
 <br>
-<a href="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Crear manifiesto</a>
+<button type="submit" class="btn btn-success">Crear manifiesto</button>
 </form>
 <br>
 @stop

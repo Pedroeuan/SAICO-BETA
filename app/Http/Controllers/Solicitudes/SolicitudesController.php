@@ -124,11 +124,29 @@ class SolicitudesController extends Controller
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
-        //$Manifiestos = manifiesto::where('idSolicitud', $id)->get();
-        //$Manifiestos = manifiesto::findOrFail($id);
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
 
-        switch ($Solicitud->Estatus) {
+        if ($Solicitud->Estatus == 'PENDIENTE') {
+            if (!$Manifiestos) {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }
+            // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
+            // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
+        }
+    
+        if ($Solicitud->Estatus == 'APROBADO') {
+            if (!$Manifiestos) {
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }
+        }
+    
+        if ($Solicitud->Estatus == 'MANIFIESTO') {
+            if ($Manifiestos) {
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+            }
+        }
+
+        /*switch ($Solicitud->Estatus) {
             case 'PENDIENTE':
                 return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
             case 'APROBADO':
@@ -137,10 +155,7 @@ class SolicitudesController extends Controller
                 return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
             //default:
                 //return view('solicitudes.default', compact('solicitud'));
-        }
-        
-        
-        
+        }*/
     }
 
     /**

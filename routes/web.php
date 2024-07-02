@@ -121,7 +121,7 @@ use App\Http\Controllers\Manifiesto\PDFController;
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
-    Route::get('/solicitud/Manifiesto/{id}', [ManifiestoController::class, 'create'])->name('solicitud.manifiesto');
+    Route::post('/solicitud/Manifiesto/{id}', [ManifiestoController::class, 'create'])->name('solicitud.manifiesto');
     /*Rutas de Vistas de Solicitudes-Pre-Manifiesto(Botón Regresar)*/
     Route::get('/solicitud/Manifiesto-Regresar/{id}', [ManifiestoController::class, 'BotonRegresar'])->name('solicitud.manifiesto-regresar');
     /*Ruta de Guardado*/

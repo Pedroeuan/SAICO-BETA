@@ -42,23 +42,59 @@ class ManifiestoController extends Controller
      * Show the form for creating a new resource.
      */
     public function create($id)
-    {
-        $Solicitud = Solicitudes::find($id);
-        $Estatus ='APROBADO';
-        // Actualizar los datos del equipo
-        $Solicitud ->update([
-            'Estatus' => $Estatus,
-        ]);
-
-        $Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
-        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-        // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
-        
-        return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
+{
+    $general = general_eyc::get();
+    $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+    $Solicitud = Solicitudes::find($id);
+    if (!$Solicitud) {
+        return redirect()->back()->with('error', 'Solicitud no encontrada.');
     }
+
+    $Estatus = 'APROBADO';
+    
+    // Actualizar el estado de la solicitud
+    $Solicitud->update([
+        'Estatus' => $Estatus,
+    ]);
+
+    // Obtener todos los detalles de la solicitud
+    $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+    // Recorrer cada detalle de la solicitud para actualizar Cantidad y Unidad
+    foreach ($DetallesSolicitud as $detalle) {
+        $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
+        $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
+
+        if ($cantidad !== null && $unidad !== null) {
+            $detalle->update([
+                'Cantidad' => $cantidad,
+                'Unidad' => $unidad,
+            ]);
+        } else {
+            return redirect()->back()->with('error', 'Datos de cantidad o unidad faltantes para algún detalle de la solicitud.');
+        }
+    }
+
+    // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+    $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+
+    // Obtener los registros de General_EyC relacionados
+    $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+
+    $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+    if ($Solicitud->Estatus == 'APROBADO') {
+        if ($Manifiestos) {
+        return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+        }
+        else{
+            return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
+        }
+    }
+
+    
+}
+
 
     /**
      * Store a newly created resource in storage.
