@@ -25,5 +25,10 @@ class detalles_solicitud extends Model
         return $this->belongsTo(Solicitud::class, 'idSolicitud', 'idSolicitud');
     }
     
+    // Definir la relación con Manifiestos
+    public function manifiestos()
+    {
+        return $this->hasMany(manifiesto::class, 'idSolicitud');
+    }
     use HasFactory;
 }
