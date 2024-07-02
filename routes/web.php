@@ -126,6 +126,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::get('/solicitud/Manifiesto-Regresar/{id}', [ManifiestoController::class, 'BotonRegresar'])->name('solicitud.manifiesto-regresar');
     /*Ruta de Guardado*/
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
+    /*Ruta de Actualización*/
+    Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
 
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/

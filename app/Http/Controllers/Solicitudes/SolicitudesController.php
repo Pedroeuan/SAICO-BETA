@@ -14,6 +14,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\Manifiesto\manifiesto;
 
 class SolicitudesController extends Controller
 {
@@ -123,6 +124,9 @@ class SolicitudesController extends Controller
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        //$Manifiestos = manifiesto::where('idSolicitud', $id)->get();
+        //$Manifiestos = manifiesto::findOrFail($id);
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
 
         switch ($Solicitud->Estatus) {
             case 'PENDIENTE':
@@ -130,8 +134,8 @@ class SolicitudesController extends Controller
             case 'APROBADO':
                 return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
             case 'MANIFIESTO':
-                //return view('solicitudes.rechazado', compact('solicitud'));
-            default:
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
+            //default:
                 //return view('solicitudes.default', compact('solicitud'));
         }
         
@@ -151,6 +155,7 @@ class SolicitudesController extends Controller
      * 
      * Remove the specified resource from storage.
      */
+    /*Botón de detalles solicitud */
     public function destroyDetallesSolicitud($id)
     {
         try {
@@ -165,9 +170,11 @@ class SolicitudesController extends Controller
         }
     }
 
+    /*Eliminación de Toda la Solicitud */
     public function destroySolicitud($id)
     {
         // Eliminar los detalles relacionados con el idSolicitud
+        manifiesto::where('idSolicitud',$id)->delete();
         detalles_solicitud::where('idSolicitud', $id)->delete();
         Solicitudes::where('idSolicitud', $id)->delete();
             

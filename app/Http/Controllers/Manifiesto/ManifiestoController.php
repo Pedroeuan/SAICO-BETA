@@ -74,7 +74,40 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+
         ]);
+
+        $id =$request->input('idSolicitud');
+        $Solicitud = Solicitudes::find($id);
+        $Estatus ='MANIFIESTO';
+        // Actualizar los datos del equipo
+        $Solicitud ->update([
+            'Estatus' => $Estatus,
+        ]);
+
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $general = general_eyc::get();
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
+
+        $Manifiestos = new manifiesto;
+        $Manifiestos->idSolicitud = $request->input('idSolicitud');
+        $Manifiestos->Cliente = $request->input('Cliente');
+        $Manifiestos->Folio = $request->input('Folio');
+        $Manifiestos->Destino = $request->input('Destino');
+        $Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');
+        $Manifiestos->Trabajo = $request->input('Trabajo');
+        $Manifiestos->Puesto = $request->input('Puesto');
+        $Manifiestos->Responsable = $request->input('Responsable');
+        $Manifiestos->Observaciones = $request->input('Observaciones');
+        $Manifiestos->save();
+
+        //$Solicitud = Solicitudes::all();
+        //return view("Solicitud.index",compact('Solicitud'));
+        return redirect()->route('solicitud.index');
     }
 
     /**
@@ -96,9 +129,51 @@ class ManifiestoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, manifiesto $manifiesto)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'Cliente' => 'required|string|max:255',
+            'Folio' => 'required|string|max:255',
+            'Destino' => 'required|string|max:255',
+            'Fecha_Salida' => 'required|date',
+            'Trabajo' => 'required|string|max:255',
+            'Puesto' => 'required|string|max:255',
+            'Responsable' => 'required|string|max:255',
+
+        ]);
+
+        $id =$request->input('idSolicitud');
+        $Solicitud = Solicitudes::find($id);
+        $Estatus ='MANIFIESTO';
+        // Actualizar los datos del equipo
+        $Solicitud ->update([
+            'Estatus' => $Estatus,
+        ]);
+
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $general = general_eyc::get();
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
+
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+        $Manifiestos->update([
+            'idSolicitud' => $request->input('idSolicitud'),
+            'Cliente' =>$request->input('Cliente'),
+            'Folio' =>$request->input('Folio'),
+            'Destino' =>$request->input('Destino'),
+            'Fecha_Salida' =>$request->input('Fecha_Salida'),
+            'Trabajo' =>$request->input('Trabajo'),
+            'Puesto' =>$request->input('Puesto'),
+            'Responsable' =>$request->input('Responsable'),
+            'Observaciones' =>$request->input('Observaciones'),
+        ]);
+
+        //$Solicitud = Solicitudes::all();
+        //return view("Solicitud.index",compact('Solicitud'));
+        return redirect()->route('solicitud.index');
     }
 
     /**

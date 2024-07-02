@@ -10,13 +10,16 @@
         <a href="{{ route('solicitud.manifiesto-regresar', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Regresar</a>
     </div>
                 <h3 align="center">PreManifiesto de Salida y/o Resguardo</h3>
-                    <form id="manifiestoForm" action="{{route('solicitudes.storeManifiesto')}}" method="post" enctype="multipart/form-data">
+                    <form id="manifiestoForm" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                             <div class="row">
                                 <div class="col-sm-4">
                                         <div class="form-group">
+                                            @php
+                                            //dd($Manifiestos->Cliente);
+                                            @endphp
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{old('Cliente')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{ $Manifiestos->Cliente }}" required>
                                             @error('Cliente')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -28,7 +31,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Folio</label>
-                                            <input type="text" class="form-control inputForm" name="Folio" placeholder="Ejemplo: PROP-040/24" value="{{old('Folio')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Folio" placeholder="Ejemplo: PROP-040/24" value="{{ $Manifiestos->Folio }}" required>
                                             @error('Folio')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -40,7 +43,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: PATIO DE FABRICACIÓN PROTEXA" value="{{old('Destino')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: PATIO DE FABRICACIÓN PROTEXA" value="{{ $Manifiestos->Destino }}" required>
                                             @error('Destino')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -52,14 +55,14 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha de Salida</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_Salida" value="{{ old('Fecha_Salida') }}" required>
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_Salida" value="{{ $Manifiestos->Fecha_Salida }}" required>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Trabajo</label>
-                                            <input type="text" class="form-control inputForm" name="Trabajo" placeholder="Ejemplo: Dureza" value="{{old('Trabajo')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Trabajo" placeholder="Ejemplo: Dureza" value="{{ $Manifiestos->Trabajo }}" required>
                                             @error('Trabajo')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -71,7 +74,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Puesto</label>
-                                            <input type="text" class="form-control inputForm" name="Puesto" placeholder="Ejemplo: TEC. PND" value="{{old('Puesto')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Puesto" placeholder="Ejemplo: TEC. PND" value="{{ $Manifiestos->Puesto }}" required>
                                             @error('Puesto')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -83,7 +86,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Responsable</label>
-                                            <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{old('Responsable')}}" required>
+                                            <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Responsable }}" required>
                                             @error('Responsable')
                                                 <br>
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -100,7 +103,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Observaciones</label>
-                                            <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{old('Observaciones')}}</textarea>
+                                            <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $Manifiestos->Observaciones }}</textarea>
                                         </div>
                                     </div>
                                 
