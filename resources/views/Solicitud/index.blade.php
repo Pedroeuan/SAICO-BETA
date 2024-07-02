@@ -35,11 +35,20 @@
                         <td scope="row">{{$solicitud->Fecha}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
+                            
+                            @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
                             <div class="btn-group">
-                                
-                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                            </div>
+                                    <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                </div>
+                                @else
+                                <div class="btn-group">
+                                    <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                    <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                </div>
+                            @endif
+                            
                         </td>
                     </tr>
                     @endforeach
