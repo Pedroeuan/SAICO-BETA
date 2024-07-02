@@ -36,7 +36,6 @@
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
                             <div class="btn-group">
-                                
                                 <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                 <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                             </div>

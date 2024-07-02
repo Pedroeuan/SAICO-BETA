@@ -14,7 +14,7 @@
 <br>
 <br>
 <!-- form start -->
-    <form role="form">
+    <form id="AprobacionForm" action="" method="post" enctype="multipart/form-data" role="form">
         <div class="box">
             <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
             <br>
@@ -83,7 +83,7 @@
         </div>
     </div>
     <br>
-    <h3 align="center">Equipos y consumibles aprobados</h3>
+    <h3 align="center">Equipos y Consumibles por Aprobar</h3>
     <br>
     <div class="card-body">
         <table id="TablaSolicitud" class="table table-bordered" >
@@ -129,7 +129,7 @@
         </table>
     </div>
 <br>
-<button type="button" class="btn btn-success">Crear manifiesto</button>
+<a href="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Crear manifiesto</a>
 </form>
 <br>
 @stop

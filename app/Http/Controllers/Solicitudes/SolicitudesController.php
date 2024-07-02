@@ -115,16 +115,28 @@ class SolicitudesController extends Controller
      */
     public function edit($id)
     {
+        $Solicitud = Solicitudes::findOrFail($id);
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-        $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+        switch ($Solicitud->Estatus) {
+            case 'PENDIENTE':
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'APROBADO':
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'MANIFIESTO':
+                //return view('solicitudes.rechazado', compact('solicitud'));
+            default:
+                //return view('solicitudes.default', compact('solicitud'));
+        }
         
-        return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+        
+        
     }
 
     /**
