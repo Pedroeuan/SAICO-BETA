@@ -48,7 +48,7 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta para dar de BAJA, equipos, comsumibles, block, herramientas-HABILITADO*/
     Route::delete('/eliminar/BajaEyC/{id}', [general_eycController::class, 'BajaEyC'])->name('eliminar.BajaEyC');
 
-        /*EQUIPOS*/
+        /*EQUIPOS */
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
