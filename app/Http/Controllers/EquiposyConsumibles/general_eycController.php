@@ -88,7 +88,6 @@ class general_eycController extends Controller
     return redirect()->route('inventario');
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -96,10 +95,5 @@ class general_eycController extends Controller
     {
         //
     }
-
-
-
-
-
     
     }

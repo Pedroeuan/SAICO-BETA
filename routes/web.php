@@ -101,9 +101,6 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta de botón Guardar-updateKits-edición*/
     Route::post('Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
 
-
-
-
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
     Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
@@ -141,8 +138,6 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
     Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
-
-
 
 });
 
