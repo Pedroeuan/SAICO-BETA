@@ -78,37 +78,30 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Ruta de Actualizar*/
     Route::post('/edicion/editHerramientas/{id}', [HerramientasController::class, 'updateHerramientas'])->name('editHerramientas.update');
 
-
-    /*Rutas de Vistas Equipos y Consumibles-Solicitud*/
-    Route::get('/registros/SolictudEyC', [SolicitudEquiposController::class, 'createSolicitud'])->name('registros.SolicitudEyC');
-
     /*HISTORIAL CERTIFICADOS*/
     /*Ruta de Vista de historial de certificados*/
     Route::get('/Historial_certificados/index', [CertificadosController::class, 'index'])->name('Historial_certificados.index');
 
-
-
-
     /*KITS*/
     /*Rutas de Vistas KITS-Tabla KITS*/
-    Route::get('/index/Kits', [general_eycController::class, 'indexKits'])->name('index.Kits');
+    Route::get('/index/Kits', [KitsController::class, 'indexKits'])->name('index.Kits');
     /*Rutas de Vistas KITS-Edición*/
-    Route::get('/edicion/editKits/{id}', [general_eycController::class, 'editKits'])->name('edicion.editKits');
-    /*Ruta de Guardado-Alta*/
-    Route::post('/GuardarKits/agregarKits', [general_eycController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
-    /*Ruta de Eliminación-de Kits-Index*/
-    Route::delete('/eliminar/Kits/{id}', [general_eycController::class, 'destroyKits'])->name('eliminar.Kits');
+    Route::get('/edicion/editKits/{id}', [KitsController::class, 'editKits'])->name('edicion.editKits');
 
-    /*Ruta de botón Agregar-datos a detalles kits*/
-    Route::post('/kits/agregar', [general_eycController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
-    /*Ruta de botón Eliminación-detalles_Kits*/
-    Route::delete('/Detalles_Kits/eliminar/{id}', [general_eycController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
-    /*Ruta de botón Guardar-updateKits*/
-    Route::post('Update/kits/{id}', [general_eycController::class, 'updateKits'])->name('kits.update');
-    /*Ruta de botón obtener-datos de detalles kits*/
-    Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
-    /*Ruta de botón obtener-datos de general_EyC para kits*/
-    Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+    /*Ruta de botón Guardado-Alta*/
+    Route::post('/GuardarKits/agregarKits', [KitsController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
+    /*Ruta de Eliminación-de Kits-Index*/
+    Route::delete('/eliminar/Kits/{id}', [KitsController::class, 'destroyKits'])->name('eliminar.Kits');
+
+    /*Ruta de botón Agregar-datos a detalles kits-edición*/
+    Route::post('/kits/agregar', [KitsController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
+    /*Ruta de botón Eliminación-detalles_Kits-edición*/
+    Route::delete('/Detalles_Kits/eliminar/{id}', [KitsController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
+
+    /*Ruta de botón Guardar-updateKits-edición*/
+    Route::post('Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
+
+
 
 
     /*SOLICITUDES*/
@@ -117,18 +110,23 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('/solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
     
-    /*Rutas de Vistas de Solicitudes-Edición*/
+    /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
-    /*Ruta de Eliminación-de Solicitud*/
+    /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
     /*SOLICITUD*/
-    /*Ruta de Guardado*/
+    /*Ruta de Guardado-index*/
     Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
-    /*Ruta de botón Agregar-datos a detalles solicitud*/
+    /*Ruta de botón Agregar-datos a detalles solicitud-por aprobar*/
     Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
-    /*Ruta de botón Eliminación-detalles_Solicitud*/
+    /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
     Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
+
+    /*Ruta de botón obtener-datos de detalles kits-Solicitud.create*/
+    Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
+    /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
+    Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
