@@ -49,7 +49,9 @@ class consumiblesController extends Controller
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
+                'Stock' => 'required|integer|min:1',
             ]);
+
         /* Tabla General_EyC */
         $general = new general_eyc;
         $EsperaDato ='ESPERA DE DATO';
@@ -257,6 +259,28 @@ class consumiblesController extends Controller
             $generalConAlmacen->Stock = $request->input('Stock');
         }
         $generalConAlmacen->save();
+
+        /*Historial Almacen */
+        // Obtén el id del registro recién creado
+        $idAlmacen = $generalConAlmacen->idAlmacen;
+        $idGeneral_EyC = $generalConAlmacen->idGeneral_EyC;
+        $Tipo='SUMINISTRO';
+        //$Cantidad = 1;
+        //$Fecha = Carbon::now()->format('Y-m-d H:i:s');
+        $Fecha = Carbon::now()->format('Y-m-d');
+        $Tierra_Costafuera ='N/A';
+
+        // Ahora, crea un registro en la tabla historial_almacen
+        $historialAlmacen = new Historial_Almacen;
+
+        $historialAlmacen->idAlmacen = $idAlmacen; // Usa el idAlmacen recién creado
+        $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
+        $historialAlmacen->Tipo = $Tipo;
+        $historialAlmacen->Cantidad = $request->input('Stock');
+        $historialAlmacen->Fecha = $Fecha;
+        $historialAlmacen->Tierra_Costafuera = $Tierra_Costafuera;
+        $historialAlmacen->save();
+
         return redirect()->route('inventario');
         }
 
@@ -304,6 +328,7 @@ class consumiblesController extends Controller
             //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
+
         // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
         if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
             // Obtener la ruta del archivo anterior desde la base de datos

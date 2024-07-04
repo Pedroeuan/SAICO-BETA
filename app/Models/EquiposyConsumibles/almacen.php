@@ -15,12 +15,19 @@ class almacen extends Model
         'Stock',
     ];
     protected $table = 'almacen';
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idAlmacen';
     public $timestamps = false; 
+
     use HasFactory;
 
     public function general_eyc()
     {
         return $this->belongsTo(general_eyc::class, 'idGeneral_EyC');
     }
+
+        public function Historial_almacen()
+    {
+        return $this->hasMany(Historial_Almacen::class, 'idAlmacen');
+    }
+    
 }

@@ -349,6 +349,11 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
                                             <input type="number" class="form-control inputForm" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            @error('Stock')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
