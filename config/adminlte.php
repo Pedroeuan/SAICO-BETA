@@ -459,14 +459,14 @@ return [
                             'url' => 'solicitud/index',
                         ],
                         [
-                            'text' => ' Certificados vencidos',
+                            'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
-                            'url' => 'certificados/index',
+                            'url' => 'Historial_certificados/index',
                         ],
                         [
                             'text' => ' Ver Kits',
                             'icon' => 'fas fa-box',
-                            'url' => '/index/Kits',
+                            'url' => 'index/Kits',
                         ],
                         /*[
                             'text' => 'level_one',
