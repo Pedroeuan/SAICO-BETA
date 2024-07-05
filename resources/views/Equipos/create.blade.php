@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
-                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="tab-content">
 
-                        <div class="tab-pane active" id="tab_1">
+                        <div class="tab-pane" id="tab_1">
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
@@ -1681,6 +1681,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+    // Guardar el índice de la pestaña activa en localStorage
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href"); // Tab activa
+        localStorage.setItem('activeTab', target);
+    });
+
+    // Restaurar la pestaña activa al cargar la página
+    var activeTab = localStorage.getItem('activeTab');
+    if (activeTab) {
+        $('.nav-pills a[href="' + activeTab + '"]').tab('show');
+    }
+
 </script>
 
 @endsection
