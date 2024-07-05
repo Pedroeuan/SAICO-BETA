@@ -94,6 +94,14 @@
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
+                                            <input type="file" class="form-control-file inputForm" name="Manifiesto"></input>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <!--Campo Oculto para pasar el id de Solicitud -->
                                 <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
