@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
@@ -233,6 +235,27 @@ class AccesoriosController extends Controller
         $generalConAlmacen->Stock = $request->input('Stock');
     }
     $generalConAlmacen->save();
+
+        /*Historial Almacen */
+    // Obtén el id del registro recién creado
+    $idAlmacen = $generalConAlmacen->idAlmacen;
+    $idGeneral_EyC = $generalConAlmacen->idGeneral_EyC;
+    $Tipo='SUMINISTRO';
+    $Cantidad = 1;
+    //$Fecha = Carbon::now()->format('Y-m-d H:i:s');
+    $Fecha = Carbon::now()->format('Y-m-d');
+    $Tierra_Costafuera ='N/A';
+
+    // Ahora, crea un registro en la tabla historial_almacen
+    $historialAlmacen = new Historial_Almacen;
+
+    $historialAlmacen->idAlmacen = $idAlmacen; // Usa el idAlmacen recién creado
+    $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
+    $historialAlmacen->Tipo = $Tipo;
+    $historialAlmacen->Cantidad = $Cantidad;
+    $historialAlmacen->Fecha = $Fecha;
+    $historialAlmacen->Tierra_Costafuera = $Tierra_Costafuera;
+    $historialAlmacen->save();
 
     return redirect()->route('inventario');
     }
