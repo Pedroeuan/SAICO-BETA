@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
-use Illuminate\Http\Request;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
+use Carbon\Carbon;
 
 class ManifiestoController extends Controller
 {
@@ -41,6 +45,7 @@ class ManifiestoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    /*/solicitud/Manifiesto/{id}-Boton Crear Manifiesto */
     public function create($id)
 {
     $general = general_eyc::get();
@@ -95,7 +100,6 @@ class ManifiestoController extends Controller
     
 }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -121,13 +125,27 @@ class ManifiestoController extends Controller
             'Estatus' => $Estatus,
         ]);
 
-        /*$Solicitud = Solicitudes::findOrFail($id);
+        //$Solicitud = Solicitudes::findOrFail($id);
         $general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+            if ($almacen) {
+                $historialAlmacen = new Historial_Almacen;
+                $historialAlmacen->idAlmacen = $almacen->idAlmacen;
+                $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
+                $historialAlmacen->Tipo = 'SALIDA';
+                $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
+                $historialAlmacen->Fecha = Carbon::now()->format('Y-m-d');
+                $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
+                $historialAlmacen->save();
+            }
+        }
 
         $Manifiestos = new manifiesto;
         $Manifiestos->idSolicitud = $request->input('idSolicitud');
