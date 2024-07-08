@@ -126,12 +126,12 @@ class ManifiestoController extends Controller
         ]);
 
         //$Solicitud = Solicitudes::findOrFail($id);
-        $general = general_eyc::get();
+        //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
         foreach ($DetallesSolicitud as $detalle) {
             $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
@@ -144,8 +144,17 @@ class ManifiestoController extends Controller
                 $historialAlmacen->Fecha = Carbon::now()->format('Y-m-d');
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
                 $historialAlmacen->save();
+    
+                // Actualizar el estado en general_eyc a "NO DISPONIBLE"
+                $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                
+                if ($generalEyC) {
+                    $generalEyC->Disponibilidad_Estado = 'NO DISPONIBLE';
+                    $generalEyC->save();
+                }
             }
         }
+    
 
         $Manifiestos = new manifiesto;
         $Manifiestos->idSolicitud = $request->input('idSolicitud');

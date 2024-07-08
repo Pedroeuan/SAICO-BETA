@@ -129,6 +129,9 @@ class SolicitudesController extends Controller
         if ($Solicitud->Estatus == 'PENDIENTE') {
             if (!$Manifiestos) {
                 return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }else
+            {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
             }
             // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
             // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
@@ -137,6 +140,9 @@ class SolicitudesController extends Controller
         if ($Solicitud->Estatus == 'APROBADO') {
             if (!$Manifiestos) {
                 return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }else
+            {
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
             }
         }
     
