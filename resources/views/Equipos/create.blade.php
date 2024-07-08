@@ -30,7 +30,6 @@
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
@@ -208,7 +207,7 @@
                                 </div>
                             </form>
                         </div>
-                            <!-- Contenido de la primera pestaña -->
+                        <!-- CONSUMIBLES -->
                         <div class="tab-pane" id="tab_2">
                             <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
@@ -1019,7 +1018,6 @@
                             </form>
                         </div><!--"class="tab-pane" id="tab_6""-->
 
-
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
             </div><!-- /.card -->   
@@ -1682,18 +1680,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-    // Guardar el índice de la pestaña activa en localStorage
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var target = $(e.target).attr("href"); // Tab activa
-        localStorage.setItem('activeTab', target);
+   // Espera a que el documento esté listo
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtiene el elemento de pestañas
+        var tabs = document.querySelectorAll('.nav-pills .nav-link');
+
+        // Itera sobre cada pestaña
+        tabs.forEach(function(tab) {
+            // Añade un evento de clic a cada pestaña
+            tab.addEventListener('click', function() {
+                // Obtiene el id de la pestaña activa
+                var activeTab = tab.getAttribute('href');
+
+                // Guarda el id de la pestaña activa en localStorage
+                localStorage.setItem('activeTab', activeTab);
+            });
+        });
+
+        // Obtiene el id de la pestaña activa desde localStorage
+        var activeTab = localStorage.getItem('activeTab');
+
+        // Si hay una pestaña activa guardada en localStorage, la muestra
+        if (activeTab) {
+            var tabLink = document.querySelector('.nav-pills .nav-link[href="' + activeTab + '"]');
+            if (tabLink) {
+                tabLink.click(); // Activa la pestaña guardada
+            }
+        }
     });
-
-    // Restaurar la pestaña activa al cargar la página
-    var activeTab = localStorage.getItem('activeTab');
-    if (activeTab) {
-        $('.nav-pills a[href="' + activeTab + '"]').tab('show');
-    }
-
 </script>
 
 @endsection
