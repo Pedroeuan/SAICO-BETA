@@ -11,6 +11,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
+        <div id="tab-warning" class="alert alert-warning text-center" style="display: none;">
+                Por favor, seleccione una pestaña.
+            </div>
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
@@ -1706,6 +1709,32 @@ document.addEventListener('DOMContentLoaded', function() {
             if (tabLink) {
                 tabLink.click(); // Activa la pestaña guardada
             }
+        }
+    });
+
+       // Espera a que el documento esté listo
+        document.addEventListener("DOMContentLoaded", function() {
+        var tabs = document.querySelectorAll('.nav-pills .nav-link');
+        var warningMessage = document.getElementById('tab-warning');
+
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var activeTab = tab.getAttribute('href');
+                localStorage.setItem('activeTab', activeTab);
+                warningMessage.style.display = 'none'; // Oculta el mensaje cuando se selecciona una pestaña
+            });
+        });
+
+        var activeTab = localStorage.getItem('activeTab');
+
+        if (activeTab) {
+            var tabLink = document.querySelector('.nav-pills .nav-link[href="' + activeTab + '"]');
+            if (tabLink) {
+                tabLink.click(); // Activa la pestaña guardada
+                warningMessage.style.display = 'none'; // Oculta el mensaje si hay una pestaña seleccionada
+            }
+        } else {
+            warningMessage.style.display = 'block'; // Muestra el mensaje si no hay ninguna pestaña seleccionada
         }
     });
 </script>
