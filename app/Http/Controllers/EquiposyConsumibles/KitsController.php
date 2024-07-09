@@ -38,7 +38,7 @@ class KitsController extends Controller
 
         public function obtenerDatosActualizados()
     {
-        $generalConCertificados = general_eyc::with('certificados')->get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
 
         return response()->json($generalConCertificados);
     }

@@ -55,7 +55,6 @@ class general_eycController extends Controller
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
          //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
-
         return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
 
