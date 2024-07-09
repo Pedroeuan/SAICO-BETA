@@ -36,6 +36,13 @@ class KitsController extends Controller
                     /*vista*/    /*variable donde se guardan los datos*/
     }
 
+        public function obtenerDatosActualizados()
+    {
+        $generalConCertificados = general_eyc::with('certificados')->get();
+
+        return response()->json($generalConCertificados);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
