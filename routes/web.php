@@ -92,6 +92,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::post('/GuardarKits/agregarKits', [KitsController::class, 'GuardarKits'])->name('GuardarKits.agregarKits');
     /*Ruta de Eliminación-de Kits-Index*/
     Route::delete('/eliminar/Kits/{id}', [KitsController::class, 'destroyKits'])->name('eliminar.Kits');
+    /*Refrecar la tabla de inventario en Kits */
+    Route::get('/obtenerDatosActualizados', [KitsController::class, 'obtenerDatosActualizados'])->name('obtenerDatosActualizados');
 
     /*Ruta de botón Agregar-datos a detalles kits-edición*/
     Route::post('/kits/agregar', [KitsController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');

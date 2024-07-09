@@ -55,7 +55,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha de Salida</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_Salida" value="{{ $Manifiestos->Fecha_Salida }}" required>
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_Salida" value="{{ $Solicitud->Fecha }}" required disabled>
                                         </div>
                                     </div>
 

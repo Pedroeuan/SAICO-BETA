@@ -975,7 +975,19 @@
                                                         <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
                                                     @endif
                                                 </td>
-                                                <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
+
+                                                @if($general_eyc->certificados)
+                                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                                                <td scope="row">SIN FECHA ASIGNADA</td>
+                                                                @else
+                                                                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                                            @endif
+                                                        @else
+                                                        <td scope="row">N/A</td>
+                                                    @endif
+                                                @endif
+
                                                 <td>
                                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                                     <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
@@ -1038,9 +1050,116 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
+
+    function actualizarTabla() {
+        $.ajax({
+            url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
+            method: 'GET',
+            success: function(response) {
+                // Vaciar el contenido actual de la tabla
+                $('#tablaJs tbody').empty();
+
+                // Iterar sobre los datos recibidos y agregarlos a la tabla
+                response.forEach(function(item) {
+                    var disponibilidad = '';
+                    switch(item.Disponibilidad_Estado) {
+                        case 'DISPONIBLE':
+                            disponibilidad = '<button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>';
+                            break;
+                        case 'NO DISPONIBLE':
+                            disponibilidad = '<button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                            break;
+                        case 'FUERA DE SERVICIO/BAJA':
+                            disponibilidad = '<button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>';
+                            break;
+                        case 'ESPERA DE DATO':
+                            disponibilidad = '<button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>';
+                            break;
+                    }
+
+                    var hojaPresentacion = item.Foto != 'ESPERA DE DATO'
+                        ? '<a class="btn btn-primary" href="/storage/' + item.Foto + '" role="button" target="_blank"><i class="fa fa-eye"></i></a>'
+                        : '<a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+
+                    var row = '<tr data-id="' + item.idGeneral_EyC + '">' +
+                            '<td>' + item.Nombre_E_P_BP + '</td>' +
+                            '<td>' + item.No_economico + '</td>' +
+                            '<td>' + item.Marca + '</td>' +
+                            '<td>' + item.Modelo + '</td>' +
+                            '<td>' + item.Serie + '</td>' +
+                            '<td>' + disponibilidad + '</td>' +
+                            '<td>' + (item.certificados ? item.certificados.Fecha_calibracion : 'N/A') + '</td>' +
+                            '<td>' + hojaPresentacion + '</td>' +
+                            '<td><button type="button" class="btn btn-success btnAgregar" data-id="' + item.idGeneral_EyC + '"><i class="fas fa-plus-circle" aria-hidden="true"></i></button></td>' +
+                            '</tr>';
+
+                    $('#tablaJs tbody').append(row);
+                });
+
+                // Reattach the listeners after updating the table
+                attachAddListeners();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+    // Actualizar la tabla cada 30 segundos (30000 milisegundos)
+    setInterval(actualizarTabla, 30000);
+
+    // Llamar a la función una vez al cargar la página
+    actualizarTabla();
+});
+
+// Funciones para adjuntar los listeners
+function attachAddListeners() {
+    document.querySelectorAll('.btnAgregar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            let id = this.dataset.id;
+
+            // Verificar si el elemento ya está en la tabla de seleccionados
+            if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                return; // Si ya está, no hacemos nada
+            }
+
+            // Clonar la fila y agregar campos de cantidad y unidad
+            let newRow = document.createElement('tr');
+            newRow.setAttribute('data-id', id);
+            newRow.innerHTML = `
+                <td>${row.cells[0].innerText}</td>
+                <td>${row.cells[1].innerText}</td>
+                <td>${row.cells[2].innerText}</td>
+                <td>${row.cells[6].innerText}</td>
+                <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
+                <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+            `;
+
+            // Agregar la nueva fila a la tabla de seleccionados
+            document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+
+            // Re-attach the delete listeners to the new button
+            attachDeleteListeners();
+        });
+    });
+}
+
+function attachDeleteListeners() {
+    document.querySelectorAll('.btnEliminar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            row.remove();
+        });
+    });
+}
+
+
 let table = new DataTable('#tablaJs', {
     // options
     language: {
@@ -1550,6 +1669,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var marca = formData.get('Marca');
             var modelo = formData.get('Modelo');
             var serie = formData.get('Serie');
+            var stock = formData.get('Stock');
 
             // Validaciones
             var camposVacios = [];
@@ -1565,6 +1685,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (!serie) {
                 camposVacios.push('Número de Serie');
+            }
+            if (!stock) {
+                camposVacios.push('Stock');
             }
 
             if (camposVacios.length > 0) {

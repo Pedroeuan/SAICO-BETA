@@ -110,7 +110,7 @@ class ManifiestoController extends Controller
             'Cliente' => 'required|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
-            'Fecha_Salida' => 'required|date',
+            //'Fecha_Salida' => 'required|date',
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
@@ -141,7 +141,7 @@ class ManifiestoController extends Controller
                 $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
                 $historialAlmacen->Tipo = 'SALIDA';
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
-                $historialAlmacen->Fecha = Carbon::now()->format('Y-m-d');
+                $historialAlmacen->Fecha = $request->input('Fecha_Salida');//Este campo se quito de la base de datos de manifiestos pero para el historial de almacen es necesario
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
                 $historialAlmacen->save();
     
@@ -161,7 +161,7 @@ class ManifiestoController extends Controller
         $Manifiestos->Cliente = $request->input('Cliente');
         $Manifiestos->Folio = $request->input('Folio');
         $Manifiestos->Destino = $request->input('Destino');
-        $Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');
+        //$Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');//Este campo se quito de la base de datos de manifiestos pero para el historial de almacen es necesario
         $Manifiestos->Trabajo = $request->input('Trabajo');
         $Manifiestos->Puesto = $request->input('Puesto');
         $Manifiestos->Responsable = $request->input('Responsable');
@@ -227,7 +227,7 @@ class ManifiestoController extends Controller
             'Cliente' =>$request->input('Cliente'),
             'Folio' =>$request->input('Folio'),
             'Destino' =>$request->input('Destino'),
-            'Fecha_Salida' =>$request->input('Fecha_Salida'),
+            //'Fecha_Salida' =>$request->input('Fecha_Salida'),
             'Trabajo' =>$request->input('Trabajo'),
             'Puesto' =>$request->input('Puesto'),
             'Responsable' =>$request->input('Responsable'),
