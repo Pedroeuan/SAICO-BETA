@@ -13,6 +13,7 @@ use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
@@ -55,7 +56,6 @@ class general_eycController extends Controller
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
          //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
-
         return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
 

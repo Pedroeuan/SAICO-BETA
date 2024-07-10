@@ -15,6 +15,8 @@ use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
 
 class SolicitudesController extends Controller
 {
@@ -129,6 +131,9 @@ class SolicitudesController extends Controller
         if ($Solicitud->Estatus == 'PENDIENTE') {
             if (!$Manifiestos) {
                 return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }else
+            {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
             }
             // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
             // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
@@ -137,6 +142,9 @@ class SolicitudesController extends Controller
         if ($Solicitud->Estatus == 'APROBADO') {
             if (!$Manifiestos) {
                 return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+            }else
+            {
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
             }
         }
     
@@ -174,13 +182,34 @@ class SolicitudesController extends Controller
     public function destroyDetallesSolicitud($id)
     {
         try {
+            // Busca el detalle de la solicitud en la tabla detalles_solicitud
             $detalle = detalles_solicitud::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
-            $detalle->delete();
-    
+            $idSolicitud = $detalle->idSolicitud; // idSolicitud
+            
+            // Busca la solicitud en la tabla Solicitudes
+            $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
+            $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
+
+            $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
+
+            // Busca el historial en la tabla Historial_Almacen
+            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
+                                                ->where('Fecha', $Fecha_Solicitud)
+                                                ->first();
+            
+            // Si se encuentra un registro en el historial
+            if ($Historial_Almacen) {
+                $Historial_Almacen->delete(); // Elimina el historial
+            }
+
+            $detalle->delete(); // Elimina el detalle de la solicitud
+
             return response()->json(['success' => 'Record deleted successfully!']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found.'], 404);
         } catch (\Exception $e) {
+            // Loguea el error para mayor detalle
+            Log::error('Error deleting record: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while deleting the record.'], 500);
         }
     }

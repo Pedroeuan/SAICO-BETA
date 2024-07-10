@@ -11,10 +11,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
+        <div id="tab-warning" class="alert alert-warning text-center" style="display: none;">
+                Por favor, seleccione una pestaña.
+            </div>
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
-                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Accesorios</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
@@ -26,11 +29,10 @@
                 <div class="card-body">
                     <div class="tab-content">
 
-                        <div class="tab-pane active" id="tab_1">
+                        <div class="tab-pane" id="tab_1">
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
@@ -208,7 +210,7 @@
                                 </div>
                             </form>
                         </div>
-                            <!-- Contenido de la primera pestaña -->
+                        <!-- CONSUMIBLES -->
                         <div class="tab-pane" id="tab_2">
                             <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
@@ -349,6 +351,11 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
                                             <input type="number" class="form-control inputForm" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            @error('Stock')
+                                                <br>
+                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                                </br>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -968,7 +975,19 @@
                                                         <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
                                                     @endif
                                                 </td>
-                                                <td>{{ $general_eyc->certificados ? $general_eyc->certificados->Fecha_calibracion : 'N/A' }}</td>
+
+                                                @if($general_eyc->certificados)
+                                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                                                <td scope="row">SIN FECHA ASIGNADA</td>
+                                                                @else
+                                                                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                                            @endif
+                                                        @else
+                                                        <td scope="row">N/A</td>
+                                                    @endif
+                                                @endif
+
                                                 <td>
                                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                                     <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
@@ -1014,7 +1033,6 @@
                             </form>
                         </div><!--"class="tab-pane" id="tab_6""-->
 
-
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
             </div><!-- /.card -->   
@@ -1032,11 +1050,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
+
 let table = new DataTable('#tablaJs', {
-    // options
+    //destroy: true, // Asegura que cualquier instancia previa de DataTables se destruya antes de crear una nueva
+    //pageLength: 5, // Especifica cuántas entradas deseas mostrar por página
+    //lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]], // Añade 5 a las opciones del menú
     language: {
                     "decimal": "",
                     "emptyTable": "No hay datos disponibles en la tabla",
@@ -1062,6 +1083,111 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+
+    function actualizarTabla() {
+        $.ajax({
+            url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
+            method: 'GET',
+            success: function(response) {
+                // Vaciar el contenido actual de la tabla
+                $('#tablaJs tbody').empty();
+
+                // Iterar sobre los datos recibidos y agregarlos a la tabla
+                response.forEach(function(item) {
+                    var disponibilidad = '';
+                    switch(item.Disponibilidad_Estado) {
+                        case 'DISPONIBLE':
+                            disponibilidad = '<button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>';
+                            break;
+                        case 'NO DISPONIBLE':
+                            disponibilidad = '<button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                            break;
+                        case 'FUERA DE SERVICIO/BAJA':
+                            disponibilidad = '<button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>';
+                            break;
+                        case 'ESPERA DE DATO':
+                            disponibilidad = '<button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>';
+                            break;
+                    }
+
+                    var hojaPresentacion = item.Foto != 'ESPERA DE DATO'
+                        ? '<a class="btn btn-primary" href="/storage/' + item.Foto + '" role="button" target="_blank"><i class="fa fa-eye"></i></a>'
+                        : '<a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+
+                    var row = '<tr data-id="' + item.idGeneral_EyC + '">' +
+                            '<td>' + item.Nombre_E_P_BP + '</td>' +
+                            '<td>' + item.No_economico + '</td>' +
+                            '<td>' + item.Marca + '</td>' +
+                            '<td>' + item.Modelo + '</td>' +
+                            '<td>' + item.Serie + '</td>' +
+                            '<td>' + disponibilidad + '</td>' +
+                            '<td>' + (item.certificados ? item.certificados.Fecha_calibracion : 'N/A') + '</td>' +
+                            '<td>' + hojaPresentacion + '</td>' +
+                            '<td><button type="button" class="btn btn-success btnAgregar" data-id="' + item.idGeneral_EyC + '"><i class="fas fa-plus-circle" aria-hidden="true"></i></button></td>' +
+                            '</tr>';
+
+                    $('#tablaJs tbody').append(row);
+                });
+
+                // Reattach the listeners after updating the table
+                attachAddListeners();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+    // Actualizar la tabla cada 30 segundos (30000 milisegundos)
+    setInterval(actualizarTabla, 30000);
+
+    // Llamar a la función una vez al cargar la página
+    actualizarTabla();
+});
+
+// Funciones para adjuntar los listeners
+function attachAddListeners() {
+    document.querySelectorAll('.btnAgregar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            let id = this.dataset.id;
+
+            // Verificar si el elemento ya está en la tabla de seleccionados
+            if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                return; // Si ya está, no hacemos nada
+            }
+
+            // Clonar la fila y agregar campos de cantidad y unidad
+            let newRow = document.createElement('tr');
+            newRow.setAttribute('data-id', id);
+            newRow.innerHTML = `
+                <td>${row.cells[0].innerText}</td>
+                <td>${row.cells[1].innerText}</td>
+                <td>${row.cells[2].innerText}</td>
+                <td>${row.cells[6].innerText}</td>
+                <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
+                <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+            `;
+
+            // Agregar la nueva fila a la tabla de seleccionados
+            document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+
+            // Re-attach the delete listeners to the new button
+            attachDeleteListeners();
+        });
+    });
+}
+
+function attachDeleteListeners() {
+    document.querySelectorAll('.btnEliminar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            row.remove();
+        });
+    });
+}
 
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
@@ -1544,6 +1670,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var marca = formData.get('Marca');
             var modelo = formData.get('Modelo');
             var serie = formData.get('Serie');
+            var stock = formData.get('Stock');
 
             // Validaciones
             var camposVacios = [];
@@ -1559,6 +1686,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (!serie) {
                 camposVacios.push('Número de Serie');
+            }
+            if (!stock) {
+                camposVacios.push('Stock');
             }
 
             if (camposVacios.length > 0) {
@@ -1676,6 +1806,61 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+   // Espera a que el documento esté listo
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtiene el elemento de pestañas
+        var tabs = document.querySelectorAll('.nav-pills .nav-link');
+
+        // Itera sobre cada pestaña
+        tabs.forEach(function(tab) {
+            // Añade un evento de clic a cada pestaña
+            tab.addEventListener('click', function() {
+                // Obtiene el id de la pestaña activa
+                var activeTab = tab.getAttribute('href');
+
+                // Guarda el id de la pestaña activa en localStorage
+                localStorage.setItem('activeTab', activeTab);
+            });
+        });
+
+        // Obtiene el id de la pestaña activa desde localStorage
+        var activeTab = localStorage.getItem('activeTab');
+
+        // Si hay una pestaña activa guardada en localStorage, la muestra
+        if (activeTab) {
+            var tabLink = document.querySelector('.nav-pills .nav-link[href="' + activeTab + '"]');
+            if (tabLink) {
+                tabLink.click(); // Activa la pestaña guardada
+            }
+        }
+    });
+
+       // Espera a que el documento esté listo
+        document.addEventListener("DOMContentLoaded", function() {
+        var tabs = document.querySelectorAll('.nav-pills .nav-link');
+        var warningMessage = document.getElementById('tab-warning');
+
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var activeTab = tab.getAttribute('href');
+                localStorage.setItem('activeTab', activeTab);
+                warningMessage.style.display = 'none'; // Oculta el mensaje cuando se selecciona una pestaña
+            });
+        });
+
+        var activeTab = localStorage.getItem('activeTab');
+
+        if (activeTab) {
+            var tabLink = document.querySelector('.nav-pills .nav-link[href="' + activeTab + '"]');
+            if (tabLink) {
+                tabLink.click(); // Activa la pestaña guardada
+                warningMessage.style.display = 'none'; // Oculta el mensaje si hay una pestaña seleccionada
+            }
+        } else {
+            warningMessage.style.display = 'block'; // Muestra el mensaje si no hay ninguna pestaña seleccionada
+        }
+    });
 </script>
 
 @endsection
