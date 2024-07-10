@@ -16,7 +16,7 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-        <h3 align="center">KITS</h3>
+        <h3 align="center">Inventario de KITS registrados</h3>
             <br>
         <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
@@ -36,8 +36,8 @@
                                 <td scope="row">{{$kits->Prueba}}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                        <button type="button" class="btn btn-light btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                        <button type="button" class="btn btn-danger btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                 </td>
                             @endif

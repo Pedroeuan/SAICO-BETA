@@ -26,139 +26,137 @@
     d-inline-block y style="width: auto;" aseguran que el campo de fecha no ocupe todo el ancho disponible y se alinee correctamente.
     -->
     <div class="box">
-            <h3 align="center">Formulario para solicitar equipos y consumibles</h3>
-            <br>
-            <div class="left-align">
+        <br>
+        <br>
+        <div class="box">
+            <h5 align="center">Elige el kit para solicitar</h5>
+            <div class="box-body">
+                <table id="tablaKits" class="table table-bordered table-striped dt-responsive tablas">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Prueba</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($kitsConDetalles as $kits)
+                        <tr>
+                        @if($kits)
+                            <td scope="row">{{$kits->Nombre}}</td>
+                            <td scope="row">{{$kits->Prueba}}</td>
+                            <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
+                                </div>
+                                        </td>
+                        @endif
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="box-body">
+            <h5 align="center">Elige el equipo o consumible para solicitar</h5>
+            <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Num. Económico</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>NS</th>
+                        <th>Disponibilidad</th>
+                        <th>Fecha calibración</th>
+                        <th>Hoja de Presentación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($generalConCertificados as $general_eyc)
+                    <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
+                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                        <td scope="row">{{$general_eyc->No_economico}}</td>
+                        <td scope="row">{{$general_eyc->Marca}}</td>
+                        <td scope="row">{{$general_eyc->Modelo}}</td>
+                        <td scope="row">{{$general_eyc->Serie}}</td>
+                        <td scope="row">
+                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                        <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                        <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                        <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                        @endif
+                        </td>
+                        <td scope="row">
+                        @if($general_eyc->certificados)
+                        @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                        @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
+                            SIN FECHA ASIGNADA
+                        @else
+                        {{$general_eyc->certificados->Fecha_calibracion}}
+                        @endif
+                        @else
+                            N/A
+                        @endif
+                        @endif
+                        </td>
+                        <td scope="row">
+                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                        @endif
+                        </td>
+                        <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
+                        </div>
+                        </td>
+                    </tr>
+                        @endforeach
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="left-align">
             <label class="col-form-label mr-2" for="Fecha_Servicio">Fecha de Servicio</label>
             <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" id="Fecha_Servicio" style="width: auto;">
         </div>
-            <br>
-            <div class="box">
-                <h3 align="center">Kits</h3>
-                <div class="box-body">
-                    <table id="tablaKits" class="table table-bordered table-striped dt-responsive tablas">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Prueba</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($kitsConDetalles as $kits)
-                                <tr>
-                                    @if($kits)
-                                        <td scope="row">{{$kits->Nombre}}</td>
-                                        <td scope="row">{{$kits->Prueba}}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
-                                            </div>
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+        <div class="box">
+            <h5 align="center">Elementos Solicitados</h5>
             <br>
             <div class="box-body">
-                    <h3 align="center">Inventario</h3>
-                <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Num. Económico</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>NS</th>
-                                <th>Disponibilidad</th>
-                                <th>Fecha calibración</th>
-                                <th>Hoja de Presentación</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($generalConCertificados as $general_eyc)
-                                <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
-                                    <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                                    <td scope="row">{{$general_eyc->No_economico}}</td>
-                                    <td scope="row">{{$general_eyc->Marca}}</td>
-                                    <td scope="row">{{$general_eyc->Modelo}}</td>
-                                    <td scope="row">{{$general_eyc->Serie}}</td>
-                                    <td scope="row">
-                                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                            <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                            <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                            <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                            <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                                        @endif
-                                    </td>
-                                    <td scope="row">
-                                        @if($general_eyc->certificados)
-                                            @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
-                                                @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                    SIN FECHA ASIGNADA
-                                                @else
-                                                    {{$general_eyc->certificados->Fecha_calibracion}}
-                                                @endif
-                                            @else
-                                                N/A
-                                            @endif
-                                        @endif
-                                    </td>
-                                    <td scope="row">
-                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
-                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                    <div class="box">
-                        <h3 align="center">Elementos Solicitados</h3>
-                        <div class="box-body">
-                            <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Num. Económico</th>
-                                        <th>Marca</th>
-                                        <th>Ultima Calibración</th>
-                                        <th>Cantidad</th>
-                                        <th>Unidad</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Elementos agregados se mostrarán aquí -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col text-center">
-                        <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
-                            Finalizar solicitud
-                        </button>
-                    </div>
-                <br>
+                <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Num. Económico</th>
+                            <th>Marca</th>
+                            <th>Ultima Calibración</th>
+                            <th>Cantidad</th>
+                            <th>Unidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Elementos agregados se mostrarán aquí -->
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <div class="col text-center">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+                Finalizar solicitud
+            </button>
+        </div>
+        <br>
+    </div>
 </form>
 @stop
 
