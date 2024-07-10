@@ -43,7 +43,7 @@
                                         </div><!--d-flex justify -->
                                     </div><!--box -->
 
-                                    <h5 align="center">Inventario Disponible</h5>
+                                    <h5 align="center">Elige los equipos y consumibles para editar el KIT</h5>
                                     <!-- Tabla de Elementos Disponibles -->
                                     <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
@@ -99,7 +99,7 @@
                                                         <td>
                                                     @endif
                                                         <div class="btn-group">
-                                                            <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}" data-id-kits="{{ $Kit->idKits }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
+                                                            <button type="button" class="btn btn-info btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}" data-id-kits="{{ $Kit->idKits }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
                                                         </div>
                                                     </td>
                                             </tr>
@@ -109,7 +109,7 @@
 
                                     <!-- Tabla de Elementos Seleccionados -->
                                     <div class="container">
-                                    <h3 align="center">Kit</h3>
+                                    <h5 align="center">Nuevo Kit editado</h5>
                                     <br>
                                     <div class="card-body">
                                     <table id="TablaKits" class="table table-bordered" >

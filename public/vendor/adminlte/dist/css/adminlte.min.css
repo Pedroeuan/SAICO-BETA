@@ -402,6 +402,8 @@ h4, .h4 {
 
 h5, .h5 {
   font-size: 1.25rem;
+  font-style: italic;
+  font-weight: bold;
 }
 
 h6, .h6 {

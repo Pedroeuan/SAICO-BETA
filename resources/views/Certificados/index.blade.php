@@ -21,7 +21,7 @@
                     <tr>
                         <!--<th>Lote / Número Económico</th>-->
                         <th>Número Económico</th>
-                        <th>Tipo (equipo)</th>
+                        <th>Categoría</th>
                         <th>Última calibración</th>
                         <th>Ver Certificado</th>
                     </tr>
@@ -42,7 +42,7 @@
                                     <td>{{ $historial->Ultima_Fecha_calibracion }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ asset('storage/' . $historial->Certificado_Caducado) }}" role="button" target="_blank">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="far fa-file-pdf"></i>
                                         </a>
                                     </td>
                                 </tr>

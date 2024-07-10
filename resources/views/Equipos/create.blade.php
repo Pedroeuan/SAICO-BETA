@@ -935,12 +935,10 @@
                                                     <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
                                                 </div>
                                             </div>
-
                                         </div>
-
                                 </div>
-                                
-                                <h5 align="center">Inventario Disponible</h5>
+                                <br>
+                                <h5 align="center">Elige los equipos y consumibles para armar el KIT</h5>
                                     <!-- Tabla de Elementos Disponibles -->
                                 <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
@@ -953,7 +951,7 @@
                                                 <th>Disponibilidad</th>
                                                 <th>Fecha calibración</th>
                                                 <th>Hoja de Presentación</th>
-                                                <th>Acciones</th>
+                                                <th>Elegir item</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -996,13 +994,14 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-info btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                 </table>
-
+                                <h5 align="center">Nuevo KIT</h5>
+                                <br>
                                 <!-- Tabla de Elementos Seleccionados -->
                                 <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
