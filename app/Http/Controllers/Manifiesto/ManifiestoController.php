@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
-use Illuminate\Http\Request;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
+use Carbon\Carbon;
 
 class ManifiestoController extends Controller
 {
@@ -41,6 +45,7 @@ class ManifiestoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    /*/solicitud/Manifiesto/{id}-Boton Crear Manifiesto */
     public function create($id)
 {
     $general = general_eyc::get();
@@ -95,7 +100,6 @@ class ManifiestoController extends Controller
     
 }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -106,13 +110,12 @@ class ManifiestoController extends Controller
             'Cliente' => 'required|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
-            'Fecha_Salida' => 'required|date',
+            //'Fecha_Salida' => 'required|date',
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
 
         ]);
-
         $id =$request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
@@ -120,21 +123,45 @@ class ManifiestoController extends Controller
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
+        
 
-        /*$Solicitud = Solicitudes::findOrFail($id);
-        $general = general_eyc::get();
+        //$Solicitud = Solicitudes::findOrFail($id);
+        //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
+        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+            if ($almacen) {
+                $historialAlmacen = new Historial_Almacen;
+                $historialAlmacen->idAlmacen = $almacen->idAlmacen;
+                $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
+                $historialAlmacen->Tipo = 'SALIDA';
+                $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
+                $historialAlmacen->Fecha = $request->input('Fecha_Salida');
+                $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
+                $historialAlmacen->save();
+    
+                // Actualizar el estado en general_eyc a "NO DISPONIBLE"
+                $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                
+                if ($generalEyC) {
+                    $generalEyC->Disponibilidad_Estado = 'NO DISPONIBLE';
+                    $generalEyC->save();
+                }
+            }
+        }
+    
 
         $Manifiestos = new manifiesto;
         $Manifiestos->idSolicitud = $request->input('idSolicitud');
         $Manifiestos->Cliente = $request->input('Cliente');
         $Manifiestos->Folio = $request->input('Folio');
         $Manifiestos->Destino = $request->input('Destino');
-        $Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');
+        //$Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');//Este campo se quito de la base de datos de manifiestos pero para el historial de almacen es necesario
         $Manifiestos->Trabajo = $request->input('Trabajo');
         $Manifiestos->Puesto = $request->input('Puesto');
         $Manifiestos->Responsable = $request->input('Responsable');
@@ -171,7 +198,7 @@ class ManifiestoController extends Controller
             'Cliente' => 'required|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
-            'Fecha_Salida' => 'required|date',
+            //'Fecha_Salida' => 'required|date',
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
@@ -200,7 +227,7 @@ class ManifiestoController extends Controller
             'Cliente' =>$request->input('Cliente'),
             'Folio' =>$request->input('Folio'),
             'Destino' =>$request->input('Destino'),
-            'Fecha_Salida' =>$request->input('Fecha_Salida'),
+            //'Fecha_Salida' =>$request->input('Fecha_Salida'),
             'Trabajo' =>$request->input('Trabajo'),
             'Puesto' =>$request->input('Puesto'),
             'Responsable' =>$request->input('Responsable'),
