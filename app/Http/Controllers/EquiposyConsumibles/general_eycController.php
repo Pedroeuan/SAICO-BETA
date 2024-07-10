@@ -13,6 +13,7 @@ use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;

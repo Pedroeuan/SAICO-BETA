@@ -116,7 +116,6 @@ class ManifiestoController extends Controller
             'Responsable' => 'required|string|max:255',
 
         ]);
-
         $id =$request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
@@ -124,6 +123,7 @@ class ManifiestoController extends Controller
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
+        
 
         //$Solicitud = Solicitudes::findOrFail($id);
         //$general = general_eyc::get();
@@ -141,7 +141,7 @@ class ManifiestoController extends Controller
                 $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
                 $historialAlmacen->Tipo = 'SALIDA';
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
-                $historialAlmacen->Fecha = $request->input('Fecha_Salida');//Este campo se quito de la base de datos de manifiestos pero para el historial de almacen es necesario
+                $historialAlmacen->Fecha = $request->input('Fecha_Salida');
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
                 $historialAlmacen->save();
     
@@ -198,7 +198,7 @@ class ManifiestoController extends Controller
             'Cliente' => 'required|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
-            'Fecha_Salida' => 'required|date',
+            //'Fecha_Salida' => 'required|date',
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',

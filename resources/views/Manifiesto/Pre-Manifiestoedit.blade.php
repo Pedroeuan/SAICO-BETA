@@ -15,9 +15,6 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                         <div class="form-group">
-                                            @php
-                                            //dd($Manifiestos->Cliente);
-                                            @endphp
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
                                             <input type="text" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{ $Manifiestos->Cliente }}" required>
                                             @error('Cliente')
@@ -55,7 +52,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha de Salida</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_Salida" value="{{ $Solicitud->Fecha }}" required disabled>
+                                            <input type="date" class="form-control inputForm" name="Fecha_Salida" value="{{ $Solicitud->Fecha }}" disabled>
                                         </div>
                                     </div>
 
