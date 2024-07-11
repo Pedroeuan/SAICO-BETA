@@ -131,8 +131,8 @@
     </div>
 <br>
 
-<!--Campo Oculto para pasar el id de Solicitud /hidden-->
-
+                        <!--Campo Oculto para pasar el id de Solicitud /hidden-->
+                            @if($Manifiestos)
                             <div class="row">
                                 <div class="col-sm-4">
                                         <div class="form-group">
@@ -193,7 +193,7 @@
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto." disabled>{{ $Manifiestos->Observaciones }}</textarea>
                                         </div>
                                     </div>
-
+                                    @endif
 <button type="submit" class="btn btn-success">Crear manifiesto</button>
 </form>
 <br>
