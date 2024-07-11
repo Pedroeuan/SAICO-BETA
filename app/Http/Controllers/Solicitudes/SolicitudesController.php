@@ -130,10 +130,10 @@ class SolicitudesController extends Controller
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
             if (!$Manifiestos) {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
             }else
             {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
             }
             // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
             // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
@@ -193,13 +193,18 @@ class SolicitudesController extends Controller
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
             // Busca el historial en la tabla Historial_Almacen
-            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
-                                                ->where('Fecha', $Fecha_Solicitud)
-                                                ->first();
+            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->first();
+            //Busca el idSolicitud que esta ligado en Manifiesto y lo elimina
+            $Manifiestos = manifiesto::where('idSolicitud', $idSolicitud)->first();
             
             // Si se encuentra un registro en el historial
             if ($Historial_Almacen) {
                 $Historial_Almacen->delete(); // Elimina el historial
+            }
+
+            // Si se encuentra un registro en la tabla manifiesto
+            if ($Manifiestos) {
+                $Manifiestos->delete(); // Elimina el historial
             }
 
             $detalle->delete(); // Elimina el detalle de la solicitud

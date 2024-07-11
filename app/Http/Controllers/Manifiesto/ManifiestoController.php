@@ -29,6 +29,7 @@ class ManifiestoController extends Controller
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
         // Obtener los registros de General_EyC relacionados
@@ -39,14 +40,14 @@ class ManifiestoController extends Controller
             'Estatus' => $Estatus,
         ]);
 
-        return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+        return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    /*/solicitud/Manifiesto/{id}-Boton Crear Manifiesto */
-    public function create($id)
+    /*/solicitud/Manifiesto/{id}----Boton Crear Manifiesto */
+    public function create(Request $request, $id)
 {
     $general = general_eyc::get();
     $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
@@ -61,6 +62,7 @@ class ManifiestoController extends Controller
     $Solicitud->update([
         'Estatus' => $Estatus,
     ]);
+
 
     // Obtener todos los detalles de la solicitud
     $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
@@ -80,14 +82,32 @@ class ManifiestoController extends Controller
         }
     }
 
+    $idSolicitud = $request->filled('idSolicitud');
+
+    if($idSolicitud) ///verifica si hay un dato en el campo de idSolicitud
+    {
+        $Manifiestos = new manifiesto;
+        $Manifiestos->idSolicitud = $request->input('idSolicitud');
+        $Manifiestos->Cliente = $request->input('Cliente');
+        $Manifiestos->Folio = $request->input('Folio');
+        $Manifiestos->Destino = $request->input('Destino');
+        //$Manifiestos->Fecha_Salida = $request->input('Fecha_Salida');//Este campo se quito de la base de datos de manifiestos pero para el historial de almacen es necesario
+        $Manifiestos->Trabajo = $request->input('Trabajo');
+        $Manifiestos->Puesto = $request->input('Puesto');
+        $Manifiestos->Responsable = $request->input('Responsable');
+        $Manifiestos->Observaciones = $request->input('Observaciones');
+        $Manifiestos->save();
+    }
+        
+
     // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
     $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
 
     // Obtener los registros de General_EyC relacionados
     $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
-
     $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+
     if ($Solicitud->Estatus == 'APROBADO') {
         if ($Manifiestos) {
         return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
@@ -116,6 +136,7 @@ class ManifiestoController extends Controller
             'Responsable' => 'required|string|max:255',
 
         ]);
+
         $id =$request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
