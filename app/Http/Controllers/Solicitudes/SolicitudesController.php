@@ -192,11 +192,25 @@ class SolicitudesController extends Controller
 
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
+            $EyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+
+            if ($EyC) {
+                if($EyC->Disponibilidad_Estado == 'NO DISPONIBLE' )
+                    {
+                        $Estatus = 'DISPONIBLE';
+                        // Actualizar el estado de la solicitud
+                        $EyC->update([
+                            'Disponibilidad_Estado' => $Estatus,
+                        ]);
+                    }
+                
+                }
+
             // Busca el historial en la tabla Historial_Almacen
             $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->first();
             //Busca el idSolicitud que esta ligado en Manifiesto y lo elimina
             $Manifiestos = manifiesto::where('idSolicitud', $idSolicitud)->first();
-            
+
             // Si se encuentra un registro en el historial
             if ($Historial_Almacen) {
                 $Historial_Almacen->delete(); // Elimina el historial
