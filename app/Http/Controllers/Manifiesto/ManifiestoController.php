@@ -63,10 +63,10 @@ class ManifiestoController extends Controller
         'Estatus' => $Estatus,
     ]);
 
-    $idSolicitud = $Solicitud->idSolicitud;
-    $Manifiesto = manifiesto::find($idSolicitud);
+    //$idSolicitud = $Solicitud->idSolicitud;
+    //$Manifiesto = manifiesto::find($idSolicitud);
 
-        if (!$Manifiesto) { 
+        if ($request->filled('Cliente')) { 
         $Manifiestos = new manifiesto;
         $Manifiestos->idSolicitud = $request->input('idSolicitud');
         $Manifiestos->Cliente = $request->input('Cliente');
@@ -183,6 +183,20 @@ class ManifiestoController extends Controller
                     }
                 }
             }
+
+            if ($request->filled('Cliente')) { 
+                $Manifiestos = new manifiesto;
+                $Manifiestos->idSolicitud = $request->input('idSolicitud');
+                $Manifiestos->Cliente = $request->input('Cliente');
+                $Manifiestos->Folio = $request->input('Folio');
+                $Manifiestos->Destino = $request->input('Destino');
+                // $Manifiestos->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                $Manifiestos->Trabajo = $request->input('Trabajo');
+                $Manifiestos->Puesto = $request->input('Puesto');
+                $Manifiestos->Responsable = $request->input('Responsable');
+                $Manifiestos->Observaciones = $request->input('Observaciones');
+                $Manifiestos->save();
+                }
         //$Solicitud = Solicitudes::all();
         //return view("Solicitud.index",compact('Solicitud'));
         return redirect()->route('solicitud.index');

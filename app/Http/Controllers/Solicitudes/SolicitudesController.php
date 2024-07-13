@@ -189,6 +189,7 @@ class SolicitudesController extends Controller
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
+            $Tipo='SALIDA';
 
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
@@ -207,7 +208,7 @@ class SolicitudesController extends Controller
                 }
 
             // Busca el historial en la tabla Historial_Almacen
-            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->first();
+            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->where('Tipo', $Tipo)->first();
             //Busca el idSolicitud que esta ligado en Manifiesto y lo elimina
             $Manifiestos = manifiesto::where('idSolicitud', $idSolicitud)->first();
 
@@ -233,13 +234,43 @@ class SolicitudesController extends Controller
         }
     }
 
-    /*Eliminación de Toda la Solicitud */
+    /*Eliminación de Toda la Solicitud-Boton eliminar del Index*/
     public function destroySolicitud($id)
     {
-        // Eliminar los detalles relacionados con el idSolicitud
-        manifiesto::where('idSolicitud',$id)->delete();
-        detalles_solicitud::where('idSolicitud', $id)->delete();
-        Solicitudes::where('idSolicitud', $id)->delete();
+    // Obtener la solicitud y su fecha de salida
+    $solicitud = Solicitudes::find($id);
+
+    $fechaSalida = $solicitud->Fecha;
+
+    $Tipo = 'SALIDA';
+
+    // Obtener los detalles relacionados con la solicitud
+    $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+    
+
+    foreach ($detallesSolicitud as $detalle) {
+
+        $idGeneral_EyC = $detalle->idGeneral_EyC;
+        $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->get();
+
+        foreach ($Historial_Almacen as $h_almacen) {
+            
+
+        }
+
+
+    }
+
+
+    // Eliminar el manifiesto relacionado con la solicitud
+    manifiesto::where('idSolicitud', $id)->delete();
+
+    // Eliminar los detalles de la solicitud
+    detalles_solicitud::where('idSolicitud', $id)->delete();
+
+    // Eliminar la solicitud
+    Solicitudes::where('idSolicitud', $id)->delete();
             
         return redirect()->route('solicitud.index');
     }
