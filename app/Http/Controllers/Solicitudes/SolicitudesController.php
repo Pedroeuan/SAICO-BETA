@@ -244,6 +244,8 @@ class SolicitudesController extends Controller
 
     $Tipo = 'SALIDA';
 
+    $disponibilidadEstado='DISPONIBLE';
+
     // Obtener los detalles relacionados con la solicitud
     $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
 
@@ -252,16 +254,25 @@ class SolicitudesController extends Controller
     foreach ($detallesSolicitud as $detalle) {
 
         $idGeneral_EyC = $detalle->idGeneral_EyC;
-        $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->get();
+        $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $fechaSalida)->where('Tipo', $Tipo)->get();
 
         foreach ($Historial_Almacen as $h_almacen) {
-            
 
+         // Actualizar el estado de General_EyC a "DISPONIBLE"
+        $generalEyC = general_eyc::find($idGeneral_EyC);
+
+        if($generalEyC)
+        {
+            // Actualizar los datos del equipo
+            $generalEyC ->update([
+                'Disponibilidad_Estado' => $disponibilidadEstado,
+            ]);
         }
 
+        $h_almacen->delete();
+        }
 
     }
-
 
     // Eliminar el manifiesto relacionado con la solicitud
     manifiesto::where('idSolicitud', $id)->delete();

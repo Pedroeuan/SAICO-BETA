@@ -49,6 +49,7 @@ class ManifiestoController extends Controller
     /*/solicitud/Manifiesto/{id}----Boton Crear Manifiesto-aprobacion.blade*/
     public function create(Request $request, $id)
 {
+    //dd($request->input('Cliente'));
     $general = general_eyc::get();
     $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
     $Solicitud = Solicitudes::find($id);
@@ -140,6 +141,7 @@ class ManifiestoController extends Controller
         $id =$request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
+        $Tipo = 'SALIDA';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
@@ -160,6 +162,7 @@ class ManifiestoController extends Controller
             // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
             $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
             ->where('Fecha', $request->input('Fecha_Salida'))
+            ->where('Tipo', $Tipo)
             ->first();
 
             if (!$historialAlmacenExistente) {
@@ -234,15 +237,17 @@ class ManifiestoController extends Controller
             'Responsable' => 'required|string|max:255',
         ]);
 
-        $id =$request->input('idSolicitud');
+        $id = $request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
+        $Fecha = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
+        $Tipo = 'SALIDA';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
 
-                //$Solicitud = Solicitudes::findOrFail($id);
+        //$Solicitud = Solicitudes::findOrFail($id);
         //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
@@ -255,17 +260,18 @@ class ManifiestoController extends Controller
             if ($almacen) {
             // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
             $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
-            ->where('Fecha', $request->input('Fecha_Salida'))
+            ->where('Fecha', $Fecha)
+            ->where('Tipo', $Tipo)
             ->first();
 
-            if (!$historialAlmacenExistente) {
-
+            if (!$historialAlmacenExistente) 
+            {
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;
                 $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
                 $historialAlmacen->Tipo = 'SALIDA';
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
-                $historialAlmacen->Fecha = $request->input('Fecha_Salida');
+                $historialAlmacen->Fecha =  $Fecha;
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
                 $historialAlmacen->save();
     
@@ -276,22 +282,40 @@ class ManifiestoController extends Controller
                     $generalEyC->Disponibilidad_Estado = 'NO DISPONIBLE';
                     $generalEyC->save();
                         }
+            }else
+                {
+                    $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+                    $Cantidad_Detalle_Solicitud = $detalle->Cantidad;
+                    $Cantidad_Actualizar = $historialAlmacenExistente->Cantidad;
+                    if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Manifiesto->Destino != $historialAlmacenExistente->Tierra_Costafuera)
+                    {
+                        $historialAlmacenExistente ->update([
+                            'Cantidad' => $Cantidad_Detalle_Solicitud,
+                            'Tierra_Costafuera' => $Manifiesto->Destino,
+                        ]);
                     }
+
+                }
+                    
                 }
             }
 
             $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
-            $Manifiestos->update([
-                'idSolicitud' => $request->input('idSolicitud'),
-                'Cliente' =>$request->input('Cliente'),
-                'Folio' =>$request->input('Folio'),
-                'Destino' =>$request->input('Destino'),
-                //'Fecha_Salida' =>$request->input('Fecha_Salida'),
-                'Trabajo' =>$request->input('Trabajo'),
-                'Puesto' =>$request->input('Puesto'),
-                'Responsable' =>$request->input('Responsable'),
-                'Observaciones' =>$request->input('Observaciones'),
-            ]);
+            if($Manifiestos)
+            {
+                $Manifiestos->update([
+                    'idSolicitud' => $request->input('idSolicitud'),
+                    'Cliente' =>$request->input('Cliente'),
+                    'Folio' =>$request->input('Folio'),
+                    'Destino' =>$request->input('Destino'),
+                    //'Fecha_Salida' =>$request->input('Fecha_Salida'),
+                    'Trabajo' =>$request->input('Trabajo'),
+                    'Puesto' =>$request->input('Puesto'),
+                    'Responsable' =>$request->input('Responsable'),
+                    'Observaciones' =>$request->input('Observaciones'),
+                ]);
+            }
+            
 
 
         //$Solicitud = Solicitudes::all();
