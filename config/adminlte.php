@@ -468,6 +468,11 @@ return [
                             'icon' => 'fas fa-box',
                             'url' => 'index/Kits',
                         ],
+                        [
+                            'text' => ' Ver E/S/D',
+                            'icon' => 'fas fa-exchange-alt',
+                            'url' => 'Historial_Almacen/index',
+                        ],
                         /*[
                             'text' => 'level_one',
                             'url' => '#',
