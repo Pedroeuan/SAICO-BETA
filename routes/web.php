@@ -12,6 +12,7 @@ use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
 use App\Http\Controllers\EquiposyConsumibles\KitsController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
@@ -136,6 +137,10 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
     /*Ruta de Actualización*/
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
+
+    /*HISTORIAL ALMACEN*/
+    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
+    Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
 
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/

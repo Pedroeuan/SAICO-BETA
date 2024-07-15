@@ -2,8 +2,26 @@
 
 namespace App\Http\Controllers\EquiposyConsumibles;
 
-use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\equipos;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Models\EquiposyConsumibles\consumibles;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\EquiposyConsumibles\accesorios;
+use App\Models\EquiposyConsumibles\block_y_probeta;
+use App\Models\EquiposyConsumibles\herramientas;
+use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
+
+
 
 class HistorialAlmacenController extends Controller
 {
@@ -12,7 +30,10 @@ class HistorialAlmacenController extends Controller
      */
     public function index()
     {
-        //
+    // Obtener todos los registros de historial_almacen con sus relaciones
+    $historiales = Historial_Almacen::with(['Almacen.General_EyC'])->get();
+
+    return view('Historial_Almacen/index', compact('historiales'));
     }
 
     /**
