@@ -189,14 +189,29 @@ class SolicitudesController extends Controller
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
+            $Tipo='SALIDA';
 
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
+            $EyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+
+            if ($EyC) {
+                if($EyC->Disponibilidad_Estado == 'NO DISPONIBLE' )
+                    {
+                        $Estatus = 'DISPONIBLE';
+                        // Actualizar el estado de la solicitud
+                        $EyC->update([
+                            'Disponibilidad_Estado' => $Estatus,
+                        ]);
+                    }
+                
+                }
+
             // Busca el historial en la tabla Historial_Almacen
-            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->first();
+            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->where('Tipo', $Tipo)->first();
             //Busca el idSolicitud que esta ligado en Manifiesto y lo elimina
             $Manifiestos = manifiesto::where('idSolicitud', $idSolicitud)->first();
-            
+
             // Si se encuentra un registro en el historial
             if ($Historial_Almacen) {
                 $Historial_Almacen->delete(); // Elimina el historial
@@ -219,13 +234,54 @@ class SolicitudesController extends Controller
         }
     }
 
-    /*Eliminación de Toda la Solicitud */
+    /*Eliminación de Toda la Solicitud-Boton eliminar del Index*/
     public function destroySolicitud($id)
     {
-        // Eliminar los detalles relacionados con el idSolicitud
-        manifiesto::where('idSolicitud',$id)->delete();
-        detalles_solicitud::where('idSolicitud', $id)->delete();
-        Solicitudes::where('idSolicitud', $id)->delete();
+    // Obtener la solicitud y su fecha de salida
+    $solicitud = Solicitudes::find($id);
+
+    $fechaSalida = $solicitud->Fecha;
+
+    $Tipo = 'SALIDA';
+
+    $disponibilidadEstado='DISPONIBLE';
+
+    // Obtener los detalles relacionados con la solicitud
+    $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+    
+
+    foreach ($detallesSolicitud as $detalle) {
+
+        $idGeneral_EyC = $detalle->idGeneral_EyC;
+        $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $fechaSalida)->where('Tipo', $Tipo)->get();
+
+        foreach ($Historial_Almacen as $h_almacen) {
+
+         // Actualizar el estado de General_EyC a "DISPONIBLE"
+        $generalEyC = general_eyc::find($idGeneral_EyC);
+
+        if($generalEyC)
+        {
+            // Actualizar los datos del equipo
+            $generalEyC ->update([
+                'Disponibilidad_Estado' => $disponibilidadEstado,
+            ]);
+        }
+
+        $h_almacen->delete();
+        }
+
+    }
+
+    // Eliminar el manifiesto relacionado con la solicitud
+    manifiesto::where('idSolicitud', $id)->delete();
+
+    // Eliminar los detalles de la solicitud
+    detalles_solicitud::where('idSolicitud', $id)->delete();
+
+    // Eliminar la solicitud
+    Solicitudes::where('idSolicitud', $id)->delete();
             
         return redirect()->route('solicitud.index');
     }

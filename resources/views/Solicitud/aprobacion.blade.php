@@ -131,69 +131,70 @@
     </div>
 <br>
 
-<!--Campo Oculto para pasar el id de Solicitud /hidden-->
-
-                            <div class="row">
-                                <div class="col-sm-4">
+                        <!--Campo Oculto para pasar el id de Solicitud /hidden-->
+                            @if($Manifiestos)
+                                <div class="row">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{ $Manifiestos->Cliente }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Cliente</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{ $Manifiestos->Cliente }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Folio</label>
-                                            <input type="text" class="form-control inputForm" name="Folio" placeholder="Ejemplo: PROP-040/24" value="{{ $Manifiestos->Folio }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Folio" placeholder="Ejemplo: PROP-040/24" value="{{ $Manifiestos->Folio }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Destino</label>
-                                            <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: PATIO DE FABRICACIÓN PROTEXA" value="{{ $Manifiestos->Destino }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Destino</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Destino" placeholder="Ejemplo: PATIO DE FABRICACIÓN PROTEXA" value="{{ $Manifiestos->Destino }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha de Salida</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_Salida" value="{{ $Solicitud->Fecha }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Fecha de Salida</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Fecha_Salida" value="{{ $Solicitud->Fecha }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Trabajo</label>
-                                            <input type="text" class="form-control inputForm" name="Trabajo" placeholder="Ejemplo: Dureza" value="{{ $Manifiestos->Trabajo }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Trabajo</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Trabajo" placeholder="Ejemplo: Dureza" value="{{ $Manifiestos->Trabajo }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Puesto</label>
-                                            <input type="text" class="form-control inputForm" name="Puesto" placeholder="Ejemplo: TEC. PND" value="{{ $Manifiestos->Puesto }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Puesto</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Puesto" placeholder="Ejemplo: TEC. PND" value="{{ $Manifiestos->Puesto }}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Responsable</label>
-                                            <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Responsable }}" disabled>
+                                            <!--<label class="col-form-label" for="inputSuccess">Responsable</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Responsable }}" readonly>
                                         </div>
                                     </div>
-                                
-                                <!--Campo Oculto para pasar el id de Solicitud -->
-                                <label class="col-form-label" for="inputSuccess">idSolicitud</label>
-                                <input type="text" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}" disabled>
+                                    
+                                    <!--Campo Oculto para pasar el id de Solicitud -->
+                                    <!--<label class="col-form-label" for="inputSuccess">idSolicitud</label>-->
+                                    <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}" readonly>
 
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Observaciones</label>
-                                            <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto." disabled>{{ $Manifiestos->Observaciones }}</textarea>
+                                        <!--<label class="col-form-label" for="inputSuccess">Observaciones</label>-->
+                                        <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo Equipo con bateria INCLUYE: Cables con puntas de contacto." style="display: none;" readonly>{{ $Manifiestos->Observaciones }}</textarea>
                                         </div>
                                     </div>
-
+                                </div>
+                            @endif
 <button type="submit" class="btn btn-success">Crear manifiesto</button>
 </form>
 <br>

@@ -51,11 +51,6 @@ class general_eyc extends Model
         return $this->hasOne(consumibles::class, 'idGeneral_EyC');
     }
 
-    public function almacen()
-    {
-        return $this->hasOne(almacen::class, 'idGeneral_EyC');
-    }
-
     public function accesorios()
     {
         return $this->hasOne(accesorios::class, 'idGeneral_EyC');
@@ -74,6 +69,16 @@ class general_eyc extends Model
     public function historial_certificado()
     {
         return $this->hasOne(historial_certificado::class, 'idGeneral_EyC');
+    }
+
+    public function almacen()
+    {
+        return $this->hasOne(almacen::class, 'idGeneral_EyC');
+    }
+
+    public function historialAlmacen()
+    {
+        return $this->hasManyThrough(Historial_Almacen::class, Almacen::class, 'idGeneral_EyC', 'idAlmacen');
     }
 
 
