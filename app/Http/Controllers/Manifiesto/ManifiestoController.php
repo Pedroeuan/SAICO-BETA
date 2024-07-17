@@ -179,7 +179,7 @@ class ManifiestoController extends Controller
     
                 // Actualizar el estado en general_eyc a "NO DISPONIBLE"
                 $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
-                $Alamcen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+                $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
                 $AlmacenStock = $Almacen->Stock;
                 //if ($generalEyC && $AlmacenStock == 0) { //Empezar a descontar del stock antes de este apartador
                 if ($generalEyC) {
