@@ -159,6 +159,7 @@ class ManifiestoController extends Controller
         foreach ($DetallesSolicitud as $detalle) {
             $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
             if ($almacen) {
+                //Empezar a descontar por aqui aprovechando el ciclo FOR
             // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
             $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
             ->where('Fecha', $request->input('Fecha_Salida'))
@@ -178,7 +179,9 @@ class ManifiestoController extends Controller
     
                 // Actualizar el estado en general_eyc a "NO DISPONIBLE"
                 $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
-                
+                $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+                $AlmacenStock = $Almacen->Stock;
+                //if ($generalEyC && $AlmacenStock == 0) { //Empezar a descontar del stock antes de este apartador
                 if ($generalEyC) {
                     $generalEyC->Disponibilidad_Estado = 'NO DISPONIBLE';
                     $generalEyC->save();

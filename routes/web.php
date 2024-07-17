@@ -12,6 +12,7 @@ use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
 use App\Http\Controllers\EquiposyConsumibles\KitsController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
@@ -127,6 +128,9 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+
+    /*Ruta /Obtener/CantidadAlmacen/*/
+    Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/

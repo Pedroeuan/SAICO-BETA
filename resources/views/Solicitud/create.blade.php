@@ -229,15 +229,42 @@ let tableInventario = new DataTable('#tablaInventario', {
                 }
 });
 
-        $(document).ready(function() {
-        // Agregar elemento de inventario
-        $('.btnAgregarInventario').click(function() {
-            var rowId = $(this).data('id');
-            var row = $('#row-' + rowId);
-            var nombre = row.find('td:eq(0)').text();
-            var numEconomico = row.find('td:eq(1)').text();
-            var marca = row.find('td:eq(2)').text();
-            var ultimaCalibracion = row.find('td:eq(6)').text();
+function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
+
+
+$(document).ready(function() {
+    // Agregar elemento de inventario
+    $('.btnAgregarInventario').click(function() {
+        var rowId = $(this).data('id');
+        var row = $('#row-' + rowId);
+        var nombre = row.find('td:eq(0)').text();
+        var numEconomico = row.find('td:eq(1)').text();
+        var marca = row.find('td:eq(2)').text();
+        var ultimaCalibracion = row.find('td:eq(6)').text();
+
+        consultarCantidadAlmacen(rowId, function(error, Cantidad) {
+            if (error) {
+                alert('Error al obtener cantidad de almacén.');
+                return;
+            }
+
+            var cantidadInput;
+            if (Cantidad == 1) {
+                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="1" readonly>`;
+            } else {
+                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" required>`;
+            }
 
             var newRow = `
                 <tr>
@@ -245,7 +272,7 @@ let tableInventario = new DataTable('#tablaInventario', {
                     <td>${numEconomico}</td>
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
-                    <td><input type="number" class="form-control" name="cantidad[]" required></td>
+                    <td>${cantidadInput}</td>
                     <td><input type="text" class="form-control" name="unidad[]" required></td>
                     <td><input type="hidden" name="general_eyc_id[]" value="${rowId}"></td>
                     <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
@@ -254,51 +281,66 @@ let tableInventario = new DataTable('#tablaInventario', {
 
             $('#tablaAgregados tbody').append(newRow);
         });
+    });
 
-        // Agregar elemento de kits
-        $('.btnAgregarKit').click(function() {
-            var kitId = $(this).data('id');
+    // Agregar elemento de kits
+    $('.btnAgregarKit').click(function() {
+        var kitId = $(this).data('id');
 
-            $.ajax({
-                url: '/Obtener/Kits/' + kitId,
-                method: 'GET',
-                success: function(detallesKits) {
-                    detallesKits.forEach(function(detalle) {
-                        $.ajax({
-                            url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
-                            method: 'GET',
-                            success: function(generalEyC) {
+        $.ajax({
+            url: '/Obtener/Kits/' + kitId,
+            method: 'GET',
+            success: function(detallesKits) {
+                detallesKits.forEach(function(detalle) {
+                    $.ajax({
+                        url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
+                        method: 'GET',
+                        success: function(generalEyC) {
+                            consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
+                                if (error) {
+                                    alert('Error al obtener cantidad de almacén.');
+                                    return;
+                                }
+
+                                var cantidadInput;
+                                if (cantidad == 1) {
+                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
+                                } else {
+                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
+                                }
+
                                 var newRow = `
                                     <tr>
                                         <td>${generalEyC.Nombre_E_P_BP}</td>
                                         <td>${generalEyC.No_economico}</td>
                                         <td>${generalEyC.Marca}</td>
                                         <td>${generalEyC.certificados.Fecha_calibracion}</td>
-                                        <td><input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required></td>
+                                        <td>${cantidadInput}</td>
                                         <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
                                         <td><input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}"></td>
                                         <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
                                     </tr>
                                 `;
                                 $('#tablaAgregados tbody').append(newRow);
-                            },
-                            error: function() {
-                                alert('Error al obtener detalles de General_EyC.');
-                            }
-                        });
+                            });
+                        },
+                        error: function() {
+                            alert('Error al obtener detalles de General_EyC.');
+                        }
                     });
-                },
-                error: function() {
-                    alert('Error al obtener detalles de Kits.');
-                }
-            });
-        });
-
-        // Eliminar elemento
-        $(document).on('click', '.btnQuitarElemento', function() {
-            $(this).closest('tr').remove();
+                });
+            },
+            error: function() {
+                alert('Error al obtener detalles de Kits.');
+            }
         });
     });
+
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
+    });
+});
 
     $(document).ready(function() {
     $('#solicitudForm').on('submit', function(event) {
