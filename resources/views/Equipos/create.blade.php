@@ -1083,6 +1083,19 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
+function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
+
     function actualizarTabla() {
         $.ajax({
             url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
