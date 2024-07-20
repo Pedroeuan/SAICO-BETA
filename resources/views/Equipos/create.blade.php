@@ -957,11 +957,11 @@
                                         <tbody>
                                             @foreach ($generalConCertificados as $general_eyc)
                                             <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
-                                                <td>{{ $general_eyc->Nombre_E_P_BP }}</td>
-                                                <td>{{ $general_eyc->No_economico }}</td>
-                                                <td>{{ $general_eyc->Marca }}</td>
-                                                <td>{{ $general_eyc->Modelo }}</td>
-                                                <td>{{ $general_eyc->Serie }}</td>
+                                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                                <td scope="row">{{$general_eyc->No_economico}}</td>
+                                                <td scope="row">{{$general_eyc->Marca}}</td>
+                                                <td scope="row">{{$general_eyc->Modelo}}</td>
+                                                <td scope="row">{{$general_eyc->Serie}}</td>
                                                 <td>
                                                     @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                                         <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
@@ -975,8 +975,8 @@
                                                 </td>
 
                                                 @if($general_eyc->certificados)
-                                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                                    @if($general_eyc->Tipo == 'EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                                            @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                                                 <td scope="row">SIN FECHA ASIGNADA</td>
                                                                 @else
                                                                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
@@ -986,7 +986,7 @@
                                                     @endif
                                                 @endif
 
-                                                <td>
+                                                <td scope="row">
                                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                                     <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
                                                     @else
@@ -1096,6 +1096,7 @@ function consultarCantidadAlmacen(id, callback) {
     });
 }
 
+    /*Actualiza la tabla automaticamente para mostrar re */
     function actualizarTabla() {
         $.ajax({
             url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
