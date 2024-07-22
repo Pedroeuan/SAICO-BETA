@@ -962,7 +962,7 @@
                                                 <td scope="row">{{$general_eyc->Marca}}</td>
                                                 <td scope="row">{{$general_eyc->Modelo}}</td>
                                                 <td scope="row">{{$general_eyc->Serie}}</td>
-                                                <td>
+                                                <td scope="row">
                                                     @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                                         <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
                                                         @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
