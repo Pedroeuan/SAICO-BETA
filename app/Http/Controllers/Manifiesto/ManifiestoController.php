@@ -288,13 +288,14 @@ class ManifiestoController extends Controller
             }else
                 {
                     $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+                    $Destino_Form = $request->input('Destino');
                     $Cantidad_Detalle_Solicitud = $detalle->Cantidad;
                     $Cantidad_Actualizar = $historialAlmacenExistente->Cantidad;
-                    if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Manifiesto->Destino != $historialAlmacenExistente->Tierra_Costafuera)
+                    if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $historialAlmacenExistente->Tierra_Costafuera)
                     {
                         $historialAlmacenExistente ->update([
                             'Cantidad' => $Cantidad_Detalle_Solicitud,
-                            'Tierra_Costafuera' => $Manifiesto->Destino,
+                            'Tierra_Costafuera' => $Destino_Form,
                         ]);
                     }
 
