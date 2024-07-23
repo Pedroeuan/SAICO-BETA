@@ -957,12 +957,12 @@
                                         <tbody>
                                             @foreach ($generalConCertificados as $general_eyc)
                                             <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
-                                                <td>{{ $general_eyc->Nombre_E_P_BP }}</td>
-                                                <td>{{ $general_eyc->No_economico }}</td>
-                                                <td>{{ $general_eyc->Marca }}</td>
-                                                <td>{{ $general_eyc->Modelo }}</td>
-                                                <td>{{ $general_eyc->Serie }}</td>
-                                                <td>
+                                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                                <td scope="row">{{$general_eyc->No_economico}}</td>
+                                                <td scope="row">{{$general_eyc->Marca}}</td>
+                                                <td scope="row">{{$general_eyc->Modelo}}</td>
+                                                <td scope="row">{{$general_eyc->Serie}}</td>
+                                                <td scope="row">
                                                     @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                                         <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
                                                         @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
@@ -975,8 +975,8 @@
                                                 </td>
 
                                                 @if($general_eyc->certificados)
-                                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                                            @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
+                                                    @if($general_eyc->Tipo == 'EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                                            @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                                                 <td scope="row">SIN FECHA ASIGNADA</td>
                                                                 @else
                                                                 <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
@@ -986,7 +986,7 @@
                                                     @endif
                                                 @endif
 
-                                                <td>
+                                                <td scope="row">
                                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                                     <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
                                                     @else
@@ -1083,6 +1083,7 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
+    /*Actualiza la tabla automaticamente para mostrar re */
     function actualizarTabla() {
         $.ajax({
             url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
@@ -1138,14 +1139,15 @@ let table = new DataTable('#tablaJs', {
     }
 
     $(document).ready(function() {
-    // Actualizar la tabla cada 30 segundos (30000 milisegundos)
-    setInterval(actualizarTabla, 30000);
+    // Actualizar la tabla cada 20 segundos (20000 milisegundos)
+    setInterval(actualizarTabla, 20000);
 
     // Llamar a la función una vez al cargar la página
     actualizarTabla();
 });
 
 // Funciones para adjuntar los listeners
+/*
 function attachAddListeners() {
     document.querySelectorAll('.btnAgregar').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -1186,7 +1188,7 @@ function attachDeleteListeners() {
             row.remove();
         });
     });
-}
+}*/
 
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
@@ -1230,52 +1232,80 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
+    
+function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
+
 function attachAddListeners() {
-    document.querySelectorAll('.btnAgregar').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let row = this.closest('tr');
-            let id = this.dataset.id;
+        document.querySelectorAll('.btnAgregar').forEach(function(button) {
+            button.addEventListener('click', function() {
+                let row = this.closest('tr');
+                let id = this.dataset.id;
 
-            // Verificar si el elemento ya está en la tabla de seleccionados
-            if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
-                return; // Si ya está, no hacemos nada
-            }
+                // Verificar si el elemento ya está en la tabla de seleccionados
+                if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
+                    return; // Si ya está, no hacemos nada
+                }
 
-            // Clonar la fila y agregar campos de cantidad y unidad
-            let newRow = document.createElement('tr');
-            newRow.setAttribute('data-id', id);
-            newRow.innerHTML = `
-                <td>${row.cells[0].innerText}</td>
-                <td>${row.cells[1].innerText}</td>
-                <td>${row.cells[2].innerText}</td>
-                <td>${row.cells[6].innerText}</td>
-                <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
-                <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
-                <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
-            `;
+                // Consultar la cantidad en el almacén antes de agregar la fila
+                consultarCantidadAlmacen(id, function(error, cantidad) {
+                    if (error) {
+                        alert('Error al obtener cantidad de almacén.');
+                        return;
+                    }
 
-            // Agregar la nueva fila a la tabla de seleccionados
-            document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+                    // Clonar la fila y agregar campos de cantidad y unidad
+                    let cantidadInput;
+                    if (cantidad === 1) {
+                        cantidadInput = `<input type="number" class="form-control cantidad" name="cantidad_${id}" value="1" readonly>`;
+                    } else {
+                        cantidadInput = `<input type="number" class="form-control cantidad" name="cantidad_${id}" required>`;
+                    }
 
-            // Re-attach the delete listeners to the new button
-            attachDeleteListeners();
+                    let newRow = document.createElement('tr');
+                    newRow.setAttribute('data-id', id);
+                    newRow.innerHTML = `
+                        <td>${row.cells[0].innerText}</td>
+                        <td>${row.cells[1].innerText}</td>
+                        <td>${row.cells[2].innerText}</td>
+                        <td>${row.cells[6].innerText}</td>
+                        <td>${cantidadInput}</td>
+                        <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
+                    `;
+
+                    // Agregar la nueva fila a la tabla de seleccionados
+                    document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
+
+                    // Re-attach the delete listeners to the new button
+                    attachDeleteListeners();
+                });
+            });
         });
-    });
-}
+    }
 
-
-function attachDeleteListeners() {
-    document.querySelectorAll('.btnEliminar').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let row = this.closest('tr');
-            row.remove();
+    function attachDeleteListeners() {
+        document.querySelectorAll('.btnEliminar').forEach(function(button) {
+            button.addEventListener('click', function() {
+                this.closest('tr').remove();
+            });
         });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        attachAddListeners();
+        attachDeleteListeners();
     });
-}
-
-// Attach listeners when the DOM content is loaded
-attachAddListeners();
-attachDeleteListeners();
 
 // Manejar el envío del formulario
 document.querySelector('#kitForm').addEventListener('submit', function(event) {

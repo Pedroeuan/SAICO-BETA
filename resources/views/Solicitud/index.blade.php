@@ -131,7 +131,7 @@
                     //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
                     Swal.fire({
                         title: "Confirmado!",
-                        text: "Equipo Eliminado Correctamente!",
+                        text: "Solicitud Eliminado Correctamente!",
                         icon: "success",
                         didClose: function() {
                             location.reload();
