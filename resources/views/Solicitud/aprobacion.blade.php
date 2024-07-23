@@ -195,7 +195,7 @@
                                     </div>
                                 </div>
                             @endif
-<button type="submit" class="btn btn-success">Crear manifiesto</button>
+    <button type="submit" class="btn btn-success">Crear manifiesto</button>
 </form>
 <br>
 @stop
@@ -261,6 +261,7 @@
                             "_token": token,
                         },
                         success: function(response) {
+                            //console.log(response); // Añade esto para depuración
                             if (response.success) {
                                 $('#row-' + idDetalles_Solicitud).remove();
                                 Swal.fire({
@@ -346,7 +347,7 @@
                             <td>${ultimaCalibracion}</td>
                             <td>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="Cantidad[]" value="0">
+                                    <input type="number" class="form-control" name="Cantidad[]" value="0">
                                 </div>
                             </td>
                             <td>
@@ -387,6 +388,7 @@
                 });
             });
         });
+        
     });
 </script>
 @endsection

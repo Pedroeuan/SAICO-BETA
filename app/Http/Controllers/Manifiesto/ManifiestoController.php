@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -39,6 +40,7 @@ class ManifiestoController extends Controller
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
+        //dd($Manifiestos);
 
         return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
     }
@@ -64,21 +66,25 @@ class ManifiestoController extends Controller
         'Estatus' => $Estatus,
     ]);
 
-    //$idSolicitud = $Solicitud->idSolicitud;
-    //$Manifiesto = manifiesto::find($idSolicitud);
-
-        if ($request->filled('Cliente')) { 
-        $Manifiestos = new manifiesto;
-        $Manifiestos->idSolicitud = $request->input('idSolicitud');
-        $Manifiestos->Cliente = $request->input('Cliente');
-        $Manifiestos->Folio = $request->input('Folio');
-        $Manifiestos->Destino = $request->input('Destino');
-        // $Manifiestos->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
-        $Manifiestos->Trabajo = $request->input('Trabajo');
-        $Manifiestos->Puesto = $request->input('Puesto');
-        $Manifiestos->Responsable = $request->input('Responsable');
-        $Manifiestos->Observaciones = $request->input('Observaciones');
-        $Manifiestos->save();
+    $idSolicitud = $Solicitud->idSolicitud;
+    $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
+    //$Manifiesto = manifiesto::find($id);
+    
+    if ($Manifiesto) {
+        Log::info('Si existe un manifiesto'); 
+    }else{ 
+        Log::info('Si no existe un manifiesto'); 
+            $Manifiesto = new manifiesto;
+            $Manifiesto->idSolicitud = $request->input('idSolicitud');
+            $Manifiesto->Cliente = $request->input('Cliente');
+            $Manifiesto->Folio = $request->input('Folio');
+            $Manifiesto->Destino = $request->input('Destino');
+            // $Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+            $Manifiesto->Trabajo = $request->input('Trabajo');
+            $Manifiesto->Puesto = $request->input('Puesto');
+            $Manifiesto->Responsable = $request->input('Responsable');
+            $Manifiesto->Observaciones = $request->input('Observaciones');
+            $Manifiesto->save();
         }
 
     // Obtener todos los detalles de la solicitud
@@ -119,9 +125,6 @@ class ManifiestoController extends Controller
     
 }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     /*BOTON FINALIZAR MANFIESTO DE PRE-MANIFIESTO.BLADE */
     public function store(Request $request)
     {
@@ -298,7 +301,6 @@ class ManifiestoController extends Controller
                             'Tierra_Costafuera' => $Destino_Form,
                         ]);
                     }
-
                 }
                     
                 }
