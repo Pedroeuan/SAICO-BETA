@@ -27,7 +27,6 @@
                     <th>Serie</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Ubicación</th>
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Fecha</th>
@@ -42,8 +41,6 @@
                         <td>{{ $historial->Almacen->General_EyC->Serie ?? 'N/A' }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Marca ?? 'N/A' }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Modelo ?? 'N/A' }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->Ubicacion ?? 'N/A' }}</td>
-                        @php //<td>{{ $historial->Almacen->General_EyC->Disponibilidad_Estado ?? 'N/A' }}</td>@endphp
                         <td>{{ $historial->Tipo }}</td>
                         <td>{{ $historial->Cantidad }}</td>
                         <td>{{ $historial->Fecha }}</td>
@@ -97,7 +94,6 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-   
 </script>
 
 @endsection
