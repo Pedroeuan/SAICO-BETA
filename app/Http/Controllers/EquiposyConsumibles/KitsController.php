@@ -143,7 +143,7 @@ class KitsController extends Controller
         // Obtén las variables de la solicitud
         $idFila = $request->input('idFila');
         $idKits = $request->input('idKits');
-        $cantidad=0;
+        $cantidad=1;
         $unidad='ESPERA DE DATO';
 
         // Registra los valores en el archivo de log
@@ -188,7 +188,7 @@ class KitsController extends Controller
             $validatedData = $request->validate([
                 'Nombre' => 'required|string|max:255',
                 'Prueba' => 'required|string|max:255',
-                'Cantidad.*' => 'required|integer|min:0',
+                'Cantidad.*' => 'required|integer|min:1',
                 'Unidad.*' => 'required|string|max:255',
             ]);
 

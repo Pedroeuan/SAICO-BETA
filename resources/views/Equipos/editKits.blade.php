@@ -138,7 +138,11 @@
                                                     <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
                                                     <td>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                                            @if($general->Tipo == 'CONSUMIBLES' )
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                                                @else
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}" readonly>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                     <td>
@@ -216,59 +220,90 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
     });
 
     $(document).ready(function() {
-    // Delegación de eventos para los botones de eliminación
-    $(document).on('click', '.btnEliminarDetallesKits', function() {
-        var idDetalles_Kits = $(this).data('id');
-        var token = '{{ csrf_token() }}';
 
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Kits).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: "Elemento Eliminado Correctamente!",
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+// Función para consultar la cantidad en almacén
+function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
+
+// Delegación de eventos para los botones de eliminación
+$(document).on('click', '.btnEliminarDetallesKits', function() {
+    var idDetalles_Kits = $(this).data('id');
+    var token = '{{ csrf_token() }}';
+
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+                type: 'DELETE',
+                data: {
+                    "_token": token,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#row-' + idDetalles_Kits).remove();
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
+                            icon: 'success',
+                            title: 'Confirmado!',
+                            text: "Elemento Eliminado Correctamente!",
                         });
                     }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+                },
+                error: function(xhr) {
+                    var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage,
+                    });
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
     });
+});
 
-    /*Botón de  AGREGAR */
-    document.querySelectorAll('.btnAgregar').forEach(button => {
-        button.addEventListener('click', function() {
-            // Deshabilitar el botón para evitar múltiples clics
-            this.disabled = true;
+// Botón de  AGREGAR
+document.querySelectorAll('.btnAgregar').forEach(button => {
+    button.addEventListener('click', function() {
+        // Deshabilitar el botón para evitar múltiples clics
+        this.disabled = true;
 
-            let idFila = this.getAttribute('data-id');
-            let idKits = this.getAttribute('data-id-kits');
-                
+        let idFila = this.getAttribute('data-id');
+        let idKits = this.getAttribute('data-id-kits');
+
+        // Consultar la cantidad en almacén
+        consultarCantidadAlmacen(idFila, function(error, cantidadAlmacen) {
+            if (error) {
+                console.error('Error consultando cantidad en almacén:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Hubo un error al consultar la cantidad en almacén.',
+                });
+                return;
+            }
+
+            // Lógica para decidir si el campo de cantidad es editable o no
+            let cantidadEditable = (cantidadAlmacen > 1);
+            let cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="${cantidadEditable ? 1 : cantidadAlmacen}" ${cantidadEditable ? '' : 'readonly'}>`;
+
             fetch('/kits/agregar', {
                 method: 'POST',
                 headers: {
@@ -312,7 +347,7 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
                         <td>${ultimaCalibracion}</td>
                         <td>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Cantidad[]" value="0">
+                                ${cantidadInput}
                             </div>
                         </td>
                         <td>
@@ -354,6 +389,9 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         });
     });
 });
+
+});
+
 
 </script>
 @endsection
