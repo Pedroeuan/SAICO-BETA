@@ -186,6 +186,7 @@ class SolicitudesController extends Controller
             $detalle = detalles_solicitud::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $idSolicitud = $detalle->idSolicitud; // idSolicitud
             
+            
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
@@ -291,7 +292,7 @@ class SolicitudesController extends Controller
         // Obtén las variables de la solicitud
         $idFila = $request->input('idFila');
         $idSolicitud = $request->input('idSolicitud');
-        $cantidad=0;
+        $cantidad=1;
         $unidad='ESPERA DE DATO';
 
          // Registra los valores en el archivo de log
