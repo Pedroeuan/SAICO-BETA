@@ -71,9 +71,9 @@ class ManifiestoController extends Controller
     //$Manifiesto = manifiesto::find($id);
     
     if ($Manifiesto) {
-        Log::info('Si existe un manifiesto'); 
+        //Log::info('Si existe un manifiesto'); 
     }else{ 
-        Log::info('Si no existe un manifiesto'); 
+        //Log::info('Si no existe un manifiesto'); 
             $Manifiesto = new manifiesto;
             $Manifiesto->idSolicitud = $request->input('idSolicitud');
             $Manifiesto->Cliente = $request->input('Cliente');
@@ -94,7 +94,7 @@ class ManifiestoController extends Controller
     foreach ($DetallesSolicitud as $detalle) {
         $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
         $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
-
+        
         if ($cantidad !== null && $unidad !== null) {
             $detalle->update([
                 'Cantidad' => $cantidad,
