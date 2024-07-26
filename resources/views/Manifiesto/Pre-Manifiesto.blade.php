@@ -7,8 +7,10 @@
 <br>
 <br>
     <div class="float-left">
+        <!--BOTÓN -->
         <a href="{{ route('solicitud.manifiesto-regresar', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Regresar</a>
     </div>
+                <!--FORMULARIO -->
                 <h3 align="center">PreManifiesto de Salida y/o Resguardo</h3>
                     <form id="manifiestoForm" action="{{route('solicitudes.storeManifiesto')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
@@ -136,7 +138,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                             
                             <div class="container">
                                 <div class="d-flex justify-content-center">
