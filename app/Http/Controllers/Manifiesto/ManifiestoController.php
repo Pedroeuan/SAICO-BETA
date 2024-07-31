@@ -73,18 +73,21 @@ class ManifiestoController extends Controller
     if ($Manifiesto) {
         //Log::info('Si existe un manifiesto'); 
     }else{ 
-        //Log::info('Si no existe un manifiesto'); 
-            $Manifiesto = new manifiesto;
-            $Manifiesto->idSolicitud = $request->input('idSolicitud');
-            $Manifiesto->Cliente = $request->input('Cliente');
-            $Manifiesto->Folio = $request->input('Folio');
-            $Manifiesto->Destino = $request->input('Destino');
-            // $Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
-            $Manifiesto->Trabajo = $request->input('Trabajo');
-            $Manifiesto->Puesto = $request->input('Puesto');
-            $Manifiesto->Responsable = $request->input('Responsable');
-            $Manifiesto->Observaciones = $request->input('Observaciones');
-            $Manifiesto->save();
+            if ($request->filled('idSolicitud'))
+            {
+                        //Log::info('Si no existe un manifiesto'); 
+                        $Manifiesto = new manifiesto;
+                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                        $Manifiesto->Cliente = $request->input('Cliente');
+                        $Manifiesto->Folio = $request->input('Folio');
+                        $Manifiesto->Destino = $request->input('Destino');
+                        // $Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                        $Manifiesto->Trabajo = $request->input('Trabajo');
+                        $Manifiesto->Puesto = $request->input('Puesto');
+                        $Manifiesto->Responsable = $request->input('Responsable');
+                        $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->save();
+            }
         }
 
     // Obtener todos los detalles de la solicitud
@@ -145,6 +148,7 @@ class ManifiestoController extends Controller
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
         $Tipo = 'SALIDA';
+        $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
@@ -184,12 +188,20 @@ class ManifiestoController extends Controller
                 $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
                 $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
                 $AlmacenStock = $Almacen->Stock;
-                //if ($generalEyC && $AlmacenStock == 0) { //Empezar a descontar del stock antes de este apartador
-                if ($generalEyC) {
-                    $generalEyC->Disponibilidad_Estado = 'NO DISPONIBLE';
-                    $generalEyC->save();
-                        }
+                    if($AlmacenStock > 0)
+                    {
+                        $AlmacenDescuento = $detalle->Cantidad;
+                        $TotalActual = $AlmacenStock-$AlmacenDescuento;
+                        $Almacen ->update([
+                            'Stock' => $TotalActual,
+                        ]);
+
+                        $generalEyC ->update([
+                            'Disponibilidad_Estado' => $NO_DISPONIBLE,
+                        ]);
+
                     }
+                }
                 }
             }
 

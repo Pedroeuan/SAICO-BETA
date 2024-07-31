@@ -238,54 +238,58 @@ class SolicitudesController extends Controller
     /*Eliminación de Toda la Solicitud-Boton eliminar del Index*/
     public function destroySolicitud($id)
     {
-    // Obtener la solicitud y su fecha de salida
-    $solicitud = Solicitudes::find($id);
-
-    $fechaSalida = $solicitud->Fecha;
-
-    $Tipo = 'SALIDA';
-
-    $disponibilidadEstado='DISPONIBLE';
-
-    // Obtener los detalles relacionados con la solicitud
-    $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-
+        // Obtener la solicitud y su fecha de salida
+        $solicitud = Solicitudes::find($id);
+        $fechaSalida = $solicitud->Fecha;
+        $Tipo = 'SALIDA';
+        $disponibilidadEstado = 'DISPONIBLE';
     
-
-    foreach ($detallesSolicitud as $detalle) {
-
-        $idGeneral_EyC = $detalle->idGeneral_EyC;
-        $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $fechaSalida)->where('Tipo', $Tipo)->get();
-
-        foreach ($Historial_Almacen as $h_almacen) {
-
-         // Actualizar el estado de General_EyC a "DISPONIBLE"
-        $generalEyC = general_eyc::find($idGeneral_EyC);
-
-        if($generalEyC)
-        {
-            // Actualizar los datos del equipo
-            $generalEyC ->update([
-                'Disponibilidad_Estado' => $disponibilidadEstado,
-            ]);
+        // Obtener los detalles relacionados con la solicitud
+        $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+    
+        foreach ($detallesSolicitud as $detalle) {
+            $idGeneral_EyC = $detalle->idGeneral_EyC;
+    
+            // Obtener el historial relacionado
+            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
+                                                    ->where('Fecha', $fechaSalida)
+                                                    ->where('Tipo', $Tipo)
+                                                    ->get();
+    
+            foreach ($Historial_Almacen as $h_almacen) {
+                // Obtener el registro en la tabla Almacen
+                $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+    
+                if ($almacen) {
+                    // Actualizar el Stock en Almacen
+                    $nuevoStock = $almacen->Stock + $detalle->Cantidad;
+                    $almacen->update(['Stock' => $nuevoStock]);
+                }
+    
+                // Actualizar el estado de General_EyC a "DISPONIBLE"
+                $generalEyC = general_eyc::find($idGeneral_EyC);
+    
+                if ($generalEyC) {
+                    $generalEyC->update(['Disponibilidad_Estado' => $disponibilidadEstado]);
+                }
+    
+                // Eliminar el historial
+                $h_almacen->delete();
+            }
         }
-
-        $h_almacen->delete();
-        }
-
-    }
-
-    // Eliminar el manifiesto relacionado con la solicitud
-    manifiesto::where('idSolicitud', $id)->delete();
-
-    // Eliminar los detalles de la solicitud
-    detalles_solicitud::where('idSolicitud', $id)->delete();
-
-    // Eliminar la solicitud
-    Solicitudes::where('idSolicitud', $id)->delete();
-            
+    
+        // Eliminar el manifiesto relacionado con la solicitud
+        manifiesto::where('idSolicitud', $id)->delete();
+    
+        // Eliminar los detalles de la solicitud
+        detalles_solicitud::where('idSolicitud', $id)->delete();
+    
+        // Eliminar la solicitud
+        Solicitudes::where('idSolicitud', $id)->delete();
+    
         return redirect()->route('solicitud.index');
     }
+    
 
     public function agregarDetallesSolicitud(Request $request)
     {
@@ -302,7 +306,7 @@ class SolicitudesController extends Controller
 
         // Procesa los datos según tus necesidades
         // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        $DetallesSolicitud = new detalles_solicitud();
+        /* $DetallesSolicitud = new detalles_solicitud();
         $DetallesSolicitud->idSolicitud = $idSolicitud;
         $DetallesSolicitud->idGeneral_EyC = $idFila;
         $DetallesSolicitud->cantidad = $cantidad;
@@ -313,7 +317,38 @@ class SolicitudesController extends Controller
         return response()->json([
             'status' => 'success',
             'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
-        ]);
+        ]);*/
+         // Verifica el stock en la tabla Almacen
+            $almacen = Almacen::where('idGeneral_EyC', $idFila)->first();
+            
+            if ($almacen) {
+                if ($almacen->Stock >= 1) {
+                    // Procesa los datos según tus necesidades
+                    $DetallesSolicitud = new detalles_solicitud();
+                    $DetallesSolicitud->idSolicitud = $idSolicitud;
+                    $DetallesSolicitud->idGeneral_EyC = $idFila;
+                    $DetallesSolicitud->cantidad = $cantidad;
+                    $DetallesSolicitud->Unidad = $unidad;
+                    $DetallesSolicitud->save();
+
+                    // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado y el stock actual
+                    return response()->json([
+                        'status' => 'success',
+                        'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
+                        'stock' => $almacen->Stock,
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'No hay suficiente stock disponible.'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Elemento no encontrado en el almacén.'
+                ]);
+            }
     }
 
 
