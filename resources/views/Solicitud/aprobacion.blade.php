@@ -109,23 +109,41 @@
                         <td>{{ $general->No_economico ?? 'N/A' }}</td>
                         <td>{{ $general->Marca ?? 'N/A' }}</td>
                         <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                        
-                        
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
-                            </div>
-                        </td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
-                        </td>
+
+                        @if($general->Tipo == 'CONSUMIBLES')
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
+                                </div>
+                            </td>
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+
+                        @else
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
+                                </div>
+                            </td>
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
@@ -247,15 +265,6 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
         // Deshabilitar el botón para evitar múltiples clics
         this.disabled = true;
 
-        // Mostrar un indicador de carga
-        /* Swal.fire({
-            title: 'Agregando...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });*/
-
         let idFila = this.getAttribute('data-id');
         let idSolicitud = this.getAttribute('data-id-solicitud');
 
@@ -280,8 +289,9 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     timer: 2000
                 });
 
-                // Obtén el ID del detalle agregado desde la respuesta
+                // Obtén el ID del detalle agregado y el stock actual desde la respuesta
                 let idDetalles_Solicitud = data.idDetalles_Solicitud;
+                let stock = data.stock;
 
                 // Eliminar la fila de la primera tabla
                 let row = document.getElementById('row-' + idFila);
@@ -302,7 +312,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     <td>${ultimaCalibracion}</td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1">
+                            <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1" ${stock === 1 ? 'readonly' : ''}>
                         </div>
                     </td>
                     <td>
