@@ -253,6 +253,22 @@ $(document).ready(function() {
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(6)').text();
 
+         // Verificar si el elemento ya está en la tabla
+        if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Elemento duplicado',
+                text: 'El elemento ya está agregado.',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
+        // Verificar la fecha de calibración
+        if (ultimaCalibracion === '2001-01-01') {
+            ultimaCalibracion = 'SIN FECHA ASIGNADA';
+        }
+
         consultarCantidadAlmacen(rowId, function(error, Cantidad) {
             if (error) {
                 alert('Error al obtener cantidad de almacén.');
@@ -274,8 +290,10 @@ $(document).ready(function() {
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
                     <td><input type="text" class="form-control" name="unidad[]" required></td>
-                    <td><input type="hidden" name="general_eyc_id[]" value="${rowId}"></td>
-                    <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
+                    <td>
+                    <input type="hidden" name="general_eyc_id[]" value="${rowId}">
+                    <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
+                    </td>
                 </tr>
             `;
 
@@ -291,11 +309,36 @@ $(document).ready(function() {
             url: '/Obtener/Kits/' + kitId,
             method: 'GET',
             success: function(detallesKits) {
+                var elementosAgregados = false; // Bandera para verificar duplicados
+
+                detallesKits.forEach(function(detalle) {
+                    if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0) {
+                        elementosAgregados = true;
+                        return;
+                    }
+                });
+
+                if (elementosAgregados) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Elemento duplicado',
+                        text: 'Uno o más elementos ya están agregados.',
+                        confirmButtonText: 'Entendido'
+                    });
+                    return;
+                }
+
                 detallesKits.forEach(function(detalle) {
                     $.ajax({
                         url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
                         method: 'GET',
                         success: function(generalEyC) {
+                            // Verificar la fecha de calibración
+                            var Fecha_calibracion = generalEyC.certificados.Fecha_calibracion;
+                            if (Fecha_calibracion === '2001-01-01') {
+                                Fecha_calibracion = 'SIN FECHA ASIGNADA';
+                            }
+
                             consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
                                 if (error) {
                                     alert('Error al obtener cantidad de almacén.');
@@ -314,11 +357,13 @@ $(document).ready(function() {
                                         <td>${generalEyC.Nombre_E_P_BP}</td>
                                         <td>${generalEyC.No_economico}</td>
                                         <td>${generalEyC.Marca}</td>
-                                        <td>${generalEyC.certificados.Fecha_calibracion}</td>
+                                        <td>${Fecha_calibracion}</td>
                                         <td>${cantidadInput}</td>
                                         <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
-                                        <td><input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}"></td>
-                                        <td><button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button></td>
+                                        <td>
+                                            <input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}">
+                                            <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
+                                        </td>
                                     </tr>
                                 `;
                                 $('#tablaAgregados tbody').append(newRow);
