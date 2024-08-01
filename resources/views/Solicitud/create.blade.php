@@ -16,15 +16,7 @@
 <!-- form start -->
 <form id="solicitudForm" role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
     @csrf
-    <!-- 
-    La clase d-flex se utiliza para hacer que el contenedor use Flexbox, lo que facilita la alineación de elementos hijos.
-    justify-content-between se usa para espaciar los elementos (botón y fecha) de manera que estén en los extremos opuestos del contenedor.
-    align-items-center alinea verticalmente los elementos al centro.
-    mb-3 agrega un margen inferior de 3 unidades para separar este grupo de otros elementos.
-    form-group mb-0 asegura que no haya margen inferior en el grupo de formulario para que los elementos estén alineados correctamente.
-    col-form-label mr-2 asegura que la etiqueta tenga un margen derecho para espaciarla del campo de fecha.
-    d-inline-block y style="width: auto;" aseguran que el campo de fecha no ocupe todo el ancho disponible y se alinee correctamente.
-    -->
+    
     <div class="box">
         <br>
         <br>
@@ -82,44 +74,48 @@
                         <td scope="row">{{$general_eyc->Marca}}</td>
                         <td scope="row">{{$general_eyc->Modelo}}</td>
                         <td scope="row">{{$general_eyc->Serie}}</td>
+
                         <td scope="row">
-                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                        <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                        <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                        <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                        @endif
+                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
+                            @endif
                         </td>
+
                         <td scope="row">
                         @if($general_eyc->certificados)
-                        @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
-                        @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                            SIN FECHA ASIGNADA
-                        @else
-                        {{$general_eyc->certificados->Fecha_calibracion}}
-                        @endif
-                        @else
-                            N/A
-                        @endif
+                            @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
+                                        SIN FECHA ASIGNADA
+                                    @else
+                                        {{$general_eyc->certificados->Fecha_calibracion}}
+                                @endif
+                            @else
+                                N/A
+                            @endif
                         @endif
                         </td>
+
                         <td scope="row">
-                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
-                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                        @endif
+                            @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                            @endif
                         </td>
+
                         <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
-                        </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
+                            </div>
                         </td>
                     </tr>
-                        @endforeach
+                    @endforeach
                 </tbody>
             </table>
         </div>

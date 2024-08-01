@@ -182,6 +182,7 @@ class ManifiestoController extends Controller
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
                 $historialAlmacen->Fecha = $request->input('Fecha_Salida');
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
+                $historialAlmacen->Folio = $request->input('Folio');
                 $historialAlmacen->save();
     
                 // Actualizar el estado en general_eyc a "NO DISPONIBLE"
