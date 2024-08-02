@@ -93,6 +93,18 @@
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                                <div class="form-check form-switch form-check-reverse">
+                                                    <input class="form-check-input" name="Renta" type="checkbox" id="flexSwitchCheckReverse">
+                                                <div class="container mt-5">
+                                                    <label class="form-check-label" for="flexSwitchCheckReverse"><b>En Renta</b></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!--Campo Oculto para pasar el id de Solicitud -->
                                 <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
@@ -106,8 +118,6 @@
                                         </div>
                                     </div>
                                 
-
-
                         <h3 align="center">Equipos y consumibles aprobados</h3>
                             <div class="card-body">
                                 <table id="TablaAprobados" class="table table-bordered" >
@@ -138,7 +148,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+                            <p>
                             <div class="container">
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-info bg-primary">Finalizar Manifiesto</button>
@@ -153,5 +163,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 @endsection
