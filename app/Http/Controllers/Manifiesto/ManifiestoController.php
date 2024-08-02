@@ -193,12 +193,8 @@ class ManifiestoController extends Controller
                 $AlmacenStock = $Almacen->Stock;
                 $AlmacenDescuento = $detalle->Cantidad;
                 $Verificar = $AlmacenStock-$AlmacenDescuento;
-                Log::info('xxxxxxxxxxxxxxxxxxx');
-                Log::info('AlmacenStock: ', ['AlmacenStock' => $AlmacenStock]);
-                Log::info('Verificar: ', ['Verificar' => $Verificar]);
                     if($Verificar == 0)
                     {
-                        //$AlmacenDescuento = $detalle->Cantidad;
                         $TotalActual = $AlmacenStock-$AlmacenDescuento;
                         $Almacen ->update([
                             'Stock' => $TotalActual,
@@ -210,7 +206,6 @@ class ManifiestoController extends Controller
 
                     }
                     else{
-                        //$AlmacenDescuento = $detalle->Cantidad;
                         $TotalActual = $AlmacenStock-$AlmacenDescuento;
                         $Almacen ->update([
                             'Stock' => $TotalActual,
