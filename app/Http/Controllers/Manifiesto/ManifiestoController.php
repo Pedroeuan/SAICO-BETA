@@ -191,9 +191,14 @@ class ManifiestoController extends Controller
                 $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
                 $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
                 $AlmacenStock = $Almacen->Stock;
-                    if($AlmacenStock > 0)
+                $AlmacenDescuento = $detalle->Cantidad;
+                $Verificar = $AlmacenStock-$AlmacenDescuento;
+                Log::info('xxxxxxxxxxxxxxxxxxx');
+                Log::info('AlmacenStock: ', ['AlmacenStock' => $AlmacenStock]);
+                Log::info('Verificar: ', ['Verificar' => $Verificar]);
+                    if($Verificar == 0)
                     {
-                        $AlmacenDescuento = $detalle->Cantidad;
+                        //$AlmacenDescuento = $detalle->Cantidad;
                         $TotalActual = $AlmacenStock-$AlmacenDescuento;
                         $Almacen ->update([
                             'Stock' => $TotalActual,
@@ -203,6 +208,13 @@ class ManifiestoController extends Controller
                             'Disponibilidad_Estado' => $NO_DISPONIBLE,
                         ]);
 
+                    }
+                    else{
+                        //$AlmacenDescuento = $detalle->Cantidad;
+                        $TotalActual = $AlmacenStock-$AlmacenDescuento;
+                        $Almacen ->update([
+                            'Stock' => $TotalActual,
+                        ]);
                     }
                 }
                 }
