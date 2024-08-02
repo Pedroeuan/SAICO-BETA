@@ -45,9 +45,9 @@ class general_eycController extends Controller
     {
     // Obtener todos los equipos con sus certificados
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->get();
+        $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
         //$generalConEquipos = general_eyc::with('Equipos')->get();
-        return view('Equipos.index', compact('general','generalConCertificados'));
+        return view('Equipos.index', compact('general','generalConCertificadosConAlmacen'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
 

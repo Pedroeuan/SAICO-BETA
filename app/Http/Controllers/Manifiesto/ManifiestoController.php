@@ -149,6 +149,8 @@ class ManifiestoController extends Controller
         $Estatus ='MANIFIESTO';
         $Tipo = 'SALIDA';
         $NO_DISPONIBLE = 'NO DISPONIBLE';
+        // Capturar el valor del switch
+        $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
@@ -178,10 +180,11 @@ class ManifiestoController extends Controller
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;
                 $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
-                $historialAlmacen->Tipo = 'SALIDA';
+                $historialAlmacen->Tipo = $Renta_Salida;
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
                 $historialAlmacen->Fecha = $request->input('Fecha_Salida');
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
+                $historialAlmacen->Folio = $request->input('Folio');
                 $historialAlmacen->save();
     
                 // Actualizar el estado en general_eyc a "NO DISPONIBLE"
@@ -259,7 +262,9 @@ class ManifiestoController extends Controller
         $Solicitud = Solicitudes::find($id);
         $Fecha = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
-        $Tipo = 'SALIDA';
+        $Tipo = ['SALIDA', 'EN RENTA'];
+        // Capturar el valor del switch
+        $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
@@ -279,7 +284,7 @@ class ManifiestoController extends Controller
             // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
             $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
             ->where('Fecha', $Fecha)
-            ->where('Tipo', $Tipo)
+            ->whereIn('Tipo', $Tipo)
             ->first();
 
             if (!$historialAlmacenExistente) 
@@ -287,10 +292,11 @@ class ManifiestoController extends Controller
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;
                 $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
-                $historialAlmacen->Tipo = 'SALIDA';
+                $historialAlmacen->Tipo = $Renta_Salida;
                 $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
                 $historialAlmacen->Fecha =  $Fecha;
                 $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
+                $historialAlmacen->Folio = $request->input('Folio');
                 $historialAlmacen->save();
     
                 // Actualizar el estado en general_eyc a "NO DISPONIBLE"
@@ -306,11 +312,12 @@ class ManifiestoController extends Controller
                     $Destino_Form = $request->input('Destino');
                     $Cantidad_Detalle_Solicitud = $detalle->Cantidad;
                     $Cantidad_Actualizar = $historialAlmacenExistente->Cantidad;
-                    if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $historialAlmacenExistente->Tierra_Costafuera)
+                    if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $historialAlmacenExistente->Tierra_Costafuera || $Tipo != $historialAlmacenExistente->Tipo )
                     {
                         $historialAlmacenExistente ->update([
                             'Cantidad' => $Cantidad_Detalle_Solicitud,
                             'Tierra_Costafuera' => $Destino_Form,
+                            'Tipo' => $Renta_Salida,
                         ]);
                     }
                 }

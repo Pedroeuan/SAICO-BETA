@@ -241,7 +241,8 @@ class SolicitudesController extends Controller
         // Obtener la solicitud y su fecha de salida
         $solicitud = Solicitudes::find($id);
         $fechaSalida = $solicitud->Fecha;
-        $Tipo = 'SALIDA';
+        //$Tipo = 'SALIDA';
+        $Tipo = ['SALIDA', 'EN RENTA']; 
         $disponibilidadEstado = 'DISPONIBLE';
     
         // Obtener los detalles relacionados con la solicitud
@@ -253,7 +254,7 @@ class SolicitudesController extends Controller
             // Obtener el historial relacionado
             $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
                                                     ->where('Fecha', $fechaSalida)
-                                                    ->where('Tipo', $Tipo)
+                                                    ->whereIn('Tipo', $Tipo)
                                                     ->get();
     
             foreach ($Historial_Almacen as $h_almacen) {

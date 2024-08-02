@@ -7,9 +7,11 @@
 <br>
 <br>
     <div class="float-left">
+        <!--Botón de Regresar -->
         <a href="{{ route('solicitud.manifiesto-regresar', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Regresar</a>
     </div>
                 <h3 align="center">PreManifiesto de Salida y/o Resguardo</h3>
+                    <!--Formulario-->
                     <form id="manifiestoForm" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                             <div class="row">
@@ -94,6 +96,17 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                                <div class="form-check form-switch form-check-reverse">
+                                                    <input class="form-check-input" name="Renta" type="checkbox" id="flexSwitchCheckReverse">
+                                                <div class="container mt-5">
+                                                    <label class="form-check-label" for="flexSwitchCheckReverse"><b>En Renta</b></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
                                             <input type="file" class="form-control-file inputForm" name="Manifiesto"></input>
                                         </div>
@@ -144,8 +157,7 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            
+                            <p>
                             <div class="container">
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-info bg-primary">Finalizar Manifiesto</button>
@@ -160,5 +172,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 @endsection

@@ -267,6 +267,7 @@ class consumiblesController extends Controller
         $idAlmacen = $generalConAlmacen->idAlmacen;
         $idGeneral_EyC = $generalConAlmacen->idGeneral_EyC;
         $Tipo='SUMINISTRO';
+        $Folio='N/A';
         //$Cantidad = 1;
         //$Fecha = Carbon::now()->format('Y-m-d H:i:s');
         $Fecha = Carbon::now()->format('Y-m-d');
@@ -281,6 +282,7 @@ class consumiblesController extends Controller
         $historialAlmacen->Cantidad = $request->input('Stock');
         $historialAlmacen->Fecha = $Fecha;
         $historialAlmacen->Tierra_Costafuera = $Tierra_Costafuera;
+        $historialAlmacen->Folio = $Folio;
         $historialAlmacen->save();
 
         return redirect()->route('inventario');

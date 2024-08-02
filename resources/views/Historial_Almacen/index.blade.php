@@ -18,10 +18,11 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Historial Almacen</h3>
+        <h3 align="center">Historial de Entradas, Salidas y Devoluciones</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                 <tr>
+                    <th>Folio</th>
                     <th>Nombre</th>
                     <th>No. Económico</th>
                     <th>Serie</th>
@@ -36,6 +37,7 @@
             <tbody>
                 @foreach($historiales as $historial)
                     <tr>
+                        <td>{{ $historial->Folio }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Nombre_E_P_BP ?? 'N/A' }}</td>
                         <td>{{ $historial->Almacen->General_EyC->No_economico ?? 'N/A' }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Serie ?? 'N/A' }}</td>
