@@ -190,8 +190,8 @@ class SolicitudesController extends Controller
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
-            $Tipo='SALIDA';
-
+            //$Tipo='SALIDA';
+            $Tipo = ['SALIDA', 'EN RENTA'];
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
             $EyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
@@ -205,7 +205,6 @@ class SolicitudesController extends Controller
                             'Disponibilidad_Estado' => $Estatus,
                         ]);
                     }
-                
                 }
 
             // Busca el historial en la tabla Historial_Almacen
@@ -215,6 +214,21 @@ class SolicitudesController extends Controller
 
             // Si se encuentra un registro en el historial
             if ($Historial_Almacen) {
+                //$idAlmacen = $Historial_Almacen->idAlmacen;
+                $Almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+                $CantidadAlmacen = $Almacen->Stock;
+                Log::info("*********************************");
+                Log::info("CantidadAlmacen: $CantidadAlmacen", ['CantidadAlmacen' => $CantidadAlmacen]);
+                $CantidadHistorialAlmacen = $Historial_Almacen->Cantidad;
+                Log::info("*********************************");
+                Log::info("CantidadHistorialAlmacen: $CantidadHistorialAlmacen", ['CantidadHistorialAlmacen' => $CantidadHistorialAlmacen]);
+                $StockDevuelto = $CantidadAlmacen + $CantidadHistorialAlmacen;
+                Log::info("*********************************");
+                Log::info("StockDevuelto: $StockDevuelto", ['StockDevuelto' => $StockDevuelto]);
+                $Almacen->update([
+                    'Stock' => $StockDevuelto,
+                ]);
+
                 $Historial_Almacen->delete(); // Elimina el historial
             }
 
