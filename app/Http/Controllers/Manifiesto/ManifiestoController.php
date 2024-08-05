@@ -148,6 +148,7 @@ class ManifiestoController extends Controller
         $Solicitud = Solicitudes::find($id);
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
+        //$Tipo = 'SALIDA';
         $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';

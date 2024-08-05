@@ -69,40 +69,41 @@ class SolicitudesController extends Controller
      * Store a newly created resource in storage.
      */
     public function storeSolicitud(Request $request)
-    {
-        $now = Carbon::now();
-        $Solicitud = new Solicitudes();
-        $tecnico = 'Pedro'; // Cambia esto a futuro por el nombre de usuario o rol
-        $Estatus = 'PENDIENTE';
-        $Fecha = $request->input('Fecha_Servicio');
-        $Solicitud->tecnico = $tecnico;
-        $Solicitud->Fecha = $Fecha;
-        $Solicitud->Estatus = $Estatus;
-        $Solicitud->save();
+        {
+            $now = Carbon::now();
+            $Solicitud = new Solicitudes();
+            $tecnico = 'Pedro'; // Cambia esto a futuro por el nombre de usuario o rol
+            $Estatus = 'PENDIENTE';
+            $Fecha = $request->input('Fecha_Servicio');
+            $Solicitud->tecnico = $tecnico;
+            $Solicitud->Fecha = $Fecha;
+            $Solicitud->Estatus = $Estatus;
+            $Solicitud->save();
 
-        // Obtener los datos de los inputs
-        $generalEycIds = $request->input('general_eyc_id');
-        $cantidades = $request->input('cantidad');
-        $unidades = $request->input('unidad');
+            // Obtener los datos de los inputs
+            $generalEycIds = $request->input('general_eyc_id');
+            $cantidades = $request->input('cantidad');
+            $unidades = $request->input('unidad');
 
-        // Iterar sobre los datos y guardarlos en la base de datos
-        foreach ($generalEycIds as $index => $generalEycId) {
-            if (isset($cantidades[$index]) && isset($unidades[$index])) {
-                $cantidad = $cantidades[$index];
-                $unidad = $unidades[$index];
+            // Iterar sobre los datos y guardarlos en la base de datos
+            foreach ($generalEycIds as $index => $generalEycId) {
+                if (isset($cantidades[$index]) && isset($unidades[$index])) {
+                    $cantidad = $cantidades[$index];
+                    $unidad = $unidades[$index];
 
-                // Crear una nueva instancia del modelo detalles_solicitud
-                $detallesolicitud = new detalles_solicitud();
-                $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
-                $detallesolicitud->idGeneral_EyC = $generalEycId;
-                $detallesolicitud->Cantidad = $cantidad;
-                $detallesolicitud->Unidad = $unidad;
-                $detallesolicitud->save();
+                    // Crear una nueva instancia del modelo detalles_solicitud
+                    $detallesolicitud = new detalles_solicitud();
+                    $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
+                    $detallesolicitud->idGeneral_EyC = $generalEycId;
+                    $detallesolicitud->Cantidad = $cantidad;
+                    $detallesolicitud->Unidad = $unidad;
+                    $detallesolicitud->save();
+                }
             }
+
+            return redirect()->route('solicitud.index');
         }
 
-        return redirect()->route('solicitud.index');
-    }
 
     /**
      * Display the specified resource.
@@ -217,7 +218,7 @@ class SolicitudesController extends Controller
                 //$idAlmacen = $Historial_Almacen->idAlmacen;
                 $Almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
                 $CantidadAlmacen = $Almacen->Stock;
-                //::info("*********************************");
+                //Log::info("*********************************");
                 //Log::info("CantidadAlmacen: $CantidadAlmacen", ['CantidadAlmacen' => $CantidadAlmacen]);
                 $CantidadHistorialAlmacen = $Historial_Almacen->Cantidad;
                 //Log::info("*********************************");

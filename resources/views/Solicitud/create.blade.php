@@ -253,7 +253,6 @@ $(document).ready(function() {
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(6)').text();
 
-        // Verificar si el elemento ya está en la tabla
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
             Swal.fire({
                 icon: 'warning',
@@ -275,16 +274,15 @@ $(document).ready(function() {
                 return;
             }
 
-            // Verificar la fecha de calibración
             if (ultimaCalibracion === '2001-01-01') {
                 ultimaCalibracion = 'SIN FECHA ASIGNADA';
             }
 
             var cantidadInput;
             if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="1" readonly>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
             }
 
             var newRow = `
@@ -326,7 +324,6 @@ $(document).ready(function() {
                                 url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
                                 method: 'GET',
                                 success: function(generalEyC) {
-                                    // Verificar la fecha de calibración
                                     var Fecha_calibracion = generalEyC.certificados.Fecha_calibracion;
                                     if (Fecha_calibracion === '2001-01-01') {
                                         Fecha_calibracion = 'SIN FECHA ASIGNADA';
@@ -334,9 +331,9 @@ $(document).ready(function() {
 
                                     var cantidadInput;
                                     if (cantidad === 1) {
-                                        cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="${detalle.Cantidad}" readonly>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
                                     } else {
-                                        cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="${detalle.Cantidad}" required>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
                                     }
 
                                     var newRow = `
@@ -394,6 +391,7 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 
     $(document).ready(function() {
