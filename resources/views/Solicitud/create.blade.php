@@ -167,6 +167,11 @@
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 
 let tableKits = new DataTable('#tablaKits', {
@@ -230,14 +235,13 @@ function consultarCantidadAlmacen(id, callback) {
         url: '/Obtener/CantidadAlmacen/' + id,
         method: 'GET',
         success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
         },
         error: function(error) {
             callback(error);
         }
     });
 }
-
 
 $(document).ready(function() {
     // Agregar elemento de inventario
@@ -249,7 +253,6 @@ $(document).ready(function() {
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(6)').text();
 
-         // Verificar si el elemento ya está en la tabla
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
             Swal.fire({
                 icon: 'warning',
@@ -260,22 +263,26 @@ $(document).ready(function() {
             return;
         }
 
-        // Verificar la fecha de calibración
-        if (ultimaCalibracion === '2001-01-01') {
-            ultimaCalibracion = 'SIN FECHA ASIGNADA';
-        }
-
         consultarCantidadAlmacen(rowId, function(error, Cantidad) {
-            if (error) {
-                alert('Error al obtener cantidad de almacén.');
+            if (error || Cantidad <= 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Sin Stock en Almacen',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 
+            if (ultimaCalibracion === '2001-01-01') {
+                ultimaCalibracion = 'SIN FECHA ASIGNADA';
+            }
+
             var cantidadInput;
-            if (Cantidad == 1) {
-                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="1" readonly>`;
+            if (Cantidad === 1) {
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
             }
 
             var newRow = `
@@ -287,8 +294,8 @@ $(document).ready(function() {
                     <td>${cantidadInput}</td>
                     <td><input type="text" class="form-control" name="unidad[]" required></td>
                     <td>
-                    <input type="hidden" name="general_eyc_id[]" value="${rowId}">
-                    <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
+                        <input type="hidden" name="general_eyc_id[]" value="${rowId}">
+                        <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
                     </td>
                 </tr>
             `;
@@ -305,74 +312,76 @@ $(document).ready(function() {
             url: '/Obtener/Kits/' + kitId,
             method: 'GET',
             success: function(detallesKits) {
-                var elementosAgregados = false; // Bandera para verificar duplicados
-
-                detallesKits.forEach(function(detalle) {
-                    if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0) {
-                        elementosAgregados = true;
-                        return;
-                    }
-                });
-
-                if (elementosAgregados) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Elemento duplicado',
-                        text: 'Uno o más elementos ya están agregados.',
-                        confirmButtonText: 'Entendido'
-                    });
-                    return;
-                }
-
-                detallesKits.forEach(function(detalle) {
-                    $.ajax({
-                        url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
-                        method: 'GET',
-                        success: function(generalEyC) {
-                            // Verificar la fecha de calibración
-                            var Fecha_calibracion = generalEyC.certificados.Fecha_calibracion;
-                            if (Fecha_calibracion === '2001-01-01') {
-                                Fecha_calibracion = 'SIN FECHA ASIGNADA';
+                var promises = detallesKits.map(function(detalle) {
+                    return new Promise(function(resolve, reject) {
+                        consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
+                            if (error || cantidad <= 0) {
+                                reject('Kit Sin Stock suficiente en el Almacen');
+                                return;
                             }
 
-                            consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
-                                if (error) {
-                                    alert('Error al obtener cantidad de almacén.');
-                                    return;
-                                }
+                            $.ajax({
+                                url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
+                                method: 'GET',
+                                success: function(generalEyC) {
+                                    var Fecha_calibracion = generalEyC.certificados.Fecha_calibracion;
+                                    if (Fecha_calibracion === '2001-01-01') {
+                                        Fecha_calibracion = 'SIN FECHA ASIGNADA';
+                                    }
 
-                                var cantidadInput;
-                                if (cantidad == 1) {
-                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
-                                } else {
-                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
-                                }
+                                    var cantidadInput;
+                                    if (cantidad === 1) {
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
+                                    } else {
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
+                                    }
 
-                                var newRow = `
-                                    <tr>
-                                        <td>${generalEyC.Nombre_E_P_BP}</td>
-                                        <td>${generalEyC.No_economico}</td>
-                                        <td>${generalEyC.Marca}</td>
-                                        <td>${Fecha_calibracion}</td>
-                                        <td>${cantidadInput}</td>
-                                        <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
-                                        <td>
-                                            <input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}">
-                                            <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
-                                        </td>
-                                    </tr>
-                                `;
-                                $('#tablaAgregados tbody').append(newRow);
+                                    var newRow = `
+                                        <tr>
+                                            <td>${generalEyC.Nombre_E_P_BP}</td>
+                                            <td>${generalEyC.No_economico}</td>
+                                            <td>${generalEyC.Marca}</td>
+                                            <td>${Fecha_calibracion}</td>
+                                            <td>${cantidadInput}</td>
+                                            <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
+                                            <td>
+                                                <input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}">
+                                                <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    resolve(newRow);
+                                },
+                                error: function() {
+                                    reject('Error al obtener detalles de General_EyC.');
+                                }
                             });
-                        },
-                        error: function() {
-                            alert('Error al obtener detalles de General_EyC.');
-                        }
+                        });
                     });
                 });
+
+                Promise.all(promises)
+                    .then(function(rows) {
+                        rows.forEach(function(row) {
+                            $('#tablaAgregados tbody').append(row);
+                        });
+                    })
+                    .catch(function(errorMessage) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorMessage,
+                            confirmButtonText: 'OK'
+                        });
+                    });
             },
             error: function() {
-                alert('Error al obtener detalles de Kits.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al obtener detalles de Kits.',
+                    confirmButtonText: 'OK'
+                });
             }
         });
     });
@@ -382,6 +391,8 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
+
 
     $(document).ready(function() {
     $('#solicitudForm').on('submit', function(event) {
