@@ -217,14 +217,14 @@ class SolicitudesController extends Controller
                 //$idAlmacen = $Historial_Almacen->idAlmacen;
                 $Almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
                 $CantidadAlmacen = $Almacen->Stock;
-                Log::info("*********************************");
-                Log::info("CantidadAlmacen: $CantidadAlmacen", ['CantidadAlmacen' => $CantidadAlmacen]);
+                //::info("*********************************");
+                //Log::info("CantidadAlmacen: $CantidadAlmacen", ['CantidadAlmacen' => $CantidadAlmacen]);
                 $CantidadHistorialAlmacen = $Historial_Almacen->Cantidad;
-                Log::info("*********************************");
-                Log::info("CantidadHistorialAlmacen: $CantidadHistorialAlmacen", ['CantidadHistorialAlmacen' => $CantidadHistorialAlmacen]);
+                //Log::info("*********************************");
+                //Log::info("CantidadHistorialAlmacen: $CantidadHistorialAlmacen", ['CantidadHistorialAlmacen' => $CantidadHistorialAlmacen]);
                 $StockDevuelto = $CantidadAlmacen + $CantidadHistorialAlmacen;
-                Log::info("*********************************");
-                Log::info("StockDevuelto: $StockDevuelto", ['StockDevuelto' => $StockDevuelto]);
+                //Log::info("*********************************");
+                //Log::info("StockDevuelto: $StockDevuelto", ['StockDevuelto' => $StockDevuelto]);
                 $Almacen->update([
                     'Stock' => $StockDevuelto,
                 ]);
@@ -244,7 +244,7 @@ class SolicitudesController extends Controller
             return response()->json(['error' => 'Record not found.'], 404);
         } catch (\Exception $e) {
             // Loguea el error para mayor detalle
-            Log::error('Error deleting record: ' . $e->getMessage());
+            //Log::error('Error deleting record: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while deleting the record.'], 500);
         }
     }
