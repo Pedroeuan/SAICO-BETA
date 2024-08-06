@@ -276,6 +276,7 @@ class ManifiestoController extends Controller
         $Fecha = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
+        $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         // Actualizar los datos del equipo
@@ -358,31 +359,45 @@ class ManifiestoController extends Controller
                             ]);
                         }
 
-                        // Actualizar el estado en general_eyc a "NO DISPONIBLE"
-                        $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                        // Obtener el registro correspondiente en la tabla 'almacen'
                         $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
-                        $AlmacenStock = $Almacen->Stock;
-                        $AlmacenDescuento = $detalle->Cantidad;
-                        $Verificar = $AlmacenStock-$AlmacenDescuento;
-                        
-                        if($Verificar == 0)
-                        {
-                            $TotalActual = $AlmacenStock-$AlmacenDescuento;
-                            $Almacen ->update([
-                                'Stock' => $TotalActual,
-                            ]);
 
-                            $generalEyC ->update([
-                                'Disponibilidad_Estado' => $NO_DISPONIBLE,
-                            ]);
+                        // Verificar si se encontró el registro en 'almacen'
+                        if ($Almacen) {
+                            $AlmacenStock = $Almacen->Stock;
+                            $AlmacenDescuento = $detalle->Cantidad;
+                            $Verificar = $AlmacenStock - $AlmacenDescuento;
 
-                        }
-                        else
-                        {
-                            $TotalActual = $AlmacenStock-$AlmacenDescuento;
-                            $Almacen ->update([
-                                'Stock' => $TotalActual,
-                            ]);
+                            // Actualizar el stock y el estado de disponibilidad
+                            if ($Verificar <= 0) 
+                            {
+                                // Si el stock resultante es cero o menos, actualizar el estado a "NO DISPONIBLE"
+                                $Almacen->update([
+                                    'Stock' => 0, // Puede ser 0 en lugar de un número negativo
+                                ]);
+
+                                // Obtener el registro correspondiente en la tabla 'general_eyc'
+                                $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+
+                                // Verificar si se encontró el registro en 'general_eyc'
+                                if ($generalEyC) {
+                                    $generalEyC->update([
+                                        'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                                    ]);
+                                }
+                            } 
+                            else 
+                            {
+                                // Si el stock resultante es mayor a cero, simplemente actualizar el stock
+                                $Almacen->update([
+                                    'Stock' => $Verificar,
+                                ]);
+                            }
+                        } else {
+                            // Manejar el caso donde no se encontró el registro en 'almacen'
+                            // Podrías lanzar una excepción, registrar un error, etc.
+                            // Por ejemplo:
+                            throw new Exception('Registro no encontrado en Almacen para idGeneral_EyC: ' . $detalle->idGeneral_EyC);
                         }
                     }  
             }
