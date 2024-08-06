@@ -301,6 +301,14 @@ $(document).ready(function() {
             `;
 
             $('#tablaAgregados tbody').append(newRow);
+
+            // Mostrar mensaje de confirmación
+            Swal.fire({
+                icon: 'success',
+                title: 'Elemento agregado',
+                text: 'El elemento ha sido agregado correctamente.',
+                confirmButtonText: 'OK'
+            });
         });
     });
 
@@ -365,6 +373,14 @@ $(document).ready(function() {
                         rows.forEach(function(row) {
                             $('#tablaAgregados tbody').append(row);
                         });
+
+                        // Mostrar mensaje de confirmación
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Kit agregado',
+                            text: 'El kit ha sido agregado correctamente.',
+                            confirmButtonText: 'OK'
+                        });
                     })
                     .catch(function(errorMessage) {
                         Swal.fire({
@@ -391,6 +407,7 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 
 
