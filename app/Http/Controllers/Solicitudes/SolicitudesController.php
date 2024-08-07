@@ -128,16 +128,16 @@ class SolicitudesController extends Controller
         // Obtener los registros de General_EyC relacionados
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+        $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
-            if (!$Manifiestos) {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
+            /*if (!$Manifiestos) {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
             }else
             {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
-            }
-            // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
-            // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
+            }*/
+            return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
         }
     
         if ($Solicitud->Estatus == 'APROBADO') {
