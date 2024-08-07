@@ -34,15 +34,15 @@
                     <tbody>
                         @foreach ($kitsConDetalles as $kits)
                         <tr>
-                        @if($kits)
-                            <td scope="row">{{$kits->Nombre}}</td>
-                            <td scope="row">{{$kits->Prueba}}</td>
-                            <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
-                                </div>
-                                        </td>
-                        @endif
+                            @if($kits)
+                                <td scope="row">{{$kits->Nombre}}</td>
+                                <td scope="row">{{$kits->Prueba}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
+                                    </div>
+                                </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

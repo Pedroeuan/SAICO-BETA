@@ -120,15 +120,21 @@ class SolicitudesController extends Controller
     public function edit($id)
     {
         $Solicitud = Solicitudes::findOrFail($id);
-        $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+        //dd($generalEyCIds);
         // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
+        //dd($generalEyC);
+
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
-        $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+        $general = general_eyc::get();
+        //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
             /*if (!$Manifiestos) {
@@ -137,7 +143,7 @@ class SolicitudesController extends Controller
             {
                 return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
             }*/
-            return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
+            return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
         }
     
         if ($Solicitud->Estatus == 'APROBADO') {
