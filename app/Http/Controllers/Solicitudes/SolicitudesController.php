@@ -321,25 +321,18 @@ class SolicitudesController extends Controller
         $cantidad=1;
         $unidad='ESPERA DE DATO';
 
-         // Registra los valores en el archivo de log
-        //Log::info('ID de Fila:', ['idFila' => $idFila]);
-        //Log::info('ID de Solicitud:', ['idSolicitud' => $idSolicitud]);
-        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+         // Verifica si el elemento ya existe en la tabla DetallesSolicitud
+        $detalleExistente = detalles_solicitud::where('idSolicitud', $idSolicitud)
+        ->where('idGeneral_EyC', $idFila)
+        ->first();
 
-        // Procesa los datos según tus necesidades
-        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        /* $DetallesSolicitud = new detalles_solicitud();
-        $DetallesSolicitud->idSolicitud = $idSolicitud;
-        $DetallesSolicitud->idGeneral_EyC = $idFila;
-        $DetallesSolicitud->cantidad = $cantidad;
-        $DetallesSolicitud->Unidad = $unidad;
-        $DetallesSolicitud->save();
+        if ($detalleExistente) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El elemento ya está agregado.'
+            ]);
+        }
 
-        // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado
-        return response()->json([
-            'status' => 'success',
-            'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
-        ]);*/
          // Verifica el stock en la tabla Almacen
             $almacen = Almacen::where('idGeneral_EyC', $idFila)->first();
             
