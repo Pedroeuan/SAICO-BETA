@@ -120,24 +120,30 @@ class SolicitudesController extends Controller
     public function edit($id)
     {
         $Solicitud = Solicitudes::findOrFail($id);
-        $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+        //dd($generalEyCIds);
         // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
+        //dd($generalEyC);
+
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+        $general = general_eyc::get();
+        //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
-            if (!$Manifiestos) {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
+            /*if (!$Manifiestos) {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
             }else
             {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
-            }
-            // Opcionalmente, puedes manejar el caso donde la solicitud sí está en Manifiestos cuando está pendiente
-            // return redirect()->route('alguna_ruta')->with('error', 'La solicitud está pendiente y se encuentra en Manifiestos');
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
+            }*/
+            return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
         }
     
         if ($Solicitud->Estatus == 'APROBADO') {
@@ -315,25 +321,18 @@ class SolicitudesController extends Controller
         $cantidad=1;
         $unidad='ESPERA DE DATO';
 
-         // Registra los valores en el archivo de log
-        //Log::info('ID de Fila:', ['idFila' => $idFila]);
-        //Log::info('ID de Solicitud:', ['idSolicitud' => $idSolicitud]);
-        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
+         // Verifica si el elemento ya existe en la tabla DetallesSolicitud
+        $detalleExistente = detalles_solicitud::where('idSolicitud', $idSolicitud)
+        ->where('idGeneral_EyC', $idFila)
+        ->first();
 
-        // Procesa los datos según tus necesidades
-        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        /* $DetallesSolicitud = new detalles_solicitud();
-        $DetallesSolicitud->idSolicitud = $idSolicitud;
-        $DetallesSolicitud->idGeneral_EyC = $idFila;
-        $DetallesSolicitud->cantidad = $cantidad;
-        $DetallesSolicitud->Unidad = $unidad;
-        $DetallesSolicitud->save();
+        if ($detalleExistente) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El elemento ya está agregado.'
+            ]);
+        }
 
-        // Retornar una respuesta JSON con el idDetalles_Solicitud recién creado
-        return response()->json([
-            'status' => 'success',
-            'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
-        ]);*/
          // Verifica el stock en la tabla Almacen
             $almacen = Almacen::where('idGeneral_EyC', $idFila)->first();
             

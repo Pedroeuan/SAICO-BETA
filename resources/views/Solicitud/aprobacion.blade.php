@@ -50,13 +50,13 @@
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
                             @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible</td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible</td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                                    <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                    <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                    <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                    <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
                         @endif 
                             @if($general_eyc->certificados)
@@ -112,13 +112,25 @@
             <tbody>
                 @foreach ($DetallesSolicitud as $detalle)
                     @php
+                        $general = $generalEyC;
                         $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                        $fechaCalibracion = $general->Certificados->Fecha_calibracion;
                     @endphp
                     <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
                         <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                         <td>{{ $general->No_economico ?? 'N/A' }}</td>
                         <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
+                        @if($general->Certificados)
+                                    @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
+                                            @if($general->Certificados->Fecha_calibracion=='2001-01-01')
+                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                @else
+                                                    <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
+                                            @endif
+                                        @else
+                                            <td scope="row">N/A</td>
+                                    @endif
+                            @endif
 
                         @if($general->Tipo == 'CONSUMIBLES')
                             <td scope="row">
@@ -270,294 +282,144 @@
                 }
 });
 
-document.querySelectorAll('.btnAgregar').forEach(button => {
-    button.addEventListener('click', function() {
-        // Deshabilitar el botón para evitar múltiples clics
-        this.disabled = true;
+    document.querySelectorAll('.btnAgregar').forEach(button => {
+        button.addEventListener('click', function() {
+            // Deshabilitar el botón para evitar múltiples clics
+            this.disabled = true;
 
-        let idFila = this.getAttribute('data-id');
-        let idSolicitud = this.getAttribute('data-id-solicitud');
+            let idFila = this.getAttribute('data-id');
+            let idSolicitud = this.getAttribute('data-id-solicitud');
 
-        fetch('/solicitudes/agregar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                idFila: idFila,
-                idSolicitud: idSolicitud
+            fetch('/solicitudes/agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    idFila: idFila,
+                    idSolicitud: idSolicitud
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Elemento Agregado Exitosamente.',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Elemento Agregado Exitosamente.',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
 
-                // Obtén el ID del detalle agregado y el stock actual desde la respuesta
-                let idDetalles_Solicitud = data.idDetalles_Solicitud;
-                let stock = data.stock;
+                    // Obtén el ID del detalle agregado y el stock actual desde la respuesta
+                    let idDetalles_Solicitud = data.idDetalles_Solicitud;
+                    let stock = data.stock;
 
-                // Eliminar la fila de la primera tabla
-                let row = document.getElementById('row-' + idFila);
-                let nombre = row.querySelector('td:nth-child(1)').innerText;
-                let noEco = row.querySelector('td:nth-child(2)').innerText;
-                let marca = row.querySelector('td:nth-child(3)').innerText;
-                let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+                    // Eliminar la fila de la primera tabla
+                    let row = document.getElementById('row-' + idFila);
+                    let nombre = row.querySelector('td:nth-child(1)').innerText;
+                    let noEco = row.querySelector('td:nth-child(2)').innerText;
+                    let marca = row.querySelector('td:nth-child(3)').innerText;
+                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
 
-                row.remove();
+                    row.remove();
 
-                // Crear una nueva fila en la segunda tabla
-                let newRow = document.createElement('tr');
-                newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
-                newRow.innerHTML = `
-                    <td>${nombre}</td>
-                    <td>${noEco}</td>
-                    <td>${marca}</td>
-                    <td>${ultimaCalibracion}</td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1" ${stock === 1 ? 'readonly' : ''}>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="Unidad[${idDetalles_Solicitud}]" value="ESPERA DE DATO">
-                        </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    </td>
-                `;
-                document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
+                    // Crear una nueva fila en la segunda tabla
+                    let newRow = document.createElement('tr');
+                    newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
+                    newRow.innerHTML = `
+                        <td>${nombre}</td>
+                        <td>${noEco}</td>
+                        <td>${marca}</td>
+                        <td>${ultimaCalibracion}</td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1" ${stock === 1 ? 'readonly' : ''}>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[${idDetalles_Solicitud}]" value="ESPERA DE DATO">
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    `;
+                    document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
 
-                // Animar la nueva fila
-                newRow.classList.add('table-success');
-                setTimeout(() => {
-                    newRow.classList.remove('table-success');
-                }, 1500);
-            } else {
+                    // Animar la nueva fila
+                    newRow.classList.add('table-success');
+                    setTimeout(() => {
+                        newRow.classList.remove('table-success');
+                    }, 1500);
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Elemento duplicado',
+                        text: data.message,
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Hubo un error al agregar el detalle.',
-                    text: data.message,
+                    title: 'Oops...',
+                    text: 'Hubo un error al agregar el detalle.',
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Hubo un error al agregar el detalle.',
+            })
+            .finally(() => {
+                // Habilitar el botón nuevamente
+                this.disabled = false;
             });
-        })
-        .finally(() => {
-            // Habilitar el botón nuevamente
-            this.disabled = false;
         });
     });
-});
 
-$(document).on('click', '.btnEliminarDetallesSolicitud', function() {
-    var idDetalles_Solicitud = $(this).data('id');
-    var token = '{{ csrf_token() }}';
+    $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
+        var idDetalles_Solicitud = $(this).data('id');
+        var token = '{{ csrf_token() }}';
 
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#row-' + idDetalles_Solicitud).remove();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Confirmado!',
-                            text: "Elemento Eliminado Correctamente!",
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessage,
-                    });
-                }
-            });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
-    });
-});
-
-
-    /*$(document).ready(function() {
-        // Delegación de eventos para los botones de eliminación
-        $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
-            var idDetalles_Solicitud = $(this).data('id');
-            var token = '{{ csrf_token() }}';
-
-            Swal.fire({
-                title: "¿Seguro de eliminar este elemento?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Sí",
-                denyButtonText: "No"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                        type: 'DELETE',
-                        data: {
-                            "_token": token,
-                        },
-                        success: function(response) {
-                            //console.log(response); // Añade esto para depuración
-                            if (response.success) {
-                                $('#row-' + idDetalles_Solicitud).remove();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Confirmado!',
-                                    text: "Elemento Eliminado Correctamente!",
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Solicitud).remove();
                             Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: errorMessage,
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: "Elemento Eliminado Correctamente!",
                             });
                         }
-                    });
-                } else if (result.isDenied) {
-                    Swal.fire("Cancelado", "", "error");
-                }
-            });
-        });
-
-          /* AGREGAR */
-        /* document.querySelectorAll('.btnAgregar').forEach(button => {
-            button.addEventListener('click', function() {
-                // Deshabilitar el botón para evitar múltiples clics
-                this.disabled = true;
-
-                // Mostrar un indicador de carga
-                /* Swal.fire({
-                    title: 'Agregando...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });*/
-
-            /*       let idFila = this.getAttribute('data-id');
-                let idSolicitud = this.getAttribute('data-id-solicitud');
-
-                fetch('/solicitudes/agregar', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({
-                        idFila: idFila,
-                        idSolicitud: idSolicitud
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Elemento Agregado Exitosamente.',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-
-                        // Obtén el ID del detalle agregado desde la respuesta
-                        let idDetalles_Solicitud = data.idDetalles_Solicitud;
-
-                        // Eliminar la fila de la primera tabla
-                        let row = document.getElementById('row-' + idFila);
-                        let nombre = row.querySelector('td:nth-child(1)').innerText;
-                        let noEco = row.querySelector('td:nth-child(2)').innerText;
-                        let marca = row.querySelector('td:nth-child(3)').innerText;
-                        let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
-
-                        row.remove();
-
-                        // Crear una nueva fila en la segunda tabla
-                        let newRow = document.createElement('tr');
-                        newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
-                        newRow.innerHTML = `
-                            <td>${nombre}</td>
-                            <td>${noEco}</td>
-                            <td>${marca}</td>
-                            <td>${ultimaCalibracion}</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[]" value="1">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        `;
-                        document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
-
-                        // Animar la nueva fila
-                        newRow.classList.add('table-success');
-                        setTimeout(() => {
-                            newRow.classList.remove('table-success');
-                        }, 1500);
-                    } else {
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
                         Swal.fire({
                             icon: 'error',
-                            title: 'Hubo un error al agregar el detalle.',
-                            text: data.message,
+                            title: 'Oops...',
+                            text: errorMessage,
                         });
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Hubo un error al agregar el detalle.',
-                    });
-                })
-                .finally(() => {
-                    // Habilitar el botón nuevamente
-                    this.disabled = false;
                 });
-            });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
         });
-        
-    });*/
+    });
+
 </script>
 @endsection
 

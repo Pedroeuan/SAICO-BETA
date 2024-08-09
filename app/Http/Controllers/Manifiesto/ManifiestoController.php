@@ -332,7 +332,6 @@ class ManifiestoController extends Controller
                         $generalEyC ->update([
                             'Disponibilidad_Estado' => $NO_DISPONIBLE,
                         ]);
-
                     }
                     else
                     {
@@ -344,18 +343,25 @@ class ManifiestoController extends Controller
                 }
                 else /*Si ya existe un $historialAlmacenExistente  */
                     {
-                        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+                        //$Manifiesto = manifiesto::where('idSolicitud', $id)->first();
                         $Destino_Form = $request->input('Destino');
                         $Destino_BD = $historialAlmacenExistente->Tierra_Costafuera;
+
                         $Tipo_DB= $historialAlmacenExistente->Tipo;
+
                         $Cantidad_Detalle_Solicitud = $detalle->Cantidad;
                         $Cantidad_Actualizar = $historialAlmacenExistente->Cantidad;
-                        if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $Destino_BD || $Tipo != $Tipo_DB )
+
+                        $Folio_Form = $request->input('Folio');
+                        $Folio_DB = $historialAlmacenExistente->Folio;
+
+                        if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $Destino_BD || $Tipo != $Tipo_DB || $Folio_Form != $Folio_DB)
                         {
                             $historialAlmacenExistente ->update([
                                 'Cantidad' => $Cantidad_Detalle_Solicitud,
                                 'Tierra_Costafuera' => $Destino_Form,
                                 'Tipo' => $Renta_Salida,
+                                'Folio' => $Folio_Form,
                             ]);
                         }
 
@@ -363,7 +369,8 @@ class ManifiestoController extends Controller
                         $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
 
                         // Verificar si se encontró el registro en 'almacen'
-                        if ($Almacen) {
+                        if ($Almacen) 
+                        {
                             $AlmacenStock = $Almacen->Stock;
                             $AlmacenDescuento = $detalle->Cantidad;
                             $Verificar = $AlmacenStock - $AlmacenDescuento;
@@ -393,7 +400,9 @@ class ManifiestoController extends Controller
                                     'Stock' => $Verificar,
                                 ]);
                             }
-                        } else {
+                        } 
+                        else 
+                        {
                             // Manejar el caso donde no se encontró el registro en 'almacen'
                             // Podrías lanzar una excepción, registrar un error, etc.
                             // Por ejemplo:
