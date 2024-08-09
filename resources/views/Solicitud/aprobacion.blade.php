@@ -16,8 +16,14 @@
 <!-- form start -->
     <form id="AprobacionForm" action="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data" role="form">
     @csrf 
+    <h3 >Formulario para aprobar solicitud de equipos y consumibles</h3>
+    <br>
+    <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Importante</h5>
+            <p>Selecciona en el boton de acciones para agregar un equipo o consumible a la solicitud</p>
+        </div>
         <div class="box">
-            <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
             <br>
             <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
@@ -84,7 +90,11 @@
         </div>
     </div>
     <br>
-    <h3 align="center">Equipos y Consumibles por Aprobar</h3>
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+        Estos son los elementos que te han solicitado
+        </div>
     <br>
     <div class="card-body">
         <table id="TablaSolicitud" class="table table-bordered" >

@@ -45,11 +45,11 @@
                                 <td scope="row">{{$general_eyc->Serie}}</td>
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible</td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible</td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                        <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
@@ -75,8 +75,8 @@
                             @endif
                             <td>
                                 <div class="btn-group">
-                                    <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-light" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                    <button type="button" class="btn btn-light btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    <button type="button" class="btn btn-danger btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                 </div>
                             </td>
                         </tr>
