@@ -6,11 +6,13 @@
 @section('content')
 <br>
 <br>
-    <div class="float-left">
-        <!--Botón de Regresar -->
-        <a href="{{ route('solicitud.manifiesto-regresar', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Regresar</a>
+    <h2>PreManifiesto de Salida y/o Resguardo</h2>
+    <br>
+    <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-info"></i> Importante</h5>
+        <p>Llena los datos generales del manifiesto como se muestra en los ejemplos</p>
     </div>
-                <h3 align="center">PreManifiesto de Salida y/o Resguardo</h3>
                     <!--Formulario-->
                     <form id="manifiestoForm" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
@@ -116,7 +118,14 @@
                                 <!--Campo Oculto para pasar el id de Solicitud -->
                                 <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
 
-                                    <h3 align="center">Salida de Equipos y Adicionales</h3>
+                                <div class="alert alert-warning alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                    <p>Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <BR>
+                                    Nota b): El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
+                                    Nota c): Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
+                                    </p>
+                                </div>
 
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -127,7 +136,11 @@
                                 
 
 
-                        <h3 align="center">Equipos y consumibles aprobados</h3>
+                            <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+                            Estos son los elementos que has aprobado
+                            </div>
                             <div class="card-body">
                                 <table id="TablaAprobados" class="table table-bordered" >
                                     <thead>
@@ -159,8 +172,12 @@
                             </div>
                             <p>
                             <div class="container">
-                                <div class="d-flex justify-content-center">
+                                <div class="float-right">
                                     <button type="submit" class="btn btn-info bg-primary">Finalizar Manifiesto</button>
+                                </div>
+                                <div class="float-left">
+                                <!--Botón de Regresar -->
+                                <a href="{{ route('solicitud.manifiesto-regresar', ['id' => $Solicitud->idSolicitud]) }}" class="btn btn-success" role="button">Regresar</a>
                                 </div>
                             </div>
 
