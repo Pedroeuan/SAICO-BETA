@@ -34,15 +34,15 @@
                     <tbody>
                         @foreach ($kitsConDetalles as $kits)
                         <tr>
-                        @if($kits)
-                            <td scope="row">{{$kits->Nombre}}</td>
-                            <td scope="row">{{$kits->Prueba}}</td>
-                            <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
-                                </div>
-                                        </td>
-                        @endif
+                            @if($kits)
+                                <td scope="row">{{$kits->Nombre}}</td>
+                                <td scope="row">{{$kits->Prueba}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btnAgregarKit" data-id="{{ $kits->idKits }}"><i class="fas fa-plus-circle"></i></button>
+                                    </div>
+                                </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
@@ -301,6 +301,14 @@ $(document).ready(function() {
             `;
 
             $('#tablaAgregados tbody').append(newRow);
+
+            // Mostrar mensaje de confirmación
+            Swal.fire({
+                icon: 'success',
+                title: 'Elemento agregado',
+                text: 'El elemento ha sido agregado correctamente.',
+                confirmButtonText: 'OK'
+            });
         });
     });
 
@@ -365,6 +373,14 @@ $(document).ready(function() {
                         rows.forEach(function(row) {
                             $('#tablaAgregados tbody').append(row);
                         });
+
+                        // Mostrar mensaje de confirmación
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Kit agregado',
+                            text: 'El kit ha sido agregado correctamente.',
+                            confirmButtonText: 'OK'
+                        });
                     })
                     .catch(function(errorMessage) {
                         Swal.fire({
@@ -391,6 +407,7 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 
 
