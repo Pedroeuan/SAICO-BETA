@@ -46,6 +46,11 @@ class general_eyc extends Model
         return $this->hasOne(certificados::class, 'idGeneral_EyC');
     }
 
+    public function certificado()
+    {
+        return $this->hasMany(certificados::class, 'idGeneral_EyC', 'idGeneral_EyC');
+    }
+
     public function consumibles()
     {
         return $this->hasOne(consumibles::class, 'idGeneral_EyC');
