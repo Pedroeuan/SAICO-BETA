@@ -347,32 +347,13 @@ class ManifiestoController extends Controller
                         $Destino_Form = $request->input('Destino');
                         $Destino_BD = $historialAlmacenExistente->Tierra_Costafuera;
 
-                        Log::info('***************************************');
-
-                        // Registrar un log con las variables
-                        Log::info('Destino Form: ' . $Destino_Form);
-                        Log::info('Destino BD: ' . $Destino_BD);
-
                         $Tipo_DB= $historialAlmacenExistente->Tipo;
 
                         $Cantidad_Detalle_Solicitud = $detalle->Cantidad;
                         $Cantidad_Actualizar = $historialAlmacenExistente->Cantidad;
 
-                        Log::info('***************************************');
-
-                        // Registrar un log con las variables
-                        Log::info('Cantidad_Detalle_Solicitud: ' . $Cantidad_Detalle_Solicitud);
-                        Log::info('Cantidad_Actualizar: ' . $Cantidad_Actualizar);
-
                         $Folio_Form = $request->input('Folio');
                         $Folio_DB = $historialAlmacenExistente->Folio;
-
-                        Log::info('***************************************');
-
-                        // Registrar un log con las variables
-                        Log::info('Folio_Form: ' . $Folio_Form);
-                        Log::info('Folio_DB: ' . $Folio_DB);
-                        
 
                         if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $Destino_BD || $Tipo != $Tipo_DB || $Folio_Form != $Folio_DB)
                         {
