@@ -17,8 +17,17 @@
 <form role="form">
     <div class="box ">
             <br>
+        <h3>Historial de Entradas, Salidas y Devoluciones</h3>
+        <br>
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Nota</h5>
+            Suministro: Activos que ingresaron como nuevo ingreso o por devolución <br>
+            Salida: Activos que salieron por servicio a través del manifiesto <br>
+            En renta: Equipos que salieron en servicio de renta
+            </p>
+        </div>
         <div class="box-body">
-        <h3 align="center">Historial de Entradas, Salidas y Devoluciones</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                 <tr>
@@ -36,6 +45,22 @@
             </thead>
             <tbody>
                 @foreach($historiales as $historial)
+                @php 
+                // Verifica si $historial->Fecha es una cadena y conviértela a Carbon
+                $Fecha = $historial->Fecha;
+                if (is_string($Fecha)) {
+                    try {
+                        $Fecha = \Carbon\Carbon::parse($Fecha)->format('d-m-y');
+                    } catch (\Exception $e) {
+                        $Fecha = 'N/A'; // En caso de error en el parsing
+                    }
+                } elseif ($Fecha instanceof \Carbon\Carbon) {
+                    $Fecha = $Fecha->format('d-m-y');
+                } else {
+                    $Fecha = 'N/A'; // En caso de que no sea ni cadena ni Carbon
+                }
+
+                @endphp
                     <tr>
                         <td>{{ $historial->Folio }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -45,7 +70,7 @@
                         <td>{{ $historial->Almacen->General_EyC->Modelo ?? 'N/A' }}</td>
                         <td>{{ $historial->Tipo }}</td>
                         <td>{{ $historial->Cantidad }}</td>
-                        <td>{{ $historial->Fecha }}</td>
+                        <td>{{ $Fecha }}</td>
                         <td>{{ $historial->Tierra_Costafuera }}</td>
                     </tr>
                 @endforeach

@@ -16,8 +16,14 @@
 <!-- form start -->
     <form id="AprobacionForm" action="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data" role="form">
     @csrf 
+    <h3 >Formulario para aprobar solicitud de equipos y consumibles</h3>
+    <br>
+    <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Importante</h5>
+            <p>Selecciona en el boton de acciones para agregar un equipo o consumible a la solicitud</p>
+        </div>
         <div class="box">
-            <h3 align="center">Formulario para aprobar solicitud de equipos y consumibles</h3>
             <br>
             <div class="box-body">
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
@@ -44,11 +50,11 @@
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
                             @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible</td>
                             @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible</td>
                             @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</td>
                             @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                 <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
@@ -84,7 +90,11 @@
         </div>
     </div>
     <br>
-    <h3 align="center">Equipos y Consumibles por Aprobar</h3>
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+        Estos son los elementos que te han solicitado
+        </div>
     <br>
     <div class="card-body">
         <table id="TablaSolicitud" class="table table-bordered" >
