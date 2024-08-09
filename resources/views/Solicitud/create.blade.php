@@ -16,12 +16,16 @@
 <!-- form start -->
 <form id="solicitudForm" role="form" method="POST" action="{{route('solicitudes.storeSolicitud')}}" enctype="multipart/form-data">
     @csrf
-    
+    <h2>Solicitud de equipos y consumibles</h2>
     <div class="box">
         <br>
         <br>
         <div class="box">
-            <h5 align="center">Elige el kit para solicitar</h5>
+        <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Importante</h5>
+            <p>Selecciona en el boton de acciones un KIT para solicitarlo</p>
+        </div>
             <div class="box-body">
                 <table id="tablaKits" class="table table-bordered table-striped dt-responsive tablas">
                     <thead>
@@ -49,9 +53,13 @@
                 </table>
             </div>
         </div>
-        <br>
+        <br><br>
+        <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Importante</h5>
+            <p>Selecciona en el boton de acciones un equipo o consumible para solicitarlo</p>
+        </div>
         <div class="box-body">
-            <h5 align="center">Elige el equipo o consumible para solicitar</h5>
             <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -77,11 +85,11 @@
 
                         <td scope="row">
                             @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-block btn-outline-success">Disponible</button>
                                 @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-block btn-outline-warning">No Disponible</button>
                                 @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</button>
                                 @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                     <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
                             @endif
@@ -119,13 +127,13 @@
                 </tbody>
             </table>
         </div>
-        <br>
-        <div class="left-align">
-            <label class="col-form-label mr-2" for="Fecha_Servicio">Fecha de Servicio</label>
-            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" id="Fecha_Servicio" style="width: auto;">
+        <br><br>
+        <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+        Estos son los elementos que has solicitado
         </div>
         <div class="box">
-            <h5 align="center">Elementos Solicitados</h5>
             <br>
             <div class="box-body">
                 <table id="tablaAgregados" class="table table-bordered table-striped dt-responsive tablas">
@@ -146,6 +154,16 @@
                 </table>
             </div>
         </div>
+        <br><br>
+        <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Importante</h5>
+            <p>Elige una fecha de servicio para concluir</p>
+        </div>
+        <div class="left-align">
+            <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" id="Fecha_Servicio" style="width: auto;">
+        </div>
+        <br><br>
         <div class="col text-center">
             <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
                 Finalizar solicitud
