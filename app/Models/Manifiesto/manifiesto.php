@@ -14,7 +14,6 @@ class manifiesto extends Model
         'Cliente',
         'Folio',
         'Destino',
-        'Fecha_Salida',
         'Trabajo',
         'Puesto',
         'Responsable',
