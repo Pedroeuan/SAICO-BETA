@@ -391,11 +391,11 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Clientes',
-                        'icon' => 'fas fa-user-plus',
-                        'url' => 'registro/create',
+                        'icon' => 'fas fa-users',
+                        'url' => 'clientes/index',
                     ],
-                    [
-                        'text' => 'level_one',
+                    /*[
+                        'text' => '',
                         'url' => '#',
                         'submenu' => 
                         [
@@ -419,11 +419,12 @@ return [
                                 ],
                             ],
                         ],
-                    ],
+                    ],*/
     
                     [
-                        'text' => 'level_one',
-                        'url' => '#',
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
                     ],
                 ],
             ],

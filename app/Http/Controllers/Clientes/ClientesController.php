@@ -17,7 +17,9 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        //
+        $clientes = clientes::all();
+
+        return view('Clientes.index', compact('clientes'));
     }
 
     /**
@@ -65,7 +67,7 @@ class ClientesController extends Controller
         }
         $clientes->save();
 
-        return redirect()->route('index.clientes');
+        return redirect()->route('clientes.index');
     }
 
     /**
@@ -79,17 +81,29 @@ class ClientesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(clientes $clientes)
+    public function edit($id)
     {
-        //
+        $clientes = clientes::where('idClientes', $id)->first();
+
+        return view('Clientes.edit', compact('id','clientes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, clientes $clientes)
+    public function update(Request $request, $id)
     {
-        //
+        // Obtener el equipo existente
+        $clientes  = clientes::find($id);
+                // Actualizar los datos del equipo
+        $clientes ->update([
+            'Cliente' => $request->input('Cliente'),
+            'RFC' => $request->input('RFC'),
+            'Telefono' => $request->input('Telefono'),
+            'Correo' => $request->input('Correo'),
+        ]);
+
+        return redirect()->route('clientes.index');
     }
 
     /**

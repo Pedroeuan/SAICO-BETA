@@ -24,35 +24,35 @@
                     <div class="tab-content">
 
                             <div class="tab-pane active" id="tab_1">
-                                <form id="kitForm" method="post" enctype="multipart/form-data" action="{{route('registro.storeClientes')}}">
+                                <form id="clienteForm" method="post" enctype="multipart/form-data" action="{{ route('editClientes.update', ['id' => $id]) }}">
                                     @csrf
                                         <div class="row">
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                                    <input type="text" class="form-control inputForm" value="{{old('Cliente')}}" name="Cliente" placeholder="Ejemplo: PROTEXA" required>
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->Cliente }}" name="Cliente" placeholder="Ejemplo: PROTEXA" required>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">RFC</label>
-                                                    <input type="text" class="form-control inputForm" value="{{old('RFC')}}" name="RFC" placeholder="Ejemplo: PROP56512458">
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->RFC }}" name="RFC" placeholder="Ejemplo: PROP56512458">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Telefono</label>
-                                                    <input type="text" class="form-control inputForm" value="{{old('Telefono')}}" name="Telefono" placeholder="Ejemplo: 81 8399 2828">
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->Telefono }}" name="Telefono" placeholder="Ejemplo: 81 8399 2828">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Correo</label>
-                                                    <input type="text" class="form-control inputForm" value="{{old('Correo')}}" name="Correo" placeholder="Ejemplo: hola@protexa.mx">
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->Correo }}" name="Correo" placeholder="Ejemplo: hola@protexa.mx">
                                                 </div>
                                             </div>
                                             <div class="container">
