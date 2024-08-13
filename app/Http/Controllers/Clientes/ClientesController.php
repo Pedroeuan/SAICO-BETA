@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\Clientes\clientes;
+
 class ClientesController extends Controller
 {
     /**
@@ -31,7 +33,39 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $clientes = new clientes;
+        $EsperaDato ='ESPERA DE DATO';
+
+        if($request->input('Cliente')==null)
+        {
+            $clientes->Cliente = $EsperaDato;
+        }else{
+            $clientes->Cliente = $request->input('Cliente');
+        }
+
+        if($request->input('RFC')==null)
+        {
+            $clientes->RFC = $EsperaDato;
+        }else{
+            $clientes->RFC = $request->input('RFC');
+        }
+
+        if($request->input('Telefono')==null)
+        {
+            $clientes->Telefono = $EsperaDato;
+        }else{
+            $clientes->Telefono = $request->input('Telefono');
+        }
+
+        if($request->input('Correo')==null)
+        {
+            $clientes->Correo = $EsperaDato;
+        }else{
+            $clientes->Correo = $request->input('Correo');
+        }
+        $clientes->save();
+
+        return redirect()->route('index.clientes');
     }
 
     /**

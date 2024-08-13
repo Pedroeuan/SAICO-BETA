@@ -154,6 +154,8 @@ use App\Http\Controllers\Clientes\Clientescontroller;
     /*CLIENTES*/
     /*Rutas de Vista para crear CLIENTES*/
     Route::get('/registro/create', [clientesController::class, 'create'])->name('registro/create');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes'); 
 
 });
 

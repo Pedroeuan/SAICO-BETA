@@ -12,31 +12,33 @@
     <div class="row justify-content-center">
         <div class="col-sm-12">
             <div class="card">
+
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center"> 
                         <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Clientes</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header p-2-->
+
                 <div class="card-body">
                     <div class="tab-content">
+
                             <div class="tab-pane active" id="tab_1">
-                                <form id="kitForm" method="post" enctype="multipart/form-data" action="">
+                                <form id="kitForm" method="post" enctype="multipart/form-data" action="{{route('registro.storeClientes')}}">
                                     @csrf
-                                    <div class="box">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="row">
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                                    <input type="text" class="form-control inputForm" value="" name="Cliente" placeholder="Ejemplo: PROTEXA">
+                                                    <input type="text" class="form-control inputForm" value="" name="Cliente" placeholder="Ejemplo: PROTEXA" required>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">RFC</label>
-                                                    <input type="text" class="form-control inputForm" value="" name="RFC" placeholder="Ejemplo: PROP">
+                                                    <input type="text" class="form-control inputForm" value="" name="RFC" placeholder="Ejemplo: PROP56512458">
                                                 </div>
                                             </div>
 
@@ -53,11 +55,17 @@
                                                     <input type="text" class="form-control inputForm" value="" name="Correo" placeholder="Ejemplo: hola@protexa.mx">
                                                 </div>
                                             </div>
+                                            <div class="container">
+                                                <div class="float-right">
+                                                    <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                                </div>
+                                                <div class="float-left">
+                                                    <button type="button" class="btn btn-info bg-success" id="guardarContinuarBlocks">Guardar y continuar</button>
+                                                </div>
+                                            </div>
 
-                                    
-                                    </div><!--d-flex justify -->
-                                </div><!--box -->
-                            </form>
+                                        </div>
+                                </form>
                         </div><!--"class="tab-pane active" id="tab_1"-->
                     </div><!-- /.tab-content -->
                 </div><!-- class="card-body" -->
