@@ -25,7 +25,7 @@
                         <select class="form-control inputForm" name="Cliente" required>
                             <option value="">Seleccione un cliente</option>
                             @foreach ($clientes as $cliente)
-                                <option value="{{ $cliente->Cliente }}" {{ $cliente->Cliente == $Manifiestos->Cliente ? 'selected' : '' }}>
+                                <option value="{{ $cliente->Cliente }}">
                                     {{ $cliente->Cliente }}
                                 </option>
                             @endforeach
@@ -43,10 +43,10 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="col-form-label" for="inputSuccess">Folio</label>
-                        <input type="text" class="form-control inputForm" name="Folio" placeholder="Ejemplo: PROP-040/24" value="{{old('Folio')}}" required>
+                        <input type="text" class="form-control inputForm" name="Folio" id="folio" placeholder="Ejemplo: PROP-001/24" required>
                         @error('Folio')
                             <br>
-                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                             </br>
                         @enderror
                     </div>
@@ -187,5 +187,51 @@
 <script src="{{ asset('js/session-handler.js') }}"></script>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const clienteSelect = document.querySelector('select[name="Cliente"]');
+        
+        if (clienteSelect.value === "") {
+            event.preventDefault(); // Evita que se envíe el formulario
+            alert("Por favor, selecciona un cliente."); // Muestra una alerta
+            clienteSelect.focus(); // Coloca el foco en el campo de selección
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const clienteSelect = document.querySelector('select[name="Cliente"]');
+        const folioInput = document.getElementById('folio');
+
+        clienteSelect.addEventListener('change', function() {
+            const cliente = clienteSelect.value;
+
+            if (cliente) {
+                // 1. Obtener las primeras 4 letras del nombre del cliente
+                const clientePrefix = cliente.substring(0, 4).toUpperCase();
+
+                // 2. Realizar la solicitud AJAX para obtener el conteo actual de registros en la tabla Solicitud
+                fetch('{{ route("solicitudes.count") }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const totalRegistros = data.total; // Sumar 1 para el próximo folio original:const totalRegistros = data.total + 1;
+                        const registroCount = totalRegistros.toString().padStart(3, '0'); // Convertir a formato 001, 002, etc.
+
+                        // 3. Obtener el año actual (últimos dos dígitos)
+                        const year = new Date().getFullYear().toString().slice(-2);
+
+                        // 4. Crear el folio con el formato PROP-001/24
+                        const folio = `${clientePrefix}-${registroCount}/${year}`;
+                        folioInput.value = folio;
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener el total de registros:', error);
+                    });
+            } else {
+                folioInput.value = ''; // Resetear el valor si no hay cliente seleccionado
+            }
+        });
+    });
+</script>
 
 @endsection

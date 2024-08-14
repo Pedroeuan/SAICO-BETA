@@ -129,6 +129,8 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+    /*ruta para obtener el conteo de registros de solicitud */
+    Route::get('/solicitudes/count', [SolicitudesController::class, 'getCount'])->name('solicitudes.count');
 
     /*Ruta /Obtener/CantidadAlmacen/*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);

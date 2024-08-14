@@ -12,6 +12,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\Clientes\clientes;
 use Carbon\Carbon;
 
 class ManifiestoController extends Controller
@@ -75,18 +76,18 @@ class ManifiestoController extends Controller
         }else{ 
                 if ($request->filled('idSolicitud'))
                 {
-                            //Log::info('Si no existe un manifiesto'); 
-                            $Manifiesto = new manifiesto;
-                            $Manifiesto->idSolicitud = $request->input('idSolicitud');
-                            $Manifiesto->Cliente = $request->input('Cliente');
-                            $Manifiesto->Folio = $request->input('Folio');
-                            $Manifiesto->Destino = $request->input('Destino');
-                            // $Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
-                            $Manifiesto->Trabajo = $request->input('Trabajo');
-                            $Manifiesto->Puesto = $request->input('Puesto');
-                            $Manifiesto->Responsable = $request->input('Responsable');
-                            $Manifiesto->Observaciones = $request->input('Observaciones');
-                            $Manifiesto->save();
+                        //Log::info('Si no existe un manifiesto'); 
+                        $Manifiesto = new manifiesto;
+                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                        $Manifiesto->Cliente = $request->input('Cliente');
+                        $Manifiesto->Folio = $request->input('Folio');
+                        $Manifiesto->Destino = $request->input('Destino');
+                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                        $Manifiesto->Trabajo = $request->input('Trabajo');
+                        $Manifiesto->Puesto = $request->input('Puesto');
+                        $Manifiesto->Responsable = $request->input('Responsable');
+                        $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->save();
                 }
             }
 
@@ -116,9 +117,11 @@ class ManifiestoController extends Controller
 
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
 
+        $clientes = clientes::all();
+
         if ($Solicitud->Estatus == 'APROBADO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
             }
             else{
                 return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
@@ -131,7 +134,8 @@ class ManifiestoController extends Controller
     {
         //
         $request->validate([
-            'Cliente' => 'required|string|max:255',
+            //'Cliente' => 'required|string|max:255',
+            'Cliente' => 'required|exists:clientes,Cliente', // 'required' asegura que no esté vacío
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
             'Fecha_Salida' => 'required|date',
