@@ -55,15 +55,12 @@
                                                     <input type="text" class="form-control inputForm" value="{{ $clientes->Correo }}" name="Correo" placeholder="Ejemplo: hola@protexa.mx">
                                                 </div>
                                             </div>
+
                                             <div class="container">
-                                                <div class="float-right">
-                                                    <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
-                                                </div>
-                                                <div class="float-left">
-                                                    <button type="button" class="btn btn-info bg-success" id="guardarContinuarBlocks">Guardar y continuar</button>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="submit" class="btn btn-info bg-success">Guardar</button>
                                                 </div>
                                             </div>
-
                                         </div>
                                 </form>
                         </div><!--"class="tab-pane active" id="tab_1"-->

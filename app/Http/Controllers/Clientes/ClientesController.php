@@ -35,9 +35,13 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'Cliente' => 'required|string|max:255',
+        ]);
         $clientes = new clientes;
         $EsperaDato ='ESPERA DE DATO';
 
+        try {
         if($request->input('Cliente')==null)
         {
             $clientes->Cliente = $EsperaDato;
@@ -66,6 +70,13 @@ class ClientesController extends Controller
             $clientes->Correo = $request->input('Correo');
         }
         $clientes->save();
+
+        // Devolver una respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Cliente guardado correctamente.']);
+        } catch (\Exception $e) {
+            // Devolver una respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error al guardar los datos.']);
+        }
 
         return redirect()->route('clientes.index');
     }
@@ -109,8 +120,15 @@ class ClientesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(clientes $clientes)
+    public function destroy($id)
     {
-        //
+        $clientes = clientes::find($id);
+    
+        if ($clientes) {
+            $clientes->delete();
+            return response()->json(['success' => true, 'message' => 'Cliente eliminado correctamente.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No se pudo encontrar el cliente.']);
+        }
     }
 }

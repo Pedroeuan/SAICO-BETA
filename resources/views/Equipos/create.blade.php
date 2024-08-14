@@ -1146,50 +1146,6 @@ let table = new DataTable('#tablaJs', {
     actualizarTabla();
 });
 
-// Funciones para adjuntar los listeners
-/*
-function attachAddListeners() {
-    document.querySelectorAll('.btnAgregar').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let row = this.closest('tr');
-            let id = this.dataset.id;
-
-            // Verificar si el elemento ya está en la tabla de seleccionados
-            if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
-                return; // Si ya está, no hacemos nada
-            }
-
-            // Clonar la fila y agregar campos de cantidad y unidad
-            let newRow = document.createElement('tr');
-            newRow.setAttribute('data-id', id);
-            newRow.innerHTML = `
-                <td>${row.cells[0].innerText}</td>
-                <td>${row.cells[1].innerText}</td>
-                <td>${row.cells[2].innerText}</td>
-                <td>${row.cells[6].innerText}</td>
-                <td><input type="number" class="form-control cantidad" name="cantidad_${id}" required></td>
-                <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
-                <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
-            `;
-
-            // Agregar la nueva fila a la tabla de seleccionados
-            document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
-
-            // Re-attach the delete listeners to the new button
-            attachDeleteListeners();
-        });
-    });
-}
-
-function attachDeleteListeners() {
-    document.querySelectorAll('.btnEliminar').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let row = this.closest('tr');
-            row.remove();
-        });
-    });
-}*/
-
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {

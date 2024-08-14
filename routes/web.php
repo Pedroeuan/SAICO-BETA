@@ -162,6 +162,8 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
     /*Ruta de Actualizar Clientes*/
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
+    /*Ruta de botón Eliminación-index-Clientes*/
+    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
 
 
 
