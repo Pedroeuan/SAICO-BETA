@@ -124,7 +124,7 @@ class ManifiestoController extends Controller
             return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
             }
             else{
-                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
+                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes'));
             }
         }
     }
