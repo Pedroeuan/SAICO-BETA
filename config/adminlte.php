@@ -340,7 +340,7 @@ return [
         ],
 
                // Sidebar Operativos:
-               [
+                [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 //'topnav' => true,
@@ -384,17 +384,18 @@ return [
             ],
 
              // Sidebar Clientes:
-             [
+                [
                 'text' => 'Ventas',
                 'icon' => 'fas fa-money-bill-wave',
                 //'topnav' => true,
                 'submenu' => [
                     [
-                        'text' => 'level_one',
-                        'url' => '#',
+                        'text' => 'Clientes',
+                        'icon' => 'fas fa-users',
+                        'url' => 'clientes/index',
                     ],
-                    [
-                        'text' => 'level_one',
+                    /*[
+                        'text' => '',
                         'url' => '#',
                         'submenu' => 
                         [
@@ -418,11 +419,12 @@ return [
                                 ],
                             ],
                         ],
-                    ],
+                    ],*/
     
                     [
-                        'text' => 'level_one',
-                        'url' => '#',
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
                     ],
                 ],
             ],

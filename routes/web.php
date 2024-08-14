@@ -18,6 +18,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
+use App\Http\Controllers\Clientes\ClientesController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -128,6 +129,8 @@ use App\Http\Controllers\Manifiesto\PDFController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+    /*ruta para obtener el conteo de registros de solicitud */
+    Route::get('/solicitudes/count', [SolicitudesController::class, 'getCount'])->name('solicitudes.count');
 
     /*Ruta /Obtener/CantidadAlmacen/*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
@@ -149,6 +152,22 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
     Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
+
+    /*CLIENTES*/
+    /*Rutas de Vistas de Tabla de Clientes*/
+    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
+    /*Rutas de Vista para crear CLIENTES*/
+    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
+    /*Rutas de Vistas Clientes-Edición*/
+    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
+    /*Ruta de Actualizar Clientes*/
+    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
+    /*Ruta de botón Eliminación-index-Clientes*/
+    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+
+
 
 });
 

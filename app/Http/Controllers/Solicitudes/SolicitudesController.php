@@ -17,6 +17,7 @@ use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\Clientes\clientes;
 
 class SolicitudesController extends Controller
 {
@@ -39,6 +40,12 @@ class SolicitudesController extends Controller
     {
         $generalEyC = general_eyc::with('Certificados')->find($id);
         return response()->json($generalEyC);
+    }
+
+    public function getCount()
+    {
+        $total = Solicitudes::count();
+        return response()->json(['total' => $total]);
     }
 
     /**
@@ -135,6 +142,7 @@ class SolicitudesController extends Controller
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         $general = general_eyc::get();
         //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+        $clientes = clientes::all();
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
             /*if (!$Manifiestos) {
@@ -148,16 +156,16 @@ class SolicitudesController extends Controller
     
         if ($Solicitud->Estatus == 'APROBADO') {
             if (!$Manifiestos) {
-                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','clientes'));
             }else
             {
-                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
             }
         }
     
         if ($Solicitud->Estatus == 'MANIFIESTO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
             }
         }
 

@@ -12,6 +12,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\Clientes\clientes;
 use Carbon\Carbon;
 
 class ManifiestoController extends Controller
@@ -50,90 +51,91 @@ class ManifiestoController extends Controller
      */
     /*/solicitud/Manifiesto/{id}----Boton Crear Manifiesto-aprobacion.blade*/
     public function create(Request $request, $id)
-{
-    //dd($request->input('Cliente'));
-    $general = general_eyc::get();
-    $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-    $Solicitud = Solicitudes::find($id);
-    if (!$Solicitud) {
-        return redirect()->back()->with('error', 'Solicitud no encontrada.');
-    }
+    {
+        //dd($request->input('Cliente'));
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $Solicitud = Solicitudes::find($id);
+        if (!$Solicitud) {
+            return redirect()->back()->with('error', 'Solicitud no encontrada.');
+        }
 
-    $Estatus = 'APROBADO';
-    
-    // Actualizar el estado de la solicitud
-    $Solicitud->update([
-        'Estatus' => $Estatus,
-    ]);
+        $Estatus = 'APROBADO';
+        
+        // Actualizar el estado de la solicitud
+        $Solicitud->update([
+            'Estatus' => $Estatus,
+        ]);
 
-    $idSolicitud = $Solicitud->idSolicitud;
-    $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
-    //$Manifiesto = manifiesto::find($id);
-    
-    if ($Manifiesto) {
-        //Log::info('Si existe un manifiesto'); 
-    }else{ 
-            if ($request->filled('idSolicitud'))
-            {
+        $idSolicitud = $Solicitud->idSolicitud;
+        $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
+        //$Manifiesto = manifiesto::find($id);
+        
+        if ($Manifiesto) {
+            //Log::info('Si existe un manifiesto'); 
+        }else{ 
+                if ($request->filled('idSolicitud'))
+                {
                         //Log::info('Si no existe un manifiesto'); 
                         $Manifiesto = new manifiesto;
                         $Manifiesto->idSolicitud = $request->input('idSolicitud');
                         $Manifiesto->Cliente = $request->input('Cliente');
                         $Manifiesto->Folio = $request->input('Folio');
                         $Manifiesto->Destino = $request->input('Destino');
-                        // $Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
                         $Manifiesto->Trabajo = $request->input('Trabajo');
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
                         $Manifiesto->Observaciones = $request->input('Observaciones');
                         $Manifiesto->save();
+                }
+            }
+
+        // Obtener todos los detalles de la solicitud
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        // Recorrer cada detalle de la solicitud para actualizar Cantidad y Unidad
+        foreach ($DetallesSolicitud as $detalle) {
+            $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
+            $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
+            
+            if ($cantidad !== null && $unidad !== null) {
+                $detalle->update([
+                    'Cantidad' => $cantidad,
+                    'Unidad' => $unidad,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Datos de cantidad o unidad faltantes para algún detalle de la solicitud.');
             }
         }
 
-    // Obtener todos los detalles de la solicitud
-    $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
 
-    // Recorrer cada detalle de la solicitud para actualizar Cantidad y Unidad
-    foreach ($DetallesSolicitud as $detalle) {
-        $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
-        $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
-        
-        if ($cantidad !== null && $unidad !== null) {
-            $detalle->update([
-                'Cantidad' => $cantidad,
-                'Unidad' => $unidad,
-            ]);
-        } else {
-            return redirect()->back()->with('error', 'Datos de cantidad o unidad faltantes para algún detalle de la solicitud.');
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+
+        $clientes = clientes::all();
+
+        if ($Solicitud->Estatus == 'APROBADO') {
+            if ($Manifiestos) {
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
+            }
+            else{
+                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
+            }
         }
     }
-
-    // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
-    $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-
-    // Obtener los registros de General_EyC relacionados
-    $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
-
-    $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
-
-    if ($Solicitud->Estatus == 'APROBADO') {
-        if ($Manifiestos) {
-        return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
-        }
-        else{
-            return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC'));
-        }
-    }
-
-    
-}
 
     /*BOTON FINALIZAR MANFIESTO DE PRE-MANIFIESTO.BLADE */
     public function store(Request $request)
     {
         //
         $request->validate([
-            'Cliente' => 'required|string|max:255',
+            //'Cliente' => 'required|string|max:255',
+            'Cliente' => 'required|exists:clientes,Cliente', // 'required' asegura que no esté vacío
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
             'Fecha_Salida' => 'required|date',
@@ -142,7 +144,6 @@ class ManifiestoController extends Controller
             'Responsable' => 'required|string|max:255',
 
         ]);
-
 
         $id = $request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
@@ -181,7 +182,7 @@ class ManifiestoController extends Controller
             $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
             if ($almacen) 
             {
-                    //Empezar a descontar por aqui aprovechando el ciclo FOR
+                //Empezar a descontar por aqui aprovechando el ciclo FOR
                 // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                 ->where('Fecha', $request->input('Fecha_Salida'))
