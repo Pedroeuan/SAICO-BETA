@@ -129,8 +129,6 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
-    /*ruta para obtener el conteo de registros de solicitud */
-    Route::get('/solicitudes/count', [SolicitudesController::class, 'getCount'])->name('solicitudes.count');
 
     /*Ruta /Obtener/CantidadAlmacen/*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
@@ -144,6 +142,8 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
     /*Ruta de Actualización*/
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
+        /*ruta para obtener el conteo de registros de manifiesto*/
+        Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/

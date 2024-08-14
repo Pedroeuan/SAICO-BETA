@@ -25,6 +25,12 @@ class ManifiestoController extends Controller
         //
     }
 
+    public function getCount()
+    {
+        $total = manifiesto::count();
+        return response()->json(['total' => $total]);
+    }
+
     public function BotonRegresar($id)
     {
         $Solicitud = Solicitudes::findOrFail($id);

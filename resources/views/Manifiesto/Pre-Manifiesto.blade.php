@@ -211,10 +211,10 @@
                 const clientePrefix = cliente.substring(0, 4).toUpperCase();
 
                 // 2. Realizar la solicitud AJAX para obtener el conteo actual de registros en la tabla Solicitud
-                fetch('{{ route("solicitudes.count") }}')
+                fetch('{{ route("manifiestos.count") }}')
                     .then(response => response.json())
                     .then(data => {
-                        const totalRegistros = data.total; // Sumar 1 para el próximo folio original:const totalRegistros = data.total + 1;
+                        const totalRegistros = data.total + 1; // Sumar 1 para el próximo folio original:const totalRegistros = data.total + 1;
                         const registroCount = totalRegistros.toString().padStart(3, '0'); // Convertir a formato 001, 002, etc.
 
                         // 3. Obtener el año actual (últimos dos dígitos)
