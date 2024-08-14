@@ -42,12 +42,6 @@ class SolicitudesController extends Controller
         return response()->json($generalEyC);
     }
 
-    public function getCount()
-    {
-        $total = Solicitudes::count();
-        return response()->json(['total' => $total]);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
