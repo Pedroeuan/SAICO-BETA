@@ -45,7 +45,8 @@
                                 <div class="btn-group">
                                     <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                     <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                    <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                    <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                    <a class="btn btn-success" href="" role="button" target="_blank"><i class="fas fa-plus-square"></i></a>                                              
                                 </div>
                             @endif
                             
@@ -97,8 +98,7 @@
                     }
     });
 
-    
-    $(".btnEliminarSolicitud").on("click", function(){
+    $(document).on("click", ".btnEliminarSolicitud", function() {
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
     Swal.fire({

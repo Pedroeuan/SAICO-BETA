@@ -128,7 +128,8 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-    $(".btnEliminarEquipo").on("click", function(){
+//$(".btnEliminarEquipo").on("click", function(){
+$(document).on("click", ".btnEliminarEquipo", function() {
     //valor del id a eliminar
     var idGeneral_EyC = $(this).attr("idGeneral_EyC");
 
@@ -142,7 +143,7 @@ let table = new DataTable('#tablaJs', {
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/eliminar/destroyEquipos/' + idGeneral_EyC, // URL del endpoint de eliminación
+                url: '/eliminar/BajaEyC/' + idGeneral_EyC, // URL del endpoint de eliminación
                 type: 'DELETE', // Método HTTP DELETE
                 data: {
                     _token: '{{ csrf_token() }}' // Token CSRF si es necesario

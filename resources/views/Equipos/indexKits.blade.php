@@ -87,7 +87,8 @@
                     }
                 }
 });
-    $(".btnEliminarEquipo").on("click", function(){
+    //$(".btnEliminarEquipo").on("click", function(){
+$(document).on("click", ".btnEliminarEquipo", function() {
     //valor del id a eliminar
     var idDetallesKits = $(this).attr("idDetallesKits");
 
