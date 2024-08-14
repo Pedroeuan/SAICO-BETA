@@ -17,17 +17,29 @@
                     <form id="manifiestoForm" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                             <div class="row">
-                                <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control inputForm" name="Cliente"  placeholder="Ejemplo: PROPETROL" value="{{ $Manifiestos->Cliente }}" required>
-                                            @error('Cliente')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
-                                            @enderror
-                                        </div>
-                                    </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+
+                                    <label class="col-form-label" for="inputSuccess">Cliente</label>
+
+                                    <select class="form-control inputForm" name="Cliente" required>
+                                        <option value="">Seleccione un cliente</option>
+                                        @foreach ($clientes as $cliente)
+                                            <option value="{{ $cliente->Cliente }}" {{ $cliente->Cliente == $Manifiestos->Cliente ? 'selected' : '' }}>
+                                                {{ $cliente->Cliente }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('Cliente')
+                                        <br>
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        </br>
+                                    @enderror
+
+                                </div>
+                            </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
