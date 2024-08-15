@@ -175,6 +175,71 @@ class SolicitudesController extends Controller
         }*/
     }
 
+    /*Botón de plus para agregar, más datos al manifiesto con el mismo folio */
+    public function editplus($id)
+    {
+        $Solicitud = Solicitudes::findOrFail($id);
+        // Crear la nueva solicitud duplicando la existente
+        $nuevaSolicitud = $Solicitud->replicate();
+        // Guardar la nueva solicitud en la base de datos
+        $nuevaSolicitud->save();
+
+        /**************************************************************/
+        $Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+        //dd($generalEyCIds);
+        // Obtener los registros de General_EyC relacionados
+        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
+        //dd($generalEyC);
+
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+        $general = general_eyc::get();
+        //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+        $clientes = clientes::all();
+
+        if ($Solicitud->Estatus == 'PENDIENTE') {
+            /*if (!$Manifiestos) {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
+            }else
+            {
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
+            }*/
+            return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
+        }
+    
+        if ($Solicitud->Estatus == 'APROBADO') {
+            if (!$Manifiestos) {
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','clientes'));
+            }else
+            {
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
+            }
+        }
+    
+        if ($Solicitud->Estatus == 'MANIFIESTO') {
+            if ($Manifiestos) {
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
+            }
+        }
+
+        /*switch ($Solicitud->Estatus) {
+            case 'PENDIENTE':
+                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'APROBADO':
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
+            case 'MANIFIESTO':
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
+            //default:
+                //return view('solicitudes.default', compact('solicitud'));
+        }*/
+    }
+
     /**
      * Update the specified resource in storage.
      */

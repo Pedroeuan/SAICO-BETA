@@ -114,6 +114,8 @@ use App\Http\Controllers\Clientes\ClientesController;
     
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
+    /*Rutas de Vistas de Solicitudes-Edición-index-Plus*/
+    Route::get('/solicitudplus/edit/{id}', [SolicitudesController::class, 'editplus'])->name('solicitudplus.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
