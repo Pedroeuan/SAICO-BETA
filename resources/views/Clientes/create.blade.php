@@ -92,6 +92,12 @@
 <script src="{{ asset('js/session-handler.js') }}"></script>
 
 <script>
+/*Prevenir el Enter */
+document.getElementById('ClienteForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
 
 $(document).ready(function() {
     $('#guardarContinuarClientes').on('click', function(event) {

@@ -24,7 +24,7 @@
                     <div class="tab-content">
 
                             <div class="tab-pane active" id="tab_1">
-                                <form id="clienteForm" method="post" enctype="multipart/form-data" action="{{ route('editClientes.update', ['id' => $id]) }}">
+                                <form id="ClienteForm" method="post" enctype="multipart/form-data" action="{{ route('editClientes.update', ['id' => $id]) }}">
                                     @csrf
                                         <div class="row">
 
@@ -83,6 +83,14 @@
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
+
+/*Prevenir el Enter */
+document.getElementById('ClienteForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
 let table = new DataTable('#tablaJs', {
     // options
     language: {

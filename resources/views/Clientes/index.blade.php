@@ -89,8 +89,7 @@
                     }
     });
 
-    
-    $(".btnEliminarSolicitud").on("click", function(){
+$(document).on("click", ".btnEliminarSolicitud", function() {
     var idCliente = $(this).attr("idCliente");
     Swal.fire({
         title: "¿Seguro de eliminar este elemento?",
@@ -125,7 +124,7 @@
                 }
             });
         } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "info");
+            Swal.fire("Cancelado", "", "error");
         }
     });
 });
