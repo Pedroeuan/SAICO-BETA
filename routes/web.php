@@ -18,6 +18,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
+use App\Http\Controllers\Admin\UsuariosController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -149,6 +150,12 @@ use App\Http\Controllers\Manifiesto\PDFController;
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
     Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
+
+    /*admin */
+    /*Ruta para alta de usuarios*/
+    Route::get('Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
+    /*Ruta para ver los usuarios*/
+    Route::get('Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
 
 });
 
