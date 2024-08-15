@@ -184,6 +184,7 @@ class SolicitudesController extends Controller
         // Guardar la nueva solicitud en la base de datos
         $nuevaSolicitud->save();
 
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         /**************************************************************/
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();

@@ -90,6 +90,83 @@
         </div>
     </div>
     <br>
+    <br>
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> ¡Elementos Previos!</h5>
+        Estos son los elementos que te han solicitado Previamente
+        </div>
+    <br>
+    <div class="card-body">
+        <table id="TablaSolicitud" class="table table-bordered" >
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>No.ECO</th>
+                    <th>Marca</th>
+                    <th>Ultima calibración</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($DetallesSolicitud as $detalle)
+                    @php
+                        $general = $generalEyC;
+                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                        $fechaCalibracion = $general->Certificados->Fecha_calibracion;
+                    @endphp
+                    <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
+                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                        <td>{{ $general->Marca ?? 'N/A' }}</td>
+                        @if($general->Certificados)
+                                    @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
+                                            @if($general->Certificados->Fecha_calibracion=='2001-01-01')
+                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                @else
+                                                    <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
+                                            @endif
+                                        @else
+                                            <td scope="row">N/A</td>
+                                    @endif
+                            @endif
+
+                        @if($general->Tipo == 'CONSUMIBLES')
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
+                                </div>
+                            </td>
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+
+                        @else
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
+                                </div>
+                            </td>
+                            <td scope="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                </div>
+                            </td>
+                        @endif
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
     <div class="alert alert-success alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
