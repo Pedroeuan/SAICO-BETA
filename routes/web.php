@@ -18,6 +18,7 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
+use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 
     Route::get('/', function () {
@@ -159,6 +160,12 @@ use App\Http\Controllers\Clientes\ClientesController;
     /*Ruta para ver el manifiesto pdf*/
     Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 
+    /*admin */
+    /*Ruta para alta de usuarios*/
+    Route::get('Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
+    /*Ruta para ver los usuarios*/
+    Route::get('Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
+
     /*CLIENTES*/
     /*Rutas de Vistas de Tabla de Clientes*/
     Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
@@ -172,8 +179,6 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-
-
 
 });
 
