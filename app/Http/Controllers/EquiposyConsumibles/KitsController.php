@@ -41,7 +41,7 @@ class KitsController extends Controller
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
 
-        return response()->json($generalConCertificados,$general);
+        return response()->json($generalConCertificados, $general);
     }
 
     /**

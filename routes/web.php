@@ -149,8 +149,10 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
     /*Ruta de Actualización*/
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
-        /*ruta para obtener el conteo de registros de manifiesto*/
-        Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
+    /*Ruta de Actualización-plus*/
+    Route::post('/solicitudesplus/updateSolicitudplus/{id}', [ManifiestoController::class, 'updateplus'])->name('solicitudesplus.updateSolicitudplus');
+    /*ruta para obtener el conteo de registros de manifiesto*/
+    Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/

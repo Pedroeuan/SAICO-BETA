@@ -118,7 +118,7 @@
                         //dump($general->idGeneral_EyC);
                     @endphp
                     <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
-                    <input type="hidden" name="idGeneralEyC[]" value="{{ $detalle->idGeneral_EyC }}" readonly>
+                    <input type="hidden" name="idDetalles_Solicitud[]" value="{{ $detalle->idDetalles_Solicitud }}" readonly>
                         <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                         <td>{{ $general->No_economico ?? 'N/A' }}</td>
                         <td>{{ $general->Marca ?? 'N/A' }}</td>
