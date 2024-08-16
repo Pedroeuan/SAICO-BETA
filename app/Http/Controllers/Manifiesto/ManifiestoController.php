@@ -217,7 +217,7 @@ class ManifiestoController extends Controller
                 {
                         //Log::info('Si no existe un manifiesto'); 
                         $Manifiesto = new manifiesto;
-                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                        $Manifiesto->idSolicitud = $idSolicitud;
                         $Manifiesto->Cliente = $request->input('Cliente');
                         $Manifiesto->Folio = $request->input('Folio');
                         $Manifiesto->Destino = $request->input('Destino');
