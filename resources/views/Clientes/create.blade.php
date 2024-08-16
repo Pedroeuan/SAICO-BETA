@@ -99,7 +99,7 @@ document.getElementById('ClienteForm').addEventListener('keydown', function(even
         }
     });
 
-$(document).ready(function() {
+    $(document).ready(function() {
     $('#guardarContinuarClientes').on('click', function(event) {
         event.preventDefault(); // Prevenir el comportamiento predeterminado del botón
 
@@ -121,13 +121,12 @@ $(document).ready(function() {
             success: function(response) {
                 // Verificar si la respuesta indica éxito
                 if (response.success) {
+                    Swal.fire('Error', response.message, 'error');
+                } else {
                     // Mostrar mensaje de éxito
                     Swal.fire('Éxito', 'Los datos han sido guardados correctamente.', 'success');
-
                     // Limpiar los campos del formulario
                     $('#ClienteForm')[0].reset();
-                } else {
-                    Swal.fire('Error', response.message, 'error');
                 }
             },
             error: function(xhr, status, error) {
