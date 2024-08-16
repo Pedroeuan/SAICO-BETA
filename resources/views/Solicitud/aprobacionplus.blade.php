@@ -14,7 +14,7 @@
 <br>
 <br>
 <!-- form start -->
-    <form id="AprobacionForm" action="{{ route('solicitud.manifiesto', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data" role="form">
+    <form id="AprobacionForm" action="{{ route('solicitudplus.manifiestoplus', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data" role="form">
     @csrf 
     <h3 >Formulario para aprobar solicitud de equipos y consumibles</h3>
     <br>
@@ -91,14 +91,14 @@
     </div>
     <br>
     <br>
-    <div class="alert alert-success alert-dismissible">
+    <div class="alert alert-warning alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h5><i class="icon fas fa-check"></i> ¡Elementos Previos!</h5>
-        Estos son los elementos que te han solicitado Previamente
+        Estos son los elementos que te han solicitado Previamente, NO apareceran en el formato final
         </div>
     <br>
     <div class="card-body">
-        <table id="TablaSolicitud" class="table table-bordered" >
+        <table id="TablaSolicitudPrevia" class="table table-bordered" >
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -115,8 +115,10 @@
                         $general = $generalEyC;
                         $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                         $fechaCalibracion = $general->Certificados->Fecha_calibracion;
+                        //dump($general->idGeneral_EyC);
                     @endphp
                     <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
+                    <input type="hidden" name="idGeneralEyC[]" value="{{ $detalle->idGeneral_EyC }}" readonly>
                         <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                         <td>{{ $general->No_economico ?? 'N/A' }}</td>
                         <td>{{ $general->Marca ?? 'N/A' }}</td>
@@ -132,123 +134,47 @@
                                     @endif
                             @endif
 
-                        @if($general->Tipo == 'CONSUMIBLES')
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
-
-                        @else
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
-                                </div>
-                            </td>
-                        @endif
+                                <td scope="row">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
+                                    </div>
+                                </td>
+                                <td scope="row">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" readonly>
+                                    </div>
+                                </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
-        Estos son los elementos que te han solicitado
+        <br>
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+            Estos son los elementos que te han solicitado
+            </div>
+        <br>
+        <div class="card-body">
+            <table id="tablaAgregados" class="table table-bordered" >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>No.ECO</th>
+                        <th>Marca</th>
+                        <th>Ultima calibración</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
         </div>
     <br>
-    <div class="card-body">
-        <table id="TablaSolicitud" class="table table-bordered" >
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>No.ECO</th>
-                    <th>Marca</th>
-                    <th>Ultima calibración</th>
-                    <th>Cantidad</th>
-                    <th>Unidad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($DetallesSolicitud as $detalle)
-                    @php
-                        $general = $generalEyC;
-                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                        $fechaCalibracion = $general->Certificados->Fecha_calibracion;
-                    @endphp
-                    <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
-                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        @if($general->Certificados)
-                                    @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
-                                            @if($general->Certificados->Fecha_calibracion=='2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
-                                                @else
-                                                    <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
-                                            @endif
-                                        @else
-                                            <td scope="row">N/A</td>
-                                    @endif
-                            @endif
-
-                        @if($general->Tipo == 'CONSUMIBLES')
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
-
-                        @else
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        @endif
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-<br>
 
                         <!--Campo Oculto para pasar el id de Solicitud /hidden-->
                             @if($Manifiestos)
@@ -314,8 +240,8 @@
                                     </div>
                                 </div>
                             @endif
-    <button type="submit" class="btn btn-success">Crear manifiesto</button>
-</form>
+        <button type="submit" class="btn btn-success">Crear manifiesto</button>
+    </form>
 <br>
 @stop
 
@@ -359,143 +285,93 @@
                 }
 });
 
-    document.querySelectorAll('.btnAgregar').forEach(button => {
-        button.addEventListener('click', function() {
-            // Deshabilitar el botón para evitar múltiples clics
-            this.disabled = true;
+    function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
 
-            let idFila = this.getAttribute('data-id');
-            let idSolicitud = this.getAttribute('data-id-solicitud');
+$(document).ready(function() {
+    // Agregar elemento de inventario
+    $('.btnAgregar').click(function() {
+        var rowId = $(this).data('id');
+        var row = $('#row-' + rowId);
+        var nombre = row.find('td:eq(0)').text();
+        var numEconomico = row.find('td:eq(1)').text();
+        var marca = row.find('td:eq(2)').text();
+        var ultimaCalibracion = row.find('td:eq(6)').text();
 
-            fetch('/solicitudes/agregar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    idFila: idFila,
-                    idSolicitud: idSolicitud
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Elemento Agregado Exitosamente.',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+        if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Elemento duplicado',
+                text: 'El elemento ya está agregado.',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
 
-                    // Obtén el ID del detalle agregado y el stock actual desde la respuesta
-                    let idDetalles_Solicitud = data.idDetalles_Solicitud;
-                    let stock = data.stock;
-
-                    // Eliminar la fila de la primera tabla
-                    let row = document.getElementById('row-' + idFila);
-                    let nombre = row.querySelector('td:nth-child(1)').innerText;
-                    let noEco = row.querySelector('td:nth-child(2)').innerText;
-                    let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
-
-                    row.remove();
-
-                    // Crear una nueva fila en la segunda tabla
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
-                    newRow.innerHTML = `
-                        <td>${nombre}</td>
-                        <td>${noEco}</td>
-                        <td>${marca}</td>
-                        <td>${ultimaCalibracion}</td>
-                        <td>
-                            <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1" ${stock === 1 ? 'readonly' : ''}>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[${idDetalles_Solicitud}]" value="ESPERA DE DATO">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    `;
-                    document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
-
-                    // Animar la nueva fila
-                    newRow.classList.add('table-success');
-                    setTimeout(() => {
-                        newRow.classList.remove('table-success');
-                    }, 1500);
-                } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Elemento duplicado',
-                        text: data.message,
-                        confirmButtonText: 'Entendido'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        consultarCantidadAlmacen(rowId, function(error, Cantidad) {
+            if (error || Cantidad <= 0) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
-                    text: 'Hubo un error al agregar el detalle.',
+                    title: 'Error',
+                    text: 'Sin Stock en Almacen',
+                    confirmButtonText: 'OK'
                 });
-            })
-            .finally(() => {
-                // Habilitar el botón nuevamente
-                this.disabled = false;
+                return;
+            }
+
+            if (ultimaCalibracion === '2001-01-01') {
+                ultimaCalibracion = 'SIN FECHA ASIGNADA';
+            }
+
+            var cantidadInput;
+            if (Cantidad === 1) {
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
+            } else {
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
+            }
+
+            var newRow = `
+                <tr>
+                    <td>${nombre}</td>
+                    <td>${numEconomico}</td>
+                    <td>${marca}</td>
+                    <td>${ultimaCalibracion}</td>
+                    <td>${cantidadInput}</td>
+                    <td><input type="text" class="form-control" name="unidad[]" required></td>
+                    <td>
+                        <input type="hidden" name="general_eyc_id[]" value="${rowId}">
+                        <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
+                    </td>
+                </tr>
+            `;
+
+            $('#tablaAgregados tbody').append(newRow);
+
+            // Mostrar mensaje de confirmación
+            Swal.fire({
+                icon: 'success',
+                title: 'Elemento agregado',
+                text: 'El elemento ha sido agregado correctamente.',
+                confirmButtonText: 'OK'
             });
         });
     });
 
-    $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
-        var idDetalles_Solicitud = $(this).data('id');
-        var token = '{{ csrf_token() }}';
-
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Solicitud).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: "Elemento Eliminado Correctamente!",
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
-                        });
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
     });
+});
 
 </script>
 @endsection
