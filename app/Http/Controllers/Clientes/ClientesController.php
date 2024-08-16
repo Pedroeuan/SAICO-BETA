@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Http\Controllers\Clientes;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Clientes\clientes;
+
+class ClientesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $clientes = clientes::all();
+
+        return view('Clientes.index', compact('clientes'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('Clientes.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'Cliente' => 'required|string|max:255',
+        ]);
+        $clientes = new clientes;
+        $EsperaDato ='ESPERA DE DATO';
+
+        try {
+        if($request->input('Cliente')==null)
+        {
+            $clientes->Cliente = $EsperaDato;
+        }else{
+            $clientes->Cliente = $request->input('Cliente');
+        }
+
+        if($request->input('RFC')==null)
+        {
+            $clientes->RFC = $EsperaDato;
+        }else{
+            $clientes->RFC = $request->input('RFC');
+        }
+
+        if($request->input('Telefono')==null)
+        {
+            $clientes->Telefono = $EsperaDato;
+        }else{
+            $clientes->Telefono = $request->input('Telefono');
+        }
+
+        if($request->input('Correo')==null)
+        {
+            $clientes->Correo = $EsperaDato;
+        }else{
+            $clientes->Correo = $request->input('Correo');
+        }
+        $clientes->save();
+
+        // Devolver una respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Cliente guardado correctamente.']);
+        } catch (\Exception $e) {
+            // Devolver una respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error al guardar los datos.']);
+        }
+
+        return redirect()->route('clientes.index');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(clientes $clientes)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $clientes = clientes::where('idClientes', $id)->first();
+
+        return view('Clientes.edit', compact('id','clientes'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        // Obtener el equipo existente
+        $clientes  = clientes::find($id);
+                // Actualizar los datos del equipo
+        $clientes ->update([
+            'Cliente' => $request->input('Cliente'),
+            'RFC' => $request->input('RFC'),
+            'Telefono' => $request->input('Telefono'),
+            'Correo' => $request->input('Correo'),
+        ]);
+
+        return redirect()->route('clientes.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $clientes = clientes::find($id);
+    
+        if ($clientes) {
+            $clientes->delete();
+            return response()->json(['success' => true, 'message' => 'Cliente eliminado correctamente.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No se pudo encontrar el cliente.']);
+        }
+    }
+}

@@ -79,13 +79,13 @@ class general_eycController extends Controller
     public function BajaEyC($id)
     {
         // Obtener el equipo existente
-    $generalEyC  = general_eyc::find($id);
-    $Baja='FUERA DE SERVICIO/BAJA';
-    // Actualizar los datos del equipo
-    $generalEyC ->update([
-        'Disponibilidad_Estado' => $Baja,
-    ]);
-    return redirect()->route('inventario');
+        $generalEyC  = general_eyc::find($id);
+        $Baja='FUERA DE SERVICIO/BAJA';
+        // Actualizar los datos del equipo
+        $generalEyC ->update([
+            'Disponibilidad_Estado' => $Baja,
+        ]);
+        return redirect()->route('inventario');
     }
 
     /**

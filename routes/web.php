@@ -19,6 +19,7 @@ use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
+use App\Http\Controllers\Clientes\ClientesController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -114,6 +115,10 @@ use App\Http\Controllers\Admin\UsuariosController;
     
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
+    /*Rutas de controlador para duplicar los datos y redirigir*/
+    Route::get('/solicitudplus/edit/{id}', [SolicitudesController::class, 'editplus'])->name('solicitudplus.edit');
+    /*Rutas de controlador que recibe el id del duplicado*/
+    Route::get('/solicitudplusvista/edit/{id}', [SolicitudesController::class, 'editplusvista'])->name('solicitudplusvista.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
@@ -136,12 +141,16 @@ use App\Http\Controllers\Admin\UsuariosController;
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
     Route::post('/solicitud/Manifiesto/{id}', [ManifiestoController::class, 'create'])->name('solicitud.manifiesto');
+    /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
+    Route::post('/solicitudplus/Manifiestoplus/{id}', [ManifiestoController::class, 'createplus'])->name('solicitudplus.manifiestoplus');
     /*Rutas de Vistas de Solicitudes-Pre-Manifiesto(Botón Regresar)*/
     Route::get('/solicitud/Manifiesto-Regresar/{id}', [ManifiestoController::class, 'BotonRegresar'])->name('solicitud.manifiesto-regresar');
     /*Ruta de Guardado*/
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
     /*Ruta de Actualización*/
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
+        /*ruta para obtener el conteo de registros de manifiesto*/
+        Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
@@ -156,6 +165,20 @@ use App\Http\Controllers\Admin\UsuariosController;
     Route::get('Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta para ver los usuarios*/
     Route::get('Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
+
+    /*CLIENTES*/
+    /*Rutas de Vistas de Tabla de Clientes*/
+    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
+    /*Rutas de Vista para crear CLIENTES*/
+    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
+    /*Rutas de Vistas Clientes-Edición*/
+    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
+    /*Ruta de Actualizar Clientes*/
+    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
+    /*Ruta de botón Eliminación-index-Clientes*/
+    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
 
 });
 

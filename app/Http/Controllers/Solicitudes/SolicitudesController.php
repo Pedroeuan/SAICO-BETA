@@ -17,6 +17,7 @@ use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\Clientes\clientes;
 
 class SolicitudesController extends Controller
 {
@@ -135,6 +136,7 @@ class SolicitudesController extends Controller
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         $general = general_eyc::get();
         //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+        $clientes = clientes::all();
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
             /*if (!$Manifiestos) {
@@ -148,16 +150,16 @@ class SolicitudesController extends Controller
     
         if ($Solicitud->Estatus == 'APROBADO') {
             if (!$Manifiestos) {
-                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados'));
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','clientes'));
             }else
             {
-                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
             }
         }
     
         if ($Solicitud->Estatus == 'MANIFIESTO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos'));
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
             }
         }
 
@@ -172,6 +174,100 @@ class SolicitudesController extends Controller
                 //return view('solicitudes.default', compact('solicitud'));
         }*/
     }
+
+    /*Botón de plus para agregar, más datos al manifiesto con el mismo folio */
+    public function editplus($id)
+    {
+        $Solicitudplus = Solicitudes::findOrFail($id);
+        
+        // Crear la nueva solicitud duplicando la existente
+        $nuevaSolicitud = $Solicitudplus->replicate();
+
+        $nuevaSolicitud->Estatus = 'PENDIENTE';
+        // Guardar la nueva solicitud en la base de datos
+        $nuevaSolicitud->save();
+
+        // Obtener el nuevo ID de la solicitud
+        $nuevoIdSolicitud = $nuevaSolicitud->idSolicitud;
+
+        // Obtener los detalles de la solicitud original
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        // Iterar sobre cada detalle y guardarlo con el nuevo ID de solicitud
+        foreach ($DetallesSolicitud as $detalle) {
+            $nuevoDetalle = $detalle->replicate();
+            $nuevoDetalle->idSolicitud = $nuevoIdSolicitud;
+            $nuevoDetalle->save();
+        }
+
+        // Obtener el manifiesto original basado en el idSolicitud
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+
+        if ($Manifiesto) {
+            // Crear el nuevo manifiesto duplicando el existente
+            $nuevoManifiesto = $Manifiesto->replicate();
+
+            // Actualizar el atributo del manifiesto con el nuevo ID de solicitud
+            $nuevoManifiesto->idSolicitud = $nuevoIdSolicitud;
+            $FolioPlus = $nuevoManifiesto->Folio;
+
+            // Expresión regular para dividir la numeración y el año
+            preg_match('/^(\D+-\d+)([A-Z]?)(\/\d{2})$/', $FolioPlus, $matches);
+
+            // Partes del FolioPlus
+            $prefix = $matches[1]; // Ejemplo: PROP-001
+            $letter = $matches[2]; // Ejemplo: A, B, etc. (puede estar vacío)
+            $suffix = $matches[3]; // Ejemplo: /24
+
+            // Determinar la nueva letra
+            if ($letter == '') {
+                $newLetter = 'A';
+            } else {
+                $newLetter = chr(ord($letter) + 1); // Incrementar la letra
+            }
+
+            // Crear el nuevo FolioPlus
+            $nuevoFolioPlus = $prefix . $newLetter . $suffix;
+
+            // Asignar el nuevo FolioPlus al manifiesto
+            $nuevoManifiesto->Folio = $nuevoFolioPlus;
+
+            // Guardar el nuevo manifiesto
+            $nuevoManifiesto->save();
+        }
+
+            return redirect()->route('solicitudplusvista.edit', ['id' => $nuevoIdSolicitud]);
+        }
+        
+
+        /*Botón de plus para agregar, más datos al manifiesto con el mismo folio */
+        public function editplusvista($id)
+        {
+
+            $Solicitud = Solicitudes::findOrFail($id);
+    
+            $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+    
+            $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+    
+            // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+            $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+            //dd($generalEyCIds);
+            // Obtener los registros de General_EyC relacionados
+            //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+            $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
+            //dd($generalEyC);
+    
+            $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+            $general = general_eyc::get();
+            //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+            $clientes = clientes::all();
+    
+            if ($Solicitud->Estatus == 'PENDIENTE') {
+
+                return view("Solicitud.aprobacionplus", compact('id','Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
+            }
+        }
 
     /**
      * Update the specified resource in storage.
