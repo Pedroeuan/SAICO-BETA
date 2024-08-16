@@ -5,6 +5,8 @@
 
 @section('content')
     <br>
+    <br>
+    <br>
         <h3 align="center"> Formulario Alta de Clientes</h3>
     <br>
 
