@@ -155,7 +155,7 @@ return [
     'layout_topnav' => true,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => true,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -293,6 +293,22 @@ return [
     */
 
     'menu' => [
+        [
+            'type' => 'navbar-notification',
+            'id' => 'my-notification',                // An ID attribute (required).
+            'icon' => 'fa fa-bell',                  // A font awesome icon (required).
+            'icon_color' => 'danger',                // The initial icon color (optional).
+            'label' => 0,                             // The initial label for the badge (optional).
+            'label_color' => '',                // The initial badge color (optional).
+            'url' => '',            // The url to access all notifications/elements (required).
+            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
+            'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
+            'update_cfg' => [
+                'url' => '',         // The url to periodically fetch new data (optional).
+                'period' => 30,                       // The update period for get new data (in seconds, optional).
+            ],
+        ],
         // Sidebar Administrativo:
         [
             'text' => 'Planeacion',
@@ -340,7 +356,9 @@ return [
         ],
 
                // Sidebar Operativos:
-                [
+            [
+
+
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 //'topnav' => true,
@@ -516,8 +534,14 @@ return [
             //'topnav' => true,
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
+                    'text' => 'Ver usuarios',
+                    'icon' => 'fas fa-users',
+                    'url' => 'Admin/index',
+                ],
+                [
+                    'text' => 'Registro de usuarios',
+                    'icon' => 'fas fa-edit',
+                    'url' => 'Admin/create',
                 ],
                 [
                     'text' => 'level_one',
