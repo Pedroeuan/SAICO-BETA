@@ -41,7 +41,6 @@ class ClientesController extends Controller
         $clientes = new clientes;
         $EsperaDato ='ESPERA DE DATO';
 
-        try {
         if($request->input('Cliente')==null)
         {
             $clientes->Cliente = $EsperaDato;
@@ -71,12 +70,6 @@ class ClientesController extends Controller
         }
         $clientes->save();
 
-        // Devolver una respuesta JSON de éxito
-            return response()->json(['success' => true, 'message' => 'Cliente guardado correctamente.']);
-        } catch (\Exception $e) {
-            // Devolver una respuesta JSON de error
-            return response()->json(['success' => false, 'message' => 'Ocurrió un error al guardar los datos.']);
-        }
 
         return redirect()->route('clientes.index');
     }
