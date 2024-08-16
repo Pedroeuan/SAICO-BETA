@@ -114,8 +114,10 @@ use App\Http\Controllers\Clientes\ClientesController;
     
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
-    /*Rutas de Vistas de Solicitudes-Edición-index-Plus*/
+    /*Rutas de controlador para duplicar los datos y redirigir*/
     Route::get('/solicitudplus/edit/{id}', [SolicitudesController::class, 'editplus'])->name('solicitudplus.edit');
+    /*Rutas de controlador que recibe el id del duplicado*/
+    Route::get('/solicitudplusvista/edit/{id}', [SolicitudesController::class, 'editplusvista'])->name('solicitudplusvista.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
 
@@ -138,6 +140,8 @@ use App\Http\Controllers\Clientes\ClientesController;
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
     Route::post('/solicitud/Manifiesto/{id}', [ManifiestoController::class, 'create'])->name('solicitud.manifiesto');
+    /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
+    Route::post('/solicitudplus/Manifiestoplus/{id}', [ManifiestoController::class, 'createplus'])->name('solicitudplus.manifiestoplus');
     /*Rutas de Vistas de Solicitudes-Pre-Manifiesto(Botón Regresar)*/
     Route::get('/solicitud/Manifiesto-Regresar/{id}', [ManifiestoController::class, 'BotonRegresar'])->name('solicitud.manifiesto-regresar');
     /*Ruta de Guardado*/

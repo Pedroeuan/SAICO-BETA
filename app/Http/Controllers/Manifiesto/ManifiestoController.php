@@ -135,6 +135,123 @@ class ManifiestoController extends Controller
         }
     }
 
+    public function createplus(Request $request, $id)
+    {
+        //dd($request->input('Cliente'));
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $Solicitud = Solicitudes::find($id);
+        if (!$Solicitud) {
+            return redirect()->back()->with('error', 'Solicitud no encontrada.');
+        }
+
+        $Estatus = 'APROBADO';
+        
+        // Actualizar el estado de la solicitud
+        $Solicitud->update([
+            'Estatus' => $Estatus,
+        ]);
+
+        $idSolicitud = $Solicitud->idSolicitud;
+        $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
+        //$Manifiesto = manifiesto::find($id);
+        $Manifiesto->delete();
+        
+        /* if ($Manifiesto) {
+            //Log::info('Si existe un manifiesto'); 
+        }else{ 
+                if ($request->filled('idSolicitud'))
+                {
+                        //Log::info('Si no existe un manifiesto'); 
+                        $Manifiesto = new manifiesto;
+                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                        $Manifiesto->Cliente = $request->input('Cliente');
+                        $Manifiesto->Folio = $request->input('Folio');
+                        $Manifiesto->Destino = $request->input('Destino');
+                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                        $Manifiesto->Trabajo = $request->input('Trabajo');
+                        $Manifiesto->Puesto = $request->input('Puesto');
+                        $Manifiesto->Responsable = $request->input('Responsable');
+                        $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->save();
+                }
+            }*/
+
+             // Obtener los datos de los inputs
+            $generalEycIds = $request->input('general_eyc_id');
+            $cantidades = $request->input('cantidad');
+            $unidades = $request->input('unidad');
+
+            // Iterar sobre los datos y guardarlos en la base de datos
+            foreach ($generalEycIds as $index => $generalEycId) {
+                if (isset($cantidades[$index]) && isset($unidades[$index])) {
+                    $cantidad = $cantidades[$index];
+                    $unidad = $unidades[$index];
+
+                    // Crear una nueva instancia del modelo detalles_solicitud
+                    $detallesolicitud = new detalles_solicitud();
+                    $detallesolicitud->idSolicitud = $Solicitud->idSolicitud;
+                    $detallesolicitud->idGeneral_EyC = $generalEycId;
+                    $detallesolicitud->Cantidad = $cantidad;
+                    $detallesolicitud->Unidad = $unidad;
+                    $detallesolicitud->save();
+                }
+            }
+
+            $idsGeneralEyC = $request->input('idGeneralEyC', []);
+
+                // Asegurarse de que sea un array
+                if (is_array($idsGeneralEyC)) {
+                    foreach ($idsGeneralEyC as $idGeneralEyC) {
+                        Log::info('idGeneralEyC: ' . $idGeneralEyC);
+                         // Eliminar los registros de detalles_solicitud basados en los valores
+                        detalles_solicitud::whereIn('idGeneral_EyC', $idsGeneralEyC)
+                        ->where('idSolicitud', $idSolicitud)
+                        ->delete();
+                    }
+                } else {
+                    Log::warning('El campo idGeneralEyC no es un array.');
+                }
+
+                if ($request->filled('idSolicitud'))
+                {
+                        //Log::info('Si no existe un manifiesto'); 
+                        $Manifiesto = new manifiesto;
+                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                        $Manifiesto->Cliente = $request->input('Cliente');
+                        $Manifiesto->Folio = $request->input('Folio');
+                        $Manifiesto->Destino = $request->input('Destino');
+                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
+                        $Manifiesto->Trabajo = $request->input('Trabajo');
+                        $Manifiesto->Puesto = $request->input('Puesto');
+                        $Manifiesto->Responsable = $request->input('Responsable');
+                        $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->save();
+                }
+
+        // Obtener todos los detalles de la solicitud
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
+
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+
+        $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
+
+        $clientes = clientes::all();
+
+        if ($Solicitud->Estatus == 'APROBADO') {
+            if ($Manifiestos) {
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
+            }
+            else{
+                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes'));
+            }
+        }
+    }
+
     /*BOTON FINALIZAR MANFIESTO DE PRE-MANIFIESTO.BLADE */
     public function store(Request $request)
     {
