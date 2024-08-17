@@ -27,7 +27,7 @@ class ManifiestoController extends Controller
 
     public function getCount()
     {
-        $total = manifiesto::count();
+        $total = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]{4}-[0-9]+/[0-9]{2}$')->count();
         return response()->json(['total' => $total]);
     }
 

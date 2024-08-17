@@ -363,7 +363,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="ESPERA DE DATO">
+                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS">
                             </div>
                         </td>
                         <td>

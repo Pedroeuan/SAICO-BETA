@@ -345,7 +345,7 @@ $(document).ready(function() {
             if (Cantidad === 1) {
                 cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
             }
 
             var newRow = `
@@ -355,7 +355,7 @@ $(document).ready(function() {
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
                     <td>
                         <input type="hidden" name="general_eyc_id[]" value="${rowId}">
                         <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
