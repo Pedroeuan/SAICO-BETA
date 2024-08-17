@@ -34,6 +34,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
+                        <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
                         <th>Hoja de Presentación</th>
@@ -49,6 +50,7 @@
                             <td scope="row">{{$general_eyc->Marca}}</td>
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
+                            <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                             @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                     <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
                                 @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
@@ -299,8 +301,8 @@
 }
 
 $(document).ready(function() {
-    // Agregar elemento de inventario
-    $('.btnAgregar').click(function() {
+    // Delegación de eventos para el botón "Agregar"
+    $('#tablaJs').on('click', '.btnAgregar', function() {
         var rowId = $(this).data('id');
         var row = $('#row-' + rowId);
         var nombre = row.find('td:eq(0)').text();
@@ -367,11 +369,12 @@ $(document).ready(function() {
         });
     });
 
-    // Eliminar elemento
-    $(document).on('click', '.btnQuitarElemento', function() {
+    // Delegación de eventos para el botón "Quitar"
+    $('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 </script>
 @endsection
