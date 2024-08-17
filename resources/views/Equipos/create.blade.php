@@ -5,8 +5,10 @@
 
 @section('content')
 <br>
-<h3 align="center"> Formulario de Alta de datos</h3>
 <br>
+<br>
+<h3 align="center"> Formulario de Alta de datos</h3>
+
 
 <div class="container">
     <div class="row justify-content-center">
@@ -964,17 +966,15 @@
                                                 <td scope="row">{{$general_eyc->Modelo}}</td>
                                                 <td scope="row">{{$general_eyc->Serie}}</td>
                                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
-                                                <td scope="row">
-                                                    @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                        @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                        <button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>
-                                                        @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                        <button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                                        @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                        <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                                                    @endif
-                                                </td>
+                                                @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible</td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible</td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato</td>
+                                                @endif
 
                                                 @if($general_eyc->certificados)
                                                     @if($general_eyc->Tipo == 'EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
@@ -1046,20 +1046,87 @@
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 <script>
 
-let table = new DataTable('#tablaJs', {
-    //destroy: true, // Asegura que cualquier instancia previa de DataTables se destruya antes de crear una nueva
-    //pageLength: 5, // Especifica cuántas entradas deseas mostrar por página
-    //lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]], // Añade 5 a las opciones del menú
-    language: {
+function actualizarTabla() {
+    $.ajax({
+        url: '/obtenerDatos/Actualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
+        method: 'GET',
+        success: function(response) {
+            // Destruye la instancia actual de DataTables si existe
+            if ($.fn.DataTable.isDataTable('#tablaJs')) {
+                table.clear().destroy();
+            }
+
+            // Vaciar el contenido actual de la tabla
+            $('#tablaJs tbody').empty();
+
+            // Iterar sobre los datos en response
+            response.forEach(function(item) {
+                var disponibilidad = '';
+                switch(item.Disponibilidad_Estado) {
+                    case 'DISPONIBLE':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></button>';
+                        break;
+                    case 'NO DISPONIBLE':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                        break;
+                    case 'FUERA DE SERVICIO/BAJA':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        break;
+                    case 'ESPERA DE DATO':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></button>';
+                        break;
+                }
+
+                var hojaPresentacion = item.Foto != 'ESPERA DE DATO'
+                    ? '<a class="btn btn-primary" href="/storage/' + item.Foto + '" role="button" target="_blank"><i class="fa fa-eye"></i></a>'
+                    : '<a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+
+                // Reemplaza la fecha '2001-01-01' por 'SIN FECHA ASIGNADA'
+                var fechaCalibracion = item.certificados && item.certificados.Fecha_calibracion === '2001-01-01'
+                    ? 'SIN FECHA ASIGNADA'
+                    : (item.certificados ? item.certificados.Fecha_calibracion : 'N/A');
+
+                var row = '<tr data-id="' + item.idGeneral_EyC + '">' +
+                        '<td>' + item.Nombre_E_P_BP + '</td>' +
+                        '<td>' + item.No_economico + '</td>' +
+                        '<td>' + item.Marca + '</td>' +
+                        '<td>' + item.Modelo + '</td>' +
+                        '<td>' + item.Serie + '</td>' +
+                        '<td>' + (item.almacen ? item.almacen.Stock : 'N/A') + '</td>' +
+                        '<td>' + disponibilidad + '</td>' +
+                        '<td>' + fechaCalibracion + '</td>' +
+                        '<td>' + hojaPresentacion + '</td>' +
+                        '<td><button type="button" class="btn btn-info btnAgregar" data-id="' + item.idGeneral_EyC + '"><i class="fas fa-plus-circle" aria-hidden="true"></i></button></td>' +
+                        '</tr>';
+
+                $('#tablaJs tbody').append(row);
+            });
+
+            // Re-inicializa DataTables después de agregar los nuevos datos
+            table = $('#tablaJs').DataTable({
+                "pageLength": 10, // Configura la cantidad de filas por página
+                "language": {
                     "decimal": "",
                     "emptyTable": "No hay datos disponibles en la tabla",
                     "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
@@ -1083,70 +1150,33 @@ let table = new DataTable('#tablaJs', {
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
-});
+            });
 
-    /*Actualiza la tabla automaticamente para mostrar re */
-    /* function actualizarTabla() {
-        $.ajax({
-            url: '/obtenerDatosActualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
-            method: 'GET',
-            success: function(response) {
-                // Vaciar el contenido actual de la tabla
-                $('#tablaJs tbody').empty();
+            // Reattach the listeners after updating the table
+            attachAddListeners();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    });
+}
 
-                // Iterar sobre los datos recibidos y agregarlos a la tabla
-                response.forEach(function(item) {
-                    var disponibilidad = '';
-                    switch(item.Disponibilidad_Estado) {
-                        case 'DISPONIBLE':
-                            disponibilidad = '<button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></button>';
-                            break;
-                        case 'NO DISPONIBLE':
-                            disponibilidad = '<button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
-                            break;
-                        case 'FUERA DE SERVICIO/BAJA':
-                            disponibilidad = '<button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></button>';
-                            break;
-                        case 'ESPERA DE DATO':
-                            disponibilidad = '<button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>';
-                            break;
-                    }
+        function attachAddListeners() {
+            // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
+            $('#tablaJs').on('click', '.btnAgregar', function() {
+                var id = $(this).data('id');
+                // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
+                //console.log('Botón Agregar clicado para id:', id);
+            });
+        }
 
-                    var hojaPresentacion = item.Foto != 'ESPERA DE DATO'
-                        ? '<a class="btn btn-primary" href="/storage/' + item.Foto + '" role="button" target="_blank"><i class="fa fa-eye"></i></a>'
-                        : '<a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+        $(document).ready(function() {
+            // Actualizar la tabla cada 10 segundos (10000 milisegundos)
+            setInterval(actualizarTabla, 10000);
 
-                    var row = '<tr data-id="' + item.idGeneral_EyC + '">' +
-                            '<td>' + item.Nombre_E_P_BP + '</td>' +
-                            '<td>' + item.No_economico + '</td>' +
-                            '<td>' + item.Marca + '</td>' +
-                            '<td>' + item.Modelo + '</td>' +
-                            '<td>' + item.Serie + '</td>' +
-                            '<td>' + disponibilidad + '</td>' +
-                            '<td>' + (item.certificados ? item.certificados.Fecha_calibracion : 'N/A') + '</td>' +
-                            '<td>' + hojaPresentacion + '</td>' +
-                            '<td><button type="button" class="btn btn-success btnAgregar" data-id="' + item.idGeneral_EyC + '"><i class="fas fa-plus-circle" aria-hidden="true"></i></button></td>' +
-                            '</tr>';
-
-                    $('#tablaJs tbody').append(row);
-                });
-
-                // Reattach the listeners after updating the table
-                attachAddListeners();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al obtener los datos:', error);
-            }
+            // Llamar a la función una vez al cargar la página
+            actualizarTabla();
         });
-    }
-
-    $(document).ready(function() {
-    // Actualizar la tabla cada 10 segundos (10000 milisegundos)
-    setInterval(actualizarTabla, 10000);
-
-    // Llamar a la función una vez al cargar la página
-    actualizarTabla();
-});*/
 
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
@@ -1204,54 +1234,6 @@ function consultarCantidadAlmacen(id, callback) {
     });
 }
 
-/*function attachAddListeners() {
-        document.querySelectorAll('.btnAgregar').forEach(button => {
-        //document.querySelectorAll('.btnAgregar').forEach(function(button) {
-            button.addEventListener('click', function() {
-                let row = this.closest('tr');
-                let id = this.dataset.id;
-
-                // Verificar si el elemento ya está en la tabla de seleccionados
-                if (document.querySelector(`#tablaSeleccionados tr[data-id='${id}']`)) {
-                    return; // Si ya está, no hacemos nada
-                }
-
-                // Consultar la cantidad en el almacén antes de agregar la fila
-                consultarCantidadAlmacen(id, function(error, cantidad) {
-                    if (error) {
-                        alert('Error al obtener cantidad de almacén.');
-                        return;
-                    }
-
-                    // Clonar la fila y agregar campos de cantidad y unidad
-                    let cantidadInput;
-                    if (cantidad === 1) {
-                        cantidadInput = `<input type="number" class="form-control cantidad" name="cantidad_${id}" value="1" readonly>`;
-                    } else {
-                        cantidadInput = `<input type="number" class="form-control cantidad" name="cantidad_${id}" required>`;
-                    }
-
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('data-id', id);
-                    newRow.innerHTML = `
-                        <td>${row.cells[0].innerText}</td>
-                        <td>${row.cells[1].innerText}</td>
-                        <td>${row.cells[2].innerText}</td>
-                        <td>${row.cells[6].innerText}</td>
-                        <td>${cantidadInput}</td>
-                        <td><input type="text" class="form-control unidad" name="unidad_${id}" required></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
-                    `;
-
-                    // Agregar la nueva fila a la tabla de seleccionados
-                    document.querySelector('#tablaSeleccionados tbody').appendChild(newRow);
-
-                    // Re-attach the delete listeners to the new button
-                    attachDeleteListeners();
-                });
-            });
-        });
-    }*/
 
     $(document).on('click', '.btnAgregar', function() {
     let row = $(this).closest('tr');
@@ -1303,10 +1285,6 @@ function consultarCantidadAlmacen(id, callback) {
         });
     }
     
-    /*document.addEventListener('DOMContentLoaded', function() {
-        attachAddListeners();
-        attachDeleteListeners();
-    });*/
 
 // Manejar el envío del formulario
 document.querySelector('#kitForm').addEventListener('submit', function(event) {

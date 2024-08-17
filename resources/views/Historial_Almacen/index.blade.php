@@ -16,15 +16,15 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-            <br>
         <h3>Historial de Entradas, Salidas y Devoluciones</h3>
         <br>
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Nota</h5>
-            Suministro: Activos que ingresaron como nuevo ingreso o por devolución <br>
-            Salida: Activos que salieron por servicio a través del manifiesto <br>
-            En renta: Equipos que salieron en servicio de renta
+            Suministro: Activos que ingresaron como nuevo ingreso.<br>
+            Salida: Activos que salieron por servicio a través del manifiesto.<br>
+            En renta: Activos que salieron en servicio de renta.<br>
+            Devolución: Activos que ingresaron por devolución.
             </p>
         </div>
         <div class="box-body">
