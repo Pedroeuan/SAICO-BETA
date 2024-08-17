@@ -85,15 +85,15 @@
                         <td scope="row">{{$general_eyc->Serie}}</td>
                         <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                         <td scope="row">
-                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-success">Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-warning">No Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                            @endif
+                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                        @endif
                         </td>
 
                         <td scope="row">
