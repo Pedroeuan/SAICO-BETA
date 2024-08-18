@@ -43,7 +43,7 @@ class general_eycController extends Controller
 
     public function index()
     {
-    // Obtener todos los equipos con sus certificados
+    // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
         $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
         //$generalConEquipos = general_eyc::with('Equipos')->get();

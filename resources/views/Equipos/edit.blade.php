@@ -5,6 +5,8 @@
 
 @section('content')
     <br>
+    <br>
+    <br>
         <h3 align="center"> Edición de 
                         @if($generalEyC->Tipo=='EQUIPOS')
                             Equipos
@@ -22,7 +24,6 @@
                             Herramientas
                         @endif
         </h3>
-    <br>
 
 <div class="container">
     <div class="row justify-content-center">

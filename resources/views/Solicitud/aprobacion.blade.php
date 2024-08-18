@@ -34,6 +34,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
+                        <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
                         <th>Hoja de Presentación</th>
@@ -49,14 +50,15 @@
                             <td scope="row">{{$general_eyc->Marca}}</td>
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
+                            <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                             @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <td scope="row"><button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i></td>
+                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
                                 @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <td scope="row"><button type="button" class="btn btn-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
                                 @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <td scope="row"><button type="button" class="btn btn-danger"><i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
                                 @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                    <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
                             @endif
                         @endif 
                             @if($general_eyc->certificados)
@@ -243,10 +245,16 @@
 @stop
 
 @section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
@@ -282,104 +290,101 @@
                 }
 });
 
-    document.querySelectorAll('.btnAgregar').forEach(button => {
-        button.addEventListener('click', function() {
-            // Deshabilitar el botón para evitar múltiples clics
-            this.disabled = true;
+$(document).ready(function() {
+    // Delegación de eventos para el botón "Agregar"
+    $('#tablaJs').on('click', '.btnAgregar', function() {
+        // Deshabilitar el botón para evitar múltiples clics
+        $(this).prop('disabled', true);
 
-            let idFila = this.getAttribute('data-id');
-            let idSolicitud = this.getAttribute('data-id-solicitud');
+        let idFila = $(this).data('id');
+        let idSolicitud = $(this).data('id-solicitud');
 
-            fetch('/solicitudes/agregar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    idFila: idFila,
-                    idSolicitud: idSolicitud
-                })
+        fetch('/solicitudes/agregar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            body: JSON.stringify({
+                idFila: idFila,
+                idSolicitud: idSolicitud
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Elemento Agregado Exitosamente.',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Elemento Agregado Exitosamente.',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
 
-                    // Obtén el ID del detalle agregado y el stock actual desde la respuesta
-                    let idDetalles_Solicitud = data.idDetalles_Solicitud;
-                    let stock = data.stock;
+                // Eliminar la fila de la primera tabla
+                let row = $('#row-' + idFila);
+                let nombre = row.find('td:nth-child(1)').text();
+                let noEco = row.find('td:nth-child(2)').text();
+                let marca = row.find('td:nth-child(3)').text();
+                let ultimaCalibracion = row.find('td:nth-child(7)').text();
 
-                    // Eliminar la fila de la primera tabla
-                    let row = document.getElementById('row-' + idFila);
-                    let nombre = row.querySelector('td:nth-child(1)').innerText;
-                    let noEco = row.querySelector('td:nth-child(2)').innerText;
-                    let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+                row.remove();
 
-                    row.remove();
-
-                    // Crear una nueva fila en la segunda tabla
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('id', 'row-' + idDetalles_Solicitud);
-                    newRow.innerHTML = `
+                // Crear una nueva fila en la segunda tabla
+                let newRow = `
+                    <tr id="row-${data.idDetalles_Solicitud}">
                         <td>${nombre}</td>
                         <td>${noEco}</td>
                         <td>${marca}</td>
                         <td>${ultimaCalibracion}</td>
                         <td>
                             <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[${idDetalles_Solicitud}]" value="1" ${stock === 1 ? 'readonly' : ''}>
+                                <input type="number" class="form-control" name="Cantidad[${data.idDetalles_Solicitud}]" value="1" ${data.stock === 1 ? 'readonly' : ''}>
                             </div>
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[${idDetalles_Solicitud}]" value="ESPERA DE DATO">
+                                <input type="text" class="form-control" name="Unidad[${data.idDetalles_Solicitud}]" value="ESPERA DE DATO">
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${data.idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
-                    `;
-                    document.querySelector('#TablaSolicitud tbody').appendChild(newRow);
+                    </tr>
+                `;
+                $('#TablaSolicitud tbody').append(newRow);
 
-                    // Animar la nueva fila
-                    newRow.classList.add('table-success');
-                    setTimeout(() => {
-                        newRow.classList.remove('table-success');
-                    }, 1500);
-                } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Elemento duplicado',
-                        text: data.message,
-                        confirmButtonText: 'Entendido'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                // Animar la nueva fila
+                $('#row-' + data.idDetalles_Solicitud).addClass('table-success');
+                setTimeout(() => {
+                    $('#row-' + data.idDetalles_Solicitud).removeClass('table-success');
+                }, 1500);
+            } else {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Hubo un error al agregar el detalle.',
+                    icon: 'warning',
+                    title: 'Elemento duplicado',
+                    text: data.message,
+                    confirmButtonText: 'Entendido'
                 });
-            })
-            .finally(() => {
-                // Habilitar el botón nuevamente
-                this.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Hubo un error al agregar el detalle.',
             });
+        })
+        .finally(() => {
+            // Habilitar el botón nuevamente
+            $(this).prop('disabled', false);
         });
     });
 
-    $(document).on('click', '.btnEliminarDetallesSolicitud', function() {
+    // Delegación de eventos para el botón "Eliminar"
+    $('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
         var idDetalles_Solicitud = $(this).data('id');
-        var token = '{{ csrf_token() }}';
+        var token = $('meta[name="csrf-token"]').attr('content');
 
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
@@ -419,6 +424,7 @@
             }
         });
     });
+});
 
 </script>
 @endsection

@@ -7,7 +7,7 @@
     <br>
     <br>
     <br>
-        <h3 align="center"> Formulario Alta de Clientes</h3>
+        <h3 align="center"> Formulario Edición de Clientes</h3>
     <br>
 
 <div class="container">

@@ -68,6 +68,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
+                        <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
                         <th>Hoja de Presentación</th>
@@ -82,18 +83,16 @@
                         <td scope="row">{{$general_eyc->Marca}}</td>
                         <td scope="row">{{$general_eyc->Modelo}}</td>
                         <td scope="row">{{$general_eyc->Serie}}</td>
-
-                        <td scope="row">
-                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-success">Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-warning">No Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                            @endif
-                        </td>
+                        <td scope="row">{{$general_eyc->almacen->Stock}}</td>
+                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                        @endif
 
                         <td scope="row">
                         @if($general_eyc->certificados)
@@ -175,9 +174,16 @@
 @stop
 
 @section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--Ajax-->
@@ -263,7 +269,7 @@ function consultarCantidadAlmacen(id, callback) {
 
 $(document).ready(function() {
     // Agregar elemento de inventario
-    $('.btnAgregarInventario').click(function() {
+    $(document).on('click', '.btnAgregarInventario', function() {
         var rowId = $(this).data('id');
         var row = $('#row-' + rowId);
         var nombre = row.find('td:eq(0)').text();
@@ -300,7 +306,7 @@ $(document).ready(function() {
             if (Cantidad === 1) {
                 cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
             }
 
             var newRow = `
@@ -310,7 +316,7 @@ $(document).ready(function() {
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
                     <td>
                         <input type="hidden" name="general_eyc_id[]" value="${rowId}">
                         <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
@@ -331,7 +337,7 @@ $(document).ready(function() {
     });
 
     // Agregar elemento de kits
-    $('.btnAgregarKit').click(function() {
+    $(document).on('click', '.btnAgregarKit', function() {
         var kitId = $(this).data('id');
 
         $.ajax({
@@ -425,9 +431,6 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
-
-
-
 
     $(document).ready(function() {
     $('#solicitudForm').on('submit', function(event) {

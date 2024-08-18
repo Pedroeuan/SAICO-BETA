@@ -97,7 +97,7 @@ use App\Http\Controllers\Clientes\ClientesController;
     /*Ruta de Eliminación-de Kits-Index*/
     Route::delete('/eliminar/Kits/{id}', [KitsController::class, 'destroyKits'])->name('eliminar.Kits');
     /*Refrecar la tabla de inventario en Kits */
-    Route::get('/obtenerDatosActualizados', [KitsController::class, 'obtenerDatosActualizados'])->name('obtenerDatosActualizados');
+    Route::get('/obtenerDatos/Actualizados', [KitsController::class, 'obtenerDatosActualizados'])->name('obtenerDatos.Actualizados');
 
     /*Ruta de botón Agregar-datos a detalles kits-edición*/
     Route::post('/kits/agregar', [KitsController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
@@ -105,7 +105,7 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::delete('/Detalles_Kits/eliminar/{id}', [KitsController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
 
     /*Ruta de botón Guardar-updateKits-edición*/
-    Route::post('Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
+    Route::post('/Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
 
     /*SOLICITUDES*/
     /*Rutas de Vistas de Solicitudes-Registro*/
@@ -149,8 +149,10 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/solicitudes/Manifiesto', [ManifiestoController::class, 'store'])->name('solicitudes.storeManifiesto');
     /*Ruta de Actualización*/
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
-        /*ruta para obtener el conteo de registros de manifiesto*/
-        Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
+    /*Ruta de Actualización-plus*/
+    Route::post('/solicitudesplus/updateSolicitudplus/{id}', [ManifiestoController::class, 'updateplus'])->name('solicitudesplus.updateSolicitudplus');
+    /*ruta para obtener el conteo de registros de manifiesto*/
+    Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
@@ -158,13 +160,13 @@ use App\Http\Controllers\Clientes\ClientesController;
 
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
-    Route::get('manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
+    Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 
     /*admin */
     /*Ruta para alta de usuarios*/
-    Route::get('Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
+    Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta para ver los usuarios*/
-    Route::get('Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
+    Route::get('/Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
 
     /*CLIENTES*/
     /*Rutas de Vistas de Tabla de Clientes*/
