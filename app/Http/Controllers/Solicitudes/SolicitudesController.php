@@ -25,9 +25,25 @@ class SolicitudesController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $Solicitud = Solicitudes::all();
-        return view("Solicitud.index",compact('Solicitud'));
+    { 
+        // Obtener todas las solicitudes
+        $Solicitudes = Solicitudes::all();
+        
+        // Agregar el folio o "No Asignado" para cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+                if ($manifiesto) 
+                {
+                    $solicitud->folio = $manifiesto->Folio;
+                } 
+                else 
+                {
+                    $solicitud->folio = "No Asignado";
+                }
+        }
+
+        return view("Solicitud.index",compact('Solicitudes'));
     }
 
     public function obtenerDetallesKits($id)

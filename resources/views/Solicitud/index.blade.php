@@ -23,15 +23,17 @@
                 <thead>
                     <tr>
                         <th>Técnico</th>
+                        <th>Folio</th>
                         <th>Fecha de servicio</th>
                         <th>Estatus</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($Solicitud as $solicitud)
+                    @foreach($Solicitudes as $solicitud)
                     <tr>
                         <td scope="row">{{$solicitud->tecnico}}</td>
+                        <td scope="row">{{$solicitud->folio}}</td> <!-- Mostrar el Folio o "No Asignado" -->
                         <td scope="row">{{$solicitud->Fecha}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
