@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Foto</label>
+                                            <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
                                             <input type="file" class="form-control inputForm" name="Foto">
                                         </div>
                                     </div>
