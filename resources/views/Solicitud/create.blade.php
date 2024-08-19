@@ -164,7 +164,7 @@
         </div>
         <br><br>
         <div class="col text-center">
-            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC" id="btnFinalizarSolicitud">
                 Finalizar solicitud
             </button>
         </div>
@@ -252,6 +252,24 @@ let tableInventario = new DataTable('#tablaInventario', {
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
+});
+
+$(document).ready(function() {
+    $('#btnFinalizarSolicitud').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#tablaAgregados tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
 });
 
 function consultarCantidadAlmacen(id, callback) {

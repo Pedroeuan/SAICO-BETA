@@ -143,7 +143,7 @@
                                                     <td>
                                                         <div class="input-group">
                                                             @if($general->Tipo == 'CONSUMIBLES' )
-                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}" required>
                                                                 @else
                                                                 <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}" readonly>
                                                             @endif
@@ -151,10 +151,11 @@
                                                     </td>
                                                     <td>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'N/A' }}">
+                                                            <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'N/A' }}" required>
                                                         </div>
                                                     </td>
                                                     <td>
+                                                        <input type="hidden" name="general_eyc_id[]" value="{{ $detalle->idGeneral_EyC }}">
                                                         <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="{{ $detalle->idDetalles_Kits }}">
                                                             <i class="fa fa-times" aria-hidden="true"></i>
                                                         </button>
@@ -230,74 +231,93 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
+
+
     $(document).ready(function() {
+    // Función para consultar la cantidad en almacén
+    function consultarCantidadAlmacen(id, callback) {
+        $.ajax({
+            url: '/Obtener/CantidadAlmacen/' + id,
+            method: 'GET',
+            success: function(data) {
+                callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            },
+            error: function(error) {
+                callback(error);
+            }
+        });
+    }
 
-// Función para consultar la cantidad en almacén
-function consultarCantidadAlmacen(id, callback) {
-    $.ajax({
-        url: '/Obtener/CantidadAlmacen/' + id,
-        method: 'GET',
-        success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
-        },
-        error: function(error) {
-            callback(error);
-        }
-    });
-}
+    // Delegación de eventos para los botones de eliminación
+    $(document).on('click', '.btnEliminarDetallesKits', function() {
+        var idDetalles_Kits = $(this).data('id');
+        var token = '{{ csrf_token() }}';
 
-// Delegación de eventos para los botones de eliminación
-$(document).on('click', '.btnEliminarDetallesKits', function() {
-    var idDetalles_Kits = $(this).data('id');
-    var token = '{{ csrf_token() }}';
-
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#row-' + idDetalles_Kits).remove();
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Kits).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: "Elemento Eliminado Correctamente!",
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Confirmado!',
-                            text: "Elemento Eliminado Correctamente!",
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorMessage,
                         });
                     }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessage,
-                    });
-                }
-            });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
+        });
     });
-});
 
-// Botón de  AGREGAR
+        // Función para verificar si un dato ya existe en la segunda tabla
+function verificarExistenciaEnTabla(idFila) {
+    const filas = document.querySelectorAll('#TablaKits tbody tr');
+    return Array.from(filas).some(fila => fila.querySelector('input[name="general_eyc_id[]"]').value === idFila);
+}
+
+// Botón de AGREGAR
 document.querySelectorAll('.btnAgregar').forEach(button => {
     button.addEventListener('click', function() {
         // Deshabilitar el botón para evitar múltiples clics
-        this.disabled = true;
+        const btn = this;
+        btn.disabled = true;
 
-        let idFila = this.getAttribute('data-id');
-        let idKits = this.getAttribute('data-id-kits');
+        let idFila = btn.getAttribute('data-id');
+        let idKits = btn.getAttribute('data-id-kits');
+
+        // Verificar si el dato ya existe en la segunda tabla
+        if (verificarExistenciaEnTabla(idFila)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Elemento ya agregado',
+                text: 'Este elemento ya está en el kit.',
+            });
+            btn.disabled = false;
+            return;
+        }
 
         // Consultar la cantidad en almacén
         consultarCantidadAlmacen(idFila, function(error, cantidadAlmacen) {
@@ -308,6 +328,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     title: 'Oops...',
                     text: 'Hubo un error al consultar la cantidad en almacén.',
                 });
+                btn.disabled = false;
                 return;
             }
 
@@ -326,12 +347,17 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     idKits: idKits
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la solicitud');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Detalle agregado exitosamente.',
+                        title: 'Elemento Agregado Exitosamente.',
                         showConfirmButton: false,
                         timer: 2000
                     });
@@ -363,10 +389,11 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS">
+                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS" required>
                             </div>
                         </td>
                         <td>
+                            <input type="hidden" name="general_eyc_id[]" value="${idFila}">
                             <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="${idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     `;
@@ -395,13 +422,14 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
             })
             .finally(() => {
                 // Habilitar el botón nuevamente
-                this.disabled = false;
+                btn.disabled = false;
             });
         });
     });
 });
 
 });
+
 
 
 </script>

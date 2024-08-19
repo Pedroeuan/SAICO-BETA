@@ -183,15 +183,16 @@ class KitsController extends Controller
         public function updateKits(Request $request, $id)
         {
             // Validar los datos del formulario
-            $validatedData = $request->validate([
+            /*$validatedData = $request->validate([
                 'Nombre' => 'required|string|max:255',
                 'Prueba' => 'required|string|max:255',
                 'Cantidad.*' => 'required|integer|min:1',
                 'Unidad.*' => 'required|string|max:255',
-            ]);
+            ]);*/
 
             // Actualizar los datos del Kit
             $kit = kits::findOrFail($id);
+            Log::info('kit: ', ['kit' => $kit]);
             $kit->Nombre = $request->input('Nombre');
             $kit->Prueba = $request->input('Prueba');
             $kit->save();
