@@ -1196,7 +1196,7 @@ function actualizarTabla() {
 
         $(document).ready(function() {
             // Actualizar la tabla cada 10 segundos (10000 milisegundos)
-            setInterval(actualizarTabla, 10000);
+            setInterval(actualizarTabla, 60000);
 
             // Llamar a la función una vez al cargar la página
             actualizarTabla();
@@ -1263,8 +1263,14 @@ function consultarCantidadAlmacen(id, callback) {
     let row = $(this).closest('tr');
     let id = $(this).data('id');
 
-    // Verificar si el elemento ya está en la tabla de seleccionados
-    if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
+       // Verificar si el elemento ya está en la tabla de seleccionados
+        if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Elemento Duplicado',
+            text: 'Este elemento ya ha sido agregado.',
+            confirmButtonText: 'Entendido'
+        });
         return; // Si ya está, no hacemos nada
     }
 

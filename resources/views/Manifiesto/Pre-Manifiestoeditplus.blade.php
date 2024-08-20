@@ -6,7 +6,8 @@
 @section('content')
 <br>
 <br>
-    <h2>PreManifiesto de Salida y/o Resguardo+</h2>
+<br>
+    <h2>PreManifiesto de Salida y/o Resguardo</h2>
     <br>
     <div class="alert alert-info alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

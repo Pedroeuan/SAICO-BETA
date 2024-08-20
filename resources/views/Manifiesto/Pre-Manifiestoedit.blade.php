@@ -6,6 +6,7 @@
 @section('content')
 <br>
 <br>
+<br>
     <h2>PreManifiesto de Salida y/o Resguardo</h2>
     <br>
     <div class="alert alert-info alert-dismissible">

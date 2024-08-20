@@ -21,6 +21,7 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
+                        <th>Categoria</th>
                         <th>Nombre</th>
                         <th>Num. Económico</th>
                         <th>Marca</th>
@@ -37,6 +38,7 @@
                     @foreach ($generalConCertificadosConAlmacen as $general_eyc)
                         <tr>
                             @if($general_eyc)
+                                <td scope="row">{{$general_eyc->Tipo}}</td>
                                 <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                 <td scope="row">{{$general_eyc->No_economico}}</td>
                                 <td scope="row">{{$general_eyc->Marca}}</td>
@@ -66,9 +68,9 @@
                                             <td scope="row"> 
                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                            @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
                                 </td>
                             @endif

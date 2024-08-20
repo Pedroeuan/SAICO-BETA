@@ -133,32 +133,65 @@
                                         <tbody>
                                             @foreach ($DetallesKits as $detalle)
                                                 @php
+                                                    $general = $generalEyC;
                                                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                                                    $fechaCalibracion = $general->Certificados->Fecha_calibracion;
                                                 @endphp
                                                 <tr id="row-{{ $detalle->idDetalles_Kits }}">
                                                     <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                                                     <td>{{ $general->No_economico ?? 'N/A' }}</td>
                                                     <td>{{ $general->Marca ?? 'N/A' }}</td>
-                                                    <td>{{ $general->Ultima_Fecha_calibracion ?? 'N/A' }}</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            @if($general->Tipo == 'CONSUMIBLES' )
-                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}">
+                                                    @if($general->Certificados)
+                                                            @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
+                                                                    @if($general->Certificados->Fecha_calibracion=='2001-01-01')
+                                                                            <td scope="row">SIN FECHA ASIGNADA</td>
+                                                                        @else
+                                                                            <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
+                                                                    @endif
                                                                 @else
-                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'N/A' }}" readonly>
+                                                                    <td scope="row">N/A</td>
                                                             @endif
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'N/A' }}">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="{{ $detalle->idDetalles_Kits }}">
-                                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                                        </button>
-                                                    </td>
+                                                    @endif
+                                                    @if($general->Tipo == 'CONSUMIBLES')
+                                                        <td scope="row">
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'ESPERA DE DATO' }}" required>
+                                                            </div>
+                                                        </td>
+
+                                                        <td scope="row">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="hidden" name="general_eyc_id[]" value="{{ $detalle->idGeneral_EyC }}">
+                                                            <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="{{ $detalle->idDetalles_Kits }}">
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    @else
+                                                        <td scope="row">
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
+                                                            </div>
+                                                        </td>
+
+                                                        <td scope="row">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="hidden" name="general_eyc_id[]" value="{{ $detalle->idGeneral_EyC }}">
+                                                            <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="{{ $detalle->idDetalles_Kits }}">
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    @endif
+
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -230,74 +263,91 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
-    $(document).ready(function() {
+ /*   $(document).ready(function() {
+    // Función para consultar la cantidad en almacén
+    function consultarCantidadAlmacen(id, callback) {
+        $.ajax({
+            url: '/Obtener/CantidadAlmacen/' + id,
+            method: 'GET',
+            success: function(data) {
+                callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            },
+            error: function(error) {
+                callback(error);
+            }
+        });
+    }
 
-// Función para consultar la cantidad en almacén
-function consultarCantidadAlmacen(id, callback) {
-    $.ajax({
-        url: '/Obtener/CantidadAlmacen/' + id,
-        method: 'GET',
-        success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
-        },
-        error: function(error) {
-            callback(error);
-        }
-    });
-}
+    // Delegación de eventos para los botones de eliminación
+    $(document).on('click', '.btnEliminarDetallesKits', function() {
+        var idDetalles_Kits = $(this).data('id');
+        var token = '{{ csrf_token() }}';
 
-// Delegación de eventos para los botones de eliminación
-$(document).on('click', '.btnEliminarDetallesKits', function() {
-    var idDetalles_Kits = $(this).data('id');
-    var token = '{{ csrf_token() }}';
-
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#row-' + idDetalles_Kits).remove();
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Kits).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: "Elemento Eliminado Correctamente!",
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Confirmado!',
-                            text: "Elemento Eliminado Correctamente!",
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorMessage,
                         });
                     }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessage,
-                    });
-                }
-            });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
+        });
     });
-});
 
-// Botón de  AGREGAR
-document.querySelectorAll('.btnAgregar').forEach(button => {
+        // Función para verificar si un dato ya existe en la segunda tabla
+function verificarExistenciaEnTabla(idFila) {
+    const filas = document.querySelectorAll('#TablaKits tbody tr');
+    return Array.from(filas).some(fila => fila.querySelector('input[name="general_eyc_id[]"]').value === idFila);
+}
+
+// Botón de AGREGAR
+/*document.querySelectorAll('.btnAgregar').forEach(button => {
     button.addEventListener('click', function() {
         // Deshabilitar el botón para evitar múltiples clics
-        this.disabled = true;
+        const btn = this;
+        btn.disabled = true;
 
-        let idFila = this.getAttribute('data-id');
-        let idKits = this.getAttribute('data-id-kits');
+        let idFila = btn.getAttribute('data-id');
+        let idKits = btn.getAttribute('data-id-kits');
+
+        // Verificar si el dato ya existe en la segunda tabla
+        if (verificarExistenciaEnTabla(idFila)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Elemento ya agregado',
+                text: 'Este elemento ya está en el kit.',
+            });
+            btn.disabled = false;
+            return;
+        }
 
         // Consultar la cantidad en almacén
         consultarCantidadAlmacen(idFila, function(error, cantidadAlmacen) {
@@ -308,6 +358,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     title: 'Oops...',
                     text: 'Hubo un error al consultar la cantidad en almacén.',
                 });
+                btn.disabled = false;
                 return;
             }
 
@@ -331,7 +382,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                 if (data.status === 'success') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Detalle agregado exitosamente.',
+                        title: 'Elemento Agregado Exitosamente.',
                         showConfirmButton: false,
                         timer: 2000
                     });
@@ -339,12 +390,12 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     // Obtén el ID del detalle agregado desde la respuesta
                     let idDetalles_Kits = data.idDetalles_Kits;
 
-                    // Eliminar la fila de la primera tabla
+                    // Obtener datos de la fila actual
                     let row = document.getElementById('row-' + idFila);
                     let nombre = row.querySelector('td:nth-child(1)').innerText;
                     let noEco = row.querySelector('td:nth-child(2)').innerText;
                     let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+                    let ultimaCalibracion = row.querySelector('td:nth-child(8)').innerText; // Ajustado al índice correcto
 
                     row.remove();
 
@@ -363,10 +414,11 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS">
+                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS" required>
                             </div>
                         </td>
                         <td>
+                            <input type="hidden" name="general_eyc_id[]" value="${idFila}">
                             <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="${idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     `;
@@ -395,12 +447,149 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
             })
             .finally(() => {
                 // Habilitar el botón nuevamente
-                this.disabled = false;
+                btn.disabled = false;
             });
         });
     });
 });
+});*/
 
+
+$(document).ready(function() {
+    // Delegación de eventos para el botón "Agregar"
+    $('#tablaJs').on('click', '.btnAgregar', function() {
+        // Deshabilitar el botón para evitar múltiples clics
+        $(this).prop('disabled', true);
+
+        let idFila = $(this).data('id');
+        let idKits = $(this).data('id-kits');
+
+        fetch('/kits/agregar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            body: JSON.stringify({
+                idFila: idFila,
+                idKits: idKits
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Elemento Agregado Exitosamente.',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+
+                // Eliminar la fila de la primera tabla
+                let row = $('#row-' + idFila);
+                let nombre = row.find('td:nth-child(1)').text();
+                let noEco = row.find('td:nth-child(2)').text();
+                let marca = row.find('td:nth-child(3)').text();
+                let ultimaCalibracion = row.find('td:nth-child(8)').text();
+
+                row.remove();
+
+                // Crear una nueva fila en la segunda tabla
+                let newRow = `
+                    <tr id="row-${data.idDetalles_Kits}">
+                        <td>${nombre}</td>
+                        <td>${noEco}</td>
+                        <td>${marca}</td>
+                        <td>${ultimaCalibracion}</td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="Cantidad[${data.idDetalles_Kits}]" value="1" ${data.stock === 1 ? 'readonly' : ''}>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[${data.idDetalles_Kits}]" value="ESPERA DE DATO">
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${data.idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                `;
+                $('#TablaKits tbody').append(newRow);
+
+                // Animar la nueva fila
+                $('#row-' + data.idDetalles_Kits).addClass('table-success');
+                setTimeout(() => {
+                    $('#row-' + data.idDetalles_Kits).removeClass('table-success');
+                }, 1500);
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Elemento duplicado',
+                    text: data.message,
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Hubo un error al agregar el detalle.',
+            });
+        })
+        .finally(() => {
+            // Habilitar el botón nuevamente
+            $(this).prop('disabled', false);
+        });
+    });
+
+    // Delegación de eventos para el botón "Eliminar"
+    $('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
+        var idDetalles_Kits = $(this).data('id');
+        var token = $('meta[name="csrf-token"]').attr('content');
+
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Kits).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: "Elemento Eliminado Correctamente!",
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorMessage,
+                        });
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
+        });
+    });
 });
 
 

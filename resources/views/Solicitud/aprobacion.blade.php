@@ -142,7 +142,7 @@
                             </td>
                             <td scope="row">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
                                 </div>
                             </td>
                             <td>
@@ -159,7 +159,7 @@
                             </td>
                             <td scope="row">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}">
+                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
                                 </div>
                             </td>
                             <td>
