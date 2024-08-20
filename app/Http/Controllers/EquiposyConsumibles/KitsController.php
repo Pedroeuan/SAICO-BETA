@@ -135,36 +135,6 @@ class KitsController extends Controller
         return redirect()->route('index.Kits');
     }
 
-    /*Boton agregar */
-    public function agregarDetallesKits(Request $request)
-    {
-        // Obtén las variables de la solicitud
-        $idFila = $request->input('idFila');
-        $idKits = $request->input('idKits');
-        $cantidad=1;
-        $unidad='ESPERA DE DATO';
-
-        // Registra los valores en el archivo de log
-        //Log::info('ID de Fila:', ['idFila' => $idFila]);
-        //Log::info('ID de Kits:', ['idKits' => $idKits]);
-        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
-
-        // Procesa los datos según tus necesidades
-        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        $DetallesKits = new detalles_kits();
-        $DetallesKits->idKits = $idKits;
-        $DetallesKits->idGeneral_EyC = $idFila;
-        $DetallesKits->cantidad = $cantidad;
-        $DetallesKits->Unidad = $unidad;
-        $DetallesKits->save();
-
-        // Retornar una respuesta JSON con el idDetalles_Kits recién creado
-        return response()->json([
-            'status' => 'success',
-            'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
-        ]);
-    }
-
         /*Botón Eliminar */
         public function destroyDetallesKits($id)
         {
@@ -180,19 +150,42 @@ class KitsController extends Controller
             }
         }
 
+            /*Boton agregar */
+            public function agregarDetallesKits(Request $request)
+            {
+                // Obtén las variables de la solicitud
+                $idFila = $request->input('idFila');
+                $idKits = $request->input('idKits');
+                $cantidad=1;
+                $unidad='ESPERA DE DATO';
+
+                // Procesa los datos según tus necesidades
+                // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
+                $DetallesKits = new detalles_kits();
+                $DetallesKits->idKits = $idKits;
+                $DetallesKits->idGeneral_EyC = $idFila;
+                $DetallesKits->cantidad = $cantidad;
+                $DetallesKits->Unidad = $unidad;
+                $DetallesKits->save();
+
+                // Retornar una respuesta JSON con el idDetalles_Kits recién creado
+                /*return response()->json([
+                    'status' => 'success',
+                    'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
+                ]);*/
+                return response()->json([
+                    'status' => 'success',
+                    'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
+                    'cantidad' => $cantidad,
+                    'unidad' => $unidad,
+                ]);
+            }
+
         public function updateKits(Request $request, $id)
         {
-            // Validar los datos del formulario
-            /*$validatedData = $request->validate([
-                'Nombre' => 'required|string|max:255',
-                'Prueba' => 'required|string|max:255',
-                'Cantidad.*' => 'required|integer|min:1',
-                'Unidad.*' => 'required|string|max:255',
-            ]);*/
 
             // Actualizar los datos del Kit
             $kit = kits::findOrFail($id);
-            Log::info('kit: ', ['kit' => $kit]);
             $kit->Nombre = $request->input('Nombre');
             $kit->Prueba = $request->input('Prueba');
             $kit->save();
@@ -208,4 +201,5 @@ class KitsController extends Controller
             // Redirigir o mostrar un mensaje de éxito
             return redirect()->route('index.Kits');
         }
-}
+    }
+

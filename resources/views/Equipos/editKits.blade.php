@@ -347,12 +347,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     idKits: idKits
                 })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta de la solicitud');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
                     Swal.fire({
@@ -365,12 +360,12 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
                     // Obtén el ID del detalle agregado desde la respuesta
                     let idDetalles_Kits = data.idDetalles_Kits;
 
-                    // Eliminar la fila de la primera tabla
+                    // Obtener datos de la fila actual
                     let row = document.getElementById('row-' + idFila);
                     let nombre = row.querySelector('td:nth-child(1)').innerText;
                     let noEco = row.querySelector('td:nth-child(2)').innerText;
                     let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(7)').innerText;
+                    let ultimaCalibracion = row.querySelector('td:nth-child(4)').innerText; // Ajustado al índice correcto
 
                     row.remove();
 
@@ -427,6 +422,7 @@ document.querySelectorAll('.btnAgregar').forEach(button => {
         });
     });
 });
+
 
 });
 
