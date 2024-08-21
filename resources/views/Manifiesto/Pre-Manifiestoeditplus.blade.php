@@ -131,14 +131,14 @@
                                 <!--Campo Oculto para pasar el id de Solicitud -->
                                 <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
 
-                                <div class="alert alert-warning alert-dismissible">
+                                <!--<div class="alert alert-warning alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                     <h5><i class="icon fas fa-info"></i> Importante</h5>
                                     <p>Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <BR>
                                     Nota b): El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
                                     Nota c): Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
                                     </p>
-                                </div>
+                                </div>-->
 
                                     <div class="col-sm-12">
                                         <div class="form-group">
