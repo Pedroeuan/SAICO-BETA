@@ -260,7 +260,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-sm-4">
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
                                             <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
@@ -270,7 +270,7 @@
                                                 </br>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -940,7 +940,6 @@
 
                                         </div>
                                 </div>
-                                
                                 <div class="d-flex justify-content-center">
                                     <button id="actualizarTablaBtn" class="btn btn-primary btn-lg shadow rounded-pill px-4" type="button">
                                         <i class="fas fa-sync-alt"></i> Actualizar Tabla
@@ -1766,7 +1765,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var nombre = formData.get('Nombre_E_P_BP');
             var marca = formData.get('Marca');
             var modelo = formData.get('Modelo');
-            var serie = formData.get('Serie');
+            //var serie = formData.get('Serie');
             var stock = formData.get('Stock');
 
             // Validaciones
@@ -1781,9 +1780,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!modelo) {
                 camposVacios.push('Modelo');
             }
-            if (!serie) {
+            /*if (!serie) {
                 camposVacios.push('Número de Serie');
-            }
+            }*/
             if (!stock) {
                 camposVacios.push('Stock');
             }
