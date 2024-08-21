@@ -239,7 +239,7 @@
                                     </div>
                                 </div>
                             @endif
-    <button type="submit" class="btn btn-success">Crear manifiesto</button>
+    <button type="submit" class="btn btn-success" id="btnFinalizaraprobacion">Crear manifiesto</button>
 </form>
 <br>
 @stop
@@ -288,6 +288,24 @@
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
+});
+
+$(document).ready(function() {
+    $('#btnFinalizaraprobacion').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#TablaSolicitud tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
 });
 
 $(document).ready(function() {

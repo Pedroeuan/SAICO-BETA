@@ -512,7 +512,7 @@ $(document).ready(function() {
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${data.idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="${data.idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 `;

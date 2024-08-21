@@ -937,7 +937,14 @@
                                                     <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
                                                 </div>
                                             </div>
+
                                         </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-center">
+                                    <button id="actualizarTablaBtn" class="btn btn-primary btn-lg shadow rounded-pill px-4" type="button">
+                                        <i class="fas fa-sync-alt"></i> Actualizar Tabla
+                                    </button>
                                 </div>
                                 <br>
                                 <h5 align="center">Elige los equipos y consumibles para armar el KIT</h5>
@@ -1027,7 +1034,7 @@
                                         </div>
 
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarKits">Guardar y continuar</button>
+                                        <button type="submit" class="btn btn-info bg-success" id="guardarContinuarKits" data-submit-type="guardar-continuar">Guardar y continuar</button>
                                         </div>
                                 </div>
 
@@ -1093,18 +1100,18 @@ let table = new DataTable('#tablaJs', {
 
 function actualizarTabla() {
     $.ajax({
-        url: '/obtenerDatos/Actualizados', // Cambia esta URL a la ruta que devuelve los datos actualizados
+        url: '/obtenerDatos/Actualizados', // Ruta que devuelve los datos actualizados
         method: 'GET',
         success: function(response) {
             // Destruye la instancia actual de DataTables si existe
             if ($.fn.DataTable.isDataTable('#tablaJs')) {
-                table.clear().destroy();
+                $('#tablaJs').DataTable().clear().destroy();
             }
 
-            // Vaciar el contenido actual de la tabla
+            // Limpiar la tabla actual
             $('#tablaJs tbody').empty();
 
-            // Iterar sobre los datos en response
+            // Iterar sobre los datos en la respuesta y agregar filas a la tabla
             response.forEach(function(item) {
                 var disponibilidad = '';
                 switch(item.Disponibilidad_Estado) {
@@ -1126,7 +1133,6 @@ function actualizarTabla() {
                     ? '<a class="btn btn-primary" href="/storage/' + item.Foto + '" role="button" target="_blank"><i class="fa fa-eye"></i></a>'
                     : '<a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>';
 
-                // Reemplaza la fecha '2001-01-01' por 'SIN FECHA ASIGNADA'
                 var fechaCalibracion = item.certificados && item.certificados.Fecha_calibracion === '2001-01-01'
                     ? 'SIN FECHA ASIGNADA'
                     : (item.certificados ? item.certificados.Fecha_calibracion : 'N/A');
@@ -1148,7 +1154,7 @@ function actualizarTabla() {
             });
 
             // Re-inicializa DataTables después de agregar los nuevos datos
-            table = $('#tablaJs').DataTable({
+            $('#tablaJs').DataTable({
                 "pageLength": 10, // Configura la cantidad de filas por página
                 "language": {
                     "decimal": "",
@@ -1176,7 +1182,7 @@ function actualizarTabla() {
                 }
             });
 
-            // Reattach the listeners after updating the table
+            // Vuelve a adjuntar los listeners si es necesario
             attachAddListeners();
         },
         error: function(xhr, status, error) {
@@ -1184,6 +1190,46 @@ function actualizarTabla() {
         }
     });
 }
+
+
+function attachAddListeners() {
+    // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
+    $('#tablaJs').on('click', '.btnAgregar', function() {
+        var id = $(this).data('id');
+        // Aquí podrías añadir la funcionalidad para agregar el ítem seleccionado
+        // console.log('Botón Agregar clicado para id:', id);
+    });
+}
+
+$(document).ready(function() {
+    // Llamar a la función de actualización cuando se hace clic en el botón
+    $('#actualizarTablaBtn').on('click', function() {
+        actualizarTabla();
+    });
+});
+
+
+function attachAddListeners() {
+    // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
+    $('#tablaJs').on('click', '.btnAgregar', function() {
+        var id = $(this).data('id');
+        // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
+        console.log('Botón Agregar clicado para id:', id);
+    });
+}
+
+$(document).ready(function() {
+    // Elimina la actualización automática si prefieres solo manual
+    // setInterval(actualizarTabla, 60000);
+
+    // Llama a la función una vez al cargar la página
+    actualizarTabla();
+
+    // Añade el evento de clic al botón para actualizar manualmente la tabla
+    $('#actualizarTablaBtn').on('click', function() {
+        actualizarTabla();
+    });
+});
 
         function attachAddListeners() {
             // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
@@ -1196,10 +1242,15 @@ function actualizarTabla() {
 
         $(document).ready(function() {
             // Actualizar la tabla cada 10 segundos (10000 milisegundos)
-            setInterval(actualizarTabla, 60000);
+            //setInterval(actualizarTabla, 60000);
 
             // Llamar a la función una vez al cargar la página
             actualizarTabla();
+
+            // Añade el evento de clic al botón para actualizar manualmente la tabla
+            $('#actualizarTablaBtn').on('click', function() {
+                actualizarTabla();
+            });
         });
 
 /*Prevenir el Enter Equipos*/
@@ -1356,9 +1407,17 @@ document.querySelector('#kitForm').addEventListener('submit', function(event) {
     });
 });
 
-document.querySelector('#kitForm').addEventListener('submit', function(event) {
+/*document.querySelector('#kitForm').addEventListener('submit', function(event) {
     if (!validateForm()) {
         event.preventDefault(); // Evitar que el formulario se envíe si no pasa la validación
+    }
+});*/
+document.querySelector('#kitForm').addEventListener('submit', function(event) {
+    // Verifica si el botón que activó el submit es "Guardar y continuar"
+    if (event.submitter && event.submitter.dataset.submitType === 'guardar-continuar') {
+        if (!validateForm()) {
+            event.preventDefault(); // Evitar que el formulario se envíe si no pasa la validación
+        }
     }
 });
 
