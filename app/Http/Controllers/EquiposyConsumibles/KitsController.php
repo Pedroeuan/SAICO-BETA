@@ -38,10 +38,8 @@ class KitsController extends Controller
 
         public function obtenerDatosActualizados()
     {
-        $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-
-        return response()->json($generalConCertificados,$general);
+        $generalConCertificados = general_eyc::with(['almacen', 'certificados'])->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        return response()->json($generalConCertificados);
     }
 
     /**
@@ -137,36 +135,6 @@ class KitsController extends Controller
         return redirect()->route('index.Kits');
     }
 
-    /*Boton agregar */
-    public function agregarDetallesKits(Request $request)
-    {
-        // Obtén las variables de la solicitud
-        $idFila = $request->input('idFila');
-        $idKits = $request->input('idKits');
-        $cantidad=1;
-        $unidad='ESPERA DE DATO';
-
-        // Registra los valores en el archivo de log
-        //Log::info('ID de Fila:', ['idFila' => $idFila]);
-        //Log::info('ID de Kits:', ['idKits' => $idKits]);
-        /*Los logs de Laravel se encuentran en el archivo storage/logs/laravel.log. Puedes revisar este archivo para ver los valores registrados.*/
-
-        // Procesa los datos según tus necesidades
-        // Aquí puedes agregar la lógica para agregar el detalle a la solicitud
-        $DetallesKits = new detalles_kits();
-        $DetallesKits->idKits = $idKits;
-        $DetallesKits->idGeneral_EyC = $idFila;
-        $DetallesKits->cantidad = $cantidad;
-        $DetallesKits->Unidad = $unidad;
-        $DetallesKits->save();
-
-        // Retornar una respuesta JSON con el idDetalles_Kits recién creado
-        return response()->json([
-            'status' => 'success',
-            'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
-        ]);
-    }
-
         /*Botón Eliminar */
         public function destroyDetallesKits($id)
         {
@@ -182,31 +150,94 @@ class KitsController extends Controller
             }
         }
 
+            /*Boton agregar */
+            public function agregarDetallesKits(Request $request)
+            {
+                // Obtén las variables de la solicitud
+                $idFila = $request->input('idFila');
+                $idKits = $request->input('idKits');
+                $cantidad = 1;
+                $unidad = 'ESPERA DE DATO';
+
+                // Verifica si el elemento ya existe en la tabla DetallesKits
+                $detalleExistente = detalles_kits::where('idKits', $idKits)
+                    ->where('idGeneral_EyC', $idFila)
+                    ->first();
+
+                if ($detalleExistente) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'El elemento ya está agregado al kit.'
+                    ]);
+                }
+
+                // Verifica el stock en la tabla Almacen
+                $almacen = Almacen::where('idGeneral_EyC', $idFila)->first();
+
+                if ($almacen) {
+                    if ($almacen->Stock >= 1) {
+                        // Procesa los datos y guarda el detalle en la tabla DetallesKits
+                        $DetallesKits = new detalles_kits();
+                        $DetallesKits->idKits = $idKits;
+                        $DetallesKits->idGeneral_EyC = $idFila;
+                        $DetallesKits->cantidad = $cantidad;
+                        $DetallesKits->Unidad = $unidad;
+                        $DetallesKits->save();
+
+                        // Retorna una respuesta JSON con el idDetalles_Kits recién creado y el stock actual
+                        return response()->json([
+                            'status' => 'success',
+                            'idDetalles_Kits' => $DetallesKits->idDetalles_Kits,
+                            'cantidad' => $cantidad,
+                            'unidad' => $unidad,
+                            'stock' => $almacen->Stock,
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'No hay suficiente stock disponible.'
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Elemento no encontrado en el almacén.'
+                    ]);
+                }
+            }
+
         public function updateKits(Request $request, $id)
         {
-            // Validar los datos del formulario
-            $validatedData = $request->validate([
-                'Nombre' => 'required|string|max:255',
-                'Prueba' => 'required|string|max:255',
-                'Cantidad.*' => 'required|integer|min:1',
-                'Unidad.*' => 'required|string|max:255',
-            ]);
-
             // Actualizar los datos del Kit
             $kit = kits::findOrFail($id);
             $kit->Nombre = $request->input('Nombre');
             $kit->Prueba = $request->input('Prueba');
             $kit->save();
 
-            // Actualizar los detalles del Kit
-            foreach ($request->input('Cantidad') as $detalleId => $cantidad) {
-                $detalle = detalles_kits::findOrFail($detalleId);
-                $detalle->Cantidad = $cantidad;
-                $detalle->Unidad = $request->input("Unidad.$detalleId");
-                $detalle->save();
-            }
+            $DetalleKits = detalles_kits::where('idKits', $id)->get();
 
+                    // Recorrer cada detalle de la solicitud para actualizar Cantidad y Unidad
+        foreach ($DetalleKits as $detalle) {
+            $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Kits] ?? null;
+            $unidad = request()->input('Unidad')[$detalle->idDetalles_Kits] ?? null;
+            Log::info('***********************');
+            Log::info('$DetalleKits-ID: ', ['DetalleKits' => $detalle->idGeneral_EyC]);
+            Log::info('***********************');
+            Log::info('cantidad: ', ['cantidad' => $cantidad]);
+            Log::info('***********************');
+            Log::info('unidad: ', ['unidad' => $unidad]);
+            
+            if ($cantidad !== null && $unidad !== null) {
+                $detalle->update([
+                    'Cantidad' => $cantidad,
+                    'Unidad' => $unidad,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Datos de cantidad o unidad faltantes para algún detalle de la solicitud.');
+            }
+        }
             // Redirigir o mostrar un mensaje de éxito
             return redirect()->route('index.Kits');
         }
-}
+    }
+

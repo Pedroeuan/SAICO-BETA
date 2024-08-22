@@ -16,12 +16,12 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-            <br>
         <div class="box-body">
         <h3 align="center">Inventario</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
+                        <th>Categoria</th>
                         <th>Nombre</th>
                         <th>Num. Económico</th>
                         <th>Marca</th>
@@ -38,6 +38,7 @@
                     @foreach ($generalConCertificadosConAlmacen as $general_eyc)
                         <tr>
                             @if($general_eyc)
+                                <td scope="row">{{$general_eyc->Tipo}}</td>
                                 <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                 <td scope="row">{{$general_eyc->No_economico}}</td>
                                 <td scope="row">{{$general_eyc->Marca}}</td>
@@ -45,13 +46,13 @@
                                 <td scope="row">{{$general_eyc->Serie}}</td>
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible</td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible</td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                        <td scope="row"><button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
                             @endif 
                             @if($general_eyc->certificados)
@@ -67,9 +68,9 @@
                                             <td scope="row"> 
                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                        <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                            @elseif($general_eyc->Foto == 'ESPERA DE DATO')  
-                                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
                                 </td>
                             @endif
@@ -89,11 +90,17 @@
 @stop
 
 @section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->

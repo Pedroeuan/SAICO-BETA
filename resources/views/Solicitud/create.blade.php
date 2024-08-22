@@ -68,6 +68,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
+                        <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
                         <th>Hoja de Presentación</th>
@@ -82,18 +83,16 @@
                         <td scope="row">{{$general_eyc->Marca}}</td>
                         <td scope="row">{{$general_eyc->Modelo}}</td>
                         <td scope="row">{{$general_eyc->Serie}}</td>
-
-                        <td scope="row">
-                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-success">Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <button type="button" class="btn btn-block btn-outline-warning">No Disponible</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio</button>
-                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                    <button type="button" class="btn btn-info"><i class="far fa-clock" aria-hidden="true"></i></button>
-                            @endif
-                        </td>
+                        <td scope="row">{{$general_eyc->almacen->Stock}}</td>
+                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
+                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                        @endif
 
                         <td scope="row">
                         @if($general_eyc->certificados)
@@ -165,7 +164,7 @@
         </div>
         <br><br>
         <div class="col text-center">
-            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalSolicitarEyC" id="btnFinalizarSolicitud">
                 Finalizar solicitud
             </button>
         </div>
@@ -175,9 +174,16 @@
 @stop
 
 @section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--Ajax-->
@@ -248,6 +254,41 @@ let tableInventario = new DataTable('#tablaInventario', {
                 }
 });
 
+$(document).on('input', 'input[name="cantidad[]"]', function() {
+    var max = $(this).attr('max');
+    var value = $(this).val();
+
+    if (parseInt(value) > parseInt(max)) {
+        $(this).val(max);
+
+        // Mostrar mensaje de advertencia
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cantidad excedida',
+            text: `La cantidad máxima permitida es ${max}.`,
+            confirmButtonText: 'Entendido'
+        });
+    }
+});
+
+$(document).ready(function() {
+    $('#btnFinalizarSolicitud').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#tablaAgregados tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
+});
+
 function consultarCantidadAlmacen(id, callback) {
     $.ajax({
         url: '/Obtener/CantidadAlmacen/' + id,
@@ -262,20 +303,27 @@ function consultarCantidadAlmacen(id, callback) {
 }
 
 $(document).ready(function() {
+    let kitDuplicadoDetectado = false; // Bandera para detectar duplicados
+
+    $(document).ready(function() {
     // Agregar elemento de inventario
-    $('.btnAgregarInventario').click(function() {
+    $(document).on('click', '.btnAgregarInventario', function() {
         var rowId = $(this).data('id');
         var row = $('#row-' + rowId);
         var nombre = row.find('td:eq(0)').text();
         var numEconomico = row.find('td:eq(1)').text();
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(6)').text();
+        var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
 
+        // Verificar si el elemento ya está agregado
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
+            nombresDuplicados.push(nombre); // Agregar el nombre del elemento duplicado al array
+
             Swal.fire({
                 icon: 'warning',
                 title: 'Elemento duplicado',
-                text: 'El elemento ya está agregado.',
+                text: `El elemento "${nombre}" ya está agregado.`,
                 confirmButtonText: 'Entendido'
             });
             return;
@@ -298,9 +346,9 @@ $(document).ready(function() {
 
             var cantidadInput;
             if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -310,7 +358,7 @@ $(document).ready(function() {
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
                     <td>
                         <input type="hidden" name="general_eyc_id[]" value="${rowId}">
                         <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
@@ -330,9 +378,18 @@ $(document).ready(function() {
         });
     });
 
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
+    });
+});
+
+
+    $(document).ready(function() {
     // Agregar elemento de kits
-    $('.btnAgregarKit').click(function() {
+    $(document).on('click', '.btnAgregarKit', function() {
         var kitId = $(this).data('id');
+        var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
 
         $.ajax({
             url: '/Obtener/Kits/' + kitId,
@@ -343,6 +400,24 @@ $(document).ready(function() {
                         consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
                             if (error || cantidad <= 0) {
                                 reject('Kit Sin Stock suficiente en el Almacen');
+                                return;
+                            }
+
+                            // Verificar duplicados antes de agregar
+                            var elementoExistente = $('#tablaAgregados tbody').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0;
+                            if (elementoExistente) {
+                                // Obtener el nombre del elemento duplicado
+                                $.ajax({
+                                    url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
+                                    method: 'GET',
+                                    success: function(generalEyC) {
+                                        nombresDuplicados.push(generalEyC.Nombre_E_P_BP); // Agregar el nombre al array
+                                        resolve(null); // Resolver con null para no agregar el elemento duplicado
+                                    },
+                                    error: function() {
+                                        reject('Error al obtener detalles de General_EyC.');
+                                    }
+                                });
                                 return;
                             }
 
@@ -389,7 +464,9 @@ $(document).ready(function() {
                 Promise.all(promises)
                     .then(function(rows) {
                         rows.forEach(function(row) {
-                            $('#tablaAgregados tbody').append(row);
+                            if (row) {
+                                $('#tablaAgregados tbody').append(row);
+                            }
                         });
 
                         // Mostrar mensaje de confirmación
@@ -399,6 +476,17 @@ $(document).ready(function() {
                             text: 'El kit ha sido agregado correctamente.',
                             confirmButtonText: 'OK'
                         });
+
+                        // Mostrar mensaje de duplicados si existen
+                        if (nombresDuplicados.length > 0) {
+                            var mensajeDuplicados = nombresDuplicados.join(', ');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Elementos duplicados',
+                                text: `Los siguientes elementos ya estaban agregados: ${mensajeDuplicados}`,
+                                confirmButtonText: 'Entendido'
+                            });
+                        }
                     })
                     .catch(function(errorMessage) {
                         Swal.fire({
@@ -423,6 +511,16 @@ $(document).ready(function() {
     // Eliminar elemento
     $(document).on('click', '.btnQuitarElemento', function() {
         $(this).closest('tr').remove();
+    });
+});
+
+
+
+
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
+        kitDuplicadoDetectado = false; // Reiniciar bandera al eliminar un elemento
     });
 });
 

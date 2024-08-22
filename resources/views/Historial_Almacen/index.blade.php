@@ -16,15 +16,15 @@
 <!-- form start -->
 <form role="form">
     <div class="box ">
-            <br>
         <h3>Historial de Entradas, Salidas y Devoluciones</h3>
         <br>
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Nota</h5>
-            Suministro: Activos que ingresaron como nuevo ingreso o por devolución <br>
-            Salida: Activos que salieron por servicio a través del manifiesto <br>
-            En renta: Equipos que salieron en servicio de renta
+            Suministro: Activos que ingresaron como nuevo ingreso.<br>
+            Salida: Activos que salieron por servicio a través del manifiesto.<br>
+            En renta: Activos que salieron en servicio de renta.<br>
+            Devolución: Activos que ingresaron por devolución.
             </p>
         </div>
         <div class="box-body">
@@ -39,7 +39,7 @@
                     <th>Modelo</th>
                     <th>Tipo</th>
                     <th>Cantidad</th>
-                    <th>Fecha</th>
+                    <th>Fecha Calibración/Caducidad</th>
                     <th>Tierra/Costa Fuera</th>
                 </tr>
             </thead>
@@ -82,11 +82,17 @@
 @stop
 
 @section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->

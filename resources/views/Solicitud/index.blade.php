@@ -23,15 +23,17 @@
                 <thead>
                     <tr>
                         <th>Técnico</th>
+                        <th>Folio</th>
                         <th>Fecha de servicio</th>
                         <th>Estatus</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($Solicitud as $solicitud)
+                    @foreach($Solicitudes as $solicitud)
                     <tr>
                         <td scope="row">{{$solicitud->tecnico}}</td>
+                        <td scope="row">{{$solicitud->folio}}</td> <!-- Mostrar el Folio o "No Asignado" -->
                         <td scope="row">{{$solicitud->Fecha}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
@@ -44,9 +46,11 @@
                                 @else
                                 <div class="btn-group">
                                     <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                    <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                        <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                                     <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                    <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>                                           
+                                    @if(!$solicitud->hidePlus)
+                                        <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                    @endif 
                                 </div>
                             @endif
                             
@@ -61,10 +65,16 @@
 @stop
 
 @section('js')
-
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->

@@ -24,12 +24,99 @@ class SolicitudesController extends Controller
     /**
      * Display a listing of the resource.
      */
+    /*public function index()
+    { 
+        // Obtener todas las solicitudes
+        $Solicitudes = Solicitudes::all();
+        
+        // Agregar el folio o "No Asignado" para cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+                if ($manifiesto) 
+                {
+                    $solicitud->folio = $manifiesto->Folio;
+                    //dd($solicitud->folio);
+                } 
+                else 
+                {
+                    $solicitud->folio = "No Asignado";
+                }
+        }
+
+        return view("Solicitud.index",compact('Solicitudes'));
+    }*/
+
     public function index()
+{
+    // Obtener todas las solicitudes
+    $Solicitudes = Solicitudes::all();
+
+    // Crear un array para almacenar el último folio encontrado para cada grupo
+    $ultimoFolioPorGrupo = [];
+
+    // Procesar cada solicitud
+    foreach ($Solicitudes as $solicitud) 
     {
-        $Solicitud = Solicitudes::all();
-        return view("Solicitud.index",compact('Solicitud'));
+        $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+    
+        if ($manifiesto) 
+        {
+            $solicitud->folio = $manifiesto->Folio;
+    
+            // Verificar si la expresión regular coincide
+            if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                $folioBase = $matches[1];
+            } else {
+                // Si no coincide, asignar un valor predeterminado o manejar el caso
+                $folioBase = '';
+            }
+    
+            // Extraer la letra al final del folio si existe (después del número antes de la "/")
+            if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+            } else {
+                $folioLetra = '';
+            }
+    
+            // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
+            if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
+                $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
+            }
+        } 
+        else 
+        {
+            $solicitud->folio = "No Asignado";
+        }
+    }
+    
+
+    // Marcar los folios que deben ocultar el botón
+    foreach ($Solicitudes as $solicitud) 
+    {
+        // Intentar coincidir con el patrón del folio base
+        if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+            $folioBase = $matches[1];  // Si coincide, asignar el valor
+        } else {
+            $folioBase = '';  // Si no coincide, asignar un valor predeterminado
+        }
+    
+        // Intentar coincidir con el patrón de la letra del folio
+        if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+            $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
+        } else {
+            $folioLetra = '';  // Si no coincide, asignar una cadena vacía
+        }
+    
+        // Si este folio no es el último en su grupo, ocultar el botón
+        $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
 
+    return view("Solicitud.index", compact('Solicitudes'));
+}
+
+    
     public function obtenerDetallesKits($id)
     {
         $detallesKits = detalles_kits::where('idKits', $id)->get();

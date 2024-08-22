@@ -15,7 +15,7 @@
         <p>Llena los datos generales del manifiesto como se muestra en los ejemplos</p>
     </div>
                     <!--Formulario-->
-                    <form id="manifiestoForm" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
+                    <form id="manifiestoForm" action="{{ route('solicitudesplus.updateSolicitudplus', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                             <div class="row">
 
@@ -131,7 +131,7 @@
                                 <!--Campo Oculto para pasar el id de Solicitud -->
                                 <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
 
-                                <!-- <div class="alert alert-warning alert-dismissible">
+                                <!--<div class="alert alert-warning alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                     <h5><i class="icon fas fa-info"></i> Importante</h5>
                                     <p>Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <BR>
