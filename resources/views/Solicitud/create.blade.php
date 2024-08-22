@@ -267,7 +267,7 @@ $(document).on('input', 'input[name="cantidad[]"]', function() {
             title: 'Cantidad excedida',
             text: `La cantidad máxima permitida es ${max}.`,
             confirmButtonText: 'Entendido'
-        });
+        }); 
     }
 });
 
@@ -313,7 +313,7 @@ $(document).ready(function() {
         var nombre = row.find('td:eq(0)').text();
         var numEconomico = row.find('td:eq(1)').text();
         var marca = row.find('td:eq(2)').text();
-        var ultimaCalibracion = row.find('td:eq(6)').text();
+        var ultimaCalibracion = row.find('td:eq(7)').text();
         var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
 
         // Verificar si el elemento ya está agregado

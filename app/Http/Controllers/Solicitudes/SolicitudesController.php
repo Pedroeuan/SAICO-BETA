@@ -113,7 +113,15 @@ class SolicitudesController extends Controller
         $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
 
-    return view("Solicitud.index", compact('Solicitudes'));
+    $DetallesSolicitud = detalles_solicitud::all(); // Suponiendo que ya tienes estos datos
+    $generalEyC = general_eyc::all(); // Suponiendo que ya tienes estos datos
+
+    foreach ($DetallesSolicitud as $detalle) {
+        $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+        $detalle->stockDisponible = $almacen ? $almacen->Stock : 0; // Si no hay stock, se asume 0
+    }
+
+    return view("Solicitud.index", compact('Solicitudes','DetallesSolicitud', 'generalEyC'));
 }
 
     

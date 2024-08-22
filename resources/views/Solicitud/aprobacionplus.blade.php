@@ -332,7 +332,7 @@ $(document).ready(function() {
         var nombre = row.find('td:eq(0)').text();
         var numEconomico = row.find('td:eq(1)').text();
         var marca = row.find('td:eq(2)').text();
-        var ultimaCalibracion = row.find('td:eq(6)').text();
+        var ultimaCalibracion = row.find('td:eq(7)').text();
 
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
             Swal.fire({
