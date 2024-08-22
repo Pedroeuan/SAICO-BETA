@@ -285,7 +285,9 @@ function consultarCantidadAlmacen(id, callback) {
     });
 }
 
-/*$(document).ready(function() {
+$(document).ready(function() {
+    let kitDuplicadoDetectado = false; // Bandera para detectar duplicados
+
     // Agregar elemento de inventario
     $(document).on('click', '.btnAgregarInventario', function() {
         var rowId = $(this).data('id');
@@ -356,6 +358,8 @@ function consultarCantidadAlmacen(id, callback) {
 
     // Agregar elemento de kits
     $(document).on('click', '.btnAgregarKit', function() {
+        if (kitDuplicadoDetectado) return; // Evitar múltiples mensajes de duplicación
+
         var kitId = $(this).data('id');
 
         $.ajax({
@@ -364,9 +368,24 @@ function consultarCantidadAlmacen(id, callback) {
             success: function(detallesKits) {
                 var promises = detallesKits.map(function(detalle) {
                     return new Promise(function(resolve, reject) {
+
                         consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
                             if (error || cantidad <= 0) {
                                 reject('Kit Sin Stock suficiente en el Almacen');
+                                return;
+                            }
+
+                            // Evitar agregar el mismo kit dos veces
+                            if ($('#tablaAgregados tbody').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0) {
+                                if (!kitDuplicadoDetectado) {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Kit duplicado',
+                                        text: 'Este kit ya está agregado.',
+                                        confirmButtonText: 'Entendido'
+                                    });
+                                    kitDuplicadoDetectado = true; // Marcar que se ha detectado un duplicado
+                                }
                                 return;
                             }
 
@@ -442,192 +461,15 @@ function consultarCantidadAlmacen(id, callback) {
                 });
             }
         });
-    });//Kits
+    });
 
     // Eliminar elemento
     $(document).on('click', '.btnQuitarElemento', function() {
         $(this).closest('tr').remove();
-    });
-});*/
-
-$(document).ready(function() {
-    // Agregar elemento de inventario
-    $(document).on('click', '.btnAgregarInventario', function() {
-        var rowId = $(this).data('id');
-        var row = $('#row-' + rowId);
-        var nombre = row.find('td:eq(0)').text();
-        var numEconomico = row.find('td:eq(1)').text();
-        var marca = row.find('td:eq(2)').text();
-        var ultimaCalibracion = row.find('td:eq(6)').text();
-
-        if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Elemento duplicado',
-                text: 'El elemento ya está agregado.',
-                confirmButtonText: 'Entendido'
-            });
-            return;
-        }
-
-        consultarCantidadAlmacen(rowId, function(error, Cantidad) {
-            if (error || Cantidad <= 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Sin Stock en Almacen',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-
-            if (ultimaCalibracion === '2001-01-01') {
-                ultimaCalibracion = 'SIN FECHA ASIGNADA';
-            }
-
-            var cantidadInput;
-            if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
-            } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
-            }
-
-            var newRow = `
-                <tr>
-                    <td>${nombre}</td>
-                    <td>${numEconomico}</td>
-                    <td>${marca}</td>
-                    <td>${ultimaCalibracion}</td>
-                    <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
-                    <td>
-                        <input type="hidden" name="general_eyc_id[]" value="${rowId}">
-                        <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
-                    </td>
-                </tr>
-            `;
-
-            $('#tablaAgregados tbody').append(newRow);
-
-            // Mostrar mensaje de confirmación
-            Swal.fire({
-                icon: 'success',
-                title: 'Elemento agregado',
-                text: 'El elemento ha sido agregado correctamente.',
-                confirmButtonText: 'OK'
-            });
-        });
-    });
-
-    // Agregar elemento de kits
-    $(document).on('click', '.btnAgregarKit', function() {
-    var kitId = $(this).data('id');
-    //console.log(kitId);
-
-    $.ajax({
-        url: '/Obtener/Kits/' + kitId,
-        method: 'GET',
-        success: function(detallesKits) {
-            var promises = detallesKits.map(function(detalle) {
-                return new Promise(function(resolve, reject) {
-
-                    consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
-                        if (error || cantidad <= 0) {
-                            reject('Kit Sin Stock suficiente en el Almacen');
-                            return;
-                        }
-
-                            // Evitar agregar el mismo kit dos veces
-                            if ($('#tablaAgregados tbody').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Kit duplicado',
-                                    text: 'Este kit ya está agregado.',
-                                    confirmButtonText: 'Entendido'
-                                });
-                                return;
-                            }
-
-                        $.ajax({
-                            url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
-                            method: 'GET',
-                            success: function(generalEyC) {
-                                console.log(detalle.idGeneral_EyC);
-                                var Fecha_calibracion = generalEyC.certificados.Fecha_calibracion;
-                                if (Fecha_calibracion === '2001-01-01') {
-                                    Fecha_calibracion = 'SIN FECHA ASIGNADA';
-                                }
-
-                                var cantidadInput;
-                                if (cantidad === 1) {
-                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
-                                } else {
-                                    cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
-                                }
-
-                                var newRow = `
-                                    <tr>
-                                        <td>${generalEyC.Nombre_E_P_BP}</td>
-                                        <td>${generalEyC.No_economico}</td>
-                                        <td>${generalEyC.Marca}</td>
-                                        <td>${Fecha_calibracion}</td>
-                                        <td>${cantidadInput}</td>
-                                        <td><input type="text" class="form-control" name="unidad[]" value="${detalle.Unidad}" required></td>
-                                        <td>
-                                            <input type="hidden" name="general_eyc_id[]" value="${detalle.idGeneral_EyC}">
-                                            <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
-                                        </td>
-                                    </tr>
-                                `;
-                                resolve(newRow);
-                            },
-                            error: function() {
-                                reject('Error al obtener detalles de General_EyC.');
-                            }
-                        });
-                    });
-                });
-            });
-
-            Promise.all(promises)
-                .then(function(rows) {
-                    rows.forEach(function(row) {
-                        $('#tablaAgregados tbody').append(row);
-                    });
-
-                    // Mostrar mensaje de confirmación
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Kit agregado',
-                        text: 'El kit ha sido agregado correctamente.',
-                        confirmButtonText: 'OK'
-                    });
-                })
-                .catch(function(errorMessage) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: errorMessage,
-                        confirmButtonText: 'OK'
-                    });
-                });
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al obtener detalles de Kits.',
-                confirmButtonText: 'OK'
-            });
-        }
+        kitDuplicadoDetectado = false; // Reiniciar bandera al eliminar un elemento
     });
 });
 
-    // Eliminar elemento
-    $(document).on('click', '.btnQuitarElemento', function() {
-        $(this).closest('tr').remove();
-    });
-});
 
 
 
