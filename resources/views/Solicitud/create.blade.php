@@ -434,7 +434,7 @@ $(document).ready(function() {
                                     if (cantidad === 1) {
                                         cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
                                     } else {
-                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}"  required>`;
                                     }
 
                                     var newRow = `
