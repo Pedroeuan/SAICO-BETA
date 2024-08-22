@@ -50,7 +50,7 @@ class consumiblesController extends Controller
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
-                'Serie' => 'required|string|max:255',
+                //'Serie' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
             ]);
 

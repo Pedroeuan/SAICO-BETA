@@ -254,6 +254,23 @@ let tableInventario = new DataTable('#tablaInventario', {
                 }
 });
 
+$(document).on('input', 'input[name="cantidad[]"]', function() {
+    var max = $(this).attr('max');
+    var value = $(this).val();
+
+    if (parseInt(value) > parseInt(max)) {
+        $(this).val(max);
+
+        // Mostrar mensaje de advertencia
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cantidad excedida',
+            text: `La cantidad máxima permitida es ${max}.`,
+            confirmButtonText: 'Entendido'
+        });
+    }
+});
+
 $(document).ready(function() {
     $('#btnFinalizarSolicitud').click(function(event) {
         // Verificar si hay filas en la tabla
@@ -286,6 +303,9 @@ function consultarCantidadAlmacen(id, callback) {
 }
 
 $(document).ready(function() {
+    let kitDuplicadoDetectado = false; // Bandera para detectar duplicados
+
+    $(document).ready(function() {
     // Agregar elemento de inventario
     $(document).on('click', '.btnAgregarInventario', function() {
         var rowId = $(this).data('id');
@@ -294,12 +314,16 @@ $(document).ready(function() {
         var numEconomico = row.find('td:eq(1)').text();
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(6)').text();
+        var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
 
+        // Verificar si el elemento ya está agregado
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
+            nombresDuplicados.push(nombre); // Agregar el nombre del elemento duplicado al array
+
             Swal.fire({
                 icon: 'warning',
                 title: 'Elemento duplicado',
-                text: 'El elemento ya está agregado.',
+                text: `El elemento "${nombre}" ya está agregado.`,
                 confirmButtonText: 'Entendido'
             });
             return;
@@ -322,9 +346,9 @@ $(document).ready(function() {
 
             var cantidadInput;
             if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -354,9 +378,18 @@ $(document).ready(function() {
         });
     });
 
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
+    });
+});
+
+
+    $(document).ready(function() {
     // Agregar elemento de kits
     $(document).on('click', '.btnAgregarKit', function() {
         var kitId = $(this).data('id');
+        var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
 
         $.ajax({
             url: '/Obtener/Kits/' + kitId,
@@ -367,6 +400,24 @@ $(document).ready(function() {
                         consultarCantidadAlmacen(detalle.idGeneral_EyC, function(error, cantidad) {
                             if (error || cantidad <= 0) {
                                 reject('Kit Sin Stock suficiente en el Almacen');
+                                return;
+                            }
+
+                            // Verificar duplicados antes de agregar
+                            var elementoExistente = $('#tablaAgregados tbody').find(`input[name="general_eyc_id[]"][value="${detalle.idGeneral_EyC}"]`).length > 0;
+                            if (elementoExistente) {
+                                // Obtener el nombre del elemento duplicado
+                                $.ajax({
+                                    url: '/Obtener/generaleyc/' + detalle.idGeneral_EyC,
+                                    method: 'GET',
+                                    success: function(generalEyC) {
+                                        nombresDuplicados.push(generalEyC.Nombre_E_P_BP); // Agregar el nombre al array
+                                        resolve(null); // Resolver con null para no agregar el elemento duplicado
+                                    },
+                                    error: function() {
+                                        reject('Error al obtener detalles de General_EyC.');
+                                    }
+                                });
                                 return;
                             }
 
@@ -413,7 +464,9 @@ $(document).ready(function() {
                 Promise.all(promises)
                     .then(function(rows) {
                         rows.forEach(function(row) {
-                            $('#tablaAgregados tbody').append(row);
+                            if (row) {
+                                $('#tablaAgregados tbody').append(row);
+                            }
                         });
 
                         // Mostrar mensaje de confirmación
@@ -423,6 +476,17 @@ $(document).ready(function() {
                             text: 'El kit ha sido agregado correctamente.',
                             confirmButtonText: 'OK'
                         });
+
+                        // Mostrar mensaje de duplicados si existen
+                        if (nombresDuplicados.length > 0) {
+                            var mensajeDuplicados = nombresDuplicados.join(', ');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Elementos duplicados',
+                                text: `Los siguientes elementos ya estaban agregados: ${mensajeDuplicados}`,
+                                confirmButtonText: 'Entendido'
+                            });
+                        }
                     })
                     .catch(function(errorMessage) {
                         Swal.fire({
@@ -449,6 +513,19 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
+
+
+
+    // Eliminar elemento
+    $(document).on('click', '.btnQuitarElemento', function() {
+        $(this).closest('tr').remove();
+        kitDuplicadoDetectado = false; // Reiniciar bandera al eliminar un elemento
+    });
+});
+
+
+
 
     $(document).ready(function() {
     $('#solicitudForm').on('submit', function(event) {
