@@ -254,6 +254,23 @@ let tableInventario = new DataTable('#tablaInventario', {
                 }
 });
 
+$(document).on('input', 'input[name="cantidad[]"]', function() {
+    var max = $(this).attr('max');
+    var value = $(this).val();
+
+    if (parseInt(value) > parseInt(max)) {
+        $(this).val(max);
+
+        // Mostrar mensaje de advertencia
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cantidad excedida',
+            text: `La cantidad máxima permitida es ${max}.`,
+            confirmButtonText: 'Entendido'
+        });
+    }
+});
+
 $(document).ready(function() {
     $('#btnFinalizarSolicitud').click(function(event) {
         // Verificar si hay filas en la tabla
@@ -324,9 +341,9 @@ $(document).ready(function() {
 
             var cantidadInput;
             if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -400,9 +417,9 @@ $(document).ready(function() {
 
                                     var cantidadInput;
                                     if (cantidad === 1) {
-                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" max="${cantidad}" readonly>`;
                                     } else {
-                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" required>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" max="${cantidad}" required>`;
                                     }
 
                                     var newRow = `
