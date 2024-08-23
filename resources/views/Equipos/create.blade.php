@@ -927,7 +927,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                                    <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
+                                                    <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos" required>
                                                 </div>
                                             </div>
 
