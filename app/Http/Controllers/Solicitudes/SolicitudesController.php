@@ -113,15 +113,7 @@ class SolicitudesController extends Controller
         $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
 
-    $DetallesSolicitud = detalles_solicitud::all(); // Suponiendo que ya tienes estos datos
-    $generalEyC = general_eyc::all(); // Suponiendo que ya tienes estos datos
-
-    foreach ($DetallesSolicitud as $detalle) {
-        $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
-        $detalle->stockDisponible = $almacen ? $almacen->Stock : 0; // Si no hay stock, se asume 0
-    }
-
-    return view("Solicitud.index", compact('Solicitudes','DetallesSolicitud', 'generalEyC'));
+    return view("Solicitud.index", compact('Solicitudes'));
 }
 
     
@@ -232,6 +224,12 @@ class SolicitudesController extends Controller
         $general = general_eyc::get();
         //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
         $clientes = clientes::all();
+
+    
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+            $detalle->stockDisponible = $almacen ? $almacen->Stock : 0; // Si no hay stock, se asume 0
+        }
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
             /*if (!$Manifiestos) {
