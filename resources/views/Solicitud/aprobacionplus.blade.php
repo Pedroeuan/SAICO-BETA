@@ -311,7 +311,7 @@ $(document).ready(function() {
     });
 });
 
-    function consultarCantidadAlmacen(id, callback) {
+function consultarCantidadAlmacen(id, callback) {
     $.ajax({
         url: '/Obtener/CantidadAlmacen/' + id,
         method: 'GET',
@@ -363,7 +363,7 @@ $(document).ready(function() {
             if (Cantidad === 1) {
                 cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" min="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -383,6 +383,20 @@ $(document).ready(function() {
 
             $('#tablaAgregados tbody').append(newRow);
 
+            // Validar la cantidad al cambiar su valor
+            $('input[name="cantidad[]"]').last().on('input', function() {
+                var inputValue = parseInt($(this).val());
+                if (inputValue > Cantidad) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad excedida',
+                        text: `La cantidad máxima permitida es ${Cantidad}.`,
+                        confirmButtonText: 'Entendido'
+                    });
+                    $(this).val(Cantidad);
+                }
+            });
+
             // Mostrar mensaje de confirmación
             Swal.fire({
                 icon: 'success',
@@ -398,6 +412,7 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 
 </script>

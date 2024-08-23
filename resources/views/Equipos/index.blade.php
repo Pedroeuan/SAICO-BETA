@@ -27,6 +27,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
+                        <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
@@ -44,6 +45,7 @@
                                 <td scope="row">{{$general_eyc->Marca}}</td>
                                 <td scope="row">{{$general_eyc->Modelo}}</td>
                                 <td scope="row">{{$general_eyc->Serie}}</td>
+                                <td scope="row">{{$general_eyc->almacen->Lote}}</td>
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
