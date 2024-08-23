@@ -109,17 +109,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <!--div class="col-sm-4">
                                         <div class="form-group">
                                                 <div class="form-check form-switch form-check-reverse">
                                                     <input class="form-check-input" name="Renta" type="checkbox" id="flexSwitchCheckReverse">
                                                 <div class="container mt-5">
                                                     <label class="form-check-label" for="flexSwitchCheckReverse"><b>En Renta</b></label>
                                                 </div>
-                                            </div>
+                                                </div>
+                                        </div>
+                                    </div-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">En renta</label> <br>
+                                            <input type="checkbox"  name="Renta" checked>                                          
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
@@ -249,6 +256,8 @@
             }
         });
     });
+    // llamar switch boostrap
+    $("[name='Renta']").bootstrapSwitch();
 </script>
 
 @endsection

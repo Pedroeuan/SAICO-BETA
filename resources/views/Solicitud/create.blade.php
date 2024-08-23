@@ -24,7 +24,8 @@
         <div class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Importante</h5>
-            <p>Selecciona en el boton de acciones un KIT para solicitarlo</p>
+            <p>Selecciona el boton de "Solicitar" <button type="button" class="btn btn-success"><i class="fas fa-plus-circle"></i></button> para agregar un KIT
+            </p>
         </div>
             <div class="box-body">
                 <table id="tablaKits" class="table table-bordered table-striped dt-responsive tablas">
@@ -32,7 +33,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Prueba</th>
-                            <th>Acciones</th>
+                            <th>Solicitar KIT</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +58,7 @@
         <div class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Importante</h5>
-            <p>Selecciona en el boton de acciones un equipo o consumible para solicitarlo</p>
+            <p>Selecciona en el boton de "Solicitar" <button type="button" class="btn btn-success"><i class="fas fa-plus-circle"></i></button> para agregar un equipo o consumible</p>
         </div>
         <div class="box-body">
             <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
@@ -71,8 +72,8 @@
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Fecha calibración</th>
-                        <th>Hoja de Presentación</th>
-                        <th>Acciones</th>
+                        <th>Ver Presentación</th>
+                        <th>Solicitar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,10 +128,13 @@
             </table>
         </div>
         <br><br>
-        <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
-        Estos son los elementos que has solicitado
+        <!-- Alerta (oculta por defecto) -->
+        <div id="alertBox" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>
+            Estos son los elementos que has solicitado
         </div>
         <div class="box">
             <br>
@@ -144,7 +148,7 @@
                             <th>Ultima Calibración</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
-                            <th>Acciones</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,7 +161,7 @@
         <div class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Importante</h5>
-            <p>Elige una fecha de servicio para concluir</p>
+            <p>Elige una fecha de servicio para concluir la solicitud</p>
         </div>
         <div class="left-align">
             <input type="date" class="form-control inputForm d-inline-block" name="Fecha_Servicio" id="Fecha_Servicio" style="width: auto;">
@@ -367,7 +371,8 @@ $(document).ready(function() {
             `;
 
             $('#tablaAgregados tbody').append(newRow);
-
+            // Mostrar la alerta
+            alertBox.style.display = 'block';
             // Mostrar mensaje de confirmación
             Swal.fire({
                 icon: 'success',
@@ -468,7 +473,8 @@ $(document).ready(function() {
                                 $('#tablaAgregados tbody').append(row);
                             }
                         });
-
+                        // Mostrar la alerta
+                        alertBox.style.display = 'block';
                         // Mostrar mensaje de confirmación
                         Swal.fire({
                             icon: 'success',

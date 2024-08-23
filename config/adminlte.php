@@ -540,7 +540,7 @@ return [
                 ],
                 [
                     'text' => 'Registro de usuarios',
-                    'icon' => 'fas fa-edit',
+                    'icon' => 'fas fa-user-plus',
                     'url' => 'Admin/create',
                 ],
                 [
@@ -665,6 +665,22 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                ],
+            ],
+        ],
+        'BootstrapSwitch' => [
+            'active' => true, // Activa el plugin
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'onColor' => 'warning',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css',
                 ],
             ],
         ],
