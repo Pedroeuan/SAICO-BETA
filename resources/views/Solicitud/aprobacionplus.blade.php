@@ -242,7 +242,7 @@
                                     </div>
                                 </div>
                             @endif
-        <button type="submit" class="btn btn-success">Crear manifiesto</button>
+        <button type="submit" class="btn btn-success" id="btnFinalizaraprobacion">Crear manifiesto</button>
     </form>
 <br>
 @stop
@@ -293,7 +293,25 @@
                 }
 });
 
-    function consultarCantidadAlmacen(id, callback) {
+$(document).ready(function() {
+    $('#btnFinalizaraprobacion').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#tablaAgregados tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
+});
+
+function consultarCantidadAlmacen(id, callback) {
     $.ajax({
         url: '/Obtener/CantidadAlmacen/' + id,
         method: 'GET',
@@ -314,7 +332,7 @@ $(document).ready(function() {
         var nombre = row.find('td:eq(0)').text();
         var numEconomico = row.find('td:eq(1)').text();
         var marca = row.find('td:eq(2)').text();
-        var ultimaCalibracion = row.find('td:eq(6)').text();
+        var ultimaCalibracion = row.find('td:eq(7)').text();
 
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
             Swal.fire({
@@ -345,7 +363,7 @@ $(document).ready(function() {
             if (Cantidad === 1) {
                 cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" min="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -365,6 +383,20 @@ $(document).ready(function() {
 
             $('#tablaAgregados tbody').append(newRow);
 
+            // Validar la cantidad al cambiar su valor
+            $('input[name="cantidad[]"]').last().on('input', function() {
+                var inputValue = parseInt($(this).val());
+                if (inputValue > Cantidad) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad excedida',
+                        text: `La cantidad máxima permitida es ${Cantidad}.`,
+                        confirmButtonText: 'Entendido'
+                    });
+                    $(this).val(Cantidad);
+                }
+            });
+
             // Mostrar mensaje de confirmación
             Swal.fire({
                 icon: 'success',
@@ -380,6 +412,7 @@ $(document).ready(function() {
         $(this).closest('tr').remove();
     });
 });
+
 
 
 </script>

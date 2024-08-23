@@ -225,6 +225,12 @@ class SolicitudesController extends Controller
         //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
         $clientes = clientes::all();
 
+    
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+            $detalle->stockDisponible = $almacen ? $almacen->Stock : 0; // Si no hay stock, se asume 0
+        }
+
         if ($Solicitud->Estatus == 'PENDIENTE') {
             /*if (!$Manifiestos) {
                 return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));

@@ -47,7 +47,15 @@ class ManifiestoController extends Controller
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
-        //dd($Manifiestos);
+
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+              // Obtener el stock actual del almacén
+                $stockActual = $almacen ? $almacen->Stock : 0;
+
+                // Sumar el stock actual con la cantidad ya solicitada en `DetallesSolicitud`
+                $detalle->stockDisponible = $stockActual + $detalle->Cantidad;
+        }
 
         return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
     }
@@ -104,6 +112,10 @@ class ManifiestoController extends Controller
         foreach ($DetallesSolicitud as $detalle) {
             $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
             $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
+
+            /*Log::info('***********************');
+            Log::info('cantidad: ', ['cantidad' => $cantidad]);
+            Log::info('unidad: ', ['unidad' => $unidad]);*/
             
             if ($cantidad !== null && $unidad !== null) {
                 $detalle->update([
@@ -269,10 +281,8 @@ class ManifiestoController extends Controller
             $Solicitud ->update([
                 'Fecha' => $Fecha_Form,
             ]);
-
         }
         
-
         //$Solicitud = Solicitudes::findOrFail($id);
         //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
@@ -432,7 +442,7 @@ class ManifiestoController extends Controller
             
                         // Actualizar el estado en general_eyc a "NO DISPONIBLE"
                         $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
-                        $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+                        $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first(); 
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
                         $Verificar = $AlmacenStock-$AlmacenDescuento;
@@ -456,9 +466,10 @@ class ManifiestoController extends Controller
                             ]);
                         }
                     }
-                    else /*Si ya existe un $historialAlmacenExistente  */
+                    else /*Si ya existe un $historialAlmacenExistente */
                         {
-                            //$Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+                            $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first(); 
+
                             $Destino_Form = $request->input('Destino');
                             $Destino_BD = $historialAlmacenExistente->Tierra_Costafuera;
 
@@ -471,24 +482,18 @@ class ManifiestoController extends Controller
                             $Folio_Form = $request->input('Folio');
                             $Folio_DB = $historialAlmacenExistente->Folio;
 
-                            /*if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar || $Destino_Form != $Destino_BD || $Tipo != $Tipo_DB || $Folio_Form != $Folio_DB || $Fecha != $Fecha_BD)
-                            {
-                                $historialAlmacenExistente ->update([
-                                    'Cantidad' => $Cantidad_Detalle_Solicitud,
-                                    'Tierra_Costafuera' => $Destino_Form,
-                                    'Tipo' => $Renta_Salida,
-                                    'Folio' => $Folio_Form,
-                                    'Fecha' => $Fecha,
-                                ]);
-
-                                $Solicitud ->update([
-                                    'Fecha' => $Fecha,
-                                ]);
-
-                            }*/
-
+                            $CantidadAnterior = $historialAlmacenExistente->Cantidad;
+                            $CantidadAlmacen = $Almacen->Stock;
+                            $CantidadNueva = $detalle->Cantidad;
+                            $StockAnterior = $CantidadAnterior + $CantidadAlmacen;
+                            $StockAlmacenActualizar = $StockAnterior - $CantidadNueva;
+                            
                             if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar)
                                 {
+                                    $Almacen ->update([
+                                        'Stock' => $StockAlmacenActualizar,
+                                    ]);
+
                                     $historialAlmacenExistente ->update([
                                         'Cantidad' => $Cantidad_Detalle_Solicitud,
                                     ]);
@@ -524,42 +529,9 @@ class ManifiestoController extends Controller
                                         'Fecha' => $Fecha,
                                     ]);
                                 }
-                            // Obtener el registro correspondiente en la tabla 'almacen'
-                            //$Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
 
-                            // Verificar si se encontró el registro en 'almacen'
-                            /* if ($Almacen) 
-                            {
-                                $AlmacenStock = $Almacen->Stock;
-                                $AlmacenDescuento = $detalle->Cantidad;
-                                $Verificar = $AlmacenStock - $AlmacenDescuento;
+                    /*Descuento de almacen */
 
-                                // Actualizar el stock y el estado de disponibilidad
-                                if ($Verificar <= 0) 
-                                {
-                                    // Si el stock resultante es cero o menos, actualizar el estado a "NO DISPONIBLE"
-                                    $Almacen->update([
-                                        'Stock' => 0, // Puede ser 0 en lugar de un número negativo
-                                    ]);
-
-                                    // Obtener el registro correspondiente en la tabla 'general_eyc'
-                                    $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
-
-                                    // Verificar si se encontró el registro en 'general_eyc'
-                                    if ($generalEyC) {
-                                        $generalEyC->update([
-                                            'Disponibilidad_Estado' => 'NO DISPONIBLE',
-                                        ]);
-                                    }
-                                } 
-                                else 
-                                {
-                                    // Si el stock resultante es mayor a cero, simplemente actualizar el stock
-                                    $Almacen->update([
-                                        'Stock' => $Verificar,
-                                    ]);
-                                }
-                            } */
                         }  
             }
 
