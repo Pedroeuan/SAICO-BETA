@@ -24,7 +24,8 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Prueba</th>
-                        <th>Acciones</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,10 @@
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('edicion.editKits', ['id' => $kits->idKits]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
                                         <button type="button" class="btn btn-danger btnEliminarEquipo" idDetallesKits="{{$kits->idKits}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                 </td>

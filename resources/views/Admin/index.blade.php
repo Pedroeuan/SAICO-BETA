@@ -26,7 +26,8 @@
                         <th>Usuario</th>
                         <th>Perfil</th>
                         <th>Fecha alta</th>
-                        <th>Acciones</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,10 @@
                     <td>
                         <div class="btn-group">
                             <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group">
                             <button type="button" class="btn btn-danger btnEliminarEquipo"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </td>

@@ -26,7 +26,10 @@
                         <th>Folio</th>
                         <th>Fecha de servicio</th>
                         <th>Estatus</th>
-                        <th>Acciones</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                        <th>Ver PDF</th>
+                        <th>Complementar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,24 +40,25 @@
                         <td scope="row">{{$solicitud->Fecha}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         <td>
-                            
                             @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
                             <div class="btn-group">
-                                    <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                    <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                            </div>
+                            @else
+                            <div class="btn-group">
+                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                @if(!$solicitud->hidePlus)
+                                    <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                @endif 
                                 </div>
-                                @else
-                                <div class="btn-group">
-                                    <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                        <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                    <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                    @if(!$solicitud->hidePlus)
-                                        <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
-                                    @endif 
-                                </div>
-                            @endif
-                            
+                            @endif 
                         </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     @endforeach
                 </tbody>
