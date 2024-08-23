@@ -47,7 +47,15 @@ class ManifiestoController extends Controller
         $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
-        //dd($Manifiestos);
+
+        foreach ($DetallesSolicitud as $detalle) {
+            $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+              // Obtener el stock actual del almacén
+                $stockActual = $almacen ? $almacen->Stock : 0;
+
+                // Sumar el stock actual con la cantidad ya solicitada en `DetallesSolicitud`
+                $detalle->stockDisponible = $stockActual + $detalle->Cantidad;
+        }
 
         return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
     }
