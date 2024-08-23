@@ -927,14 +927,14 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                                    <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
+                                                    <input type="text" class="form-control inputForm" name="Nombre" placeholder="Ejemplo: Kit de Liquidos" required>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Prueba</label>
-                                                    <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos">
+                                                    <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos" required>
                                                 </div>
                                             </div>
 
@@ -1029,7 +1029,7 @@
 
                                 <div class="container">
                                         <div class="float-right">
-                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                            <button type="submit" id="btnFinalizarkit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
 
                                         <div class="float-left">
@@ -1190,7 +1190,7 @@ function actualizarTabla() {
     });
 }
 
-
+/*
 function attachAddListeners() {
     // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
     $('#tablaJs').on('click', '.btnAgregar', function() {
@@ -1198,16 +1198,16 @@ function attachAddListeners() {
         // Aquí podrías añadir la funcionalidad para agregar el ítem seleccionado
         // console.log('Botón Agregar clicado para id:', id);
     });
-}
-
+}*/
+/*
 $(document).ready(function() {
     // Llamar a la función de actualización cuando se hace clic en el botón
     $('#actualizarTablaBtn').on('click', function() {
         actualizarTabla();
     });
-});
+});*/
 
-
+/*
 function attachAddListeners() {
     // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
     $('#tablaJs').on('click', '.btnAgregar', function() {
@@ -1215,8 +1215,8 @@ function attachAddListeners() {
         // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
         console.log('Botón Agregar clicado para id:', id);
     });
-}
-
+}*/
+/*
 $(document).ready(function() {
     // Elimina la actualización automática si prefieres solo manual
     // setInterval(actualizarTabla, 60000);
@@ -1228,29 +1228,16 @@ $(document).ready(function() {
     $('#actualizarTablaBtn').on('click', function() {
         actualizarTabla();
     });
-});
+});*/
 
-        function attachAddListeners() {
+        /* function attachAddListeners() {
             // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
             $('#tablaJs').on('click', '.btnAgregar', function() {
                 var id = $(this).data('id');
                 // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
                 //console.log('Botón Agregar clicado para id:', id);
             });
-        }
-
-        $(document).ready(function() {
-            // Actualizar la tabla cada 10 segundos (10000 milisegundos)
-            //setInterval(actualizarTabla, 60000);
-
-            // Llamar a la función una vez al cargar la página
-            actualizarTabla();
-
-            // Añade el evento de clic al botón para actualizar manualmente la tabla
-            $('#actualizarTablaBtn').on('click', function() {
-                actualizarTabla();
-            });
-        });
+        }*/
 
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
@@ -1294,6 +1281,37 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
+    $(document).ready(function() {
+    $('#btnFinalizarkit').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#tablaSeleccionados tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
+});
+
+    $(document).ready(function() {
+            // Actualizar la tabla cada 10 segundos (10000 milisegundos)
+            //setInterval(actualizarTabla, 60000);
+
+            // Llamar a la función una vez al cargar la página
+            actualizarTabla();
+
+            // Añade el evento de clic al botón para actualizar manualmente la tabla
+            $('#actualizarTablaBtn').on('click', function() {
+                actualizarTabla();
+            });
+        });
+
     
 function consultarCantidadAlmacen(id, callback) {
     $.ajax({
@@ -1309,12 +1327,12 @@ function consultarCantidadAlmacen(id, callback) {
 }
 
 
-    $(document).on('click', '.btnAgregar', function() {
+$(document).on('click', '.btnAgregar', function() {
     let row = $(this).closest('tr');
     let id = $(this).data('id');
 
-       // Verificar si el elemento ya está en la tabla de seleccionados
-        if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
+    // Verificar si el elemento ya está en la tabla de seleccionados
+    if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
         Swal.fire({
             icon: 'warning',
             title: 'Elemento Duplicado',
@@ -1334,14 +1352,14 @@ function consultarCantidadAlmacen(id, callback) {
         // Clonar la fila y agregar campos de cantidad y unidad
         let cantidadInput = (cantidad === 1) ?
             `<input type="number" class="form-control cantidad" name="cantidad_${id}" value="1" readonly>` :
-            `<input type="number" class="form-control cantidad" name="cantidad_${id}" value="1" required>`;
+            `<input type="number" class="form-control cantidad" name="cantidad_${id}" value="1" min="1" max="${cantidad}" required>`;
 
         let newRow = `
             <tr data-id="${id}">
                 <td>${row.find('td').eq(0).text()}</td>
                 <td>${row.find('td').eq(1).text()}</td>
                 <td>${row.find('td').eq(2).text()}</td>
-                <td>${row.find('td').eq(6).text()}</td>
+                <td>${row.find('td').eq(7).text()}</td>
                 <td>${cantidadInput}</td>
                 <td><input type="text" class="form-control unidad" name="unidad_${id}" value="EN ESPERA DE DATOS" required></td>
                 <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
@@ -1353,8 +1371,29 @@ function consultarCantidadAlmacen(id, callback) {
 
         // Re-attach the delete listeners to the new button
         attachDeleteListeners();
+
+        // Validar la cantidad ingresada para que no exceda el máximo permitido
+        $(`input[name="cantidad_${id}"]`).on('input', function() {
+            let inputVal = parseInt($(this).val());
+            if (inputVal > cantidad) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cantidad excedida',
+                    text: `La cantidad máxima permitida es ${cantidad}.`,
+                    confirmButtonText: 'Entendido'
+                });
+                $(this).val(cantidad);
+            }
+        });
     });
 });
+
+function attachDeleteListeners() {
+    // Tu código para manejar la eliminación de filas
+    $('.btnEliminar').on('click', function() {
+        $(this).closest('tr').remove();
+    });
+}
 
 
     function attachDeleteListeners() {
