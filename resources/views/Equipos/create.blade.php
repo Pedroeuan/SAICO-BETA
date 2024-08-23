@@ -7,9 +7,9 @@
 <br>
 <br>
 <br>
-<h3 align="center"> Formulario de Alta de datos</h3>
-
-
+<br>
+<h3 align="center"> Formulario para el alta de datos</h3>
+<br>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
@@ -937,16 +937,23 @@
                                                     <input type="text" class="form-control inputForm" name="Prueba" placeholder="Ejemplo: Liquidos" required>
                                                 </div>
                                             </div>
-
                                         </div>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <button id="actualizarTablaBtn" class="btn btn-primary btn-lg shadow rounded-pill px-4" type="button">
-                                        <i class="fas fa-sync-alt"></i> Actualizar Tabla
-                                    </button>
+                                    </div>  
                                 </div>
                                 <br>
-                                <h5 align="center">Elige los equipos y consumibles para armar el KIT</h5>
+                                <div class="alert alert-info alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                    <p>Con el botón agregar, elige los equipos y consumibles para armar el KIT</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <button id="actualizarTablaBtn" type="button" class="btn btn-warning">
+                                            <i class="fas fa-sync-alt"></i>
+                                            <span>Actualizar tabla</span>
+                                        </button>
+                                    </div>
+                                </div>
                                     <!-- Tabla de Elementos Disponibles -->
                                 <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
@@ -959,8 +966,8 @@
                                                 <th>Stock</th>
                                                 <th>Disponibilidad</th>
                                                 <th>Fecha calibración</th>
-                                                <th>Hoja de Presentación</th>
-                                                <th>Elegir item</th>
+                                                <th>Ver Presentación</th>
+                                                <th>Agregar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1008,7 +1015,12 @@
                                             @endforeach
                                         </tbody>
                                 </table>
-                                <h5 align="center">Nuevo KIT</h5>
+                                <br>
+                                <div class="alert alert-info alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                    <p>Estos son los elemtos que has agregado al nuevo KIT</p>
+                                </div>
                                 <br>
                                 <!-- Tabla de Elementos Seleccionados -->
                                 <table id="tablaSeleccionados" class="table table-bordered table-striped dt-responsive tablas">
@@ -1020,7 +1032,7 @@
                                                 <th>Ultima calibración</th>
                                                 <th>Cantidad</th>
                                                 <th>Unidad</th>
-                                                <th>Acciones</th>
+                                                <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
