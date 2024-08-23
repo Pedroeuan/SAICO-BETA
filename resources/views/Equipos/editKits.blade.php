@@ -31,14 +31,14 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                                    <input type="text" class="form-control inputForm" value="{{ $Kit->Nombre }}" name="Nombre" placeholder="Ejemplo: Kit de Liquidos">
+                                                    <input type="text" class="form-control inputForm" value="{{ $Kit->Nombre }}" name="Nombre" placeholder="Ejemplo: Kit de Liquidos" required>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Prueba</label>
-                                                    <input type="text" class="form-control inputForm" value="{{ $Kit->Prueba }}" name="Prueba" placeholder="Ejemplo: Liquidos">
+                                                    <input type="text" class="form-control inputForm" value="{{ $Kit->Prueba }}" name="Prueba" placeholder="Ejemplo: Liquidos" required>
                                                 </div>
                                             </div>
 
@@ -198,7 +198,7 @@
                                     </table>
                                     </div>
                                         <br>
-                                        <button type="submit" class="btn btn-info bg-primary">Guardar</button>
+                                        <button type="submit" class="btn btn-info bg-primary" id="btnFinalizarkit">Guardar</button>
                                     </div>
                                 </form>
                             </div><!--"class="tab-pane active" id="tab_1"-->
@@ -263,7 +263,7 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
- /*   $(document).ready(function() {
+    /*   $(document).ready(function() {
     // Función para consultar la cantidad en almacén
     function consultarCantidadAlmacen(id, callback) {
         $.ajax({
@@ -453,6 +453,24 @@ function verificarExistenciaEnTabla(idFila) {
     });
 });
 });*/
+
+$(document).ready(function() {
+    $('#btnFinalizarkit').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#TablaKits tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
+    });
+});
 
 
 $(document).ready(function() {

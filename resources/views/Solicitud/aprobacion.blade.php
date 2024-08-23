@@ -99,79 +99,78 @@
         </div>
     <br>
     <div class="card-body">
-        <table id="TablaSolicitud" class="table table-bordered" >
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>No.ECO</th>
-                    <th>Marca</th>
-                    <th>Ultima calibración</th>
-                    <th>Cantidad</th>
-                    <th>Unidad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($DetallesSolicitud as $detalle)
-                    @php
-                        $general = $generalEyC;
-                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                        $fechaCalibracion = $general->Certificados->Fecha_calibracion;
-                    @endphp
-                    <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
-                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                        @if($general->Certificados)
-                                    @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
-                                            @if($general->Certificados->Fecha_calibracion=='2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
-                                                @else
-                                                    <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
-                                            @endif
-                                        @else
-                                            <td scope="row">N/A</td>
-                                    @endif
+        <table id="TablaSolicitud" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>No.ECO</th>
+                <th>Marca</th>
+                <th>Ultima calibración</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($DetallesSolicitud as $detalle)
+                @php
+                    $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                    $fechaCalibracion = $general->Certificados->Fecha_calibracion;
+                    $stockDisponible = $detalle->stockDisponible; // Ahora tienes el stock aquí
+                @endphp
+                <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
+                    <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                    <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                    <td>{{ $general->Marca ?? 'N/A' }}</td>
+                    @if($general->Certificados)
+                        @if($general->Tipo=='EQUIPOS' || $general->Tipo=='BLOCK Y PROBETA')
+                            @if($general->Certificados->Fecha_calibracion=='2001-01-01')
+                                <td scope="row">SIN FECHA ASIGNADA</td>
+                            @else
+                                <td scope="row">{{$general->Certificados->Fecha_calibracion}}</td>
                             @endif
-
-                        @if($general->Tipo == 'CONSUMIBLES')
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}">
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
-
                         @else
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
+                            <td scope="row">N/A</td>
                         @endif
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endif
+
+                    @if($general->Tipo == 'CONSUMIBLES')
+                        <td scope="row">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" required>
+                            </div>
+                        </td>
+                        <td scope="row">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    @else
+                        <td scope="row">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
+                            </div>
+                        </td>
+                        <td scope="row">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    @endif
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
     </div>
 <br>
 
@@ -290,6 +289,7 @@
                 }
 });
 
+
 $(document).ready(function() {
     $('#btnFinalizaraprobacion').click(function(event) {
         // Verificar si hay filas en la tabla
@@ -308,14 +308,90 @@ $(document).ready(function() {
     });
 });
 
+function consultarCantidadAlmacen(id, callback) {
+    $.ajax({
+        url: '/Obtener/CantidadAlmacen/' + id,
+        method: 'GET',
+        success: function(data) {
+            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+        },
+        error: function(error) {
+            callback(error);
+        }
+    });
+}
+$(document).ready(function() {
+    // Validar la cantidad ingresada en los inputs de cantidad
+    $('#TablaSolicitud').on('input', '.input-cantidad', function() {
+        let maxCantidad = $(this).data('stock'); // Obtener el stock máximo desde data-stock
+        let cantidadIngresada = $(this).val();
+
+        if (cantidadIngresada > maxCantidad) {
+            $(this).val(maxCantidad); // Limitar al máximo permitido
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cantidad excedida',
+                text: `La cantidad máxima permitida es ${maxCantidad}.`,
+                confirmButtonText: 'Entendido'
+            });
+        }
+    });
+    
+    
+    // Delegación de eventos para el botón "Eliminar"
+    $('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
+        var idDetalles_Solicitud = $(this).data('id');
+        var token = $('meta[name="csrf-token"]').attr('content');
+
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Solicitud).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: "Elemento Eliminado Correctamente!",
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorMessage,
+                        });
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
+        });
+    });
+});
+
 $(document).ready(function() {
     // Delegación de eventos para el botón "Agregar"
     $('#tablaJs').on('click', '.btnAgregar', function() {
-        // Deshabilitar el botón para evitar múltiples clics
         $(this).prop('disabled', true);
 
         let idFila = $(this).data('id');
         let idSolicitud = $(this).data('id-solicitud');
+        let row = $('#row-' + idFila);
+        let nombre = row.find('td:nth-child(1)').text(); // Obtener el nombre del elemento
 
         fetch('/solicitudes/agregar', {
             method: 'POST',
@@ -338,25 +414,18 @@ $(document).ready(function() {
                     timer: 2000
                 });
 
-                // Eliminar la fila de la primera tabla
-                let row = $('#row-' + idFila);
-                let nombre = row.find('td:nth-child(1)').text();
-                let noEco = row.find('td:nth-child(2)').text();
-                let marca = row.find('td:nth-child(3)').text();
-                let ultimaCalibracion = row.find('td:nth-child(7)').text();
-
                 row.remove();
 
                 // Crear una nueva fila en la segunda tabla
                 let newRow = `
                     <tr id="row-${data.idDetalles_Solicitud}">
                         <td>${nombre}</td>
-                        <td>${noEco}</td>
-                        <td>${marca}</td>
-                        <td>${ultimaCalibracion}</td>
+                        <td>${row.find('td:nth-child(2)').text()}</td>
+                        <td>${row.find('td:nth-child(3)').text()}</td>
+                        <td>${row.find('td:nth-child(7)').text()}</td>
                         <td>
                             <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[${data.idDetalles_Solicitud}]" value="1" ${data.stock === 1 ? 'readonly' : ''}>
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[${data.idDetalles_Solicitud}]" value="1" min="1" max="${data.stock}" data-stock="${data.stock}" ${data.stock === 1 ? 'readonly' : ''}>
                             </div>
                         </td>
                         <td>
@@ -380,7 +449,7 @@ $(document).ready(function() {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Elemento duplicado',
-                    text: data.message,
+                    text: `El elemento "${nombre}" ya está agregado.`,
                     confirmButtonText: 'Entendido'
                 });
             }
@@ -394,11 +463,10 @@ $(document).ready(function() {
             });
         })
         .finally(() => {
-            // Habilitar el botón nuevamente
             $(this).prop('disabled', false);
         });
     });
-
+    
     // Delegación de eventos para el botón "Eliminar"
     $('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
         var idDetalles_Solicitud = $(this).data('id');
