@@ -566,48 +566,51 @@ $(document).ready(function() {
 
     // Delegación de eventos para el botón "Eliminar"
     $('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
-        var idDetalles_Kits = $(this).data('id');
-        var token = $('meta[name="csrf-token"]').attr('content');
+    var idDetalles_Kits = $(this).data('id');
+    var token = $('meta[name="csrf-token"]').attr('content');
+    var row = $(this).closest('tr');
+    var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
 
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Kits).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: "Elemento Eliminado Correctamente!",
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+        icon: "warning",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+                type: 'DELETE',
+                data: {
+                    "_token": token,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#row-' + idDetalles_Kits).remove();
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
+                            icon: 'success',
+                            title: 'Confirmado!',
+                            text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
                         });
                     }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+                },
+                error: function(xhr) {
+                    var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage,
+                    });
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "info");
+        }
     });
+});
+
 });
 
 

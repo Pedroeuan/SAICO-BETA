@@ -1342,13 +1342,14 @@ function consultarCantidadAlmacen(id, callback) {
 $(document).on('click', '.btnAgregar', function() {
     let row = $(this).closest('tr');
     let id = $(this).data('id');
+    let nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera columna
 
     // Verificar si el elemento ya está en la tabla de seleccionados
     if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
         Swal.fire({
             icon: 'warning',
             title: 'Elemento Duplicado',
-            text: 'Este elemento ya ha sido agregado.',
+            text: `El elemento "${nombreElemento}" ya ha sido agregado.`,
             confirmButtonText: 'Entendido'
         });
         return; // Si ya está, no hacemos nada
@@ -1397,24 +1398,63 @@ $(document).on('click', '.btnAgregar', function() {
                 $(this).val(cantidad);
             }
         });
+
+        // Mostrar una alerta de éxito
+        Swal.fire({
+            icon: 'success',
+            title: 'Elemento Agregado',
+            text: `El elemento "${nombreElemento}" ha sido agregado exitosamente.`,
+            showConfirmButton: false,
+            timer: 2000
+        });
     });
 });
 
+
+/*
 function attachDeleteListeners() {
     // Tu código para manejar la eliminación de filas
     $('.btnEliminar').on('click', function() {
         $(this).closest('tr').remove();
     });
-}
+}*/
 
 
-    function attachDeleteListeners() {
-        document.querySelectorAll('.btnEliminar').forEach(function(button) {
-            button.addEventListener('click', function() {
-                this.closest('tr').remove();
+function attachDeleteListeners() {
+    document.querySelectorAll('.btnEliminar').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let row = this.closest('tr');
+            let nombreElemento = row.querySelector('td').textContent; // Asume que el nombre del elemento está en la primera celda (primer <td>)
+
+            // Mostrar una alerta de confirmación antes de eliminar
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Eliminar la fila de la tabla
+                    row.remove();
+
+                    // Mostrar una alerta de éxito después de eliminar
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Elemento Eliminado',
+                        text: `El elemento "${nombreElemento}" ha sido eliminado exitosamente.`,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
             });
         });
-    }
+    });
+}
+
     
 
 // Manejar el envío del formulario

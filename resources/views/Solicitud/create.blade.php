@@ -376,17 +376,44 @@ $(document).ready(function() {
             // Mostrar mensaje de confirmación
             Swal.fire({
                 icon: 'success',
-                title: 'Elemento agregado',
-                text: 'El elemento ha sido agregado correctamente.',
+                title: 'Elemento "${nombreElemento}" agregado',
+                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
                 confirmButtonText: 'OK'
             });
         });
     });
 
     // Eliminar elemento
-    $(document).on('click', '.btnQuitarElemento', function() {
-        $(this).closest('tr').remove();
+// Eliminar elemento con confirmación
+$(document).on('click', '.btnQuitarElemento', function() {
+    let row = $(this).closest('tr');
+    let nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
+
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            row.remove();
+            Swal.fire({
+                icon: 'success',
+                title: 'Elemento Eliminado',
+                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cancelado',
+                text: 'El elemento no ha sido eliminado.',
+            });
+        }
     });
+});
+
 });
 
 
