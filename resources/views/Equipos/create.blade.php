@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Registro E y C')
 
 @section('content')
 <br>

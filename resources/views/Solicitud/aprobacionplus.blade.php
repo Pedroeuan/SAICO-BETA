@@ -338,7 +338,7 @@ $(document).ready(function() {
             Swal.fire({
                 icon: 'warning',
                 title: 'Elemento duplicado',
-                text: 'El elemento ya está agregado.',
+                text: `El elemento "${nombre}" ya está agregado.`,
                 confirmButtonText: 'Entendido'
             });
             return;
@@ -401,17 +401,40 @@ $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Elemento agregado',
-                text: 'El elemento ha sido agregado correctamente.',
+                text: `El elemento "${nombre}" ha sido agregado correctamente.`,
                 confirmButtonText: 'OK'
             });
         });
     });
 
-    // Delegación de eventos para el botón "Quitar"
+    // Delegación de eventos para el botón "Quitar" con confirmación
     $('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
-        $(this).closest('tr').remove();
+        var row = $(this).closest('tr');
+        var nombre = row.find('td:eq(0)').text();
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+                text: `¿Deseas eliminar el elemento "${nombre}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                row.remove();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Elemento eliminado',
+                    text: `El elemento "${nombre}" ha sido eliminado.`,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
     });
 });
+
 
 
 

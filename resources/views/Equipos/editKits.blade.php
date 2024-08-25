@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Editar Kits')
 
 @section('content')
     <br>
@@ -482,6 +482,10 @@ $(document).ready(function() {
         let idFila = $(this).data('id');
         let idKits = $(this).data('id-kits');
 
+        // Extraer el nombre del elemento antes de realizar la solicitud
+        let row = $('#row-' + idFila);
+        let nombre = row.find('td:nth-child(1)').text();
+
         fetch('/kits/agregar', {
             method: 'POST',
             headers: {
@@ -498,14 +502,12 @@ $(document).ready(function() {
             if (data.status === 'success') {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Elemento Agregado Exitosamente.',
+                    title: `Elemento "${nombre}" agregado exitosamente.`,
                     showConfirmButton: false,
                     timer: 2000
                 });
 
                 // Eliminar la fila de la primera tabla
-                let row = $('#row-' + idFila);
-                let nombre = row.find('td:nth-child(1)').text();
                 let noEco = row.find('td:nth-child(2)').text();
                 let marca = row.find('td:nth-child(3)').text();
                 let ultimaCalibracion = row.find('td:nth-child(8)').text();
@@ -521,7 +523,7 @@ $(document).ready(function() {
                         <td>${ultimaCalibracion}</td>
                         <td>
                             <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[${data.idDetalles_Kits}]" value="1" ${data.stock === 1 ? 'readonly' : ''}>
+                                <input type="number" class="form-control cantidadInput" name="Cantidad[${data.idDetalles_Kits}]" value="1" min="1" max="${data.stock}" ${data.stock === 1 ? 'readonly' : ''}>
                             </div>
                         </td>
                         <td>
@@ -541,11 +543,26 @@ $(document).ready(function() {
                 setTimeout(() => {
                     $('#row-' + data.idDetalles_Kits).removeClass('table-success');
                 }, 1500);
+
+                // Evitar que la cantidad exceda el stock máximo
+                $('#row-' + data.idDetalles_Kits).find('.cantidadInput').on('input', function() {
+                    let maxStock = $(this).attr('max');
+                    if (parseInt($(this).val()) > parseInt(maxStock)) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cantidad excedida',
+                            text: `La cantidad no puede exceder el stock disponible (${maxStock}).`,
+                            confirmButtonText: 'Entendido'
+                        });
+                        $(this).val(maxStock);
+                    }
+                });
+
             } else {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Elemento duplicado',
-                    text: data.message,
+                    text: `El elemento "${nombre}" ya está duplicado.`,
                     confirmButtonText: 'Entendido'
                 });
             }
@@ -566,52 +583,53 @@ $(document).ready(function() {
 
     // Delegación de eventos para el botón "Eliminar"
     $('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
-    var idDetalles_Kits = $(this).data('id');
-    var token = $('meta[name="csrf-token"]').attr('content');
-    var row = $(this).closest('tr');
-    var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
+        var idDetalles_Kits = $(this).data('id');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var row = $(this).closest('tr');
+        var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
 
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-        icon: "warning",
-        showDenyButton: true,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#row-' + idDetalles_Kits).remove();
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+            icon: "warning",
+            showDenyButton: true,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#row-' + idDetalles_Kits).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Confirmado!',
+                                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Confirmado!',
-                            text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: errorMessage,
                         });
                     }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessage,
-                    });
-                }
-            });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "info");
-        }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "info");
+            }
+        });
     });
-});
 
 });
+
 
 
 </script>
