@@ -117,7 +117,7 @@ class KitsController extends Controller
             $stockActual = $almacen ? $almacen->Stock : 0;
 
             // Sumar el stock actual con la cantidad ya solicitada en `DetallesSolicitud`
-            $detalle->stockDisponible = $stockActual + $detalle->Cantidad;
+            $detalle->stockDisponible = $stockActual;
     }
     
     return view("Equipos.editKits", compact('id', 'Kit', 'DetallesKits', 'generalEyC','general','generalConCertificados'));

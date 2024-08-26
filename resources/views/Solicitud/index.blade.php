@@ -39,26 +39,54 @@
                         <td scope="row">{{$solicitud->folio}}</td> <!-- Mostrar el Folio o "No Asignado" -->
                         <td scope="row">{{$solicitud->Fecha}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
-                        <td>
+                        
                             @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
-                            <div class="btn-group">
-                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                            </div>
+                                <div class="btn-group">
+                                    <td>
+                                        <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </td>
+
+                                    <td>
+                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                            <i class="far fa-file-pdf"></i>
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                            <i class="fas fa-plus-square"></i>
+                                        </span>
+                                    </td>
+
+                                </div>
                             @else
-                            <div class="btn-group">
-                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                <a class="btn btn-primary" href="{{ route('Manifiesto.pdf') }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                @if(!$solicitud->hidePlus)
-                                    <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
-                                @endif 
+                                <div class="btn-group">
+                                    <td>
+                                        <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    </td>
+                                    <td>        
+                                        <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                    </td>
+                                    @if(!$solicitud->hidePlus)
+                                    <td>
+                                        <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                    </td>
+                                    @else
+                                    <td>
+                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                            <i class="fas fa-plus-square"></i>
+                                        </span>
+                                    </td>
+                                    @endif 
                                 </div>
                             @endif 
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     @endforeach
                 </tbody>
