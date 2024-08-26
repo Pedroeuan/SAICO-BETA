@@ -123,7 +123,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">En renta</label> <br>
-                                            <input type="checkbox"  name="Renta" checked>                                          
+                                            <input type="checkbox"  name="Renta">                                          
                                         </div>
                                     </div>
                                     
