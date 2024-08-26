@@ -499,7 +499,7 @@ $(document).ready(function() {
                     }
                 });
             } else if (result.isDenied) {
-                Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "info");
+                Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "error");
             }
         });
     });
