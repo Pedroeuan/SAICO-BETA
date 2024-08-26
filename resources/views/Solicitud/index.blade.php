@@ -72,7 +72,7 @@
                                         <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                                     </td>
                                     <td>
-                                        <a class="btn btn-primary" href="" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        <a class="btn btn-primary" href="{{ route('Manifiesto.pdf') }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                     </td>
                                     @if(!$solicitud->hidePlus)
                                     <td>
