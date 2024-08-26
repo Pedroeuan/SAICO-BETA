@@ -16,10 +16,10 @@ use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
-use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
+use App\Http\Controllers\Manifiesto\ManifiestoController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -160,7 +160,7 @@ use App\Http\Controllers\Clientes\ClientesController;
 
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
-    Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
+    /*Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 
     /*admin */
     /*Ruta para alta de usuarios*/
@@ -181,6 +181,11 @@ use App\Http\Controllers\Clientes\ClientesController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+
+    /*manifiestos*/
+    /*Ruta para ver el manifiesto PDF*/
+    Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
+
 
 });
 
