@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
-        <div id="tab-warning" class="alert alert-warning text-center" style="display: none;">
+            <div id="tab-warning" class="alert alert-warning text-center" style="display: none;">
                 Por favor, seleccione una pestaña.
             </div>
             <div class="card">
@@ -35,7 +35,7 @@
                             <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-                                <div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
                                             <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
