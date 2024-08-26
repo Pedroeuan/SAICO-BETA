@@ -137,6 +137,7 @@
                                                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                                                     $fechaCalibracion = $general->Certificados->Fecha_calibracion;
                                                     $stockDisponible = $detalle->stockDisponible; // Ahora tienes el stock aquí
+                                                    //dump($stockDisponible);
                                                 @endphp
                                                 <tr id="row-{{ $detalle->idDetalles_Kits }}">
                                                     <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -153,10 +154,10 @@
                                                                     <td scope="row">N/A</td>
                                                             @endif
                                                     @endif
-                                                    @if($general->Tipo == 'CONSUMIBLES')
+                                                    @if($general->Tipo == 'CONSUMIBLES') 
                                                         <td scope="row">
                                                             <div class="input-group">
-                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'ESPERA DE DATO' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" required>
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" required>
                                                             </div>
                                                         </td>
 
@@ -282,6 +283,47 @@ $(document).ready(function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionar todos los inputs de cantidad
+    const cantidadInputs = document.querySelectorAll('input[name^="Cantidad"]');
+
+    cantidadInputs.forEach(input => {
+        // Agregar un evento input para validar la cantidad ingresada
+        input.addEventListener('input', function() {
+            const maxStock = parseInt(this.getAttribute('max'), 10);
+            let valorIngresado = parseInt(this.value, 10);
+
+            // Si el valor ingresado es mayor que el stock disponible
+            if (valorIngresado > maxStock) {
+                // Mostrar un mensaje de advertencia
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cantidad excedida',
+                    text: `La cantidad no puede exceder el stock disponible (${maxStock}).`,
+                    confirmButtonText: 'Entendido'
+                }).then(() => {
+                    // Ajustar el valor al máximo permitido después de que el usuario cierre la alerta
+                    this.value = maxStock;
+                });
+            }
+
+            // Si el valor es menor que 1, restablecer a 1
+            if (valorIngresado < 1) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cantidad mínima',
+                    text: `La cantidad mínima permitida es 1.`,
+                    confirmButtonText: 'Entendido'
+                }).then(() => {
+                    this.value = 1;
+                });
+            }
+        });
+    });
+});
+
+
+
 $(document).ready(function() {
     // Delegación de eventos para el botón "Agregar"
     $('#tablaJs').on('click', '.btnAgregar', function() {
@@ -375,15 +417,20 @@ $(document).ready(function() {
 
                 // Evitar que la cantidad exceda el stock máximo
                 $('#row-' + data.idDetalles_Kits).find('.cantidadInput').on('input', function() {
-                    let maxStock = $(this).attr('max');
-                    if (parseInt($(this).val()) > parseInt(maxStock)) {
+                    let $input = $(this);
+                    let maxStock = parseInt($input.attr('max'));
+                    let currentValue = parseInt($input.val());
+
+                    if (currentValue > maxStock) {
                         Swal.fire({
                             icon: 'warning',
                             title: 'Cantidad excedida',
                             text: `La cantidad no puede exceder el stock disponible (${maxStock}).`,
                             confirmButtonText: 'Entendido'
+                        }).then(() => {
+                            // Ajustar el valor al máximo permitido después de que el usuario cierre la alerta
+                            $input.val(maxStock).trigger('input'); // Forzar actualización
                         });
-                        $(this).val(maxStock);
                     }
                 });
 
@@ -456,8 +503,8 @@ $(document).ready(function() {
             }
         });
     });
-
 });
+
 
                 
 
