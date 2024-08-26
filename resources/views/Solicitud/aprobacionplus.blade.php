@@ -408,31 +408,40 @@ $(document).ready(function() {
     });
 
     // Delegación de eventos para el botón "Quitar" con confirmación
-    $('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
-        var row = $(this).closest('tr');
-        var nombre = row.find('td:eq(0)').text();
+// Delegación de eventos para el botón "Quitar" con confirmación
+$('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
+    var row = $(this).closest('tr');
+    var nombre = row.find('td:eq(0)').text();
 
-        Swal.fire({
-            title: '¿Estás seguro?',
-                text: `¿Deseas eliminar el elemento "${nombre}"?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                row.remove();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Elemento eliminado',
-                    text: `El elemento "${nombre}" ha sido eliminado.`,
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Deseas eliminar el elemento "${nombre}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            row.remove();
+            Swal.fire({
+                icon: 'success',
+                title: 'Elemento eliminado',
+                text: `El elemento "${nombre}" ha sido eliminado.`,
+                confirmButtonText: 'OK'
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Cancelado',
+                text: `El elemento "${nombre}" no fue eliminado.`,
+                confirmButtonText: 'OK'
+            });
+        }
     });
+});
+
 });
 
 
