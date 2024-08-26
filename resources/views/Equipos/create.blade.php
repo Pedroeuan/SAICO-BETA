@@ -1450,6 +1450,14 @@ function attachDeleteListeners() {
                         showConfirmButton: false,
                         timer: 2000
                     });
+                } else {
+                    // Mostrar una alerta de cancelación si el usuario decide no eliminar
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Cancelado',
+                        text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
+                        confirmButtonText: 'Entendido'
+                    });
                 }
             });
         });
