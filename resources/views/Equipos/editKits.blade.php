@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Editar Kits')
 
 @section('content')
     <br>
@@ -136,6 +136,7 @@
                                                     $general = $generalEyC;
                                                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                                                     $fechaCalibracion = $general->Certificados->Fecha_calibracion;
+                                                    $stockDisponible = $detalle->stockDisponible; // Ahora tienes el stock aquí
                                                 @endphp
                                                 <tr id="row-{{ $detalle->idDetalles_Kits }}">
                                                     <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -155,7 +156,7 @@
                                                     @if($general->Tipo == 'CONSUMIBLES')
                                                         <td scope="row">
                                                             <div class="input-group">
-                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'ESPERA DE DATO' }}" required>
+                                                                <input type="number" class="form-control" name="Cantidad[{{ $detalle->idDetalles_Kits }}]" value="{{ $detalle->Cantidad ?? 'ESPERA DE DATO' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" required>
                                                             </div>
                                                         </td>
 
@@ -263,197 +264,6 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
         }
     });
 
-    /*   $(document).ready(function() {
-    // Función para consultar la cantidad en almacén
-    function consultarCantidadAlmacen(id, callback) {
-        $.ajax({
-            url: '/Obtener/CantidadAlmacen/' + id,
-            method: 'GET',
-            success: function(data) {
-                callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
-            },
-            error: function(error) {
-                callback(error);
-            }
-        });
-    }
-
-    // Delegación de eventos para los botones de eliminación
-    $(document).on('click', '.btnEliminarDetallesKits', function() {
-        var idDetalles_Kits = $(this).data('id');
-        var token = '{{ csrf_token() }}';
-
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Kits).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: "Elemento Eliminado Correctamente!",
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON.error || 'Error occurred while deleting the record.';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
-                        });
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
-    });
-
-        // Función para verificar si un dato ya existe en la segunda tabla
-function verificarExistenciaEnTabla(idFila) {
-    const filas = document.querySelectorAll('#TablaKits tbody tr');
-    return Array.from(filas).some(fila => fila.querySelector('input[name="general_eyc_id[]"]').value === idFila);
-}
-
-// Botón de AGREGAR
-/*document.querySelectorAll('.btnAgregar').forEach(button => {
-    button.addEventListener('click', function() {
-        // Deshabilitar el botón para evitar múltiples clics
-        const btn = this;
-        btn.disabled = true;
-
-        let idFila = btn.getAttribute('data-id');
-        let idKits = btn.getAttribute('data-id-kits');
-
-        // Verificar si el dato ya existe en la segunda tabla
-        if (verificarExistenciaEnTabla(idFila)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Elemento ya agregado',
-                text: 'Este elemento ya está en el kit.',
-            });
-            btn.disabled = false;
-            return;
-        }
-
-        // Consultar la cantidad en almacén
-        consultarCantidadAlmacen(idFila, function(error, cantidadAlmacen) {
-            if (error) {
-                console.error('Error consultando cantidad en almacén:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Hubo un error al consultar la cantidad en almacén.',
-                });
-                btn.disabled = false;
-                return;
-            }
-
-            // Lógica para decidir si el campo de cantidad es editable o no
-            let cantidadEditable = (cantidadAlmacen > 1);
-            let cantidadInput = `<input type="number" class="form-control" name="Cantidad[]" value="${cantidadEditable ? 1 : cantidadAlmacen}" ${cantidadEditable ? '' : 'readonly'}>`;
-
-            fetch('/kits/agregar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    idFila: idFila,
-                    idKits: idKits
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Elemento Agregado Exitosamente.',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-
-                    // Obtén el ID del detalle agregado desde la respuesta
-                    let idDetalles_Kits = data.idDetalles_Kits;
-
-                    // Obtener datos de la fila actual
-                    let row = document.getElementById('row-' + idFila);
-                    let nombre = row.querySelector('td:nth-child(1)').innerText;
-                    let noEco = row.querySelector('td:nth-child(2)').innerText;
-                    let marca = row.querySelector('td:nth-child(3)').innerText;
-                    let ultimaCalibracion = row.querySelector('td:nth-child(8)').innerText; // Ajustado al índice correcto
-
-                    row.remove();
-
-                    // Crear una nueva fila en la segunda tabla
-                    let newRow = document.createElement('tr');
-                    newRow.setAttribute('id', 'row-' + idDetalles_Kits);
-                    newRow.innerHTML = `
-                        <td>${nombre}</td>
-                        <td>${noEco}</td>
-                        <td>${marca}</td>
-                        <td>${ultimaCalibracion}</td>
-                        <td>
-                            <div class="input-group">
-                                ${cantidadInput}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[]" value="EN ESPERA DE DATOS" required>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="hidden" name="general_eyc_id[]" value="${idFila}">
-                            <button type="button" class="btn btn-danger btnEliminarDetallesKits" data-id="${idDetalles_Kits}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    `;
-                    document.querySelector('#TablaKits tbody').appendChild(newRow);
-
-                    // Animar la nueva fila
-                    newRow.classList.add('table-success');
-                    setTimeout(() => {
-                        newRow.classList.remove('table-success');
-                    }, 1500);
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Hubo un error al agregar el detalle.',
-                        text: data.message,
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Hubo un error al agregar el detalle.',
-                });
-            })
-            .finally(() => {
-                // Habilitar el botón nuevamente
-                btn.disabled = false;
-            });
-        });
-    });
-});
-});*/
-
 $(document).ready(function() {
     $('#btnFinalizarkit').click(function(event) {
         // Verificar si hay filas en la tabla
@@ -472,7 +282,6 @@ $(document).ready(function() {
     });
 });
 
-
 $(document).ready(function() {
     // Delegación de eventos para el botón "Agregar"
     $('#tablaJs').on('click', '.btnAgregar', function() {
@@ -481,6 +290,30 @@ $(document).ready(function() {
 
         let idFila = $(this).data('id');
         let idKits = $(this).data('id-kits');
+
+        // Verificar si el elemento ya está en la segunda tabla
+        let exists = false;
+        $('#TablaKits tbody tr').each(function() {
+            if ($(this).find('.btnEliminarDetallesKits').data('id') == idKits) {
+                exists = true;
+                return false;  // Salir del bucle si se encuentra un duplicado
+            }
+        });
+
+        if (exists) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Elemento duplicado',
+                text: `El elemento ya está en la segunda tabla.`,
+                confirmButtonText: 'Entendido'
+            });
+            $(this).prop('disabled', false);
+            return;  // Salir de la función si el elemento ya existe
+        }
+
+        // Extraer el nombre del elemento antes de realizar la solicitud
+        let row = $('#row-' + idFila);
+        let nombre = row.find('td:nth-child(1)').text();
 
         fetch('/kits/agregar', {
             method: 'POST',
@@ -498,14 +331,12 @@ $(document).ready(function() {
             if (data.status === 'success') {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Elemento Agregado Exitosamente.',
+                    title: `Elemento "${nombre}" agregado exitosamente.`,
                     showConfirmButton: false,
                     timer: 2000
                 });
 
                 // Eliminar la fila de la primera tabla
-                let row = $('#row-' + idFila);
-                let nombre = row.find('td:nth-child(1)').text();
                 let noEco = row.find('td:nth-child(2)').text();
                 let marca = row.find('td:nth-child(3)').text();
                 let ultimaCalibracion = row.find('td:nth-child(8)').text();
@@ -521,7 +352,7 @@ $(document).ready(function() {
                         <td>${ultimaCalibracion}</td>
                         <td>
                             <div class="input-group">
-                                <input type="number" class="form-control" name="Cantidad[${data.idDetalles_Kits}]" value="1" ${data.stock === 1 ? 'readonly' : ''}>
+                                <input type="number" class="form-control cantidadInput" name="Cantidad[${data.idDetalles_Kits}]" value="1" min="1" max="${data.stock}" ${data.stock === 1 ? 'readonly' : ''}>
                             </div>
                         </td>
                         <td>
@@ -541,11 +372,26 @@ $(document).ready(function() {
                 setTimeout(() => {
                     $('#row-' + data.idDetalles_Kits).removeClass('table-success');
                 }, 1500);
+
+                // Evitar que la cantidad exceda el stock máximo
+                $('#row-' + data.idDetalles_Kits).find('.cantidadInput').on('input', function() {
+                    let maxStock = $(this).attr('max');
+                    if (parseInt($(this).val()) > parseInt(maxStock)) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cantidad excedida',
+                            text: `La cantidad no puede exceder el stock disponible (${maxStock}).`,
+                            confirmButtonText: 'Entendido'
+                        });
+                        $(this).val(maxStock);
+                    }
+                });
+
             } else {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Elemento duplicado',
-                    text: data.message,
+                    text: `El elemento "${nombre}" ya está duplicado.`,
                     confirmButtonText: 'Entendido'
                 });
             }
@@ -568,18 +414,20 @@ $(document).ready(function() {
     $('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
         var idDetalles_Kits = $(this).data('id');
         var token = $('meta[name="csrf-token"]').attr('content');
+        var row = $(this).closest('tr');
+        var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
 
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
+            text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+            icon: "warning",
             showDenyButton: true,
-            showCancelButton: false,
             confirmButtonText: "Sí",
             denyButtonText: "No"
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-
                     type: 'DELETE',
                     data: {
                         "_token": token,
@@ -590,12 +438,12 @@ $(document).ready(function() {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Confirmado!',
-                                text: "Elemento Eliminado Correctamente!",
+                                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
                             });
                         }
                     },
                     error: function(xhr) {
-                        var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+                        var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -604,11 +452,14 @@ $(document).ready(function() {
                     }
                 });
             } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
+                Swal.fire("Cancelado", "El elemento no ha sido eliminado.", "info");
             }
         });
     });
+
 });
+
+                
 
 
 </script>

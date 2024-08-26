@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Inventario')
 
 @section('css')
 <!--datatable -->
@@ -33,7 +33,7 @@
                         <th>Fecha calibración</th>
                         <th>Hoja de Presentación</th>
                         <th>Editar</th>
-                        <th>Eliminar</th>
+                        <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>

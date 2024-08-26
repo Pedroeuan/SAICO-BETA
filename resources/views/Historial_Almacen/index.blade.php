@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@section('title', 'Historial E,S y D')
 
 @section('css')
 <!--datatable -->
