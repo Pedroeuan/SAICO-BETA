@@ -305,11 +305,24 @@ function consultarCantidadAlmacen(id, callback) {
         }
     });
 }
+    $(document).ready(function() {
+    $('#solicitudForm').on('submit', function(event) {
+        var fechaServicio = $('#Fecha_Servicio').val();
+
+        if (!fechaServicio) {
+            event.preventDefault(); // Previene el envío del formulario
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Por favor, completa el campo de Fecha de Servicio antes de enviar la solicitud.'
+            });
+        }
+    });
+});
 
 $(document).ready(function() {
     let kitDuplicadoDetectado = false; // Bandera para detectar duplicados
 
-    $(document).ready(function() {
     // Agregar elemento de inventario
     $(document).on('click', '.btnAgregarInventario', function() {
         var rowId = $(this).data('id');
@@ -376,48 +389,13 @@ $(document).ready(function() {
             // Mostrar mensaje de confirmación
             Swal.fire({
                 icon: 'success',
-                title: 'Elemento "${nombreElemento}" agregado',
-                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
+                title: `Elemento "${nombre}" agregado`,
+                text: `El elemento "${nombre}" ha sido agregado correctamente.`,
                 confirmButtonText: 'OK'
             });
         });
     });
 
-    // Eliminar elemento
-// Eliminar elemento con confirmación
-$(document).on('click', '.btnQuitarElemento', function() {
-    let row = $(this).closest('tr');
-    let nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
-
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            row.remove();
-            Swal.fire({
-                icon: 'success',
-                title: 'Elemento Eliminado',
-                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Cancelado',
-                text: 'El elemento no ha sido eliminado.',
-            });
-        }
-    });
-});
-
-});
-
-
-    $(document).ready(function() {
     // Agregar elemento de kits
     $(document).on('click', '.btnAgregarKit', function() {
         var kitId = $(this).data('id');
@@ -543,37 +521,36 @@ $(document).on('click', '.btnQuitarElemento', function() {
 
     // Eliminar elemento
     $(document).on('click', '.btnQuitarElemento', function() {
-        $(this).closest('tr').remove();
+        var row = $(this).closest('tr');
+        var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
+
+        Swal.fire({
+            title: "¿Seguro de eliminar este elemento?",
+            text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                row.remove();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Elemento Eliminado',
+                    text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cancelado',
+                    text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
+                });
+            }
+        });
     });
 });
 
 
-
-
-    // Eliminar elemento
-    $(document).on('click', '.btnQuitarElemento', function() {
-        $(this).closest('tr').remove();
-        kitDuplicadoDetectado = false; // Reiniciar bandera al eliminar un elemento
-    });
-});
-
-
-
-
-    $(document).ready(function() {
-    $('#solicitudForm').on('submit', function(event) {
-        var fechaServicio = $('#Fecha_Servicio').val();
-
-        if (!fechaServicio) {
-            event.preventDefault(); // Previene el envío del formulario
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Por favor, completa el campo de Fecha de Servicio antes de enviar la solicitud.'
-            });
-        }
-    });
-});
 </script>
 
 @endsection
