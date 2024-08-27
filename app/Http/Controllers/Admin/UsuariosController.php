@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+
 
 use App\Models\Admin\Usuario;
 
@@ -35,7 +37,38 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Registro de Usuarios
+        // Validar los datos de entrada
+        $request->validate([
+            'NombreUsuario' => 'required|string|max:255',
+            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'ContrasenaUsuario' => 'required|string|max:255',
+            'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+            'RolUsuario' => [
+                'required',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+            ],
+        ]);
+    
+        // Crear una nueva instancia de Usuario
+        $Usuario = new Usuario;
+        $EsperaDato ='ESPERA DE DATO';
+        
+        // Asignar valores a los atributos del usuario
+        $Usuario->name = $request->input('NombreUsuario') ?? $EsperaDato;
+        $Usuario->email = $request->input('CorreoUsuario') ?? $EsperaDato;
+        
+        // Cifrar la contraseña antes de guardarla
+        $Usuario->password = Hash::make($request->input('ContrasenaUsuario'));
+        
+        $Usuario->rol = $request->input('RolUsuario') ?? $EsperaDato;
+
+        // Guardar el usuario en la base de datos
+        $Usuario->save();
+
+        // Redirigir a la página de administración
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
     }
 
     /**

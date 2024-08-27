@@ -17,7 +17,7 @@ class Usuario extends Model
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';
-    public $timestamps = false; 
+    //public $timestamps = false; 
     use HasFactory;
 
     public function getFormattedDateAttribute()

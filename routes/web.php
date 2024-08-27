@@ -163,10 +163,13 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
 
     /*admin */
-    /*Ruta para alta de usuarios*/
-    Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta para ver los usuarios*/
     Route::get('/Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
+    /*Ruta vista para alta de usuarios*/
+    Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeusuarios', [UsuariosController::class, 'store'])->name('registro.storeUsuarios');
+    
 
     /*CLIENTES*/
     /*Rutas de Vistas de Tabla de Clientes*/
