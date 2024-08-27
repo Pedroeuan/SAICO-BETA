@@ -19,4 +19,9 @@ class Usuario extends Model
     protected $primaryKey = 'id';
     public $timestamps = false; 
     use HasFactory;
+
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
+    }
 }

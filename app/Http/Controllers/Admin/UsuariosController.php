@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Admin\Usuario;
 
 class UsuariosController extends Controller
 {
@@ -12,7 +17,9 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        return view('Admin.index');
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
+        //dd($Usuarios);
     }
 
     /**

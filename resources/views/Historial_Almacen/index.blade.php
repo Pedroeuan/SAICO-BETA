@@ -45,22 +45,7 @@
             </thead>
             <tbody>
                 @foreach($historiales as $historial)
-                @php 
-                // Verifica si $historial->Fecha es una cadena y conviértela a Carbon
-                $Fecha = $historial->Fecha;
-                if (is_string($Fecha)) {
-                    try {
-                        $Fecha = \Carbon\Carbon::parse($Fecha)->format('d-m-y');
-                    } catch (\Exception $e) {
-                        $Fecha = 'N/A'; // En caso de error en el parsing
-                    }
-                } elseif ($Fecha instanceof \Carbon\Carbon) {
-                    $Fecha = $Fecha->format('d-m-y');
-                } else {
-                    $Fecha = 'N/A'; // En caso de que no sea ni cadena ni Carbon
-                }
 
-                @endphp
                     <tr>
                         <td>{{ $historial->Folio }}</td>
                         <td>{{ $historial->Almacen->General_EyC->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -70,7 +55,7 @@
                         <td>{{ $historial->Almacen->General_EyC->Modelo ?? 'N/A' }}</td>
                         <td>{{ $historial->Tipo }}</td>
                         <td>{{ $historial->Cantidad }}</td>
-                        <td>{{ $Fecha }}</td>
+                        <td>{{ $historial->formatted_date }}</td>
                         <td>{{ $historial->Tierra_Costafuera }}</td>
                     </tr>
                 @endforeach

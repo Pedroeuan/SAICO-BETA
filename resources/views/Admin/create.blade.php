@@ -37,16 +37,17 @@
             </div>
             <div class="form-group">
                 <label for="inputSubject">Contraseña</label>
-                <input type="password" class="form-control" placeholder="Contraseña" name="ContraseñaUsuario" >
+                <input type="password" class="form-control" placeholder="Contraseña" name="ContraseñaUsuario">
             </div>
             <div class="form-group">
                 <label for="inputSubject">Repetir contraseña</label>
                 <input type="password" class="form-control" placeholder="Repetir contraseña" name="RepetirContraseña">
             </div>
             <div class="form-group">
-                <label for="inputSubject">Perfil</label>
+                <label for="inputSubject">Rol</label>
                 <select class="form-control select2"  style="width: 100%;" name="RolUsuario">
                     <option selected disabled>Selecciona un perfil</option>
+                    <option>Super Administrador</option>
                     <option>Administrador</option>
                     <option>Cliente</option>
                     <option>Ventas</option>

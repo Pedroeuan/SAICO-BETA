@@ -24,28 +24,29 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>Perfil</th>
+                        <th>Rol</th>
                         <th>Fecha alta</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td>Pablo Hernandez</td>
-                    <td>p.hernandez@aicosc.com</td>
-                    <td>Admin</td>
-                    <td>15-08-24</td>
-                    <td>
-                        <div class="btn-group">
+                @foreach($Usuarios as $Usuario)
+                    <tr>
+                        <td>{{ $Usuario->name }}</td>
+                        <td>{{ $Usuario->email}}</td>
+                        <td>{{ $Usuario->rol }}</td>
+                        <td>{{ $Usuario->formatted_date }}</td>
+                        <td>
                             <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-danger btnEliminarEquipo"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </div>
-                    </td>
-                </tbody>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarSolicitud"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
             </table>
         </div>
     </div>

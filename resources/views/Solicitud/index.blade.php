@@ -36,8 +36,8 @@
                     @foreach($Solicitudes as $solicitud)
                     <tr>
                         <td scope="row">{{$solicitud->tecnico}}</td>
-                        <td scope="row">{{$solicitud->folio}}</td> <!-- Mostrar el Folio o "No Asignado" -->
-                        <td scope="row">{{$solicitud->Fecha}}</td>
+                        <td scope="row">{{$solicitud->folio}}</td> 
+                        <td scope="row">{{$solicitud->formatted_date}}</td>
                         <td scope="row">{{$solicitud->Estatus}}</td>
                         
                             @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')

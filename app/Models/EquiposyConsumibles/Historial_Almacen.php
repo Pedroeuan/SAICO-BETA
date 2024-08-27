@@ -27,4 +27,10 @@ class Historial_Almacen extends Model
     {
         return $this->belongsTo(almacen::class, 'idAlmacen');
     }
+
+        public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
+    }
+
 }
