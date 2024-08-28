@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -134,9 +134,15 @@ class SolicitudesController extends Controller
      */
     public function storeSolicitud(Request $request)
         {
+
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+            // Obtener el nombre del usuario
+            $nombre = $user->name;
+
             $now = Carbon::now();
             $Solicitud = new Solicitudes();
-            $tecnico = 'Pedro'; // Cambia esto a futuro por el nombre de usuario o rol
+            $tecnico = $nombre;
             $Estatus = 'PENDIENTE';
             $Fecha = $request->input('Fecha_Servicio');
             $Solicitud->tecnico = $tecnico;
