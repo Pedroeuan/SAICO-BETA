@@ -46,7 +46,7 @@
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label class="col-form-label" for="inputSuccess">Telefono</label>
+                                                    <label class="col-form-label" for="inputSuccess">Teléfono</label>
                                                     <input type="text" class="form-control inputForm" value="{{ $clientes->Telefono }}" name="Telefono" placeholder="Ejemplo: 81 8399 2828">
                                                 </div>
                                             </div>

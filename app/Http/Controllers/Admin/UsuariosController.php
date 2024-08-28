@@ -82,17 +82,43 @@ class UsuariosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $Usuario = Usuario::where('id', $id)->first();
+
+        return view('Admin.edit', compact('id','Usuario'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validar los datos de entrada
+        $request->validate([
+            'NombreUsuario' => 'required|string|max:255',
+            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'ContrasenaUsuario' => 'required|string|max:255',
+            'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+            'RolUsuario' => [
+                'required',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+            ],
+        ]);
+        // Obtener el equipo existente
+        $Usuario  = Usuario::find($id);
+
+        // Actualizar los datos del equipo
+        $Usuario ->update([
+            'name' => $request->input('NombreUsuario'),
+            'email' => $request->input('CorreoUsuario'),
+            'password' => Hash::make($request->input('ContrasenaUsuario')),
+            'rol' => $request->input('RolUsuario'),
+        ]);
+
+        // Redirigir a la página de administración
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
     }
 
     /**

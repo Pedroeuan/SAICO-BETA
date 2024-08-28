@@ -169,10 +169,13 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta de Guardado Clientes*/
     Route::post('/registro/storeusuarios', [UsuariosController::class, 'store'])->name('registro.storeUsuarios');
+    /*Rutas de Vistas Usuarios-Edición*/
+    Route::get('/edicion/editusuarios/{id}', [UsuariosController::class, 'edit'])->name('edicion.editUsuarios');
+    /*Ruta de Actualizar Usuarios*/
+    Route::post('/edicion/updateUsuario/{id}', [UsuariosController::class, 'update'])->name('editUsuarios.update');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     
-
     /*CLIENTES*/
     /*Rutas de Vistas de Tabla de Clientes*/
     Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');

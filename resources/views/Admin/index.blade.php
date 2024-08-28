@@ -38,7 +38,7 @@
                         <td>{{ $Usuario->rol }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
                         <td>
-                            <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
