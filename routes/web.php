@@ -169,6 +169,8 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta de Guardado Clientes*/
     Route::post('/registro/storeusuarios', [UsuariosController::class, 'store'])->name('registro.storeUsuarios');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     
 
     /*CLIENTES*/
