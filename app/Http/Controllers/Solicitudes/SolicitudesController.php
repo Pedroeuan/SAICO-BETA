@@ -26,8 +26,21 @@ class SolicitudesController extends Controller
      */
     public function index()
 {
-    // Obtener todas las solicitudes
-    $Solicitudes = Solicitudes::all();
+    // Obtener el usuario autenticado
+    $user = Auth::user();
+    // Obtener el nombre del usuario
+    $Nombre = $user->name;
+    $rol = Auth::user()->rol;
+
+    if($rol == 'Técnicos')
+    {
+        $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+    }
+    else
+    {
+        // Obtener todas las solicitudes
+        $Solicitudes = Solicitudes::all();
+    }
 
     // Crear un array para almacenar el último folio encontrado para cada grupo
     $ultimoFolioPorGrupo = [];
@@ -89,7 +102,7 @@ class SolicitudesController extends Controller
         $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
 
-    return view("Solicitud.index", compact('Solicitudes'));
+    return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
 }
 
     
@@ -110,7 +123,6 @@ class SolicitudesController extends Controller
      */
     public function create()
     {
-
         // Obtener todos los Kits con sus detalles_kits
         $kitsConDetalles = Kits::with('detalles_kits')->get();
 
@@ -171,6 +183,7 @@ class SolicitudesController extends Controller
                 }
             }
 
+            
             return redirect()->route('solicitud.index');
         }
 
