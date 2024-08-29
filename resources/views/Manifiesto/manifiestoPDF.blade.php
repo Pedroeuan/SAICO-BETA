@@ -3,38 +3,620 @@
 <head>
     <title>Manifiesto</title>
     <style>
-        /* Agrega estilos aquí si es necesario */
+        /* Ajusta la celda al texto en los datos generales */
+        .datosGeneralesCortos{
+            font-weight: bold;
+            width: 100px;
+            font-family: Arial;
+            font-size: 11px;
+            text-align: center;
+        }
+        .respuestasGenerales{
+            font-family: Arial;
+            font-size: 11px;
+            text-align: center;
+        }
+        /* borde para tabla */
+        .tablaManifiesto{
+            border: 1px solid black; 
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaManifiesto td, .tablaManifiesto th {
+            border: 1px solid black; 
+            font-size: 11px;
+        }
+        .notas{
+            text-align: left;
+            font-size: 11px;
+        }
+        .letraRoja{
+            color: #c02302;
+            font-weight: bold;
+        }
+        .celdaAzul{
+            background-color: #00356d;
+        }
+        .letraBlanca{
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .celdaCrema{
+            background-color: #F8CBAD;
+        }
+        /*oculta todo el borde de la tabla*/
+        .sinBorde{
+            border: 0px;
+            text-align: center;
+            border-collapse: collapse;
+            text-align: center;
+            width: 100%;
+        }
+        .tablaContainer {
+            margin-top: 10px; /* Ajusta el valor según la altura de tu header */
+        }
+        body {
+            padding-top: 60px; /* Ajusta el valor según la altura de tu header */
+        }
+        /*muestra solo la linea inferior de la celda*/
+        .lineaInferior{
+            border-bottom: 1px solid black;
+            font-weight: bold;
+            font-family: Arial;
+            font-size: 11px;
+            text-align: center;
+        }
+        header {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000; /* Asegura que el header esté por encima */
+        }
+        footer {
+            position: sticky;
+            bottom: -60px;
+            left: 0px;
+            right: 0px;
+            height: 400px;
+        }
+        .altoCelda{
+            height: 70px;
+        }
+        .especial {
+            width: 20px; /* Ajusta el ancho de esta celda específica */
+        }
+        .saltoBlanco{
+            height: 15px;
+        }
+        .logo{
+            width: 20px;
+            height: 15;
+        }
     </style>
 </head>
 <body>
-<table>
+<header>
+    <table class="tablaManifiesto">
+        <thead>
+            <tr>
+                <th class="">Formato</th>
+                <th class="respuestasGenerales">Código:</th>
+                <th class="respuestasGenerales">FOR-PCVE-01/05</th>
+                <th rowspan="3"><img class="logo" src=" {{ url('images/Logo_AICO.png') }}"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2"> Manifiesto de Salida y/o Resguardo</td>
+                <td class="respuestasGenerales">Versión</td>
+                <td class="respuestasGenerales">3</td>
+            </tr>
+            <tr>
+                <td class="respuestasGenerales">Página</td>
+                <td class="respuestasGenerales">1 de 1</td>
+            </tr>
+        </tbody>
+    </table>
+</header>
+
+<div class="tablaContainer">
+    <table class="sinBorde">
+        <tbody>
+            <tr>
+                <td class="datosGeneralesCortos">Cliente:</td>
+                <td class="lineaInferior"><label for="">Protexa</label></td>
+                <td class="datosGeneralesCortos">Folio:</td>
+                <td class="lineaInferior">PROP-024/24</td>
+            </tr>
+            <tr>
+                <td class="datosGeneralesCortos">Destino:</td>
+                <td class="lineaInferior">NA</td>
+                <td class="datosGeneralesCortos">Fecha de salida:</td>
+                <td class="lineaInferior">20-JUN-2024</td>
+            </tr>
+            <tr>
+                <td class="datosGeneralesCortos">Trabajo: </td>
+                <td class="lineaInferior">ULTRASONIDO INDUSTRIAL 
+                </td>
+                <td class="datosGeneralesCortos">Puesto:</td>
+                <td class="lineaInferior">TECNICO</td>
+            </tr>
+            <tr>
+                <td class="datosGeneralesCortos">Responsable:</td>
+                <td class="lineaInferior" colspan="3">HECTOR DAVID DE LA CRUZ RODRIGUEZ</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="">
+    <table class="tablaManifiesto">
     <thead>
-        <tr>
-            <th>Formato</th>
-            <th>Código:</th>
-            <th>FOR-PCVE-01/05 3</th>
-            <th>Logo</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Celda 1.1</td>
-            <td>Celda 1.2</td>
-            <td>Celda 1.3</td>
-            <td>Celda 1.3</td>
-        </tr>
-        <tr>
-            <td>Celda 2.1</td>
-            <td>Celda 2.2</td>
-            <td>Celda 2.3</td>
-            <td>Celda 1.3</td>
-        </tr>
-        <tr>
-            <td>Celda 3.1</td>
-            <td>Celda 3.2</td>
-            <td>Celda 3.3</td>
-            <td>Celda 1.3</td>
-        </tr>
-    </tbody>
+            <tr>
+                <th class="celdaAzul letraBlanca" colspan="7">Equipos</th>
+            </tr>
+            <tr class="celdaCrema">
+                <th class="especial">No.</th>
+                <th class="">Descripción:</th>
+                <th class="">No. ECO</th>
+                <th class="">No. De Serie</th>
+                <th class="">Marca</th>
+                <th class="">Modelo</th>
+                <th class="">Comentarios</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+            <tr class="respuestasGenerales">
+                <td>1</td>
+                <td>laptop</td>
+                <td>ID-30</td>
+                <td>PF4CVKPD</td>
+                <td>LENOVO</td>
+                <td>IDEADPAD 3 15ALC6</td>
+                <td>incluye bolsa de transportación</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="tablaManifiesto">
+    <thead>
+            <tr>
+                <th class="celdaAzul letraBlanca" colspan="4">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+            </tr>
+            <tr class="celdaCrema">
+                <th class="especial">No.</th>
+                <th class="">Cantidad:</th>
+                <th class="">Unidad</th>
+                <th class="" colspan="4">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>lata</td>
+                <td colspan="4">liquidos</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<table class="tablaManifiesto">
+    <tr>
+        <td class="notas" colspan="4"><strong class="letraRoja">Nota a):</strong> Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <br>
+            <strong class="letraRoja">Nota b):</strong> El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
+            <strong class="letraRoja">Nota c):</strong> Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
+        </td>
+    </tr>
+</table>
+<footer>
+<div class="">
+    <table class="tablaManifiesto">
+        <thead>
+            <tr>
+                <th class="celdaAzul letraBlanca" colspan="3">SALIDA DE EQUIPOS Y ADICIONALES</th>
+            </tr>
+            <tr>
+                <th colspan="3" class="saltoBlanco"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2" class="altoCelda"></td>
+                <td rowspan="2" class="altoCelda"></td>
+                <td class="celdaAzul letraBlanca">Obsevaciones</td>
+            </tr>
+            <tr>
+            <td class="altoCelda"></td>
+            </tr>
+            <tr>
+                <td>Entrega: Nombre/cargo/firma</td>
+                <td>Recibe: Nombre/cargo/firma </td>
+                <td rowspan="2"></td>
+            </tr>
+            
+            <tr>
+                <td class="celdaAzul letraBlanca" colspan="3">RETORNO DE EQUIPOS Y ADICIONALES</td>
+            </tr>
+            <tr>
+                <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="celdaAzul letraBlanca">¿Los equipos retornan en optimas condiciones?</td>
+                <td>SI______    NO______  N/A______</td>
+                <td class="celdaAzul letraBlanca">Observaciones</td>
+            </tr>
+            <tr>
+                <td class="altoCelda"></td>
+                <td class="altoCelda"></td>
+                <td class="altoCelda" rowspan="2"></td>
+            </tr>
+            <tr>
+                <td>Entrega: Nombre/cargo/firma</td>
+                <td>Recibe: Nombre/cargo/firma </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</footer>
 </body>
 </html>
