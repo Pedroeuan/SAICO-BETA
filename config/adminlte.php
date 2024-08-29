@@ -313,7 +313,7 @@ return [
         [
             'text' => 'Planeacion',
             'icon' => 'fas fa-calendar-alt',
-            'can' => 'admin-access',  // Define una política en Laravel para controlar el acceso
+            'can' => 'Superadmin-access',  // Define una política en Laravel para controlar el acceso
             //'topnav' => true,
             'submenu' => [
                 [

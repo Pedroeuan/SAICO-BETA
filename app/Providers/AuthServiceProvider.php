@@ -26,16 +26,34 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Define tus políticas de acceso aquí
-        Gate::define('admin-access', function ($user) { 
+        Gate::define('Superadmin-access', function ($user) { 
             return $user->rol === 'Super Administrador';
         });
 
-        Gate::define('operativo-access', function ($user) {
-            return in_array($user->rol, ['Super Administrador', 'Operativo']);
+        Gate::define('administrador-access', function ($user) {
+            return in_array($user->rol, ['Administrador']);
+        });
+
+        Gate::define('cliente-access', function ($user) {
+            return $user->rol === 'Cliente';
+        });
+
+        Gate::define('ventas-access', function ($user) {
+            return $user->rol === 'Ventas';
+        });
+
+        Gate::define('tecnicos-access', function ($user) {
+            return $user->rol === 'Técnicos';
+        });
+
+        Gate::define('planeacion-access', function ($user) {
+            return $user->rol === 'Planeación';
         });
 
         Gate::define('equipos-access', function ($user) {
             return $user->rol === 'Equipos';
         });
+
+        
     }
 }
