@@ -43,7 +43,7 @@
                     @foreach($Solicitudes as $solicitud)
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
-                            <td scope="row">{{$solicitud->folio}}</td> 
+                            <td scope="row">{{$solicitud->folio}}</td>
                             <td scope="row">{{$solicitud->formatted_date}}</td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
                             @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')

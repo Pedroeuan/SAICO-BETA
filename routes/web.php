@@ -40,6 +40,8 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });
 
+    /*EQUIPOS*/
+    Route::middleware('can:equipos-access')->group(function () {
     /*Equipos y Consumibles*/ 
     Route::middleware('auth')->group(function () {
     /*GENERAL EYC*/
@@ -52,7 +54,7 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*Ruta para dar de BAJA, equipos, comsumibles, block, herramientas-HABILITADO*/
     Route::delete('/eliminar/BajaEyC/{id}', [general_eycController::class, 'BajaEyC'])->name('eliminar.BajaEyC');
 
-        /*EQUIPOS */
+    /*EQUIPOS */
     /*Ruta de Guardado*/
     Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
     /*Ruta de Actualizar*/
@@ -112,7 +114,6 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('/solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
-    
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
     /*Rutas de controlador para duplicar los datos y redirigir*/
@@ -129,7 +130,6 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
     /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
     Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
-
     /*Ruta de botón obtener-datos de detalles kits-Solicitud.create*/
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
@@ -157,11 +157,13 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
-
+    });
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
-    /*Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');
-
+    /*Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');*/
+    
+    /*admin */
+    Route::middleware('can:administrador-access')->group(function () {
     /*admin */
     /*Ruta para ver los usuarios*/
     Route::get('/Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
@@ -175,7 +177,9 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/edicion/updateUsuario/{id}', [UsuariosController::class, 'update'])->name('editUsuarios.update');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
-    
+    });
+    /*CLIENTES*/
+    Route::middleware('can:ventas-access')->group(function () {
     /*CLIENTES*/
     /*Rutas de Vistas de Tabla de Clientes*/
     Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
@@ -189,6 +193,7 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+    });
 
     /*manifiestos*/
     /*Ruta para ver el manifiesto PDF*/
