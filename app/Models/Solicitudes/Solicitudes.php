@@ -24,4 +24,9 @@ class Solicitudes extends Model
     {
         return $this->hasMany(detalles_solicitud::class, 'idSolicitud', 'idSolicitud');
     }
+
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
+    }
 }

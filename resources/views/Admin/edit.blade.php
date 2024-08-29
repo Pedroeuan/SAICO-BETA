@@ -15,7 +15,7 @@
 <br>
 <br>
 <br>
-<form id="UsuarioForm" method="post" enctype="multipart/form-data" action="{{route('registro.storeUsuarios')}}">
+<form id="UsuarioForm" method="post" enctype="multipart/form-data" action="{{ route('editUsuarios.update', ['id' => $id]) }}">
     @csrf
     <section class="content">
 
@@ -29,13 +29,11 @@
                     </div>
                 </div>
 
-                
-
                     <div class="col-7">
 
                         <div class="form-group">
                             <label for="NombreUsuario">Nombre de Usuario</label>
-                            <input type="text" class="form-control @error('NombreUsuario') is-invalid @enderror" placeholder="Nombre del usuario" id="NombreUsuario" name="NombreUsuario" value="{{ old('NombreUsuario') }}">
+                            <input type="text" class="form-control @error('NombreUsuario') is-invalid @enderror" placeholder="Nombre del usuario" id="NombreUsuario" name="NombreUsuario" value="{{ $Usuario->name }}">
                             @error('NombreUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -43,7 +41,7 @@
 
                         <div class="form-group">
                             <label for="inputEmail">Correo</label>
-                            <input type="email" class="form-control @error('CorreoUsuario') is-invalid @enderror" placeholder="Correo del usuario" name="CorreoUsuario" value="{{old('CorreoUsuario')}}">
+                            <input type="email" class="form-control @error('CorreoUsuario') is-invalid @enderror" placeholder="Correo del usuario" name="CorreoUsuario" value="{{ $Usuario->email }}">
                             @error('CorreoUsuario')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -69,13 +67,13 @@
                             <label for="inputSubject">Rol</label>
                             <select class="form-control select2 @error('RolUsuario') is-invalid @enderror" style="width: 100%;" name="RolUsuario">
                                 <option selected disabled>Selecciona un perfil</option>
-                                <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
-                                <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
-                                <option value="Cliente" {{ old('RolUsuario') == 'Cliente' ? 'selected' : '' }}>Cliente</option>
-                                <option value="Ventas" {{ old('RolUsuario') == 'Ventas' ? 'selected' : '' }}>Ventas</option>
-                                <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
-                                <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
-                                <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
+                                <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
+                                <option value="Cliente" @if($Usuario->rol == 'Cliente') selected="selected" @endif> Cliente</option>
+                                <option value="Ventas" @if($Usuario->rol == 'Ventas') selected="selected" @endif> Ventas</option>
+                                <option value="Técnicos" @if($Usuario->rol == 'Técnicos') selected="selected" @endif> Técnicos</option>
+                                <option value="Planeación" @if($Usuario->rol == 'Planeación') selected="selected" @endif> Planeación</option>
+                                <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                             </select>
                             @error('RolUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -83,7 +81,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Registrar">
+                            <input type="submit" class="btn btn-primary" value="Actualizar">
                         </div>
                     </div>
 
@@ -93,18 +91,6 @@
 
     </section>
 </form>
+        
 @stop
-
-
-@section('js')
-<script>
-/*Prevenir el Enter*/
-document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-</script>
-
-@endsection
 

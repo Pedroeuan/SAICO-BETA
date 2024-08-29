@@ -28,5 +28,9 @@ class certificados extends Model
     {
         return $this->hasMany(historial_certificado::class, 'idCertificados');
     }
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Fecha_calibracion'])->format('d-m-Y');
+    }
 
 }

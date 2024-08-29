@@ -313,7 +313,7 @@ return [
         [
             'text' => 'Planeacion',
             'icon' => 'fas fa-calendar-alt',
-            
+            'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
             //'topnav' => true,
             'submenu' => [
                 [
@@ -361,6 +361,7 @@ return [
 
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
+                'can' => 'administrador-access',
                 //'topnav' => true,
                 'submenu' => [
                     [
@@ -405,6 +406,7 @@ return [
                 [
                 'text' => 'Ventas',
                 'icon' => 'fas fa-money-bill-wave',
+                'can' => 'ventas-access',
                 //'topnav' => true,
                 'submenu' => [
                     [
@@ -451,47 +453,50 @@ return [
                 [
                     'text' => 'Equipos',
                     'icon' => 'fa fa-suitcase',
+                    'can' => 'tecnicos-equipos-access',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-folder-open',
                             'url' => 'inventario',
+                            'can' => 'equipos-access',
                         ],
                         [
                             'text' => 'Registro de altas',
                             'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
+                            'can' => 'equipos-access',
                         ],
-                        /*[
-                            'text' => 'Kits',
-                            'icon' => 'fas fa-suitcase',
-                            'url' => '#',
-                        ],*/
                         [
                             'text' => 'Solicitar E y C',
                             'icon' => 'far fa-file-alt',
                             'url' => 'solicitud/create',
+                            'can' => 'tecnicos-equipos-access',
                         ],
                         [
                             'text' => ' Ver solicitudes',
                             'icon' => 'far fa-clipboard',
                             'url' => 'solicitud/index',
+                            'can' => 'tecnicos-equipos-access',
                         ],
                         [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
+                            'can' => 'equipos-access',
                         ],
                         [
                             'text' => ' Ver Kits',
                             'icon' => 'fas fa-box',
                             'url' => 'index/Kits',
+                            'can' => 'equipos-access',
                         ],
                         [
                             'text' => ' Ver E/S/D',
                             'icon' => 'fas fa-exchange-alt',
                             'url' => 'Historial_Almacen/index',
+                            'can' => 'equipos-access',
                         ],
                         /*[
                             'text' => 'level_one',
@@ -531,6 +536,7 @@ return [
         [
             'text' => 'Admin',
             'icon' => 'fas fa-universal-access',
+            'can' => 'administrador-access',
             //'topnav' => true,
             'submenu' => [
                 [

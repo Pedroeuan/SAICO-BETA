@@ -39,7 +39,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $general_eyc->Tipo }}</td>
-                                    <td>{{ $historial->Ultima_Fecha_calibracion }}</td>
+                                    <td>{{ $historial->formatted_date }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ asset('storage/' . $historial->Certificado_Caducado) }}" role="button" target="_blank">
                                             <i class="far fa-file-pdf"></i>

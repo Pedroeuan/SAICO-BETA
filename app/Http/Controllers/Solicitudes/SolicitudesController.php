@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -24,34 +24,23 @@ class SolicitudesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    /*public function index()
-    { 
-        // Obtener todas las solicitudes
-        $Solicitudes = Solicitudes::all();
-        
-        // Agregar el folio o "No Asignado" para cada solicitud
-        foreach ($Solicitudes as $solicitud) 
-        {
-            
-            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-                if ($manifiesto) 
-                {
-                    $solicitud->folio = $manifiesto->Folio;
-                    //dd($solicitud->folio);
-                } 
-                else 
-                {
-                    $solicitud->folio = "No Asignado";
-                }
-        }
-
-        return view("Solicitud.index",compact('Solicitudes'));
-    }*/
-
     public function index()
 {
-    // Obtener todas las solicitudes
-    $Solicitudes = Solicitudes::all();
+    // Obtener el usuario autenticado
+    $user = Auth::user();
+    // Obtener el nombre del usuario
+    $Nombre = $user->name;
+    $rol = Auth::user()->rol;
+
+    if($rol == 'Técnicos')
+    {
+        $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+    }
+    else
+    {
+        // Obtener todas las solicitudes
+        $Solicitudes = Solicitudes::all();
+    }
 
     // Crear un array para almacenar el último folio encontrado para cada grupo
     $ultimoFolioPorGrupo = [];
@@ -113,7 +102,7 @@ class SolicitudesController extends Controller
         $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
 
-    return view("Solicitud.index", compact('Solicitudes'));
+    return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
 }
 
     
@@ -134,7 +123,6 @@ class SolicitudesController extends Controller
      */
     public function create()
     {
-
         // Obtener todos los Kits con sus detalles_kits
         $kitsConDetalles = Kits::with('detalles_kits')->get();
 
@@ -158,9 +146,15 @@ class SolicitudesController extends Controller
      */
     public function storeSolicitud(Request $request)
         {
+
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+            // Obtener el nombre del usuario
+            $nombre = $user->name;
+
             $now = Carbon::now();
             $Solicitud = new Solicitudes();
-            $tecnico = 'Pedro'; // Cambia esto a futuro por el nombre de usuario o rol
+            $tecnico = $nombre;
             $Estatus = 'PENDIENTE';
             $Fecha = $request->input('Fecha_Servicio');
             $Solicitud->tecnico = $tecnico;
@@ -189,6 +183,7 @@ class SolicitudesController extends Controller
                 }
             }
 
+            
             return redirect()->route('solicitud.index');
         }
 
