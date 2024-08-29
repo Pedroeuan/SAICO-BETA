@@ -25,4 +25,9 @@ class historial_certificado extends Model
         return $this->belongsTo(certificados::class, 'idCertificados');
     }
 
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Ultima_Fecha_calibracion'])->format('d-m-Y');
+    }
+
 }

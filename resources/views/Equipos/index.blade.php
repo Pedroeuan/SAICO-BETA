@@ -63,7 +63,8 @@
                                             @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
                                                 @else
-                                                    <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                                    <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    
                                             @endif
                                         @else
                                             <td scope="row">N/A</td>

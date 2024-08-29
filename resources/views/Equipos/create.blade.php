@@ -38,11 +38,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -50,11 +48,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
                                             @error('No_economico')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -62,11 +58,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: MANGAFLUX" value="{{old('Marca')}}">
+                                            <input type="text" class="form-control inputForm @error('Marca') is-invalid @enderror" name="Marca" placeholder="Ejemplo: MANGAFLUX" value="{{old('Marca')}}">
                                             @error('Marca')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -74,11 +68,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
                                             @error('Modelo')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -86,11 +78,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -112,9 +102,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Factura">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -134,9 +124,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
-                                            <input type="file" class="form-control-file inputForm" name="Foto">
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Foto">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -151,9 +141,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
-                                            <input type="file" class="form-control-file inputForm" name="Certificado_Actual" placeholder="">
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual" placeholder="">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -217,14 +207,13 @@
                             <form id="consumiblesForm" action="{{route('general_eyc.storeConsumibles')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable de Corriente" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable de Corriente" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -232,11 +221,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: KARL DEUTSCH" value="{{old('Marca')}}">
+                                            <input type="text" class="form-control inputForm @error('Marca') is-invalid @enderror" name="Marca" placeholder="Ejemplo: KARL DEUTSCH" value="{{old('Marca')}}">
                                             @error('Marca')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -244,11 +231,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
                                             @error('Modelo')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -289,9 +274,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Factura"></input>
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -318,9 +303,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Foto" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -335,9 +320,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado actual</label>
-                                            <input type="file" class="form-control-file inputForm" name="Certificado_Actual" placeholder="">
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual" placeholder="">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -352,11 +337,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
-                                            <input type="number" class="form-control inputForm" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            <input type="number" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
                                             @error('Stock')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -407,11 +390,9 @@
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable DUAL con cubierta de acero inox. (uso rudo)" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable DUAL con cubierta de acero inox. (uso rudo)" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -419,11 +400,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: No. AICO-001" value="{{old('No_economico')}}">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: No. AICO-001" value="{{old('No_economico')}}">
                                             @error('No_economico')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -431,11 +410,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: Brüder NDT" value="{{old('Marca')}}">
+                                            <input type="text" class="form-control inputForm @error('Marca') is-invalid @enderror" name="Marca" placeholder="Ejemplo: Brüder NDT" value="{{old('Marca')}}">
                                             @error('Marca')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -443,11 +420,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Modelo" placeholder="Ejemplo: DPM" value="{{old('Modelo')}}">
                                             @error('Modelo')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -455,11 +430,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -481,9 +454,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Factura"></input>
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -503,9 +476,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual">
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -563,11 +536,9 @@
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: BLOCK ASME T= 3/4"" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: BLOCK ASME T= 3/4"" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -575,11 +546,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: No. ECO-B-034" value="{{old('No_economico')}}">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: No. ECO-B-034" value="{{old('No_economico')}}">
                                             @error('No_economico')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -587,11 +556,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: Brüder NDT" value="{{old('Marca')}}">
+                                            <input type="text" class="form-control inputForm @error('Marca') is-invalid @enderror" name="Marca" placeholder="Ejemplo: Brüder NDT" value="{{old('Marca')}}">
                                             @error('Marca')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -599,11 +566,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: 5-STEPS-ACERO" value="{{old('Modelo')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Modelo" placeholder="Ejemplo: 5-STEPS-ACERO" value="{{old('Modelo')}}">
                                             @error('Modelo')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -611,11 +576,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: 102021CUT05" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 102021CUT05" value="{{old('Serie')}}">
                                             @error('Serie')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -637,9 +600,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Factura"></input>
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -659,9 +622,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
-                                            <input type="file" class="form-control-file inputForm" name="Foto">
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Foto">
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -681,18 +644,18 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado de calibración</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Plano</label>
-                                            <input type="file" class="form-control inputForm" name="Plano" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Plano" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
 
                                         </div>
@@ -743,11 +706,9 @@
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP"  placeholder="Ejemplo: Sonda cableada regular" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Sonda cableada regular" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -755,11 +716,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" placeholder="Ejemplo: No. AD-003" value="{{old('No_economico')}}">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: No. AD-003" value="{{old('No_economico')}}">
                                             @error('No_economico')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -767,11 +726,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
-                                            <input type="text" class="form-control inputForm" name="Marca" placeholder="Ejemplo: DeFelsko" value="{{old('Marca')}}">
+                                            <input type="text" class="form-control inputForm @error('Marca') is-invalid @enderror" name="Marca" placeholder="Ejemplo: DeFelsko" value="{{old('Marca')}}">
                                             @error('Marca')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -779,11 +736,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
-                                            <input type="text" class="form-control inputForm" name="Modelo" placeholder="Ejemplo: FS" value="{{old('Modelo')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Modelo" placeholder="Ejemplo: FS" value="{{old('Modelo')}}">
                                             @error('Modelo')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -791,11 +746,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: 190776" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 190776" value="{{old('Serie')}}">
                                             @error('Serie')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -818,9 +771,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
-                                            <input type="file" class="form-control-file inputForm" name="Factura"></input>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Factura"></input>
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -840,16 +793,19 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Garantía</label>
-                                            <input type="file" class="form-control inputForm" name="Garantia" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Garantia" >
+                                            @if ($errors->any())
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ficha técnica</label>
-                                            <input type="file" class="form-control inputForm" name="Foto" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Foto" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -857,9 +813,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado Actual</label>
-                                            <input type="file" class="form-control inputForm" name="Certificado_Actual" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
@@ -867,9 +823,9 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Plano</label>
-                                            <input type="file" class="form-control inputForm" name="Plano" >
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Plano" >
                                             @if ($errors->any())
-                                                <div class="alert alert-warning">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>

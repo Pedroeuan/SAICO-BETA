@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+
+
+use App\Models\Admin\Usuario;
 
 class UsuariosController extends Controller
 {
@@ -12,7 +19,9 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        return view('Admin.index');
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
+        //dd($Usuarios);
     }
 
     /**
@@ -28,7 +37,38 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Registro de Usuarios
+        // Validar los datos de entrada
+        $request->validate([
+            'NombreUsuario' => 'required|string|max:255',
+            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'ContrasenaUsuario' => 'required|string|max:255',
+            'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+            'RolUsuario' => [
+                'required',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+            ],
+        ]);
+    
+        // Crear una nueva instancia de Usuario
+        $Usuario = new Usuario;
+        $EsperaDato ='ESPERA DE DATO';
+        
+        // Asignar valores a los atributos del usuario
+        $Usuario->name = $request->input('NombreUsuario') ?? $EsperaDato;
+        $Usuario->email = $request->input('CorreoUsuario') ?? $EsperaDato;
+        
+        // Cifrar la contraseña antes de guardarla
+        $Usuario->password = Hash::make($request->input('ContrasenaUsuario'));
+        
+        $Usuario->rol = $request->input('RolUsuario') ?? $EsperaDato;
+
+        // Guardar el usuario en la base de datos
+        $Usuario->save();
+
+        // Redirigir a la página de administración
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
     }
 
     /**
@@ -42,24 +82,60 @@ class UsuariosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $Usuario = Usuario::where('id', $id)->first();
+
+        return view('Admin.edit', compact('id','Usuario'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validar los datos de entrada
+        $request->validate([
+            'NombreUsuario' => 'required|string|max:255',
+            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'ContrasenaUsuario' => 'required|string|max:255',
+            'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+            'RolUsuario' => [
+                'required',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+            ],
+        ]);
+        // Obtener el equipo existente
+        $Usuario  = Usuario::find($id);
+
+        // Actualizar los datos del equipo
+        $Usuario ->update([
+            'name' => $request->input('NombreUsuario'),
+            'email' => $request->input('CorreoUsuario'),
+            'password' => Hash::make($request->input('ContrasenaUsuario')),
+            'rol' => $request->input('RolUsuario'),
+        ]);
+
+        // Redirigir a la página de administración
+        $Usuarios = Usuario::all();
+        return view('Admin.index', compact('Usuarios'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
     {
-        //
+        $usuario = Usuario::find($id);
+    
+        if ($usuario) {
+            $usuario->delete();
+            return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No se pudo encontrar el Usuario.']);
+        }
     }
 }
