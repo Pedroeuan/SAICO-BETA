@@ -110,7 +110,7 @@
                 <th class="">Formato</th>
                 <th class="respuestasGenerales">Código:</th>
                 <th class="respuestasGenerales">FOR-PCVE-01/05</th>
-                <th rowspan="3"><img class="logo" src=" {{ url('images/Logo_AICO.png') }}"></th>
+                <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo"></th>
             </tr>
         </thead>
         <tbody>
@@ -132,26 +132,25 @@
         <tbody>
             <tr>
                 <td class="datosGeneralesCortos">Cliente:</td>
-                <td class="lineaInferior"><label for="">Protexa</label></td>
+                <td class="lineaInferior"><label for="">{{ $Manifiesto->Cliente }}</label></td>
                 <td class="datosGeneralesCortos">Folio:</td>
-                <td class="lineaInferior">PROP-024/24</td>
+                <td class="lineaInferior">{{ $Manifiesto->Folio }}</td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Destino:</td>
-                <td class="lineaInferior">NA</td>
+                <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
                 <td class="datosGeneralesCortos">Fecha de salida:</td>
-                <td class="lineaInferior">20-JUN-2024</td>
+                <td class="lineaInferior">{{ $Solicitud->formatted_date }}</td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Trabajo: </td>
-                <td class="lineaInferior">ULTRASONIDO INDUSTRIAL 
-                </td>
+                <td class="lineaInferior">{{ $Manifiesto->Trabajo }}</td>
                 <td class="datosGeneralesCortos">Puesto:</td>
-                <td class="lineaInferior">TECNICO</td>
+                <td class="lineaInferior">{{ $Manifiesto->Puesto }}</td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Responsable:</td>
-                <td class="lineaInferior" colspan="3">HECTOR DAVID DE LA CRUZ RODRIGUEZ</td>
+                <td class="lineaInferior" colspan="3">{{ $Manifiesto->Responsable }}</td>
             </tr>
         </tbody>
     </table>
