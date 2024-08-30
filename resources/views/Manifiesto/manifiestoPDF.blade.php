@@ -16,17 +16,51 @@
             font-size: 11px;
             text-align: center;
         }
-        /* borde para tabla */
-        .tablaManifiesto{
-            border: 1px solid black; 
+        /* borde para tabla-yacziry*/
+        /*.tablaManifiesto{
+            border: 0px solid black; 
             border-collapse: collapse;
             width: 100%;
             text-align: center;
             font-size: 11px;
+        }*/
+        .tablaheader {
+            border-collapse: collapse;  /* No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
         }
+
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaheader td, .tablaheader th {
+            border: 1px solid black; 
+            font-size: 11px;
+        }
+        .tablaManifiesto {
+            border-collapse: collapse;  /* No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+
         /* Aplica el borde a las celdas de la tabla */
         .tablaManifiesto td, .tablaManifiesto th {
-            border: 1px solid black; 
+            border: .6px solid black; 
+            font-size: 11px;
+        }
+        .tablaManifiesto2 {
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaManifiesto2 td, .tablaManifiesto2 th {
+            border: .6px solid black; 
             font-size: 11px;
         }
         .notas{
@@ -77,7 +111,7 @@
             height: 60px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 0px;
             z-index: 1000; /* Asegura que el header esté por encima */
         }
         footer {
@@ -104,7 +138,7 @@
 </head>
 <body>
 <header>
-    <table class="tablaManifiesto">
+    <table class="tablaheader">
         <thead>
             <tr>
                 <th class="">Formato</th>
@@ -158,403 +192,138 @@
 <br>
 <div class="">
     <table class="tablaManifiesto">
-    <thead>
+        <thead>
             <tr>
-                <th class="celdaAzul letraBlanca" colspan="7">Equipos</th>
+                @if($Manifiesto->Cliente == 'PROTEXA')
+                    <th class="celdaAzul letraBlanca" colspan="9">Equipos</th>
+                    @else
+                    <th class="celdaAzul letraBlanca" colspan="7">Equipos</th>
+                @endif
             </tr>
-            <tr class="celdaCrema">
-                <th class="especial">No.</th>
-                <th class="">Descripción:</th>
-                <th class="">No. ECO</th>
-                <th class="">No. De Serie</th>
-                <th class="">Marca</th>
-                <th class="">Modelo</th>
-                <th class="">Comentarios</th>
-            </tr>
+            @if($Manifiesto->Cliente == 'PROTEXA')
+                    <tr class="celdaCrema">
+                        <th class="especial">No.</th>
+                        <th class="">Descripción:</th>
+                        <th class="">No. ECO</th>
+                        <th class="">No. De Serie</th>
+                        <th class="">SAT</th>
+                        <th class="">BMPRO</th>
+                        <th class="">Marca</th>
+                        <th class="">Modelo</th>
+                        <th class="">Comentarios</th>
+                    </tr>
+                @else
+                    <tr class="celdaCrema">
+                        <th class="especial">No.</th>
+                        <th class="">Descripción:</th>
+                        <th class="">No. ECO</th>
+                        <th class="">No. De Serie</th>
+                        <th class="">Marca</th>
+                        <th class="">Modelo</th>
+                        <th class="">Comentarios</th>
+                    </tr>
+            @endif         
         </thead>
-        <tbody>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
-            <tr class="respuestasGenerales">
-                <td>1</td>
-                <td>laptop</td>
-                <td>ID-30</td>
-                <td>PF4CVKPD</td>
-                <td>LENOVO</td>
-                <td>IDEADPAD 3 15ALC6</td>
-                <td>incluye bolsa de transportación</td>
-            </tr>
+    <tbody>
+        @php
+            $contador = 1; // Inicializa el contador
+        @endphp
+            @foreach ($DetallesSolicitud as $detalle)
+                    @php
+                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                    @endphp
+                    @if($general->Tipo != 'CONSUMIBLES')
+                        @if($Manifiesto->Cliente == 'PROTEXA')
+                                    <tr>
+                                        <td>{{ $contador }}</td>
+                                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                                        <td>{{ $general->Serie ?? 'N/A' }}</td>
+                                        <td>{{ $general->SAT ?? 'N/A' }}</td>
+                                        <td>{{ $general->BMPRO ?? 'N/A' }}</td>
+                                        <td>{{ $general->Marca ?? 'N/A' }}</td>
+                                        <td>{{ $general->Modelo ?? 'N/A' }}</td>
+                                        <td>{{ $general->Comentario ?? 'N/A' }}</td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td>{{ $contador }}</td>
+                                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
+                                        <td>{{ $general->Serie ?? 'N/A' }}</td>
+                                        <td>{{ $general->Marca ?? 'N/A' }}</td>
+                                        <td>{{ $general->Modelo ?? 'N/A' }}</td>
+                                        <td>{{ $general->Comentario ?? 'N/A' }}</td>
+                                    </tr>
+                        @endif
+
+                        @php
+                            $contador++; // Incrementa el contador
+                        @endphp
+                    @endif
+            @endforeach
         </tbody>
     </table>
 
-    <table class="tablaManifiesto">
-    <thead>
+    <table class="tablaManifiesto2">
+        <thead>
             <tr>
-                <th class="celdaAzul letraBlanca" colspan="4">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                @if($Manifiesto->Cliente == 'PROTEXA')
+                    <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                    @else
+                    <th class="celdaAzul letraBlanca" colspan="4">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                @endif
             </tr>
-            <tr class="celdaCrema">
-                <th class="especial">No.</th>
-                <th class="">Cantidad:</th>
-                <th class="">Unidad</th>
-                <th class="" colspan="4">Descripción</th>
-            </tr>
+            @if($Manifiesto->Cliente == 'PROTEXA')
+                    <tr class="celdaCrema">
+                        <th class="especial">No.</th>
+                        <th class="">Cantidad:</th>
+                        <th class="">Unidad</th>
+                        <th class="">SAT</th>
+                        <th class="">BMPRO</th>
+                        <th class="" colspan="7">Descripción</th>
+                    </tr>
+                @else
+                    <tr class="celdaCrema">
+                        <th class="especial">No.</th>
+                        <th class="">Cantidad:</th>
+                        <th class="">Unidad</th>
+                        <th class="" colspan="4">Descripción</th>
+                    </tr>
+            @endif
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>3</td>
-                <td>lata</td>
-                <td colspan="4">liquidos</td>
-            </tr>
+            @php
+                $contador = 1; // Inicializa el contador
+            @endphp
+                @foreach ($DetallesSolicitud as $detalle)
+                        @php
+                            $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                        @endphp
+                        @if($general->Tipo == 'CONSUMIBLES')
+                            @if($Manifiesto->Cliente == 'PROTEXA')
+                                        <tr>
+                                            <td>{{ $contador }}</td>
+                                            <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                            <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                            <td>{{ $general->SAT ?? 'N/A' }}</td>
+                                            <td>{{ $general->BMPRO ?? 'N/A' }}</td>
+                                            <td colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td>{{ $contador }}</td>
+                                            <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                            <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                            <td colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        </tr>
+                                @endif
+                            
+                            @php
+                                $contador++; // Incrementa el contador
+                            @endphp
+                        @endif
+                @endforeach
         </tbody>
     </table>
 </div>
@@ -579,12 +348,12 @@
         </thead>
         <tbody>
             <tr>
-                <td rowspan="2" class="altoCelda"></td>
-                <td rowspan="2" class="altoCelda"></td>
+                <td rowspan="2" class="altoCelda">{{ $nombre }}</td>
+                <td rowspan="2" class="altoCelda">{{ $Solicitud->tecnico }}</td>
                 <td class="celdaAzul letraBlanca">Obsevaciones</td>
             </tr>
             <tr>
-            <td class="altoCelda"></td>
+                <td class="altoCelda">{{ $Manifiesto->Observaciones }}</td>
             </tr>
             <tr>
                 <td>Entrega: Nombre/cargo/firma</td>
