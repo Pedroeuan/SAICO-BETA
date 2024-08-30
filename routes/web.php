@@ -157,6 +157,11 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
+
+    /*manifiestos*/
+    /*Ruta para ver el manifiesto PDF*/
+    //Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
+    Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     });
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
@@ -178,6 +183,7 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     });
+
     /*CLIENTES*/
     Route::middleware('can:ventas-access')->group(function () {
     /*CLIENTES*/
@@ -194,11 +200,6 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
     });
-
-    /*manifiestos*/
-    /*Ruta para ver el manifiesto PDF*/
-    Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
-
 
 });
 

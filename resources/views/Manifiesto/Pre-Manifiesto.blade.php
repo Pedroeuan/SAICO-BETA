@@ -100,7 +100,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="col-form-label" for="inputSuccess">Responsable</label>
-                        <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{old('Responsable')}}" required>
+                        <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Solicitud->tecnico }}" required>
                         @error('Responsable')
                         <br>
                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
