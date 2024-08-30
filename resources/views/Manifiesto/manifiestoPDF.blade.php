@@ -110,7 +110,7 @@
                 <th class="">Formato</th>
                 <th class="respuestasGenerales">Código:</th>
                 <th class="respuestasGenerales">FOR-PCVE-01/05</th>
-                <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo"></th>
+                <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
             </tr>
         </thead>
         <tbody>

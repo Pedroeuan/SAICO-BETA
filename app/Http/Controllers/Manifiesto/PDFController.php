@@ -19,7 +19,8 @@ class PDFController extends Controller
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
         // Ruta de la imagen en el directorio public
-        $Logo = asset('images/Logo_AICO.png'); // Ajusta la ruta según sea necesario
+        //$Logo = asset('images/Logo_AICO.png'); // Ajusta la ruta según sea necesario
+        $Logo = public_path('images/Logo_AICO.png'); // Ajusta la ruta según sea necesario
 
         // Consultar datos desde la base de datos
         // Datos para el PDF (pueden ser datos estáticos o dinámicos)
