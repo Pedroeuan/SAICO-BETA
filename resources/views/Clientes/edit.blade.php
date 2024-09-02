@@ -33,14 +33,14 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->Cliente }}" name="Cliente" placeholder="Ejemplo: PROTEXA" required>
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->Cliente }}" name="Cliente" placeholder="Ejemplo: PROTEXA" style="text-transform: uppercase;" required>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">RFC</label>
-                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->RFC }}" name="RFC" placeholder="Ejemplo: PROP56512458">
+                                                    <input type="text" class="form-control inputForm" value="{{ $clientes->RFC }}" name="RFC" placeholder="Ejemplo: PROP56512458" style="text-transform: uppercase;">
                                                 </div>
                                             </div>
 
