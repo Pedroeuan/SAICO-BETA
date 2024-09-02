@@ -111,11 +111,8 @@
 
                 <div class="col-sm-4">
                     <div class="form-group">
-                        
-                        <div class="form-check form-switch form-check-reverse">
-                        <label class="form-check-label" for="flexSwitchCheckReverse"><b>En Renta</b></label>
-                            <input class="form-check-input" name="Renta" type="checkbox" id="flexSwitchCheckReverse">
-                        </div>
+                        <label class="col-form-label" for="inputSuccess">En renta</label> <br>
+                        <input type="checkbox"  name="Renta">                                          
                     </div>
                 </div>
 
@@ -234,6 +231,9 @@
             }
         });
     });
+
+    // llamar switch boostrap
+    $("[name='Renta']").bootstrapSwitch();
 </script>
 
 @endsection
