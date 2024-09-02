@@ -33,7 +33,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                                    <input type="text" class="form-control inputForm @error('Cliente') is-invalid @enderror" value="{{old('Cliente')}}" name="Cliente" placeholder="Ejemplo: PROTEXA" style="text-transform: uppercase;">
+                                                    <input type="text" class="form-control inputForm @error('Cliente') is-invalid @enderror" value="{{old('Cliente')}}" name="Cliente" placeholder="Ejemplo: PROTEXA" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
                                                     @error('Cliente')
                                                             <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                     @enderror
@@ -43,7 +43,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">RFC</label>
-                                                    <input type="text" class="form-control inputForm" value="{{old('RFC')}}" name="RFC" placeholder="Ejemplo: PROP56512458" style="text-transform: uppercase;">
+                                                    <input type="text" class="form-control inputForm" value="{{old('RFC')}}" name="RFC" placeholder="Ejemplo: PROP56512458" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
                                                 </div>
                                             </div>
 
