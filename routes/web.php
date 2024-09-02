@@ -40,10 +40,10 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });
 
-    /*EQUIPOS*/
-    Route::middleware('can:equipos-access')->group(function () {
-    /*Equipos y Consumibles*/ 
+
     Route::middleware('auth')->group(function () {
+    /*EQUIPOS INVENTARIO-REGISTRO*/
+    Route::middleware('can:equipos-access')->group(function () {
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
@@ -162,6 +162,7 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     /*Ruta para ver el manifiesto PDF*/
     //Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
+    
     });
     /*MANIFIESTO PDF*/
     /*Ruta para ver el manifiesto pdf*/
