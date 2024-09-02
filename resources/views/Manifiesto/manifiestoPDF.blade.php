@@ -119,7 +119,7 @@
             bottom: -60px;
             left: 0px;
             right: 0px;
-            height: 400px;
+            height: 100px; /*400*/
         }
         .altoCelda{
             height: 70px;
@@ -227,6 +227,7 @@
     <tbody>
         @php
             $contador = 1; // Inicializa el contador
+            $minFilas = 5; // Define el número mínimo de filas
         @endphp
             @foreach ($DetallesSolicitud as $detalle)
                     @php
@@ -262,6 +263,30 @@
                         @endphp
                     @endif
             @endforeach
+
+            @for($i = $contador; $i <= $minFilas; $i++)
+                <tr>
+                    @if($Manifiesto->Cliente == 'PROTEXA')
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                    @else
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                    @endif
+                </tr>
+            @endfor
         </tbody>
     </table>
 
@@ -269,7 +294,7 @@
         <thead>
             <tr>
                 @if($Manifiesto->Cliente == 'PROTEXA')
-                    <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                    <th class="celdaAzul letraBlanca" colspan="12">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                     @else
                     <th class="celdaAzul letraBlanca" colspan="4">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                 @endif
@@ -294,97 +319,147 @@
         </thead>
         <tbody>
             @php
+                $minFilas = 5; // Define el número mínimo de filas
                 $contador = 1; // Inicializa el contador
+                $hayConsumibles = $DetallesSolicitud->contains(function($detalle) use ($generalEyC) {
+                    $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                    return $general && $general->Tipo == 'CONSUMIBLES';
+                });
             @endphp
+
+            @if($hayConsumibles)
                 @foreach ($DetallesSolicitud as $detalle)
-                        @php
-                            $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                        @endphp
-                        @if($general->Tipo == 'CONSUMIBLES')
-                            @if($Manifiesto->Cliente == 'PROTEXA')
-                                        <tr>
-                                            <td>{{ $contador }}</td>
-                                            <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                            <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                            <td>{{ $general->SAT ?? 'N/A' }}</td>
-                                            <td>{{ $general->BMPRO ?? 'N/A' }}</td>
-                                            <td colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td>{{ $contador }}</td>
-                                            <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                            <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                            <td colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        </tr>
-                                @endif
-                            
-                            @php
-                                $contador++; // Incrementa el contador
-                            @endphp
+
+                    @php
+                        $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                    @endphp
+
+                    @if($general && $general->Tipo == 'CONSUMIBLES')
+                        @if($Manifiesto->Cliente == 'PROTEXA')
+                            <tr>
+                                <td>{{ $contador }}</td>
+                                <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                <td>{{ $general->SAT ?? 'N/A' }}</td>
+                                <td>{{ $general->BMPRO ?? 'N/A' }}</td>
+                                <td colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td>{{ $contador }}</td>
+                                <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                <td colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                            </tr>
                         @endif
+
+                        @php
+                            $contador++; // Incrementa el contador
+                        @endphp
+
+                    @endif
+
                 @endforeach
+
+                @for($i = $contador; $i <= $minFilas; $i++)
+                    <tr>
+                        @if($Manifiesto->Cliente == 'PROTEXA')
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td colspan="7">----</td>
+                        @else
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td colspan="4">----</td>
+                        @endif
+                    </tr>
+                @endfor
+            @else
+                @for($i=0;$i<=5;$i=$i+1)
+                    <tr>
+                        @if($Manifiesto->Cliente == 'PROTEXA')
+                            
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td colspan="7">----</td>
+                            @else
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td colspan="4">----</td>
+                        @endif
+                    </tr>
+                @endfor
+            @endif
         </tbody>
+
     </table>
 </div>
-<table class="tablaManifiesto">
-    <tr>
-        <td class="notas" colspan="4"><strong class="letraRoja">Nota a):</strong> Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <br>
-            <strong class="letraRoja">Nota b):</strong> El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
-            <strong class="letraRoja">Nota c):</strong> Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
-        </td>
-    </tr>
-</table>
-<footer>
-<div class="">
     <table class="tablaManifiesto">
-        <thead>
-            <tr>
-                <th class="celdaAzul letraBlanca" colspan="3">SALIDA DE EQUIPOS Y ADICIONALES</th>
-            </tr>
-            <tr>
-                <th colspan="3" class="saltoBlanco"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td rowspan="2" class="altoCelda">{{ $nombre }}</td>
-                <td rowspan="2" class="altoCelda">{{ $Solicitud->tecnico }}</td>
-                <td class="celdaAzul letraBlanca">Obsevaciones</td>
-            </tr>
-            <tr>
-                <td class="altoCelda">{{ $Manifiesto->Observaciones }}</td>
-            </tr>
-            <tr>
-                <td>Entrega: Nombre/cargo/firma</td>
-                <td>Recibe: Nombre/cargo/firma </td>
-                <td rowspan="2"></td>
-            </tr>
-            
-            <tr>
-                <td class="celdaAzul letraBlanca" colspan="3">RETORNO DE EQUIPOS Y ADICIONALES</td>
-            </tr>
-            <tr>
-                <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="celdaAzul letraBlanca">¿Los equipos retornan en optimas condiciones?</td>
-                <td>SI______    NO______  N/A______</td>
-                <td class="celdaAzul letraBlanca">Observaciones</td>
-            </tr>
-            <tr>
-                <td class="altoCelda"></td>
-                <td class="altoCelda"></td>
-                <td class="altoCelda" rowspan="2"></td>
-            </tr>
-            <tr>
-                <td>Entrega: Nombre/cargo/firma</td>
-                <td>Recibe: Nombre/cargo/firma </td>
-            </tr>
-        </tbody>
+        <tr>
+            <td class="notas" colspan="4"><strong class="letraRoja">Nota a):</strong> Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <br>
+                <strong class="letraRoja">Nota b):</strong> El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
+                <strong class="letraRoja">Nota c):</strong> Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
+            </td>
+        </tr>
     </table>
-</div>
-</footer>
-</body>
+        <footer>
+            <div class="">
+                <table class="tablaManifiesto">
+                    <thead>
+                        <tr>
+                            <th class="celdaAzul letraBlanca" colspan="3">SALIDA DE EQUIPOS Y ADICIONALES</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3" class="saltoBlanco"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2" class="altoCelda">{{ $nombre }}</td>
+                            <td rowspan="2" class="altoCelda">{{ $Solicitud->tecnico }}</td>
+                            <td class="celdaAzul letraBlanca">Obsevaciones</td>
+                        </tr>
+                        <tr>
+                            <td class="altoCelda">{{ $Manifiesto->Observaciones }}</td>
+                        </tr>
+                        <tr>
+                            <td>Entrega: Nombre/cargo/firma</td>
+                            <td>Recibe: Nombre/cargo/firma </td>
+                            <td rowspan="2"></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="celdaAzul letraBlanca" colspan="3">RETORNO DE EQUIPOS Y ADICIONALES</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="celdaAzul letraBlanca">¿Los equipos retornan en optimas condiciones?</td>
+                            <td>SI______    NO______  N/A______</td>
+                            <td class="celdaAzul letraBlanca">Observaciones</td>
+                        </tr>
+                        <tr>
+                            <td class="altoCelda"></td>
+                            <td class="altoCelda"></td>
+                            <td class="altoCelda" rowspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>Entrega: Nombre/cargo/firma</td>
+                            <td>Recibe: Nombre/cargo/firma </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </footer>
+    </body>
 </html>
