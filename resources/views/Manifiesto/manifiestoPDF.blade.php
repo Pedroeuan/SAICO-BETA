@@ -294,9 +294,9 @@
         <thead>
             <tr>
                 @if($Manifiesto->Cliente == 'PROTEXA')
-                    <th class="celdaAzul letraBlanca" colspan="12">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                    <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                     @else
-                    <th class="celdaAzul letraBlanca" colspan="4">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
+                    <th class="celdaAzul letraBlanca" colspan="5">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                 @endif
             </tr>
             @if($Manifiesto->Cliente == 'PROTEXA')
@@ -313,7 +313,7 @@
                         <th class="especial">No.</th>
                         <th class="">Cantidad:</th>
                         <th class="">Unidad</th>
-                        <th class="" colspan="4">Descripción</th>
+                        <th class="" colspan="5">Descripción</th>
                     </tr>
             @endif
         </thead>
