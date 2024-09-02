@@ -42,6 +42,30 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
 
 
     Route::middleware('auth')->group(function () {
+        
+    Route::middleware('can:tecnicos-equipos-access')->group(function () {
+    /*SOLICITUDES-1*/
+    /*Rutas de Vistas de Solicitudes-Registro*/
+    Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
+    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
+    Route::get('/solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+
+    /*SOLICITUD*/
+    /*Ruta de Guardado-index*/
+    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
+    /*Ruta de botón Agregar-datos a detalles solicitud-por aprobar*/
+    Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
+    /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
+    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
+    /*Ruta de botón obtener-datos de detalles kits-Solicitud.create*/
+    Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
+    /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
+    Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
+
+    /*Ruta /Obtener/CantidadAlmacen/*/
+    Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
+    });
+        
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
     /*GENERAL EYC*/
@@ -105,15 +129,10 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/kits/agregar', [KitsController::class, 'agregarDetallesKits'])->name('Kits.agregarDetallesKits');
     /*Ruta de botón Eliminación-detalles_Kits-edición*/
     Route::delete('/Detalles_Kits/eliminar/{id}', [KitsController::class, 'destroyDetallesKits'])->name('Kits.destroyDetallesKits');
-
     /*Ruta de botón Guardar-updateKits-edición*/
     Route::post('/Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
 
-    /*SOLICITUDES*/
-    /*Rutas de Vistas de Solicitudes-Registro*/
-    Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
-    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
-    Route::get('/solicitud/index', [SolicitudesController::class, 'index'])->name('solicitud.index');
+    /*SOLICITUDES-2*/
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
     /*Rutas de controlador para duplicar los datos y redirigir*/
@@ -122,21 +141,6 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::get('/solicitudplusvista/edit/{id}', [SolicitudesController::class, 'editplusvista'])->name('solicitudplusvista.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
-
-    /*SOLICITUD*/
-    /*Ruta de Guardado-index*/
-    Route::post('/solicitudes/storeSolicitud', [SolicitudesController::class, 'storeSolicitud'])->name('solicitudes.storeSolicitud');
-    /*Ruta de botón Agregar-datos a detalles solicitud-por aprobar*/
-    Route::post('/solicitudes/agregar', [SolicitudesController::class, 'agregarDetallesSolicitud'])->name('solicitudes.agregarDetallesSolicitud');
-    /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
-    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroyDetallesSolicitud'])->name('solicitudes.destroyDetallesSolicitud');
-    /*Ruta de botón obtener-datos de detalles kits-Solicitud.create*/
-    Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
-    /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
-    Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
-
-    /*Ruta /Obtener/CantidadAlmacen/*/
-    Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
@@ -151,9 +155,9 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
     Route::post('/solicitudes/updateSolicitud/{id}', [ManifiestoController::class, 'update'])->name('solicitudes.updateSolicitud');
     /*Ruta de Actualización-plus*/
     Route::post('/solicitudesplus/updateSolicitudplus/{id}', [ManifiestoController::class, 'updateplus'])->name('solicitudesplus.updateSolicitudplus');
+
     /*ruta para obtener el conteo de registros de manifiesto*/
     Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
-
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
