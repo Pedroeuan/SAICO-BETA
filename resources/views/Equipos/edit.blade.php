@@ -368,7 +368,7 @@
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
+                                            <label class="col-form-label" for="inputSuccess">No de Certificado</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado">
                                         </div>
                                     </div>
