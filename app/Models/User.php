@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -52,7 +53,13 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return "Administrador";
+        //Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+        return $rol;
+        //return "Administrador";
     }
 
     public function adminlte_profile_url()

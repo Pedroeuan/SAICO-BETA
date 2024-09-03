@@ -357,8 +357,6 @@ return [
 
                // Sidebar Operativos:
             [
-
-
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
