@@ -20,14 +20,27 @@ use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Notificaciones\NotificationController;
+//use App\Http\Controllers\NotificationController;
+
 
     Route::get('/', function () {
         return view('auth.login');
     });
 
-    Route::get('/dashboard', function () {
+    /*Route::get('/dashboard', function () {
         return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');*/
+
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
+
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

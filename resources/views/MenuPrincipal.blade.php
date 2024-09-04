@@ -8,6 +8,26 @@
 <br>
 <br>
 <br>
+@php 
+//dd($notificaciones);
+
+/*
+@if($notificaciones->isNotEmpty())
+    <ul class="list-group">
+        @foreach ($notificaciones as $notificacion)
+            <li class="list-group-item">
+                {{ $notificacion->data['mensaje'] }}
+                <small class="text-muted">{{ $notificacion->created_at->diffForHumans() }}</small>
+            </li>
+        @endforeach
+    </ul>
+@else
+    <p>No hay notificaciones.</p>
+@endif
+*/
+
+//dd($data);
+@endphp
 <div class="content">
     <div class="container-fluid">
         <div class="row">
