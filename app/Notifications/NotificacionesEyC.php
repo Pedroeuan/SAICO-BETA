@@ -70,8 +70,8 @@ class NotificacionesEyC extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        /*\Log::info('Creating notification with data:', [
-            'certificado_id' => $this->certificado->idCertificados,
+        /*Log::info('Creating notification with data:', [
+            'certificado_id' => $this->certificado->id,
             'diasRestantes' => $this->diasRestantes,
         ]);*/
         return [
