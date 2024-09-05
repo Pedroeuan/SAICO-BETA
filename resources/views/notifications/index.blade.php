@@ -26,9 +26,55 @@
             {{ $notifications->links() }} <!-- Paginación -->
         </div>
     </div>
+    @php 
+    //dd($notifications);
+    @endphp
 @stop
 
+@section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--datatable -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">-->
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+
 <script>
+    $(document).ready(function () {
+    function fetchNotifications() {
+        $.ajax({
+            url: '{{ route('notifications.fetch') }}',
+            method: 'GET',
+            success: function (data) {
+                // Actualizar el ícono de notificaciones con el número de nuevas notificaciones
+                $('#my-notification').data('label', data.length);
+
+                // Llenar el menú de notificaciones
+                let dropdown = $('#my-notification-dropdown');
+                dropdown.empty();
+
+                data.forEach(function (notification) {
+                    dropdown.append(`
+                        <a href="${notification.url}" class="dropdown-item">
+                            <i class="fas fa-exclamation-circle"></i> ${notification.message}
+                        </a>
+                    `);
+                });
+            },
+            error: function (error) {
+                console.error('Error al obtener notificaciones:', error);
+            }
+        });
+    }
+
+    // Llamar a la función cada 30 segundos (o como esté configurado)
+    setInterval(fetchNotifications, 30000);
+});
+
 /*
 document.addEventListener('DOMContentLoaded', function () {
     function fetchNotifications() {
@@ -81,3 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
 */
 
 </script>
+
+@endsection
+
+

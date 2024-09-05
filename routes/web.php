@@ -49,9 +49,9 @@ use App\Http\Controllers\Notificaciones\NotificationController;
     });
 
     /*PDF*/
-    Route::middleware('auth')->group(function () {
+    /*Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
-    });
+    });*/
 
 
     Route::middleware('auth')->group(function () {

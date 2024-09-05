@@ -26,15 +26,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Programar el comando para que se ejecute diariamente
-        $schedule->command('notificaciones:calibracion')->daily();
+        //$schedule->command('notificaciones:calibracion')->daily(); //cada dia
+        $schedule->command('notificaciones:calibracion')->daily(); //cada minuto
     }
-    
-    /*public function index()
-    {
-        $notificaciones = auth()->user()->notifications;
-
-        return view('notificaciones.index', compact('notificaciones'));
-    }*/
 
     /**
      * Registrar los comandos de consola de la aplicación.
