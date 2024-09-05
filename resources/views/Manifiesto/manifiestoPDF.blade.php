@@ -7,7 +7,13 @@
             margin: 45px 25px;
             counter-reset: page; /* Inicializa el contador de páginas */
         }
-
+        .page-num-container {
+            position: fixed; /* Fija la posición del contenedor */
+            bottom: 20px;   /* Ajusta la posición vertical */
+            right: 20px;    /* Ajusta la posición horizontal */
+            font-size: 10px;
+            text-align: right;
+        }
         /* Ajusta la celda al texto en los datos generales */
         .datosGeneralesCortos{
             font-weight: bold;
@@ -164,15 +170,6 @@
                 <td class="page-num-container">
                 </td>
             </tr>
-
-            <!-- Script de número de página separado del contenido -->
-<script type="text/php">
-    if (isset($pdf)) {
-        $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-        $size = 10;
-        $pdf->page_text(500, 80, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, $size);
-    }
-</script>
         </tbody>
     </table>
 </header>
@@ -219,7 +216,7 @@
             @if($Manifiesto->Cliente == 'PROTEXA')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Descripción:</th>
+                        <th class="">Descripción</th>
                         <th class="">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">SAT</th>
@@ -231,7 +228,7 @@
                 @else
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Descripción:</th>
+                        <th class="">Descripción</th>
                         <th class="">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">Marca</th>
@@ -243,7 +240,7 @@
     <tbody>
         @php
             $contador = 1; // Inicializa el contador
-            $minFilas = 100; // Define el número mínimo de filas
+            $minFilas = 5; // Define el número mínimo de filas
         @endphp
             @foreach ($DetallesSolicitud as $detalle)
                     @php
@@ -318,7 +315,7 @@
             @if($Manifiesto->Cliente == 'PROTEXA')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Cantidad:</th>
+                        <th class="">Cantidad</th>
                         <th class="">Unidad</th>
                         <th class="">SAT</th>
                         <th class="">BMPRO</th>
@@ -327,7 +324,7 @@
                 @else
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Cantidad:</th>
+                        <th class="">Cantidad</th>
                         <th class="">Unidad</th>
                         <th class="" colspan="5">Descripción</th>
                     </tr>
@@ -335,8 +332,8 @@
         </thead>
         <tbody>
             @php
-                $minFilas = 5; // Define el número mínimo de filas
                 $contador = 1; // Inicializa el contador
+                $minFilas = 5; // Define el número mínimo de filas
                 $hayConsumibles = $DetallesSolicitud->contains(function($detalle) use ($generalEyC) {
                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     return $general && $general->Tipo == 'CONSUMIBLES';
@@ -476,14 +473,6 @@
                     </tbody>
                 </table>
             </div>
-                <!-- Footer con el número de página -->
-    <script type="text/php">
-        if (isset($pdf)) {
-            $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-            $size = 10;
-            $pdf->page_text(270, 820, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, $size);
-        }
-    </script>
         </footer>
     </body>
 </html>
