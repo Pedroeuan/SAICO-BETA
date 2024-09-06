@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // Programar el comando para que se ejecute diariamente
         //$schedule->command('notificaciones:calibracion')->daily(); //cada dia
-        $schedule->command('notificaciones:calibracion')->daily(); //cada minuto
+        $schedule->command('notificaciones:calibracion')->everyMinute(); //cada minuto
     }
 
     /**
