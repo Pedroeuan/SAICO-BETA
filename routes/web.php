@@ -29,17 +29,22 @@ use App\Http\Controllers\Notificaciones\NotificationController;
         return view('auth.login');
     });
 
-    /*Route::get('/dashboard', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');*/
+    })->middleware(['auth', 'verified'])->name('dashboard');
+
+    /*Route::middleware(['auth', 'verificar.certificados'])->group(function () {
+        // Rutas protegidas por autenticación y verificación de certificados
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('verificar.certificados');
+    });    */
 
 
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
+    /*Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['auth', 'verified'])
-        ->name('dashboard');
+        ->name('dashboard');*/
 
 
     Route::middleware('auth')->group(function () {

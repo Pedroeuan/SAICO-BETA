@@ -21,10 +21,11 @@ class DashboardController extends Controller
     
     public function index()
     {
-        $notificaciones = auth()->user()->notifications;
+        //$notificaciones = auth()->user()->notifications;
 
         //return view('notificaciones.index', compact('notificaciones'));
-        return view('MenuPrincipal', compact('notificaciones'));
+        //return view('MenuPrincipal', compact('notificaciones'));
+        return view('MenuPrincipal');
     }
 
 }

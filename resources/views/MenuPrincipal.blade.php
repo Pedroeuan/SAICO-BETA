@@ -9,25 +9,18 @@
 <br>
 <br>
 @php 
-//dd($notificaciones);
-
-/*
-@if($notificaciones->isNotEmpty())
-    <ul class="list-group">
-        @foreach ($notificaciones as $notificacion)
-            <li class="list-group-item">
-                {{ $notificacion->data['mensaje'] }}
-                <small class="text-muted">{{ $notificacion->created_at->diffForHumans() }}</small>
-            </li>
-        @endforeach
-    </ul>
-@else
-    <p>No hay notificaciones.</p>
-@endif
-*/
-
-//dd($data);
 @endphp
+
+@if (session('alert'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ session('alert') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
