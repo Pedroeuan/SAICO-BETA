@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('{{ url("notificaciones/update") }}')
             .then(response => response.json())
             .then(data => {
+                console.log('Datos recibidos:', data); // Verifica los datos recibidos en la consola
                 const notificationBadge = document.querySelector('#my-notification .badge'); 
                 const notificationList = document.querySelector('#my-notification .dropdown-menu'); 
 
