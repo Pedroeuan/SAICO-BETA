@@ -82,6 +82,45 @@ class NotificacionController extends Controller
             }
         }
     }
+
+    /*public function getNotificaciones()
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        
+        // Obtener notificaciones para el usuario
+        $notificaciones = Notificacion::where('users_id', $user->id)
+                                      //->where('leido', false) // Asumiendo que tienes un campo 'leido' para verificar si ya se ha leído
+                                      ->orderBy('created_at', 'desc')
+                                      ->get(['Mensaje_Corto']); // Solo necesitamos el campo del mensaje corto
+        
+        // Retornar las notificaciones en formato JSON
+        return response()->json($notificaciones);
+    }    */
+
+    public function getNotificaciones()
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        
+        // Obtener notificaciones para el usuario
+        $notificaciones = Notificacion::where('users_id', $user->id)
+                                       //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                       ->orderBy('created_at', 'desc')
+                                       ->get(['idNotificaciones', 'Mensaje_Corto']); // Asegúrate de tener el 'id' también
+    
+        // Formatear las notificaciones para AdminLTE
+        $formattedNotifications = $notificaciones->map(function ($notificacion) {
+            return [
+                'id' => $notificacion->idNotificaciones,
+                'message' => $notificacion->Mensaje_Corto,
+                'url' => '#', // Aquí puedes poner la URL real de la notificación o alguna acción relevante
+            ];
+        });
+    
+        // Retornar las notificaciones en formato JSON
+        return response()->json($formattedNotifications);
+    }
     
     
 }

@@ -305,7 +305,7 @@ return [
             'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
             'update_cfg' => [
-                'url' => 'cambiar url para icono', // The url to periodically fetch new data (optional).
+                'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
                 'period' => 30,                       // The update period for get new data (in seconds, optional).
             ],
         ],

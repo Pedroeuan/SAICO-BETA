@@ -38,7 +38,12 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('verificar.certificados');
     });    */
 
+    /*Creación de Notificaciones*/
     Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
+
+    /*Obtener Notificaciones*/
+    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
+
 
     //Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     //Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
