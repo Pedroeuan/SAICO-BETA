@@ -300,12 +300,12 @@ return [
             'icon_color' => 'danger',                // The initial icon color (optional).
             'label' => 0,                             // The initial label for the badge (optional).
             'label_color' => '',                // The initial badge color (optional).
-            'url' => 'notifications',            // The url to access all notifications/elements (required).
+            'url' => 'notificacion/index',            // The url to access all notifications/elements (required).
             'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
             'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
             'update_cfg' => [
-                'url' => 'notifications/fetch', // The url to periodically fetch new data (optional).
+                'url' => 'cambiar url para icono', // The url to periodically fetch new data (optional).
                 'period' => 30,                       // The update period for get new data (in seconds, optional).
             ],
         ],

@@ -9,6 +9,8 @@
 <br>
 <br>
 @php 
+//dd($user);
+//dd($certificados);
 @endphp
 
 @if (session('alert'))

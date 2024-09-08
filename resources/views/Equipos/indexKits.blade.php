@@ -7,6 +7,14 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+<style>
+    #tablaJs td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaJs th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+</style>
 @endsection
 
 @section('content')
