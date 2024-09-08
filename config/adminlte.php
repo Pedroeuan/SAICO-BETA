@@ -306,7 +306,7 @@ return [
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
             'update_cfg' => [
                 'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
-                'period' => 30,                       // The update period for get new data (in seconds, optional).
+                'period' => 10,                       // The update period for get new data (in seconds, optional).
             ],
         ],
         // Sidebar Administrativo:
