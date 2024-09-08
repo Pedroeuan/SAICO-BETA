@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Llamada inicial y periódica
     updateNotifications();
-    setInterval(updateNotifications, 30000); // 30 segundos
+    setInterval(updateNotifications, 10000); // 10 segundos
 });
 </script>
 @endsection
