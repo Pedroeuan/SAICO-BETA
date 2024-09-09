@@ -355,7 +355,8 @@ class AccesoriosController extends Controller
             $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
     }  
     $generalConCertificado->update([
-        'No_certificado' => $request->input('No_certificado'),
+        'No_certificado' => 'N/A',
+        //'No_certificado' => $request->input('No_certificado'),
         //'Fecha_calibracion' => $fechaCalibracion,
         //'Prox_fecha_calibracion' => $proxFechaCalibracion,
     ]);

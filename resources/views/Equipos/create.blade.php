@@ -3,6 +3,15 @@
 
 @section('title', 'Registro E y C')
 
+<style>
+    #tablaJs td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaJs th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+</style>
+
 @section('content')
 <br>
 <br>

@@ -1,7 +1,6 @@
-
 @extends('adminlte::page')
 
-@section('title', 'Historial E,S y D')
+@section('title', 'Notificaciones')
 
 @section('css')
 <!--datatable -->
@@ -19,60 +18,33 @@
 @endsection
 
 @section('content')
-<br>  
 <br>
 <br>
-<!-- form start -->
-<form role="form">
-    <div class="box ">
-        <h3>Historial de Entradas, Salidas y Devoluciones</h3>
-        <br>
-        <div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h5><i class="icon fas fa-info"></i> Nota</h5>
-            Suministro: Activos que ingresaron como nuevo ingreso.<br>
-            Salida: Activos que salieron por servicio a través del manifiesto.<br>
-            En renta: Activos que salieron en servicio de renta.<br>
-            Devolución: Activos que ingresaron por devolución.
-            </p>
-        </div>
-        <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                <thead>
+<br>
+<div class="container">
+    @php 
+    //dd($notificaciones);
+    @endphp
+
+    @if($notificaciones->isEmpty())
+        <p>No hay notificaciones para este rol.</p>
+    @else
+    <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <thead>
                 <tr>
-                    <th>Folio</th>
-                    <th>Nombre</th>
-                    <th>No. Económico</th>
-                    <th>Serie</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Fecha Calibración/Caducidad</th>
-                    <th>Tierra/Costa Fuera</th>
+                    <th>Mensaje</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($historiales as $historial)
-
+                @foreach ($notificaciones as $notificacion)
                     <tr>
-                        <td>{{ $historial->Folio }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->Nombre_E_P_BP ?? 'N/A' }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->No_economico ?? 'N/A' }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->Serie ?? 'N/A' }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->Marca ?? 'N/A' }}</td>
-                        <td>{{ $historial->Almacen->General_EyC->Modelo ?? 'N/A' }}</td>
-                        <td>{{ $historial->Tipo }}</td>
-                        <td>{{ $historial->Cantidad }}</td>
-                        <td>{{ $historial->formatted_date }}</td>
-                        <td>{{ $historial->Tierra_Costafuera }}</td>
+                        <td>{{ $notificacion->Mensaje_Largo }}</td>
                     </tr>
                 @endforeach
             </tbody>
-            </table>
-        </div>
-    </div>
-</form>
+        </table>
+    @endif
+</div>
 @stop
 
 @section('js')
@@ -125,7 +97,6 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
-
 </script>
 
 @endsection

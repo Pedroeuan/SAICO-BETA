@@ -368,7 +368,7 @@
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado</label>
+                                            <label class="col-form-label" for="inputSuccess">No de Certificado</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalConCertificados->No_certificado }}" name="No_certificado">
                                         </div>
                                     </div>
@@ -1077,6 +1077,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <Script>
     /*Prevenir el Enter Equipos*/
