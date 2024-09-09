@@ -41,47 +41,56 @@ class NotificacionController extends Controller
     }
 
     public function crearNotificacionesCertificados()
-    {
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-    
-        // Obtener fechas límite para las consultas
-        $fechaActual = Carbon::now();
-        $fecha30DiasAntes = $fechaActual->copy()->subDays(30)->toDateString();
-        $fecha15DiasAntes = $fechaActual->copy()->subDays(15)->toDateString();
-        $fecha7DiasAntes = $fechaActual->copy()->subDays(7)->toDateString();
-    
-        // Obtener certificados con fechas de calibración específicas
-        $certificados = certificados::whereIn('Prox_fecha_calibracion', [$fecha30DiasAntes, $fecha15DiasAntes, $fecha7DiasAntes])->get();
-    
-        // Recorrer cada certificado y crear una notificación para cada uno
-        foreach ($certificados as $certificado) {
-            // Determinar los días restantes para la calibración
-            $diasRestantes = Carbon::parse($certificado->Prox_fecha_calibracion)->diffInDays($fechaActual);
-    
-            // Asegúrate de que $diasRestantes es un entero
-            $diasRestantes = (int) $diasRestantes;
-    
-            // Crear los mensajes corto y largo
+{
+    // Obtener el usuario autenticado
+    $user = Auth::user();
+
+    // Obtener fechas límite para las consultas
+    $fechaActual = Carbon::now();
+    $fecha30DiasAntes = $fechaActual->copy()->subDays(30)->toDateString();
+    $fecha15DiasAntes = $fechaActual->copy()->subDays(15)->toDateString();
+    $fecha7DiasAntes = $fechaActual->copy()->subDays(7)->toDateString();
+    $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();
+
+    // Obtener certificados con fechas de calibración específicas
+    $certificados = certificados::whereIn('Prox_fecha_calibracion', [$fecha30DiasAntes, $fecha15DiasAntes, $fecha7DiasAntes, $fecha0DiasAntes])->get();
+
+    // Recorrer cada certificado y crear una notificación para cada uno
+    foreach ($certificados as $certificado) {
+        // Determinar los días restantes para la calibración
+        $diasRestantes = Carbon::parse($certificado->Prox_fecha_calibracion)->diffInDays($fechaActual);
+
+        // Asegúrate de que $diasRestantes es un entero
+        $diasRestantes = (int) $diasRestantes;
+
+        // Crear los mensajes corto y largo
+        if ($diasRestantes === 0) {
+            // Mensaje especial para certificados vencidos
+            $mensajeCorto = "Certificado VENCIDO";
+            $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está VENCIDO (Fecha de vencimiento: " . $certificado->Prox_fecha_calibracion . ")";
+        } else {
+            // Mensaje para certificados próximos a vencer
             $mensajeCorto = "Cert. Prox. a VENCER en $diasRestantes días";
             $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está próximo a vencer en $diasRestantes días (Fecha de vencimiento: " . $certificado->Prox_fecha_calibracion . ")";
-    
-            // Verificar si la notificación ya existe
-            $notificacionExistente = Notificacion::where('users_id', $user->id)
-                ->where('Mensaje_Corto', $mensajeCorto)
-                ->where('Mensaje_Largo', $mensajeLargo)
-                ->first();
-    
-            if (!$notificacionExistente) {
-                // Crear la notificación solo si no existe
-                $notificacion = new Notificacion();
-                $notificacion->users_id = $user->id;
-                $notificacion->Mensaje_Corto = $mensajeCorto;
-                $notificacion->Mensaje_Largo = $mensajeLargo;
-                $notificacion->save();
-            }
+        }
+
+        // Verificar si la notificación ya existe
+        $notificacionExistente = Notificacion::where('users_id', $user->id)
+            ->where('Mensaje_Corto', $mensajeCorto)
+            ->where('Mensaje_Largo', $mensajeLargo)
+            ->first();
+
+        if (!$notificacionExistente) {
+            // Crear la notificación solo si no existe
+            $notificacion = new Notificacion();
+            $notificacion->users_id = $user->id;
+            $notificacion->Mensaje_Corto = $mensajeCorto;
+            $notificacion->Mensaje_Largo = $mensajeLargo;
+            $notificacion->save();
         }
     }
+}
+
 
     /*public function getNotificaciones()
     {
