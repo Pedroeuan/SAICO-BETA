@@ -32,7 +32,7 @@
     <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
                 <tr>
-                    <th>Mensaje Largo</th>
+                    <th>Mensaje</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,7 +63,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
-
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
 let table = new DataTable('#tablaJs', {
@@ -93,7 +97,6 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
-
 </script>
 
 @endsection

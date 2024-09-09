@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = '/login';
+                    }else{
+                        window.location.href = '/login';
                     }
                 });
             }

@@ -63,8 +63,8 @@ class NotificacionController extends Controller
             $diasRestantes = (int) $diasRestantes;
     
             // Crear los mensajes corto y largo
-            $mensajeCorto = "Certificado próximo a vencer en $diasRestantes días";
-            $mensajeLargo = "El certificado: " . $certificado->idCertificados . " está próximo a vencer en $diasRestantes días (Fecha de vencimiento: " . $certificado->Prox_fecha_calibracion . ")";
+            $mensajeCorto = "Cert. Prox. a VENCER en $diasRestantes días";
+            $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está próximo a vencer en $diasRestantes días (Fecha de vencimiento: " . $certificado->Prox_fecha_calibracion . ")";
     
             // Verificar si la notificación ya existe
             $notificacionExistente = Notificacion::where('users_id', $user->id)
@@ -91,8 +91,8 @@ class NotificacionController extends Controller
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
                                       //->where('leido', false) // Asumiendo que tienes un campo 'leido' para verificar si ya se ha leído
-                                      ->orderBy('created_at', 'desc')
-                                      ->get(['Mensaje_Corto']); // Solo necesitamos el campo del mensaje corto
+                                        ->orderBy('created_at', 'desc')
+                                        ->get(['Mensaje_Corto']); // Solo necesitamos el campo del mensaje corto
         
         // Retornar las notificaciones en formato JSON
         return response()->json($notificaciones);
@@ -106,7 +106,7 @@ class NotificacionController extends Controller
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
                                        //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
-                                       ->orderBy('created_at', 'desc')
+                                        ->orderBy('created_at', 'desc')
                                        ->get(['idNotificaciones', 'Mensaje_Corto']); // Asegúrate de tener el 'id' también
     
         // Formatear las notificaciones para AdminLTE

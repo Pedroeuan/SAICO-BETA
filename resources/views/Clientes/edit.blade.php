@@ -85,6 +85,11 @@
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
 
 /*Prevenir el Enter */
 document.getElementById('ClienteForm').addEventListener('keydown', function(event) {
