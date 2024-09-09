@@ -233,6 +233,10 @@ return [
          * @var bool
          */
         'enable_php' => false,
+        'isPhpEnabled' => true,
+        'isHtml5ParserEnabled' => true,
+        'isRemoteEnabled' => true,
+
 
         /**
          * Rnable inline JavaScript

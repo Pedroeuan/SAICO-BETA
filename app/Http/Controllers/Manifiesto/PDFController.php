@@ -16,22 +16,17 @@ class PDFController extends Controller
 {
     public function generaManifiestoPDF($id)
     {
-        // Obtener el usuario autenticado
         $user = Auth::user();
-        // Obtener el nombre del usuario
         $nombre = $user->name;
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
         $generalEyC = general_eyc::all();
-
-        $Logo = public_path('images/Logo_AICO.png'); // Ajusta la ruta según sea necesario
-
-        // Consultar datos desde la base de datos
-        // Datos para el PDF (pueden ser datos estáticos o dinámicos)
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+    
         $data = [
-            'title' => 'Sample PDF',
-            'content' => 'This is a sample PDF generated without database interaction.',
+            'title' => 'Manifiesto PDF',
             'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -39,12 +34,32 @@ class PDFController extends Controller
             'nombre' => $nombre,
             'Logo' => $Logo,
         ];
+    
         // Cargar la vista con los datos
         $pdf = PDF::loadView('Manifiesto.manifiestoPDF', $data);
-
-        // Descargar el PDF generado
-        //return $pdf->download('sample.pdf');
-        // Mostrar el PDF en el navegador
-        return $pdf->stream('sample.pdf');
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('Helvetica', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 406; // Ajusta esta posición X según sea necesario
+            $y = 62;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('manifiesto.pdf');
     }
+    
 }

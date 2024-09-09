@@ -3,6 +3,15 @@
 
 @section('title', 'Editar Kits')
 
+<style>
+    #tablaJs td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaJs th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+</style>
+
 @section('content')
     <br>
     <br>
@@ -229,6 +238,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 let table = new DataTable('#tablaJs', {
     // options

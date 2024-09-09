@@ -194,6 +194,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
