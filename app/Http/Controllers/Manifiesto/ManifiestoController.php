@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manifiesto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -66,6 +67,10 @@ class ManifiestoController extends Controller
     /*/solicitud/Manifiesto/{id}----Boton Crear Manifiesto-aprobacion.blade*/
     public function create(Request $request, $id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
         //dd($request->input('Cliente'));
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
@@ -139,16 +144,20 @@ class ManifiestoController extends Controller
 
         if ($Solicitud->Estatus == 'APROBADO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes','Nombre'));
             }
             else{
-                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes'));
+                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes','Nombre'));
             }
         }
     }
 
     public function createplus(Request $request, $id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
         //dd($request->input('Cliente'));
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
@@ -158,11 +167,11 @@ class ManifiestoController extends Controller
         }
 
         $Estatus = 'APROBADO';
-        
-        // Actualizar el estado de la solicitud
-        $Solicitud->update([
+        // Actualizar los datos del equipo
+        $Solicitud ->update([
             'Estatus' => $Estatus,
         ]);
+
 
         $idSolicitud = $Solicitud->idSolicitud;
         $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
@@ -237,7 +246,7 @@ class ManifiestoController extends Controller
 
         if ($Solicitud->Estatus == 'APROBADO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoeditplus', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes'));
+            return view('Manifiesto.Pre-Manifiestoeditplus', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes','Nombre'));
             }
             /*else{
                 return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes'));
@@ -258,6 +267,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Recibe_Nombre' => 'required|string|max:255',
 
         ]);
 
@@ -270,9 +280,11 @@ class ManifiestoController extends Controller
         $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
+        $Recibe_Nombre = $request->input('Recibe_Nombre');
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
+            'tecnico' => $Recibe_Nombre,
         ]);
 
         if($Fecha_Form != $Fecha_BD)
@@ -393,6 +405,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Recibe_Nombre' => 'required|string|max:255',
         ]);
 
         $id = $request->input('idSolicitud');
@@ -404,9 +417,13 @@ class ManifiestoController extends Controller
         $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
+        $Recibe_Nombre = $request->input('Recibe_Nombre');
+        //$Entrega_Nombre = $request->input('Entrega_Nombre');
+        
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
+            'tecnico' => $Recibe_Nombre,
         ]);
 
         //$Solicitud = Solicitudes::findOrFail($id);
@@ -567,6 +584,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Recibe_Nombre' => 'required|string|max:255',
         ]);
 
         $id = $request->input('idSolicitud');
@@ -578,11 +596,12 @@ class ManifiestoController extends Controller
         $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
+        $Recibe_Nombre = $request->input('Recibe_Nombre');
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
+            'tecnico' => $Recibe_Nombre,
         ]);
-
         //$Solicitud = Solicitudes::findOrFail($id);
         //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();

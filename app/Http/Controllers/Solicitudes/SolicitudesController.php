@@ -202,6 +202,12 @@ class SolicitudesController extends Controller
      */
     public function edit($id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        //$rol = Auth::user()->rol;
+
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
 
@@ -238,16 +244,16 @@ class SolicitudesController extends Controller
     
         if ($Solicitud->Estatus == 'APROBADO') {
             if (!$Manifiestos) {
-                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','clientes'));
+                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','clientes','Nombre'));
             }else
             {
-                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
+                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes','Nombre'));
             }
         }
     
         if ($Solicitud->Estatus == 'MANIFIESTO') {
             if ($Manifiestos) {
-            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes'));
+            return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes','Nombre'));
             }
         }
 

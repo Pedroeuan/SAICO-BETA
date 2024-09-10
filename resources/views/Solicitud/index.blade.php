@@ -39,6 +39,7 @@
                             <th>Eliminar</th>
                             <th>Ver PDF</th>
                             <th>Complementar</th>
+                            <th>Devolver</th>
                         @else
                             <th>Técnico</th>
                             <th>Folio</th>
@@ -104,7 +105,10 @@
                                 @endif
 
                             @endif
-                        </tr>
+                                <td>
+                                    <a href="" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
                     @endforeach
                 </tbody>
             </table>
