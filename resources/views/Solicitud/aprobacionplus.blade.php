@@ -449,9 +449,6 @@ $('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
 
 });
 
-
-
-
 </script>
 @endsection
 
