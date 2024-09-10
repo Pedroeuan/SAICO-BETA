@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
     
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva

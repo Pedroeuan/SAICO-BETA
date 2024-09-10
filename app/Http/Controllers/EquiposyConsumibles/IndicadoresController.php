@@ -17,9 +17,8 @@ class IndicadoresController extends Controller
     public function index()
     {
         // Obtiene todos los datos de almacen y consumibles
-        $consumibles = general_eyc::with('almacen')->where('Tipo', 'CONSUMIBLES')->get();
-
+        //$consumibles = general_eyc::with('almacen')->where('Tipo', 'CONSUMIBLES')->get();
         // Pretornar datos de consulta
-        return view('indicadoresEquipos', compact('consumibles'));  
+        //return view('Equipos.indicadoresEquipos', compact('consumibles'));
     }  
 }

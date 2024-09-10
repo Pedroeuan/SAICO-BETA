@@ -33,11 +33,6 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         return view('dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');*/
 
-    /*Route::middleware(['auth', 'verificar.certificados'])->group(function () {
-        // Rutas protegidas por autenticación y verificación de certificados
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('verificar.certificados');
-    });    */
-
     /*Creación de Notificaciones*/
     Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
 
@@ -48,9 +43,7 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     //Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     //Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
     Route::middleware('auth')->group(function () {
@@ -59,11 +52,9 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-        /*Ruta de grafico para indicadores en equipos*/
-        Route::get('/grafico', [IndicadoresController::class, 'index'])->name('grafico.index');
-       // Route::get('/grafico', [IndicadoresController::class, 'equipos'])->name('grafico.index');
+    /*Ruta de grafico para indicadores en equipos*/
+    //Route::get('Equipos/indicadoresEquipos', [IndicadoresController::class, 'index'])->name('Equipos.IndicadoresEquipos');
     
-
     /*PDF*/
     /*Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
