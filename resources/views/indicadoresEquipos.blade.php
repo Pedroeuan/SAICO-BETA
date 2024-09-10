@@ -18,7 +18,7 @@
     <div class="card-body">
         <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Inidicadores de consumibles</h3>
+                <h3 class="card-title">Indicadores de consumibles</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="" data-source-selector="#card-refresh-content">
                         <i class="fas fa-sync-alt"></i>
