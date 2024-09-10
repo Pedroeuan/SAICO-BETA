@@ -7,6 +7,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 
+<style>
+    #tablaJs td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaJs th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+</style>
 @endsection
 
 @section('content')
@@ -31,6 +39,7 @@
                             <th>Eliminar</th>
                             <th>Ver PDF</th>
                             <th>Complementar</th>
+                            <th>Devolver</th>
                         @else
                             <th>Técnico</th>
                             <th>Folio</th>
@@ -96,7 +105,10 @@
                                 @endif
 
                             @endif
-                        </tr>
+                                <td>
+                                    <a href="" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -120,6 +132,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     let table = new DataTable('#tablaJs', {
         // options

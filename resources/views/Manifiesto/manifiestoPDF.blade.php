@@ -3,6 +3,17 @@
 <head>
     <title>Manifiesto</title>
     <style>
+        @page {
+            margin: 45px 25px;
+            counter-reset: page; /* Inicializa el contador de páginas */
+        }
+        .page-num-container {
+            position: fixed; /* Fija la posición del contenedor */
+            bottom: 20px;   /* Ajusta la posición vertical */
+            right: 20px;    /* Ajusta la posición horizontal */
+            font-size: 10px;
+            text-align: right;
+        }
         /* Ajusta la celda al texto en los datos generales */
         .datosGeneralesCortos{
             font-weight: bold;
@@ -147,6 +158,7 @@
                 <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
             </tr>
         </thead>
+
         <tbody>
             <tr>
                 <td rowspan="2"> Manifiesto de Salida y/o Resguardo</td>
@@ -155,7 +167,8 @@
             </tr>
             <tr>
                 <td class="respuestasGenerales">Página</td>
-                <td class="respuestasGenerales">1 de 1</td>
+                <td class="page-num-container">
+                </td>
             </tr>
         </tbody>
     </table>
@@ -203,7 +216,7 @@
             @if($Manifiesto->Cliente == 'PROTEXA')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Descripción:</th>
+                        <th class="">Descripción</th>
                         <th class="">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">SAT</th>
@@ -215,7 +228,7 @@
                 @else
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Descripción:</th>
+                        <th class="">Descripción</th>
                         <th class="">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">Marca</th>
@@ -289,7 +302,7 @@
             @endfor
         </tbody>
     </table>
-
+<br>
     <table class="tablaManifiesto2">
         <thead>
             <tr>
@@ -302,7 +315,7 @@
             @if($Manifiesto->Cliente == 'PROTEXA')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Cantidad:</th>
+                        <th class="">Cantidad</th>
                         <th class="">Unidad</th>
                         <th class="">SAT</th>
                         <th class="">BMPRO</th>
@@ -311,7 +324,7 @@
                 @else
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
-                        <th class="">Cantidad:</th>
+                        <th class="">Cantidad</th>
                         <th class="">Unidad</th>
                         <th class="" colspan="5">Descripción</th>
                     </tr>
@@ -319,8 +332,8 @@
         </thead>
         <tbody>
             @php
-                $minFilas = 5; // Define el número mínimo de filas
                 $contador = 1; // Inicializa el contador
+                $minFilas = 5; // Define el número mínimo de filas
                 $hayConsumibles = $DetallesSolicitud->contains(function($detalle) use ($generalEyC) {
                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     return $general && $general->Tipo == 'CONSUMIBLES';

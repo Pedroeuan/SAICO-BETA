@@ -32,11 +32,8 @@
                                 </option>
                             @endforeach
                         </select>
-
                         @error('Cliente')
-                            <br>
                                 <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                            </br>
                         @enderror
 
                     </div>
@@ -47,9 +44,7 @@
                         <label class="col-form-label" for="inputSuccess">Folio</label>
                         <input type="text" class="form-control inputForm" name="Folio" id="folio" placeholder="Ejemplo: PROP-001/24" required>
                         @error('Folio')
-                            <br>
                                 <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                            </br>
                         @enderror
                     </div>
                 </div>
@@ -59,9 +54,7 @@
                         <label class="col-form-label" for="inputSuccess">Destino</label>
                         <input type="text" class="form-control inputForm" name="Destino" placeholder="Ejemplo: PATIO DE FABRICACIÓN PROTEXA" value="{{old('Destino')}}" required>
                         @error('Destino')
-                        <br>
-                        <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                        </br>
+                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                         @enderror
                     </div>
                 </div>
@@ -78,9 +71,7 @@
                         <label class="col-form-label" for="inputSuccess">Trabajo</label>
                         <input type="text" class="form-control inputForm" name="Trabajo" placeholder="Ejemplo: Dureza" value="{{old('Trabajo')}}" required>
                         @error('Trabajo')
-                        <br>
-                        <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                        </br>
+                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                         @enderror
                     </div>
                 </div>
@@ -90,9 +81,7 @@
                         <label class="col-form-label" for="inputSuccess">Puesto</label>
                         <input type="text" class="form-control inputForm" name="Puesto" placeholder="Ejemplo: TEC. PND" value="{{old('Puesto')}}" required>
                         @error('Puesto')
-                            <br>
                                 <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                            </br>
                         @enderror
                     </div>
                 </div>
@@ -102,12 +91,30 @@
                         <label class="col-form-label" for="inputSuccess">Responsable</label>
                         <input type="text" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Solicitud->tecnico }}" required>
                         @error('Responsable')
-                        <br>
-                        <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                        </br>
+                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                         @enderror
                     </div>
                 </div>
+
+                <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Entrega</label>
+                                <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" readonly>
+                                    @error('Entrega_Nombre')
+                                        <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                    @enderror
+                        </div>
+                </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Recibe</label>
+                                <input type="text" class="form-control inputForm" name="Recibe_Nombre" value="{{ $Solicitud->tecnico }}" required>
+                                    @error('Recibe_Nombre')
+                                        <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                    @enderror
+                        </div>
+                    </div>
 
                 <div class="col-sm-4">
                     <div class="form-group">
@@ -184,6 +191,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
