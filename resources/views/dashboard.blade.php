@@ -5,8 +5,16 @@
 @section('content_header')
 @stop
 
+@php 
+//dd($user->rol);
+@endphp
+
 @section('content')
-@include('MenuPrincipal')
+    @if($user->rol == 'Equipos')
+        @include('Equipos.indicadoresEquipos')
+            @else
+        @include('MenuPrincipal')
+    @endif
 @stop
 
 @section('css')

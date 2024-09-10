@@ -20,7 +20,7 @@
             <div class="card-header">
                 <h3 class="card-title">Indicadores de consumibles</h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="" data-source-selector="#card-refresh-content">
+                    <button type="button" class="btn btn-tool" data-card-widget="" data-source="" data-source-selector="#card-refresh-content">
                         <i class="fas fa-sync-alt"></i>
                     </button>
                 </div>
@@ -35,14 +35,15 @@
 </div>
 
 @endsection
-@php 
-//dd($resultado);
-@endphp
-
 @section('js')
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
-    console.log('prueba');
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+
 <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Convierte la colección de resultados a JSON para JavaScript
@@ -53,8 +54,8 @@
             const stocks = consumibles.map(item => item.almacen ? item.almacen.Stock : 0); // Usa 0 si 'almacen' es null
 
             // Verifica los datos en la consola
-            console.log('Nombres:', nombres);
-            console.log('Stocks:', stocks);
+            //console.log('Nombres:', nombres);
+            //console.log('Stocks:', stocks);
 
             // Obtén el contexto del canvas
             const abc = document.querySelector('#grafico').getContext('2d');
