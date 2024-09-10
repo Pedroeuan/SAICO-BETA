@@ -75,7 +75,7 @@ class general_eyc extends Model
     {
         return $this->hasOne(historial_certificado::class, 'idGeneral_EyC');
     }
-
+    //crear realcion con la tabla almacen
     public function almacen()
     {
         return $this->hasOne(almacen::class, 'idGeneral_EyC');
