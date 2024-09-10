@@ -25,6 +25,7 @@ use App\Models\EquiposyConsumibles\kits;
 use App\Models\Notificacion\Notificacion;
 
 use App\Http\Controllers\Notificacion\NotificacionController;
+use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
 
 class DashboardController extends Controller
 {
@@ -37,13 +38,17 @@ class DashboardController extends Controller
         
         // Obtener el usuario autenticado
         $user = Auth::user();
-        
         // Obtener otros datos necesarios para el dashboard
         // Por ejemplo, cargar los certificados para mostrarlos en la vista
         $certificados = certificados::all();
+
+        // Llamar al método del controlador de Indicadores
+        //$indicadoresController = new IndicadoresController();
+        //$consumibles = $indicadoresController->index();
+        $consumibles = general_eyc::with('almacen')->where('Tipo', 'CONSUMIBLES')->get();
         
         // Retornar la vista del dashboard con los datos necesarios
-        return view('dashboard', compact('certificados', 'user'));
+        return view('dashboard', compact('certificados', 'user','consumibles'));
     }
 
 }

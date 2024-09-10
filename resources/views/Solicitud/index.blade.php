@@ -94,10 +94,20 @@
                                         <td>
                                             <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
                                         </td>
+
+                                        <td>
+                                            <a href="" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                        </td>
                                         @else
                                         <td>
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="fas fa-plus-square"></i>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fas fa-undo-alt"></i>
                                             </span>
                                         </td>
                                         @endif 
@@ -105,9 +115,6 @@
                                 @endif
 
                             @endif
-                                <td>
-                                    <a href="" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
-                                </td>
                             </tr>
                     @endforeach
                 </tbody>
