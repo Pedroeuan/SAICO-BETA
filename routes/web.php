@@ -20,10 +20,10 @@ use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
+use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Notificacion\NotificacionController;
 //use App\Http\Controllers\NotificationController;
-
 
     Route::get('/', function () {
         return view('auth.login');
@@ -58,6 +58,11 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
+
+        /*Ruta de grafico para indicadores en equipos*/
+        Route::get('/grafico', [IndicadoresController::class, 'index'])->name('grafico.index');
+       // Route::get('/grafico', [IndicadoresController::class, 'equipos'])->name('grafico.index');
+    
 
     /*PDF*/
     /*Route::middleware('auth')->group(function () {
@@ -228,8 +233,7 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-    });
-
+});
 });
 
 require __DIR__.'/auth.php';
