@@ -25,35 +25,47 @@
 <br>  
 <br>
 <br>
-@php 
-//dd($datosManifiesto);
-@endphp
-<h3 align="center">Devoluciones</h3>
-<table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-    <thead>
-        <tr>
-            <th>Folio</th>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th>Devolver</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($datosManifiesto as $dato)
-            <tr>
-                <td>{{ $dato['Folio'] }}</td>
-                <td>{{ $dato['Nombre'] }}</td>
-                <td>
-                    <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
-                    <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input">
-                </td>
-                <td>
-                    <a href="" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+    <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-info"></i> Nota</h5>
+                Una vez devueltos los equipos y darle click a Concluir Manifiesto y el Estatus cambia a "DEVOLVER", <u>NO</u> se podran realizar más cambios y Devoluciones.
+            </p>
+    </div>
+    <h3 align="center">Devoluciones</h3>
+    <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
+        <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Devolver</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($datosManifiesto as $dato)
+                @if($dato['Disponibilidad_Estado'] == 'NO DISPONIBLE')
+                    <tr>
+                        <td>{{ $dato['Folio'] }}</td>
+                        <td>{{ $dato['Nombre'] }}</td>
+                        <td>
+                            <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
+                            @if($dato['cantidad'] == 1)
+                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" readonly>
+                                    @else
+                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                            
+                        </td>
+                    </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    </form>
 <br>
 <br>
 <div class="container d-flex justify-content-center">
@@ -112,6 +124,98 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+
+/*Prevenir el Enter Devoluciones*/
+document.getElementById('equiposForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    $(document).ready(function() {
+    // Inicializar DataTable
+    var table = $('#tablaJs').DataTable();
+
+    // Asignar eventos a los campos de entrada después de cada redibujado de la tabla
+    table.on('draw', function() {
+        // Seleccionar todos los campos de entrada de cantidad
+        const cantidadInputs = document.querySelectorAll('.cantidad-input');
+
+        cantidadInputs.forEach(input => {
+            // Agregar un evento 'input' a cada campo de entrada de cantidad
+            input.addEventListener('input', function() {
+                const max = parseInt(this.getAttribute('max')); // Obtener el valor máximo permitido
+                const currentValue = parseInt(this.value); // Obtener el valor actual ingresado
+
+                if (currentValue > max) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad excedida',
+                        text: `La cantidad máxima permitida a devolver es ${max}.`, // Mostrar la cantidad máxima permitida
+                        confirmButtonText: 'Entendido'
+                    });
+                    this.value = max; // Ajustar el valor al máximo permitido
+                    event.preventDefault(); // Prevenir el envío del formulario
+                }
+            });
+        });
+    });
+
+    // Llamar al evento 'draw' por primera vez para la página inicial
+    table.draw();
+});
+
+/*Devolución*/
+$(document).ready(function() {
+    var table = $('#tablaJs').DataTable();
+
+    // Reasignar eventos después de cada redibujado de la tabla
+    table.on('draw', function() {
+        // Manejar el evento click en los botones de devolver
+        $('.btn-devolver').off('click').on('click', function(event) {
+            event.preventDefault(); // Prevenir comportamiento predeterminado
+
+            const row = $(this).closest('tr'); // Fila de la tabla
+            const idGeneral_EyC = row.find('input[name^="cantidad"]').attr('name').match(/\d+/)[0]; // Obtener idGeneral_EyC
+            const nombre = this.getAttribute('data-nombre'); // Obtener el nombre del atributo data-nombre
+            const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
+
+            // Confirmación de SweetAlert2
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `Se devolverá ${nombre} la cantidad "${cantidad}" al almacén, se cambiará el estado a "DISPONIBLE".`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, devolver',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar la solicitud AJAX
+                    $.ajax({
+                        url: '{{ route('devolver.item') }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}', // Agregar token CSRF
+                            idGeneral_EyC: idGeneral_EyC,
+                            cantidad: cantidad
+                        },
+                        success: function(response) {
+                            Swal.fire('Devuelto', response.success, 'success');
+                            table.row(row).remove().draw(); // Eliminar la fila de la tabla
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Error', xhr.responseJSON.error || 'Ocurrió un error.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // Llamar al evento 'draw' por primera vez para la página inicial
+    table.draw();
+});
+
 </script>
 
 @endsection

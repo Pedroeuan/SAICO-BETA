@@ -15,6 +15,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\almacen;
 
 class DevolucionController extends Controller
 {
@@ -85,7 +86,8 @@ class DevolucionController extends Controller
             $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC');
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
-            $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)->get(['idGeneral_EyC', 'Nombre_E_P_BP']);
+            //$generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)->get(['idGeneral_EyC', 'Nombre_E_P_BP']);
+            $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado']);
 
             // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
             $datosManifiesto = [];
@@ -98,6 +100,7 @@ class DevolucionController extends Controller
                         'Nombre' => $general->Nombre_E_P_BP,
                         'cantidad' => $detalle->cantidad, // Cantidad de ocurrencias
                         'Folio' => $folio, // Agregar el Folio desde manifiesto
+                        'Disponibilidad_Estado'=> $general->Disponibilidad_Estado, // Agregar Disponibilidad_Estado
                     ];
                 }
             }
@@ -107,6 +110,39 @@ class DevolucionController extends Controller
 
         // Pasar los datos a la vista
         return view('Equipos.devolucion', compact('datosManifiesto'));
+    }
+
+    public function devolverItem(Request $request)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'idGeneral_EyC' => 'required|integer',
+            'cantidad' => 'required|integer|min:1',
+        ]);
+
+        $idGeneral_EyC = $request->input('idGeneral_EyC');
+        $cantidad = $request->input('cantidad');
+
+        // Buscar el registro en General_EyC
+        $generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+
+        if (!$generalEyC) {
+            return response()->json(['error' => 'Elemento no encontrado'], 404);
+        }
+
+        // Cambiar el estado a "DISPONIBLE"
+        $generalEyC->Disponibilidad_Estado = 'DISPONIBLE';
+        $generalEyC->save();
+
+        // Actualizar la cantidad en Almacen
+        $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+        if ($almacen) {
+            $almacen->Stock += $cantidad; // Devolver la cantidad al stock
+            $almacen->save();
+        }
+
+        // Retornar respuesta exitosa
+        return response()->json(['success' => 'Elemento devuelto exitosamente.']);
     }
 
     /**

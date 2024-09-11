@@ -45,8 +45,11 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    /*Rutas de controlador para duplicar los datos y redirigir*/
+    /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
+
+    Route::post('/devolver-item', [DevolucionController::class, 'devolverItem'])->name('devolver.item');
+
 
     /*Ruta de grafico para indicadores en equipos*/
     //Route::get('Equipos/indicadoresEquipos', [IndicadoresController::class, 'index'])->name('Equipos.IndicadoresEquipos');
