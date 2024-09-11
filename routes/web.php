@@ -14,6 +14,7 @@ use App\Http\Controllers\EquiposyConsumibles\KitsController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
+use App\Http\Controllers\EquiposyConsumibles\DevolucionController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\PDFController;
@@ -32,14 +33,6 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     /*Route::get('/dashboard', function () {
         return view('dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');*/
-
-    /*Creación de Notificaciones*/
-    Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
-
-    /*Obtener Notificaciones*/
-    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
-
-
     //Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     //Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 
@@ -52,6 +45,9 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+    /*Rutas de controlador para duplicar los datos y redirigir*/
+    Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
+
     /*Ruta de grafico para indicadores en equipos*/
     //Route::get('Equipos/indicadoresEquipos', [IndicadoresController::class, 'index'])->name('Equipos.IndicadoresEquipos');
     
@@ -59,8 +55,16 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     /*Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });*/
+    Route::middleware('auth')->group(function () {
+    Route::middleware('can:equipos-access')->group(function () {
+    /*Creación de Notificaciones*/
+    Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
+    /*Obtener Notificaciones*/
+    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
+    });
 
-
+    });
+    
     Route::middleware('auth')->group(function () {
         
     Route::middleware('can:tecnicos-equipos-access')->group(function () {
