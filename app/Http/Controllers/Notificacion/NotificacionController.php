@@ -91,22 +91,6 @@ class NotificacionController extends Controller
     }
 }
 
-
-    /*public function getNotificaciones()
-    {
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-        
-        // Obtener notificaciones para el usuario
-        $notificaciones = Notificacion::where('users_id', $user->id)
-                                      //->where('leido', false) // Asumiendo que tienes un campo 'leido' para verificar si ya se ha leído
-                                        ->orderBy('created_at', 'desc')
-                                        ->get(['Mensaje_Corto']); // Solo necesitamos el campo del mensaje corto
-        
-        // Retornar las notificaciones en formato JSON
-        return response()->json($notificaciones);
-    }    */
-
     public function getNotificaciones()
     {
         // Obtener el usuario autenticado

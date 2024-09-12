@@ -14,6 +14,7 @@ use App\Http\Controllers\EquiposyConsumibles\KitsController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
+use App\Http\Controllers\EquiposyConsumibles\DevolucionController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Manifiesto\PDFController;
@@ -32,14 +33,6 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     /*Route::get('/dashboard', function () {
         return view('dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');*/
-
-    /*Creación de Notificaciones*/
-    Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
-
-    /*Obtener Notificaciones*/
-    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
-
-
     //Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     //Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 
@@ -59,8 +52,16 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     /*Route::middleware('auth')->group(function () {
     Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
     });*/
+    Route::middleware('auth')->group(function () {
+    Route::middleware('can:equipos-access')->group(function () {
+    /*Creación de Notificaciones*/
+    Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
+    /*Obtener Notificaciones*/
+    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
+    });
 
-
+    });
+    
     Route::middleware('auth')->group(function () {
         
     Route::middleware('can:tecnicos-equipos-access')->group(function () {
@@ -88,6 +89,11 @@ use App\Http\Controllers\Notificacion\NotificacionController;
         
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
+    /*DEVOLUCIONES*/
+    /*Rutas de Devolución para listar y devolver*/
+    Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
+    /*Ruta para devolver los articulos de la lista al almacen */
+    Route::post('/devolver-item', [DevolucionController::class, 'devolverItem'])->name('devolver.item');
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
@@ -178,6 +184,10 @@ use App\Http\Controllers\Notificacion\NotificacionController;
 
     /*ruta para obtener el conteo de registros de manifiesto*/
     Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
+
+    /*CONCLUIR MANIFIESTO*/
+    Route::post('/Concluir/Manifiesto/{id}', [ManifiestoController::class, 'ConcluirManifiesto'])->name('Concluir.Manifiesto');
+
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
