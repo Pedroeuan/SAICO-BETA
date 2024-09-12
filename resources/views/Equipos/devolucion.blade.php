@@ -32,7 +32,10 @@
             </p>
     </div>
     <h3 align="center">Devoluciones</h3>
-    <form id="equiposForm" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
+    <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+    @csrf
+    <!-- Campo oculto para enviar todos los idSolicitud -->
+    <input type="hidden" name="idSolicitudes" value="{{ json_encode($idsSolicitud) }}">
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
                 <tr>
@@ -58,20 +61,17 @@
                         </td>
                         <td>
                             <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
-                            
                         </td>
                     </tr>
                     @endif
                 @endforeach
             </tbody>
         </table>
+        <br>
+        <div class="container d-flex justify-content-center">
+            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">Concluir Manifiesto</button>
+        </div>
     </form>
-<br>
-<br>
-<div class="container d-flex justify-content-center">
-    <button type="button" class="btn btn-info bg-success" id="guardarContinuarHerramientas">Concluir Manifiesto</button>
-</div>
-
 @stop
 
 @section('js')
@@ -126,7 +126,7 @@ let table = new DataTable('#tablaJs', {
 });
 
 /*Prevenir el Enter Devoluciones*/
-document.getElementById('equiposForm').addEventListener('keydown', function(event) {
+document.getElementById('devolverForm').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
