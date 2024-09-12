@@ -769,24 +769,9 @@ class ManifiestoController extends Controller
             
         }
 
-        //$Solicitud = Solicitudes::all();
-        //return view("Solicitud.index",compact('Solicitud'));
         return redirect()->route('solicitud.index');
     }
 
-    /*public function ConcluirManifiesto(Request $request, $id)
-    {
-        $Solicitudes = Solicitudes::whereIn('idSolicitud', $id)->first();
-        Log::info('***********************');
-        Log::info('Solicitudes: ', ['Solicitudes' => $Solicitudes]);
-        
-        $Estatus ='CONCLUIDO';
-        $Solicitudes ->update([
-            'Estatus' => $Estatus,
-        ]);
-
-        return redirect()->route('Solicitud.index');
-    }*/
     public function concluirManifiesto(Request $request, $id)
     {
     // Obtener el usuario autenticado

@@ -49,7 +49,10 @@
                 @foreach ($datosManifiesto as $dato)
                 @if($dato['Disponibilidad_Estado'] == 'NO DISPONIBLE')
                     <tr>
-                        <td>{{ $dato['Folio'] }}</td>
+                        <td>
+                        <input type="hidden" name="folio[{{ $dato['Folio'] }}]" id="folio_{{ $dato['Folio'] }}" value="{{ $dato['Folio'] }}">
+                        {{ $dato['Folio'] }}
+                        </td>
                         <td>{{ $dato['Nombre'] }}</td>
                         <td>
                             <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
@@ -60,7 +63,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}" data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                     @endif
@@ -132,7 +135,7 @@ document.getElementById('devolverForm').addEventListener('keydown', function(eve
         }
     });
 
-    $(document).ready(function() {
+$(document).ready(function() {
     // Inicializar DataTable
     var table = $('#tablaJs').DataTable();
 
@@ -179,6 +182,8 @@ $(document).ready(function() {
             const idGeneral_EyC = row.find('input[name^="cantidad"]').attr('name').match(/\d+/)[0]; // Obtener idGeneral_EyC
             const nombre = this.getAttribute('data-nombre'); // Obtener el nombre del atributo data-nombre
             const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
+            const folio = $(this).data('folio'); // Obtener el folio del atributo data-folio
+            //const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
 
             // Confirmación de SweetAlert2
             Swal.fire({
@@ -197,7 +202,8 @@ $(document).ready(function() {
                         data: {
                             _token: '{{ csrf_token() }}', // Agregar token CSRF
                             idGeneral_EyC: idGeneral_EyC,
-                            cantidad: cantidad
+                            cantidad: cantidad,
+                            folio: folio
                         },
                         success: function(response) {
                             Swal.fire('Devuelto', response.success, 'success');
