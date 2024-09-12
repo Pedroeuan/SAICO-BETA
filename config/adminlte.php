@@ -450,13 +450,13 @@ return [
                 // Sidebar Equipos y Consumibles:
                 [
                     'text' => 'Equipos',
-                    'icon' => 'fa fa-suitcase',
+                    'icon' => 'fas fa-pencil-ruler',
                     'can' => 'tecnicos-equipos-access',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
-                            'icon' => 'far fa-folder-open',
+                            'icon' => 'far fa-clipboard',
                             'url' => 'inventario',
                             'can' => 'equipos-access',
                         ],
