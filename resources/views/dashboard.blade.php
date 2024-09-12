@@ -5,10 +5,6 @@
 @section('content_header')
 @stop
 
-@php 
-//dd($user->rol);
-@endphp
-
 @section('content')
     @if($user->rol == 'Equipos')
         @include('Equipos.indicadoresEquipos')
