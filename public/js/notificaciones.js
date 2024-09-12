@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         const viewAllItem = document.createElement('li');
                         viewAllItem.classList.add('dropdown-item', 'text-center');
-                        viewAllItem.innerHTML = `<a href="${viewAllNotificationsUrl}">Ver todas las notificaciones</a>`;
+                        viewAllItem.innerHTML = `<a href="${viewAllNotificationsUrl}">Todas las notificaciones</a>`;
                         notificationList.appendChild(viewAllItem);
                     } else {
                         notificationBadge.style.display = 'none';
