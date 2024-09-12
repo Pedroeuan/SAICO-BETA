@@ -8,14 +8,10 @@
 <br>
 <br>
 <br>
-@php 
-//dd($user);
-//dd($certificados);
-//dd($notificaciones);
-@endphp
 <br>
 <br>
 <br>
+<body>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -244,7 +240,7 @@
         </div>
     </div>
 </div>
-
+</body>
 @stop
 
 @section('js')
