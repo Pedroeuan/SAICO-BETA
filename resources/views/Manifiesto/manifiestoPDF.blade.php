@@ -207,13 +207,13 @@
     <table class="tablaManifiesto">
         <thead>
             <tr>
-                @if($Manifiesto->Cliente == 'PROTEXA')
+                @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                     <th class="celdaAzul letraBlanca" colspan="9">Equipos</th>
                     @else
                     <th class="celdaAzul letraBlanca" colspan="7">Equipos</th>
                 @endif
             </tr>
-            @if($Manifiesto->Cliente == 'PROTEXA')
+            @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Descripción</th>
@@ -247,7 +247,7 @@
                         $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     @endphp
                     @if($general->Tipo != 'CONSUMIBLES')
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                                     <tr>
                                         <td>{{ $contador }}</td>
                                         <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -279,7 +279,7 @@
 
             @for($i = $contador; $i <= $minFilas; $i++)
                 <tr>
-                    @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                    @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                         <td>----</td>
                         <td>----</td>
                         <td>----</td>
@@ -306,13 +306,13 @@
     <table class="tablaManifiesto2">
         <thead>
             <tr>
-                @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                     <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                     @else
                     <th class="celdaAzul letraBlanca" colspan="5">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                 @endif
             </tr>
-            @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+            @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Cantidad</th>
@@ -348,7 +348,7 @@
                     @endphp
 
                     @if($general && $general->Tipo == 'CONSUMIBLES')
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             <tr>
                                 <td>{{ $contador }}</td>
                                 <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
@@ -376,7 +376,7 @@
 
                 @for($i = $contador; $i <= $minFilas; $i++)
                     <tr>
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             <td>----</td>
                             <td>----</td>
                             <td>----</td>
@@ -394,7 +394,7 @@
             @else
                 @for($i=0;$i<=5;$i=$i+1)
                     <tr>
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'POPETROL')
+                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             
                                 <td>----</td>
                                 <td>----</td>
