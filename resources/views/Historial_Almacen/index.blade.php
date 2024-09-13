@@ -48,7 +48,7 @@
                     <th>Modelo</th>
                     <th>Tipo</th>
                     <th>Cantidad</th>
-                    <th>Fecha Calibración/Caducidad</th>
+                    <th>Fecha</th>
                     <th>Tierra/Costa Fuera</th>
                 </tr>
             </thead>
