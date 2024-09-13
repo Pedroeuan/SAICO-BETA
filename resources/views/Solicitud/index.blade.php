@@ -78,6 +78,12 @@
                                             </span>
                                         </td>
 
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fas fa-undo-alt"></i>
+                                            </span>
+                                        </td>
+
                                     </div>
                                 @elseif($solicitud->Estatus == 'CONCLUIDO')
                                     <div class="btn-group">
