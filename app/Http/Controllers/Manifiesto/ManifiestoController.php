@@ -774,6 +774,11 @@ class ManifiestoController extends Controller
 
     public function concluirManifiesto(Request $request, $id)
     {
+        
+    $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
+
+    // Actualizar el estatus de las solicitudes
+    Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
     // Obtener el usuario autenticado
     $user = Auth::user();
     // Obtener el nombre del usuario
@@ -849,10 +854,6 @@ class ManifiestoController extends Controller
         // Si este folio no es el último en su grupo, ocultar el botón
         $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
     }
-        $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
-
-        // Actualizar el estatus de las solicitudes
-        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
 
         //return redirect()->route('Solicitud.index');
         return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
