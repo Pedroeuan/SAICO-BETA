@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\equiposController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Notificacion\NotificacionController;
-//use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -58,10 +59,11 @@ use App\Http\Controllers\Notificacion\NotificacionController;
     Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
     /*Obtener Notificaciones*/
     Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
-    });
-
+        });
     });
     
+    Route::post('/importarEyC', [ExcelEyCController::class, 'importarExcel'])->name('importar.EyC');
+
     Route::middleware('auth')->group(function () {
         
     Route::middleware('can:tecnicos-equipos-access')->group(function () {
