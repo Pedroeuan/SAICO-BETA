@@ -19,6 +19,7 @@
 <br>
 <h3 align="center"> Formulario para el alta de datos</h3>
 <br>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
@@ -34,6 +35,7 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Block Y Probeta</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Herramientas</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Kits</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Importar</a></li>
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header p-2-->
@@ -1019,6 +1021,14 @@
 
                             </form>
                         </div><!--"class="tab-pane" id="tab_6""-->
+
+                        <div class="tab-pane" id="tab_7">
+                            <form action="{{ route('importar.EyC') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="archivo" required>
+                                <button type="submit">Importar</button>
+                            </form>
+                        </div>
 
                     </div><!-- /.tab-content -->
                 </div><!-- /.card-body -->
