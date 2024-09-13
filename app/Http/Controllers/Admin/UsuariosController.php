@@ -94,10 +94,11 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($request->filled('ContrasenaUsuario') && $request->filled('RepetirContrasena')) {
         // Validar los datos de entrada
         $request->validate([
             'NombreUsuario' => 'required|string|max:255',
-            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
             'ContrasenaUsuario' => 'required|string|max:255',
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
@@ -115,6 +116,31 @@ class UsuariosController extends Controller
             'password' => Hash::make($request->input('ContrasenaUsuario')),
             'rol' => $request->input('RolUsuario'),
         ]);
+    }
+    else{
+        // Validar los datos de entrada
+        $request->validate([
+            'NombreUsuario' => 'required|string|max:255',
+            //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            //'ContrasenaUsuario' => 'required|string|max:255',
+            //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+            'RolUsuario' => [
+                'required',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+            ],
+        ]);
+        // Obtener el equipo existente
+        $Usuario  = Usuario::find($id);
+
+        // Actualizar los datos del equipo
+        $Usuario ->update([
+            'name' => $request->input('NombreUsuario'),
+            'email' => $request->input('CorreoUsuario'),
+            //'password' => Hash::make($request->input('ContrasenaUsuario')),
+            'rol' => $request->input('RolUsuario'),
+        ]);
+
+    }
 
         // Redirigir a la página de administración
         $Usuarios = Usuario::all();
