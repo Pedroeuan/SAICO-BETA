@@ -39,7 +39,7 @@
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
-                        <th>Fecha calibración</th>
+                        <th>Fecha Calibración/Caducidad</th>
                         <th>Hoja de Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
@@ -68,7 +68,7 @@
                                 @endif
                             @endif 
                             @if($general_eyc->certificados)
-                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion=='2001-01-01')
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
                                                 @else
