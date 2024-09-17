@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.length > 0) {
                         notificationBadge.textContent = data.length;
                         notificationBadge.style.display = 'inline';
-                        notificationBadge.style.color = 'black';
+                        notificationBadge.style.color = 'black';  // Cambia el color a negro
+                        notificationBadge.style.position = 'relative'; // Posición relativa
+                        notificationBadge.style.top = '-3px';  // Mueve el número hacia arriba
                         notificationList.innerHTML = '';
 
                         data.forEach(notificacion => {
