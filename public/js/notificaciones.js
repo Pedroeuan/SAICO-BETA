@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.length > 0) {
                         notificationBadge.textContent = data.length;
                         notificationBadge.style.display = 'inline';
+                        notificationBadge.style.color = 'black';
                         notificationList.innerHTML = '';
 
                         data.forEach(notificacion => {

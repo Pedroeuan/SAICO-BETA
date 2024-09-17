@@ -28,7 +28,7 @@ class certificados extends Model
     {
         return $this->hasMany(historial_certificado::class, 'idCertificados');
     }
-    public function generalEyc()
+    public function generaleyc()
     {
         return $this->belongsTo(general_eyc::class, 'idGeneral_EyC');
     }

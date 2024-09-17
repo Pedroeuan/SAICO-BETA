@@ -707,8 +707,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                            <label class="col-form-label" for="inputSuccess">Ver Hoja de presentación</label>                                               
-                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                              
+                                            <label class="col-form-label" for="inputSuccess">Ver Hoja de presentación</label>
+                                                <div>                                             
+                                                    <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                              
+                                                </div> 
                                         </div>
                                     </div>
                                     @elseif($generalEyC->Foto == 'ESPERA DE DATO')
