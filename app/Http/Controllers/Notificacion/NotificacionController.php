@@ -187,7 +187,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a vencer en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
