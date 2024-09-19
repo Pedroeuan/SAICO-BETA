@@ -55,7 +55,7 @@ class DevolucionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editDevolucionListado(Request $request, $id)
+    /*public function editDevolucionListado(Request $request, $id)
     {
         $manifiesto = manifiesto::where('idSolicitud', $id)->first();
         $folioBase = $manifiesto->Folio;
@@ -79,7 +79,7 @@ class DevolucionController extends Controller
             
             // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
             $detallesSolicitud = detalles_solicitud::whereIn('idSolicitud', $idsSolicitud)
-                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('COUNT(*) as cantidad'))
+                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(cantidad) as cantidad'))
                 ->groupBy('idGeneral_EyC', 'idSolicitud')
                 ->get();
 
@@ -88,17 +88,19 @@ class DevolucionController extends Controller
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
             $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado']);
+                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo']);
 
             // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
             $datosManifiesto = [];
             foreach ($detallesSolicitud as $detalle) {
+                //dd($detallesSolicitud);
                 $general = $generalesEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                 $folio = $foliosManifiestos->get($detalle->idSolicitud)?->Folio; // Obtener Folio correspondiente desde $foliosManifiestos
                 if ($general) {
                     $datosManifiesto[] = [
                         'idGeneral_EyC' => $detalle->idGeneral_EyC,
                         'Nombre' => $general->Nombre_E_P_BP,
+                        'Tipo' =>$general->Tipo,
                         'cantidad' => $detalle->cantidad, // Cantidad de ocurrencias
                         'Folio' => $folio, // Agregar el Folio desde manifiesto
                         'Disponibilidad_Estado'=> $general->Disponibilidad_Estado, // Agregar Disponibilidad_Estado
@@ -112,7 +114,78 @@ class DevolucionController extends Controller
 
         // Pasar los datos a la vista
         return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud'));
+    }*/
+
+    public function editDevolucionListado(Request $request, $id)
+    {
+        $manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $folioBase = $manifiesto->Folio;
+
+        // Extraer el prefijo (4 letras), número y año del Folio base
+        preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
+        if (count($matches) > 0) {
+            $folioPattern = $matches[1]; // Prefijo + número como "PROP-001"
+            $anioPattern = substr($folioBase, -2); // Año como "24"
+
+            // Usar expresión regular para buscar folios similares
+            $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
+            //dd($foliosSimilares);
+            // Obtener todos los idSolicitud de los folios similares
+            $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
+
+            // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
+            $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitud)
+                ->get(['idSolicitud', 'Folio'])
+                ->keyBy('idSolicitud'); // Indexar por idSolicitud para fácil acceso
+
+            // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
+            $detallesSolicitud = detalles_solicitud::whereIn('idSolicitud', $idsSolicitud)
+                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(cantidad) as cantidad'))
+                ->groupBy('idGeneral_EyC', 'idSolicitud')
+                ->get();
+
+            // Obtener los idGeneral_EyC de los resultados obtenidos
+            $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC')->toArray(); // Convertir a array
+
+            // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
+            $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
+                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo']);
+
+            // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
+            $datosManifiesto = [];
+            foreach ($detallesSolicitud as $detalle) {
+                $general = $generalesEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
+                $folio = $foliosManifiestos->get($detalle->idSolicitud)?->Folio; // Obtener Folio correspondiente desde $foliosManifiestos
+                //dd($folio);
+                // Verificar si el registro está en Historial_Almacen con Tipo "DEVOLUCIÓN"
+                $Fecha = now()->format('Y-m-d');
+                $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
+                    ->where('Fecha', $Fecha)
+                    ->where('Folio', $folio)
+                    ->where('Tipo', 'DEVOLUCIÓN')
+                    ->exists(); // Si existe el registro con "DEVOLUCIÓN"
+
+                // Solo incluir en $datosManifiesto si no está en Historial_Almacen
+                if (!$historialAlmacenExistente && $general) {
+                    $datosManifiesto[] = [
+                        'idGeneral_EyC' => $detalle->idGeneral_EyC,
+                        'Nombre' => $general->Nombre_E_P_BP,
+                        'Tipo' => $general->Tipo,
+                        'cantidad' => $detalle->cantidad, // Cantidad de ocurrencias
+                        'Folio' => $folio, // Agregar el Folio desde manifiesto
+                        'Disponibilidad_Estado' => $general->Disponibilidad_Estado, // Agregar Disponibilidad_Estado
+                    ];
+                }
+            }
+        } else {
+            $datosManifiesto = [];
+            $idsSolicitud = [];
+        }
+
+        // Pasar los datos a la vista
+        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud'));
     }
+
 
     public function devolverItem(Request $request)
     {
@@ -154,7 +227,7 @@ class DevolucionController extends Controller
         $historialAlmacen = new Historial_Almacen;
         $historialAlmacen->idAlmacen = $almacen->idAlmacen;
         $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
-        $historialAlmacen->Tipo = 'Devolución';
+        $historialAlmacen->Tipo = 'DEVOLUCIÓN';
         $historialAlmacen->Cantidad = $cantidad;
         $historialAlmacen->Fecha = now()->format('Y-m-d');
         $historialAlmacen->Tierra_Costafuera = $tierraCostafuera; 
