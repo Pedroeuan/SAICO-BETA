@@ -1023,11 +1023,25 @@
                         </div><!--"class="tab-pane" id="tab_6""-->
 
                         <div class="tab-pane" id="tab_7">
-                            <form action="{{ route('importar.EyC') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="file" name="archivo" required>
-                                <button type="submit">Importar</button>
-                            </form>
+
+                            <div class="d-flex justify-content-center" style="min-height: 10vh;">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <form action="{{ route('importar.EyC') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <label class="col-form-label" for="inputSuccess">IMPORTAR DATOS DEL EXCEL</label>
+                                                <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="archivo" required>
+                                                    @if ($errors->any())
+                                                        <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                    @endif
+                                                <div class="text-center mt-3">
+                                                    <button type="submit" id="btnImportar" class="btn btn-info bg-primary">Importar</button>
+                                                </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div><!-- /.tab-content -->
