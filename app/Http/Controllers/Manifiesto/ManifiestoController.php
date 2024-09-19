@@ -313,7 +313,7 @@ class ManifiestoController extends Controller
                 //Empezar a descontar por aqui aprovechando el ciclo FOR
                 // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
-                ->where('Fecha', $request->input('Fecha_Salida'))
+                ->where('Fecha', $Fecha_Form)
                 ->where('Tipo', $Tipo)
                 ->first();
 
@@ -324,7 +324,7 @@ class ManifiestoController extends Controller
                     $historialAlmacen->idGeneral_EyC = $detalle->idGeneral_EyC;
                     $historialAlmacen->Tipo = $Renta_Salida;
                     $historialAlmacen->Cantidad = $detalle->Cantidad; // Usar la cantidad de detalles_solicitud
-                    $historialAlmacen->Fecha = $request->input('Fecha_Salida');
+                    $historialAlmacen->Fecha = $Fecha_Form;
                     $historialAlmacen->Tierra_Costafuera = $request->input('Destino');
                     $historialAlmacen->Folio = $request->input('Folio');
                     $historialAlmacen->save();
@@ -425,6 +425,7 @@ class ManifiestoController extends Controller
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
+            'Fecha' => $Fecha,
             'tecnico' => $Recibe_Nombre,
         ]);
 
@@ -444,8 +445,11 @@ class ManifiestoController extends Controller
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                     ->where('Fecha', $Fecha_DB_Solicitud)
+                    //->where('Fecha', $Fecha)//error se duplican datos
                     ->whereIn('Tipo', $Tipo)
                     ->first();
+                    //Log::info('***********************');
+                    //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
 
                     if (!$historialAlmacenExistente) 
                     {
@@ -541,12 +545,15 @@ class ManifiestoController extends Controller
 
                             if($Fecha != $Fecha_BD)
                                 {
+                                    Log::info('***********************');
+                                    Log::info('$Fecha_BD: ', ['$Fecha_BD' => $Fecha_BD]);
+                                    Log::info('$Fecha: ', ['$Fecha' => $Fecha]);
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
-                                    $Solicitud ->update([
+                                    /*$Solicitud ->update([
                                         'Fecha' => $Fecha,
-                                    ]);
+                                    ]);*/
                                 }
 
                     /*Descuento de almacen */
@@ -592,7 +599,8 @@ class ManifiestoController extends Controller
         $id = $request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Fecha = $request->input('Fecha_Salida');
-        $Fecha_DB_Solicitud = $Solicitud->Fecha;
+        //$Fecha_DB_Solicitud = $Solicitud->Fecha;
+        //$Fecha_Form = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
@@ -602,6 +610,7 @@ class ManifiestoController extends Controller
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
+            'Fecha' => $Fecha,
             'tecnico' => $Recibe_Nombre,
         ]);
         //$Solicitud = Solicitudes::findOrFail($id);
@@ -619,7 +628,7 @@ class ManifiestoController extends Controller
             {
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
-                    ->where('Fecha', $Fecha_DB_Solicitud)
+                    ->where('Fecha', $Fecha)
                     ->whereIn('Tipo', $Tipo)
                     ->first();
 
@@ -709,9 +718,9 @@ class ManifiestoController extends Controller
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
-                                    $Solicitud ->update([
+                                    /*$Solicitud ->update([
                                         'Fecha' => $Fecha,
-                                    ]);
+                                    ]);*/
                                 }
                             // Obtener el registro correspondiente en la tabla 'almacen'
                             $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();

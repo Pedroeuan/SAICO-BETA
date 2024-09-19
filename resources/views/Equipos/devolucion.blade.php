@@ -47,7 +47,9 @@
             </thead>
             <tbody>
                 @foreach ($datosManifiesto as $dato)
-                @if($dato['Disponibilidad_Estado'] == 'NO DISPONIBLE')
+                @php 
+                //dd($datosManifiesto);
+                @endphp
                     <tr>
                         <td>
                         <input type="hidden" name="folio[{{ $dato['Folio'] }}]" id="folio_{{ $dato['Folio'] }}" value="{{ $dato['Folio'] }}">
@@ -66,7 +68,6 @@
                             <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}" data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
                         </td>
                     </tr>
-                    @endif
                 @endforeach
             </tbody>
         </table>
