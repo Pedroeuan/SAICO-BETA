@@ -444,8 +444,11 @@ class ManifiestoController extends Controller
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                     ->where('Fecha', $Fecha_DB_Solicitud)
+                    //->where('Fecha', $Fecha)//error se duplican datos
                     ->whereIn('Tipo', $Tipo)
                     ->first();
+                    Log::info('***********************');
+                    Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
 
                     if (!$historialAlmacenExistente) 
                     {
@@ -592,7 +595,8 @@ class ManifiestoController extends Controller
         $id = $request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Fecha = $request->input('Fecha_Salida');
-        $Fecha_DB_Solicitud = $Solicitud->Fecha;
+        //$Fecha_DB_Solicitud = $Solicitud->Fecha;
+        //$Fecha_Form = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
@@ -619,7 +623,7 @@ class ManifiestoController extends Controller
             {
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
-                    ->where('Fecha', $Fecha_DB_Solicitud)
+                    ->where('Fecha', $Fecha)
                     ->whereIn('Tipo', $Tipo)
                     ->first();
 
