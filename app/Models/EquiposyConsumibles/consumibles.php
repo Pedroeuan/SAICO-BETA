@@ -11,8 +11,8 @@ class consumibles extends Model
         'idConsumibles',
         'idGeneral_EyC',
         'Proveedor',
-        'Tipo',
     ];
+    protected $table = 'consumibles';
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;

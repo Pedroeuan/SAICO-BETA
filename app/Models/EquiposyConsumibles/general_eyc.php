@@ -20,6 +20,7 @@ class general_eyc extends Model
         'Comentario',
         'SAT',
         'BMPRO',
+        'Factura',
         'Destino',
         'Tipo',
         'Foto',

@@ -11,6 +11,7 @@ class herramientas extends Model
         'idEquipos_Tools_Complementos',
         'idGeneral_EyC',
         'Garantia',
+        'Plano',
     ];
     protected $table = 'equipos_tools_complementos';
     protected $primaryKey = 'idGeneral_EyC';
