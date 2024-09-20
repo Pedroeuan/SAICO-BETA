@@ -18,6 +18,7 @@ use App\Models\EquiposyConsumibles\consumibles;
 use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
 
 
 class ImporExcelEyC implements ToModel, WithHeadingRow
@@ -28,93 +29,6 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    /*public function model(array $row)
-    {
-        // Validación: si una fila está vacía, no la procesa
-        if (empty($row['idgeneral_eyc']) || empty($row['nombre_e_p_bp'])) {
-            return null; // Evita crear un registro si no hay datos válidos
-        }
-
-        // Convertir fechas numéricas de Excel a formato de fecha PHP
-        $fechaCalibracion = is_numeric($row['fecha_calibracion']) 
-            ? Date::excelToDateTimeObject($row['fecha_calibracion'])->format('Y-m-d')
-            : $row['fecha_calibracion'];
-
-        $proxFechaCalibracion = is_numeric($row['prox_fecha_calibracion']) 
-            ? Date::excelToDateTimeObject($row['prox_fecha_calibracion'])->format('Y-m-d')
-            : $row['prox_fecha_calibracion'];
-        //dd($row);
-         // Asumiendo que tus columnas están en el orden correcto y que coinciden con el archivo Excel
-        $generalEyC = general_eyc::create([
-            'idGeneral_EyC' => $row['idgeneral_eyc'], // Clave en minúsculas
-            'Nombre_E_P_BP' => $row['nombre_e_p_bp'],
-            'No_economico' => $row['no_economico'],
-            'Serie' => $row['serie'],
-            'Marca' => $row['marca'],
-            'Modelo' => $row['modelo'],
-            'Ubicacion' => $row['ubicacion'],
-            'Almacenamiento' => $row['almacenamiento'], 
-            'Comentario' => $row['comentario'],
-            'SAT' => $row['sat'],
-            'BMPRO' => $row['bmpro'],
-            'Factura' => $row['factura'],
-            'Tipo' => $row['tipo'],
-            'Foto' => $row['foto'],
-            'Disponibilidad_Estado' => $row['disponibilidad_estado'],
-        ]);
-
-        // También puedes guardar en la tabla Almacen
-        almacen::create([
-            'idAlmacen' => $row['idalmacen'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'Lote' => $row['lote'],
-            'Stock' => $row['stock'],
-        ]);
-
-        certificados::create([
-            'idCertificados' => $row['idcertificados'], 
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'No_certificado' => $row['no_certificado'],
-            'Certificado_Actual' => $row['certificado_actual'],
-            'Fecha_calibracion' => $fechaCalibracion, // Fecha convertida
-            'Prox_fecha_calibracion' => $proxFechaCalibracion, // Fecha convertida
-        ]);
-
-        equipos::create([
-            'idEquipos' => $row['idequipos'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-        ]);
-
-        consumibles::create([
-            'idConsumibles' => $row['idconsumibles'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'Proveedor' => $row['proveedor'],
-        ]);
-
-        accesorios::create([
-            'idAccesorio' => $row['idaccesorios'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'Proveedor' => $row['proveedor'],
-        ]);
-
-        block_y_probeta::create([
-            'idBlock_probeta' => $row['idblock_probeta'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'Plano' => $row['plano'],
-        ]);
-
-        herramientas::create([
-            'idEquipos_Tools_Complementos' => $row['idequipos_tools_complementos'], // Clave en minúsculas
-            'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-            'Garantia' => $row['garantia'],
-            'Plano' => $row['plano'],
-        ]);
-
-        // Devuelve una instancia del modelo para realizar operaciones adicionales si es necesario
-        return $generalEyC;
-
-    }*/
-
     public function model(array $row)
     {
         //dd($row);
@@ -150,6 +64,24 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Lote' => $row['lote'],
                 'Stock' => $row['stock'],
+            ]);
+        }
+
+        // Comprobamos si hay datos para almacenar en la tabla Herramientas
+        if (!empty($row['idhistorial_almacen'])) {
+            $fecha = is_numeric($row['fecha']) 
+            ? Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d')
+            : $row['fecha'];
+
+            Historial_Almacen::create([
+                'idHistorial_almacen' => $row['idhistorial_almacen'],
+                'idAlmacen' => $row['idalmacen'],
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
+                'Folio' => $row['folio'],
+                'Tipo' => $row['tipo'],
+                'Cantidad' => $row['cantidad'],
+                'Fecha' => $fecha,
+                'Tierra_Costafuera' => $row['tierra_costafuera'],
             ]);
         }
 

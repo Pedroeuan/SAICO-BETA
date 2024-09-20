@@ -11,11 +11,11 @@ class Historial_Almacen extends Model
         'idHistorial_almacen',
         'idAlmacen',
         'idGeneral_EyC',
+        'Folio',
         'Tipo',
         'Cantidad',
         'Fecha',
         'Tierra_Costafuera',
-        'Folio',
     ];
     protected $table = 'historial_almacen';
     protected $primaryKey = 'idHistorial_almacen';
