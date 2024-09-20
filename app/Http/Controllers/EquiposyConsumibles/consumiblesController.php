@@ -69,12 +69,13 @@ class consumiblesController extends Controller
         }else{
             $general->No_economico = $request->input('No_economico');
         }
-        if($request->input('Serie')==null)
+        /*if($request->input('Serie')==null)
         {
             $general->Serie = 'N/A';
         }else{
             $general->Serie = $request->input('Serie');
-        }
+        }*/
+        $general->Serie = 'N/A';
         if($request->input('Marca')==null)
         {
             $general->Marca = $EsperaDato;
@@ -321,7 +322,8 @@ class consumiblesController extends Controller
         $generalEyC ->update([
             'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
             //'No_economico' => $request->input('No_economico'),
-            'Serie' => $request->input('Serie'),
+            //'Serie' => $request->input('Serie'),
+            //'Serie' => 'N/A',
             'Marca' => $request->input('Marca'),
             'Modelo' => $request->input('Modelo'),
             'Ubicacion' => $request->input('Ubicacion'),
