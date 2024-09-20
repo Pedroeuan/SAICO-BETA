@@ -1027,16 +1027,16 @@
                             <div class="d-flex justify-content-center" style="min-height: 10vh;">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <form action="{{ route('importar.EyC') }}" method="POST" enctype="multipart/form-data">
+                                        <form id="importarExcelForm" enctype="multipart/form-data">
                                             @csrf
                                             <label class="col-form-label" for="inputSuccess">IMPORTAR DATOS DEL EXCEL</label>
-                                                <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="archivo" required>
-                                                    @if ($errors->any())
-                                                        <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
-                                                    @endif
-                                                <div class="text-center mt-3">
-                                                    <button type="submit" id="btnImportar" class="btn btn-info bg-primary">Importar</button>
-                                                </div>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="archivo" required>
+                                            @if ($errors->any())
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
+                                            <div class="text-center mt-3">
+                                                <button type="button" id="btnImportar" class="btn btn-info bg-primary">Importar</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -1067,6 +1067,9 @@
 
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
@@ -2051,6 +2054,46 @@ document.addEventListener('DOMContentLoaded', function() {
             warningMessage.style.display = 'block'; // Muestra el mensaje si no hay ninguna pestaña seleccionada
         }
     });
+
+    document.getElementById('btnImportar').addEventListener('click', function () {
+    // Crear un objeto FormData con el formulario
+    var form = document.getElementById('importarExcelForm');
+    var formData = new FormData(form);
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+        url: '{{ route('importar.EyC') }}', // Ruta que recibe el archivo en el servidor
+        type: 'POST',
+        data: formData, // Los datos del formulario
+        processData: false, // Evitar que jQuery procese los datos
+        contentType: false, // Evitar que jQuery establezca el Content-Type
+        success: function(response) {
+            // Mostrar mensaje de éxito usando SweetAlert2
+            Swal.fire({
+                title: '¡Importación Exitosa!',
+                text: response.success, // Mensaje de la respuesta JSON
+                icon: 'success',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            });
+
+            // Resetear el campo de archivo después de la importación exitosa
+        $('input[type="file"]').val(''); // Resetea el campo de tipo file
+        },
+        error: function(error) {
+            // Manejar errores con SweetAlert2
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al importar los datos.',
+                icon: 'error',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#d33'
+            });
+            console.error(error);
+        }
+    });
+});
+
 </script>
 
 @endsection
