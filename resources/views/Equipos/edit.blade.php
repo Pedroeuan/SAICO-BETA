@@ -282,12 +282,12 @@
                                             <input type="text" class="form-control inputForm" value="{{ $generalConAlmacen->Lote }}" name="Lote" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
                                             <input type="text" class="form-control inputForm" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
