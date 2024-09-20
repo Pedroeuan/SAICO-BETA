@@ -62,11 +62,13 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
         });
     });
     
-    Route::post('/importarEyC', [ExcelEyCController::class, 'importarExcel'])->name('importar.EyC');
+
 
     Route::middleware('auth')->group(function () {
         
     Route::middleware('can:tecnicos-equipos-access')->group(function () {
+    /*IMPORTAR EXCEL */
+    Route::post('/importarEyC', [ExcelEyCController::class, 'importarExcel'])->name('importar.EyC');
     /*SOLICITUDES-1*/
     /*Rutas de Vistas de Solicitudes-Registro*/
     Route::get('/solicitud/create', [SolicitudesController::class, 'create'])->name('solicitud.create');
