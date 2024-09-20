@@ -52,7 +52,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
             'SAT' => $row['sat'],
             'BMPRO' => $row['bmpro'],
             'Factura' => $row['factura'],
-            'Tipo' => $row['tipo'],
+            'Tipo' => $row['tipog'],
             'Foto' => $row['foto'],
             'Disponibilidad_Estado' => $row['disponibilidad_estado'],
         ]);
@@ -78,7 +78,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 'idAlmacen' => $row['idalmacen'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Folio' => $row['folio'],
-                'Tipo' => $row['tipo'],
+                'Tipo' => $row['tipoh'],
                 'Cantidad' => $row['cantidad'],
                 'Fecha' => $fecha,
                 'Tierra_Costafuera' => $row['tierra_costafuera'],

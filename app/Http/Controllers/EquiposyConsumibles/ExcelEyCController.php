@@ -19,6 +19,7 @@ class ExcelEyCController extends Controller
         // Usa la clase de importación correctamente
         Excel::import(new ImporExcelEyC, $request->file('archivo'));
 
-        return back()->with('success', 'Datos importados correctamente.');
+         // Respuesta JSON
+        return response()->json(['success' => '¡Importación completada con éxito!']);
     }
 }
