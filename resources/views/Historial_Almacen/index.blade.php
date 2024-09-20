@@ -49,7 +49,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Fecha</th>
-                    <th>Tierra/Costa Fuera</th>
+                    <th>Tierra/Costa Afuera</th>
                 </tr>
             </thead>
             <tbody>
