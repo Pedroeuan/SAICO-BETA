@@ -1061,7 +1061,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+<!--<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>-->
 
 
 <!--sweet alert -->
@@ -1105,6 +1105,13 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+
+function attachAddListeners() {
+    $('.btnAgregar').on('click', function() {
+        var id = $(this).data('id');
+        // Lógica para agregar el elemento
+    });
+}
 
 function actualizarTabla() {
     $.ajax({
@@ -1198,116 +1205,6 @@ function actualizarTabla() {
         }
     });
 }
-
-/*
-function attachAddListeners() {
-    // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
-    $('#tablaJs').on('click', '.btnAgregar', function() {
-        var id = $(this).data('id');
-        // Aquí podrías añadir la funcionalidad para agregar el ítem seleccionado
-        // console.log('Botón Agregar clicado para id:', id);
-    });
-}*/
-/*
-$(document).ready(function() {
-    // Llamar a la función de actualización cuando se hace clic en el botón
-    $('#actualizarTablaBtn').on('click', function() {
-        actualizarTabla();
-    });
-});*/
-
-/*
-function attachAddListeners() {
-    // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
-    $('#tablaJs').on('click', '.btnAgregar', function() {
-        var id = $(this).data('id');
-        // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
-        console.log('Botón Agregar clicado para id:', id);
-    });
-}*/
-/*
-$(document).ready(function() {
-    // Elimina la actualización automática si prefieres solo manual
-    // setInterval(actualizarTabla, 60000);
-
-    // Llama a la función una vez al cargar la página
-    actualizarTabla();
-
-    // Añade el evento de clic al botón para actualizar manualmente la tabla
-    $('#actualizarTablaBtn').on('click', function() {
-        actualizarTabla();
-    });
-});*/
-
-        /* function attachAddListeners() {
-            // Ejemplo de cómo podrías adjuntar listeners a los botones con la clase `btnAgregar`
-            $('#tablaJs').on('click', '.btnAgregar', function() {
-                var id = $(this).data('id');
-                // Agrega aquí el código que deseas ejecutar cuando se hace clic en el botón
-                //console.log('Botón Agregar clicado para id:', id);
-            });
-        }*/
-
-/*Prevenir el Enter Equipos*/
-document.getElementById('equiposForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Consumibles*/
-document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Accesorios*/
-document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Blocks*/
-document.getElementById('blocksForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Herramientas*/
-document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Kits*/
-document.getElementById('kitForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    $(document).ready(function() {
-    $('#btnFinalizarkit').click(function(event) {
-        // Verificar si hay filas en la tabla
-        if ($('#tablaSeleccionados tbody tr').length === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Tabla vacía',
-                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
-                confirmButtonText: 'Entendido'
-            });
-            event.preventDefault(); // Prevenir el envío del formulario
-        } else {
-            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
-            // Si usas un formulario real, aquí podrías hacer el submit
-        }
-    });
-});
-
     $(document).ready(function() {
             // Actualizar la tabla cada 10 segundos (10000 milisegundos)
             //setInterval(actualizarTabla, 60000);
@@ -1320,7 +1217,6 @@ document.getElementById('kitForm').addEventListener('keydown', function(event) {
                 actualizarTabla();
             });
         });
-
     
 function consultarCantidadAlmacen(id, callback) {
     $.ajax({
@@ -1334,7 +1230,6 @@ function consultarCantidadAlmacen(id, callback) {
         }
     });
 }
-
 
 $(document).on('click', '.btnAgregar', function() {
     let row = $(this).closest('tr');
@@ -1407,14 +1302,23 @@ $(document).on('click', '.btnAgregar', function() {
     });
 });
 
-
-/*
-function attachDeleteListeners() {
-    // Tu código para manejar la eliminación de filas
-    $('.btnEliminar').on('click', function() {
-        $(this).closest('tr').remove();
+$(document).ready(function() {
+    $('#btnFinalizarkit').click(function(event) {
+        // Verificar si hay filas en la tabla
+        if ($('#tablaSeleccionados tbody tr').length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tabla vacía',
+                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                confirmButtonText: 'Entendido'
+            });
+            event.preventDefault(); // Prevenir el envío del formulario
+        } else {
+            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+            // Si usas un formulario real, aquí podrías hacer el submit
+        }
     });
-}*/
+});
 
 
 function attachDeleteListeners() {
@@ -1502,11 +1406,6 @@ document.querySelector('#kitForm').addEventListener('submit', function(event) {
     });
 });
 
-/*document.querySelector('#kitForm').addEventListener('submit', function(event) {
-    if (!validateForm()) {
-        event.preventDefault(); // Evitar que el formulario se envíe si no pasa la validación
-    }
-});*/
 document.querySelector('#kitForm').addEventListener('submit', function(event) {
     // Verifica si el botón que activó el submit es "Guardar y continuar"
     if (event.submitter && event.submitter.dataset.submitType === 'guardar-continuar') {
@@ -1532,7 +1431,7 @@ function validateForm() {
     }
 
     if (selectedRows.length === 0) {
-        camposVacios.push('Elementos seleccionados');
+        camposVacios.push('TABLA VACIA Agregue al menos un elemento a la tabla');
     }
 
     selectedRows.forEach(function(row) {
@@ -2092,6 +1991,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+/*PREVENIR CLICS */
+/*Prevenir el Enter Equipos*/
+document.getElementById('equiposForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Consumibles*/
+document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Accesorios*/
+document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Blocks*/
+document.getElementById('blocksForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Herramientas*/
+document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    /*Prevenir el Enter Kits*/
+document.getElementById('kitForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
 
 </script>
 
