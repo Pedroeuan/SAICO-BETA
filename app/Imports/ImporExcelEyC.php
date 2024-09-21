@@ -33,14 +33,14 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
     {
         //dd($row);
         // Validar si la fila contiene un idGeneral_EyC
-        if (empty($row['nombre_e_p_bp'])) {
+        if (empty($row['nombre_e_p_bp'])) { 
             return null; // Evita procesar filas sin un idGeneral_EyC
         }
 
         // Buscar si ya existe un registro de general_eyc para evitar duplicados
-        $generalEyC = general_eyc::firstOrCreate([
-            'idGeneral_EyC' => $row['idgeneral_eyc']
-        ], [
+        $generalEyC = general_eyc::updateOrCreate([
+            'idGeneral_EyC' => $row['idgeneral_eyc']], // Condición para encontrar el registro
+            [
             'Nombre_E_P_BP' => $row['nombre_e_p_bp'],
             'No_economico' => $row['no_economico'],
             'Serie' => $row['serie'],
@@ -59,7 +59,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Almacen
         if (!empty($row['idalmacen']) && !empty($row['stock'])) {
-            almacen::create([
+            almacen::updateOrCreate([
                 'idAlmacen' => $row['idalmacen'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Lote' => $row['lote'],
@@ -73,7 +73,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
             ? Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d')
             : $row['fecha'];
 
-            Historial_Almacen::create([
+            Historial_Almacen::updateOrCreate([
                 'idHistorial_almacen' => $row['idhistorial_almacen'],
                 'idAlmacen' => $row['idalmacen'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
@@ -95,7 +95,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 ? Date::excelToDateTimeObject($row['prox_fecha_calibracion'])->format('Y-m-d')
                 : $row['prox_fecha_calibracion'];
 
-            certificados::create([
+            certificados::updateOrCreate([
                 'idCertificados' => $row['idcertificados'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'No_certificado' => $row['no_certificado'],
@@ -107,7 +107,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Equipos
         if (!empty($row['idequipos'])) {
-            equipos::create([
+            equipos::updateOrCreate([
                 'idEquipos' => $row['idequipos'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
             ]);
@@ -115,7 +115,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Consumibles
         if (!empty($row['idconsumibles'])) {
-            consumibles::create([
+            consumibles::updateOrCreate([
                 'idConsumibles' => $row['idconsumibles'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Proveedor' => $row['proveedorc'],
@@ -124,8 +124,8 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Accesorios
         if (!empty($row['idaccesorios'])) {
-            accesorios::create([
-                'idAccesorio' => $row['idaccesorios'],
+            accesorios::updateOrCreate([
+                'idAccesorios' => $row['idaccesorios'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Proveedor' => $row['proveedora'],
             ]);
@@ -133,7 +133,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Block y Probeta
         if (!empty($row['idblock_probeta'])) {
-            block_y_probeta::create([
+            block_y_probeta::updateOrCreate([
                 'idBlock_probeta' => $row['idblock_probeta'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Plano' => $row['planob'],
@@ -142,7 +142,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         // Comprobamos si hay datos para almacenar en la tabla Herramientas
         if (!empty($row['idequipos_tools_complementos'])) {
-            herramientas::create([
+            herramientas::updateOrCreate([
                 'idEquipos_Tools_Complementos' => $row['idequipos_tools_complementos'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Garantia' => $row['garantia'],
