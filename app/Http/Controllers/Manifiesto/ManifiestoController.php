@@ -786,8 +786,8 @@ class ManifiestoController extends Controller
         
     $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
     $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
-    //dd($RecibeDevolucion);
 
+    // Obtener los ids de las solicitudes en formato array
     $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
 
     // Actualizar el estatus de las solicitudes
@@ -798,6 +798,27 @@ class ManifiestoController extends Controller
     $Nombre = $user->name;
     $rol = Auth::user()->rol;
 
+    // Obtener las solicitudes actualizadas
+    $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
+
+    // Insertar los registros en la tabla devoluciones
+    foreach ($solicitudesActualizadas as $solicitud) {
+        // Obtener el idManifiesto asociado a la solicitud
+        $idManifiesto = $solicitud->idManifiesto;
+        $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+        // Crear una nueva devolución
+        DB::table('devoluciones')->insert([
+
+            'idManifiestos'=> $idManifiesto,
+            'idSolicitud'=> $idSolicitud,
+            'Entrega' => $EntregaDevolucion,
+            'Recibe'  => $RecibeDevolucion,
+            //'created_at'        => now(),
+            //'updated_at'        => now(),
+        ]);
+    }
+
     if($rol == 'Técnicos')
     {
         $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
@@ -807,7 +828,7 @@ class ManifiestoController extends Controller
         // Obtener todas las solicitudes
         $Solicitudes = Solicitudes::all();
     }
-    
+
     /*Condiciones de los Folios para la vista de solicitud*/
     // Crear un array para almacenar el último folio encontrado para cada grupo
     $ultimoFolioPorGrupo = [];
