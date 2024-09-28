@@ -36,6 +36,29 @@
     @csrf
     <!-- Campo oculto para enviar todos los idSolicitud -->
     <input type="hidden" name="idSolicitudes" value="{{ json_encode($idsSolicitud) }}">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">Entrega</label>
+                <input type="text" class="form-control inputForm" name="Entrega_Nombre_Devolucion" value="" required>
+                @error('Entrega_Nombre')
+                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">Recibe</label>
+                <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="" required>
+                @error('Recibe_Nombre')
+                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                @enderror
+            </div>
+        </div>
+    </div>
+
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
                 <tr>

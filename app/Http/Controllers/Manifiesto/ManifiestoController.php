@@ -784,6 +784,10 @@ class ManifiestoController extends Controller
     public function concluirManifiesto(Request $request, $id)
     {
         
+    $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
+    $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+    //dd($RecibeDevolucion);
+
     $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
 
     // Actualizar el estatus de las solicitudes
@@ -803,7 +807,8 @@ class ManifiestoController extends Controller
         // Obtener todas las solicitudes
         $Solicitudes = Solicitudes::all();
     }
-
+    
+    /*Condiciones de los Folios para la vista de solicitud*/
     // Crear un array para almacenar el último folio encontrado para cada grupo
     $ultimoFolioPorGrupo = [];
 
