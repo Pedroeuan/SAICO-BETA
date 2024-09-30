@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -804,8 +805,12 @@ class ManifiestoController extends Controller
     // Insertar los registros en la tabla devoluciones
     foreach ($solicitudesActualizadas as $solicitud) {
         // Obtener el idManifiesto asociado a la solicitud
-        $idManifiesto = $solicitud->idManifiesto;
         $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+        // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
+        $idManifiesto = DB::table('manifiestos')
+        ->where('idSolicitud', $idSolicitud)
+        ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
 
         // Crear una nueva devolución
         DB::table('devoluciones')->insert([
