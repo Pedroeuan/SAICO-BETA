@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -445,11 +446,8 @@ class ManifiestoController extends Controller
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                     ->where('Fecha', $Fecha_DB_Solicitud)
-                    //->where('Fecha', $Fecha)//error se duplican datos
                     ->whereIn('Tipo', $Tipo)
                     ->first();
-                    //Log::info('***********************');
-                    //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
 
                     if (!$historialAlmacenExistente) 
                     {
@@ -545,9 +543,6 @@ class ManifiestoController extends Controller
 
                             if($Fecha != $Fecha_BD)
                                 {
-                                    Log::info('***********************');
-                                    Log::info('$Fecha_BD: ', ['$Fecha_BD' => $Fecha_BD]);
-                                    Log::info('$Fecha: ', ['$Fecha' => $Fecha]);
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
@@ -784,6 +779,12 @@ class ManifiestoController extends Controller
     public function concluirManifiesto(Request $request, $id)
     {
         
+    $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
+    $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+    $Observaciones = $request->input('Observaciones_Devolucion');
+    $Condiciones = $request->input('Condiciones_Retorno');
+
+    // Obtener los ids de las solicitudes en formato array
     $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
 
     // Actualizar el estatus de las solicitudes
@@ -793,6 +794,35 @@ class ManifiestoController extends Controller
     // Obtener el nombre del usuario
     $Nombre = $user->name;
     $rol = Auth::user()->rol;
+
+    // Obtener las solicitudes actualizadas
+    $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
+
+    // Insertar los registros en la tabla devoluciones
+    foreach ($solicitudesActualizadas as $solicitud) {
+        // Obtener el idManifiesto asociado a la solicitud
+        $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+        // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
+        $idManifiesto = DB::table('manifiestos')
+        ->where('idSolicitud', $idSolicitud)
+        ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
+
+        $Fecha = Carbon::now();
+        // Crear una nueva devolución
+        DB::table('devoluciones')->insert([
+
+            'idManifiestos'=> $idManifiesto,
+            'idSolicitud'=> $idSolicitud,
+            'Entrega' => $EntregaDevolucion,
+            'Recibe'  => $RecibeDevolucion,
+            'Fecha'  => $Fecha,
+            'Observaciones'  => $Observaciones,
+            'Condiciones'  => $Condiciones,
+            //'created_at'        => now(),
+            //'updated_at'        => now(),
+        ]);
+    }
 
     if($rol == 'Técnicos')
     {
@@ -804,6 +834,7 @@ class ManifiestoController extends Controller
         $Solicitudes = Solicitudes::all();
     }
 
+    /*Condiciones de los Folios para la vista de solicitud*/
     // Crear un array para almacenar el último folio encontrado para cada grupo
     $ultimoFolioPorGrupo = [];
 

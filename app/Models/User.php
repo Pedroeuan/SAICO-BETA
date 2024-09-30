@@ -60,7 +60,6 @@ class User extends Authenticatable
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
         return $rol;
-        //return "Administrador";
     }
 
     public function adminlte_profile_url()

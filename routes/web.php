@@ -31,14 +31,7 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
         return view('auth.login');
     });
 
-    /*Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');*/
-    //Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    //Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,13 +39,6 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    /*Ruta de grafico para indicadores en equipos*/
-    //Route::get('Equipos/indicadoresEquipos', [IndicadoresController::class, 'index'])->name('Equipos.IndicadoresEquipos');
-    
-    /*PDF*/
-    /*Route::middleware('auth')->group(function () {
-    Route::post('/upload-pdf', [PDFController::class, 'upload'])->name('upload.pdf');
-    });*/
     Route::middleware('auth')->group(function () {
     Route::middleware('can:equipos-access')->group(function () {
     /*Creación de Notificaciones*/
@@ -202,9 +188,6 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     
     });
-    /*MANIFIESTO PDF*/
-    /*Ruta para ver el manifiesto pdf*/
-    /*Route::get('/manifiesto/generarManifiesto', [PDFController::class, 'generarManifiesto'])->name('manifiesto/generarManifiesto');*/
     
     /*admin */
     Route::middleware('can:administrador-access')->group(function () {
