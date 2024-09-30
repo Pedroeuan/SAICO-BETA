@@ -19,4 +19,9 @@ class devolucion extends Model
     public $timestamps = false; 
     
     use HasFactory;
+
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
+    }
 }

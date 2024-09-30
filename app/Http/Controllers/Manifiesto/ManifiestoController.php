@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -446,11 +446,8 @@ class ManifiestoController extends Controller
                     // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                     $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                     ->where('Fecha', $Fecha_DB_Solicitud)
-                    //->where('Fecha', $Fecha)//error se duplican datos
                     ->whereIn('Tipo', $Tipo)
                     ->first();
-                    //Log::info('***********************');
-                    //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
 
                     if (!$historialAlmacenExistente) 
                     {
@@ -546,9 +543,6 @@ class ManifiestoController extends Controller
 
                             if($Fecha != $Fecha_BD)
                                 {
-                                    Log::info('***********************');
-                                    Log::info('$Fecha_BD: ', ['$Fecha_BD' => $Fecha_BD]);
-                                    Log::info('$Fecha: ', ['$Fecha' => $Fecha]);
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
@@ -787,6 +781,8 @@ class ManifiestoController extends Controller
         
     $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
     $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+    $Observaciones = $request->input('Observaciones_Devolucion');
+    $Condiciones = $request->input('Condiciones_Retorno');
 
     // Obtener los ids de las solicitudes en formato array
     $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
@@ -812,6 +808,7 @@ class ManifiestoController extends Controller
         ->where('idSolicitud', $idSolicitud)
         ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
 
+        $Fecha = Carbon::now();
         // Crear una nueva devolución
         DB::table('devoluciones')->insert([
 
@@ -819,6 +816,9 @@ class ManifiestoController extends Controller
             'idSolicitud'=> $idSolicitud,
             'Entrega' => $EntregaDevolucion,
             'Recibe'  => $RecibeDevolucion,
+            'Fecha'  => $Fecha,
+            'Observaciones'  => $Observaciones,
+            'Condiciones'  => $Condiciones,
             //'created_at'        => now(),
             //'updated_at'        => now(),
         ]);

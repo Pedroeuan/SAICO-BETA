@@ -11,6 +11,8 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\devolucion;
+
 
 class PDFController extends Controller
 {
@@ -21,6 +23,7 @@ class PDFController extends Controller
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
         $generalEyC = general_eyc::all();
     
         $Logo = public_path('images/Logo_AICO_R.jpg');
@@ -33,6 +36,7 @@ class PDFController extends Controller
             'generalEyC' => $generalEyC,
             'nombre' => $nombre,
             'Logo' => $Logo,
+            'Devolucion' => $Devolucion,
         ];
     
         // Cargar la vista con los datos

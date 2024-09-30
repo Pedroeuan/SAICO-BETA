@@ -34,6 +34,48 @@
     <h3 align="center">Devoluciones</h3>
     <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
     @csrf
+
+    <div class="row">
+        <!-- Columna izquierda para la fecha -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">Fecha Actual</label>
+                <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="{{ $FechaActual->format('d-m-Y') }}" readonly>
+            </div>
+        </div>
+
+        <!-- Columna derecha para el select -->
+        <!--<div class="col-md-6">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en optimas condiciones?</label>
+                <select class="form-control select2" style="width: 100%;" name="Condiciones_Retorno">
+                    <option selected="selected">Elige un Tipo</option>
+                    <option value="DISPONIBLE" {{ old('Condiciones_Retorno') == 'SI' ? 'selected' : '' }}>SI</option>
+                    <option value="NO DISPONIBLE" {{ old('Condiciones_Retorno') == 'NO' ? 'selected' : '' }}>NO</option>
+                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Condiciones_Retorno') == 'N/A' ? 'selected' : '' }}>N/A</option>
+                </select>
+            </div>
+        </div>-->
+        <div class="col-md-6">
+            <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en optimas condiciones?</label>
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio1" value="SI">
+                    <label class="form-check-label" for="inlineRadio1">SI</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio2" value="NO">
+                    <label class="form-check-label" for="inlineRadio2">NO</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio3" value="N/A" >
+                    <label class="form-check-label" for="inlineRadio3">N/A</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <!-- Campo oculto para enviar todos los idSolicitud -->
     <input type="hidden" name="idSolicitudes" value="{{ json_encode($idsSolicitud) }}">
 
@@ -51,13 +93,20 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label class="col-form-label" for="inputSuccess">Recibe</label>
-                <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="" required>
+                <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="{{ $Nombre }}" required>
                 @error('Recibe_Nombre')
                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                 @enderror
             </div>
         </div>
     </div>
+
+    <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label" for="inputSuccess">Observaciones</label>
+                        <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones_Devolucion" placeholder="Ejemplo: Equipo regresa en malas condiciones">{{old('Observaciones')}}</textarea>
+                    </div>
+                </div>   
 
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
