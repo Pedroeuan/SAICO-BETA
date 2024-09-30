@@ -37,5 +37,4 @@ class certificados extends Model
         return \Carbon\Carbon::parse($this->attributes['Fecha_calibracion'])->format('d-m-Y');
     }
     
-
 }

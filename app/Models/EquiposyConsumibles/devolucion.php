@@ -9,14 +9,19 @@ class devolucion extends Model
 {
     protected $fillable = [
         'idDevoluciones',
-        'idGeneral_EyC',
-        'idAlmacen',
-        'idHidtorial_almacen',
-        'Estado_Cantidad',
+        'idManifiestos',
+        'idSolicitud',
+        'Entrega',
+        'Recibe',
     ];
     protected $table = 'Devoluciones';
     protected $primaryKey = 'idDevoluciones';
     public $timestamps = false; 
     
     use HasFactory;
+
+    public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
+    }
 }
