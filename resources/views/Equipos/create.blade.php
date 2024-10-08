@@ -255,18 +255,6 @@
                                             <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
                                         </div>
                                     </div>
-                                    
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
-                                            @error('Serie')
-                                                <br>
-                                                    <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                                </br>
-                                            @enderror
-                                        </div>
-                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">

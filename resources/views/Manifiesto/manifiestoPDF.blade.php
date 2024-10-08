@@ -453,32 +453,51 @@
                             <td class="celdaAzul letraBlanca" colspan="3">RETORNO DE EQUIPOS Y ADICIONALES</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. : {{ $Devolucion->formatted_date }}</td>
+                        <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :
+                            @if($Devolucion && $Devolucion->formatted_date != '')
+                                {{ $Devolucion->formatted_date }}
+                            @else
+                                
+                            @endif
+                        </td>
+
                             <td></td>
                         </tr>
                         <tr>
                             <td class="celdaAzul letraBlanca">¿Los equipos retornan en optimas condiciones?</td>
                                 <td>
-                                    @if($Devolucion->Condiciones == 'SI')
-                                        SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>&nbsp;
-                                        NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
-                                        N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            @elseif($Devolucion->Condiciones == 'NO')
-                                        SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
-                                        NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>&nbsp; 
-                                        N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            @else
-                                        SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
-                                        NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
-                                        N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>
-                                    @endif
+                                @if($Devolucion && $Devolucion->Condiciones != '')
+                                        @if($Devolucion->Condiciones == 'SI')
+                                            SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>&nbsp;
+                                            NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                            N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                @elseif($Devolucion->Condiciones == 'NO')
+                                            SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                            NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>&nbsp; 
+                                            N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                @else
+                                            SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                            NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+                                            N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp; X &nbsp;&nbsp;</span>
+                                        @endif
+                                    @else
+                                    SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                    NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+                                    N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                @endif
                                 </td>
                             <td class="celdaAzul letraBlanca">Observaciones</td>
                         </tr>
                         <tr>
-                            <td class="altoCelda">{{ $Devolucion->Entrega }}</td>
-                            <td class="altoCelda">{{ $Devolucion->Recibe }}</td>
-                            <td class="altoCelda" rowspan="2">{{ $Devolucion->Observaciones }}</td>
+                            @if($Devolucion && $Devolucion->Entrega != '' && $Devolucion->Recibe != '' && $Devolucion->Observaciones != '')
+                                    <td class="altoCelda">{{ $Devolucion->Entrega }}</td>
+                                    <td class="altoCelda">{{ $Devolucion->Recibe }}</td>
+                                    <td class="altoCelda" rowspan="2">{{ $Devolucion->Observaciones }}</td>
+                                @else
+                                    <td class="altoCelda"></td>
+                                    <td class="altoCelda"></td>
+                                    <td class="altoCelda" rowspan="2"></td>
+                            @endif
                         </tr>
                         <tr>
                             <td>Entrega: Nombre/cargo/firma</td>
