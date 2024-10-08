@@ -119,9 +119,6 @@
             </thead>
             <tbody>
                 @foreach ($datosManifiesto as $dato)
-                @php 
-                //dd($datosManifiesto);
-                @endphp
                     <tr>
                         <td>
                         <input type="hidden" name="folio[{{ $dato['Folio'] }}]" id="folio_{{ $dato['Folio'] }}" value="{{ $dato['Folio'] }}">
