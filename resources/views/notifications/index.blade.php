@@ -22,10 +22,6 @@
 <br>
 <br>
 <div class="container">
-    @php 
-    //dd($notificaciones);
-    @endphp
-
     @if($notificaciones->isEmpty())
         <p>No hay notificaciones para este rol.</p>
     @else
