@@ -342,8 +342,6 @@ $(document).ready(function() {
         }
     });
     
-    
-    // Delegación de eventos para el botón "Eliminar"
 // Delegación de eventos para el botón "Eliminar"
 $('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
     var idDetalles_Solicitud = $(this).data('id');

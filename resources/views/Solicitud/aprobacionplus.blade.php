@@ -311,7 +311,6 @@ $(document).ready(function() {
             event.preventDefault(); // Prevenir el envío del formulario
         } else {
             // Si hay elementos en la tabla, puedes continuar con el envío del formulario
-            // Si usas un formulario real, aquí podrías hacer el submit
         }
     });
 });
@@ -411,8 +410,7 @@ $(document).ready(function() {
             });
         });
     });
-
-    // Delegación de eventos para el botón "Quitar" con confirmación
+    
 // Delegación de eventos para el botón "Quitar" con confirmación
 $('#tablaAgregados').on('click', '.btnQuitarElemento', function() {
     var row = $(this).closest('tr');
