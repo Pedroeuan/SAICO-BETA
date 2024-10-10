@@ -474,7 +474,6 @@ class BlockYProbetaController extends Controller
         $generalConCertificado->update([
             'No_certificado' => $request->input('No_certificado'),
             'Fecha_calibracion' => $fechaCalibracion,
-            //'Prox_fecha_calibracion' => $proxFechaCalibracion,
         ]);
 
         // Verificar si se ha proporcionado un nuevo certificado actual
@@ -518,8 +517,6 @@ class BlockYProbetaController extends Controller
                 $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
                 $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
                 $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
-                /*$Espera_Dato='ESPERA DE DATO';
-                $CertificadosHistorialCertificados->Tipo = $Espera_Dato;*/
                 $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
                 $CertificadosHistorialCertificados->save();
                 }
