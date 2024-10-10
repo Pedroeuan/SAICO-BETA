@@ -211,8 +211,6 @@ class BlockYProbetaController extends Controller
                 $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
             }  
 
-                //$generalConCertificados->Fecha_calibracion = $request->input('Fecha_calibracion');
-                //$generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
             if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
                 $Certificado_Actual = $request->file('Certificado_Actual');
 
