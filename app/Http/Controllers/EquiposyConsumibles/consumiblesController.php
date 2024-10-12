@@ -31,7 +31,6 @@ class consumiblesController extends Controller
     {
         //
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -39,7 +38,6 @@ class consumiblesController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -50,7 +48,6 @@ class consumiblesController extends Controller
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
-                //'Serie' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
             ]);
 
@@ -69,12 +66,6 @@ class consumiblesController extends Controller
         }else{
             $general->No_economico = $request->input('No_economico');
         }
-        /*if($request->input('Serie')==null)
-        {
-            $general->Serie = 'N/A';
-        }else{
-            $general->Serie = $request->input('Serie');
-        }*/
         $general->Serie = 'N/A';
         if($request->input('Marca')==null)
         {
@@ -157,8 +148,6 @@ class consumiblesController extends Controller
         {
             $general->Factura = $EsperaDato;
         }
-            // Si no se ha enviado un archivo PDF válido, devolver un mensaje de error
-            //return redirect()->back()->withErrors(['Factura' => 'Error: no se ha enviado un archivo PDF válido.']);
         }
         /*Ficha Tecnica */
         if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
@@ -321,9 +310,6 @@ class consumiblesController extends Controller
         // Actualizar los datos del equipo
         $generalEyC ->update([
             'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
-            //'No_economico' => $request->input('No_economico'),
-            //'Serie' => $request->input('Serie'),
-            //'Serie' => 'N/A',
             'Marca' => $request->input('Marca'),
             'Modelo' => $request->input('Modelo'),
             'Ubicacion' => $request->input('Ubicacion'),
@@ -414,7 +400,6 @@ class consumiblesController extends Controller
         $generalConCertificado->update([
             'No_certificado' => $request->input('No_certificado'),
             'Fecha_calibracion' => $fechaCalibracion,
-            //'Prox_fecha_calibracion' => $proxFechaCalibracion,
         ]);
 
         // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
@@ -448,51 +433,7 @@ class consumiblesController extends Controller
             $generalConCertificado->Certificado_Actual = $Certificado_ActualPath;
             $generalConCertificado->save();
         }
-        // Verificar si se ha proporcionado un nuevo certificado actual
-        /* if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
-            // Obtener la ruta del certificado actual desde la base de datos
-            $rutaAnterior = $generalConCertificado->Certificado_Actual;
-            // Guardar el nuevo certificado en la carpeta origina
-            $certificado = $request->file('Certificado_Actual');
-
-            // Obtener el último número consecutivo
-            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Consumibles'))
-                ->filter(function ($file) {
-                    return preg_match('/^\d+_/', basename($file));
-                })
-                ->sort()
-                ->last();
-            $lastNumber = 0;
-            if ($lastFile) {
-                $lastNumber = (int)explode('_', basename($lastFile))[0];
-            }
-            // Incrementar el número consecutivo
-            $newNumber = $lastNumber + 1;
-            $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
-            
-            $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Consumibles', $newFileNameCertificado, 'public');
-            // Actualizar la ruta del certificado en la base de datos
-            $generalConCertificado->Certificado_Actual = $certificadoPath;*/
-
-            // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
-            /* if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                // Obtener el nombre del archivo
-                $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
-                // Construir la nueva ruta para mover el archivo
-                $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Consumibles/' . $nombreArchivo;
-                // Mover el archivo
-                Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
-                /* Tabla Historial_certificados */
-                /*$CertificadosHistorialCertificados = new historial_certificado;
-                $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
-                $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
-                $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
-                /*$Espera_Dato='ESPERA DE DATO';
-                $CertificadosHistorialCertificados->Tipo = $Espera_Dato;*/
-                /* $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
-                $CertificadosHistorialCertificados->save();
-                }
-            }*/
+        
         $generalConCertificado->save();
 
         // Actualizar los datos del Almacen asociado

@@ -9,7 +9,6 @@ use App\Imports\ImporExcelEyC;
 
 class ExcelEyCController extends Controller
 {
-    //
     public function importarExcel(Request $request)
     {
         $request->validate([

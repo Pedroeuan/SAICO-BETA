@@ -41,13 +41,12 @@ class general_eycController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     /*GENERAL*/
-
     public function index()
     {
     // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
         $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
-        //$generalConEquipos = general_eyc::with('Equipos')->get();
+
         return view('Equipos.index', compact('general','generalConCertificadosConAlmacen'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
@@ -56,7 +55,7 @@ class general_eycController extends Controller
     {
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-         //$DetallesKits = detalles_Kits::where('idKits', $id)->get()
+
         return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
     }
 
@@ -64,7 +63,6 @@ class general_eycController extends Controller
     {
         $generalEyC = general_eyc::findOrFail($id);
         /*devuelven los datos de la tabla a la que estan ligados */
-        //$generalConEquipos = general_eyc::with('certificados')->where('idGeneral_EyC', $id)->first();
         $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
         $generalConCertificados = certificados::where('idGeneral_EyC', $id)->first();
         $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
