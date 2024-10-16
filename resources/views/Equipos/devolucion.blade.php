@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label class="col-form-label" for="inputSuccess">Entrega</label>
+                <label class="col-form-label" for="inputSuccess">Técnico que Entrega</label>
                 <input type="text" class="form-control inputForm" name="Entrega_Nombre_Devolucion" value="" required>
                 @error('Entrega_Nombre')
                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -92,7 +92,7 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label class="col-form-label" for="inputSuccess">Recibe</label>
+                <label class="col-form-label" for="inputSuccess">Persona que Recibe</label>
                 <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="{{ $Nombre }}" required>
                 @error('Recibe_Nombre')
                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
