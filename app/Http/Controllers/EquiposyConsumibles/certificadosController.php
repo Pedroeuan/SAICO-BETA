@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class certificadosController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()

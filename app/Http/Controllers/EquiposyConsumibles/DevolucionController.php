@@ -75,7 +75,7 @@ class DevolucionController extends Controller
 
             // Usar expresión regular para buscar folios similares
             $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
-            //dd($foliosSimilares);
+
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
 
@@ -102,7 +102,7 @@ class DevolucionController extends Controller
             foreach ($detallesSolicitud as $detalle) {
                 $general = $generalesEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                 $folio = $foliosManifiestos->get($detalle->idSolicitud)?->Folio; // Obtener Folio correspondiente desde $foliosManifiestos
-                //dd($folio);
+
                 // Verificar si el registro está en Historial_Almacen con Tipo "DEVOLUCIÓN"
                 $Fecha = now()->format('Y-m-d');
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
@@ -146,8 +146,6 @@ class DevolucionController extends Controller
         $idGeneral_EyC = $request->input('idGeneral_EyC');
         $cantidad = $request->input('cantidad');
         $folio = $request->input('folio'); // Obtener el Folio de la solicitud
-        // Agrega un log para verificar los datos obtenidos
-        //Log::info('Folio obtenido:', ['folio' => $folio]);
         // Buscar el registro en General_EyC
         $generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
 

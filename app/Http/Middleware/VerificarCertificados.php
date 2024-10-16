@@ -38,9 +38,6 @@ class VerificarCertificados
                 $mensajeL = "El No certificado: {$certificado->No_certificado} está próximo a vencer en {$diasRestantes} días.";
                 $mensajeC = "Un certificado caduca en {$diasRestantes} días.";
 
-                Log::info('***********************');
-                Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
-
                 // Crear registro en la tabla de notificaciones
                 Notificacion::create([
                     'users_id' => $user->id,
@@ -48,8 +45,6 @@ class VerificarCertificados
                     'Mensaje_Largo' => $mensajeL,
                 ]);
 
-                 // Agregar registro para verificar la creación de notificación
-                Log::info('Notificación creada: ' . $mensaje);
                 // Opcional: Mostrar una notificación en la interfaz de usuario
                 session()->flash('alert', $mensajeC);
             }
