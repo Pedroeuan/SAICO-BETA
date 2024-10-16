@@ -101,24 +101,24 @@ class KitsController extends Controller
      */
     public function editKits($id)
     {
-    $general = general_eyc::get();
-    $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-    
-    $Kit = kits::findOrFail($id);
-    $DetallesKits = detalles_kits::where('idKits', $id)->get();
-    // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
-    $generalEyCIds = $DetallesKits->pluck('idGeneral_EyC');
-    // Obtener los registros de General_EyC relacionados
-    $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
+        $general = general_eyc::get();
+        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        
+        $Kit = kits::findOrFail($id);
+        $DetallesKits = detalles_kits::where('idKits', $id)->get();
+        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
+        $generalEyCIds = $DetallesKits->pluck('idGeneral_EyC');
+        // Obtener los registros de General_EyC relacionados
+        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
-    foreach ($DetallesKits as $detalle) {
-        $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
-          // Obtener el stock actual del almacén
-            $stockActual = $almacen ? $almacen->Stock : 0;
+        foreach ($DetallesKits as $detalle) {
+            $almacen = Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
+            // Obtener el stock actual del almacén
+                $stockActual = $almacen ? $almacen->Stock : 0;
 
-            // Sumar el stock actual con la cantidad ya solicitada en `DetallesSolicitud`
-            $detalle->stockDisponible = $stockActual;
-    }
+                // Sumar el stock actual con la cantidad ya solicitada en `DetallesSolicitud`
+                $detalle->stockDisponible = $stockActual;
+        }
     
     return view("Equipos.editKits", compact('id', 'Kit', 'DetallesKits', 'generalEyC','general','generalConCertificados'));
     }
@@ -229,12 +229,6 @@ class KitsController extends Controller
         foreach ($DetalleKits as $detalle) {
             $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Kits] ?? null;
             $unidad = request()->input('Unidad')[$detalle->idDetalles_Kits] ?? null;
-            /*Log::info('***********************');
-            Log::info('$DetalleKits-ID: ', ['DetalleKits' => $detalle->idGeneral_EyC]);
-            Log::info('***********************');
-            Log::info('cantidad: ', ['cantidad' => $cantidad]);
-            Log::info('***********************');
-            Log::info('unidad: ', ['unidad' => $unidad]);*/
             
             if ($cantidad !== null && $unidad !== null) {
                 $detalle->update([

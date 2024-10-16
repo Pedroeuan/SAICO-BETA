@@ -25,85 +25,85 @@ class SolicitudesController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    // Obtener el usuario autenticado
-    $user = Auth::user();
-    // Obtener el nombre del usuario
-    $Nombre = $user->name;
-    $rol = Auth::user()->rol;
-
-    if($rol == 'Técnicos')
     {
-        $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
-    }
-    else
-    {
-        // Obtener todas las solicitudes
-        $Solicitudes = Solicitudes::all();
-    }
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
 
-    // Crear un array para almacenar el último folio encontrado para cada grupo
-    $ultimoFolioPorGrupo = [];
-
-    // Procesar cada solicitud
-    foreach ($Solicitudes as $solicitud) 
-    {
-        $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-    
-        if ($manifiesto) 
+        if($rol == 'Técnicos')
         {
-            $solicitud->folio = $manifiesto->Folio;
-    
-            // Verificar si la expresión regular coincide
+            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+        }
+        else
+        {
+            // Obtener todas las solicitudes
+            $Solicitudes = Solicitudes::all();
+        }
+
+        // Crear un array para almacenar el último folio encontrado para cada grupo
+        $ultimoFolioPorGrupo = [];
+
+        // Procesar cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+        
+            if ($manifiesto) 
+            {
+                $solicitud->folio = $manifiesto->Folio;
+        
+                // Verificar si la expresión regular coincide
+                if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                    $folioBase = $matches[1];
+                } else {
+                    // Si no coincide, asignar un valor predeterminado o manejar el caso
+                    $folioBase = '';
+                }
+        
+                // Extraer la letra al final del folio si existe (después del número antes de la "/")
+                if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                    $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                } else {
+                    $folioLetra = '';
+                }
+        
+                // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
+                if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
+                    $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
+                }
+            } 
+            else 
+            {
+                $solicitud->folio = "No Asignado";
+            }
+        }
+        
+
+        // Marcar los folios que deben ocultar el botón
+        foreach ($Solicitudes as $solicitud) 
+        {
+            // Intentar coincidir con el patrón del folio base
             if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
-                $folioBase = $matches[1];
+                $folioBase = $matches[1];  // Si coincide, asignar el valor
             } else {
-                // Si no coincide, asignar un valor predeterminado o manejar el caso
-                $folioBase = '';
+                $folioBase = '';  // Si no coincide, asignar un valor predeterminado
             }
-    
-            // Extraer la letra al final del folio si existe (después del número antes de la "/")
+        
+            // Intentar coincidir con el patrón de la letra del folio
             if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
-                $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
             } else {
-                $folioLetra = '';
+                $folioLetra = '';  // Si no coincide, asignar una cadena vacía
             }
-    
-            // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
-            if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
-                $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
-            }
-        } 
-        else 
-        {
-            $solicitud->folio = "No Asignado";
+        
+            // Si este folio no es el último en su grupo, ocultar el botón
+            $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
-    }
-    
 
-    // Marcar los folios que deben ocultar el botón
-    foreach ($Solicitudes as $solicitud) 
-    {
-        // Intentar coincidir con el patrón del folio base
-        if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
-            $folioBase = $matches[1];  // Si coincide, asignar el valor
-        } else {
-            $folioBase = '';  // Si no coincide, asignar un valor predeterminado
-        }
-    
-        // Intentar coincidir con el patrón de la letra del folio
-        if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
-            $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
-        } else {
-            $folioLetra = '';  // Si no coincide, asignar una cadena vacía
-        }
-    
-        // Si este folio no es el último en su grupo, ocultar el botón
-        $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
     }
-
-    return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
-}
 
     
     public function obtenerDetallesKits($id)
@@ -129,13 +129,6 @@ class SolicitudesController extends Controller
         /*Inventario */
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-        /*Kits */
-        /*$Kit = kits::findOrFail($id);
-        $DetallesKits = detalles_kits::where('idKits', $id)->get();
-        // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
-        $generalEyCIds = $DetallesKits->pluck('idGeneral_EyC');
-        // Obtener los registros de General_EyC relacionados
-        $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();*/
 
         return view('Solicitud.create', compact('general','generalConCertificados','kitsConDetalles'));
                                     /*vista*/    /*variable donde se guardan los datos*/
@@ -206,7 +199,6 @@ class SolicitudesController extends Controller
         $user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
-        //$rol = Auth::user()->rol;
 
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
@@ -215,15 +207,11 @@ class SolicitudesController extends Controller
 
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-        //dd($generalEyCIds);
         // Obtener los registros de General_EyC relacionados
-        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
         $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
-        //dd($generalEyC);
 
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         $general = general_eyc::get();
-        //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
         $clientes = clientes::all();
 
     
@@ -233,12 +221,6 @@ class SolicitudesController extends Controller
         }
 
         if ($Solicitud->Estatus == 'PENDIENTE') {
-            /*if (!$Manifiestos) {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
-            }else
-            {
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','generalConCertificadosConAlmacen'));
-            }*/
             return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));
         }
     
@@ -256,17 +238,6 @@ class SolicitudesController extends Controller
             return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados', 'Manifiestos','clientes','Nombre'));
             }
         }
-
-        /*switch ($Solicitud->Estatus) {
-            case 'PENDIENTE':
-                return view("Solicitud.aprobacion", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
-            case 'APROBADO':
-                return view('Manifiesto.Pre-Manifiesto', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados'));
-            case 'MANIFIESTO':
-                return view('Manifiesto.Pre-Manifiestoedit', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC','general','generalConCertificados','Manifiestos'));
-            //default:
-                //return view('solicitudes.default', compact('solicitud'));
-        }*/
     }
 
     /*Botón de plus para agregar, más datos al manifiesto con el mismo folio */
@@ -331,7 +302,7 @@ class SolicitudesController extends Controller
         }
 
             return redirect()->route('solicitudplusvista.edit', ['id' => $nuevoIdSolicitud]);
-        }
+    }
         
 
         /*Botón de plus para agregar, más datos al manifiesto con el mismo folio */
@@ -346,15 +317,11 @@ class SolicitudesController extends Controller
     
             // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
             $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-            //dd($generalEyCIds);
             // Obtener los registros de General_EyC relacionados
-            //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
             $generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->with('certificados')->with('almacen')->get();
-            //dd($generalEyC);
     
             $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
             $general = general_eyc::get();
-            //$generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
             $clientes = clientes::all();
     
             if ($Solicitud->Estatus == 'PENDIENTE') {
@@ -387,7 +354,6 @@ class SolicitudesController extends Controller
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
-            //$Tipo='SALIDA';
             $Tipo = ['SALIDA', 'EN RENTA'];
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
@@ -411,17 +377,10 @@ class SolicitudesController extends Controller
 
             // Si se encuentra un registro en el historial
             if ($Historial_Almacen) {
-                //$idAlmacen = $Historial_Almacen->idAlmacen;
                 $Almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
                 $CantidadAlmacen = $Almacen->Stock;
-                //Log::info("*********************************");
-                //Log::info("CantidadAlmacen: $CantidadAlmacen", ['CantidadAlmacen' => $CantidadAlmacen]);
                 $CantidadHistorialAlmacen = $Historial_Almacen->Cantidad;
-                //Log::info("*********************************");
-                //Log::info("CantidadHistorialAlmacen: $CantidadHistorialAlmacen", ['CantidadHistorialAlmacen' => $CantidadHistorialAlmacen]);
                 $StockDevuelto = $CantidadAlmacen + $CantidadHistorialAlmacen;
-                //Log::info("*********************************");
-                //Log::info("StockDevuelto: $StockDevuelto", ['StockDevuelto' => $StockDevuelto]);
                 $Almacen->update([
                     'Stock' => $StockDevuelto,
                 ]);
@@ -440,8 +399,6 @@ class SolicitudesController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Record not found.'], 404);
         } catch (\Exception $e) {
-            // Loguea el error para mayor detalle
-            //Log::error('Error deleting record: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while deleting the record.'], 500);
         }
     }
@@ -449,10 +406,10 @@ class SolicitudesController extends Controller
     /*Eliminación de Toda la Solicitud-Boton eliminar del Index*/
     public function destroySolicitud($id)
     {
-        // Obtener la solicitud y su fecha de salida
+        //Obtener la solicitud y su fecha de salida
         $solicitud = Solicitudes::find($id);
         $fechaSalida = $solicitud->Fecha;
-        //$Tipo = 'SALIDA';
+
         $Tipo = ['SALIDA', 'EN RENTA']; 
         $disponibilidadEstado = 'DISPONIBLE';
     
@@ -555,6 +512,5 @@ class SolicitudesController extends Controller
                 ]);
             }
     }
-
 
 }
