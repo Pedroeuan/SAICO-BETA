@@ -105,6 +105,7 @@
         }
         body {
             padding-top: 60px; /* Ajusta el valor según la altura de tu header */
+            font-family: "Arial", sans-serif; /* Cambiar a Arial */
         }
         /*muestra solo la linea inferior de la celda*/
         .lineaInferior{
@@ -112,6 +113,11 @@
             font-weight: bold;
             font-family: Arial;
             font-size: 11px;
+            text-align: center;
+        }
+        .Contenido{
+            font-family: Arial;
+            font-size: 10px !important; /* Forzar el tamaño de letra */
             text-align: center;
         }
         header {
@@ -249,25 +255,25 @@
                     @if($general->Tipo != 'CONSUMIBLES')
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                                     <tr>
-                                        <td>{{ $contador }}</td>
-                                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                                        <td>{{ $general->Serie ?? 'N/A' }}</td>
-                                        <td>{{ $general->SAT ?? 'N/A' }}</td>
-                                        <td>{{ $general->BMPRO ?? 'N/A' }}</td>
-                                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                                        <td>{{ $general->Modelo ?? 'N/A' }}</td>
-                                        <td>{{ $general->Comentario ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $contador }}</td>
+                                        <td class="Contenido">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->No_economico ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Serie ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->SAT ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->BMPRO ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Marca ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Modelo ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Comentario ?? 'N/A' }}</td>
                                     </tr>
                                 @else
                                     <tr>
-                                        <td>{{ $contador }}</td>
-                                        <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        <td>{{ $general->No_economico ?? 'N/A' }}</td>
-                                        <td>{{ $general->Serie ?? 'N/A' }}</td>
-                                        <td>{{ $general->Marca ?? 'N/A' }}</td>
-                                        <td>{{ $general->Modelo ?? 'N/A' }}</td>
-                                        <td>{{ $general->Comentario ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $contador }}</td>
+                                        <td class="Contenido">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->No_economico ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Serie ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Marca ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Modelo ?? 'N/A' }}</td>
+                                        <td class="Contenido">{{ $general->Comentario ?? 'N/A' }}</td>
                                     </tr>
                         @endif
 
@@ -280,23 +286,23 @@
             @for($i = $contador; $i <= $minFilas; $i++)
                 <tr>
                     @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
                     @else
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
-                        <td>----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
+                        <td class="Contenido">----</td>
                     @endif
                 </tr>
             @endfor
@@ -350,19 +356,19 @@
                     @if($general && $general->Tipo == 'CONSUMIBLES')
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             <tr>
-                                <td>{{ $contador }}</td>
-                                <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                <td>{{ $general->SAT ?? 'N/A' }}</td>
-                                <td>{{ $general->BMPRO ?? 'N/A' }}</td>
-                                <td colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                <td class="Contenido">{{ $contador }}</td>
+                                <td class="Contenido">{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                <td class="Contenido">{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                <td class="Contenido">{{ $general->SAT ?? 'N/A' }}</td>
+                                <td class="Contenido">{{ $general->BMPRO ?? 'N/A' }}</td>
+                                <td class="Contenido" colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                             </tr>
                         @else
                             <tr>
-                                <td>{{ $contador }}</td>
-                                <td>{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                <td>{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                <td colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                <td class="Contenido"{{ $contador }}</td>
+                                <td class="Contenido">{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                <td class="Contenido">{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                <td class="Contenido" colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
                             </tr>
                         @endif
 
@@ -377,17 +383,17 @@
                 @for($i = $contador; $i <= $minFilas; $i++)
                     <tr>
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td colspan="7">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido" colspan="7">----</td>
                         @else
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td colspan="4">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido">----</td>
+                            <td class="Contenido" colspan="4">----</td>
                         @endif
                     </tr>
                 @endfor
@@ -396,17 +402,17 @@
                     <tr>
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td colspan="7">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido" colspan="7">----</td>
                             @else
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td colspan="4">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido">----</td>
+                                <td class="Contenido" colspan="4">----</td>
                         @endif
                     </tr>
                 @endfor
@@ -436,8 +442,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="2" class="altoCelda">{{ $nombre }}</td>
-                            <td rowspan="2" class="altoCelda">{{ $Solicitud->tecnico }}</td>
+                            <td rowspan="2" class="Contenido" class="altoCelda">{{ $nombre }}</td>
+                            <td rowspan="2" class="Contenido" class="altoCelda">{{ $Solicitud->tecnico }}</td>
                             <td class="celdaAzul letraBlanca">Obsevaciones</td>
                         </tr>
                         <tr>
@@ -490,13 +496,13 @@
                         </tr>
                         <tr>
                             @if($Devolucion && $Devolucion->Entrega != '' && $Devolucion->Recibe != '' && $Devolucion->Observaciones != '')
-                                    <td class="altoCelda">{{ $Devolucion->Entrega }}</td>
-                                    <td class="altoCelda">{{ $Devolucion->Recibe }}</td>
-                                    <td class="altoCelda" rowspan="2">{{ $Devolucion->Observaciones }}</td>
+                                    <td td class="Contenido" class="altoCelda">{{ $Devolucion->Entrega }}</td>
+                                    <td td class="Contenido" class="altoCelda">{{ $Devolucion->Recibe }}</td>
+                                    <td td class="Contenido" class="altoCelda" rowspan="2">{{ $Devolucion->Observaciones }}</td>
                                 @else
-                                    <td class="altoCelda"></td>
-                                    <td class="altoCelda"></td>
-                                    <td class="altoCelda" rowspan="2"></td>
+                                    <td td class="Contenido" class="altoCelda"></td>
+                                    <td td class="Contenido" class="altoCelda"></td>
+                                    <td td class="Contenido" class="altoCelda" rowspan="2"></td>
                             @endif
                         </tr>
                         <tr>
