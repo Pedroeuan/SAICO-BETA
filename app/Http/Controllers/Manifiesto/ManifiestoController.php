@@ -74,7 +74,7 @@ class ManifiestoController extends Controller
         $user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
-        //dd($request->input('Cliente'));
+
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $Solicitud = Solicitudes::find($id);
@@ -91,7 +91,6 @@ class ManifiestoController extends Controller
 
         $idSolicitud = $Solicitud->idSolicitud;
         $Manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
-        //$Manifiesto = manifiesto::find($id);
         
         if ($Manifiesto) {
             //Log::info('Si existe un manifiesto'); 
@@ -104,7 +103,6 @@ class ManifiestoController extends Controller
                         $Manifiesto->Cliente = $request->input('Cliente');
                         $Manifiesto->Folio = $request->input('Folio');
                         $Manifiesto->Destino = $request->input('Destino');
-                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
                         $Manifiesto->Trabajo = $request->input('Trabajo');
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
@@ -120,10 +118,6 @@ class ManifiestoController extends Controller
         foreach ($DetallesSolicitud as $detalle) {
             $cantidad = request()->input('Cantidad')[$detalle->idDetalles_Solicitud] ?? null;
             $unidad = request()->input('Unidad')[$detalle->idDetalles_Solicitud] ?? null;
-
-            /*Log::info('***********************');
-            Log::info('cantidad: ', ['cantidad' => $cantidad]);
-            Log::info('unidad: ', ['unidad' => $unidad]);*/
             
             if ($cantidad !== null && $unidad !== null) {
                 $detalle->update([
@@ -161,7 +155,7 @@ class ManifiestoController extends Controller
         $user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
-        //dd($request->input('Cliente'));
+
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
         $Solicitud = Solicitudes::find($id);
@@ -207,8 +201,6 @@ class ManifiestoController extends Controller
                 if (is_array($idDetalles_Solicitud)) {
                     foreach ($idDetalles_Solicitud as $idDetalle) {
 
-                       // Log::info('idDetalles_Solicitud: ' . $idDetalle);
-
                         // Eliminar los registros de detalles_solicitud basados en los valores individuales
                         detalles_solicitud::where('idDetalles_Solicitud', $idDetalle)
                             ->where('idSolicitud', $idSolicitud)
@@ -220,13 +212,11 @@ class ManifiestoController extends Controller
 
                 if ($request->filled('idSolicitud'))
                 {
-                        //Log::info('Si no existe un manifiesto'); 
                         $Manifiesto = new manifiesto;
                         $Manifiesto->idSolicitud = $request->input('idSolicitud');
                         $Manifiesto->Cliente = $request->input('Cliente');
                         $Manifiesto->Folio = $request->input('Folio');
                         $Manifiesto->Destino = $request->input('Destino');
-                        //$Manifiesto->Fecha_Salida = $request->input('Fecha_Salida'); // Este campo se quitó de la base de datos de manifiestos pero para el historial de almacén es necesario
                         $Manifiesto->Trabajo = $request->input('Trabajo');
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
@@ -251,9 +241,6 @@ class ManifiestoController extends Controller
             if ($Manifiestos) {
             return view('Manifiesto.Pre-Manifiestoeditplus', compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos','clientes','Nombre'));
             }
-            /*else{
-                return view("Manifiesto.Pre-Manifiesto", compact('id', 'Solicitud', 'DetallesSolicitud', 'generalEyC', 'clientes'));
-            }*/
         }
     }
 
@@ -262,7 +249,6 @@ class ManifiestoController extends Controller
     {
         //
         $request->validate([
-            //'Cliente' => 'required|string|max:255',
             'Cliente' => 'required|exists:clientes,Cliente', // 'required' asegura que no esté vacío
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
@@ -298,20 +284,15 @@ class ManifiestoController extends Controller
             ]);
         }
         
-        //$Solicitud = Solicitudes::findOrFail($id);
-        //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-        // Obtener los registros de General_EyC relacionados
-        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
         foreach ($DetallesSolicitud as $detalle) 
         {
             $almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
             if ($almacen) 
             {
-                //Empezar a descontar por aqui aprovechando el ciclo FOR
                 // Verificar si ya existe un registro en Historial_Almacen con el mismo idGeneral_EyC y Fecha_Salida
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
                 ->where('Fecha', $Fecha_Form)
@@ -373,8 +354,7 @@ class ManifiestoController extends Controller
                 $Manifiestos->Observaciones = $request->input('Observaciones');
                 $Manifiestos->save();
             }
-        //$Solicitud = Solicitudes::all();
-        //return view("Solicitud.index",compact('Solicitud'));
+
         return redirect()->route('solicitud.index');
     }
 
@@ -430,13 +410,9 @@ class ManifiestoController extends Controller
             'tecnico' => $Recibe_Nombre,
         ]);
 
-        //$Solicitud = Solicitudes::findOrFail($id);
-        //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-        // Obtener los registros de General_EyC relacionados
-        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
         foreach ($DetallesSolicitud as $detalle) 
         {
@@ -546,13 +522,7 @@ class ManifiestoController extends Controller
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
-                                    /*$Solicitud ->update([
-                                        'Fecha' => $Fecha,
-                                    ]);*/
                                 }
-
-                    /*Descuento de almacen */
-
                         }  
             }
 
@@ -573,8 +543,6 @@ class ManifiestoController extends Controller
             
         }
 
-        //$Solicitud = Solicitudes::all();
-        //return view("Solicitud.index",compact('Solicitud'));
         return redirect()->route('solicitud.index');
     }
 
@@ -594,8 +562,6 @@ class ManifiestoController extends Controller
         $id = $request->input('idSolicitud');
         $Solicitud = Solicitudes::find($id);
         $Fecha = $request->input('Fecha_Salida');
-        //$Fecha_DB_Solicitud = $Solicitud->Fecha;
-        //$Fecha_Form = $request->input('Fecha_Salida');
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
@@ -608,13 +574,9 @@ class ManifiestoController extends Controller
             'Fecha' => $Fecha,
             'tecnico' => $Recibe_Nombre,
         ]);
-        //$Solicitud = Solicitudes::findOrFail($id);
-        //$general = general_eyc::get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
-        // Obtener los registros de General_EyC relacionados
-        //$generalEyC = general_eyc::whereIn('idGeneral_EyC', $generalEyCIds)->get();
 
         foreach ($DetallesSolicitud as $detalle) 
         {
@@ -667,7 +629,6 @@ class ManifiestoController extends Controller
                     }
                     else /*Si ya existe un $historialAlmacenExistente  */
                         {
-                            //$Manifiesto = manifiesto::where('idSolicitud', $id)->first();
                             $Destino_Form = $request->input('Destino');
                             $Destino_BD = $historialAlmacenExistente->Tierra_Costafuera;
 
@@ -713,9 +674,6 @@ class ManifiestoController extends Controller
                                     $historialAlmacenExistente ->update([
                                         'Fecha' => $Fecha,
                                     ]);
-                                    /*$Solicitud ->update([
-                                        'Fecha' => $Fecha,
-                                    ]);*/
                                 }
                             // Obtener el registro correspondiente en la tabla 'almacen'
                             $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
@@ -778,125 +736,121 @@ class ManifiestoController extends Controller
 
     public function concluirManifiesto(Request $request, $id)
     {
+        $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
+        $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+        $Observaciones = $request->input('Observaciones_Devolucion');
+        $Condiciones = $request->input('Condiciones_Retorno');
+
+        // Obtener los ids de las solicitudes en formato array
+        $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
+
+        // Actualizar el estatus de las solicitudes
+        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
+        // Obtener las solicitudes actualizadas
+        $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
+
+        // Insertar los registros en la tabla devoluciones
+        foreach ($solicitudesActualizadas as $solicitud) {
+            // Obtener el idManifiesto asociado a la solicitud
+            $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+            // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
+            $idManifiesto = DB::table('manifiestos')
+            ->where('idSolicitud', $idSolicitud)
+            ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
+
+            $Fecha = Carbon::now();
+            // Crear una nueva devolución
+            DB::table('devoluciones')->insert([
+
+                'idManifiestos'=> $idManifiesto,
+                'idSolicitud'=> $idSolicitud,
+                'Entrega' => $EntregaDevolucion,
+                'Recibe'  => $RecibeDevolucion,
+                'Fecha'  => $Fecha,
+                'Observaciones'  => $Observaciones,
+                'Condiciones'  => $Condiciones,
+
+            ]);
+        }
+
+        if($rol == 'Técnicos')
+        {
+            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+        }
+        else
+        {
+            // Obtener todas las solicitudes
+            $Solicitudes = Solicitudes::all();
+        }
+
+        /*Condiciones de los Folios para la vista de solicitud*/
+        // Crear un array para almacenar el último folio encontrado para cada grupo
+        $ultimoFolioPorGrupo = [];
+
+        // Procesar cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
         
-    $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
-    $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
-    $Observaciones = $request->input('Observaciones_Devolucion');
-    $Condiciones = $request->input('Condiciones_Retorno');
+            if ($manifiesto) 
+            {
+                $solicitud->folio = $manifiesto->Folio;
+        
+                // Verificar si la expresión regular coincide
+                if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                    $folioBase = $matches[1];
+                } else {
+                    // Si no coincide, asignar un valor predeterminado o manejar el caso
+                    $folioBase = '';
+                }
+        
+                // Extraer la letra al final del folio si existe (después del número antes de la "/")
+                if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                    $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                } else {
+                    $folioLetra = '';
+                }
+        
+                // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
+                if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
+                    $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
+                }
+            } 
+            else 
+            {
+                $solicitud->folio = "No Asignado";
+            }
+        }
+        
 
-    // Obtener los ids de las solicitudes en formato array
-    $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
-
-    // Actualizar el estatus de las solicitudes
-    Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
-    // Obtener el usuario autenticado
-    $user = Auth::user();
-    // Obtener el nombre del usuario
-    $Nombre = $user->name;
-    $rol = Auth::user()->rol;
-
-    // Obtener las solicitudes actualizadas
-    $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
-
-    // Insertar los registros en la tabla devoluciones
-    foreach ($solicitudesActualizadas as $solicitud) {
-        // Obtener el idManifiesto asociado a la solicitud
-        $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
-
-        // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
-        $idManifiesto = DB::table('manifiestos')
-        ->where('idSolicitud', $idSolicitud)
-        ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
-
-        $Fecha = Carbon::now();
-        // Crear una nueva devolución
-        DB::table('devoluciones')->insert([
-
-            'idManifiestos'=> $idManifiesto,
-            'idSolicitud'=> $idSolicitud,
-            'Entrega' => $EntregaDevolucion,
-            'Recibe'  => $RecibeDevolucion,
-            'Fecha'  => $Fecha,
-            'Observaciones'  => $Observaciones,
-            'Condiciones'  => $Condiciones,
-            //'created_at'        => now(),
-            //'updated_at'        => now(),
-        ]);
-    }
-
-    if($rol == 'Técnicos')
-    {
-        $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
-    }
-    else
-    {
-        // Obtener todas las solicitudes
-        $Solicitudes = Solicitudes::all();
-    }
-
-    /*Condiciones de los Folios para la vista de solicitud*/
-    // Crear un array para almacenar el último folio encontrado para cada grupo
-    $ultimoFolioPorGrupo = [];
-
-    // Procesar cada solicitud
-    foreach ($Solicitudes as $solicitud) 
-    {
-        $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-    
-        if ($manifiesto) 
+        // Marcar los folios que deben ocultar el botón
+        foreach ($Solicitudes as $solicitud) 
         {
-            $solicitud->folio = $manifiesto->Folio;
-    
-            // Verificar si la expresión regular coincide
+            // Intentar coincidir con el patrón del folio base
             if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
-                $folioBase = $matches[1];
+                $folioBase = $matches[1];  // Si coincide, asignar el valor
             } else {
-                // Si no coincide, asignar un valor predeterminado o manejar el caso
-                $folioBase = '';
+                $folioBase = '';  // Si no coincide, asignar un valor predeterminado
             }
-    
-            // Extraer la letra al final del folio si existe (después del número antes de la "/")
+        
+            // Intentar coincidir con el patrón de la letra del folio
             if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
-                $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
             } else {
-                $folioLetra = '';
+                $folioLetra = '';  // Si no coincide, asignar una cadena vacía
             }
-    
-            // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
-            if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
-                $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
-            }
-        } 
-        else 
-        {
-            $solicitud->folio = "No Asignado";
+        
+            // Si este folio no es el último en su grupo, ocultar el botón
+            $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
-    }
-    
-
-    // Marcar los folios que deben ocultar el botón
-    foreach ($Solicitudes as $solicitud) 
-    {
-        // Intentar coincidir con el patrón del folio base
-        if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
-            $folioBase = $matches[1];  // Si coincide, asignar el valor
-        } else {
-            $folioBase = '';  // Si no coincide, asignar un valor predeterminado
-        }
-    
-        // Intentar coincidir con el patrón de la letra del folio
-        if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
-            $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
-        } else {
-            $folioLetra = '';  // Si no coincide, asignar una cadena vacía
-        }
-    
-        // Si este folio no es el último en su grupo, ocultar el botón
-        $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
-    }
-
-        //return redirect()->route('Solicitud.index');
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
+            return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
     }
 
     /**
