@@ -184,7 +184,7 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
 
     /*manifiestos*/
     /*Ruta para ver el manifiesto PDF*/
-    //Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
+    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     
     });

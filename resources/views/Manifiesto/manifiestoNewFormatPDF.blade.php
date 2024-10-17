@@ -155,10 +155,19 @@
 </head>
 <body>
 <header>
+
     <table class="tablaheader">
+
+
+
+
+    </table>
+<br>
+    <table class="tablaheader">
+
         <thead>
             <tr>
-                <th class="">Formato</th>
+                <th></th>
                 <th class="respuestasGenerales">Código:</th>
                 <th class="respuestasGenerales">FOR-PCVE-01/05</th>
                 <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
@@ -167,17 +176,18 @@
 
         <tbody>
             <tr>
-                <td rowspan="2"> Manifiesto de Salida y/o Resguardo</td>
+                <td rowspan="2"> Manifiesto / Resguardo de equipos, herramientas y materiales.</td>
                 <td class="respuestasGenerales">Versión</td>
-                <td class="respuestasGenerales">3</td>
+                <td class="respuestasGenerales">0</td>
             </tr>
             <tr>
-                <td class="respuestasGenerales">Página</td>
-                <td class="page-num-container">
-                </td>
+                <td class="respuestasGenerales">Fecha de emisión:</td>
+                <td></td>
             </tr>
         </tbody>
+        
     </table>
+
 </header>
 
 <div class="tablaContainer">
@@ -185,25 +195,25 @@
         <tbody>
             <tr>
                 <td class="datosGeneralesCortos">Cliente:</td>
-                <td class="lineaInferior"><label for="">{{ $Manifiesto->Cliente }}</label></td>
+                <td class="lineaInferior"><label for=""></label></td>
                 <td class="datosGeneralesCortos">Folio:</td>
-                <td class="lineaInferior">{{ $Manifiesto->Folio }}</td>
+                <td class="lineaInferior"></td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Destino:</td>
-                <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
+                <td class="lineaInferior"></td>
                 <td class="datosGeneralesCortos">Fecha de salida:</td>
-                <td class="lineaInferior">{{ $Solicitud->formatted_date }}</td>
+                <td class="lineaInferior"></td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Trabajo: </td>
-                <td class="lineaInferior">{{ $Manifiesto->Trabajo }}</td>
+                <td class="lineaInferior"></td>
                 <td class="datosGeneralesCortos">Puesto:</td>
-                <td class="lineaInferior">{{ $Manifiesto->Puesto }}</td>
+                <td class="lineaInferior"></td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Responsable:</td>
-                <td class="lineaInferior" colspan="3">{{ $Manifiesto->Responsable }}</td>
+                <td class="lineaInferior" colspan="3"></td>
             </tr>
         </tbody>
     </table>
@@ -255,25 +265,25 @@
                     @if($general->Tipo != 'CONSUMIBLES')
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                                     <tr>
-                                        <td class="Contenido">{{ $contador }}</td>
-                                        <td class="Contenido">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->No_economico ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Serie ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->SAT ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->BMPRO ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Marca ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Modelo ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Comentario ?? 'N/A' }}</td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
                                     </tr>
                                 @else
                                     <tr>
-                                        <td class="Contenido">{{ $contador }}</td>
-                                        <td class="Contenido">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->No_economico ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Serie ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Marca ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Modelo ?? 'N/A' }}</td>
-                                        <td class="Contenido">{{ $general->Comentario ?? 'N/A' }}</td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
+                                        <td class="Contenido"></td>
                                     </tr>
                         @endif
 
@@ -356,19 +366,19 @@
                     @if($general && $general->Tipo == 'CONSUMIBLES')
                         @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
                             <tr>
-                                <td class="Contenido">{{ $contador }}</td>
-                                <td class="Contenido">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                <td class="Contenido">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                <td class="Contenido">{{ $general->SAT ?? 'N/A' }}</td>
-                                <td class="Contenido">{{ $general->BMPRO ?? 'N/A' }}</td>
-                                <td class="Contenido" colspan="7">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido" colspan="7"></td>
                             </tr>
                         @else
                             <tr>
-                                <td class="Contenido">{{ $contador }}</td>
-                                <td class="Contenido">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                <td class="Contenido">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                <td class="Contenido" colspan="4">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido"></td>
+                                <td class="Contenido" colspan="4"></td>
                             </tr>
                         @endif
 
@@ -442,12 +452,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="2" class="Contenido" class="altoCelda">{{ $nombre }}</td>
-                            <td rowspan="2" class="Contenido" class="altoCelda">{{ $Solicitud->tecnico }}</td>
+                            <td rowspan="2" class="Contenido" class="altoCelda"></td>
+                            <td rowspan="2" class="Contenido" class="altoCelda"></td>
                             <td class="celdaAzul letraBlanca">Obsevaciones</td>
                         </tr>
                         <tr>
-                            <td class="altoCelda">{{ $Manifiesto->Observaciones }}</td>
+                            <td class="altoCelda"></td>
                         </tr>
                         <tr>
                             <td>Entrega: Nombre/cargo/firma</td>
@@ -460,11 +470,6 @@
                         </tr>
                         <tr>
                         <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :
-                            @if($Devolucion && $Devolucion->formatted_date != '')
-                                {{ $Devolucion->formatted_date }}
-                            @else
-                                
-                            @endif
                         </td>
 
                             <td></td>
@@ -496,9 +501,9 @@
                         </tr>
                         <tr>
                             @if($Devolucion && $Devolucion->Entrega != '' && $Devolucion->Recibe != '' && $Devolucion->Observaciones != '')
-                                    <td td class="Contenido" class="altoCelda">{{ $Devolucion->Entrega }}</td>
-                                    <td td class="Contenido" class="altoCelda">{{ $Devolucion->Recibe }}</td>
-                                    <td td class="Contenido" class="altoCelda" rowspan="2">{{ $Devolucion->Observaciones }}</td>
+                                    <td td class="Contenido" class="altoCelda"></td>
+                                    <td td class="Contenido" class="altoCelda"></td>
+                                    <td td class="Contenido" class="altoCelda" rowspan="2"></td>
                                 @else
                                     <td td class="Contenido" class="altoCelda"></td>
                                     <td td class="Contenido" class="altoCelda"></td>
