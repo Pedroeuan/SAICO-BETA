@@ -50,11 +50,11 @@ class PDFController extends Controller
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 8;
+            $size = 10;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 413; // Ajusta esta posición X según sea necesario
-            $y = 62;  // Ajusta esta posición Y según sea necesario
+            $x = 414; // Ajusta esta posición X según sea necesario
+            $y = 72;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
             if (is_numeric($x) && is_numeric($y)) {
