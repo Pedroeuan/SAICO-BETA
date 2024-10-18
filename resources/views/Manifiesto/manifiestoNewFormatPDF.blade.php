@@ -222,8 +222,8 @@
             <tr>
                 <td class="datosGeneralesCortos">Sitio de Trabajo:</td>
                 <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
-                <td class="datosGeneralesCortos">Fecha de salida:</td>
-                <td class="lineaInferior">{{ $Solicitud->formatted_date }}</td>
+                <td class="datosGeneralesCortos"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="datosGeneralesCortos">Servicio: </td>
@@ -335,18 +335,38 @@
     </table>
 <br>
 
-    <table class="Comentarios">
-        <tr>
-            <td >Comentarios: </td>
-        </tr>
-        <tr>
-            <td><br></td>
-        </tr>
-        <tr>
-            <td><br></td>
-        </tr>
-    </table>
+@if ( $Manifiesto->Observaciones == '' && $Devolucion->Observaciones == '')
+        <table class="Comentarios">
+            <tr>
+                <td >Comentarios:     
+            </td>
+            </tr>
+            <tr>
+                <td><br></td>
+            </tr>
+            <tr>
+                <td><br></td>
+            </tr>
+        </table>
+    @else
+        <table class="Comentarios">
+            <tr>
+                <td >Comentarios:
+                    @if ($Manifiesto->Observaciones != '' )
+                            Salida: {{$Manifiesto->Observaciones}}
+                        @else
+                    @endif
+
+                    @if($Devolucion->Observaciones != '')
+                            Devolución: {{ $Devolucion->Observaciones }}
+                        @else
+                    @endif
+                </td>
+            </tr>     
+        </table>
+@endif
     <br>
+
 </div>
     <table class="tablaManifiesto">
         <tr>
@@ -406,7 +426,7 @@
                             <table class="DentroFirmas">
                                 <tr class="celdaCrema">
                                     <td COLSPAN=2 class="letraNegra">Fecha de Recepción</td>
-                                    <td> 00/00/0000 </td>
+                                    <td> {{ $Solicitud->formatted_date }} </td>
                                 </tr>
                                 <tr class="celdaCrema">
                                     <td class="letraNegra">Nombre</td>
@@ -428,7 +448,7 @@
                                 </tr>
                                 <tr class="celdaCrema">
                                     <td class="letraNegra">Nombre</td>
-                                    <td COLSPAN=2>(Encargado de Equipos)</td>
+                                    <td COLSPAN=2>{{ $Devolucion->Recibe }}</td>
                                 </tr>
                                 <tr class="celdaCrema">
                                     <td class="letraNegra">Firma</td>
