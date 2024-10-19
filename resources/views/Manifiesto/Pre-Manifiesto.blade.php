@@ -138,7 +138,8 @@
                         <label class="col-form-label" for="inputSuccess">Observaciones</label>
                         <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{old('Observaciones')}}</textarea>
                     </div>
-                </div>           
+                </div>      
+            
                 <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>

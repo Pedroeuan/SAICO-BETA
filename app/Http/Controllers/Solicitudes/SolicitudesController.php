@@ -16,6 +16,7 @@ use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\Clientes\clientes;
 
@@ -102,7 +103,9 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
+        $SolicitudesDetallesManifiestosDevoluciones = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol', 'SolicitudesDetallesManifiestosDevoluciones'));
     }
 
     

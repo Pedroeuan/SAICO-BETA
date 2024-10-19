@@ -53,7 +53,7 @@ class PDFController extends Controller
             $size = 10;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 414; // Ajusta esta posición X según sea necesario
+            $x = 406; // Ajusta esta posición X según sea necesario
             $y = 72;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas

@@ -18,12 +18,12 @@
         .datosGeneralesCortos{
             font-weight: bold;
             width: 100px;
-            font-family: Arial;
+            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
         .respuestasGenerales{
-            font-family: Arial;
+            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
@@ -105,18 +105,18 @@
         }
         body {
             padding-top: 60px; /* Ajusta el valor según la altura de tu header */
-            font-family: "Arial", sans-serif; /* Cambiar a Arial */
+            /*font-family: "Arial", sans-serif; /* Cambiar a Arial */
         }
         /*muestra solo la linea inferior de la celda*/
         .lineaInferior{
             border-bottom: 1px solid black;
             font-weight: bold;
-            font-family: Arial;
+            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
         .Contenido{
-            font-family: Arial;
+            /*font-family: Arial;*/
             font-size: 10px !important; /* Forzar el tamaño de letra */
             text-align: center;
         }

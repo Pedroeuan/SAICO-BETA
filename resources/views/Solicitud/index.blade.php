@@ -95,8 +95,19 @@
                                         </td>
 
                                         <td>
+                                        @foreach ($SolicitudesDetallesManifiestosDevoluciones as $solicitud)
+                                            @foreach ($solicitud->detalles_solicitud as $detalle)
+                                                @if ($detalle->manifiesto)
+                                                    {{-- Acceder al campo ScanPDF del manifiesto --}}
+                                                    @php 
+                                                    dump($detalle);
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                        @endforeach
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            
                                         </td>
 
                                         <td>
@@ -119,6 +130,7 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            
                                         </td>
                                         @if(!$solicitud->hidePlus)
                                             <td>

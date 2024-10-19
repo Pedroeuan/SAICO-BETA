@@ -24,4 +24,11 @@ class devolucion extends Model
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
     }
+
+        // Relación: Devolucion pertenece a un manifiesto
+        public function manifiesto()
+        {
+            return $this->belongsTo(Manifiesto::class, 'manifiesto_id');
+        }
+        
 }

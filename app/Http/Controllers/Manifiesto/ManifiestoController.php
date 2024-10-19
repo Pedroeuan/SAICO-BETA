@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Http\Request;
 
 use App\Models\Manifiesto\manifiesto;
@@ -351,7 +353,13 @@ class ManifiestoController extends Controller
                 $Manifiestos->Trabajo = $request->input('Trabajo');
                 $Manifiestos->Puesto = $request->input('Puesto');
                 $Manifiestos->Responsable = $request->input('Responsable');
-                $Manifiestos->Observaciones = $request->input('Observaciones');
+                if($request->input('Observaciones')==null)
+                {
+                    $Manifiestos->Observaciones = '----';
+                }else{
+                    $Manifiestos->Observaciones = $request->input('Observaciones');
+                }
+                $Manifiestos->ScanPDF = 'ESPERA DE DATO';
                 $Manifiestos->save();
             }
 
@@ -539,6 +547,31 @@ class ManifiestoController extends Controller
                         'Responsable' =>$request->input('Responsable'),
                         'Observaciones' =>$request->input('Observaciones'),
                     ]);
+
+                // Validar que se ha enviado el archivo de foto
+                    if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+                        $ScanPDF = $request->file('ScanPDF');
+                        // Obtener el último número consecutivo
+                        $lastFile = collect(Storage::disk('public')->files('Manifiestos/Salidas'))
+                            ->filter(function ($file) {
+                                return preg_match('/^\d+_/', basename($file));
+                            })
+                            ->sort()
+                            ->last();
+                        $lastNumber = 0;
+                        if ($lastFile) {
+                            $lastNumber = (int)explode('_', basename($lastFile))[0];
+                        }
+                        // Incrementar el número consecutivo
+                        $newNumber = $lastNumber + 1;
+                        $newFileNameFoto = $newNumber . '_' . $ScanPDF->getClientOriginalName();
+                        // Guardar el archivo en la carpeta "public/Equipos/Fotos"
+                        $ScanPDFPath = $ScanPDF->storeAs('Manifiestos/Salidas', $newFileNameFoto, 'public');
+
+                        $Manifiestos->ScanPDF = $ScanPDFPath;
+                    }
+
+                    $Manifiestos->save();
                 }
             
         }

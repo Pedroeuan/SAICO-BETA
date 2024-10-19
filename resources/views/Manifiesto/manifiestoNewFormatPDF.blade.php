@@ -29,7 +29,7 @@
             font-weight: bold; /* Negritas */
         }
         .respuestasGenerales2{
-            font-family: Arial !important;
+            /*font-family: Arial !important;*/
             font-size: 16px !important; 
             text-align: center;
             font-weight: bold; /* Negritas */
@@ -60,7 +60,7 @@
             width: 100%;
             text-align: center;
             font-size: 11px;
-            font-family: Arial !important;
+            /*font-family: Arial !important;*/
         }
 
         /* Aplica el borde a las celdas de la tabla */
@@ -80,6 +80,7 @@
         .tablaManifiesto td, .tablaManifiesto th { 
             border: .6px solid black; 
             font-size: 11px;
+            /*font-family: Arial !important;*/
         }
         .Firmas {
             border-collapse: separate;  /*separate No colapsar bordes */
@@ -191,7 +192,7 @@
     <table class="tablaheader">
 
         <TR>
-            <TD class="respuestasGenerales2" ALIGN=center ROWSPAN=3> Manifiesto / Resguardo de equipos,<br> herramientas y materiales.</TD>
+            <TD class="respuestasGenerales2" ALIGN=center ROWSPAN=3>Manifiesto / Resguardo de equipos,<br> herramientas y materiales.</TD>
             <TD class="respuestasGenerales">Código:</TD>
             <TD>FOR-01-PRO-EQ-01</TD>
             <TD rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></TD>
