@@ -68,7 +68,7 @@
                                         <td>
                                             <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                         </td>
-
+<!-- -->
                                         <td>
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="far fa-file-pdf"></i>
