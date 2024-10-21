@@ -29,7 +29,7 @@ class detalles_solicitud extends Model
     // Definir la relación con Manifiestos
     public function manifiesto()
     {
-        return $this->hasMany(manifiesto::class, 'idSolicitud');
+        return $this->hasMany(manifiesto::class, 'idManifiestos');
     }
 
     use HasFactory;

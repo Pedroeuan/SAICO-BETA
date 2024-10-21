@@ -28,7 +28,7 @@ class devolucion extends Model
         // Relación: Devolucion pertenece a un manifiesto
         public function manifiesto()
         {
-            return $this->belongsTo(Manifiesto::class, 'manifiesto_id');
+            return $this->belongsTo(Manifiesto::class, 'idManifiestos');
         }
         
 }

@@ -336,7 +336,8 @@
     </table>
 <br>
 
-@if ( $Manifiesto->Observaciones == '' && $Devolucion->Observaciones == '')
+@if (isset($Manifiesto) && isset($Devolucion) && $Manifiesto->Observaciones == null && $Devolucion->Observaciones == null)
+
         <table class="Comentarios">
             <tr>
                 <td >Comentarios:     
@@ -353,12 +354,12 @@
         <table class="Comentarios">
             <tr>
                 <td >Comentarios:
-                    @if ($Manifiesto->Observaciones != '' )
+                    @if (isset($Manifiesto) && $Manifiesto->Observaciones == null)
                             Salida: {{$Manifiesto->Observaciones}}
                         @else
                     @endif
 
-                    @if($Devolucion->Observaciones != '')
+                    @if (isset($Devolucion) && $Devolucion->Observaciones == null)
                             Devolución: {{ $Devolucion->Observaciones }}
                         @else
                     @endif
@@ -445,11 +446,21 @@
                             <table class="DentroFirmas">
                                 <tr class="celdaCrema">
                                     <td COLSPAN=2 class="letraNegra">Fecha Devolución</td>
-                                    <td> {{ $Devolucion->formatted_date }} </td>
+                                        <td>
+                                            @if (isset($Devolucion->formatted_date) && $Devolucion->formatted_date == null)
+                                                {{ $Devolucion->formatted_date }}
+                                                @else
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                                            @endif
+                                        </td>
                                 </tr>
                                 <tr class="celdaCrema">
                                     <td class="letraNegra">Nombre</td>
-                                    <td COLSPAN=2>{{ $Devolucion->Recibe }}</td>
+                                        <td COLSPAN=2>
+                                            @if (isset($Devolucion->Recibe) && $Devolucion->Recibe == null)
+                                                {{ $Devolucion->Recibe }}
+                                            @endif
+                                        </td>
                                 </tr>
                                 <tr class="celdaCrema">
                                     <td class="letraNegra">Firma</td>

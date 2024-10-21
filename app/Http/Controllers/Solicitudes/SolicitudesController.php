@@ -40,7 +40,10 @@ class SolicitudesController extends Controller
         else
         {
             // Obtener todas las solicitudes
-            $Solicitudes = Solicitudes::all();
+            //$Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+            //dump($Solicitudes);
+
         }
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
@@ -50,7 +53,13 @@ class SolicitudesController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-        
+            //$ScanPDF = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+            /*if ($manifiesto) {
+                dump($manifiesto->ScanPDF);
+            } else {
+                dump('No se encontró un manifiesto para esta solicitud.');
+            }*/
+                    
             if ($manifiesto) 
             {
                 $solicitud->folio = $manifiesto->Folio;
@@ -103,9 +112,7 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        $SolicitudesDetallesManifiestosDevoluciones = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
-
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol', 'SolicitudesDetallesManifiestosDevoluciones'));
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol','manifiesto'));
     }
 
     

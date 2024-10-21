@@ -50,6 +50,9 @@
                 </thead>
                 <tbody>
                     @foreach($Solicitudes as $solicitud)
+@php 
+//dump($solicitud->idSolicitud);
+@endphp
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
@@ -95,16 +98,6 @@
                                         </td>
 
                                         <td>
-                                        @foreach ($SolicitudesDetallesManifiestosDevoluciones as $solicitud)
-                                            @foreach ($solicitud->detalles_solicitud as $detalle)
-                                                @if ($detalle->manifiesto)
-                                                    {{-- Acceder al campo ScanPDF del manifiesto --}}
-                                                    @php 
-                                                    dump($detalle);
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-                                        @endforeach
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                             
@@ -130,6 +123,21 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            
+                                            
+                                                @foreach ($solicitud->detalles_solicitud as $detalle)
+                                                    @foreach ($detalle->manifiesto as $manifiestos)
+                                                    @if($manifiestos->ScanPDF != '')
+                                                            <a class="btn btn-primary" href="{{ asset('storage/' . $manifiestos->ScanPDF) }}" role="button" target="_blank">
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </a>                                              
+                                                        @else
+                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </span>
+                                                    @endif
+                                                    @endforeach
+                                                @endforeach
                                             
                                         </td>
                                         @if(!$solicitud->hidePlus)
