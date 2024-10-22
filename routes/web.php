@@ -175,6 +175,8 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
     /*ruta para obtener el conteo de registros de manifiesto*/
     Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
+    /*PRE-CONCLUIR MANIFIESTO*/
+    Route::post('/PreConcluir/Manifiesto/{id}', [ManifiestoController::class, 'PreConcluirManifiesto'])->name('PreConcluir.Manifiesto');
     /*CONCLUIR MANIFIESTO*/
     Route::post('/Concluir/Manifiesto/{id}', [ManifiestoController::class, 'ConcluirManifiesto'])->name('Concluir.Manifiesto');
 

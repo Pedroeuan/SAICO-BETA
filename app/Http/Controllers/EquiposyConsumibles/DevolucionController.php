@@ -67,6 +67,9 @@ class DevolucionController extends Controller
         $manifiesto = manifiesto::where('idSolicitud', $id)->first();
         $folioBase = $manifiesto->Folio;
 
+        $solicitud = Solicitudes::where('idSolicitud', $id)->first();
+        $EstadoSolicitud = $solicitud->Estatus;
+
         // Extraer el prefijo (4 letras), número y año del Folio base
         preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
         if (count($matches) > 0) {
@@ -131,7 +134,7 @@ class DevolucionController extends Controller
         $FechaActual = Carbon::now();
 
         // Pasar los datos a la vista
-        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre'));
+        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud'));
     }
 
 

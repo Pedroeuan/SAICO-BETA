@@ -127,15 +127,15 @@
                                             
                                                 @foreach ($solicitud->detalles_solicitud as $detalle)
                                                     @foreach ($detalle->manifiesto as $manifiestos)
-                                                    @if($manifiestos->ScanPDF != '')
-                                                            <a class="btn btn-primary" href="{{ asset('storage/' . $manifiestos->ScanPDF) }}" role="button" target="_blank">
-                                                                <i class="far fa-file-pdf"></i>
-                                                            </a>                                              
-                                                        @else
-                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                <i class="far fa-file-pdf"></i>
-                                                            </span>
-                                                    @endif
+                                                        @if($manifiestos->ScanPDF != '')
+                                                                <a class="btn btn-primary" href="{{ asset('storage/' . $manifiestos->ScanPDF) }}" role="button" target="_blank">
+                                                                    <i class="far fa-file-pdf"></i>
+                                                                </a>                                              
+                                                            @else
+                                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                                    <i class="far fa-file-pdf"></i>
+                                                                </span>
+                                                        @endif
                                                     @endforeach
                                                 @endforeach
                                             

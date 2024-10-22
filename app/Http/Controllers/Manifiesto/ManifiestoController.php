@@ -767,7 +767,7 @@ class ManifiestoController extends Controller
         return redirect()->route('solicitud.index');
     }
 
-    public function concluirManifiesto(Request $request, $id)
+    public function PreConcluirManifiesto(Request $request, $id)
     {
         $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');

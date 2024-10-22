@@ -28,13 +28,21 @@
     <div class="alert alert-warning alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Nota</h5>
-                Una vez devueltos los equipos y darle click a Concluir Manifiesto y el Estatus cambia a "DEVOLVER", <u>NO</u> se podran realizar más cambios y Devoluciones.
+            @if($EstadoSolicitud == 'MANIFIESTO')
+                    Al Pre-Concluir un manifiesto, se guardan los datos de Fecha Actual, Condiciones, tecnico, persona y observaciones para posteriormente subir el archivo firmado
+                @else
+                    Una vez devueltos los equipos y darle click a Concluir Manifiesto y el Estatus cambia a "DEVOLVER", <u>NO</u> se podran realizar más cambios y Devoluciones.
+            @endif
             </p>
     </div>
     <h3 align="center">Devoluciones</h3>
+    @if($EstadoSolicitud == 'MANIFIESTO')
+            <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+        @else
+            <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+    @endif
     <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
     @csrf
-
     <div class="row">
         <!-- Columna izquierda para la fecha -->
         <div class="col-md-6">
@@ -100,7 +108,17 @@
             </div>
         </div>
     </div>
-
+    @if($EstadoSolicitud == 'PRE-CONCLUIDO')
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
+                    <input type="file" class="form-control-file inputForm" name="ScanPDF"></input>
+                        @if ($errors->any())
+                            <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                        @endif
+            </div>
+        </div>
+    @endif
     <div class="col-sm-12">
                     <div class="form-group">
                         <label class="col-form-label" for="inputSuccess">Observaciones</label>
@@ -141,8 +159,15 @@
             </tbody>
         </table>
         <br>
+        
         <div class="container d-flex justify-content-center">
-            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">Concluir Manifiesto</button>
+            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">
+                @if($EstadoSolicitud == 'MANIFIESTO')
+                        Pre-Concluir Manifiesto
+                    @else    
+                        Concluir Manifiesto
+                @endif
+            </button>
         </div>
     </form>
 @stop
