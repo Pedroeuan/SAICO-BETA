@@ -774,12 +774,13 @@ class ManifiestoController extends Controller
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
         $Observaciones = $request->input('Observaciones_Devolucion');
         $Condiciones = $request->input('Condiciones_Retorno');
+        $ScanPDF = 'ESPERA DE DATO';
 
         // Obtener los ids de las solicitudes en formato array
         $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
 
         // Actualizar el estatus de las solicitudes
-        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
+        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'PRE-CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
@@ -810,9 +811,153 @@ class ManifiestoController extends Controller
                 'Fecha'  => $Fecha,
                 'Observaciones'  => $Observaciones,
                 'Condiciones'  => $Condiciones,
-
+                'ScanPDF'  => $ScanPDF,
             ]);
         }
+
+        if($rol == 'Técnicos')
+        {
+            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+        }
+        else
+        {
+            // Obtener todas las solicitudes
+            $Solicitudes = Solicitudes::all();
+        }
+
+        /*Condiciones de los Folios para la vista de solicitud*/
+        // Crear un array para almacenar el último folio encontrado para cada grupo
+        $ultimoFolioPorGrupo = [];
+
+        // Procesar cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+        
+            if ($manifiesto) 
+            {
+                $solicitud->folio = $manifiesto->Folio;
+        
+                // Verificar si la expresión regular coincide
+                if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                    $folioBase = $matches[1];
+                } else {
+                    // Si no coincide, asignar un valor predeterminado o manejar el caso
+                    $folioBase = '';
+                }
+        
+                // Extraer la letra al final del folio si existe (después del número antes de la "/")
+                if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                    $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                } else {
+                    $folioLetra = '';
+                }
+        
+                // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
+                if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
+                    $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
+                }
+            } 
+            else 
+            {
+                $solicitud->folio = "No Asignado";
+            }
+        }
+        
+
+        // Marcar los folios que deben ocultar el botón
+        foreach ($Solicitudes as $solicitud) 
+        {
+            // Intentar coincidir con el patrón del folio base
+            if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                $folioBase = $matches[1];  // Si coincide, asignar el valor
+            } else {
+                $folioBase = '';  // Si no coincide, asignar un valor predeterminado
+            }
+        
+            // Intentar coincidir con el patrón de la letra del folio
+            if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
+            } else {
+                $folioLetra = '';  // Si no coincide, asignar una cadena vacía
+            }
+        
+            // Si este folio no es el último en su grupo, ocultar el botón
+            $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
+        }
+            return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
+    }
+
+    public function ConcluirManifiesto (Request $request, $id)
+    { 
+        $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
+        $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+        $Observaciones = $request->input('Observaciones_Devolucion');
+        $Condiciones = $request->input('Condiciones_Retorno');
+
+        // Obtener los ids de las solicitudes en formato array
+        $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
+
+        // Actualizar el estatus de las solicitudes
+        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
+        // Obtener las solicitudes actualizadas
+        $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
+
+        // Insertar los registros en la tabla devoluciones
+        foreach ($solicitudesActualizadas as $solicitud) {
+            // Obtener el idManifiesto asociado a la solicitud
+            $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+            // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
+            $idManifiesto = DB::table('manifiestos')
+            ->where('idSolicitud', $idSolicitud)
+            ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
+
+            $Fecha = Carbon::now();
+            // Actualizar o insertar en la tabla devoluciones
+            DB::table('devoluciones')->updateOrInsert(
+                ['idManifiestos' => $idManifiesto, 'idSolicitud' => $idSolicitud], // Condiciones de búsqueda
+                [
+                    'Entrega' => $EntregaDevolucion,
+                    'Recibe' => $RecibeDevolucion,
+                    'Fecha' => $Fecha,
+                    'Condiciones' => $Condiciones,
+                    'Observaciones' => $Observaciones,
+                    //Agregar ScanPDF
+                ]
+            );
+
+    $Devoluciones = devolucion::where('idSolicitud', $id)->first();
+        // Validar que se ha enviado el archivo de foto
+        if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+            $ScanPDF = $request->file('ScanPDF');
+                // Obtener el último número consecutivo
+                    $lastFile = collect(Storage::disk('public')->files('Manifiestos/Devoluciones'))
+                        ->filter(function ($file) {
+                            return preg_match('/^\d+_/', basename($file));
+                        })
+                        ->sort()
+                        ->last();
+                    $lastNumber = 0;
+                    if ($lastFile) {
+                        $lastNumber = (int)explode('_', basename($lastFile))[0];
+                        }
+            // Incrementar el número consecutivo
+                $newNumber = $lastNumber + 1;
+                $newFileNameFoto = $newNumber . '_' . $ScanPDF->getClientOriginalName();
+                // Guardar el archivo en la carpeta "public/Equipos/Fotos"
+                $ScanPDFPath = $ScanPDF->storeAs('Manifiestos/Devoluciones', $newFileNameFoto, 'public');
+            
+                $Devoluciones->ScanPDF = $ScanPDFPath;
+                }
+                $Devoluciones->save();
+            }
 
         if($rol == 'Técnicos')
         {

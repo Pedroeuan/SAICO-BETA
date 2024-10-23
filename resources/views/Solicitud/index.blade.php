@@ -123,8 +123,6 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                            
-                                            
                                                 @foreach ($solicitud->detalles_solicitud as $detalle)
                                                     @foreach ($detalle->manifiesto as $manifiestos)
                                                         @if($manifiestos->ScanPDF != '')
@@ -138,7 +136,6 @@
                                                         @endif
                                                     @endforeach
                                                 @endforeach
-                                            
                                         </td>
                                         @if(!$solicitud->hidePlus)
                                             <td>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\EquiposyConsumibles;
 
-use App\Models\EquiposyConsumibles\devolucion;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -18,6 +17,7 @@ use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\EquiposyConsumibles\devolucion;
 
 class DevolucionController extends Controller
 {
@@ -133,8 +133,10 @@ class DevolucionController extends Controller
 
         $FechaActual = Carbon::now();
 
+        $devoluciones = devolucion::where('idSolicitud', $id)->first();
+
         // Pasar los datos a la vista
-        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud'));
+        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud','devoluciones'));
     }
 
 

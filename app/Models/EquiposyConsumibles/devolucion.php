@@ -13,6 +13,11 @@ class devolucion extends Model
         'idSolicitud',
         'Entrega',
         'Recibe',
+        'Fecha',
+        'Condiciones',
+        'Observaciones',
+        'ScanPDF',
+
     ];
     protected $table = 'Devoluciones';
     protected $primaryKey = 'idDevoluciones';
