@@ -17,6 +17,7 @@ use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\Clientes\clientes;
+use App\Models\EquiposyConsumibles\devolucion;
 use Carbon\Carbon;
 
 use App\Http\Controllers\Solicitudes\SolicitudesController;
@@ -933,7 +934,7 @@ class ManifiestoController extends Controller
                 ]
             );
 
-    $Devoluciones = devolucion::where('idSolicitud', $id)->first();
+    $Devoluciones = devolucion::where('idSolicitud', $idSolicitud)->first();
         // Validar que se ha enviado el archivo de foto
         if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
             $ScanPDF = $request->file('ScanPDF');

@@ -19,6 +19,7 @@ class manifiesto extends Model
         'Puesto',
         'Responsable',
         'Observaciones',
+        'ScanPDF',
     ];
     protected $table = 'Manifiestos';
     protected $primaryKey = 'idManifiestos';

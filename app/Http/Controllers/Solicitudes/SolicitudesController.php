@@ -53,12 +53,6 @@ class SolicitudesController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-            //$ScanPDF = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-            /*if ($manifiesto) {
-                dump($manifiesto->ScanPDF);
-            } else {
-                dump('No se encontró un manifiesto para esta solicitud.');
-            }*/
                     
             if ($manifiesto) 
             {
@@ -112,7 +106,7 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol','manifiesto'));
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
     }
 
     

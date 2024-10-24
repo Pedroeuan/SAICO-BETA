@@ -48,11 +48,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="col-form-label" for="inputSuccess">
-                    @if($devoluciones->formatted_date) 
-                        Fecha de Devolución  
-                            @else  
+                @if($devoluciones)
+                        @if($devoluciones->formatted_date) 
+                            Fecha de Devolución  
+                        @endif
+                    @else  
                         Fecha Actual
-                    @endif
+                @endif
                 </label>
                 <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="@if($devoluciones){{ $devoluciones->formatted_date }}@else {{ $FechaActual->format('d-m-Y') }} @endif" readonly>
             </div>
