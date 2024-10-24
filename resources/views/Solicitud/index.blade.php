@@ -31,28 +31,30 @@
                 <thead>
                     <tr>
                         @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
-                            <th>Técnico</th>
-                            <th>Folio</th>
-                            <th>Fecha de servicio</th>
-                            <th>Estatus</th>
-                            <th>Editar</th>
-                            <th>Eliminar</th>
-                            <th>Formato PDF</th>
-                            <th>Complementar</th>
-                            <th>Devolver</th>
-                        @else
-                            <th>Técnico</th>
-                            <th>Folio</th>
-                            <th>Fecha de servicio</th>
-                            <th>Estatus</th>
+                                <th>Técnico</th>
+                                <th>Folio</th>
+                                <th>Fecha de servicio</th>
+                                <th>Estatus</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
+                                <th>PDF Generado</th>
+                                <th>PDF de Salida</th>
+                                <th>PDF de Resguardo</th>
+                                <th>Complementar</th>
+                                <th>Devolver</th>
+                            @else
+                                <th>Técnico</th>
+                                <th>Folio</th>
+                                <th>Fecha de servicio</th>
+                                <th>Estatus</th>
                         @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($Solicitudes as $solicitud)
-@php 
-//dump($solicitud->idSolicitud);
-@endphp
+                    @php 
+                    //dd($solicitud);
+                    @endphp
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
@@ -103,8 +105,11 @@
                                                 <i class="fa fa-times"></i></button>
                                         </td>
 
+                                            <!--PDF GENERADO-->
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        </td>
+                                        <td>
                                             <!--<a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>-->
                                             @foreach ($solicitud->detalles_solicitud as $detalle)
                                                 @foreach ($detalle->manifiesto as $manifiestos)
@@ -120,7 +125,9 @@
                                                     @endif
                                                 @endforeach
                                             @endforeach
+                                        </td>
 
+                                        <td>
                                             @foreach ($solicitud->detalles_solicitud as $detalle)
                                                 @foreach ($detalle->manifiesto as $manifiestos)
                                                     @foreach ($manifiestos->devolucion as $devolucion)
@@ -176,8 +183,8 @@
                                                         @endforeach
                                                         @else
                                                         <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                                <i class="far fa-file-pdf"></i>
-                                                                            </span>
+                                                            <i class="far fa-file-pdf"></i>
+                                                        </span>
                                                     @endif
                                                 @endforeach
                                         </td>
