@@ -117,7 +117,7 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol','devolucion'));
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
     }
 
     

@@ -115,9 +115,6 @@
                                         </td>
 
                                         <td>
-                                            @php 
-                                                //dump($solicitud->pdf);
-                                            @endphp
                                             @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="far fa-file-pdf"></i>
@@ -131,9 +128,6 @@
                                         </td>
 
                                         <td>
-                                        @php 
-                                            //dump($solicitud->devolucion_pdf);
-                                        @endphp
                                             @if ($solicitud->devolucion_pdf)
                                                 <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
                                                     <i class="far fa-file-pdf"></i> 

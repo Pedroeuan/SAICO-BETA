@@ -843,20 +843,22 @@ class ManifiestoController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-                    
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
             if ($manifiesto) 
             {
-                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
+                
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
-
+                
                 if($devolucion)
                 {
-                    $devolucion->pdf = $devolucion->ScanPDF;
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
                 }
-                
-                //dd($devolucion->ScanPDF);
-        
+                //dump($devolucion);
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
@@ -881,7 +883,7 @@ class ManifiestoController extends Controller
             {
                 $solicitud->folio = "No Asignado";
                 $solicitud->pdf = null; // No hay PDF disponible
-                $devolucion->pdf = null;
+                $solicitud->devolucion_pdf = null;
             }
         }
         
@@ -999,21 +1001,22 @@ class ManifiestoController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-                    
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
             if ($manifiesto) 
             {
-                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
+                
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
-
+                
                 if($devolucion)
                 {
-                    $devolucion->pdf = $devolucion->ScanPDF;
-                    dump($devolucion->ScanPDF);
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
                 }
-                
-                //dd($devolucion->ScanPDF);
-        
+                //dump($devolucion);
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
@@ -1038,7 +1041,7 @@ class ManifiestoController extends Controller
             {
                 $solicitud->folio = "No Asignado";
                 $solicitud->pdf = null; // No hay PDF disponible
-                $devolucion->pdf = null;
+                $solicitud->devolucion_pdf = null;
             }
         }
         
