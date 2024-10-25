@@ -109,41 +109,35 @@
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
-                                        <td>
-                                            <!--<a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>-->
-                                            @foreach ($solicitud->detalles_solicitud as $detalle)
-                                                @foreach ($detalle->manifiesto as $manifiestos)
-                                                    @if( $manifiestos->ScanPDF == 'ESPERA DE DATO' ||  $manifiestos->ScanPDF == 'ESPERA DE DATOS')
-                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                <i class="far fa-file-pdf"></i>
-                                                            </span>
-                                                        @else
-                                                            <a class="btn btn-primary" href="{{ asset('storage/' . $manifiestos->ScanPDF) }}" role="button" target="_blank">
-                                                                <i class="far fa-file-pdf"></i>
-                                                            </a>
-                                                        @break 2   
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
-                                        </td>
 
                                         <td>
-                                            @foreach ($solicitud->detalles_solicitud as $detalle)
-                                                @foreach ($detalle->manifiesto as $manifiestos)
-                                                    @foreach ($manifiestos->devolucion as $devolucion)
-                                                        @if( $devolucion->ScanPDF == 'ESPERA DE DATO' ||  $devolucion->ScanPDF == 'ESPERA DE DATOS')
-                                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                    <i class="far fa-file-pdf"></i>
-                                                                </span>
-                                                            @else
-                                                                <a class="btn btn-primary" href="{{ asset('storage/' . $devolucion->ScanPDF) }}" role="button" target="_blank">
-                                                                    <i class="far fa-file-pdf"></i>
-                                                                </a>  
-                                                            @break 3 
-                                                        @endif
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
+                                            @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
+                                                        class="btn btn-primary" target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                    </a>
+                                            @endif
+                                        </td>
+
+                                        @php 
+                                        //dd($devolucion->ScanPDF);
+                                        @endphp
+
+                                        <td>
+                                            @if (empty($devolucion->pdf) || in_array($devolucion->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $devolucion->pdf) }}" 
+                                                        class="btn btn-primary" target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                    </a>
+                                            @endif
                                         </td>
 
                                         <td>
@@ -168,25 +162,34 @@
                                         <td>
                                             
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                                @foreach($solicitud->detalles_solicitud as $detalle)
-                                                    @if($detalle->manifiesto)
-                                                        @foreach ($detalle->manifiesto as $manifiestos)
-                                                                    @if( $manifiestos->ScanPDF == 'ESPERA DE DATO' ||  $manifiestos->ScanPDF == 'ESPERA DE DATOS')
-                                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                                <i class="far fa-file-pdf"></i>
-                                                                            </span>
-                                                                        @else
-                                                                            <a class="btn btn-primary" href="{{ asset('storage/' . $manifiestos->ScanPDF) }}" role="button" target="_blank">
-                                                                                <i class="far fa-file-pdf"></i>
-                                                                            </a>   
-                                                                    @endif
-                                                        @endforeach
-                                                        @else
-                                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                        </td>
+                                            <td>
+                                                @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="far fa-file-pdf"></i>
+                                                </span>
+                                                    @else
+                                                        <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
+                                                            class="btn btn-primary" target="_blank">
+                                                                <i class="far fa-file-pdf"></i>
+                                                        </a>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                @php 
+                                                dump($devolucion->pdf);
+                                                @endphp
+                                            @if (empty($devolucion->pdf) || in_array($devolucion->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $devolucion->pdf) }}" 
+                                                        class="btn btn-primary" target="_blank">
                                                             <i class="far fa-file-pdf"></i>
-                                                        </span>
-                                                    @endif
-                                                @endforeach
+                                                    </a>
+                                            @endif
                                         </td>
                                         @if(!$solicitud->hidePlus)
                                             <td>

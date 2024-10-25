@@ -42,7 +42,6 @@ class SolicitudesController extends Controller
             // Obtener todas las solicitudes
             //$Solicitudes = Solicitudes::all();
             $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
-            //dump($Solicitudes);
 
         }
 
@@ -56,7 +55,16 @@ class SolicitudesController extends Controller
                     
             if ($manifiesto) 
             {
+                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
                 $solicitud->folio = $manifiesto->Folio;
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+
+                if($devolucion)
+                {
+                    $devolucion->pdf = $devolucion->ScanPDF;
+                }
+                
+                //dd($devolucion->ScanPDF);
         
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
@@ -81,6 +89,8 @@ class SolicitudesController extends Controller
             else 
             {
                 $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                
             }
         }
         

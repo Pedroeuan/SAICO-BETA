@@ -260,7 +260,6 @@ class ManifiestoController extends Controller
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
             'Recibe_Nombre' => 'required|string|max:255',
-
         ]);
 
         $id = $request->input('idSolicitud');
@@ -270,6 +269,7 @@ class ManifiestoController extends Controller
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
+        $EsperaDato ='ESPERA DE DATO';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
@@ -354,13 +354,13 @@ class ManifiestoController extends Controller
                 $Manifiestos->Trabajo = $request->input('Trabajo');
                 $Manifiestos->Puesto = $request->input('Puesto');
                 $Manifiestos->Responsable = $request->input('Responsable');
+                $Manifiestos->ScanPDF = $EsperaDato;
                 if($request->input('Observaciones')==null)
                 {
-                    $Manifiestos->Observaciones = '----';
+                    $Manifiestos->Observaciones = '-----';
                 }else{
                     $Manifiestos->Observaciones = $request->input('Observaciones');
                 }
-                $Manifiestos->ScanPDF = 'ESPERA DE DATO';
                 $Manifiestos->save();
             }
 
@@ -791,10 +791,18 @@ class ManifiestoController extends Controller
         // Obtener las solicitudes actualizadas
         $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
 
+        // Usar un array para rastrear las solicitudes ya insertadas
+        $solicitudesProcesadas = [];
+
         // Insertar los registros en la tabla devoluciones
         foreach ($solicitudesActualizadas as $solicitud) {
             // Obtener el idManifiesto asociado a la solicitud
             $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+        // Verificar si ya se procesó esta solicitud
+        if (in_array($idSolicitud, $solicitudesProcesadas)) {
+            continue; // Si ya se procesó, saltar a la siguiente iteración
+        }
 
             // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
             $idManifiesto = DB::table('manifiestos')
