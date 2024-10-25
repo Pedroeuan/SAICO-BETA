@@ -98,7 +98,7 @@
 
                 <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Entrega</label>
+                            <label class="col-form-label" for="inputSuccess">Persona que Entrega</label>
                                 <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" readonly>
                                     @error('Entrega_Nombre')
                                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -108,7 +108,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Recibe</label>
+                            <label class="col-form-label" for="inputSuccess">Técnico que Recibe</label>
                                 <input type="text" class="form-control inputForm" name="Recibe_Nombre" value="{{ $Solicitud->tecnico }}" required>
                                     @error('Recibe_Nombre')
                                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -138,7 +138,8 @@
                         <label class="col-form-label" for="inputSuccess">Observaciones</label>
                         <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{old('Observaciones')}}</textarea>
                     </div>
-                </div>           
+                </div>      
+            
                 <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-check"></i> ¡Bien hecho!</h5>

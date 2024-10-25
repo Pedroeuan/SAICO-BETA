@@ -13,6 +13,11 @@ class devolucion extends Model
         'idSolicitud',
         'Entrega',
         'Recibe',
+        'Fecha',
+        'Condiciones',
+        'Observaciones',
+        'ScanPDF',
+
     ];
     protected $table = 'Devoluciones';
     protected $primaryKey = 'idDevoluciones';
@@ -24,4 +29,11 @@ class devolucion extends Model
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
     }
+
+        // Relación: Devolucion pertenece a un manifiesto
+        public function manifiesto()
+        {
+            return $this->belongsTo(Manifiesto::class, 'idManifiestos');
+        }
+        
 }

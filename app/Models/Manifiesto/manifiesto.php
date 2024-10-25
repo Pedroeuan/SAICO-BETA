@@ -4,6 +4,7 @@ namespace App\Models\Manifiesto;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\EquiposyConsumibles\devolucion;
 
 class manifiesto extends Model
 {
@@ -18,6 +19,7 @@ class manifiesto extends Model
         'Puesto',
         'Responsable',
         'Observaciones',
+        'ScanPDF',
     ];
     protected $table = 'Manifiestos';
     protected $primaryKey = 'idManifiestos';
@@ -28,5 +30,11 @@ class manifiesto extends Model
     {
         return $this->belongsTo(detalles_solicitud::class);
     }
+
+    public function devolucion()
+    {
+        return $this->hasMany(devolucion::class, 'idManifiestos');
+    }
+    
     use HasFactory;
 }
