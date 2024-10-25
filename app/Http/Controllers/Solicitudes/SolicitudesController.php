@@ -42,7 +42,6 @@ class SolicitudesController extends Controller
             // Obtener todas las solicitudes
             //$Solicitudes = Solicitudes::all();
             $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
-
         }
 
         // Crear un array para almacenar el último folio encontrado para cada grupo

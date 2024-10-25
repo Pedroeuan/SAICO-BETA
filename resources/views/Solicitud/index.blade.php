@@ -178,7 +178,7 @@
 
                                             <td>
                                                 @php 
-                                                dump($devolucion->pdf);
+                                                //dump($devolucion->pdf);
                                                 @endphp
                                             @if (empty($devolucion->pdf) || in_array($devolucion->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
