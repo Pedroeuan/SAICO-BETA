@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Manifiesto;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Http\Request;
 
 use App\Models\Manifiesto\manifiesto;
@@ -15,6 +17,7 @@ use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\Clientes\clientes;
+use App\Models\EquiposyConsumibles\devolucion;
 use Carbon\Carbon;
 
 use App\Http\Controllers\Solicitudes\SolicitudesController;
@@ -257,7 +260,6 @@ class ManifiestoController extends Controller
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
             'Recibe_Nombre' => 'required|string|max:255',
-
         ]);
 
         $id = $request->input('idSolicitud');
@@ -267,6 +269,7 @@ class ManifiestoController extends Controller
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
+        $EsperaDato ='ESPERA DE DATO';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
@@ -351,7 +354,13 @@ class ManifiestoController extends Controller
                 $Manifiestos->Trabajo = $request->input('Trabajo');
                 $Manifiestos->Puesto = $request->input('Puesto');
                 $Manifiestos->Responsable = $request->input('Responsable');
-                $Manifiestos->Observaciones = $request->input('Observaciones');
+                $Manifiestos->ScanPDF = $EsperaDato;
+                if($request->input('Observaciones')==null)
+                {
+                    $Manifiestos->Observaciones = '-----';
+                }else{
+                    $Manifiestos->Observaciones = $request->input('Observaciones');
+                }
                 $Manifiestos->save();
             }
 
@@ -539,6 +548,31 @@ class ManifiestoController extends Controller
                         'Responsable' =>$request->input('Responsable'),
                         'Observaciones' =>$request->input('Observaciones'),
                     ]);
+
+                // Validar que se ha enviado el archivo de foto
+                    if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+                        $ScanPDF = $request->file('ScanPDF');
+                        // Obtener el último número consecutivo
+                        $lastFile = collect(Storage::disk('public')->files('Manifiestos/Salidas'))
+                            ->filter(function ($file) {
+                                return preg_match('/^\d+_/', basename($file));
+                            })
+                            ->sort()
+                            ->last();
+                        $lastNumber = 0;
+                        if ($lastFile) {
+                            $lastNumber = (int)explode('_', basename($lastFile))[0];
+                        }
+                        // Incrementar el número consecutivo
+                        $newNumber = $lastNumber + 1;
+                        $newFileNameFoto = $newNumber . '_' . $ScanPDF->getClientOriginalName();
+                        // Guardar el archivo en la carpeta "public/Equipos/Fotos"
+                        $ScanPDFPath = $ScanPDF->storeAs('Manifiestos/Salidas', $newFileNameFoto, 'public');
+
+                        $Manifiestos->ScanPDF = $ScanPDFPath;
+                    }
+
+                    $Manifiestos->save();
                 }
             
         }
@@ -734,8 +768,151 @@ class ManifiestoController extends Controller
         return redirect()->route('solicitud.index');
     }
 
-    public function concluirManifiesto(Request $request, $id)
-    {
+    public function PreConcluirManifiesto (Request $request, $id)
+    { 
+        /**/
+        $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
+        $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
+        $Observaciones = $request->input('Observaciones_Devolucion');
+        $Condiciones = $request->input('Condiciones_Retorno');
+        $ScanPDF = 'ESPERA DE DATO';
+
+        // Obtener los ids de las solicitudes en formato array
+        $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
+
+        // Actualizar el estatus de las solicitudes
+        Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'PRE-CONCLUIDO']);
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
+        // Obtener las solicitudes actualizadas
+        $solicitudesActualizadas = Solicitudes::whereIn('idSolicitud', $idsSolicitud)->get();
+
+        // Usar un array para rastrear las solicitudes ya insertadas
+        $solicitudesProcesadas = [];
+
+        // Insertar los registros en la tabla devoluciones
+        foreach ($solicitudesActualizadas as $solicitud) {
+            // Obtener el idManifiesto asociado a la solicitud
+            $idSolicitud = $solicitud->idSolicitud; // Obtener idSolicitud
+
+        // Verificar si ya se procesó esta solicitud
+        if (in_array($idSolicitud, $solicitudesProcesadas)) {
+            continue; // Si ya se procesó, saltar a la siguiente iteración
+        }
+
+            // Buscar el idManifiesto en la tabla manifiestos basado en el idSolicitud
+            $idManifiesto = DB::table('manifiestos')
+            ->where('idSolicitud', $idSolicitud)
+            ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
+
+            $Fecha = Carbon::now();
+            // Crear una nueva devolución
+            DB::table('devoluciones')->insert([
+
+                'idManifiestos'=> $idManifiesto,
+                'idSolicitud'=> $idSolicitud,
+                'Entrega' => $EntregaDevolucion,
+                'Recibe'  => $RecibeDevolucion,
+                'Fecha'  => $Fecha,
+                'Observaciones'  => $Observaciones,
+                'Condiciones'  => $Condiciones,
+                'ScanPDF'  => $ScanPDF,
+            ]);
+        }
+
+        if($rol == 'Técnicos')
+        {
+            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+        }
+        else
+        {
+            // Obtener todas las solicitudes
+            //$Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+        }
+
+        /*Condiciones de los Folios para la vista de solicitud*/
+        // Crear un array para almacenar el último folio encontrado para cada grupo
+        $ultimoFolioPorGrupo = [];
+
+        // Procesar cada solicitud
+        foreach ($Solicitudes as $solicitud) 
+        {
+            $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
+            if ($manifiesto) 
+            {
+                
+                $solicitud->folio = $manifiesto->Folio;
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+                
+                if($devolucion)
+                {
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
+                }
+                //dump($devolucion);
+                // Verificar si la expresión regular coincide
+                if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                    $folioBase = $matches[1];
+                } else {
+                    // Si no coincide, asignar un valor predeterminado o manejar el caso
+                    $folioBase = '';
+                }
+        
+                // Extraer la letra al final del folio si existe (después del número antes de la "/")
+                if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                    $folioLetra = $matches[1] ?? ''; // Si no hay letra, asigna una cadena vacía
+                } else {
+                    $folioLetra = '';
+                }
+        
+                // Verificar si este folio es el último en su grupo (mayor en orden lexicográfico)
+                if (!isset($ultimoFolioPorGrupo[$folioBase]) || strcmp($folioLetra, $ultimoFolioPorGrupo[$folioBase]) > 0) {
+                    $ultimoFolioPorGrupo[$folioBase] = $folioLetra;
+                }
+            } 
+            else 
+            {
+                $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                $solicitud->devolucion_pdf = null;
+            }
+        }
+        
+
+        // Marcar los folios que deben ocultar el botón
+        foreach ($Solicitudes as $solicitud) 
+        {
+            // Intentar coincidir con el patrón del folio base
+            if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
+                $folioBase = $matches[1];  // Si coincide, asignar el valor
+            } else {
+                $folioBase = '';  // Si no coincide, asignar un valor predeterminado
+            }
+        
+            // Intentar coincidir con el patrón de la letra del folio
+            if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
+                $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
+            } else {
+                $folioLetra = '';  // Si no coincide, asignar una cadena vacía
+            }
+        
+            // Si este folio no es el último en su grupo, ocultar el botón
+            $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
+        }
+            return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
+    }
+
+    public function ConcluirManifiesto (Request $request, $id)
+    { 
         $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
         $Observaciones = $request->input('Observaciones_Devolucion');
@@ -766,19 +943,44 @@ class ManifiestoController extends Controller
             ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
 
             $Fecha = Carbon::now();
-            // Crear una nueva devolución
-            DB::table('devoluciones')->insert([
+            // Actualizar o insertar en la tabla devoluciones
+            DB::table('devoluciones')->updateOrInsert(
+                ['idManifiestos' => $idManifiesto, 'idSolicitud' => $idSolicitud], // Condiciones de búsqueda
+                [
+                    'Entrega' => $EntregaDevolucion,
+                    'Recibe' => $RecibeDevolucion,
+                    'Fecha' => $Fecha,
+                    'Condiciones' => $Condiciones,
+                    'Observaciones' => $Observaciones,
+                    //Agregar ScanPDF
+                ]
+            );
 
-                'idManifiestos'=> $idManifiesto,
-                'idSolicitud'=> $idSolicitud,
-                'Entrega' => $EntregaDevolucion,
-                'Recibe'  => $RecibeDevolucion,
-                'Fecha'  => $Fecha,
-                'Observaciones'  => $Observaciones,
-                'Condiciones'  => $Condiciones,
-
-            ]);
-        }
+    $Devoluciones = devolucion::where('idSolicitud', $idSolicitud)->first();
+        // Validar que se ha enviado el archivo de foto
+        if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+            $ScanPDF = $request->file('ScanPDF');
+                // Obtener el último número consecutivo
+                    $lastFile = collect(Storage::disk('public')->files('Manifiestos/Devoluciones'))
+                        ->filter(function ($file) {
+                            return preg_match('/^\d+_/', basename($file));
+                        })
+                        ->sort()
+                        ->last();
+                    $lastNumber = 0;
+                    if ($lastFile) {
+                        $lastNumber = (int)explode('_', basename($lastFile))[0];
+                        }
+            // Incrementar el número consecutivo
+                $newNumber = $lastNumber + 1;
+                $newFileNameFoto = $newNumber . '_' . $ScanPDF->getClientOriginalName();
+                // Guardar el archivo en la carpeta "public/Equipos/Fotos"
+                $ScanPDFPath = $ScanPDF->storeAs('Manifiestos/Devoluciones', $newFileNameFoto, 'public');
+            
+                $Devoluciones->ScanPDF = $ScanPDFPath;
+                }
+                $Devoluciones->save();
+            }
 
         if($rol == 'Técnicos')
         {
@@ -787,7 +989,8 @@ class ManifiestoController extends Controller
         else
         {
             // Obtener todas las solicitudes
-            $Solicitudes = Solicitudes::all();
+            //Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         }
 
         /*Condiciones de los Folios para la vista de solicitud*/
@@ -798,11 +1001,22 @@ class ManifiestoController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-        
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
             if ($manifiesto) 
             {
+                
                 $solicitud->folio = $manifiesto->Folio;
-        
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+                
+                if($devolucion)
+                {
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
+                }
+                //dump($devolucion);
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
@@ -826,6 +1040,8 @@ class ManifiestoController extends Controller
             else 
             {
                 $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                $solicitud->devolucion_pdf = null;
             }
         }
         

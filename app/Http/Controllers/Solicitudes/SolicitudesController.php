@@ -16,6 +16,7 @@ use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\Clientes\clientes;
 
@@ -39,7 +40,8 @@ class SolicitudesController extends Controller
         else
         {
             // Obtener todas las solicitudes
-            $Solicitudes = Solicitudes::all();
+            //$Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         }
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
@@ -49,11 +51,22 @@ class SolicitudesController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-        
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
             if ($manifiesto) 
             {
+                
                 $solicitud->folio = $manifiesto->Folio;
-        
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+                
+                if($devolucion)
+                {
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
+                }
+                //dump($devolucion);
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
@@ -77,6 +90,8 @@ class SolicitudesController extends Controller
             else 
             {
                 $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                $solicitud->devolucion_pdf = null;
             }
         }
         

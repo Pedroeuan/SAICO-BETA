@@ -111,7 +111,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Entrega</label>
+                                            <label class="col-form-label" for="inputSuccess">Persona que Entrega</label>
                                             <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" readonly>
                                             @error('Entrega_Nombre')
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -121,7 +121,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Recibe</label>
+                                            <label class="col-form-label" for="inputSuccess">Técnico que Recibe</label>
                                             <input type="text" class="form-control inputForm" name="Recibe_Nombre" value="{{ $Solicitud->tecnico }}" required>
                                             @error('Recibe_Nombre')
                                                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>

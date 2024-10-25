@@ -4,6 +4,7 @@ namespace App\Models\Solicitudes;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Manifiesto\manifiesto;
 
 class detalles_solicitud extends Model
 {
@@ -26,9 +27,10 @@ class detalles_solicitud extends Model
     }
     
     // Definir la relación con Manifiestos
-    public function manifiestos()
+    public function manifiesto()
     {
-        return $this->hasMany(manifiesto::class, 'idSolicitud');
+        return $this->hasMany(manifiesto::class, 'idManifiestos');
     }
+
     use HasFactory;
 }

@@ -28,51 +28,100 @@
     <div class="alert alert-warning alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Nota</h5>
-                Una vez devueltos los equipos y darle click a Concluir Manifiesto y el Estatus cambia a "DEVOLVER", <u>NO</u> se podran realizar más cambios y Devoluciones.
+            @if($EstadoSolicitud == 'MANIFIESTO')
+                    Al Pre-Concluir un manifiesto, se guardan los datos de Fecha Actual, Condiciones, tecnico, persona y observaciones para posteriormente subir el archivo firmado
+                @else
+                    Una vez devueltos los equipos y darle click a Concluir Manifiesto y el Estatus cambia a "DEVOLVER", <u>NO</u> se podran realizar más cambios y Devoluciones.
+            @endif
             </p>
     </div>
     <h3 align="center">Devoluciones</h3>
-    <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-    @csrf
+    @if($EstadoSolicitud == 'MANIFIESTO')
+            <form id="devolverForm" action="{{ route('PreConcluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+        @else
+            <form id="devolverForm" action="{{ route('Concluir.Manifiesto', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+    @endif
 
+    @csrf
     <div class="row">
         <!-- Columna izquierda para la fecha -->
         <div class="col-md-6">
             <div class="form-group">
-                <label class="col-form-label" for="inputSuccess">Fecha Actual</label>
-                <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="{{ $FechaActual->format('d-m-Y') }}" readonly>
+                <label class="col-form-label" for="inputSuccess">
+                @if($devoluciones)
+                        @if($devoluciones->formatted_date) 
+                            Fecha de Devolución  
+                        @endif
+                    @else  
+                        Fecha Actual
+                @endif
+                </label>
+                <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="@if($devoluciones){{ $devoluciones->formatted_date }}@else {{ $FechaActual->format('d-m-Y') }} @endif" readonly>
             </div>
         </div>
-
-        <!-- Columna derecha para el select -->
-        <!--<div class="col-md-6">
-            <div class="form-group">
+        <!--
+            <div class="col-md-6">
                 <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en optimas condiciones?</label>
-                <select class="form-control select2" style="width: 100%;" name="Condiciones_Retorno">
-                    <option selected="selected">Elige un Tipo</option>
-                    <option value="DISPONIBLE" {{ old('Condiciones_Retorno') == 'SI' ? 'selected' : '' }}>SI</option>
-                    <option value="NO DISPONIBLE" {{ old('Condiciones_Retorno') == 'NO' ? 'selected' : '' }}>NO</option>
-                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Condiciones_Retorno') == 'N/A' ? 'selected' : '' }}>N/A</option>
-                </select>
+                <div class="form-group">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio1" value="SI">
+                        <label class="form-check-label" for="inlineRadio1">SI</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio2" value="NO">
+                        <label class="form-check-label" for="inlineRadio2">NO</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio3" value="N/A" >
+                        <label class="form-check-label" for="inlineRadio3">N/A</label>
+                    </div>
+                </div>
             </div>
-        </div>-->
+        -->
+            
+        @php
+            $valorCondiciones = old('Condiciones_Retorno', $devoluciones->Condiciones ?? ''); 
+            // Aquí `$devoluciones->Condiciones` es el valor guardado en la base de datos
+        @endphp
+
         <div class="col-md-6">
-            <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en optimas condiciones?</label>
+            <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en óptimas condiciones?</label>
             <div class="form-group">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio1" value="SI">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="Condiciones_Retorno" 
+                        id="inlineRadio1" 
+                        value="SI"
+                        {{ $valorCondiciones == 'SI' ? 'checked' : '' }}>
                     <label class="form-check-label" for="inlineRadio1">SI</label>
                 </div>
+
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio2" value="NO">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="Condiciones_Retorno" 
+                        id="inlineRadio2" 
+                        value="NO"
+                        {{ $valorCondiciones == 'NO' ? 'checked' : '' }}>
                     <label class="form-check-label" for="inlineRadio2">NO</label>
                 </div>
+
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio3" value="N/A" >
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="Condiciones_Retorno" 
+                        id="inlineRadio3" 
+                        value="N/A"
+                        {{ $valorCondiciones == 'N/A' ? 'checked' : '' }}>
                     <label class="form-check-label" for="inlineRadio3">N/A</label>
                 </div>
             </div>
         </div>
+
 
     </div>
 
@@ -82,8 +131,8 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label class="col-form-label" for="inputSuccess">Entrega</label>
-                <input type="text" class="form-control inputForm" name="Entrega_Nombre_Devolucion" value="" required>
+                <label class="col-form-label" for="inputSuccess">Técnico que Entrega</label>
+                <input type="text" class="form-control inputForm" name="Entrega_Nombre_Devolucion" value="@if($devoluciones){{ $devoluciones->Entrega }}@else @endif" required>
                 @error('Entrega_Nombre')
                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                 @enderror
@@ -92,21 +141,32 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label class="col-form-label" for="inputSuccess">Recibe</label>
-                <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="{{ $Nombre }}" required>
+                <label class="col-form-label" for="inputSuccess">Persona que Recibe</label>
+                <input type="text" class="form-control inputForm" name="Recibe_Nombre_Devolucion" value="@if($devoluciones){{ $devoluciones->Recibe }}@else{{ $Nombre }} @endif" required>
+                
                 @error('Recibe_Nombre')
                     <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                 @enderror
             </div>
         </div>
     </div>
-
+    @if($EstadoSolicitud == 'PRE-CONCLUIDO')
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
+                    <input type="file" class="form-control-file inputForm" name="ScanPDF"></input>
+                        @if ($errors->any())
+                            <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                        @endif
+            </div>
+        </div>
+    @endif
     <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-form-label" for="inputSuccess">Observaciones</label>
-                        <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones_Devolucion" placeholder="Ejemplo: Equipo regresa en malas condiciones">{{old('Observaciones')}}</textarea>
-                    </div>
-                </div>   
+        <div class="form-group">
+            <label class="col-form-label" for="inputSuccess">Observaciones</label>
+                <textarea class="form-control is-waning" id="inputSuccess" name="Observaciones_Devolucion" placeholder="Ejemplo: Equipo regresa en malas condiciones">@if($devoluciones){{ $devoluciones->Observaciones }} @else{{old('Observaciones')}}@endif </textarea>
+        </div>
+    </div>   
 
         <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
@@ -141,8 +201,15 @@
             </tbody>
         </table>
         <br>
+        
         <div class="container d-flex justify-content-center">
-            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">Concluir Manifiesto</button>
+            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">
+                @if($EstadoSolicitud == 'MANIFIESTO')
+                        Pre-Concluir Manifiesto
+                    @else    
+                        Concluir Manifiesto
+                @endif
+            </button>
         </div>
     </form>
 @stop

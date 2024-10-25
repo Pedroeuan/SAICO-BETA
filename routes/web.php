@@ -175,6 +175,8 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
     /*ruta para obtener el conteo de registros de manifiesto*/
     Route::get('/manifiestos/count', [ManifiestoController::class, 'getCount'])->name('manifiestos.count');
 
+    /*PRE-CONCLUIR MANIFIESTO*/
+    Route::post('/PreConcluir/Manifiesto/{id}', [ManifiestoController::class, 'PreConcluirManifiesto'])->name('PreConcluir.Manifiesto');
     /*CONCLUIR MANIFIESTO*/
     Route::post('/Concluir/Manifiesto/{id}', [ManifiestoController::class, 'ConcluirManifiesto'])->name('Concluir.Manifiesto');
 
@@ -184,7 +186,7 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
 
     /*manifiestos*/
     /*Ruta para ver el manifiesto PDF*/
-    //Route::get('/Manifiesto/create', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
+    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     
     });

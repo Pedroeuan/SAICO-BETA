@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\EquiposyConsumibles;
 
-use App\Models\EquiposyConsumibles\devolucion;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -18,6 +17,7 @@ use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\EquiposyConsumibles\devolucion;
 
 class DevolucionController extends Controller
 {
@@ -66,6 +66,9 @@ class DevolucionController extends Controller
 
         $manifiesto = manifiesto::where('idSolicitud', $id)->first();
         $folioBase = $manifiesto->Folio;
+
+        $solicitud = Solicitudes::where('idSolicitud', $id)->first();
+        $EstadoSolicitud = $solicitud->Estatus;
 
         // Extraer el prefijo (4 letras), número y año del Folio base
         preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
@@ -130,8 +133,10 @@ class DevolucionController extends Controller
 
         $FechaActual = Carbon::now();
 
+        $devoluciones = devolucion::where('idSolicitud', $id)->first();
+
         // Pasar los datos a la vista
-        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre'));
+        return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud','devoluciones'));
     }
 
 
