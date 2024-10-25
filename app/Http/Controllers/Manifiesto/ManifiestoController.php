@@ -831,7 +831,8 @@ class ManifiestoController extends Controller
         else
         {
             // Obtener todas las solicitudes
-            $Solicitudes = Solicitudes::all();
+            //$Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         }
 
         /*Condiciones de los Folios para la vista de solicitud*/
@@ -842,10 +843,19 @@ class ManifiestoController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-        
+                    
             if ($manifiesto) 
             {
+                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
                 $solicitud->folio = $manifiesto->Folio;
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+
+                if($devolucion)
+                {
+                    $devolucion->pdf = $devolucion->ScanPDF;
+                }
+                
+                //dd($devolucion->ScanPDF);
         
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
@@ -870,6 +880,8 @@ class ManifiestoController extends Controller
             else 
             {
                 $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                $devolucion->pdf = null;
             }
         }
         
@@ -975,7 +987,8 @@ class ManifiestoController extends Controller
         else
         {
             // Obtener todas las solicitudes
-            $Solicitudes = Solicitudes::all();
+            //Solicitudes = Solicitudes::all();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         }
 
         /*Condiciones de los Folios para la vista de solicitud*/
@@ -986,10 +999,20 @@ class ManifiestoController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-        
+                    
             if ($manifiesto) 
             {
+                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
                 $solicitud->folio = $manifiesto->Folio;
+                $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+
+                if($devolucion)
+                {
+                    $devolucion->pdf = $devolucion->ScanPDF;
+                    dump($devolucion->ScanPDF);
+                }
+                
+                //dd($devolucion->ScanPDF);
         
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
@@ -1014,6 +1037,8 @@ class ManifiestoController extends Controller
             else 
             {
                 $solicitud->folio = "No Asignado";
+                $solicitud->pdf = null; // No hay PDF disponible
+                $devolucion->pdf = null;
             }
         }
         

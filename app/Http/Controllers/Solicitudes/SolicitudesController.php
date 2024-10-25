@@ -51,20 +51,22 @@ class SolicitudesController extends Controller
         foreach ($Solicitudes as $solicitud) 
         {
             $manifiesto = manifiesto::where('idSolicitud', $solicitud->idSolicitud)->first();
-                    
+            $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();  
+
             if ($manifiesto) 
             {
-                $devolucion = devolucion::where('idSolicitud', $solicitud->idSolicitud)->first();
+                
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
-
+                
                 if($devolucion)
                 {
-                    $devolucion->pdf = $devolucion->ScanPDF;
+                    //$devolucion->pdf = $devolucion->ScanPDF;
+                    $solicitud->devolucion_pdf = $devolucion->ScanPDF;
+                }else {
+                $solicitud->devolucion_pdf = null;
                 }
-                
-                //dd($devolucion->ScanPDF);
-        
+                //dump($devolucion);
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
@@ -89,7 +91,7 @@ class SolicitudesController extends Controller
             {
                 $solicitud->folio = "No Asignado";
                 $solicitud->pdf = null; // No hay PDF disponible
-                
+                $solicitud->devolucion_pdf = null;
             }
         }
         
@@ -115,7 +117,7 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        return view("Solicitud.index", compact('Solicitudes','Nombre','rol'));
+        return view("Solicitud.index", compact('Solicitudes','Nombre','rol','devolucion'));
     }
 
     

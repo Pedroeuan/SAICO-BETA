@@ -115,6 +115,9 @@
                                         </td>
 
                                         <td>
+                                            @php 
+                                                //dump($solicitud->pdf);
+                                            @endphp
                                             @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="far fa-file-pdf"></i>
@@ -127,20 +130,18 @@
                                             @endif
                                         </td>
 
-                                        @php 
-                                        //dd($devolucion->ScanPDF);
-                                        @endphp
-
                                         <td>
-                                            @if (empty($devolucion->pdf) || in_array($devolucion->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
-                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                <i class="far fa-file-pdf"></i>
-                                            </span>
-                                                @else
-                                                    <a href="{{ asset('storage/' . $devolucion->pdf) }}" 
-                                                        class="btn btn-primary" target="_blank">
-                                                            <i class="far fa-file-pdf"></i>
-                                                    </a>
+                                        @php 
+                                            //dump($solicitud->devolucion_pdf);
+                                        @endphp
+                                            @if ($solicitud->devolucion_pdf)
+                                                <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
+                                                    <i class="far fa-file-pdf"></i> 
+                                                </a>
+                                            @else
+                                                <span class="btn btn-secondary" style="cursor: not-allowed; background-color: gray; border-color: gray;">
+                                                    <i class="far fa-file-pdf"></i> 
+                                                </span>
                                             @endif
                                         </td>
 
@@ -154,11 +155,13 @@
                                             <a class="btn btn-info" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
                                         </td>
                                     </div>
-                                @else <!-- MANIFIESTO, PRE-CONCLUIDO, CONCLUIDO -->
+                                @else <!-- MANIFIESTO, PRE-CONCLUIDO -->
+
                                     <div class="btn-group">
                                         <td>
                                             <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                         </td>
+
                                         <td>        
                                             <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                                         </td>
@@ -167,34 +170,26 @@
                                             
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
-                                            <td>
-                                                @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
-                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </span>
-                                                    @else
-                                                        <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
-                                                            class="btn btn-primary" target="_blank">
-                                                                <i class="far fa-file-pdf"></i>
-                                                        </a>
-                                                @endif
-                                            </td>
 
-                                            <td>
-                                                @php 
-                                                //dump($devolucion->pdf);
-                                                @endphp
-                                            @if (empty($devolucion->pdf) || in_array($devolucion->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                        <td>
+                                            @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="far fa-file-pdf"></i>
                                             </span>
                                                 @else
-                                                    <a href="{{ asset('storage/' . $devolucion->pdf) }}" 
+                                                    <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
                                                         class="btn btn-primary" target="_blank">
                                                             <i class="far fa-file-pdf"></i>
                                                     </a>
                                             @endif
                                         </td>
+
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>
+
                                         @if(!$solicitud->hidePlus)
                                             <td>
                                                 <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
