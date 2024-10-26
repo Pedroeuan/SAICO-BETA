@@ -66,7 +66,7 @@ class SolicitudesController extends Controller
                 }else {
                 $solicitud->devolucion_pdf = null;
                 }
-                //dump($devolucion);
+                
                 // Verificar si la expresión regular coincide
                 if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
                     $folioBase = $matches[1];
