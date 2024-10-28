@@ -113,7 +113,7 @@
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
-
+                                    <!--PDF DE SALIDA-->
                                         <td>
                                             @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
@@ -126,7 +126,7 @@
                                                     </a>
                                             @endif
                                         </td>
-
+                                    <!--PDF DE RESGUARDO-->
                                         <td>
                                             @if ($solicitud->devolucion_pdf)
                                                 <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
@@ -159,12 +159,11 @@
                                         <td>        
                                             <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
                                         </td>
-                                        
+                                    <!--PDF GENERADO-->
                                         <td>
-                                            
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
-
+                                    <!--PDF DE RESGUARDO-->
                                         <td>
                                             @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
@@ -177,7 +176,7 @@
                                                     </a>
                                             @endif
                                         </td>
-
+                                    <!--PDF DE SALIDA-->
                                         <td>
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                 <i class="far fa-file-pdf"></i>

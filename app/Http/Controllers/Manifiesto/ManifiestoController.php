@@ -110,6 +110,7 @@ class ManifiestoController extends Controller
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
                         $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->ScanPDF = 'ESPERA DE DATO';
                         $Manifiesto->save();
                 }
             }
@@ -224,6 +225,7 @@ class ManifiestoController extends Controller
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
                         $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->ScanPDF = 'ESPERA DE DATO';
                         $Manifiesto->save();
                 }
 
@@ -410,7 +412,6 @@ class ManifiestoController extends Controller
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
-        //$Entrega_Nombre = $request->input('Entrega_Nombre');
         
         // Actualizar los datos del equipo
         $Solicitud ->update([
