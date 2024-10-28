@@ -59,25 +59,6 @@
                 <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="@if($devoluciones){{ $devoluciones->formatted_date }}@else {{ $FechaActual->format('d-m-Y') }} @endif" readonly>
             </div>
         </div>
-        <!--
-            <div class="col-md-6">
-                <label class="col-form-label" for="inputSuccess">¿Los equipos retornan en optimas condiciones?</label>
-                <div class="form-group">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio1" value="SI">
-                        <label class="form-check-label" for="inlineRadio1">SI</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio2" value="NO">
-                        <label class="form-check-label" for="inlineRadio2">NO</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Condiciones_Retorno" id="inlineRadio3" value="N/A" >
-                        <label class="form-check-label" for="inlineRadio3">N/A</label>
-                    </div>
-                </div>
-            </div>
-        -->
             
         @php
             $valorCondiciones = old('Condiciones_Retorno', $devoluciones->Condiciones ?? ''); 
