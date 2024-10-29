@@ -1,31 +1,33 @@
 <?php
 //use App\Http\Controllers\HomeController;
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProfileController;
 
-use App\Http\Controllers\EquiposyConsumibles\general_eycController;
-use App\Http\Controllers\EquiposyConsumibles\equiposController;
-use App\Http\Controllers\EquiposyConsumibles\consumiblesController;
-use App\Http\Controllers\EquiposyConsumibles\AccesoriosController;
-use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
-use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
-use App\Http\Controllers\EquiposyConsumibles\KitsController;
-use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
-use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
-use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
-use App\Http\Controllers\EquiposyConsumibles\DevolucionController;
-use App\Http\Controllers\Solicitudes\SolicitudesController;
-use App\Http\Controllers\Certificados\CertificadosController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
-use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Solicitudes\SolicitudesController;
+use App\Http\Controllers\PDFReportes\PDFReportesController;
+use App\Http\Controllers\EquiposyConsumibles\KitsController;
+use App\Http\Controllers\Certificados\CertificadosController;
 use App\Http\Controllers\Notificacion\NotificacionController;
+use App\Http\Controllers\EquiposyConsumibles\equiposController;
+use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
+use App\Http\Controllers\EquiposyConsumibles\DevolucionController;
+use App\Http\Controllers\EquiposyConsumibles\AccesoriosController;
+use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
+use App\Http\Controllers\EquiposyConsumibles\consumiblesController;
+use App\Http\Controllers\EquiposyConsumibles\general_eycController;
+use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
+use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
+use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
+use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+
 
     Route::get('/', function () {
         return view('auth.login');
@@ -189,6 +191,9 @@ use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
     
+    /*REPORTES PDF*/
+    /*Ruta para ver los PDF de los Reportes*/
+    Route::get('/Reporte/UltrasonidoFOR_PINS_12', [PDFReportesController::class, 'UltrasonidoFOR_PINS_12'])->name('ReporteUltrasonidoFOR_PINS_12.PDF');
     });
     
     /*admin */

@@ -364,7 +364,7 @@ return [
                 'submenu' => [
                     [
                         'text' => 'level_one',
-                        'url' => '#',
+                        'url' => '/Reporte/UltrasonidoFOR_PINS_12',
                     ],
                     [
                         'text' => 'level_one',
