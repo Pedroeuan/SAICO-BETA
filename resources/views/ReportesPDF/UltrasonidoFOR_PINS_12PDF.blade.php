@@ -45,6 +45,7 @@
 
         /* Aplica el borde a las celdas de la tabla */
         .tablaheader td, .tablaheader th {
+            width: 70%;
             border: 1px solid black; 
             font-size: 11px;
         }
@@ -180,6 +181,17 @@
             justify-content: space-around; /* Separación uniforme entre las tablas */
             gap: 10px;            /* Espacio entre tablas */
         }
+        .datosequipo table, th, td {
+            border-collapse: collapse;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        p {
+        border: red 5px double;
+        }
     </style>
 </head>
 <body>
@@ -187,22 +199,22 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th class="">Formato</th>
-                <th class="respuestasGenerales">Código:</th>
-                <th class="respuestasGenerales">FOR-PINS-12</th>
-                <th rowspan="3"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
+                <th class="" style="width: 500px;">Formato</th>
+                <td class="" style="width: 100px;">Código:</td>
+                <td class="" style="width: 80px;">FOR-PINS-12</td>
+                <th rowspan="3" style="width: 100px;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
             </tr>
         </thead>
 
         <tbody>
             <tr>
-                <td rowspan="2"> INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </td>
-                <td class="respuestasGenerales">Versión</td>
-                <td class="respuestasGenerales">1</td>
+                <th rowspan="2" style="width: 500px;"> INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                <td class="" style="width: 100px;">Versión</td>
+                <td class="" style="width: 80px;">1</td>
             </tr>
             <tr>
-                <td class="respuestasGenerales">Página</td>
-                <td class="page-num-container">
+                <td class="" style="width: 100px;">Página</td>
+                <td class="page-num-container" style="width: 80px;">
                 </td>
             </tr>
         </tbody>
@@ -212,7 +224,7 @@
 <div class="tablaContainer">
     <table class="sinBorde">
             <tr>
-                <th class="celdaAzul letraBlanca" colspan="9">DATOS GENERALES</th>
+                <th class="celdaAzul letraBlanca" colspan="4">DATOS GENERALES</th>
             </tr>
         <tbody>
             <tr>
@@ -265,234 +277,61 @@
     </table>
 </div>
 <br>
+    
 <div class="">
-    <table class="tablaManifiesto">
-        <thead>
-            <tr>
-                    <th class="celdaAzul letraBlanca" colspan="9">DATOS DEL EQUIPO</th>
-            </tr>
-
-            <table class="">
-                <tbody>
-                    <tr>
-                        <th class="celdaGris" colspan="2">EQUIPO</th>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">MARCA:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">MODELO:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">N.S:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="">
-                <tbody>
-                    <tr>
-                        <th class="celdaGris" colspan="2">EQUIPO</th>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">MARCA:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">MODELO:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                    <tr>
-                        <td class="respuestasGenerales">N.S:</td>
-                        <td class="respuestasGenerales"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </thead>
-    <tbody>
-                <tr>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-                        <td class="Contenido">----</td>
-
-                </tr>
-
-        </tbody>
-    </table>
-<br>
     <table class="tablaManifiesto2">
         <thead>
             <tr>
-
-                    <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
-
-                    <th class="celdaAzul letraBlanca" colspan="5">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
-
+                <th class="celdaAzul letraBlanca" colspan="9">DATOS DEL EQUIPO</th>
             </tr>
-
-                    <tr class="celdaCrema">
-                        <th class="especial">No.</th>
-                        <th class="">Cantidad</th>
-                        <th class="">Unidad</th>
-                        <th class="">SAT</th>
-                        <th class="">BMPRO</th>
-                        <th class="" colspan="7">Descripción</th>
-                    </tr>
-
-                    <tr class="celdaCrema">
-                        <th class="especial">No.</th>
-                        <th class="">Cantidad</th>
-                        <th class="">Unidad</th>
-                        <th class="" colspan="5">Descripción</th>
-                    </tr>
-
         </thead>
+    </table>
+    <div style="margin-bottom: 4px;"></div>
+    <table class="tablaManifiesto2">
         <tbody>
-            @php
-                $contador = 1; // Inicializa el contador
-                $minFilas = 5; // Define el número mínimo de filas
-            @endphp
-
-                            <tr>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido" colspan="7"></td>
-                            </tr>
-                            <tr>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido"></td>
-                                <td class="Contenido" colspan="4"></td>
-                            </tr>
-
-                        @php
-                            $contador++; // Incrementa el contador
-                        @endphp
-
-                    <tr>
-                        
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido" colspan="7">----</td>
-
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido">----</td>
-                            <td class="Contenido" colspan="4">----</td>
-
-                    </tr>
-
-                    <tr>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido" colspan="7">----</td>
-                            
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido">----</td>
-                                <td class="Contenido" colspan="4">----</td>
-                        
-                    </tr>
+            <tr class="celdaGris">
+                <th colspan="2">EQUIPO</th>
+                <th colspan="4">TRANSDUCTOR</th>
+                <th colspan="2">BLOCK DE REFERENCIA</th>
+                <th colspan="2">ACOPLANTE (MARCA Y TIPO)</th>
+            </tr>
+            <tr>
+                <th class="celdaGris">MARCA:</th>
+                <td>Smith</td>
+                <th class="celdaGris">MARCA:</th>
+                <td colspan="3">50</td>
+                <th class="celdaGris">MARCA:</th>
+                <td>Smith</td>
+                <td>Smith</td>
+            </tr>
+            <tr>
+                <th class="celdaGris">MODELO:</th>
+                <td>Jackson</td>
+                <th class="celdaGris">MODELO:</th>
+                <td colspan="3">94</td>
+                <th class="celdaGris">MODELO:</th>
+                <td>Jackson</td>
+                <th class="celdaGris">LONGITUD DEL CABLE:</th>
+            </tr>
+            <tr>
+                <th class="celdaGris">N.S.:</th>
+                <td>Jackson</td>
+                <th class="celdaGris">N.S.:</th>
+                <td>94</td>
+                <th class="celdaGris">FRECC:</th>
+                <td>Smith2</td>
+                <th class="celdaGris">N.S.:</th>
+                <td>Jackson</td>
+                <td>Smith3</td>
+            </tr>
         </tbody>
-
     </table>
 </div>
-    <table class="tablaManifiesto">
-        <tr>
-            <td class="notas" colspan="4"><strong class="letraRoja">Nota a):</strong> Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio. <br>
-                <strong class="letraRoja">Nota b):</strong> El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo. <br>
-                <strong class="letraRoja">Nota c):</strong> Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
-            </td>
-        </tr>
-    </table>
-        <footer>
-            <div class="">
-                <table class="tablaManifiesto">
-                    <thead>
-                        <tr>
-                            <th class="celdaAzul letraBlanca" colspan="3">SALIDA DE EQUIPOS Y ADICIONALES</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3" class="saltoBlanco"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td rowspan="2" class="Contenido" class="altoCelda"></td>
-                            <td rowspan="2" class="Contenido" class="altoCelda"></td>
-                            <td class="celdaAzul letraBlanca">Obsevaciones</td>
-                        </tr>
-                        <tr>
-                            <td class="altoCelda"></td>
-                        </tr>
-                        <tr>
-                            <td>Entrega: Nombre/cargo/firma</td>
-                            <td>Recibe: Nombre/cargo/firma </td>
-                            <td rowspan="2"></td>
-                        </tr>
-                        
-                        <tr>
-                            <td class="celdaAzul letraBlanca" colspan="3">RETORNO DE EQUIPOS Y ADICIONALES</td>
-                        </tr>
-                        <tr>
-                        <td colspan="2">Fecha de devolución a las instalaciones de AICO S.C. :
 
-                        </td>
 
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="celdaAzul letraBlanca">¿Los equipos retornan en optimas condiciones?</td>
-                                <td>
-                                    SI <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
-                                    NO <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
-                                    N/A <span style="border-bottom: 1px solid black; padding-bottom: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                </td>
-                            <td class="celdaAzul letraBlanca">Observaciones</td>
-                        </tr>
-                        <tr>
-                                    <td td class="Contenido" class="altoCelda"></td>
-                                    <td td class="Contenido" class="altoCelda"></td>
-                                    <td td class="Contenido" class="altoCelda" rowspan="2"></td>
+    <footer>
 
-                                    <td td class="Contenido" class="altoCelda"></td>
-                                    <td td class="Contenido" class="altoCelda"></td>
-                                    <td td class="Contenido" class="altoCelda" rowspan="2"></td>
-                        </tr>
-                        <tr>
-                            <td>Entrega: Nombre/cargo/firma</td>
-                            <td>Recibe: Nombre/cargo/firma </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </footer>
+
+    </footer>
     </body>
 </html>
