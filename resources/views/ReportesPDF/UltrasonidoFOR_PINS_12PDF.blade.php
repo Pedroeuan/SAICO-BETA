@@ -76,6 +76,19 @@
             font-size: 11px;
         }
 
+        .tablaManifiesto3 {
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .tablaManifiesto3 td, .tablaManifiesto3 th {
+            /*border: .6px solid black; 
+            font-size: 11px;*/
+        }
+
         .tabla-contenedor {
             display: flex;        /* Distribuir las tablas horizontalmente */
             justify-content: space-around; /* Separación uniforme entre las tablas */
@@ -104,6 +117,7 @@
         }
         .celdaAzul{
             background-color: #2F75B5;
+            border:black 2px double;
         }
         .letraBlanca{
             color: #ffffff;
@@ -116,12 +130,35 @@
         .celdaGris{
             background-color: #DBDBDB;
         }
-        /*oculta todo el borde de la tabla*/
-        .sinBorde{
-            border: 0px;
+
+        .celdaAmarillo{
+            background-color: #FFF2CC;
+        }
+        
+        .sinBordetd td {
+            border: 0px !important;
             text-align: center;
             border-collapse: collapse;
+            width: 100%;
+        }
+
+        .sinBordeth th {
+            border: 0px !important;
             text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        /*oculta todo el borde de la tabla*/
+        .sinBorde{
+            border: 0px !important;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .conBorde{
+            border: 10px;
+            text-align: center;
+            border-collapse: collapse;
             width: 100%;
         }
         .tablaContainer {
@@ -130,6 +167,7 @@
         body {
             padding-top: 60px; /* Ajusta el valor según la altura de tu header */
             /*font-family: "Arial", sans-serif; /* Cambiar a Arial */
+            /*margin: 0px 5px 5px 5px; /* Márgenes: arriba, derecha, abajo, izquierda */
         }
         /*muestra solo la linea inferior de la celda*/
         .lineaInferior{
@@ -189,9 +227,6 @@
             font-size: 11px;
         }
 
-        p {
-        border: red 5px double;
-        }
     </style>
 </head>
 <body>
@@ -276,17 +311,20 @@
         </tbody>
     </table>
 </div>
-<br>
-    
+
+<div style="margin-bottom: 4px;"></div>
+
 <div class="">
-    <table class="tablaManifiesto2">
+    <table class="tablaManifiesto3">
         <thead>
             <tr>
                 <th class="celdaAzul letraBlanca" colspan="9">DATOS DEL EQUIPO</th>
             </tr>
         </thead>
     </table>
+
     <div style="margin-bottom: 4px;"></div>
+
     <table class="tablaManifiesto2">
         <tbody>
             <tr class="celdaGris">
@@ -296,41 +334,235 @@
                 <th colspan="2">ACOPLANTE (MARCA Y TIPO)</th>
             </tr>
             <tr>
-                <th class="celdaGris">MARCA:</th>
-                <td>Smith</td>
-                <th class="celdaGris">MARCA:</th>
-                <td colspan="3">50</td>
-                <th class="celdaGris">MARCA:</th>
-                <td>Smith</td>
-                <td>Smith</td>
+                <th class="celdaGris" style="width: 80px;">MARCA:</th>
+                <td style="width: 182px;">1</td>
+                <th class="celdaGris" style="width: 80px;">MARCA:</th>
+                <td colspan="3" style="width: 100px;">2</td>
+                <th class="celdaGris" style="width: 80px;">MARCA:</th>
+                <td style="width: 182px;">3</td>
+                <td style="width: 182px;">4</td>
             </tr>
             <tr>
                 <th class="celdaGris">MODELO:</th>
-                <td>Jackson</td>
+                <td>5</td>
                 <th class="celdaGris">MODELO:</th>
-                <td colspan="3">94</td>
+                <td colspan="3">6</td>
                 <th class="celdaGris">MODELO:</th>
-                <td>Jackson</td>
+                <td>7</td>
                 <th class="celdaGris">LONGITUD DEL CABLE:</th>
             </tr>
             <tr>
                 <th class="celdaGris">N.S.:</th>
-                <td>Jackson</td>
+                <td>8</td>
                 <th class="celdaGris">N.S.:</th>
-                <td>94</td>
-                <th class="celdaGris">FRECC:</th>
-                <td>Smith2</td>
+                <td style="width: 94px;">9</td>
+                <th class="celdaGris" style="width: 50px;">FRECC:</th>
+                <td style="width: 60px;">10</td>
                 <th class="celdaGris">N.S.:</th>
-                <td>Jackson</td>
-                <td>Smith3</td>
+                <td>11</td>
+                <td>12</td>
             </tr>
         </tbody>
     </table>
 </div>
 
+<div style="margin-bottom: 2px;"></div>
+
+<table class="sinBorde">
+    <tbody>
+        <tr class="">
+            <th>GANANCIA:</th>
+            <td class="lineaInferior">1</td>
+            <th>RANGO</th>
+            <td class="lineaInferior">2</td>
+            <th>RECHAZO</th>
+            <td class="lineaInferior">3</td>
+            <th>SUPERFICIE</th>
+            <td class="lineaInferior">4</td>
+            <th>PINTURA</th>
+            <td class="lineaInferior">5</td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="margin-bottom: 5px;"></div>
+    <table class="tablaManifiesto3">
+        <thead>
+            <tr>
+                <th class="celdaAzul letraBlanca" colspan="9">RESULTADOS</th>
+            </tr>
+        </thead>
+    </table>
+
+<div style="margin-bottom: 2px;"></div>
+
+<table class="tablaManifiesto2">
+        <thead>
+            <tr class="celdaGris">
+                <th colspan="7">DATOS DEL MATERIAL</th>
+                <th colspan="8">DATOS DE LA INDICACIÓN</th>
+                <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
+                <th rowspan="2">Observaciones</th>
+            </tr>
+            <tr class="celdaGris">
+                <th>ID:</th>
+                <th>Elemento / Tubo</th>
+                <th>No. Aceptación</th>
+                <th>No. Serie</th>
+                <th>No. Colada</th>
+                <th>tnominal</th>
+                <th>Ø</th>
+
+                <th>No.Ind.</th>
+                <th>Tipo de Indicación</th>
+                <th>NR (%)</th>
+                <th>NI (%)</th>
+                <th>H.T.</th>
+                <th>Prof</th>
+                <th>LA</th>
+                <th>LC</th>
+
+                <th>tmáx</th>
+                <th>tmin</th>
+                <th>Metros Lineales</th>
+                <th>Evaluación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for($i = 0; $i < 14; $i++)
+            <tr>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+                <td>----</td>
+            </tr>
+            @endfor
+            <tr class="sinBordetd">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <th colspan="4">Longitud Inspeccionada:</th>
+                <th colspan="2">48.00 m</th>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-bottom: 5px;"></div>
+
+    <table class="tablaManifiesto2">
+        <thead>
+            <tr class="sinBordetd">
+                <td></td>
+                <th colspan="7" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
+                <th colspan="8" class="celdaAmarillo">DATOS DE LA INDICACIÓN</th>
+                <th colspan="4" class="celdaAmarillo">RESULTADOS DE LA INSPECCIÓN</th>
+                <th>Observaciones</th>
+            </tr>
+            <tr class="sinBordeth">
+                <th></th>
+                <td><strong>NPIR:</strong></td>
+                <td>NO PRESENTA INDICACIONES RELEVANTES</td>
+                <td><strong>CI:</strong></td>
+                <td>CORROSIÓN INTERNA</td>
+                <th></th>
+                <th></th>
+
+                <th>No.Ind.</th>
+                <th>Tipo de Indicación</th>
+                <th>NR (%)</th>
+                <th>NI (%)</th>
+                <th>H.T.</th>
+                <th>Prof</th>
+                <th>LA</th>
+                <th>LC</th>
+
+                <th>tmáx</th>
+                <th>tmin</th>
+                <th>Metros Lineales</th>
+                <th>Evaluación</th>
+                <th>Evaluación</th>
+            </tr>
+            <tr class="sinBordeth">
+                <th></th>
+                <td><strong>ZI:</strong></td>
+                <td>ZONA DE INCLUSIONES NO METALICAS</td>
+                <td><strong>I:</strong></td>
+                <td>CORROSIÓN INTERNA</td>
+                <th></th>
+                <th></th>
+
+                <th>No.Ind.</th>
+                <th>Tipo de Indicación</th>
+                <th>NR (%)</th>
+                <th>NI (%)</th>
+                <th>H.T.</th>
+                <th>Prof</th>
+                <th>LA</th>
+                <th>LC</th>
+
+                <th>tmáx</th>
+                <th>tmin</th>
+                <th>Metros Lineales</th>
+                <th>Evaluación</th>
+                <th>Evaluación</th>
+            </tr>
+            <tr class="sinBordeth">
+                <th></th>
+                <td><strong>LE:</strong></td>
+                <td>LAMINACIÓN ESCALONADA</td>
+                <td><strong>I:</strong></td>
+                <td>CORROSIÓN INTERNA</td>
+                <th></th>
+                <th></th>
+
+                <th>No.Ind.</th>
+                <th>Tipo de Indicación</th>
+                <th>NR (%)</th>
+                <th>NI (%)</th>
+                <th>H.T.</th>
+                <th>Prof</th>
+                <th>LA</th>
+                <th>LC</th>
+
+                <th>tmáx</th>
+                <th>tmin</th>
+                <th>Metros Lineales</th>
+                <th>Evaluación</th>
+                <th>Evaluación</th>
+            </tr>
+        </thead>
+    </table>
+
+
 
     <footer>
-
 
     </footer>
     </body>

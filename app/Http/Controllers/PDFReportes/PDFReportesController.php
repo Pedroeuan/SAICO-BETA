@@ -35,10 +35,16 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper('a4', 'landscape');;
+        //$pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper([0, 0, 800, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
     
         $canvas = $dompdf->getCanvas();
@@ -48,7 +54,7 @@ class PDFReportesController extends Controller
             $size = 10;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 664; // Ajusta esta posición X según sea necesario
+            $x = 630; // Ajusta esta posición X según sea necesario
             $y = 72;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
