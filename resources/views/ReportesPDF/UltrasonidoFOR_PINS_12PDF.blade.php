@@ -85,8 +85,10 @@
         }
 
         .tablaManifiesto3 td, .tablaManifiesto3 th {
-            /*border: .6px solid black; 
-            font-size: 11px;*/
+            border: .6px solid black; 
+            font-size: 8px;
+            text-align: center;
+            /*border:black 2px double;*/
         }
 
         .tabla-contenedor {
@@ -134,19 +136,29 @@
         .celdaAmarillo{
             background-color: #FFF2CC;
         }
+
+        .sinBordetdth td, .sinBordetdth th {
+            border: 0px !important;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+            /*font-size: 100px;*/
+        }
         
         .sinBordetd td {
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
+            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
             border: 0px !important;
-            text-align: center;
+            text-align: left;
             border-collapse: collapse;
             width: 100%;
+            /*font-size: 10px;*/
         }
         /*oculta todo el borde de la tabla*/
         .sinBorde{
@@ -314,13 +326,11 @@
 
 <div style="margin-bottom: 4px;"></div>
 
-<div class="">
-    <table class="tablaManifiesto3">
-        <thead>
+<div class="tablaContainer">
+    <table class="sinBorde">
             <tr>
                 <th class="celdaAzul letraBlanca" colspan="9">DATOS DEL EQUIPO</th>
             </tr>
-        </thead>
     </table>
 
     <div style="margin-bottom: 4px;"></div>
@@ -386,12 +396,11 @@
 </table>
 
 <div style="margin-bottom: 5px;"></div>
-    <table class="tablaManifiesto3">
-        <thead>
+
+    <table class="sinBorde">
             <tr>
                 <th class="celdaAzul letraBlanca" colspan="9">RESULTADOS</th>
             </tr>
-        </thead>
     </table>
 
 <div style="margin-bottom: 2px;"></div>
@@ -476,94 +485,142 @@
 
     <div style="margin-bottom: 5px;"></div>
 
-    <table class="tablaManifiesto2">
+    <table class="tablaManifiesto3">
         <thead>
+
             <tr class="sinBordetd">
+                <td style="width: 80px;"></td>
+                <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
+                <td style="width: 20px;"></td>
+                <td style="width: 20px;"></td>
+                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
                 <td></td>
-                <th colspan="7" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
-                <th colspan="8" class="celdaAmarillo">DATOS DE LA INDICACIÓN</th>
-                <th colspan="4" class="celdaAmarillo">RESULTADOS DE LA INSPECCIÓN</th>
-                <th>Observaciones</th>
             </tr>
+
             <tr class="sinBordeth">
                 <th></th>
-                <td><strong>NPIR:</strong></td>
-                <td>NO PRESENTA INDICACIONES RELEVANTES</td>
-                <td><strong>CI:</strong></td>
-                <td>CORROSIÓN INTERNA</td>
+                <td style="width: 20px;"><strong>NPIR:</strong></td>
+                <td style="width: 180px;">NO PRESENTA INDICACIONES RELEVANTES</td>
+                <td style="width: 20px;"><strong>CI:</strong></td>
+                <td style="width: 100px;">CORROSIÓN INTERNA</td>
                 <th></th>
                 <th></th>
 
-                <th>No.Ind.</th>
-                <th>Tipo de Indicación</th>
-                <th>NR (%)</th>
-                <th>NI (%)</th>
-                <th>H.T.</th>
-                <th>Prof</th>
-                <th>LA</th>
-                <th>LC</th>
-
-                <th>tmáx</th>
-                <th>tmin</th>
-                <th>Metros Lineales</th>
-                <th>Evaluación</th>
-                <th>Evaluación</th>
+                <td style="width: 20px;"><strong>tmin</strong></td>
+                <td style="width: 110px;">ESPESOR NÓMINAL (in)</td>
+                <td style="width: 20px;"><strong>LA</strong></td>
+                <td style="width: 150px;">LONGITUD AXIAN (IN)</td>
+                <td style="width: 20px;"><strong>tmin</strong></td>
+                <td style="width: 180px;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
+                <th></th>
             </tr>
+
             <tr class="sinBordeth">
                 <th></th>
                 <td><strong>ZI:</strong></td>
                 <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                <td><strong>I:</strong></td>
-                <td>CORROSIÓN INTERNA</td>
+                <td><strong>L:</strong></td>
+                <td>LAMINACIÓN</td>
                 <th></th>
                 <th></th>
 
-                <th>No.Ind.</th>
-                <th>Tipo de Indicación</th>
-                <th>NR (%)</th>
-                <th>NI (%)</th>
-                <th>H.T.</th>
-                <th>Prof</th>
-                <th>LA</th>
-                <th>LC</th>
-
-                <th>tmáx</th>
-                <th>tmin</th>
-                <th>Metros Lineales</th>
-                <th>Evaluación</th>
-                <th>Evaluación</th>
+                <td><strong>G:</strong></td>
+                <td>GANANCIA (dB)</td>
+                <td><strong>LC</strong></td>
+                <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
+                <td><strong>tmax</strong></td>
+                <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
+                <th></th>
             </tr>
+
             <tr class="sinBordeth">
                 <th></th>
                 <td><strong>LE:</strong></td>
                 <td>LAMINACIÓN ESCALONADA</td>
                 <td><strong>I:</strong></td>
-                <td>CORROSIÓN INTERNA</td>
+                <td>INCLUSIÓN NO METÁLICA</td>
                 <th></th>
                 <th></th>
 
-                <th>No.Ind.</th>
-                <th>Tipo de Indicación</th>
-                <th>NR (%)</th>
-                <th>NI (%)</th>
-                <th>H.T.</th>
-                <th>Prof</th>
-                <th>LA</th>
-                <th>LC</th>
-
-                <th>tmáx</th>
-                <th>tmin</th>
-                <th>Metros Lineales</th>
-                <th>Evaluación</th>
-                <th>Evaluación</th>
+                <td><strong>NR:</strong></td>
+                <td>NIVEL DE REFERENCIA (%)</td>
+                <td><strong>NI:</strong></td>
+                <td>NIVEL DE INDICACIÓN (%)</td>
+                <td><strong>Prof</strong></td>
+                <td>PROFUNDIDAD DE LA INDICACIÓN</td>
+                <th></th>
             </tr>
         </thead>
     </table>
 
+    <div style="margin-bottom: 20px;"></div>
+
+    <div class="tablaContainer">
+        <table class="sinBorde">
+            <tr>
+                <td class="datosGeneralesCortos">Observaciones:</td>
+                <td class="lineaInferior"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-bottom: 20px;"></div>
 
 
     <footer>
 
+        <div class="tablaContainer">
+            <table class="sinBorde">
+                <thead>
+
+                    <tr>
+                        <td style="width: 30px;"></td>
+                        <th>Realizó</th>
+                        <td style="width: 30px;"></td>
+                        <th>Vo.Bo.</th>
+                        <td style="width: 30px;"></td>
+                        <th>Vo.Bo.</th>
+                    </tr>
+
+                    <!--<tr class="sinBordetdth">-->
+                    <tr>
+                        <th></th>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>NOMBRE DEL TÉCNICO</strong></td>
+                        <td></td>
+                        <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                        <td></td>
+                        <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <th></th>
+                        <td><strong>NIVEL DEL TÉCNICO</strong></td>
+                        <td></td>
+                        <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                        <td></td>
+                        <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                        <td></td>
+                        <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </footer>
     </body>
 </html>

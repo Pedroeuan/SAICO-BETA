@@ -36,7 +36,7 @@ class PDFReportesController extends Controller
     
         // Cargar la vista con los datos
         //$pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper('a4', 'landscape');
-        $pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper([0, 0, 800, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper([0, 0, 800, 750]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
