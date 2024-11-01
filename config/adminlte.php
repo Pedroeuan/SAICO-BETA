@@ -309,6 +309,52 @@ return [
                 'period' => 60,                       // The update period for get new data (in seconds, optional).
             ],
         ],
+                // Sidebar Administrativo:
+                [
+                    'text' => 'REPORTES',
+                    'icon' => 'fas fa-file-alt',
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'FOR-PINS-03/01',
+                            'url' => '/Reporte/FOR-PINS-03/01',
+                            //can => 'nombre-ruta'
+                        ],
+                        [
+                            'text' => 'level_one',
+                            'url' => '#',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'level_two',
+                                    'url' => '#',
+                                ],
+                                [
+                                    'text' => 'level_two',
+                                    'url' => '#',
+                                    'submenu' => 
+                                    [
+                                        [
+                                            'text' => 'level_three',
+                                            'url' => '#',
+                                        ],
+                                        [
+                                            'text' => 'level_three',
+                                            'url' => '#',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+        
+                        [
+                            'text' => 'level_one',
+                            'url' => '#',
+                        ],
+                    ],
+                ],
+        
         // Sidebar Administrativo:
         [
             'text' => 'Planeacion',
@@ -364,7 +410,7 @@ return [
                 'submenu' => [
                     [
                         'text' => 'level_one',
-                        'url' => '/Reporte/FOR-PINS-11/02',
+                        'url' => '',
                     ],
                     [
                         'text' => 'level_one',
