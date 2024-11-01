@@ -193,7 +193,7 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
     
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
-    Route::get('/Reporte/UltrasonidoFOR_PINS_12', [PDFReportesController::class, 'UltrasonidoFOR_PINS_12'])->name('ReporteUltrasonidoFOR_PINS_12.PDF');
+    Route::get('/Reporte/FOR-PINS-11/02', [PDFReportesController::class, 'FOR_PINS_11_02'])->name('Reporte_FOR_PINS_11_02.PDF');
     });
     
     /*admin */

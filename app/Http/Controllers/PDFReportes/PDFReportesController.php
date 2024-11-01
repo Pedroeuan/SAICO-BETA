@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PDFReportesController extends Controller
 {
 
-    public function UltrasonidoFOR_PINS_12()
+    public function FOR_PINS_11_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -24,7 +24,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
     
         $data = [
-            'title' => 'ReporteUltrasonidoFOR_PINS_12.PDF',
+            'title' => 'Reporte_FOR-PINS-11/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -36,7 +36,7 @@ class PDFReportesController extends Controller
     
         // Cargar la vista con los datos
         //$pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper('a4', 'landscape');
-        $pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper([0, 0, 800, 750]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -64,6 +64,6 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('ReporteUltrasonidoFOR_PINS_12.PDF');
+        return $pdf->stream('Reporte_FOR_PINS_11_02.PDF');
     }
 }
