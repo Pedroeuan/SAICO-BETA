@@ -322,30 +322,8 @@ return [
                             //can => 'nombre-ruta'
                         ],
                         [
-                            'text' => 'level_one',
-                            'url' => '#',
-                            'submenu' => 
-                            [
-                                [
-                                    'text' => 'level_two',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_two',
-                                    'url' => '#',
-                                    'submenu' => 
-                                    [
-                                        [
-                                            'text' => 'level_three',
-                                            'url' => '#',
-                                        ],
-                                        [
-                                            'text' => 'level_three',
-                                            'url' => '#',
-                                        ],
-                                    ],
-                                ],
-                            ],
+                            'text' => 'FOR-PINS-04/01',
+                            'url' => '/Reporte/FOR-PINS-04/01',
                         ],
         
                         [
