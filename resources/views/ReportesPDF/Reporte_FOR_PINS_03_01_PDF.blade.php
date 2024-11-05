@@ -317,7 +317,7 @@
             <tr>
                 <td class="datosGeneralesCortos">PROCEDIMIENTO:</td>
                 <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos">CRITERIO DE EVALUACIÓN:</td>
+                <td class="datosGeneralesCortos" style="width: 180px;">CRITERIO DE EVALUACIÓN:</td>
                 <td class="lineaInferior"></td>
             </tr>
         </tbody>
@@ -422,37 +422,32 @@
 <table class="tablaManifiesto2">
         <thead>
             <tr class="celdaGris">
-                <th>No:</th>
-                <th>Elemento / Tubo</th>
-                <th>No. Aceptación</th>
-                <th>No. Serie</th>
-                <th>No. Colada</th>
-                <th>tnominal</th>
+                <th rowspan= "2">No:</th>
+                <th rowspan= "2">No. De Junta / Componente</th>
+                <th rowspan= "2">No. Indicación</th>
+                <th rowspan= "2">Tipo de Indicación</th>
+                <th rowspan= "2">No. Colada</th>
+                <th rowspan= "2">tnominal</th>
+                <th rowspan= "2">Ø</th>
+                <th rowspan= "2">No.Ind.</th>
+                <th rowspan= "2">Tipo de Indicación</th>
+
+                <th colspan="3">Dim. De Indicación</th>
+
+                <th>Localización</th>
+                <th rowspan= "2">Evaluación</th>
+                <th rowspan= "2">Longitud Inspeccionada</th>
+            </tr>
+            <tr class="celdaGris">
+                <th>Largo</th>
+                <th>Ancho</th>
                 <th>Ø</th>
-
-                <th>No.Ind.</th>
-                <th>Tipo de Indicación</th>
-                <th>NR (%)</th>
-                <th>NI (%)</th>
                 <th>H.T.</th>
-                <th>Prof</th>
-                <th>LA</th>
-                <th>LC</th>
-
-                <th>tmáx</th>
-                <th>tmin</th>
-                <th>Metros Lineales</th>
-                <th>Evaluación</th>
             </tr>
         </thead>
         <tbody>
             @for($i = 0; $i < 14; $i++)
             <tr>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
                 <td>----</td>
                 <td>----</td>
                 <td>----</td>
@@ -481,12 +476,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <th colspan="4">Longitud Inspeccionada:</th>
-                <th colspan="2">48.00 m</th>
-                <td></td>
+                <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
+                <th>0 m</th>
             </tr>
         </tbody>
     </table>
@@ -495,68 +486,35 @@
 
     <table class="tablaManifiesto3">
         <thead>
-
-            <tr class="sinBordetd">
-                <td style="width: 80px;"></td>
-                <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
-                <td style="width: 20px;"></td>
-                <td style="width: 20px;"></td>
-                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
-                <td></td>
+            <tr>
+                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
             </tr>
 
-            <tr class="sinBordeth">
-                <th></th>
-                <td style="width: 20px;"><strong>NPIR:</strong></td>
-                <td style="width: 180px;">NO PRESENTA INDICACIONES RELEVANTES</td>
-                <td style="width: 20px;"><strong>CI:</strong></td>
-                <td style="width: 100px;">CORROSIÓN INTERNA</td>
-                <th></th>
-                <th></th>
-
-                <td style="width: 20px;"><strong>tmin</strong></td>
-                <td style="width: 110px;">ESPESOR NÓMINAL (in)</td>
-                <td style="width: 20px;"><strong>LA</strong></td>
-                <td style="width: 150px;">LONGITUD AXIAN (IN)</td>
-                <td style="width: 20px;"><strong>tmin</strong></td>
-                <td style="width: 180px;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                <th></th>
+            <tr>
+                <td style="width: 20px;"><strong>NPIR</strong></td>
+                <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                <td style="width: 20px;"><strong>DM</strong></td>
+                <td style="width: 150px;">DAÑO MECÁNICO</td>
+                <td style="width: 20px;"><strong>PT</strong></td>
+                <td style="width: 180px;">POROSIDAD TUBULAR</td>
             </tr>
 
-            <tr class="sinBordeth">
-                <th></th>
-                <td><strong>ZI:</strong></td>
-                <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                <td><strong>L:</strong></td>
-                <td>LAMINACIÓN</td>
-                <th></th>
-                <th></th>
-
+            <tr>
                 <td><strong>G:</strong></td>
                 <td>GANANCIA (dB)</td>
                 <td><strong>LC</strong></td>
                 <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
                 <td><strong>tmax</strong></td>
                 <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
-                <th></th>
             </tr>
 
-            <tr class="sinBordeth">
-                <th></th>
-                <td><strong>LE:</strong></td>
-                <td>LAMINACIÓN ESCALONADA</td>
-                <td><strong>I:</strong></td>
-                <td>INCLUSIÓN NO METÁLICA</td>
-                <th></th>
-                <th></th>
-
+            <tr>
                 <td><strong>NR:</strong></td>
                 <td>NIVEL DE REFERENCIA (%)</td>
                 <td><strong>NI:</strong></td>
                 <td>NIVEL DE INDICACIÓN (%)</td>
                 <td><strong>Prof</strong></td>
                 <td>PROFUNDIDAD DE LA INDICACIÓN</td>
-                <th></th>
             </tr>
         </thead>
     </table>
