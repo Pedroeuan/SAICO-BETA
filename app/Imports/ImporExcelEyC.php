@@ -31,9 +31,6 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        //dd($row);
-        //Log::info('***********************');
-        //Log::info('row: ', ['row' => $row]);
         // Validar si la fila contiene un idGeneral_EyC
         if (empty($row['nombre_e_p_bp'])) { 
             return null; // Evita procesar filas sin un idGeneral_EyC

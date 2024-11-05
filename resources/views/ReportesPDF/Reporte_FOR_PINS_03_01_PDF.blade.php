@@ -118,7 +118,7 @@
             font-weight: bold;
         }
         .celdaAzul{
-            background-color: #2F75B5;
+            background-color: #305496;
             border:black 2px double;
         }
         .letraBlanca{
@@ -368,24 +368,46 @@
     </table>
 </div>
 
-<div style="margin-bottom: 2px;"></div>
+<div style="margin-bottom: 5px;"></div>
 
-<table class="sinBorde">
-    <tbody>
-        <tr class="">
-            <th>GANANCIA:</th>
-            <td class="lineaInferior">1</td>
-            <th>RANGO</th>
-            <td class="lineaInferior">2</td>
-            <th>RECHAZO</th>
-            <td class="lineaInferior">3</td>
-            <th>SUPERFICIE</th>
-            <td class="lineaInferior">4</td>
-            <th>PINTURA</th>
-            <td class="lineaInferior">5</td>
-        </tr>
-    </tbody>
-</table>
+<table class="tablaManifiesto2">
+        <tbody>
+            <tr class="celdaGris">
+                <th style="width: 180px;" >EQUIPO</th>
+                <th style="width: 100px;">MARCA</th>
+                <th style="width: 100px;">MODELO</th>
+                <th style="width: 100px;">N/S</th>
+                <th style="width: 100px;">CORRIENTE</th>
+                <th style="width: 100px;">DISTANCIA ENTRE PATAS</th>
+                
+            </tr>
+            <tr>
+                <td>YUGO ELECTROMÁGNETICO:</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-bottom: 5px;"></div>
+
+    <table class="sinBorde">
+        <tbody>
+            <tr class="">
+                <th>TIPO DE LUZ:</th>
+                <td class="lineaInferior">1</td>
+                <th>INTENCIDAD:</th>
+                <td class="lineaInferior">2</td> <th style="text-align: left; width: 10px;"> Lx </th>
+                <th>CONDICIÓN SUPERFICIAL:</th>
+                <td class="lineaInferior">3</td>
+                <th>TEMPERATURA DE PRUEBA:</th>
+                <td class="lineaInferior">4</td> <th style="text-align: left; width: 10px;"> °C </th>
+            </tr>
+        </tbody>
+    </table>
 
 <div style="margin-bottom: 5px;"></div>
 
@@ -400,13 +422,7 @@
 <table class="tablaManifiesto2">
         <thead>
             <tr class="celdaGris">
-                <th colspan="7">DATOS DEL MATERIAL</th>
-                <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr class="celdaGris">
-                <th>ID:</th>
+                <th>No:</th>
                 <th>Elemento / Tubo</th>
                 <th>No. Aceptación</th>
                 <th>No. Serie</th>
