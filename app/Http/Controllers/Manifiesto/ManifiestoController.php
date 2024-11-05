@@ -34,8 +34,33 @@ class ManifiestoController extends Controller
 
     public function getCount()
     {
-        $total = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]{4}-[0-9]+/[0-9]{2}$')->count();
-        return response()->json(['total' => $total]);
+    // Obtener el año actual en formato de dos dígitos
+    $currentYear = date('y');
+
+    // Expresión regular para extraer folios del año actual con el formato deseado
+    $folios = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]{4}-[0-9]+/' . $currentYear . '$')
+        ->pluck('Folio');
+
+    // Inicializar el número más alto en 0
+    $highestNumber = 0;
+
+    // Recorrer los folios obtenidos y extraer el número posterior al guion
+    foreach ($folios as $folio) {
+        // Extraer el número usando expresión regular
+        if (preg_match('/^[A-Z]{4}-([0-9]+)/', $folio, $matches)) {
+            // Convertir el número extraído a entero
+            $number = (int) $matches[1];
+
+            // Comparar con el número más alto actual
+            if ($number > $highestNumber) {
+                $highestNumber = $number;
+            }
+        }
+    }
+
+    // Retornar el número más alto en formato JSON
+    return response()->json(['total' => $highestNumber]);
+
     }
 
     public function BotonRegresar($id)
