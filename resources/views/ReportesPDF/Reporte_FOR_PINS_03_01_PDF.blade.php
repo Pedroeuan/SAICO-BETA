@@ -276,7 +276,7 @@
         <tbody>
             <tr>
                 <td class="datosGeneralesCortos">FECHA:</td>
-                <td class="lineaInferior"><label for=""></label></td>
+                <td class="lineaInferior"></td>
                 <td class="datosGeneralesCortos">NO. REPORTE:</td>
                 <td class="lineaInferior"></td>
             </tr>
@@ -317,7 +317,7 @@
             <tr>
                 <td class="datosGeneralesCortos">PROCEDIMIENTO:</td>
                 <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos" style="width: 180px;">CRITERIO DE EVALUACIÓN:</td>
+                <td class="datosGeneralesCortos" style="width: 160px;">CRITERIO DE EVALUACIÓN:</td>
                 <td class="lineaInferior"></td>
             </tr>
         </tbody>
@@ -569,7 +569,7 @@
                     
                     <tr>
                         <th></th>
-                        <td><strong>NIVEL DEL TÉCNICO</strong></td>
+                        <td><strong>Técnico N-II SNT-TC-1A</strong></td>
                         <td></td>
                         <td><strong>PUESTO DEL ENCARGADO</strong></td>
                         <td></td>
