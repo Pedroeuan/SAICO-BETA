@@ -205,13 +205,26 @@
             padding: 0 0px;
             z-index: 1000; /* Asegura que el header esté por encima */
         }
+        /* Footer que se repetirá en cada página */
         footer {
-            position: sticky;
-            bottom: -60px;
+            position: fixed;
+            /*op: 0px;*/
+            bottom: 0px;
             left: 0px;
             right: 0px;
-            height: 100px; /*400*/
+            height: 150px;
+            display: flex;
+            align-items: center;
+            padding: 0 0px;
+            z-index: 1000; /* Asegura que el header esté por encima */
         }
+
+        /* Contenido del footer */
+        /*footer .tablaContainer {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }*/
         .altoCelda{
             height: 70px;
         }
@@ -446,7 +459,7 @@
             </tr>
         </thead>
         <tbody>
-            @for($i = 0; $i < 14; $i++)
+            @for($i = 0; $i < 54; $i++)
             <tr>
                 <td>----</td>
                 <td>----</td>
@@ -532,9 +545,7 @@
 
     <div style="margin-bottom: 20px;"></div>
 
-
     <footer>
-
         <div class="tablaContainer">
             <table class="sinBorde">
                 <thead>

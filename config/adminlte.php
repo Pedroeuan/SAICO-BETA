@@ -325,10 +325,14 @@ return [
                             'text' => 'FOR-PINS-04/01',
                             'url' => '/Reporte/FOR-PINS-04/01',
                         ],
-        
                         [
-                            'text' => 'level_one',
-                            'url' => '#',
+                            'text' => 'FOR-PINS-05/01',
+                            'url' => '/Reporte/FOR-PINS-05/01',
+                        ],
+
+                        [
+                            'text' => 'FOR-PINS-11/02',
+                            'url' => '/Reporte/FOR-PINS-11/02',
                         ],
                     ],
                 ],

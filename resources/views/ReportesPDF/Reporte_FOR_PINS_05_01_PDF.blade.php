@@ -118,7 +118,7 @@
             font-weight: bold;
         }
         .celdaAzul{
-            background-color: #2F75B5;
+            background-color: #305496;
             border:black 2px double;
         }
         .letraBlanca{
@@ -239,6 +239,17 @@
             font-size: 11px;
         }
 
+        .rotar-texto {
+            font-size: 12px !important; /* Ajusta el tamaño de la fuente aquí */
+            text-align: center; /* Centra el texto horizontalmente */
+            padding: 0;
+        }
+
+        .rotar-texto span{
+            display: inline-block; /* Necesario para la rotación */
+            transform: rotate(270deg); /* Rota solo el texto */
+    }
+
     </style>
 </head>
 <body>
@@ -248,16 +259,16 @@
             <tr>
                 <th class="" style="width: 500px;">Formato</th>
                 <td class="" style="width: 100px;">Código:</td>
-                <td class="" style="width: 80px;">FOR-PINS-12</td>
+                <td class="" style="width: 80px;">FOR-PINS-05/01</td>
                 <th rowspan="3" style="width: 100px;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
             </tr>
         </thead>
 
         <tbody>
             <tr>
-                <th rowspan="2" style="width: 500px;"> INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                <th rowspan="2" style="width: 500px;"> INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES </th>
                 <td class="" style="width: 100px;">Versión</td>
-                <td class="" style="width: 80px;">1</td>
+                <td class="" style="width: 80px;">2</td>
             </tr>
             <tr>
                 <td class="" style="width: 100px;">Página</td>
@@ -276,7 +287,7 @@
         <tbody>
             <tr>
                 <td class="datosGeneralesCortos">FECHA:</td>
-                <td class="lineaInferior"><label for=""></label></td>
+                <td class="lineaInferior"></td>
                 <td class="datosGeneralesCortos">NO. REPORTE:</td>
                 <td class="lineaInferior"></td>
             </tr>
@@ -329,7 +340,7 @@
 <div class="tablaContainer">
     <table class="sinBorde">
             <tr>
-                <th class="celdaAzul letraBlanca" colspan="9">DATOS DEL EQUIPO</th>
+                <th class="celdaAzul letraBlanca" colspan="9">DATOS DE LA INSPECCIÓN</th>
             </tr>
     </table>
 
@@ -341,16 +352,16 @@
                 <th colspan="2">EQUIPO</th>
                 <th colspan="4">TRANSDUCTOR</th>
                 <th colspan="2">BLOCK DE REFERENCIA</th>
-                <th colspan="2">ACOPLANTE (MARCA Y TIPO)</th>
+                <th>ACOPLANTE</th>
             </tr>
             <tr>
-                <th class="celdaGris" style="width: 80px;">MARCA:</th>
+                <th class="celdaGris" style="width: 60px;">MARCA:</th>
                 <td style="width: 182px;">1</td>
-                <th class="celdaGris" style="width: 80px;">MARCA:</th>
-                <td colspan="3" style="width: 100px;">2</td>
-                <th class="celdaGris" style="width: 80px;">MARCA:</th>
+                <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                <td colspan="3">2</td>
+                <th class="celdaGris" style="width: 60px;">MARCA:</th>
                 <td style="width: 182px;">3</td>
-                <td style="width: 180px;">4</td>
+                <th class="celdaGris" style="width: 181px;">(MARCA Y TIPO)</th>
             </tr>
             <tr>
                 <th class="celdaGris">MODELO:</th>
@@ -359,38 +370,52 @@
                 <td colspan="3">6</td>
                 <th class="celdaGris">MODELO:</th>
                 <td>7</td>
-                <th class="celdaGris">LONGITUD DEL CABLE:</th>
+                <td rowspan="2">12</td>
             </tr>
             <tr>
                 <th class="celdaGris">N.S.:</th>
                 <td>8</td>
                 <th class="celdaGris">N.S.:</th>
-                <td style="width: 94px;">9</td>
+                <td style="width: 90px;">9</td>
                 <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                <td style="width: 60px;">10</td>
+                <td style="width: 70px;">10</td>
                 <th class="celdaGris">N.S.:</th>
                 <td>11</td>
-                <td>12</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<div style="margin-bottom: 2px;"></div>
+<div style="margin-bottom: 5px;"></div>
 
-<table class="sinBorde">
+    <table class="sinBorde">
+            <tr>
+                <th class="celdaAzul letraBlanca" colspan="9">AJUSTE DEL EQUIPO</th>
+            </tr>
+    </table>
+
+    <div style="margin-bottom: 2px;"></div>
+
+    <table class="sinBorde">
     <tbody>
         <tr class="">
             <th>GANANCIA:</th>
             <td class="lineaInferior">1</td>
-            <th>RANGO</th>
+            <th>TIPO DE JUNTA:</th>
             <td class="lineaInferior">2</td>
-            <th>RECHAZO</th>
-            <td class="lineaInferior">3</td>
-            <th>SUPERFICIE</th>
-            <td class="lineaInferior">4</td>
-            <th>PINTURA</th>
-            <td class="lineaInferior">5</td>
+            <th rowspan="3" style="width: 100px;"><img class="FOR_PINS_05_01" src="{{ $FOR_PINS_05_01 }}" alt="FOR_PINS_05_01" style="width: 80px; height: auto;"></th>
+        </tr>
+        <tr class="">
+            <th>RECHAZO:</th>
+            <td class="lineaInferior">1</td>
+            <th>DIAMETRO:</th>
+            <td class="lineaInferior">2</td>
+        </tr>
+        <tr class="">
+            <th>RETARDO:</th>
+            <td class="lineaInferior">1</td>
+            <th>ESPESOR:</th>
+            <td class="lineaInferior">2</td>
         </tr>
     </tbody>
 </table>
@@ -408,41 +433,50 @@
 <table class="tablaManifiesto2">
         <thead>
             <tr class="celdaGris">
-                <th colspan="7">DATOS DEL MATERIAL</th>
-                <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                <th rowspan="2">Observaciones</th>
+                <th rowspan= "3" class="rotar-texto"><span>Número de junta</span></th>
+                <th rowspan= "3" class="rotar-texto"><span>No. Indicación</span></th>
+                <th rowspan= "3" class="rotar-texto"><span>Ángulo de inspección</span></th>
+                <th rowspan= "3" class="rotar-texto"><span>Desde la cara</span></th>
+                <th rowspan= "3" class="rotar-texto"><span>Pierna</span></th>
+
+                <th colspan= "4">Decibeles</th>
+
+                <th colspan= "5">Discontinuidad</th>
+
+                <th rowspan="3" class="rotar-texto"><span>Clase de la discontinuidad</span></th>
+                <th rowspan="3" class="rotar-texto"><span>Evaluación</span></th>
+
+                <th rowspan= "3" style="width: 70px;">Observaciones</th>
+
             </tr>
+
+
             <tr class="celdaGris">
-                <th>ID:</th>
-                <th>Elemento / Tubo</th>
-                <th>No. Aceptación</th>
-                <th>No. Serie</th>
-                <th>No. Colada</th>
-                <th>tnominal</th>
-                <th>Ø</th>
+                <th class="rotar-texto" style="height: 60px;"><span>Nivel de indicación</span></th>
+                <th class="rotar-texto"><span>Nivel de referencia</span></th>
+                <th class="rotar-texto"><span>Factor de atenuación</span></th>
+                <th class="rotar-texto"><span>Relación de indicación</span></th>
 
-                <th>No.Ind.</th>
-                <th>Tipo de Indicación</th>
-                <th>NR (%)</th>
-                <th>NI (%)</th>
-                <th>H.T.</th>
-                <th>Prof</th>
-                <th>LA</th>
-                <th>LC</th>
+                <th rowspan= "2" class="rotar-texto"><span>Longitud</span></th>
+                <th rowspan= "2" class="rotar-texto"><span>Distancia angular</span></th>
+                <th rowspan= "2" class="rotar-texto"><span>Profundidad desde A</span></th>
 
-                <th>tmáx</th>
-                <th>tmin</th>
-                <th>Metros Lineales</th>
-                <th>Evaluación</th>
+                <th colspan= "2">Posición</th>
+            </tr>
+
+            <tr class="celdaGris">
+                <th>a</th>
+                <th>b</th>
+                <th>c</th>
+                <th>d</th>
+
+                <th style="width: 30px;">X</th>
+                <th style="width: 30px;">Y</th>
             </tr>
         </thead>
         <tbody>
             @for($i = 0; $i < 14; $i++)
             <tr>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
                 <td>----</td>
                 <td>----</td>
                 <td>----</td>
@@ -475,82 +509,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <th colspan="4">Longitud Inspeccionada:</th>
-                <th colspan="2">48.00 m</th>
-                <td></td>
+                <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
+                <th>0 m</th>
             </tr>
         </tbody>
-    </table>
-
-    <div style="margin-bottom: 5px;"></div>
-
-    <table class="tablaManifiesto3">
-        <thead>
-
-            <tr class="sinBordetd">
-                <td style="width: 80px;"></td>
-                <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
-                <td style="width: 20px;"></td>
-                <td style="width: 20px;"></td>
-                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
-                <td></td>
-            </tr>
-
-            <tr class="sinBordeth">
-                <th></th>
-                <td style="width: 20px;"><strong>NPIR:</strong></td>
-                <td style="width: 180px;">NO PRESENTA INDICACIONES RELEVANTES</td>
-                <td style="width: 20px;"><strong>CI:</strong></td>
-                <td style="width: 100px;">CORROSIÓN INTERNA</td>
-                <th></th>
-                <th></th>
-
-                <td style="width: 20px;"><strong>tmin</strong></td>
-                <td style="width: 110px;">ESPESOR NÓMINAL (in)</td>
-                <td style="width: 20px;"><strong>LA</strong></td>
-                <td style="width: 150px;">LONGITUD AXIAN (IN)</td>
-                <td style="width: 20px;"><strong>tmin</strong></td>
-                <td style="width: 180px;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                <th></th>
-            </tr>
-
-            <tr class="sinBordeth">
-                <th></th>
-                <td><strong>ZI:</strong></td>
-                <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                <td><strong>L:</strong></td>
-                <td>LAMINACIÓN</td>
-                <th></th>
-                <th></th>
-
-                <td><strong>G:</strong></td>
-                <td>GANANCIA (dB)</td>
-                <td><strong>LC</strong></td>
-                <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
-                <td><strong>tmax</strong></td>
-                <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
-                <th></th>
-            </tr>
-
-            <tr class="sinBordeth">
-                <th></th>
-                <td><strong>LE:</strong></td>
-                <td>LAMINACIÓN ESCALONADA</td>
-                <td><strong>I:</strong></td>
-                <td>INCLUSIÓN NO METÁLICA</td>
-                <th></th>
-                <th></th>
-
-                <td><strong>NR:</strong></td>
-                <td>NIVEL DE REFERENCIA (%)</td>
-                <td><strong>NI:</strong></td>
-                <td>NIVEL DE INDICACIÓN (%)</td>
-                <td><strong>Prof</strong></td>
-                <td>PROFUNDIDAD DE LA INDICACIÓN</td>
-                <th></th>
-            </tr>
-        </thead>
     </table>
 
     <div style="margin-bottom: 20px;"></div>
@@ -575,11 +537,11 @@
 
                     <tr>
                         <td style="width: 30px;"></td>
-                        <th>Realizó</th>
+                        <th></th>
                         <td style="width: 30px;"></td>
-                        <th>Vo.Bo.</th>
+                        <th></th>
                         <td style="width: 30px;"></td>
-                        <th>Vo.Bo.</th>
+                        <th></th>
                     </tr>
 
                     <!--<tr class="sinBordetdth">-->
@@ -603,7 +565,7 @@
                     
                     <tr>
                         <th></th>
-                        <td><strong>NIVEL DEL TÉCNICO</strong></td>
+                        <td><strong>Técnico N-II SNT-TC-1A</strong></td>
                         <td></td>
                         <td><strong>PUESTO DEL ENCARGADO</strong></td>
                         <td></td>

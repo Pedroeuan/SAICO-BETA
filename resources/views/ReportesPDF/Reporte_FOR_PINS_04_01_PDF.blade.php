@@ -535,11 +535,11 @@
 
                     <tr>
                         <td style="width: 30px;"></td>
-                        <th>Realizó</th>
+                        <th></th>
                         <td style="width: 30px;"></td>
-                        <th>Vo.Bo.</th>
+                        <th></th>
                         <td style="width: 30px;"></td>
-                        <th>Vo.Bo.</th>
+                        <th></th>
                     </tr>
 
                     <!--<tr class="sinBordetdth">-->
