@@ -309,6 +309,34 @@ return [
                 'period' => 60,                       // The update period for get new data (in seconds, optional).
             ],
         ],
+                // Sidebar Administrativo:
+                [
+                    'text' => 'REPORTES',
+                    'icon' => 'fas fa-file-alt',
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'FOR-PINS-03/01',
+                            'url' => '/Reporte/FOR-PINS-03/01',
+                            //can => 'nombre-ruta'
+                        ],
+                        [
+                            'text' => 'FOR-PINS-04/01',
+                            'url' => '/Reporte/FOR-PINS-04/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-05/01',
+                            'url' => '/Reporte/FOR-PINS-05/01',
+                        ],
+
+                        [
+                            'text' => 'FOR-PINS-11/02',
+                            'url' => '/Reporte/FOR-PINS-11/02',
+                        ],
+                    ],
+                ],
+        
         // Sidebar Administrativo:
         [
             'text' => 'Planeacion',
@@ -364,7 +392,7 @@ return [
                 'submenu' => [
                     [
                         'text' => 'level_one',
-                        'url' => '#',
+                        'url' => '',
                     ],
                     [
                         'text' => 'level_one',

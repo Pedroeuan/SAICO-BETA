@@ -223,7 +223,7 @@
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Descripción</th>
-                        <th class="">No. ECO</th>
+                        <th class="" style="width: 60px;">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">SAT</th>
                         <th class="">BMPRO</th>
@@ -235,7 +235,7 @@
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Descripción</th>
-                        <th class="">No. ECO</th>
+                        <th class="" style="width: 60px;">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">Marca</th>
                         <th class="">Modelo</th>
