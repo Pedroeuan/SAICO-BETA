@@ -36,7 +36,7 @@ class PDFReportesController extends Controller
     
         // Cargar la vista con los datos
         //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper('letter', 'landscape');
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();

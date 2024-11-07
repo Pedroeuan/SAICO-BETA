@@ -7,23 +7,21 @@
             margin: 45px 25px;
             counter-reset: page; /* Inicializa el contador de páginas */
         /*}*/
-        .page-num-container {
-            position: fixed; /* Fija la posición del contenedor */
-            bottom: 20px;   /* Ajusta la posición vertical */
-            right: 20px;    /* Ajusta la posición horizontal */
-            font-size: 10px;
+        /*.page-num-container {
+            /*position: fixed; /* Fija la posición del contenedor */
+            /*bottom: 20px;   /* Ajusta la posición vertical */
+            /*right: 20px;    /* Ajusta la posición horizontal */
+            /*font-size: 10px;
             text-align: right;
-        }
+        }*/
         /* Ajusta la celda al texto en los datos generales */
         .datosGeneralesCortos{
-            /*font-weight: bold;*/
+            font-weight: bold;
             width: 100px;
-            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
         .respuestasGenerales{
-            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
@@ -180,7 +178,6 @@
         .lineaInferior{
             border-bottom: 1px solid black;
             /*font-weight: bold;*/
-            /*font-family: Arial;*/
             font-size: 11px;
             text-align: center;
         }
@@ -203,26 +200,40 @@
         }
 
         body {
-        margin-top: 370px; /* Altura del header */
-        margin-bottom: 200px; /* Altura del footer */
+        margin-top: 425px; /* Altura del header */
+        margin-bottom: 220px; /* Altura del footer */
         }
 
-
-        footer {
-            position: sticky;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 100px; /*400*/
-        }
 
         /*footer {
-            position: sticky;
+            position: fixed;
             bottom: -60px;
             left: 0px;
             right: 0px;
-            height: 100px;
+            height: 250px; 
         }*/
+
+            footer {
+            position: fixed;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            height: 200px;
+            /*background-color: #fff; /* Color de fondo, si lo deseas */
+            /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
+            }
+/*
+        footer {
+            position: fixed;
+            top: 780px;
+            left: 0px;
+            right: 0px;
+            height: 0px;
+            display: flex;
+            align-items: center;
+            padding: 0 0px;
+            /*z-index: 1000; /* Asegura que el header esté por encima */
+        /*}*/
         .altoCelda{
             height: 70px;
         }
@@ -250,11 +261,6 @@
             font-size: 11px;
         }
 
-        .negritas{
-            font-weight: bold;
-            text-align: center;
-        }
-
     </style>
 </head>
     <body>
@@ -262,9 +268,9 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th class="" style="width: 500px;">Formato</th>
-                            <td class="" style="width: 100px;">Código:</td>
-                            <td class="" style="width: 80px;">FOR-PINS-03/01</td>
+                            <th class="" style="width: 500px;">FORMATO</th>
+                            <th class="" style="width: 100px;">Código:</th>
+                            <th class="" style="width: 80px;">FOR-PINS-03/01</th>
                             <th rowspan="3" style="width: 100px;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
                         </tr>
                     </thead>
@@ -272,13 +278,12 @@
                     <tbody>
                         <tr>
                             <th rowspan="2" style="width: 500px;"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
-                            <td class="" style="width: 100px;">Versión</td>
-                            <td class="" style="width: 80px;">3</td>
+                            <th class="" style="width: 100px;">Versión</th>
+                            <th class="" style="width: 80px;">3</th>
                         </tr>
                         <tr>
-                            <td class="" style="width: 100px;">Página</td>
-                            <td class="page-num-container">
-                            </td>
+                            <th class="" style="width: 100px;">Página</th>
+                            <th class="page-num-container"></th>
                         </tr>
                     </tbody>
                 </table>
@@ -349,11 +354,11 @@
             <div class="Contenido">
                 <table class="sinBorde">
                         <tr>
-                            <td class="celdaAzul letraBlanca" colspan="4">DATOS DE LA INSPECCIÓN</td>
+                            <th class="celdaAzul letraBlanca" colspan="4">DATOS DE LA INSPECCIÓN</th>
                         </tr>
                 </table>
             </div>
-</header>                
+
                 <div style="margin-bottom: 4px;"></div>
 
                 <table class="tablaManifiesto2">
@@ -436,23 +441,17 @@
                         <th class="celdaAzul letraBlanca" colspan="9">RESULTADOS</th>
                     </tr>
             </table>
-        <!--</header>-->
+</header>
 
         <div style="margin-bottom: 2px;"></div>
 
     <table class="tablaManifiesto2">
             <thead>
                 <tr class="celdaGris">
-                    <th rowspan= "2">No:</th>
+                    <th rowspan= "2">No.</th>
                     <th rowspan= "2">No. De Junta / Componente</th>
                     <th rowspan= "2">No. Indicación</th>
                     <th rowspan= "2">Tipo de Indicación</th>
-                    <th rowspan= "2">No. Colada</th>
-                    <th rowspan= "2">tnominal</th>
-                    <th rowspan= "2">Ø</th>
-                    <th rowspan= "2">No.Ind.</th>
-                    <th rowspan= "2">Tipo de Indicación</th>
-
                     <th colspan="3">Dim. De Indicación</th>
 
                     <th>Localización</th>
@@ -467,13 +466,8 @@
                 </tr>
             </thead>
             <tbody>
-                @for($i = 0; $i < 64; $i++)
+                @for($i = 0; $i < 24; $i++)
                 <tr>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
                     <td>----</td>
                     <td>----</td>
                     <td>----</td>
@@ -492,18 +486,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
                     <th>0 m</th>
                 </tr>
             </tbody>
         </table>
 
-        <div style="margin-bottom: 5px;"></div>
 <footer>
         <table class="tablaManifiesto3">
             <thead>
@@ -521,22 +509,32 @@
                 </tr>
 
                 <tr>
-                    <td><strong>G:</strong></td>
-                    <td>GANANCIA (dB)</td>
-                    <td><strong>LC</strong></td>
-                    <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
-                    <td><strong>tmax</strong></td>
-                    <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
+                    <td><strong>G</strong></td>
+                    <td>GRIETA</td>
+                    <td><strong>S</strong></td>
+                    <td>SOCAVADO</td>
+                    <td><strong>C</strong></td>
+                    <td>CRATER</td>
                 </tr>
 
                 <tr>
-                    <td><strong>NR:</strong></td>
-                    <td>NIVEL DE REFERENCIA (%)</td>
-                    <td><strong>NI:</strong></td>
-                    <td>NIVEL DE INDICACIÓN (%)</td>
-                    <td><strong>Prof</strong></td>
-                    <td>PROFUNDIDAD DE LA INDICACIÓN</td>
+                    <td><strong>ZG</strong></td>
+                    <td>ZONA DE GRIETAS</td>
+                    <td><strong>P</strong></td>
+                    <td>POROSIDAD</td>
+                    <td><strong>IL</strong></td>
+                    <td>INDICACIÓN LINEAL</td>
                 </tr>
+
+                <tr>
+                    <td><strong>FF</strong></td>
+                    <td>FALTA DE FUSIÓN</td>
+                    <td><strong>ZP</strong></td>
+                    <td>ZONA DE POROS</td>
+                    <td><strong>IR</strong></td>
+                    <td>INDICACIÓN REDONDEADA</td>
+                </tr>
+
             </thead>
         </table>
 
