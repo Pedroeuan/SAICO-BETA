@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PDFReportesController extends Controller
 {
+
     public function FOR_PINS_03_01()
     {
         $user = Auth::user();
@@ -42,9 +43,7 @@ class PDFReportesController extends Controller
         // Configurar márgenes personalizados (en milímetros)
         $options = $dompdf->getOptions();
         $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
-        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
-        $options->set(['isHtml5ParserEnabled' => true, 'isPhpEnabled' => true]);  // [arriba, derecha, abajo, izquierda]
-
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
         $dompdf->setOptions($options);
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
     
@@ -52,10 +51,10 @@ class PDFReportesController extends Controller
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 10;
+            $size = 9;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 598; // Ajusta esta posición X según sea necesario
+            $x = 588; // Ajusta esta posición X según sea necesario
             $y = 72;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
