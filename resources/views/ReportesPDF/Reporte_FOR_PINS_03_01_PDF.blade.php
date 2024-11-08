@@ -204,15 +204,6 @@
         margin-bottom: 220px; /* Altura del footer */
         }
 
-
-        /*footer {
-            position: fixed;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 250px; 
-        }*/
-
             footer {
             position: fixed;
             bottom: 0px;
@@ -222,7 +213,15 @@
             /*background-color: #fff; /* Color de fondo, si lo deseas */
             /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
             }
-/*
+            
+            /*footer {
+            position: fixed;
+            bottom: -60px;
+            left: 0px;
+            right: 0px;
+            height: 250px; 
+        }*/
+        /*
         footer {
             position: fixed;
             top: 780px;

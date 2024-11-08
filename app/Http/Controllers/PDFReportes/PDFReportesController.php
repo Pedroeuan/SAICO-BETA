@@ -7,11 +7,41 @@ use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class PDFReportesController extends Controller
 {
 
     public function FOR_PINS_03_01()
+{
+    $user = Auth::user();
+    $nombre = $user->name;
+
+    $Logo = public_path('images/Logo_AICO_R.jpg');
+
+    $data = [
+        'title' => 'Reporte_FOR-PINS-03/01.PDF',
+        'nombre' => $nombre,
+        'Logo' => $Logo,
+    ];
+
+    // Generar el PDF con Snappy
+    $pdf = SnappyPdf::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)
+                    ->setOption('page-size', 'A4')
+                    ->setOption('orientation', 'landscape')
+                    ->setOption('margin-top', '10mm')
+                    ->setOption('margin-right', '10mm')
+                    ->setOption('margin-bottom', '10mm')
+                    ->setOption('margin-left', '10mm');
+
+    // Agregar el pie de página con el número de página
+    $pdf->setOption('footer-right', '[page] de [toPage]')
+        ->setOption('footer-font-size', '9');
+
+    return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
+}
+
+    public function FOR_PINS_03_01__()
     {
         $user = Auth::user();
         $nombre = $user->name;
