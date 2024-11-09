@@ -3,26 +3,54 @@
 <head>
     <title>Manifiesto</title>
     <style>
-        /*@page {
-            margin: 45px 25px;
-            counter-reset: page; /* Inicializa el contador de páginas */
-        /*}*/
-        /*.page-num-container {
-            /*position: fixed; /* Fija la posición del contenedor */
-            /*bottom: 20px;   /* Ajusta la posición vertical */
-            /*right: 20px;    /* Ajusta la posición horizontal */
-            /*font-size: 10px;
-            text-align: right;
-        }*/
+        @page {
+            header: html_myHeader; /* Nombre del bloque HTML para el header */
+            footer: html_myFooter; /* Nombre del bloque HTML para el footer */
+            margin-top: 30px;
+            margin-bottom: 50px;
+        } 
+
+        body {
+            font-family: Arial, sans-serif; /* Cambia a la fuente que prefieras */
+            /*font-size: 8px; /* Ajusta el tamaño según tus necesidades */
+            margin-top: 425px; /* Altura del header */
+            margin-bottom: 220px; /* Altura del footer */
+        }
+
+        .tablaheader {
+            border-collapse: collapse;  /* No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 50px;
+        }
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaheader td, .tablaheader th {
+            width: 70%;
+            border: 1px solid black; 
+            /*font-size: 11px;*/
+        }
+
+        .celdaAzul{
+            background-color: #305496;
+            border:black 2px double;
+        }
+        .letraBlanca{
+            color: #ffffff;
+            /*font-weight: bold;*/
+        }
+
+
+        /********VERIFICAR*********/
         /* Ajusta la celda al texto en los datos generales */
         .datosGeneralesCortos{
             font-weight: bold;
             width: 100px;
-            font-size: 11px;
+            /*font-size: 11px;*/
             text-align: center;
         }
         .respuestasGenerales{
-            font-size: 11px;
+            /*font-size: 11px;*/
             text-align: center;
         }
         /* borde para tabla-yacziry*/
@@ -33,45 +61,34 @@
             text-align: center;
             font-size: 11px;
         }*/
-        .tablaheader {
-            border-collapse: collapse;  /* No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
 
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaheader td, .tablaheader th {
-            width: 70%;
-            border: 1px solid black; 
-            font-size: 11px;
-        }
+
+
         .tablaManifiesto {
             border-collapse: collapse;  /* No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
 
         /* Aplica el borde a las celdas de la tabla */
         .tablaManifiesto td, .tablaManifiesto th {
             border: .6px solid black; 
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
         .tablaManifiesto2 {
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
 
         /* Aplica el borde a las celdas de la tabla */
         .tablaManifiesto2 td, .tablaManifiesto2 th {
             border: .6px solid black; 
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
 
         .tablaManifiesto3 {
@@ -79,12 +96,12 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
 
         .tablaManifiesto3 td, .tablaManifiesto3 th {
             border: .6px solid black; 
-            font-size: 8px;
+            /*font-size: 8px;*/
             text-align: center;
             /*border:black 2px double;*/
         }
@@ -107,22 +124,6 @@
             text-align: center;
         }
 
-        .notas{
-            text-align: left;
-            font-size: 11px;
-        }
-        .letraRoja{
-            color: #c02302;
-            /*font-weight: bold;*/
-        }
-        .celdaAzul{
-            background-color: #305496;
-            border:black 2px double;
-        }
-        .letraBlanca{
-            color: #ffffff;
-            /*font-weight: bold;*/
-        }
         .celdaCrema{
             background-color: #F8CBAD;
         }
@@ -178,16 +179,11 @@
         .lineaInferior{
             border-bottom: 1px solid black;
             /*font-weight: bold;*/
-            font-size: 11px;
-            text-align: center;
-        }
-        .Contenido{
-            /*font-family: Arial;*/
-            /*font-size: 10px !important; /* Forzar el tamaño de letra */
+            /*font-size: 11px;*/
             text-align: center;
         }
 
-        header {
+        /*header {
             position: fixed;
             top: 0px;
             left: 0px;
@@ -196,12 +192,12 @@
             display: flex;
             align-items: center;
             padding: 0 0px;
-            z-index: 1000; /* Asegura que el header esté por encima */
+            z-index: 1000; 
         }
 
         body {
-        margin-top: 425px; /* Altura del header */
-        margin-bottom: 220px; /* Altura del footer */
+        margin-top: 425px; 
+        margin-bottom: 220px; 
         }
 
             footer {
@@ -210,29 +206,12 @@
             left: 0;
             right: 0;
             height: 200px;
-            /*background-color: #fff; /* Color de fondo, si lo deseas */
-            /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
-            }
-            
-            /*footer {
-            position: fixed;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 250px; 
-        }*/
-        /*
-        footer {
-            position: fixed;
-            top: 780px;
-            left: 0px;
-            right: 0px;
-            height: 0px;
-            display: flex;
-            align-items: center;
-            padding: 0 0px;
-            /*z-index: 1000; /* Asegura que el header esté por encima */
-        /*}*/
+            background-color: #fff; 
+            z-index: 1000; 
+            }*/
+
+
+
         .altoCelda{
             height: 70px;
         }
@@ -257,40 +236,45 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 11px;
+            /*font-size: 11px;*/
         }
 
     </style>
 </head>
     <body>
+    <htmlpageheader name="myHeader">
+        <table class="tablaheader">
+        </table>
+    </htmlpageheader>
+    
         <header>
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th class="" style="width: 500px;">FORMATO</th>
-                            <th class="" style="width: 100px;">Código:</th>
-                            <th class="" style="width: 80px;">FOR-PINS-03/01</th>
-                            <th rowspan="3" style="width: 100px;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
+                            <th style="width: 500%;">FORMATO</th>
+                            <th style="width: 100%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-03/01</th>
+                            <th rowspan="3" style="width: 80%;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="width: 500px;"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
-                            <th class="" style="width: 100px;">Versión</th>
-                            <th class="" style="width: 80px;">3</th>
+                            <th rowspan="2" > INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
+                            <th >Versión</th>
+                            <th >3</th>
                         </tr>
                         <tr>
-                            <th class="" style="width: 100px;">Página</th>
-                            <th class="page-num-container"></th>
+                            <th>Página</th>
+                            <th>{PAGENO} de {nbpg}</th>
                         </tr>
                     </tbody>
                 </table>
     
         <div style="margin-bottom: 5px;"></div>
         
-            <div class="Contenido">
-                <table class="sinBorde">
+            <div>
+                <table >
                         <tr>
                             <th class="celdaAzul letraBlanca" colspan="4">DATOS GENERALES</th>
                         </tr>
@@ -603,5 +587,12 @@
                 </table>
             </div>
         </footer>
+
+        <htmlpagefooter name="myFooter">
+            <div style="text-align: center;">
+                
+            </div>
+        </htmlpagefooter>
+
     </body>
 </html>

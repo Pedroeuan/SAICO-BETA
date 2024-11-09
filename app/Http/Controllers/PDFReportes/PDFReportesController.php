@@ -7,12 +7,49 @@ use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\Snappy\Facades\SnappyPdf;
+//use Barryvdh\Snappy\Facades\SnappyPdf;
+use \Mpdf\Mpdf;
 
 class PDFReportesController extends Controller
 {
 
     public function FOR_PINS_03_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-03/01.PDF',
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+        ];
+
+        // Cargar la vista y generar el HTML
+        $html = view('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->render();
+
+        // Crear una instancia de mPDF
+        $mpdf = new Mpdf([
+            //'format' => [190, 250], // Ancho x Alto en mm (ajústalo según tus necesidades)
+            'default_font' => 'Arial',  // Configura la fuente predeterminada (puedes usar Arial, Times, etc.)
+            //'default_font_size' => 12,   // Establece el tamaño de fuente predeterminado en puntos
+            'format' => 'Letter',
+            'orientation' => 'P',   // 'orientation' => 'L': Usa 'L' para formato horizontal (landscape) o 'P' para vertical (portrait).
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+            'margin_left' => 10,
+            'margin_right' => 10,
+        ]);
+
+        // Escribir el contenido HTML en el PDF
+        $mpdf->WriteHTML($html);
+
+        // Enviar el PDF al navegador
+        return $mpdf->Output('Reporte_FOR_PINS_03_01.PDF', 'I'); //Esto envía el PDF generado directamente al navegador en modo de vista previa ('I').
+    }
+
+    /*public function FOR_PINS_03_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -27,19 +64,16 @@ class PDFReportesController extends Controller
     
         // Cargar la vista con los datos y configuraciones de papel
         $pdf = SnappyPdf::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)
-            ->setOption('page-width', '760mm')
-            ->setOption('page-height', '780mm');
-            /*->setPaper([0, 0, 760, 780]) // Ancho x Alto en milímetros
-            ->setOption('margin-top', '10mm')
-            ->setOption('margin-right', '10mm')
-            ->setOption('margin-bottom', '10mm')
-            ->setOption('margin-left', '10mm')
-            ->setOption('orientation', 'Landscape')
-            ->setOption('footer-font-size', '9')
-            ->setOption('footer-right', '[page] de [toPage]'); // Para el pie de página con la numeración*/
+        ->setPaper('letter') // Evita dimensiones personalizadas
+        ->setOption('no-collate', true) // Desactiva collation de impresión si está habilitado
+        ->setOption('no-print-media-type', true) // Evita que se utilicen tipos de medios de impresión
+        ->setOption('margin-bottom', '10mm')
+        ->setOption('margin-top', '10mm')
+        ->setOption('margin-left', '10mm')
+        ->setOption('margin-right', '10mm');
     
         return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
-    }
+    }*/
 
     public function FOR_PINS_03_01__()
     {
