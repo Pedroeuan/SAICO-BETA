@@ -489,6 +489,18 @@ return [
                             'can' => 'equipos-access',
                         ],
                         [
+                            'text' => ' Calibraciones',
+                            'icon' => 'fab fa-cloudscale',
+                            'url' => '',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => ' Certificados',
+                            'icon' => 'fa fa-certificate',
+                            'url' => 'Historial_certificados/index',
+                            'can' => 'equipos-access',
+                        ],
+                        [
                             'text' => 'Registro de altas',
                             'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
@@ -501,15 +513,9 @@ return [
                             'can' => 'tecnicos-equipos-access',
                         ],
                         [
-                            'text' => ' Ver solicitudes',
-                            'icon' => 'far fa-clipboard',
-                            'url' => 'solicitud/index',
-                            'can' => 'tecnicos-equipos-access',
-                        ],
-                        [
-                            'text' => ' Certificados',
-                            'icon' => 'fa fa-certificate',
-                            'url' => 'Historial_certificados/index',
+                            'text' => ' Ver E/S/D',
+                            'icon' => 'fas fa-exchange-alt',
+                            'url' => 'Historial_Almacen/index',
                             'can' => 'equipos-access',
                         ],
                         [
@@ -519,10 +525,10 @@ return [
                             'can' => 'equipos-access',
                         ],
                         [
-                            'text' => ' Ver E/S/D',
-                            'icon' => 'fas fa-exchange-alt',
-                            'url' => 'Historial_Almacen/index',
-                            'can' => 'equipos-access',
+                            'text' => ' Ver solicitudes',
+                            'icon' => 'far fa-clipboard',
+                            'url' => 'solicitud/index',
+                            'can' => 'tecnicos-equipos-access',
                         ],
                         /*[
                             'text' => 'level_one',
