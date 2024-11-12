@@ -7,11 +7,51 @@ use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+//use Barryvdh\Snappy\Facades\SnappyPdf;
+use \Mpdf\Mpdf;
 
 class PDFReportesController extends Controller
 {
 
     public function FOR_PINS_03_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-03/01.PDF',
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+        ];
+
+        // Cargar la vista y generar el HTML
+        $html = view('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->render();
+
+        // Crear una instancia de mPDF
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            //'format' => [190, 250], // Ancho x Alto en mm (ajústalo según tus necesidades)
+            'default_font' => 'Arial',  // Configura la fuente predeterminada (puedes usar Arial, Times, etc.)
+            //'default_font_size' => 12,   // Establece el tamaño de fuente predeterminado en puntos
+            'format' => 'Letter',
+            'orientation' => 'P',   // 'orientation' => 'L': Usa 'L' para formato horizontal (landscape) o 'P' para vertical (portrait).
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+            'margin_left' => 10,
+            'margin_right' => 10,
+        ]);
+
+        // Escribir el contenido HTML en el PDF
+        $mpdf->WriteHTML($html);
+
+        // Enviar el PDF al navegador
+        return $mpdf->Output('Reporte_FOR_PINS_03_01.PDF', 'I'); //Esto envía el PDF generado directamente al navegador en modo de vista previa ('I').
+    }
+
+
+    public function FOR_PINS_03_01__()
     {
         $user = Auth::user();
         $nombre = $user->name;
