@@ -27,6 +27,7 @@ use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
 use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
+use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
 
     Route::get('/', function () {
@@ -185,6 +186,9 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
     /*HISTORIAL ALMACEN*/
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('Historial_Almacen/index', [HistorialAlmacenController::class, 'index'])->name('Historial_Almacen.index');
+
+    /*SOLICITAR RECURSOS*/
+    Route::get('solicitar_recursos/create', [SolicitudRecursosController::class, 'create'])->name('solicitar_recursos.create');
 
     /*manifiestos*/
     /*Ruta para ver el manifiesto PDF*/

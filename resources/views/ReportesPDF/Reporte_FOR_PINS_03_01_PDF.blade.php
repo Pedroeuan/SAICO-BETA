@@ -190,13 +190,95 @@
             border-collapse: collapse;
             width: 100%;
         }
+        /*.tablaContainer {
+            margin-top: 10px; /* Ajusta el valor según la altura de tu header */
+        /*}*/
+        /*muestra solo la linea inferior de la celda*/
+        .lineaInferior{
+            border-bottom: 1px solid black;
+            /*font-weight: bold;*/
+            font-size: 11px;
+            text-align: center;
+        }
+        .Contenido{
+            /*font-family: Arial;*/
+            /*font-size: 10px !important; /* Forzar el tamaño de letra */
+            text-align: center;
+        }
 
+        header {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 0px;
+            z-index: 1000; /* Asegura que el header esté por encima */
+        }
+
+        body {
+        margin-top: 425px; /* Altura del header */
+        margin-bottom: 220px; /* Altura del footer */
+        }
+
+
+        /*footer {
+            position: fixed;
+            bottom: -60px;
+            left: 0px;
+            right: 0px;
+            height: 250px; 
+        }*/
+
+            footer {
+            position: fixed;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            height: 200px;
+            /*background-color: #fff; /* Color de fondo, si lo deseas */
+            /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
+            }
+/*
+        footer {
+            position: fixed;
+            top: 780px;
+            left: 0px;
+            right: 0px;
+            height: 0px;
+            display: flex;
+            align-items: center;
+            padding: 0 0px;
+            /*z-index: 1000; /* Asegura que el header esté por encima */
+        /*}*/
+        .altoCelda{
+            height: 70px;
+        }
+        .especial {
+            width: 20px; /* Ajusta el ancho de esta celda específica */
+        }
+        .saltoBlanco{
+            height: 15px;
+        }
+        .logo{
+            width: 20px;
+            height: 15;
+        }
+
+        .tabla-contenedor {
+            display: flex;        /* Distribuir las tablas horizontalmente */
+            justify-content: space-around; /* Separación uniforme entre las tablas */
+            gap: 10px;            /* Espacio entre tablas */
+        }
         .datosequipo table, th, td {
             border-collapse: collapse;  
             border-spacing: 0px;        
             width: 100%;
             text-align: center;
         }
+
 
     </style>
     
@@ -400,7 +482,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for($i = 0; $i < 24; $i++)
+                @for($i = 0; $i < 30; $i++)
                 <tr>
                     <td>----</td>
                     <td>----</td>
@@ -424,16 +506,14 @@
                     <th>0 m</th>
                 </tr>
             </tbody>
-    </table>
-    </htmlpageheader> 
-<htmlpagefooter name="myFooter">
-    <div style="text-align: center;">
-        <footer>
-                <table class="tablaManifiesto3">
-                    <thead>
-                        <tr>
-                            <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                        </tr>
+        </table>
+
+<footer>
+        <table class="tablaManifiesto3">
+            <thead>
+                <tr>
+                    <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
+                </tr>
 
                         <tr>
                             <td style="width: 20px;"><strong>NPIR</strong></td>
