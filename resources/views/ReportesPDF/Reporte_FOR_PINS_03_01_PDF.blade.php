@@ -186,8 +186,32 @@
             /*font-size: 10px !important; /* Forzar el tamaño de letra */
             text-align: center;
         }
+        /*cambios desde aqui*/
+        @page {
+            margin-top: 0px;     /* Ajusta el margen superior según el tamaño del encabezado */
+            margin-bottom: 50px;  /* Asegura que haya suficiente espacio para el footer */
+        }
 
-        header {
+        @page :first {
+            margin-top: 0px;     /* Ajusta el margen superior si es necesario */
+            margin-bottom: 50px;  /* Asegura que haya suficiente espacio para el footer */
+        }
+        footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;  /* Ajusta el tamaño según sea necesario */
+    background-color: #fff;  /* Fondo blanco opcional */
+    text-align: center;  /* Alineación del texto del footer */
+    padding: 10px 0;
+}
+body {
+    margin-top: 100px;    /* Ajusta según la altura del encabezado */
+    margin-bottom: 150px; /* Asegura que haya suficiente espacio para el footer */
+}
+
+        /*header {
             position: fixed;
             top: 0px;
             left: 0px;
@@ -199,10 +223,10 @@
             z-index: 1000; /* Asegura que el header esté por encima */
         }
 
-        body {
+        /*body {
         margin-top: 425px; /* Altura del header */
-        margin-bottom: 220px; /* Altura del footer */
-        }
+        /*margin-bottom: 220px; /* Altura del footer */
+        /*} 
 
 
         /*footer {
@@ -213,7 +237,7 @@
             height: 250px; 
         }*/
 
-            footer {
+            /*footer {
             position: fixed;
             bottom: 0px;
             left: 0;
@@ -221,7 +245,7 @@
             height: 200px;
             /*background-color: #fff; /* Color de fondo, si lo deseas */
             /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
-            }
+            /*}
 /*
         footer {
             position: fixed;
@@ -260,6 +284,7 @@
             text-align: center;
             font-size: 11px;
         }
+
 
     </style>
 </head>
@@ -466,7 +491,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for($i = 0; $i < 24; $i++)
+                @for($i = 0; $i < 30; $i++)
                 <tr>
                     <td>----</td>
                     <td>----</td>
@@ -491,7 +516,7 @@
                 </tr>
             </tbody>
         </table>
-
+        <div style="page-break-before: always;"></div>
 <footer>
         <table class="tablaManifiesto3">
             <thead>
