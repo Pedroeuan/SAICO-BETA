@@ -31,6 +31,7 @@ class PDFReportesController extends Controller
 
         // Crear una instancia de mPDF
         $mpdf = new Mpdf([
+            'mode' => 'utf-8',
             //'format' => [190, 250], // Ancho x Alto en mm (ajústalo según tus necesidades)
             'default_font' => 'Arial',  // Configura la fuente predeterminada (puedes usar Arial, Times, etc.)
             //'default_font_size' => 12,   // Establece el tamaño de fuente predeterminado en puntos
@@ -49,31 +50,6 @@ class PDFReportesController extends Controller
         return $mpdf->Output('Reporte_FOR_PINS_03_01.PDF', 'I'); //Esto envía el PDF generado directamente al navegador en modo de vista previa ('I').
     }
 
-    /*public function FOR_PINS_03_01()
-    {
-        $user = Auth::user();
-        $nombre = $user->name;
-    
-        $Logo = public_path('images/Logo_AICO_R.jpg');
-    
-        $data = [
-            'title' => 'Reporte_FOR-PINS-03/01.PDF',
-            'nombre' => $nombre,
-            'Logo' => $Logo,
-        ];
-    
-        // Cargar la vista con los datos y configuraciones de papel
-        $pdf = SnappyPdf::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)
-        ->setPaper('letter') // Evita dimensiones personalizadas
-        ->setOption('no-collate', true) // Desactiva collation de impresión si está habilitado
-        ->setOption('no-print-media-type', true) // Evita que se utilicen tipos de medios de impresión
-        ->setOption('margin-bottom', '10mm')
-        ->setOption('margin-top', '10mm')
-        ->setOption('margin-left', '10mm')
-        ->setOption('margin-right', '10mm');
-    
-        return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
-    }*/
 
     public function FOR_PINS_03_01__()
     {
