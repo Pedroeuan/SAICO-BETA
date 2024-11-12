@@ -525,7 +525,7 @@ return [
                             'can' => 'equipos-access',
                         ],
                         [
-                            'text' => ' Ver solicitudes',
+                            'text' => ' Ver Solicitudes',
                             'icon' => 'far fa-clipboard',
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
