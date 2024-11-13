@@ -299,6 +299,7 @@ class ManifiestoController extends Controller
         $EsperaDato ='ESPERA DE DATO';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
+        $SATBMPRO = $request->has('SATBMPRO') ? 'SI' : 'NO';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
         // Actualizar los datos del equipo
         $Solicitud ->update([
@@ -382,6 +383,7 @@ class ManifiestoController extends Controller
                 $Manifiestos->Puesto = $request->input('Puesto');
                 $Manifiestos->Responsable = $request->input('Responsable');
                 $Manifiestos->ScanPDF = $EsperaDato;
+                $Manifiestos->SATBMPRO = $SATBMPRO;
                 if($request->input('Observaciones')==null)
                 {
                     $Manifiestos->Observaciones = '-----';
@@ -436,6 +438,7 @@ class ManifiestoController extends Controller
         $NO_DISPONIBLE = 'NO DISPONIBLE';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
+        $SATBMPRO = $request->has('SATBMPRO') ? 'SI' : 'NO';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
         
         // Actualizar los datos del equipo
@@ -573,6 +576,7 @@ class ManifiestoController extends Controller
                         'Puesto' =>$request->input('Puesto'),
                         'Responsable' =>$request->input('Responsable'),
                         'Observaciones' =>$request->input('Observaciones'),
+                        'SATBMPRO' => $SATBMPRO,
                     ]);
 
                 // Validar que se ha enviado el archivo de foto
@@ -628,6 +632,7 @@ class ManifiestoController extends Controller
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         $Recibe_Nombre = $request->input('Recibe_Nombre');
+        $SATBMPRO = $request->has('SATBMPRO') ? 'SI' : 'NO';
         // Actualizar los datos del equipo
         $Solicitud ->update([
             'Estatus' => $Estatus,
@@ -786,6 +791,7 @@ class ManifiestoController extends Controller
                         'Puesto' =>$request->input('Puesto'),
                         'Responsable' =>$request->input('Responsable'),
                         'Observaciones' =>$request->input('Observaciones'),
+                        'SATBMPRO' => $SATBMPRO,
                     ]);
                 }
             
