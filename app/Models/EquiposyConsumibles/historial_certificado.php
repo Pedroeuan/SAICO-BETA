@@ -30,4 +30,9 @@ class historial_certificado extends Model
         return \Carbon\Carbon::parse($this->attributes['Ultima_Fecha_calibracion'])->format('d-m-Y');
     }
 
+    public function general_eyc()
+    {
+        return $this->certificado->belongsTo(general_eyc::class, 'idGeneral_EyC');
+    }
+
 }
