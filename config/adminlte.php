@@ -489,12 +489,6 @@ return [
                             'can' => 'equipos-access',
                         ],
                         [
-                            'text' => ' Calibraciones',
-                            'icon' => 'fab fa-cloudscale',
-                            'url' => '',
-                            'can' => 'equipos-access',
-                        ],
-                        [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
