@@ -524,6 +524,12 @@ return [
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
                         ],
+                        [
+                            'text' => ' Solicitar recursos',
+                            'icon' => 'fa fa-cart-plus',
+                            'url' => 'solicitar_recursos/create',
+                            'can' => 'equipos-access',
+                        ],
                         /*[
                             'text' => 'level_one',
                             'url' => '#',

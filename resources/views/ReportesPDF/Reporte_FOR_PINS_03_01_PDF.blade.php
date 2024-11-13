@@ -2,29 +2,7 @@
 <html>
 <head>
     <style>
-        /* Aquí puedes incluir cualquier estilo para el contenido principal */
-        .contenido {
-            font-size: 12px;
-            text-align: justify;
-        }
 
-        /*.tabla {
-            width: 100%;
-            border-collapse: collapse;
-        }*/
-
-        /*.tabla, .tabla th, .tabla td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }*/
-
-        .titulo {
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
@@ -44,6 +22,7 @@
                 </tr>
             </thead>
             <tbody>
+                @for($i = 0; $i < 24; $i++)
                 <tr>
                     <td>Dato 1</td>
                     <td>Dato 2</td>
@@ -51,7 +30,122 @@
                 </tr>
                 <!-- Más filas según tus datos -->
             </tbody>
-        </table>
+    </table>
+    </htmlpageheader> 
+<htmlpagefooter name="myFooter">
+    <div style="text-align: center;">
+        <footer>
+                <table class="tablaManifiesto3">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 20px;"><strong>NPIR</strong></td>
+                            <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                            <td style="width: 20px;"><strong>DM</strong></td>
+                            <td style="width: 150px;">DAÑO MECÁNICO</td>
+                            <td style="width: 20px;"><strong>PT</strong></td>
+                            <td style="width: 180px;">POROSIDAD TUBULAR</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>GRIETA</td>
+                            <td><strong>S</strong></td>
+                            <td>SOCAVADO</td>
+                            <td><strong>C</strong></td>
+                            <td>CRATER</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>ZG</strong></td>
+                            <td>ZONA DE GRIETAS</td>
+                            <td><strong>P</strong></td>
+                            <td>POROSIDAD</td>
+                            <td><strong>IL</strong></td>
+                            <td>INDICACIÓN LINEAL</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>FF</strong></td>
+                            <td>FALTA DE FUSIÓN</td>
+                            <td><strong>ZP</strong></td>
+                            <td>ZONA DE POROS</td>
+                            <td><strong>IR</strong></td>
+                            <td>INDICACIÓN REDONDEADA</td>
+                        </tr>
+
+                    </thead>
+                </table>
+
+                <div style="margin-bottom: 20px;"></div>
+
+                <div class="">
+                    <table class="sinBorde">
+                        <tr>
+                            <td class="datosGeneralesCortos">Observaciones:</td>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="margin-bottom: 20px;"></div>
+
+                    <div class="">
+                        <table class="sinBorde">
+                            <thead>
+
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>Realizó</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                </tr>
+
+                                <!--<tr class="sinBordetdth">-->
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>NOMBRE DEL TÉCNICO</strong></td>
+                                    <td></td>
+                                    <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                    <td></td>
+                                    <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                </tr>
+                                
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Técnico N-II SNT-TC-1A</strong></td>
+                                    <td></td>
+                                    <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                    <td></td>
+                                    <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                    <td></td>
+                                    <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+        </footer>           
     </div>
 
 </body>
