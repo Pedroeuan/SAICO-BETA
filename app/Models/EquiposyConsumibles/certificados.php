@@ -28,10 +28,12 @@ class certificados extends Model
     {
         return $this->hasMany(historial_certificado::class, 'idGeneral_EyC');
     }
-    public function generaleyc()
+
+    public function general_eyc()
     {
         return $this->belongsTo(general_eyc::class, 'idGeneral_EyC');
     }
+
     public function getFormattedDateAttribute()
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha_calibracion'])->format('d-m-Y');

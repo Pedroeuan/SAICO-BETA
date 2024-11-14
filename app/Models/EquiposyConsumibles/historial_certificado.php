@@ -22,7 +22,7 @@ class historial_certificado extends Model
     
     public function certificado()
     {
-        return $this->belongsTo(certificados::class, 'idCertificados');
+        return $this->belongsTo(certificados::class, 'idGeneral_EyC');
     }
 
     public function getFormattedDateAttribute()

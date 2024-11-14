@@ -28,8 +28,8 @@ class AlmacenController extends Controller
     public function obtenerCantidadAlmacen($id)
     {
         // Consulta la cantidad del elemento en la tabla 'almacen'
-        //$Almacen = almacen::find($id);
-        $Almacen = Almacen::where('idGeneral_EyC',$id)->first();
+        $Almacen = Almacen::where('idGeneral_EyC', $id)->first();
+
         
         if ($Almacen) {
             return response()->json(['Cantidad' => $Almacen->Stock]);

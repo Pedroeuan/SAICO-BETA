@@ -27,9 +27,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($generalConCertificadosConHistorialYAlmacen as $general_eyc)
+                @foreach ($generalConCertificadosConHistorial as $general_eyc)
                         @if($general_eyc->certificados)
                             @foreach ($general_eyc->certificados->historial_certificado as $historial)
+                            @php
+                            //dump($historial);
+                            @endphp
                                 <tr>
                                     <td>
                                         @if ($general_eyc->Tipo == 'CONSUMIBLES')
@@ -55,6 +58,7 @@
                             @endforeach
                         @endif
                     @endforeach
+
                 </tbody>
             </table>
         </div>

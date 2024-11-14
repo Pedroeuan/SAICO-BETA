@@ -431,6 +431,7 @@ class equiposController extends Controller
                 $CertificadosHistorialCertificados = new historial_certificado;
                 $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
                 $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
+                //$CertificadosHistorialCertificados->idGeneral_EyC = $generalConCertificado->idGeneral_EyC;
                 $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
                 $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
                 $CertificadosHistorialCertificados->save();

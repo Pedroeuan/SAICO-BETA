@@ -213,17 +213,17 @@
     <table class="tablaManifiesto">
         <thead>
             <tr>
-                @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                @if($Manifiesto->SATBMPRO == 'SI')
                     <th class="celdaAzul letraBlanca" colspan="9">Equipos</th>
                     @else
                     <th class="celdaAzul letraBlanca" colspan="7">Equipos</th>
                 @endif
             </tr>
-            @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+            @if($Manifiesto->SATBMPRO == 'SI')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Descripción</th>
-                        <th class="">No. ECO</th>
+                        <th class="" style="width: 60px;">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">SAT</th>
                         <th class="">BMPRO</th>
@@ -235,7 +235,7 @@
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Descripción</th>
-                        <th class="">No. ECO</th>
+                        <th class="" style="width: 60px;">No. ECO</th>
                         <th class="">No. De Serie</th>
                         <th class="">Marca</th>
                         <th class="">Modelo</th>
@@ -253,7 +253,7 @@
                         $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     @endphp
                     @if($general->Tipo != 'CONSUMIBLES')
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                        @if($Manifiesto->SATBMPRO == 'SI')
                                     <tr>
                                         <td class="Contenido">{{ $contador }}</td>
                                         <td class="Contenido">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -285,7 +285,7 @@
 
             @for($i = $contador; $i <= $minFilas; $i++)
                 <tr>
-                    @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                    @if($Manifiesto->SATBMPRO == 'SI')
                         <td class="Contenido">----</td>
                         <td class="Contenido">----</td>
                         <td class="Contenido">----</td>
@@ -312,13 +312,13 @@
     <table class="tablaManifiesto2">
         <thead>
             <tr>
-                @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                @if($Manifiesto->SATBMPRO == 'SI')
                     <th class="celdaAzul letraBlanca" colspan="7">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                     @else
                     <th class="celdaAzul letraBlanca" colspan="5">ADICIONAL (accesorio, consumible, y/o herramientas)</th>
                 @endif
             </tr>
-            @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+            @if($Manifiesto->SATBMPRO == 'SI')
                     <tr class="celdaCrema">
                         <th class="especial">No.</th>
                         <th class="">Cantidad</th>
@@ -354,7 +354,7 @@
                     @endphp
 
                     @if($general && $general->Tipo == 'CONSUMIBLES')
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                        @if($Manifiesto->SATBMPRO == 'SI')
                             <tr>
                                 <td class="Contenido">{{ $contador }}</td>
                                 <td class="Contenido">{{ $detalle->Cantidad ?? 'N/A' }}</td>
@@ -382,7 +382,7 @@
 
                 @for($i = $contador; $i <= $minFilas; $i++)
                     <tr>
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                        @if($Manifiesto->SATBMPRO == 'SI')
                             <td class="Contenido">----</td>
                             <td class="Contenido">----</td>
                             <td class="Contenido">----</td>
@@ -400,7 +400,7 @@
             @else
                 @for($i=0;$i<=5;$i=$i+1)
                     <tr>
-                        @if($Manifiesto->Cliente == 'PROTEXA' || $Manifiesto->Cliente == 'PERMADUCTO' || $Manifiesto->Cliente == 'PROPETROL')
+                        @if($Manifiesto->SATBMPRO == 'SI')
                             
                                 <td class="Contenido">----</td>
                                 <td class="Contenido">----</td>
