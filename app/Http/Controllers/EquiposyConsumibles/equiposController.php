@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -53,6 +54,23 @@ class equiposController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
             ]);
+
+            // Estandarizar y limpiar el valor de No_economico para la comparación
+            $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
+            $serie = Str::lower($request->input('Serie'));
+
+            // Verificar que no exista un registro duplicado en la base de datos
+            $exists = general_eyc::whereRaw("LOWER(REPLACE(No_economico, '-', '')) = ?", [$noEconomico])
+            ->orWhereRaw("LOWER(REPLACE(No_economico, 'No.', '')) = ?", [$noEconomico])
+            ->orWhereRaw("LOWER(Serie) = ?", [$serie])
+            ->exists();
+
+            if ($exists) {
+                return redirect()->back()->withErrors([
+                    'No_economico' => 'El No_economico ya existe en la base de datos.',
+                    'Serie' => 'La Serie ya existe en la base de datos.',
+                ])->withInput();
+            }
 
         /* Tabla General_EyC */
             $general = new general_eyc;
