@@ -60,12 +60,20 @@ class equiposController extends Controller
             //preg_replace('/[^a-zA-Z0-9]/', '', ...): Elimina todos los caracteres que no sean letras o números, para poder comparar variantes como ECO-004, No.ECO-004, etc.
             $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
             $serie = Str::lower($request->input('Serie'));
+            Log::info('***********************');
+            Log::info('noEconomico: ', ['noEconomico' => $noEconomico]);
 
-            // Verificar que no exista un registro duplicado en la base de datos
-            //whereRaw("LOWER(REPLACE(No_economico, '-', '')) = ?", [$noEconomico]): Usa consultas crudas con LOWER 
-            //y REPLACE para limpiar el No_economico antes de compararlo con el valor estandarizado.
-            $existsNo_Economico = general_eyc::whereRaw("LOWER(REGEXP_REPLACE(No_economico, '[^a-zA-Z0-9]', '')) = ?", [$noEconomico])
+            /*^: Comienza desde el inicio del texto.
+            (no[\\.]\\s?eco[-]?|eco[-]?|noeco[-]?):
+            no[\\.]\\s?eco[-]?: Detecta "No. ECO-", permitiendo espacios opcionales después del punto.
+            eco[-]?: Detecta "ECO-" o "eco-", con un guion opcional.
+            noeco[-]?: Detecta "No.ECO-" o "noeco-", con un guion opcional.
+            \\d{3,}: Una secuencia de al menos 3 dígitos consecutivos.
+            $: Indica que debe coincidir hasta el final del texto. */
+            $existsNo_Economico = general_eyc::whereRaw("LOWER(No_economico) REGEXP '^(no[\\.]\\s?eco[-]?|eco[-]?|noeco[-]?|no\\seco)\\d{0,}$'")
             ->exists();
+            Log::info('***********************');
+            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
 
             $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])
             ->exists();
