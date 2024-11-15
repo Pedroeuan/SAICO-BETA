@@ -89,7 +89,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -1812,72 +1812,86 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*Equipos*/
 document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
     document.getElementById('guardarContinuarEquipos').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+        event.preventDefault();
 
         var form = document.getElementById('equiposForm');
         var formData = new FormData(form);
 
-         // Obtener los valores de los campos
-            var nombre = formData.get('Nombre_E_P_BP');
-            var numeroEconomico = formData.get('No_economico');
-            var marca = formData.get('Marca');
-            var modelo = formData.get('Modelo');
-            var serie = formData.get('Serie');
+        // Obtener los valores de los campos
+        var nombre = formData.get('Nombre_E_P_BP');
+        var numeroEconomico = formData.get('No_economico');
+        var marca = formData.get('Marca');
+        var modelo = formData.get('Modelo');
+        var serie = formData.get('Serie');
 
-            // Validaciones
-            var camposVacios = [];
+        // Validaciones
+        var camposVacios = [];
+        if (!nombre) camposVacios.push('Nombre');
+        if (!numeroEconomico) camposVacios.push('Número Económico');
+        if (!marca) camposVacios.push('Marca');
+        if (!modelo) camposVacios.push('Modelo');
+        if (!serie) camposVacios.push('Número de Serie');
 
-            if (!nombre) {
-                camposVacios.push('Nombre');
-            }
-            if (!numeroEconomico) {
-                camposVacios.push('Número Económico');
-            }
-            if (!marca) {
-                camposVacios.push('Marca');
-            }
-            if (!modelo) {
-                camposVacios.push('Modelo');
-            }
-            if (!serie) {
-                camposVacios.push('Número de Serie');
-            }
+        if (camposVacios.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
 
-            if (camposVacios.length > 0) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
-
-            // Enviar el formulario usando AJAX
+        // Validación de duplicados en No_economico y Serie
         $.ajax({
-            url: form.action,
-            type: form.method,
-            data: formData,
-            processData: false,
-            contentType: false,
+            url: '/verificar-duplicado',
+            type: 'POST',
+            data: {
+                No_economico: numeroEconomico,
+                Serie: serie,
+                _token: formData.get('_token')
+            },
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
-                Swal.fire({
-                    title: 'Datos guardados',
-                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-                // Limpiar el formulario
-                form.reset();
+                if (response.duplicado) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.mensaje,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else {
+                    // Enviar el formulario usando AJAX si no hay duplicados
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Datos guardados',
+                                text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            });
+                            form.reset();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error al guardar los datos.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
             },
             error: function(xhr, status, error) {
-                // Usar SweetAlert2 para mostrar una alerta de error
                 Swal.fire({
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar los datos.',
+                    text: 'Ocurrió un error al verificar los duplicados.',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
@@ -1885,6 +1899,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 
    // Espera a que el documento esté listo
     document.addEventListener("DOMContentLoaded", function() {

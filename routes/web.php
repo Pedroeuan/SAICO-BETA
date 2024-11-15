@@ -96,6 +96,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/edicion/editEyC/{id}', [general_eycController::class, 'editEyC'])->name('edicion.editEyC');
     /*Ruta para dar de BAJA, equipos, comsumibles, block, herramientas-HABILITADO*/
     Route::delete('/eliminar/BajaEyC/{id}', [general_eycController::class, 'BajaEyC'])->name('eliminar.BajaEyC');
+    /*Ruta para verificar duplicados de No economico y Serie de la tabla general_EyC*/
+    Route::post('/verificar-duplicado', [general_eycController::class, 'verificarDuplicado']);
+
 
     /*EQUIPOS */
     /*Ruta de Guardado*/
