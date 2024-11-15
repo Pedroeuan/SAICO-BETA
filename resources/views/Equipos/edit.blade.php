@@ -65,7 +65,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
+                                            @error('No_economico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -83,7 +86,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
+                                            @error('Serie')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -466,13 +472,16 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Nombre_E_P_BP }}" name="Nombre_E_P_BP"  placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" value="{{ $generalEyC->Nombre_E_P_BP }}" name="Nombre_E_P_BP"  placeholder="Enter ...">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            @error('No_economico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
