@@ -429,7 +429,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -575,7 +575,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 102021CUT05" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 102021CUT05" value="{{old('Serie')}}">
                                             @error('Serie')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -746,7 +746,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm @error('Modelo') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 190776" value="{{old('Serie')}}">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 190776" value="{{old('Serie')}}">
                                             @error('Serie')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
