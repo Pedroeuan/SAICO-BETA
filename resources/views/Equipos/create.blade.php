@@ -1552,29 +1552,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+        // Validación de duplicados en No_economico y Serie
         $.ajax({
-            url: form.action,
-            type: form.method,
-            data: formData,
-            processData: false,
-            contentType: false,
+            url: '/verificar-duplicado-Herramientas',
+            type: 'POST',
+            data: {
+                No_economico: numeroEconomico,
+                Serie: serie,
+                _token: formData.get('_token')
+            },
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
-                Swal.fire({
-                    title: 'Datos guardados',
-                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-
-                // Limpiar el formulario
-                form.reset();
+                if (response.duplicado) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.mensaje,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else {
+                    // Enviar el formulario usando AJAX si no hay duplicados
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Datos guardados',
+                                text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            });
+                            form.reset();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error al guardar los datos.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
             },
             error: function(xhr, status, error) {
-                // Usar SweetAlert2 para mostrar una alerta de error
                 Swal.fire({
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar los datos.',
+                    text: 'Ocurrió un error al verificar los duplicados.',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
@@ -1628,29 +1654,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+        // Validación de duplicados en No_economico y Serie
         $.ajax({
-            url: form.action,
-            type: form.method,
-            data: formData,
-            processData: false,
-            contentType: false,
+            url: '/verificar-duplicado-BlockyProbeta',
+            type: 'POST',
+            data: {
+                No_economico: numeroEconomico,
+                Serie: serie,
+                _token: formData.get('_token')
+            },
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
-                Swal.fire({
-                    title: 'Datos guardados',
-                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-
-                // Limpiar el formulario
-                form.reset();
+                if (response.duplicado) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.mensaje,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else {
+                    // Enviar el formulario usando AJAX si no hay duplicados
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Datos guardados',
+                                text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            });
+                            form.reset();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error al guardar los datos.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
             },
             error: function(xhr, status, error) {
-                // Usar SweetAlert2 para mostrar una alerta de error
                 Swal.fire({
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar los datos.',
+                    text: 'Ocurrió un error al verificar los duplicados.',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
@@ -1704,29 +1756,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+        // Validación de duplicados en No_economico y Serie
         $.ajax({
-            url: form.action,
-            type: form.method,
-            data: formData,
-            processData: false,
-            contentType: false,
+            url: '/verificar-duplicado-Accesorios',
+            type: 'POST',
+            data: {
+                No_economico: numeroEconomico,
+                Serie: serie,
+                _token: formData.get('_token')
+            },
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
-                Swal.fire({
-                    title: 'Datos guardados',
-                    text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-
-                // Limpiar el formulario
-                form.reset();
+                if (response.duplicado) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.mensaje,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else {
+                    // Enviar el formulario usando AJAX si no hay duplicados
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Datos guardados',
+                                text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            });
+                            form.reset();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error al guardar los datos.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
             },
             error: function(xhr, status, error) {
-                // Usar SweetAlert2 para mostrar una alerta de error
                 Swal.fire({
                     title: 'Error',
-                    text: 'Ocurrió un error al guardar los datos.',
+                    text: 'Ocurrió un error al verificar los duplicados.',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
@@ -1845,7 +1923,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Validación de duplicados en No_economico y Serie
         $.ajax({
-            url: '/verificar-duplicado',
+            url: '/verificar-duplicado-Equipos',
             type: 'POST',
             data: {
                 No_economico: numeroEconomico,
