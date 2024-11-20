@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Str;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
@@ -85,6 +85,39 @@ class general_eycController extends Controller
             'Disponibilidad_Estado' => $Baja,
         ]);
         return redirect()->route('inventario');
+    }
+
+    public function verificarDuplicado(Request $request)
+    {
+        // Estandarizar y limpiar los valores
+        $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
+        $serie = Str::lower($request->input('Serie'));
+
+        // Verificar duplicados
+        $existsNo_Economico = general_eyc::whereRaw("LOWER(REPLACE(No_economico, '-', '')) = ?", [$noEconomico])
+            ->orWhereRaw("LOWER(REPLACE(No_economico, 'No.', '')) = ?", [$noEconomico])
+            ->exists();
+
+        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+        // Construir respuesta JSON según los duplicados encontrados
+        $response = [
+            'duplicado' => false,
+            'mensaje' => ''
+        ];
+
+        if ($existsNo_Economico && $existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico y la Serie ya existen en la base de datos.';
+        } elseif ($existsNo_Economico) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico ya existe en la base de datos.';
+        } elseif ($existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'La Serie ya existe en la base de datos.';
+        }
+
+        return response()->json($response);
     }
 
     /**

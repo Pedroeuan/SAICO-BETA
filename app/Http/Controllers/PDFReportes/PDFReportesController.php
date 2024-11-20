@@ -37,11 +37,26 @@ class PDFReportesController extends Controller
             //'default_font_size' => 12,   // Establece el tamaño de fuente predeterminado en puntos
             'format' => 'Letter',
             'orientation' => 'P',   // 'orientation' => 'L': Usa 'L' para formato horizontal (landscape) o 'P' para vertical (portrait).
-            'margin_top' => 20,
-            'margin_bottom' => 20,
+            'margin_top' => 40,
+            'margin_bottom' => 30,
             'margin_left' => 10,
             'margin_right' => 10,
         ]);
+        
+        // Definir el HTML del encabezado
+        /*$mpdf->SetHTMLHeader('
+            <div style="text-align: center; border-bottom: 1px solid #000; font-weight: bold; padding-bottom: 10px;">
+                <img src="' . $Logo . '" alt="Logo" style="width: 50px; vertical-align: middle;">
+                <span>Reporte FOR-PINS-03/01 - ' . $data['title'] . '</span>
+            </div>
+        ');
+
+        // Definir el HTML del pie de página
+        $mpdf->SetHTMLFooter('
+            <div style="text-align: center; border-top: 1px solid #000; font-size: 10px; padding-top: 10px;">
+                Página {PAGENO} de {nbpg}
+            </div>
+        ');*/
 
         // Escribir el contenido HTML en el PDF
         $mpdf->WriteHTML($html);

@@ -4,14 +4,14 @@
     <title>Manifiesto</title>
     <style>
         @page {
-            header: html_myHeader; /* Nombre del bloque HTML para el header */
-            footer: html_myFooter; /* Nombre del bloque HTML para el footer */
+            header: html_myHeader; 
+            footer: html_myFooter; 
             margin-top: 30px;
             margin-bottom: 20px;
         } 
 
         .tablaheader {
-            border-collapse: collapse;  /* No colapsar bordes */
+            border-collapse: collapse; 
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
@@ -21,7 +21,6 @@
         .tablaheader th {
             width: 70%;
             border: 1px solid black; 
-            /*font-size: 11px;*/
         }
 
         .datosgenerales{
@@ -29,7 +28,7 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 20px;
+            font-size: 8px;
         }
 
         .datosinspeccion{
@@ -37,39 +36,32 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 60px;
+            font-size: 8px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
-            /*font-size: 11px;*/
         }
+
+        .datosinspeccionsinborde{
+            border: 0px !important;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+        }
+        
 
         .datosresultados{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 80px;
-            /*margin-top: 60px;*/
+            font-size: 60px;
         }
 
         .datosresultados td, .datosresultados th {
             border: .6px solid black; 
-            /*font-size: 11px;*/
-        }
-
-        .tamanoPersonalizado{
-            font-size: 20px;
-        }
-
-
-        .celdaAzul{
-            background-color: #305496;
-            border:black 2px double;
-        }
-        .letraBlanca{
-            color: #ffffff;
         }
 
         /*muestra solo la linea inferior de la celda*/
@@ -78,80 +70,26 @@
             text-align: center;
         }
 
-        /*oculta todo el borde de la tabla*/
-        .sinBorde{
-            border: 0px !important;
+        .encabezadoAzul{
             text-align: center;
-            border-collapse: collapse;
             width: 100%;
-            font-size: 60px;
+            font-size: 8px;
+            background-color: #305496;
+            color: #ffffff;
+            border-collapse: collapse;
         }
 
-        .encabezadoAzul{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
+        .simbologia {
+            border-collapse: collapse;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
+            text-align: center;
             font-size: 8px;
         }
 
-        /* Ajusta la celda al texto en los datos generales */
-        .datosGeneralesCortos{
-            font-weight: bold;
-            width: 100px;
-            text-align: center;
-        }
-        .respuestasGenerales{
-            /*font-size: 11px;*/
-            text-align: center;
-        }
-
-        .tablaManifiesto {
-            border-collapse: collapse;  /* No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            /*font-size: 11px;*/
-        }
-
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaManifiesto td, .tablaManifiesto th {
+        .simbologia td, .simbologia th {
             border: .6px solid black; 
-            /*font-size: 11px;*/
         }
-        .tablaManifiesto2 {
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 20px;
-        }
-
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaManifiesto2 td, .tablaManifiesto2 th {
-            border: .6px solid black; 
-            font-size: 11px;
-        }
-
-        .tablaManifiesto3 {
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            /*font-size: 11px;*/
-        }
-
-        .tablaManifiesto3 td, .tablaManifiesto3 th {
-            border: .6px solid black; 
-            /*font-size: 8px;*/
-            text-align: center;
-            /*border:black 2px double;*/
-        }
-
-        .celdaCrema{
-            background-color: #F8CBAD;
-        }
-
         .celdaGris{
             background-color: #DBDBDB;
         }
@@ -183,109 +121,26 @@
             width: 100%;
             /*font-size: 10px;*/
         }
-
+        /*oculta todo el borde de la tabla*/
+        .sinBorde{
+            border: 0px !important;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+        }
         .conBorde{
             border: 10px;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
         }
-        /*.tablaContainer {
-            margin-top: 10px; /* Ajusta el valor según la altura de tu header */
-        /*}*/
-        /*muestra solo la linea inferior de la celda*/
-        .lineaInferior{
-            border-bottom: 1px solid black;
-            /*font-weight: bold;*/
-            font-size: 11px;
-            text-align: center;
-        }
-        .Contenido{
-            /*font-family: Arial;*/
-            /*font-size: 10px !important; /* Forzar el tamaño de letra */
-            text-align: center;
-        }
-
-        header {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 0px;
-            z-index: 1000; /* Asegura que el header esté por encima */
-        }
-
-        body {
-        margin-top: 425px; /* Altura del header */
-        margin-bottom: 220px; /* Altura del footer */
-        }
-
-
-        /*footer {
-            position: fixed;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 250px; 
-        }*/
-
-            footer {
-            position: fixed;
-            bottom: 0px;
-            left: 0;
-            right: 0;
-            height: 200px;
-            /*background-color: #fff; /* Color de fondo, si lo deseas */
-            /*z-index: 1000; /* Asegura que el footer esté por encima del contenido */
-            }
-/*
-        footer {
-            position: fixed;
-            top: 780px;
-            left: 0px;
-            right: 0px;
-            height: 0px;
-            display: flex;
-            align-items: center;
-            padding: 0 0px;
-            /*z-index: 1000; /* Asegura que el header esté por encima */
-        /*}*/
-        .altoCelda{
-            height: 70px;
-        }
-        .especial {
-            width: 20px; /* Ajusta el ancho de esta celda específica */
-        }
-        .saltoBlanco{
-            height: 15px;
-        }
-        .logo{
-            width: 20px;
-            height: 15;
-        }
-
-        .tabla-contenedor {
-            display: flex;        /* Distribuir las tablas horizontalmente */
-            justify-content: space-around; /* Separación uniforme entre las tablas */
-            gap: 10px;            /* Espacio entre tablas */
-        }
-        .datosequipo table, th, td {
-            border-collapse: collapse;  
-            border-spacing: 0px;        
-            width: 100%;
-            text-align: center;
-        }
-
 
     </style>
     
 </head>
     <body>
     <htmlpageheader name="myHeader">
-        <header>
+        <!--<header>-->
                 <table class="tablaheader">
                     <thead>
                         <tr>
@@ -304,7 +159,7 @@
                         </tr>
                         <tr>
                             <th>Página</th>
-                            <th colspan="2" align="center" style="text-align: center;" class="lineaInferior"><strong>{PAGENO} de {nbpg} &nbsp;&nbsp;&nbsp;</strong></th>
+                            <th>{PAGENO} de {nbpg}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -313,55 +168,55 @@
         
                 <table class="encabezadoAzul">
                     <tr>
-                        <th class="celdaAzul letraBlanca" colspan="4">DATOS GENERALES</th>
+                        <th colspan="4">DATOS GENERALES</th>
                     </tr>
                 </table>            
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
-                            <td class="datosGeneralesCortos" style="width: 26%;">FECHA:</td>
+                            <th style="width: 11%;">FECHA:</th>
                             <td class="lineaInferior"></td>
-                            <td class="datosGeneralesCortos" style="width: 30%;">NO. REPORTE:</td>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                        <tr>
-                            <td class="datosGeneralesCortos">CLIENTE:</td>
-                            <td class="lineaInferior"></td>
-                            <td class="datosGeneralesCortos">CONTRATO:</td>
+                            <th style="width: 15%;">NO. REPORTE:</th>
                             <td class="lineaInferior"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">PROYECTO: </td>
+                            <th>CLIENTE:</th>
+                            <td class="lineaInferior"></td>
+                            <th>CONTRATO:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th>PROYECTO: </th>
                             <td class="lineaInferior" colspan="3"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">ORDEN DE TRABAJO:</td>
+                            <th>ORDEN DE TRABAJO:</th>
                             <td class="lineaInferior" colspan="3"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">FOLIO:</td>
+                            <th>FOLIO:</th>
                             <td class="lineaInferior" colspan="3"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">PARTIDA:</td>
+                            <th>PARTIDA:</th>
                             <td class="lineaInferior" colspan="3"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">LUGAR:</td>
+                            <th>LUGAR:</th>
                             <td class="lineaInferior"></td>
-                            <td class="datosGeneralesCortos">ISOMETRICO/PLANO:</td>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                        <tr>
-                            <td class="datosGeneralesCortos">PIEZA:</td>
-                            <td class="lineaInferior"></td>
-                            <td class="datosGeneralesCortos">MATERIAL:</td>
+                            <th>ISOMETRICO/PLANO:</th>
                             <td class="lineaInferior"></td>
                         </tr>
                         <tr>
-                            <td class="datosGeneralesCortos">PROCEDIMIENTO:</td>
+                            <th>PIEZA:</th>
                             <td class="lineaInferior"></td>
-                            <td class="datosGeneralesCortos" style="width: 160px;">CRITERIO DE EVALUACIÓN:</td>
+                            <th>MATERIAL:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th >PROCEDIMIENTO:</th>
+                            <td class="lineaInferior"></td>
+                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
                             <td class="lineaInferior"></td>
                         </tr>
                     </tbody>
@@ -372,9 +227,11 @@
 
                 <table class="encabezadoAzul">
                     <tr>
-                        <th class="celdaAzul letraBlanca" colspan="7">DATOS DE LA INSPECCIÓN</th>
+                        <th colspan="7">DATOS DE LA INSPECCIÓN</th>
                     </tr>
                 </table>
+
+                <div style="margin-bottom: 2px;"></div>
 
                 <table class="datosinspeccion">
                         <tbody>
@@ -413,12 +270,12 @@
                 <table class="datosinspeccion">
                     <tbody>
                         <tr class="celdaGris">
-                            <th style="width: 200%;">EQUIPO</th>
-                            <th style="width: 100%;">MARCA</th>
-                            <th style="width: 100%;">MODELO</th>
-                            <th style="width: 100%;">N/S</th>
-                            <th style="width: 100%;">CORRIENTE</th>
-                            <th style="width: 100%;">DISTANCIA ENTRE PATAS</th>
+                            <th style="width: 20%;">EQUIPO</th>
+                            <th style="width: 20%;">MARCA</th>
+                            <th style="width: 20%;">MODELO</th>
+                            <th style="width: 20%;">N/S</th>
+                            <th style="width: 20%;">CORRIENTE</th>
+                            <th style="width: 20%;">DISTANCIA ENTRE PATAS</th>
                             
                         </tr>
                         <tr>
@@ -434,17 +291,17 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
-                <table>
+                <table class="datosinspeccionsinborde">
                     <tbody>
                         <tr>
-                            <th >TIPO DE LUZ:</th>
+                            <th style="width: 10%;">TIPO DE LUZ:</th>
                             <td class="lineaInferior">1</td>
-                            <th >INTENCIDAD:</th>
-                            <td class="lineaInferior">2</td> <th style="text-align: left; width: 10px;"> Lx </th>
-                            <th>CONDICIÓN SUPERFICIAL:</th>
-                            <td class="lineaInferior">3</td>
-                            <th style="width: 60%;">TEMPERATURA DE PRUEBA:</th>
-                            <td class="lineaInferior">4</td> <th style="text-align: left; width: 10px;"> °C </th>
+                            <th style="width: 10%;">INTENCIDAD:</th>
+                            <td class="lineaInferior">2</td> <th style="text-align: left; width: 5%;"> Lx </th>
+                            <th style="width: 10%;">CONDICIÓN SUPERFICIAL:</th>
+                            <td class="lineaInferior">3</td>|
+                            <th style="width: 10%;">TEMPERATURA DE PRUEBA:</th>
+                            <td class="lineaInferior">4</td> <th style="text-align: left; width: 5%;"> °C </th>
                         </tr>
                     </tbody>
                 </table>
@@ -453,15 +310,32 @@
 
                 <table class="encabezadoAzul">
                         <tr>
-                            <th class="celdaAzul letraBlanca" colspan="9">RESULTADOS</th>
+                            <th colspan="9">RESULTADOS</th>
                         </tr>
                 </table>
-        </header>
-       
+        <!--</header>-->
+    <div style="margin-bottom: 2px;"></div>
+</htmlpageheader>
 
-        <div style="margin-bottom: 2px;"></div>
-
-    <table class="datosresultados">
+<!-- Contenido principal en el cuerpo del documento -->
+<!--<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>-->
+<div style="margin-bottom: 0px;"></div>
+<table class="datosresultados">
             <thead>
                 <tr class="celdaGris">
                     <th rowspan= "2" style="width: 20%;">No.</th>
@@ -482,7 +356,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for($i = 0; $i < 30; $i++)
+                @for($i = 0; $i < 24; $i++)
                 <tr>
                     <td>----</td>
                     <td>----</td>
@@ -506,122 +380,117 @@
                     <th>0 m</th>
                 </tr>
             </tbody>
-        </table>
+    </table>
 
-<footer>
-        <table class="tablaManifiesto3">
-            <thead>
-                <tr>
-                    <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                </tr>
-
-                        <tr>
-                            <td style="width: 20px;"><strong>NPIR</strong></td>
-                            <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
-                            <td style="width: 20px;"><strong>DM</strong></td>
-                            <td style="width: 150px;">DAÑO MECÁNICO</td>
-                            <td style="width: 20px;"><strong>PT</strong></td>
-                            <td style="width: 180px;">POROSIDAD TUBULAR</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>G</strong></td>
-                            <td>GRIETA</td>
-                            <td><strong>S</strong></td>
-                            <td>SOCAVADO</td>
-                            <td><strong>C</strong></td>
-                            <td>CRATER</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>ZG</strong></td>
-                            <td>ZONA DE GRIETAS</td>
-                            <td><strong>P</strong></td>
-                            <td>POROSIDAD</td>
-                            <td><strong>IL</strong></td>
-                            <td>INDICACIÓN LINEAL</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>FF</strong></td>
-                            <td>FALTA DE FUSIÓN</td>
-                            <td><strong>ZP</strong></td>
-                            <td>ZONA DE POROS</td>
-                            <td><strong>IR</strong></td>
-                            <td>INDICACIÓN REDONDEADA</td>
-                        </tr>
-
-                    </thead>
-                </table>
-
-                <div style="margin-bottom: 20px;"></div>
-
-                <div class="">
-                    <table class="sinBorde">
-                        <tr>
-                            <td class="datosGeneralesCortos">Observaciones:</td>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div style="margin-bottom: 20px;"></div>
-
-                    <div class="">
-                        <table class="sinBorde">
+        <htmlpagefooter name="myFooter">
+            <div style="text-align: center;">
+                <!--footer>-->
+                        <table class="simbologia">
                             <thead>
-
                                 <tr>
-                                    <td style="width: 30px;"></td>
-                                    <th>Realizó</th>
-                                    <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
-                                    <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
-                                </tr>
-
-                                <!--<tr class="sinBordetdth">-->
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
                                 </tr>
 
                                 <tr>
-                                    <th></th>
-                                    <td><strong>NOMBRE DEL TÉCNICO</strong></td>
-                                    <td></td>
-                                    <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                                    <td></td>
-                                    <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                                </tr>
-                                
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Técnico N-II SNT-TC-1A</strong></td>
-                                    <td></td>
-                                    <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                                    <td></td>
-                                    <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                    <td style="width: 20px;"><strong>NPIR</strong></td>
+                                    <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                    <td style="width: 20px;"><strong>DM</strong></td>
+                                    <td style="width: 150px;">DAÑO MECÁNICO</td>
+                                    <td style="width: 20px;"><strong>PT</strong></td>
+                                    <td style="width: 180px;">POROSIDAD TUBULAR</td>
                                 </tr>
 
                                 <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                                    <td></td>
-                                    <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                    <td><strong>G</strong></td>
+                                    <td>GRIETA</td>
+                                    <td><strong>S</strong></td>
+                                    <td>SOCAVADO</td>
+                                    <td><strong>C</strong></td>
+                                    <td>CRATER</td>
                                 </tr>
+
+                                <tr>
+                                    <td><strong>ZG</strong></td>
+                                    <td>ZONA DE GRIETAS</td>
+                                    <td><strong>P</strong></td>
+                                    <td>POROSIDAD</td>
+                                    <td><strong>IL</strong></td>
+                                    <td>INDICACIÓN LINEAL</td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>FF</strong></td>
+                                    <td>FALTA DE FUSIÓN</td>
+                                    <td><strong>ZP</strong></td>
+                                    <td>ZONA DE POROS</td>
+                                    <td><strong>IR</strong></td>
+                                    <td>INDICACIÓN REDONDEADA</td>
+                                </tr>
+
                             </thead>
                         </table>
-                    </div>
-        </footer>           
-    </div>
-</htmlpagefooter>
 
+                        <br>
+
+                            <table>
+                                <tr>
+                                    <th class="datosGenerales" style="width: 10%;">OBSERVACIONES:</th>
+                                    <td class="lineaInferior" style="width: 100%;"></td>
+                                </tr>
+                            </table>
+                            
+                        <br>
+                                <table class="datosGenerales">
+                                    <thead>
+
+                                        <tr>
+                                            <td style="width: 30px;"></td>
+                                            <th>Realizó</th>
+                                            <td style="width: 30px;"></td>
+                                            <th>Vo.Bo.</th>
+                                            <td style="width: 30px;"></td>
+                                            <th>Vo.Bo.</th>
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                            <td></td>
+                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                            <td></td>
+                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <td><strong>NOMBRE DEL TÉCNICO</strong></td>
+                                            <td></td>
+                                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                            <td></td>
+                                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <th></th>
+                                            <td><strong>Técnico N-II SNT-TC-1A</strong></td>
+                                            <td></td>
+                                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                            <td></td>
+                                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                            <td></td>
+                                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                            <td></td>
+                                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                <!--</footer>-->
+            </div>
+        </htmlpagefooter>
     </body>
 </html>

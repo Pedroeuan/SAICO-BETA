@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -53,6 +54,41 @@ class HerramientasController extends Controller
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
         ]);
+
+        // Limpia y normaliza el número económico
+        $noEconomico = $request->input('No_economico');
+        $serie = Str::lower($request->input('Serie'));
+        
+        // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+        $noEconomicoLimpio = preg_replace('/^(no\.?\s*ad[- ]?|ad[- ]?)/i', '', $noEconomico);
+        $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+        $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
+        ->where('Tipo', 'HERRAMIENTAS')
+        ->exists();
+
+        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+        //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
+        //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
+        if ($existsNo_Economico && $existsSerie)
+        {
+            return redirect()->back()->withErrors([
+                'No_economico' => 'El No economico ya existe en la base de datos.',
+                'Serie' => 'La Serie ya existe en la base de datos.',
+            ])->withInput();
+        }
+        else if ($existsNo_Economico) {
+            return redirect()->back()->withErrors([
+                'No_economico' => 'El No economico ya existe en la base de datos.',
+            ])->withInput();
+        }
+        else if ($existsSerie)
+        {
+            return redirect()->back()->withErrors([
+                'Serie' => 'La Serie ya existe en la base de datos.',
+            ])->withInput();
+        }
         
         /* Tabla General_EyC */
         $general = new general_eyc;
@@ -364,6 +400,16 @@ class HerramientasController extends Controller
         $generalEyC  = general_eyc::find($id);
         // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
         $EsperaDato ='ESPERA DE DATO';
+
+        $No_EBD = $generalEyC->No_economico;
+        $SerBD = $generalEyC->Serie;
+
+        $No_EF = $request->input('No_economico');
+        $SerF = $request->input('Serie');
+
+        if($No_EF == $No_EBD && $SerF==$SerBD)
+        {
+
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
@@ -542,6 +588,223 @@ class HerramientasController extends Controller
                 $generalConHerramientas->Plano = $PlanoPath;
                 $generalConHerramientas->save();
                 }
+            }
+            else
+            {
+            // Limpia y normaliza el número económico
+            $noEconomico = $request->input('No_economico');
+            $serie = Str::lower($request->input('Serie'));
+
+            // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+            $noEconomicoLimpio = preg_replace('/^(no\.?\s*ad[- ]?|ad[- ]?)/i', '', $noEconomico);
+            $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
+            ->where('Tipo', 'HERRAMIENTAS')
+            ->exists();
+
+            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+            //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
+            //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
+            if ($existsNo_Economico && $existsSerie)
+            {
+                return redirect()->back()->withErrors([
+                    'No_economico' => 'El No economico ya existe en la base de datos.',
+                    'Serie' => 'La Serie ya existe en la base de datos.',
+                ])->withInput();
+            }
+            else if ($existsNo_Economico) {
+                return redirect()->back()->withErrors([
+                    'No_economico' => 'El No economico ya existe en la base de datos.',
+                ])->withInput();
+            }
+            else if ($existsSerie)
+            {
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie ya existe en la base de datos.',
+                ])->withInput();
+            }
+
+        $disponibilidadEstado = $request->input('Disponibilidad_Estado');
+        if ($disponibilidadEstado == 'Elige un Tipo') {
+            $disponibilidadEstado = $EsperaDato;
+        }
+        // Actualizar los datos del equipo
+        $generalEyC ->update([
+            'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
+            'No_economico' => $request->input('No_economico'),
+            'Serie' => $request->input('Serie'),
+            'Marca' => $request->input('Marca'),
+            'Modelo' => $request->input('Modelo'),
+            'Ubicacion' => $request->input('Ubicacion'),
+            'Almacenamiento' => $request->input('Almacenamiento'),
+            'Comentario' => $request->input('Comentario'),
+            'SAT' => $request->input('SAT'),
+            'BMPRO' => $request->input('BMPRO'),
+            'Tipo' => $request->input('Tipo'),
+            'Disponibilidad_Estado' => $disponibilidadEstado,
+        ]);
+
+        // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+        if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
+            $rutaAnterior = $generalEyC->Factura;
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+            $pdf = $request->file('Factura');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Herramientas'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
+
+            $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Herramientas/', $newFileNameFactura, 'public');
+            $generalEyC->Factura = $pdfPath;
+            
+        }
+
+        // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+        if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
+            // Obtener la ruta del archivo anterior desde la base de datos
+            $rutaAnterior = $generalEyC->Foto;
+            // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+            // Guardar el nuevo archivo de imagen
+            $imagen = $request->file('Foto');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Herramientas'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName(); 
+            $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Herramientas/', $newFileNameFoto, 'public');
+            // Actualizar la ruta de la imagen en la base de datos
+            $generalEyC->Foto = $imagenPath;
+        }
+
+        $generalEyC->save();
+        // Actualizar los datos del certificado asociado
+        $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
+
+        // Verificar si se ha proporcionado un nuevo certificado actual
+        if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
+            // Obtener la ruta del certificado actual desde la base de datos
+            $rutaAnterior = $generalConCertificado->Certificado_Actual;
+            // Guardar el nuevo certificado en la carpeta origina
+
+            $certificado = $request->file('Certificado_Actual');
+
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
+            
+            $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Herramientas', $newFileNameCertificado, 'public');
+            // Actualizar la ruta del certificado en la base de datos
+            $generalConCertificado->Certificado_Actual = $certificadoPath;
+            $generalConCertificado->save();
+
+            // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                // Obtener el nombre del archivo
+                $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
+                // Construir la nueva ruta para mover el archivo
+                $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Herramientas/' . $nombreArchivo;
+                // Mover el archivo
+                Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
+                /* Tabla Historial_certificados */
+                $CertificadosHistorialCertificados = new historial_certificado;
+                $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
+                $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
+                $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
+                $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
+                $CertificadosHistorialCertificados->save();
+                }
+            }
+
+        /*HERRAMIENTAS*/
+        $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
+
+        if ($request->hasFile('Garantia') && $request->file('Garantia')->isValid()) {
+            $rutaAnterior = $generalConHerramientas->Garantia;
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+            $Garantia = $request->file('Garantia');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Herramientas'))
+            ->filter(function ($file) {
+                return preg_match('/^\d+_/', basename($file));
+            })
+            ->sort()
+            ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameFactura = $newNumber . '_' . $Garantia->getClientOriginalName();
+            $imagenPath = $Garantia->storeAs('Equipos y Consumibles/Certificados/Herramientas/', $newFileNameFactura, 'public');
+            $generalConHerramientas->Garantia = $imagenPath;
+            $generalConHerramientas->save();
+            }
+
+            if ($request->hasFile('Plano') && $request->file('Plano')->isValid()) {
+                $rutaAnteriorP = $generalConHerramientas->Plano;
+                if ($rutaAnteriorP && Storage::disk('public')->exists($rutaAnteriorP)) {
+                    Storage::disk('public')->delete($rutaAnteriorP);
+                }
+                $Plano = $request->file('Plano');
+                // Obtener el último número consecutivo
+                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Planos/Herramientas'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                    })
+                    ->sort()
+                    ->last();
+                $lastNumber = 0;
+                if ($lastFile) {
+                    $lastNumber = (int)explode('_', basename($lastFile))[0];
+                }
+                // Incrementar el número consecutivo
+                $newNumber = $lastNumber + 1;
+                $newFileNameFactura = $newNumber . '_' . $Plano->getClientOriginalName();
+                $PlanoPath = $Plano->storeAs('Equipos y Consumibles/Planos/Herramientas/', $newFileNameFactura, 'public');
+                $generalConHerramientas->Plano = $PlanoPath;
+                $generalConHerramientas->save();
+                }
+            }
 
         return redirect()->route('inventario');
     }
