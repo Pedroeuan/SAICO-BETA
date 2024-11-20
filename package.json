@@ -21,6 +21,7 @@
     "dependencies": {
         "bootstrap-icons": "^1.11.3",
         "datatables.net-dt": "^2.1.4",
+        "puppeteer": "^23.7.1",
         "sweetalert2": "^11.6.13"
     }
 }

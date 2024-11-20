@@ -122,6 +122,13 @@
                                             <input type="checkbox"  name="Renta">                                          
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT Y BMPRO</label><br>
+                                            <input type="checkbox"  name="SATBMPRO">                                          
+                                        </div>
+                                    </div>
                                     
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -250,8 +257,34 @@
             }
         });
     });
+
+    $(document).ready(function() {
+        // Inicializa el switch con las etiquetas personalizadas
+        $("[name='SATBMPRO']").bootstrapSwitch({
+            onText: 'Sí',
+            offText: 'No'
+        });
+
+        // Obtiene el valor desde PHP y lo pasa a JavaScript
+        var valorDevuelto = "{{ $Manifiestos->SATBMPRO }}"; // "Sí" o "No" desde PHP
+
+        // Ajusta el estado del switch según el valor devuelto
+        if (valorDevuelto === "SI") {
+            $("[name='SATBMPRO']").bootstrapSwitch('state', true); // Activa el switch
+        } else if (valorDevuelto === "NO") {
+            $("[name='SATBMPRO']").bootstrapSwitch('state', false); // Desactiva el switch
+        }
+    });
+
     // llamar switch boostrap
-    $("[name='Renta']").bootstrapSwitch();
+    $("[name='Renta']").bootstrapSwitch({
+        onText: 'Sí',
+        offText: 'No'
+    });
+    /*$("[name='SATBMPRO']").bootstrapSwitch({
+        onText: 'Sí',
+        offText: 'No'
+    });*/
 </script>
 
 @endsection

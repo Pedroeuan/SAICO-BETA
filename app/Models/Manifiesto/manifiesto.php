@@ -20,6 +20,7 @@ class manifiesto extends Model
         'Responsable',
         'Observaciones',
         'ScanPDF',
+        'SATBMPRO',
     ];
     protected $table = 'Manifiestos';
     protected $primaryKey = 'idManifiestos';

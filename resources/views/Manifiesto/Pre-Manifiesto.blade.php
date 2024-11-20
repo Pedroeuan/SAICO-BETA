@@ -123,6 +123,13 @@
                     </div>
                 </div>
 
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label" for="inputSuccess">SAT Y BMPRO</label><br>
+                        <input type="checkbox"  name="SATBMPRO">                                          
+                    </div>
+                </div>
+
             <!--Campo Oculto para pasar el id de Solicitud -->
             <input type="hidden" class="form-control inputForm" name="idSolicitud" placeholder="" value="{{ $Solicitud->idSolicitud }}">
                 <div class="col-sm-12">
@@ -238,7 +245,14 @@
     });
 
     // llamar switch boostrap
-    $("[name='Renta']").bootstrapSwitch();
+    $("[name='Renta']").bootstrapSwitch({
+        onText: 'Sí',
+        offText: 'No'
+    });
+    $("[name='SATBMPRO']").bootstrapSwitch({
+        onText: 'Sí',
+        offText: 'No'
+    });
 </script>
 
 @endsection
