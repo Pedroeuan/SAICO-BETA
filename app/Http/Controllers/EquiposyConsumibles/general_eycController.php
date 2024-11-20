@@ -87,18 +87,130 @@ class general_eycController extends Controller
         return redirect()->route('inventario');
     }
 
-    public function verificarDuplicado(Request $request)
+    public function verificarDuplicadoEquipos(Request $request)
     {
-        // Estandarizar y limpiar los valores
-        $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
-        $serie = Str::lower($request->input('Serie'));
+    // Limpia y normaliza el número económico
+    $noEconomico = $request->input('No_economico');
+    $serie = Str::lower($request->input('Serie'));
 
-        // Verificar duplicados
-        $existsNo_Economico = general_eyc::whereRaw("LOWER(REPLACE(No_economico, '-', '')) = ?", [$noEconomico])
-            ->orWhereRaw("LOWER(REPLACE(No_economico, 'No.', '')) = ?", [$noEconomico])
-            ->exists();
+    // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
+    $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
+    $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
-        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+    // Verifica si el número económico ya existe (compara el número limpio)
+    $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
+    ->where('Tipo', 'EQUIPOS')
+    ->exists();
+
+    $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+        // Construir respuesta JSON según los duplicados encontrados
+        $response = [
+            'duplicado' => false,
+            'mensaje' => ''
+        ];
+
+        if ($existsNo_Economico && $existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico y la Serie ya existen en la base de datos.';
+        } elseif ($existsNo_Economico) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico ya existe en la base de datos.';
+        } elseif ($existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'La Serie ya existe en la base de datos.';
+        }
+
+        return response()->json($response);
+    }
+
+    public function verificarDuplicadoAccesorios(Request $request)
+    {
+    // Limpia y normaliza el número económico
+    $noEconomico = $request->input('No_economico');
+    $serie = Str::lower($request->input('Serie'));
+    
+    // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+    $noEconomicoLimpio = preg_replace('/^(no\.?\s*aico[- ]?|aico[- ]?)/i', '', $noEconomico);
+    $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+    $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AICO-', ''))) = ?", [$noEconomicoLimpio])
+    ->where('Tipo', 'ACCESORIOS')
+    ->exists();
+
+    $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+        // Construir respuesta JSON según los duplicados encontrados
+        $response = [
+            'duplicado' => false,
+            'mensaje' => ''
+        ];
+
+        if ($existsNo_Economico && $existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico y la Serie ya existen en la base de datos.';
+        } elseif ($existsNo_Economico) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico ya existe en la base de datos.';
+        } elseif ($existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'La Serie ya existe en la base de datos.';
+        }
+
+        return response()->json($response);
+    }
+
+    public function verificarDuplicadoBlockyProbeta(Request $request)
+    {
+    // Limpia y normaliza el número económico
+    $noEconomico = $request->input('No_economico');
+    $serie = Str::lower($request->input('Serie'));
+    
+    // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+    $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?|eco-b[- ]?)/i', '', $noEconomico);
+    $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+    $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
+    ->where('Tipo', 'BLOCK Y PROBETA')
+    ->exists();
+
+    $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+        // Construir respuesta JSON según los duplicados encontrados
+        $response = [
+            'duplicado' => false,
+            'mensaje' => ''
+        ];
+
+        if ($existsNo_Economico && $existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico y la Serie ya existen en la base de datos.';
+        } elseif ($existsNo_Economico) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'El Número Económico ya existe en la base de datos.';
+        } elseif ($existsSerie) {
+            $response['duplicado'] = true;
+            $response['mensaje'] = 'La Serie ya existe en la base de datos.';
+        }
+
+        return response()->json($response);
+    }
+
+    public function verificarDuplicadoHerramientas(Request $request)
+    {
+    // Limpia y normaliza el número económico
+    $noEconomico = $request->input('No_economico');
+    $serie = Str::lower($request->input('Serie'));
+    
+    // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+    $noEconomicoLimpio = preg_replace('/^(no\.?\s*ad[- ]?|ad[- ]?)/i', '', $noEconomico);
+    $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+    $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
+    ->where('Tipo', 'HERRAMIENTAS')
+    ->exists();
+
+    $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
 
         // Construir respuesta JSON según los duplicados encontrados
         $response = [
