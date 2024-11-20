@@ -55,28 +55,20 @@ class equiposController extends Controller
                 'Serie' => 'required|string|max:255',
             ]);
 
-            // Estandarizar y limpiar el valor de No_economico para la comparación
-            //Str::lower(...): Convierte la cadena a minúsculas para evitar problemas de mayúsculas y minúsculas.
-            //preg_replace('/[^a-zA-Z0-9]/', '', ...): Elimina todos los caracteres que no sean letras o números, para poder comparar variantes como ECO-004, No.ECO-004, etc.
-            $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
+            // Limpia y normaliza el número económico
+            $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
-            Log::info('***********************');
-            Log::info('noEconomico: ', ['noEconomico' => $noEconomico]);
+            
+            // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
+            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
+            $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
-            /*^: Comienza desde el inicio del texto.
-            (no[\\.]\\s?eco[-]?|eco[-]?|noeco[-]?):
-            no[\\.]\\s?eco[-]?: Detecta "No. ECO-", permitiendo espacios opcionales después del punto.
-            eco[-]?: Detecta "ECO-" o "eco-", con un guion opcional.
-            noeco[-]?: Detecta "No.ECO-" o "noeco-", con un guion opcional.
-            \\d{3,}: Una secuencia de al menos 3 dígitos consecutivos.
-            $: Indica que debe coincidir hasta el final del texto. */
-            $existsNo_Economico = general_eyc::whereRaw("LOWER(No_economico) REGEXP '^(no[\\.]\\s?eco[-]?|eco[-]?|noeco[-]?|no\\seco)\\d{0,}$'")
+             // Verifica si el número económico ya existe (compara el número limpio)
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
+            ->where('Tipo', 'EQUIPOS')
             ->exists();
-            Log::info('***********************');
-            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
 
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])
-            ->exists();
+            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -503,20 +495,20 @@ class equiposController extends Controller
         }
         else
         {
-            // Estandarizar y limpiar el valor de No_economico para la comparación
-            //Str::lower(...): Convierte la cadena a minúsculas para evitar problemas de mayúsculas y minúsculas.
-            //preg_replace('/[^a-zA-Z0-9]/', '', ...): Elimina todos los caracteres que no sean letras o números, para poder comparar variantes como ECO-004, No.ECO-004, etc.
-            $noEconomico = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $request->input('No_economico')));
+            // Limpia y normaliza el número económico
+            $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
+            
+            // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
+            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
+            $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
-            // Verificar que no exista un registro duplicado en la base de datos
-            //whereRaw("LOWER(REPLACE(No_economico, '-', '')) = ?", [$noEconomico]): Usa consultas crudas con LOWER 
-            //y REPLACE para limpiar el No_economico antes de compararlo con el valor estandarizado.
-            $existsNo_Economico = general_eyc::whereRaw("LOWER(REGEXP_REPLACE(No_economico, '[^a-zA-Z0-9]', '')) = ?", [$noEconomico])
+             // Verifica si el número económico ya existe (compara el número limpio)
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
+            ->where('Tipo', 'EQUIPOS')
             ->exists();
 
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])
-            ->exists();
+            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -540,7 +532,7 @@ class equiposController extends Controller
             }
             //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
 
-                                    // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
+            // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
             if ($disponibilidadEstado == 'Elige un Tipo') {
                 $disponibilidadEstado = $EsperaDato;

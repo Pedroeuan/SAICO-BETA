@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -53,6 +54,42 @@ class BlockYProbetaController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
             ]);
+
+            // Limpia y normaliza el número económico
+            $noEconomico = $request->input('No_economico');
+            $serie = Str::lower($request->input('Serie'));
+            
+            // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?|eco-b[- ]?)/i', '', $noEconomico);
+            $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
+            ->where('Tipo', 'BLOCK Y PROBETA')
+            ->exists();
+
+            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+
+            //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
+            //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
+            if ($existsNo_Economico && $existsSerie)
+            {
+                return redirect()->back()->withErrors([
+                    'No_economico' => 'El No economico ya existe en la base de datos.',
+                    'Serie' => 'La Serie ya existe en la base de datos.',
+                ])->withInput();
+            }
+            else if ($existsNo_Economico) {
+                return redirect()->back()->withErrors([
+                    'No_economico' => 'El No economico ya existe en la base de datos.',
+                ])->withInput();
+            }
+            else if ($existsSerie)
+            {
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie ya existe en la base de datos.',
+                ])->withInput();
+            }
+
             /* Tabla General_EyC */
             $general = new general_eyc;
             $EsperaDato ='ESPERA DE DATO';
