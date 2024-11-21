@@ -4,12 +4,9 @@
     <title>Manifiesto</title>
     <style>
         @page {
-            header: html_myHeader; 
-            footer: html_myFooter; 
-            margin-top: 30px;
-            margin-bottom: 20px;
-        } 
-
+            margin: 45px 25px;
+            counter-reset: page; /* Inicializa el contador de páginas */
+        }
         .tablaheader {
             border-collapse: collapse; 
             border-spacing: 0px;        /* Espacio entre celdas */
@@ -135,12 +132,25 @@
             width: 100%;
         }
 
+        .header {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #000;
+        }
     </style>
     
 </head>
     <body>
-    <htmlpageheader name="myHeader">
-        <!--<header>-->
+    <div class="header">
+        <header>
                 <table class="tablaheader">
                     <thead>
                         <tr>
@@ -313,9 +323,10 @@
                             <th colspan="9">RESULTADOS</th>
                         </tr>
                 </table>
-        <!--</header>-->
+        </header>
+    </div>
     <div style="margin-bottom: 2px;"></div>
-</htmlpageheader>
+
 
 <!-- Contenido principal en el cuerpo del documento -->
 <!--<br>
@@ -382,9 +393,9 @@
             </tbody>
     </table>
 
-        <htmlpagefooter name="myFooter">
+
             <div style="text-align: center;">
-                <!--footer>-->
+                <footer>
                         <table class="simbologia">
                             <thead>
                                 <tr>
@@ -489,8 +500,8 @@
                                         </tr>
                                     </thead>
                                 </table>
-                <!--</footer>-->
+                </footer>
             </div>
-        </htmlpagefooter>
+
     </body>
 </html>
