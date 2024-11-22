@@ -16,21 +16,28 @@ class PDFReportesController extends Controller
     {
         $user = Auth::user();
         $nombre = $user->name;
-        $Logo = public_path('images/Logo_AICO_R.jpg');
+        //$Logo = public_path('images/Logo_AICO_R.jpg');
         $data = [
             'title' => 'Reporte_FOR-PINS-03/01.PDF',
             'nombre' => $nombre,
-            'Logo' => $Logo,
-        ]; // Datos para la vista PDF
-
-        // Genera el PDF a partir de una vista
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data);
-
-        // Devuelve el archivo PDF como descarga
-        //return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
-        return response($pdf->output())
-        ->header('Content-Type', 'application/pdf')
-        ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_03_01.PDF"');
+            //'Logo' => $Logo,
+        ];
+    
+        try {
+            $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)
+                ->setPaper('letter')
+                ->setOption('margin-top', 90)
+                ->setOption('margin-bottom', 20)
+                ->setOption('header-right', 'Página [page] de [toPage]')
+                ->setOption('enable-local-file-access', true)
+                ->setOption('header-html', view('ReportesPDF.header')->render())
+                ->setOption('footer-html', view('ReportesPDF.footer')->render());
+                //->setOption('enable-local-file-access', true); // Habilitar acceso a archivos locales
+    
+            return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function FOR_PINS_03_01__()
