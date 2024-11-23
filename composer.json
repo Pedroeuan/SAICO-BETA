@@ -8,6 +8,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
         "barryvdh/laravel-snappy": "^1.0",
+        "fpdf/fpdf": "^1.86",
         "jeroennoten/laravel-adminlte": "^3.11",
         "knplabs/knp-snappy": "^1.5",
         "laravel-lang/common": "^6.3",
@@ -19,6 +20,8 @@
         "mpdf/mpdf": "^8.2",
         "nesbot/carbon": "^3.6",
         "setasign/fpdf": "^1.8",
+        "smalot/pdfparser": "^2.11",
+        "spatie/browsershot": "^4.3",
         "spipu/html2pdf": "^5.2",
         "tecnickcom/tcpdf": "^6.7",
         "twbs/bootstrap-icons": "^1.11"

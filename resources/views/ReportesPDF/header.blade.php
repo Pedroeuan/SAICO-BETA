@@ -148,9 +148,14 @@
             border-top: 1px solid #000;
         }
 
+        .right {
+            text-align: right;
+            width: 30%;
+        }
     </style>
 </head>
     <body>
+    Página [page] de [toPage]
                 <table class="tablaheader">
                     <tbody>  
                         <tr>
@@ -166,7 +171,9 @@
                         </tr>
                         <tr>
                             <th>Página</th>
-                            <th>Página {PAGENO} de {nbpg}</th>
+                            <th>
+
+                            </th>
                         </tr>
                     </tbody>
                 </table>
