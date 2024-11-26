@@ -623,9 +623,8 @@ class AccesoriosController extends Controller
         $generalConAccesorios->update([
             'Proveedor' => $request->input('Proveedor'),
         ]);
-
-        
     }
+    
         return redirect()->route('inventario');
     }
     /**
