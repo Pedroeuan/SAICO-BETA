@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manifiesto</title>
     <style>
-        @page {
-            margin: 45px 25px;
-            counter-reset: page; /* Inicializa el contador de páginas */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            text-align: center;
+            margin: 0;
         }
         .tablaheader {
             border-collapse: collapse; 
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 60px;
+            table-layout: fixed;
+            /*font-size: 60px;*/
         }
         /* Aplica el borde a las celdas de la tabla */
         .tablaheader th {
@@ -145,23 +147,23 @@
             width: 100%;
             border-top: 1px solid #000;
         }
+
+        .right {
+            text-align: right;
+            width: 30%;
+        }
     </style>
-    
 </head>
     <body>
-    <div class="header">
-        <header>
+    Página [page] de [toPage]
                 <table class="tablaheader">
-                    <thead>
+                    <tbody>  
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 60%;">FOR-PINS-03/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 75%;">FORMATO</th>
+                            <th style="width: 10%;">Código:</th>
+                            <th style="width: 12%;">FOR-PINS-03/01</th>
+                            <th rowspan="3" style="width: 10%;"><img src="{{ public_path('images/Logo_AICO_R.jpg') }}" style="width: 60px; height: auto;"></th>
                         </tr>
-                    </thead>
-
-                    <tbody>
                         <tr>
                             <th rowspan="2"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
                             <th>Versión</th>
@@ -169,7 +171,9 @@
                         </tr>
                         <tr>
                             <th>Página</th>
-                            <th>{PAGENO} de {nbpg}</th>
+                            <th>
+
+                            </th>
                         </tr>
                     </tbody>
                 </table>
@@ -323,192 +327,6 @@
                             <th colspan="9">RESULTADOS</th>
                         </tr>
                 </table>
-        </header>
-    </div>
-    <div style="margin-bottom: 2px;"></div>
-
-
-<!-- Contenido principal en el cuerpo del documento -->
-<!--<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>-->
-<div style="margin-bottom: 0px;"></div>
-<table class="datosresultados">
-            <thead>
-                <tr class="celdaGris">
-                    <th rowspan= "2" style="width: 20%;">No.</th>
-                    <th rowspan= "2">No. De Junta / Componente</th>
-                    <th rowspan= "2">No. Indicación</th>
-                    <th rowspan= "2">Tipo de Indicación</th>
-                    <th colspan="3">Dim. De Indicación</th>
-
-                    <th style="width: 50%;">Localización</th>
-                    <th rowspan= "2" style="width: 100%;">Evaluación</th>
-                    <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
-                </tr>
-                <tr class="celdaGris">
-                    <th style="width: 50%;">Largo</th>
-                    <th style="width: 50%;">Ancho</th>
-                    <th style="width: 50%;">Ø</th>
-                    <th style="width: 50%;">H.T.</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for($i = 0; $i < 24; $i++)
-                <tr>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                </tr>
-                @endfor
-                <tr class="sinBordetd">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
-                    <th>0 m</th>
-                </tr>
-            </tbody>
-    </table>
-
-
-            <div style="text-align: center;">
-                <footer>
-                        <table class="simbologia">
-                            <thead>
-                                <tr>
-                                    <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                                </tr>
-
-                                <tr>
-                                    <td style="width: 20px;"><strong>NPIR</strong></td>
-                                    <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
-                                    <td style="width: 20px;"><strong>DM</strong></td>
-                                    <td style="width: 150px;">DAÑO MECÁNICO</td>
-                                    <td style="width: 20px;"><strong>PT</strong></td>
-                                    <td style="width: 180px;">POROSIDAD TUBULAR</td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>G</strong></td>
-                                    <td>GRIETA</td>
-                                    <td><strong>S</strong></td>
-                                    <td>SOCAVADO</td>
-                                    <td><strong>C</strong></td>
-                                    <td>CRATER</td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>ZG</strong></td>
-                                    <td>ZONA DE GRIETAS</td>
-                                    <td><strong>P</strong></td>
-                                    <td>POROSIDAD</td>
-                                    <td><strong>IL</strong></td>
-                                    <td>INDICACIÓN LINEAL</td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>FF</strong></td>
-                                    <td>FALTA DE FUSIÓN</td>
-                                    <td><strong>ZP</strong></td>
-                                    <td>ZONA DE POROS</td>
-                                    <td><strong>IR</strong></td>
-                                    <td>INDICACIÓN REDONDEADA</td>
-                                </tr>
-
-                            </thead>
-                        </table>
-
-                        <br>
-
-                            <table>
-                                <tr>
-                                    <th class="datosGenerales" style="width: 10%;">OBSERVACIONES:</th>
-                                    <td class="lineaInferior" style="width: 100%;"></td>
-                                </tr>
-                            </table>
-                            
-                        <br>
-                                <table class="datosGenerales">
-                                    <thead>
-
-                                        <tr>
-                                            <td style="width: 30px;"></td>
-                                            <th>Realizó</th>
-                                            <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
-                                            <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
-                                        </tr>
-
-                                        <tr>
-                                            <th></th>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <th></th>
-                                            <td><strong>NOMBRE DEL TÉCNICO</strong></td>
-                                            <td></td>
-                                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                                            <td></td>
-                                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                                        </tr>
-                                        
-                                        <tr>
-                                            <th></th>
-                                            <td><strong>Técnico N-II SNT-TC-1A</strong></td>
-                                            <td></td>
-                                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                                            <td></td>
-                                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                                        </tr>
-
-                                        <tr>
-                                            <th></th>
-                                            <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                            <td></td>
-                                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                                            <td></td>
-                                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                                        </tr>
-                                    </thead>
-                                </table>
-                </footer>
-            </div>
 
     </body>
 </html>
-
-
-
-@for($i = 0; $i < 624; $i++)
-HOLA MUNDO
-@endfor
-

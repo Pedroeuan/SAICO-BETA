@@ -681,11 +681,6 @@ class equiposController extends Controller
                     }
                 }
         }
-
-            
-        
-        
-
             return redirect()->route('inventario');
     }
 
