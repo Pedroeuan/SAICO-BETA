@@ -15,30 +15,39 @@ use Illuminate\Support\Facades\Auth;
 //use Barryvdh\Snappy\Facades\SnappyPdf;
 use Barryvdh\DomPDF\Facade\Pdf;
 //use Barryvdh\DomPDF\Facade as PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class PDFReportesController extends Controller
 {
     public function FOR_PINS_03_01()
     {
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+    
+        $dompdf = new Dompdf($options);
+        $html = view('ReportesPDF.Reporte_FOR_PINS_03_01_PDF')->render(); // Renderiza la vista
+    
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('letter', 'portrait');
+        $dompdf->render();
+    
+        return $dompdf->stream('Reporte_FOR_PINS_03_01.PDF', ['Attachment' => false]); // Descargar o visualizar
+    }
+
+    /*DOMPDF2 */
+    /*public function FOR_PINS_03_01()
+    {
         $user = Auth::user();
         $nombre = $user->name;
-        /*$Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
-        $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();*/
-    
+
         $Logo = public_path('images/Logo_AICO_R.jpg');
     
         $data = [
             'title' => 'Reporte_FOR-PINS-03/01.PDF',
-            /*'Manifiesto' => $Manifiesto,
-            'DetallesSolicitud' => $DetallesSolicitud,
-            'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,*/
             'nombre' => $nombre,
             'Logo' => $Logo,
-            //'Devolucion' => $Devolucion,
         ];
     
         // Cargar la vista con los datos
@@ -63,17 +72,17 @@ class PDFReportesController extends Controller
                     // Header
         $xHeader = 20; // Ajusta esta posición X del header
         $yHeader = 40; // Ajusta esta posición Y del header
-        $headerText = "Este es el Header de cada página";
-        $canvas->text($xHeader, $yHeader, $headerText, $font, $size);
+        //$headerText = "Este es el Header de cada página";
+        //$canvas->text($xHeader, $yHeader, $headerText, $font, $size);
 
         // Footer
         $xFooter = 588; // Ajusta esta posición X del footer
         $yFooter = 750; // Ajusta esta posición Y del footer
-        $footerText = "$pageNumber de $pageCount";
-        $canvas->text($xFooter, $yFooter, $footerText, $font, $size);
+        //$footerText = "$pageNumber de $pageCount";
+        //$canvas->text($xFooter, $yFooter, $footerText, $font, $size);
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 588; // Ajusta esta posición X según sea necesario
+            $x = 614; // Ajusta esta posición X según sea necesario
             $y = 72;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
@@ -84,6 +93,140 @@ class PDFReportesController extends Controller
         });
     
         return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
+    }*/
+
+    /*Snappy */
+    public function FOR_PINS_03_01333()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+    
+        $data = [
+            'title' => 'Reporte_FOR-PINS-03/01.PDF',
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+        ];
+    
+        $pdf = SnappyPdf::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)
+            ->setPaper('a4')               // Configurar tamaño del papel
+            ->setOrientation('portrait')   // Orientación: 'portrait' o 'landscape'
+            ->setOption('margin-top', 90) // Aumenta el espacio superior para el header
+            ->setOption('margin-bottom', 60)
+            ->setOption('margin-left', 10)
+            ->setOption('margin-right', 10)
+            ->setOption('header-html', view('ReportesPDF.header')->render())
+            ->setOption('footer-html', view('ReportesPDF.footer')->render())
+            ->setOption('header-spacing', 5) // Espaciado entre el header y el contenido
+            ->setOption('enable-javascript', true)
+            ->setOption('no-stop-slow-scripts', true)
+            ->setOption('header-center', 'Página [page] de [toPage]')
+            ->setOption('footer-spacing', 5);
+            //->setOption('footer-right', '[page] de [toPage]'); // Activar marcador de página
+            //->setOption('disable-smart-shrinking', true)
+            //->setOption('lowquality', true)
+            //->setOption('dpi', 96); // Reducir DPI para mejorar velocidad
+
+    
+        return $pdf->download('reporte.pdf');
+    }
+    /*MPDF */
+    public function FOR_PINS_03_0122222()
+    {
+        $mpdf = new \Mpdf\Mpdf();
+        // Define el encabezado extenso
+        $headerHTML = <<<HTML
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    margin: 0;
+                }
+                .tablaheader {
+                    border-collapse: collapse;
+                    width: 100%;
+                    text-align: center;
+                }
+                .tablaheader th {
+                    border: 1px solid black;
+                }
+                .datosgenerales, .datosinspeccion, .encabezadoAzul {
+                    width: 100%;
+                    font-size: 8px;
+                    text-align: center;
+                }
+                .datosgenerales td, .datosgenerales th,
+                .datosinspeccion td, .datosinspeccion th {
+                    border: 1px solid black;
+                }
+                .lineaInferior {
+                    border-bottom: 1px solid black;
+                }
+            </style>
+        </head>
+        <body>
+        <table class="tablaheader">
+            <tbody>
+                <tr>
+                    <th style="width: 75%;">FORMATO</th>
+                    <th style="width: 10%;">Código:</th>
+                    <th style="width: 12%;">FOR-PINS-03/01</th>
+                    <th rowspan="3" style="width: 10%;"><img src="path/to/your/logo.jpg" style="width: 60px; height: auto;"></th>
+                </tr>
+                <tr>
+                    <th rowspan="2"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
+                    <th>Versión</th>
+                    <th>3</th>
+                </tr>
+                <tr>
+                    <th>Página</th>
+                    <th>{PAGENO} de {nbpg}</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom: 5px;"></div>
+        <table class="encabezadoAzul">
+            <tr>
+                <th colspan="4">DATOS GENERALES</th>
+            </tr>
+        </table>
+        <table class="datosgenerales">
+            <tbody>
+                <tr>
+                    <th style="width: 11%;">FECHA:</th>
+                    <td class="lineaInferior"></td>
+                    <th style="width: 15%;">NO. REPORTE:</th>
+                    <td class="lineaInferior"></td>
+                </tr>
+            </tbody>
+        </table>
+        </body>
+        </html>
+        HTML;
+
+        // Agrega el encabezado
+        $mpdf->SetHTMLHeader($headerHTML);
+
+        // Pie de página (opcional)
+        $footerHTML = <<<HTML
+        <div style="text-align: center; font-size: 10px; border-top: 1px solid black;">
+            Página {PAGENO} de {nbpg}
+        </div>
+        HTML;
+
+        $mpdf->SetHTMLFooter($footerHTML);
+
+        // Contenido del PDF
+        $htmlContent = '<h1>Contenido principal del PDF</h1>';
+        $mpdf->WriteHTML($htmlContent);
+
+        // Genera el archivo
+        $mpdf->Output('documento.pdf', 'I');
     }
 
     /*public function FOR_PINS_03_01()

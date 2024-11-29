@@ -3,22 +3,11 @@
 <head>
     <title>Manifiesto</title>
     <style>
-        @page {
+        /*@page {
             margin: 45px 25px;
             counter-reset: page; /* Inicializa el contador de páginas */
-        }
-        .tablaheader {
-            border-collapse: collapse; 
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 60px;
-        }
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaheader th {
-            width: 70%;
-            border: 1px solid black; 
-        }
+        /*}*/
+
 
         .datosgenerales{
             border: 0px !important;
@@ -54,7 +43,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 60px;
+            font-size: 12px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -132,24 +121,45 @@
             width: 100%;
         }
 
-        .header {
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .footer {
+        .tablaheader {
+            border-collapse: collapse; 
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
             text-align: center;
             font-size: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            border-top: 1px solid #000;
         }
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaheader th {
+            width: 70%;
+            border: 1px solid black; 
+        }
+
+        header {
+            position: fixed;
+            top: -40px; /* Ajusta según la altura del margen superior */
+            left: 0;
+            right: 0;
+            height: 50px;
+            text-align: center;
+            line-height: 35px; /* Alineación vertical */
+            font-size: 12px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 250px; /* Ajusta según la altura del margen inferior */
+            left: 0;
+            right: 0;
+            height: 30px;
+            text-align: center;
+            line-height: 20px; /* Alineación vertical */
+            font-size: 10px;
+        }
+        
     </style>
     
 </head>
     <body>
-    <div class="header">
         <header>
                 <table class="tablaheader">
                     <thead>
@@ -157,7 +167,7 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 60%;">FOR-PINS-03/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -169,7 +179,7 @@
                         </tr>
                         <tr>
                             <th>Página</th>
-                            <th>{PAGENO} de {nbpg}</th>
+                            <th></th>
                         </tr>
                     </tbody>
                 </table>
@@ -324,75 +334,11 @@
                         </tr>
                 </table>
         </header>
-    </div>
     <div style="margin-bottom: 2px;"></div>
 
-
-<!-- Contenido principal en el cuerpo del documento -->
-<!--<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>-->
-<div style="margin-bottom: 0px;"></div>
-<table class="datosresultados">
-            <thead>
-                <tr class="celdaGris">
-                    <th rowspan= "2" style="width: 20%;">No.</th>
-                    <th rowspan= "2">No. De Junta / Componente</th>
-                    <th rowspan= "2">No. Indicación</th>
-                    <th rowspan= "2">Tipo de Indicación</th>
-                    <th colspan="3">Dim. De Indicación</th>
-
-                    <th style="width: 50%;">Localización</th>
-                    <th rowspan= "2" style="width: 100%;">Evaluación</th>
-                    <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
-                </tr>
-                <tr class="celdaGris">
-                    <th style="width: 50%;">Largo</th>
-                    <th style="width: 50%;">Ancho</th>
-                    <th style="width: 50%;">Ø</th>
-                    <th style="width: 50%;">H.T.</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for($i = 0; $i < 24; $i++)
-                <tr>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                    <td>----</td>
-                </tr>
-                @endfor
-                <tr class="sinBordetd">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
-                    <th>0 m</th>
-                </tr>
-            </tbody>
-    </table>
-
+    @for($i = 0; $i < 624; $i++)
+HOLA MUNDO
+@endfor
 
             <div style="text-align: center;">
                 <footer>
@@ -505,10 +451,3 @@
 
     </body>
 </html>
-
-
-
-@for($i = 0; $i < 624; $i++)
-HOLA MUNDO
-@endfor
-
