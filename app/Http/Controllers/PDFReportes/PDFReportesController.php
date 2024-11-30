@@ -13,27 +13,344 @@ use Illuminate\Support\Facades\Auth;
 //use Spatie\Browsershot\Browsershot;
 //use Smalot\PdfParser\Parser;
 //use Barryvdh\Snappy\Facades\SnappyPdf;
-use Barryvdh\DomPDF\Facade\Pdf;
+//use Barryvdh\DomPDF\Facade\Pdf;
 //use Barryvdh\DomPDF\Facade as PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
+use Spatie\LaravelPdf\Facades\Pdf;
+
 class PDFReportesController extends Controller
 {
+
     public function FOR_PINS_03_01()
     {
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-    
-        $dompdf = new Dompdf($options);
-        $html = view('ReportesPDF.Reporte_FOR_PINS_03_01_PDF')->render(); // Renderiza la vista
-    
+        // Crear instancia de Dompdf
+        $dompdf = new Dompdf();
+        $dompdf->set_option('isRemoteEnabled', true);
+
+        // Ruta absoluta de la imagen
+        $image_path = public_path('images/Logo_AICO_R2.png');
+        $image_data = base64_encode(file_get_contents($image_path));
+        $image_src = 'data:image/png;base64,' . $image_data;
+
+        $html = '
+        <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF con Header, Footer y Contenido</title>
+    <style>
+        @page {
+            margin: 100px 50px; /* Margen superior para header y margen inferior para footer */
+        }
+        header {
+            position: fixed;
+            top: -80px; /* Ajustar para que quede dentro del margen superior */
+            left: 0;
+            right: 0;
+            height: 50px;
+            text-align: center;
+            line-height: 35px;
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ccc;
+        }
+        footer {
+            position: fixed;
+            bottom: -50px; /* Ajustar para que quede dentro del margen inferior */
+            left: 0;
+            right: 0;
+            height: 40px;
+            text-align: center;
+            line-height: 35px;
+            background-color: #f2f2f2;
+            border-top: 1px solid #ccc;
+        }
+        .content {
+            margin-top: 120px; /* Evita superposición con el header */
+            margin-bottom: 70px; /* Evita superposición con el footer */
+        }
+        .content h1 {
+            text-align: center;
+            color: #333;
+        }
+        .content p {
+            text-align: justify;
+            line-height: 1.5;
+            color: #555;
+        }
+        .table-container {
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <strong>Mi Encabezado Personalizado</strong>
+    </header>
+    <footer>
+        <footer>
+    <strong>Mi Pie de Página - Página {PAGE_NUM} de {PAGE_COUNT}</strong>
+    </footer>
+    </footer>
+    <div class="content">
+        <h1>Bienvenido al Contenido Principal</h1>
+        <p>
+            Este es el cuerpo principal del documento PDF. Aquí puedes colocar el contenido que desees,
+            como texto, imágenes, tablas, etc. El contenido se ajustará automáticamente para evitar superponerse 
+            al encabezado y al pie de página.
+        </p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+                        <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Elemento A</td>
+                        <td>Descripción del elemento A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Elemento B</td>
+                        <td>Descripción del elemento B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Elemento C</td>
+                        <td>Descripción del elemento C</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            Puedes seguir agregando más contenido y Dompdf ajustará el contenido automáticamente
+            para paginarlo, respetando el espacio reservado para el encabezado y el pie de página.
+        </p>
+    </div>
+</body>
+</html>
+        ';
+
+
+        // Verificar que la imagen existe
+        if (!file_exists($image_path)) {
+            die('La imagen no existe en la ruta especificada.');
+        }
+
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('letter', 'portrait');
+        $dompdf->setPaper('A4', 'portrait');
+
         $dompdf->render();
-    
-        return $dompdf->stream('Reporte_FOR_PINS_03_01.PDF', ['Attachment' => false]); // Descargar o visualizar
+
+        // Establecer las opciones para mostrar el número de página correctamente
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_text(270, 810, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 12, array(0, 0, 0)); // Ajuste la posición y estilo según necesite
+
+        $dompdf->stream("documento.pdf", ["Attachment" => false]);
+
     }
 
     /*DOMPDF2 */
