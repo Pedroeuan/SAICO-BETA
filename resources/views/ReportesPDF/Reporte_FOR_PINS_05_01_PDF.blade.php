@@ -1,142 +1,134 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Manifiesto</title>
-    <style>
-        @page {
-            margin: 45px 25px;
-            counter-reset: page; /* Inicializa el contador de páginas */
-        }
-        .page-num-container {
-            position: fixed; /* Fija la posición del contenedor */
-            bottom: 20px;   /* Ajusta la posición vertical */
-            right: 20px;    /* Ajusta la posición horizontal */
-            font-size: 10px;
-            text-align: right;
-        }
-        /* Ajusta la celda al texto en los datos generales */
-        .datosGeneralesCortos{
-            font-weight: bold;
-            width: 100px;
-            /*font-family: Arial;*/
-            font-size: 11px;
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>FORMATO FOR-PINS-05/01</title>
+            <style>
+                @page {
+                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
+                }
+                header {
+                    position: fixed;
+                    top: -80px; /* Ajustar para que quede dentro del margen superior */
+                    left: 0;
+                    right: 0;
+                    height: 100px;
+                    text-align: center;
+                    line-height: normal;
+                    /*background-color: #f2f2f2;*/
+                    border-bottom: 1px solid #ffffff;
+                }
+                footer {
+                    position: fixed;
+                    bottom: 100px; /* Ajustar para que quede dentro del margen inferior */
+                    left: 0;
+                    right: 0;
+                    height: 100px;
+                    text-align: center;
+                    line-height: normal;
+                    /*background-color: #f2f2f2;*/
+                    border-top: 1px solid #ffffff;
+                }
+                    
+                body {
+                    margin-top: 282px; /* Ajusta según el tamaño de tu encabezado */
+                }
+                .content {
+                    /*margin-top: 300px; /* Evita superposición con el header */
+                    margin-bottom: 200px; /* Evita superposición con el footer */
+                }
+
+                .table-container {
+                    margin: 100px 0;
+                }
+
+                .datosgenerales{
+                    border: 0px !important;
+                    text-align: center;
+                    border-collapse: collapse;
+                    width: 100%;
+                    font-size: 8px !important;
+                } 
+                
+                /*muestra solo la linea inferior de la celda*/
+                .lineaInferior{
+                    border-bottom: 1px solid black;
+                    text-align: center;
+                }
+                    
+                .simbologia {
+                    border-collapse: collapse;  /*separate No colapsar bordes */
+                    border-spacing: 0px;        /* Espacio entre celdas */
+                    width: 100%;
+                    text-align: center;
+                    font-size: 8px;
+                }
+
+                .simbologia td, .simbologia th {
+                    border: .6px solid black; 
+                }
+                .celdaAmarillo{
+                    background-color: #FFF2CC;
+                }
+
+                .tablaheader {
+                    border-collapse: collapse; 
+                    border-spacing: 0px;        /* Espacio entre celdas */
+                    width: 100%;
+                    text-align: center;
+                    font-size: 10px;
+                }
+                    
+                /* Aplica el borde a las celdas de la tabla */
+                .tablaheader th {
+                    /*width: 70%;*/
+                    border: 1px solid black; 
+                }
+
+        .encabezadoAzul{
             text-align: center;
+            width: 100%;
+            font-size: 8px;
+            background-color: #305496;
+            color: #ffffff;
+            outline: 1px double #000000; /* Contorno externo */
         }
-        .respuestasGenerales{
-            /*font-family: Arial;*/
-            font-size: 11px;
+            
+        .datosinspeccion{
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
             text-align: center;
+            font-size: 8px;
         }
-        /* borde para tabla-yacziry*/
-        /*.tablaManifiesto{
-            border: 0px solid black; 
+
+        .datosinspeccion td, .datosinspeccion th {
+            border: .6px solid black; 
+        }
+
+        .datosinspeccionsinborde{
+            border: 0px !important;
+            text-align: center;
             border-collapse: collapse;
             width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }*/
-        .tablaheader {
-            border-collapse: collapse;  /* No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaheader td, .tablaheader th {
-            width: 70%;
-            border: 1px solid black; 
-            font-size: 11px;
-        }
-        .tablaManifiesto {
-            border-collapse: collapse;  /* No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaManifiesto td, .tablaManifiesto th {
-            border: .6px solid black; 
-            font-size: 11px;
-        }
-        .tablaManifiesto2 {
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        /* Aplica el borde a las celdas de la tabla */
-        .tablaManifiesto2 td, .tablaManifiesto2 th {
-            border: .6px solid black; 
-            font-size: 11px;
-        }
-
-        .tablaManifiesto3 {
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .tablaManifiesto3 td, .tablaManifiesto3 th {
-            border: .6px solid black; 
             font-size: 8px;
+        }
+
+        .datosresultados{
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
             text-align: center;
-            /*border:black 2px double;*/
+            font-size: 12px;
         }
 
-        .tabla-contenedor {
-            display: flex;        /* Distribuir las tablas horizontalmente */
-            justify-content: space-around; /* Separación uniforme entre las tablas */
-            gap: 10px;            /* Espacio entre tablas */
+        .datosresultados td, .datosresultados th {
+            border: .6px solid black; 
         }
-
-        .tabla-contenedor table {
-            border-collapse: collapse; /* Elimina espacios entre bordes */
-            width: 30%;                /* Ajusta el tamaño de cada tabla */
-            border: 1px solid black;
-        }
-
-        .tabla-contenedor th, .tabla-contenedor td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .notas{
-            text-align: left;
-            font-size: 11px;
-        }
-        .letraRoja{
-            color: #c02302;
-            font-weight: bold;
-        }
-        .celdaAzul{
-            background-color: #305496;
-            border:black 2px double;
-        }
-        .letraBlanca{
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .celdaCrema{
-            background-color: #F8CBAD;
-        }
-
         .celdaGris{
             background-color: #DBDBDB;
         }
-
-        .celdaAmarillo{
-            background-color: #FFF2CC;
-        }
-
+        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
@@ -160,85 +152,6 @@
             width: 100%;
             /*font-size: 10px;*/
         }
-        /*oculta todo el borde de la tabla*/
-        .sinBorde{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        .conBorde{
-            border: 10px;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        .tablaContainer {
-            margin-top: 10px; /* Ajusta el valor según la altura de tu header */
-        }
-        body {
-            padding-top: 60px; /* Ajusta el valor según la altura de tu header */
-            /*font-family: "Arial", sans-serif; /* Cambiar a Arial */
-            /*margin: 0px 5px 5px 5px; /* Márgenes: arriba, derecha, abajo, izquierda */
-        }
-        /*muestra solo la linea inferior de la celda*/
-        .lineaInferior{
-            border-bottom: 1px solid black;
-            font-weight: bold;
-            /*font-family: Arial;*/
-            font-size: 11px;
-            text-align: center;
-        }
-        .Contenido{
-            /*font-family: Arial;*/
-            font-size: 10px !important; /* Forzar el tamaño de letra */
-            text-align: center;
-        }
-        header {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 0px;
-            z-index: 1000; /* Asegura que el header esté por encima */
-        }
-        footer {
-            position: sticky;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 100px; /*400*/
-        }
-        .altoCelda{
-            height: 70px;
-        }
-        .especial {
-            width: 20px; /* Ajusta el ancho de esta celda específica */
-        }
-        .saltoBlanco{
-            height: 15px;
-        }
-        .logo{
-            width: 20px;
-            height: 15;
-        }
-
-        .tabla-contenedor {
-            display: flex;        /* Distribuir las tablas horizontalmente */
-            justify-content: space-around; /* Separación uniforme entre las tablas */
-            gap: 10px;            /* Espacio entre tablas */
-        }
-        .datosequipo table, th, td {
-            border-collapse: collapse;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
         .rotar-texto {
             font-size: 12px !important; /* Ajusta el tamaño de la fuente aquí */
             text-align: center; /* Centra el texto horizontalmente */
@@ -249,340 +162,336 @@
             display: inline-block; /* Necesario para la rotación */
             transform: rotate(270deg); /* Rota solo el texto */
     }
+            </style>
+        </head>
+        <body>
 
-    </style>
-</head>
-<body>
-<header>
-    <table class="tablaheader">
-        <thead>
-            <tr>
-                <th class="" style="width: 500px;">Formato</th>
-                <td class="" style="width: 100px;">Código:</td>
-                <td class="" style="width: 80px;">FOR-PINS-05/01</td>
-                <th rowspan="3" style="width: 100px;"><img class="logo" src="{{ $Logo }}" alt="Logo" style="width: 50px; height: auto;"></th>
-            </tr>
-        </thead>
+            <header>
+                <table class="tablaheader">
+                    <thead>
+                        <tr>
+                            <th style="width: 500%;">FORMATO</th>
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 80%;">FOR-PINS-05/01</th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                        </tr>
+                    </thead>
 
-        <tbody>
-            <tr>
-                <th rowspan="2" style="width: 500px;"> INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES </th>
-                <td class="" style="width: 100px;">Versión</td>
-                <td class="" style="width: 80px;">2</td>
-            </tr>
-            <tr>
-                <td class="" style="width: 100px;">Página</td>
-                <td class="page-num-container" style="width: 80px;">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</header>
-
-<div class="tablaContainer">
-    <table class="sinBorde">
-            <tr>
-                <th class="celdaAzul letraBlanca" colspan="4">DATOS GENERALES</th>
-            </tr>
-        <tbody>
-            <tr>
-                <td class="datosGeneralesCortos">FECHA:</td>
-                <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos">NO. REPORTE:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">CLIENTE:</td>
-                <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos">CONTRATO:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">PROYECTO: </td>
-                <td class="lineaInferior" colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">ORDEN DE TRABAJO:</td>
-                <td class="lineaInferior" colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">FOLIO:</td>
-                <td class="lineaInferior" colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">PARTIDA:</td>
-                <td class="lineaInferior" colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">LUGAR:</td>
-                <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos">ISOMETRICO/PLANO:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">PIEZA:</td>
-                <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos">MATERIAL:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-            <tr>
-                <td class="datosGeneralesCortos">PROCEDIMIENTO:</td>
-                <td class="lineaInferior"></td>
-                <td class="datosGeneralesCortos" style="width: 160px;">CRITERIO DE EVALUACIÓN:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div style="margin-bottom: 4px;"></div>
-
-<div class="tablaContainer">
-    <table class="sinBorde">
-            <tr>
-                <th class="celdaAzul letraBlanca" colspan="9">DATOS DE LA INSPECCIÓN</th>
-            </tr>
-    </table>
-
-    <div style="margin-bottom: 4px;"></div>
-
-    <table class="tablaManifiesto2">
-        <tbody>
-            <tr class="celdaGris">
-                <th colspan="2">EQUIPO</th>
-                <th colspan="4">TRANSDUCTOR</th>
-                <th colspan="2">BLOCK DE REFERENCIA</th>
-                <th>ACOPLANTE</th>
-            </tr>
-            <tr>
-                <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                <td style="width: 182px;">1</td>
-                <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                <td colspan="3">2</td>
-                <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                <td style="width: 182px;">3</td>
-                <th class="celdaGris" style="width: 181px;">(MARCA Y TIPO)</th>
-            </tr>
-            <tr>
-                <th class="celdaGris">MODELO:</th>
-                <td>5</td>
-                <th class="celdaGris">MODELO:</th>
-                <td colspan="3">6</td>
-                <th class="celdaGris">MODELO:</th>
-                <td>7</td>
-                <td rowspan="2">12</td>
-            </tr>
-            <tr>
-                <th class="celdaGris">N.S.:</th>
-                <td>8</td>
-                <th class="celdaGris">N.S.:</th>
-                <td style="width: 90px;">9</td>
-                <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                <td style="width: 70px;">10</td>
-                <th class="celdaGris">N.S.:</th>
-                <td>11</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div style="margin-bottom: 5px;"></div>
-
-    <table class="sinBorde">
-            <tr>
-                <th class="celdaAzul letraBlanca" colspan="9">AJUSTE DEL EQUIPO</th>
-            </tr>
-    </table>
-
-    <div style="margin-bottom: 2px;"></div>
-
-    <table class="sinBorde">
-    <tbody>
-        <tr class="">
-            <th>GANANCIA:</th>
-            <td class="lineaInferior">1</td>
-            <th>TIPO DE JUNTA:</th>
-            <td class="lineaInferior">2</td>
-            <th rowspan="3" style="width: 100px;"><img class="FOR_PINS_05_01" src="{{ $FOR_PINS_05_01 }}" alt="FOR_PINS_05_01" style="width: 80px; height: auto;"></th>
-        </tr>
-        <tr class="">
-            <th>RECHAZO:</th>
-            <td class="lineaInferior">1</td>
-            <th>DIAMETRO:</th>
-            <td class="lineaInferior">2</td>
-        </tr>
-        <tr class="">
-            <th>RETARDO:</th>
-            <td class="lineaInferior">1</td>
-            <th>ESPESOR:</th>
-            <td class="lineaInferior">2</td>
-        </tr>
-    </tbody>
-</table>
-
-<div style="margin-bottom: 5px;"></div>
-
-    <table class="sinBorde">
-            <tr>
-                <th class="celdaAzul letraBlanca" colspan="9">RESULTADOS</th>
-            </tr>
-    </table>
-
-<div style="margin-bottom: 2px;"></div>
-
-<table class="tablaManifiesto2">
-        <thead>
-            <tr class="celdaGris">
-                <th rowspan= "3" class="rotar-texto"><span>Número de junta</span></th>
-                <th rowspan= "3" class="rotar-texto"><span>No. Indicación</span></th>
-                <th rowspan= "3" class="rotar-texto"><span>Ángulo de inspección</span></th>
-                <th rowspan= "3" class="rotar-texto"><span>Desde la cara</span></th>
-                <th rowspan= "3" class="rotar-texto"><span>Pierna</span></th>
-
-                <th colspan= "4">Decibeles</th>
-
-                <th colspan= "5">Discontinuidad</th>
-
-                <th rowspan="3" class="rotar-texto"><span>Clase de la discontinuidad</span></th>
-                <th rowspan="3" class="rotar-texto"><span>Evaluación</span></th>
-
-                <th rowspan= "3" style="width: 70px;">Observaciones</th>
-
-            </tr>
-
-
-            <tr class="celdaGris">
-                <th class="rotar-texto" style="height: 60px;"><span>Nivel de indicación</span></th>
-                <th class="rotar-texto"><span>Nivel de referencia</span></th>
-                <th class="rotar-texto"><span>Factor de atenuación</span></th>
-                <th class="rotar-texto"><span>Relación de indicación</span></th>
-
-                <th rowspan= "2" class="rotar-texto"><span>Longitud</span></th>
-                <th rowspan= "2" class="rotar-texto"><span>Distancia angular</span></th>
-                <th rowspan= "2" class="rotar-texto"><span>Profundidad desde A</span></th>
-
-                <th colspan= "2">Posición</th>
-            </tr>
-
-            <tr class="celdaGris">
-                <th>a</th>
-                <th>b</th>
-                <th>c</th>
-                <th>d</th>
-
-                <th style="width: 30px;">X</th>
-                <th style="width: 30px;">Y</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for($i = 0; $i < 14; $i++)
-            <tr>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-                <td>----</td>
-            </tr>
-            @endfor
-            <tr class="sinBordetd">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
-                <th>0 m</th>
-            </tr>
-        </tbody>
-    </table>
-
-    <div style="margin-bottom: 20px;"></div>
-
-    <div class="tablaContainer">
-        <table class="sinBorde">
-            <tr>
-                <td class="datosGeneralesCortos">Observaciones:</td>
-                <td class="lineaInferior"></td>
-            </tr>
-        </table>
-    </div>
-
-    <div style="margin-bottom: 20px;"></div>
-
-
-    <footer>
-
-        <div class="tablaContainer">
-            <table class="sinBorde">
-                <thead>
-
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
+                            <th>Versión</th>
+                            <th>2</th>
+                        </tr>
+                        <tr>
+                            <th>Página</th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <div style="margin-bottom: 5px;"></div>
+        
+                <table class="encabezadoAzul">
                     <tr>
-                        <td style="width: 30px;"></td>
-                        <th></th>
-                        <td style="width: 30px;"></td>
-                        <th></th>
-                        <td style="width: 30px;"></td>
-                        <th></th>
+                        <th colspan="4">DATOS GENERALES</th>
                     </tr>
+                </table>   
+                <div style="margin-bottom: 5px;"></div>         
+                <table class="datosgenerales">
+                    <tbody>
+                        <tr>
+                            <th style="width: 12%;">FECHA:</th>
+                            <td class="lineaInferior"></td>
+                            <th style="width: 15%;">NO. REPORTE:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th>CLIENTE:</th>
+                            <td class="lineaInferior"></td>
+                            <th>CONTRATO:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th>PROYECTO: </th>
+                            <td class="lineaInferior" colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <th>ORDEN DE TRABAJO:</th>
+                            <td class="lineaInferior" colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <th>FOLIO:</th>
+                            <td class="lineaInferior" colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <th>PARTIDA:</th>
+                            <td class="lineaInferior" colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <th>LUGAR:</th>
+                            <td class="lineaInferior"></td>
+                            <th>ISOMETRICO/PLANO:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th>PIEZA:</th>
+                            <td class="lineaInferior"></td>
+                            <th>MATERIAL:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                        <tr>
+                            <th >PROCEDIMIENTO:</th>
+                            <td class="lineaInferior"></td>
+                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
+                            <td class="lineaInferior"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <!--<tr class="sinBordetdth">-->
-                    <tr>
-                        <th></th>
-                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                        <td></td>
-                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                        <td></td>
-                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                    </tr>
+                <div style="margin-bottom: 4px;"></div>
 
+                <table class="encabezadoAzul">
                     <tr>
-                        <th></th>
-                        <td><strong>NOMBRE DEL TÉCNICO</strong></td>
-                        <td></td>
-                        <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                        <td></td>
-                        <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
                     </tr>
-                    
-                    <tr>
-                        <th></th>
-                        <td><strong>Técnico N-II SNT-TC-1A</strong></td>
-                        <td></td>
-                        <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                        <td></td>
-                        <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                    </tr>
+                </table>
 
+                <div style="margin-bottom: 2px;"></div>
+
+                <table class="datosinspeccion">
+                    <tbody>
+                        <tr class="celdaGris">
+                            <th colspan="2">EQUIPO</th>
+                            <th colspan="4">TRANSDUCTOR</th>
+                            <th colspan="2">BLOCK DE REFERENCIA</th>
+                            <th>ACOPLANTE</th>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td style="width: 100px;">1</td>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td colspan="3">2</td>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td style="width: 100px;">3</td>
+                            <th class="celdaGris" style="width: 100px;">(MARCA Y TIPO)</th>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>5</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td colspan="3">6</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>7</td>
+                            <td rowspan="2">12</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">N.S.:</th>
+                            <td>8</td>
+                            <th class="celdaGris">N.S.:</th>
+                            <td style="width: 60px;">9</td>
+                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
+                            <td style="width: 50px;">10</td>
+                            <th class="celdaGris">N.S.:</th>
+                            <td>11</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="encabezadoAzul">
                     <tr>
-                        <th></th>
-                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                        <td></td>
-                        <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                        <td></td>
-                        <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                        <th colspan="9">AJUSTE DEL EQUIPO</th>
                     </tr>
-                </thead>
-            </table>
-        </div>
-    </footer>
-    </body>
-</html>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="datosinspeccionsinborde">
+                    <tbody>
+                        <tr class="">
+                            <th style="width: 100px;">GANANCIA:</th>
+                            <td class="lineaInferior">1</td><td style="text-align: left; width: 2%;"> dB </td>
+                            <th style="width: 100px;">TIPO DE JUNTA:</th>
+                            <td class="lineaInferior">2</td>
+                            <th rowspan="3" style="width: 100px;"><img class="FOR_PINS_05_01" src="{{ $FOR_PINS_05_01 }}" alt="FOR_PINS_05_01" style="width: 80px; height: auto;"></th>
+                        </tr>
+                        <tr class="">
+                            <th>RECHAZO:</th>
+                            <td class="lineaInferior">1</td><td></td>
+                            <th>DIAMETRO:</th>
+                            <td class="lineaInferior">2</td>
+                        </tr>
+                        <tr class="">
+                            <th>RETARDO:</th>
+                            <td class="lineaInferior">1</td><td></td>
+                            <th>ESPESOR:</th>
+                            <td class="lineaInferior">2</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="encabezadoAzul">
+                        <tr>
+                            <th colspan="9">RESULTADOS</th>
+                        </tr>
+                </table>
+            </header>
+
+            <footer>
+                    <br>
+
+                    <table>                               
+                        <tr>                                     
+                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <td class="lineaInferior" style="width: 676px;"></td>                            
+                        </tr>                      
+                    </table>
+
+                    <br>
+                                                
+                    <table class="datosgenerales">
+                        <thead>
+                            <tr>
+                                <td style="width: 30px;"></td>
+                                <th>Realizó</th>
+                                <td style="width: 30px;"></td>
+                                <th>Vo.Bo.</th>
+                                <td style="width: 30px;"></td>
+                                <th>Vo.Bo.</th>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                <td></td>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                <td></td>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td><strong>NOMBRE DEL TÉCNICO</strong></td>
+                                <td></td>
+                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                <td></td>
+                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                            </tr>
+                                                                
+                            <tr>
+                                <th></th>
+                                <td><strong>Técnico N-II SNT-TC-1A</strong></td>
+                                <td></td>
+                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                <td></td>
+                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                <td></td>
+                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                <td></td>
+                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                            </tr>
+                        </thead>                            
+                    </table>
+            </footer>
+
+            <div class="content">
+                <div style="margin-bottom: 0px;"></div>
+
+                    <table class="datosresultados">
+                        <thead>
+                            <tr class="celdaGris">
+                                <th rowspan= "3" class="rotar-texto"><span>Número de junta</span></th>
+                                <th rowspan= "3" class="rotar-texto"><span>No. Indicación</span></th>
+                                <th rowspan= "3" class="rotar-texto"><span>Ángulo de inspección</span></th>
+                                <th rowspan= "3" class="rotar-texto"><span>Desde la cara</span></th>
+                                <th rowspan= "3" class="rotar-texto"><span>Pierna</span></th>
+
+                                <th colspan= "4">Decibeles</th>
+
+                                <th colspan= "5">Discontinuidad</th>
+
+                                <th rowspan="3" class="rotar-texto"><span>Clase de la discontinuidad</span></th>
+                                <th rowspan="3" class="rotar-texto"><span>Evaluación</span></th>
+
+                                <th rowspan= "3" style="width: 70px;">Observaciones</th>
+
+                            </tr>
+
+
+                            <tr class="celdaGris">
+                                <th class="rotar-texto" style="height: 60px;"><span>Nivel de indicación</span></th>
+                                <th class="rotar-texto"><span>Nivel de referencia</span></th>
+                                <th class="rotar-texto"><span>Factor de atenuación</span></th>
+                                <th class="rotar-texto"><span>Relación de indicación</span></th>
+
+                                <th rowspan= "2" class="rotar-texto"><span>Longitud</span></th>
+                                <th rowspan= "2" class="rotar-texto"><span>Distancia angular</span></th>
+                                <th rowspan= "2" class="rotar-texto"><span>Profundidad desde A</span></th>
+
+                                <th colspan= "2">Posición</th>
+                            </tr>
+
+                            <tr class="celdaGris">
+                                <th>a</th>
+                                <th>b</th>
+                                <th>c</th>
+                                <th>d</th>
+
+                                <th style="width: 30px;">X</th>
+                                <th style="width: 30px;">Y</th>
+                            </tr>
+                        </thead>
+
+                            <tbody>
+                            @for($i = 0; $i < 54; $i++)
+                            <tr>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                            </tr>
+                            @endfor
+                            <tr class="sinBordetd">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
+                                <th>0 m</th>
+                            </tr>
+
+                            </tbody>
+                    </table>
+            </div>
+        </body>
+    </html>
