@@ -31,7 +31,7 @@
                 }
                     
                 body {
-                    margin-top: 227px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -85,13 +85,13 @@
                     border: 1px solid black; 
                 }
 
-            .encabezadoAzul{
+        .encabezadoAzul{
             text-align: center;
             width: 100%;
             font-size: 8px;
             background-color: #305496;
             color: #ffffff;
-            border-collapse: collapse;
+            outline: 1px double #000000; /* Contorno externo */
         }
             
         .datosinspeccion{
@@ -169,7 +169,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
+                            <th rowspan="2"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS</th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>
@@ -186,7 +186,8 @@
                     <tr>
                         <th colspan="4">DATOS GENERALES</th>
                     </tr>
-                </table>            
+                </table>   
+                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
@@ -330,160 +331,160 @@
                 </table>
             </header>
 
-        <footer>
-                <table class="simbologia">
-                    <thead>
-                        <tr>
-                            <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                        </tr>
-
-                        <tr>
-                            <td style="width: 20px;"><strong>NPIR</strong></td>
-                            <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
-                            <td style="width: 20px;"><strong>DM</strong></td>
-                            <td style="width: 150px;">DAÑO MECÁNICO</td>
-                            <td style="width: 20px;"><strong>PT</strong></td>
-                            <td style="width: 180px;">POROSIDAD TUBULAR</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>G</strong></td>
-                            <td>GRIETA</td>
-                            <td><strong>S</strong></td>
-                            <td>SOCAVADO</td>
-                            <td><strong>C</strong></td>
-                            <td>CRATER</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>ZG</strong></td>
-                            <td>ZONA DE GRIETAS</td>
-                            <td><strong>P</strong></td>
-                            <td>POROSIDAD</td>
-                            <td><strong>IL</strong></td>
-                            <td>INDICACIÓN LINEAL</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>FF</strong></td>
-                            <td>FALTA DE FUSIÓN</td>
-                            <td><strong>ZP</strong></td>
-                            <td>ZONA DE POROS</td>
-                            <td><strong>IR</strong></td>
-                            <td>INDICACIÓN REDONDEADA</td>
-                        </tr>
-                    </thead>
-                </table>
-                <br>
-
-                <table>                               
-                    <tr>                                     
-                        <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                        <td class="lineaInferior" style="width: 676px;"></td>                            
-                    </tr>                      
-                </table>
-
-                <br>
-                                            
-                <table class="datosgenerales">
-                    <thead>
-                        <tr>
-                            <td style="width: 30px;"></td>
-                            <th>Realizó</th>
-                            <td style="width: 30px;"></td>
-                            <th>Vo.Bo.</th>
-                            <td style="width: 30px;"></td>
-                            <th>Vo.Bo.</th>
-                        </tr>
-
-                        <tr>
-                            <th></th>
-                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                            <td></td>
-                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                            <td></td>
-                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                        </tr>
-
-                        <tr>
-                            <th></th>
-                            <td><strong>NOMBRE DEL TÉCNICO</strong></td>
-                            <td></td>
-                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                            <td></td>
-                            <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                        </tr>
-                                                            
-                        <tr>
-                            <th></th>
-                            <td><strong>Técnico N-II SNT-TC-1A</strong></td>
-                            <td></td>
-                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                            <td></td>
-                            <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                        </tr>
-
-                        <tr>
-                            <th></th>
-                            <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                            <td></td>
-                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                            <td></td>
-                            <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                        </tr>
-                    </thead>                            
-                </table>
-        </footer>
-
-        <div class="content">
-            <div style="margin-bottom: 0px;"></div>
-                <table class="datosresultados">
+            <footer>
+                    <table class="simbologia">
                         <thead>
-                            <tr class="celdaGris">
-                                <th rowspan= "2" style="width: 20%;">No.</th>
-                                <th rowspan= "2">No. De Junta / Componente</th>
-                                <th rowspan= "2">No. Indicación</th>
-                                <th rowspan= "2">Tipo de Indicación</th>
-                                <th colspan="3">Dim. De Indicación</th>
-
-                                <th style="width: 50%;">Localización</th>
-                                <th rowspan= "2" style="width: 100%;">Evaluación</th>
-                                <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
+                            <tr>
+                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
                             </tr>
-                            <tr class="celdaGris">
-                                <th style="width: 50%;">Largo</th>
-                                <th style="width: 50%;">Ancho</th>
-                                <th style="width: 50%;">Ø</th>
-                                <th style="width: 50%;">H.T.</th>
+
+                            <tr>
+                                <td style="width: 20px;"><strong>NPIR</strong></td>
+                                <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                <td style="width: 20px;"><strong>DM</strong></td>
+                                <td style="width: 150px;">DAÑO MECÁNICO</td>
+                                <td style="width: 20px;"><strong>PT</strong></td>
+                                <td style="width: 180px;">POROSIDAD TUBULAR</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>G</strong></td>
+                                <td>GRIETA</td>
+                                <td><strong>S</strong></td>
+                                <td>SOCAVADO</td>
+                                <td><strong>C</strong></td>
+                                <td>CRATER</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>ZG</strong></td>
+                                <td>ZONA DE GRIETAS</td>
+                                <td><strong>P</strong></td>
+                                <td>POROSIDAD</td>
+                                <td><strong>IL</strong></td>
+                                <td>INDICACIÓN LINEAL</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>FF</strong></td>
+                                <td>FALTA DE FUSIÓN</td>
+                                <td><strong>ZP</strong></td>
+                                <td>ZONA DE POROS</td>
+                                <td><strong>IR</strong></td>
+                                <td>INDICACIÓN REDONDEADA</td>
                             </tr>
                         </thead>
-                        <tbody>';
-                        @for($i = 0; $i < 54; $i++)
-                        <tr>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                        </tr>
-                        @endfor
-                        <tr class="sinBordetd">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
-                            <th>0 m</th>
-                        </tr>
+                    </table>
+                    <br>
 
-                        </tbody>
-                </table>
+                    <table>                               
+                        <tr>                                     
+                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <td class="lineaInferior" style="width: 676px;"></td>                            
+                        </tr>                      
+                    </table>
+
+                    <br>
+                                                
+                    <table class="datosgenerales">
+                        <thead>
+                            <tr>
+                                <td style="width: 30px;"></td>
+                                <th>Realizó</th>
+                                <td style="width: 30px;"></td>
+                                <th>Vo.Bo.</th>
+                                <td style="width: 30px;"></td>
+                                <th>Vo.Bo.</th>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                <td></td>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                <td></td>
+                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td><strong>NOMBRE DEL TÉCNICO</strong></td>
+                                <td></td>
+                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                                <td></td>
+                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
+                            </tr>
+                                                                
+                            <tr>
+                                <th></th>
+                                <td><strong>Técnico N-II SNT-TC-1A</strong></td>
+                                <td></td>
+                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                                <td></td>
+                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                <td></td>
+                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                                <td></td>
+                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
+                            </tr>
+                        </thead>                            
+                    </table>
+            </footer>
+
+            <div class="content">
+                <div style="margin-bottom: 0px;"></div>
+                    <table class="datosresultados">
+                            <thead>
+                                <tr class="celdaGris">
+                                    <th rowspan= "2" style="width: 20%;">No.</th>
+                                    <th rowspan= "2">No. De Junta / Componente</th>
+                                    <th rowspan= "2">No. Indicación</th>
+                                    <th rowspan= "2">Tipo de Indicación</th>
+                                    <th colspan="3">Dim. De Indicación</th>
+
+                                    <th style="width: 50%;">Localización</th>
+                                    <th rowspan= "2" style="width: 100%;">Evaluación</th>
+                                    <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
+                                </tr>
+                                <tr class="celdaGris">
+                                    <th style="width: 50%;">Largo</th>
+                                    <th style="width: 50%;">Ancho</th>
+                                    <th style="width: 50%;">Ø</th>
+                                    <th style="width: 50%;">H.T.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @for($i = 0; $i < 54; $i++)
+                            <tr>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                            </tr>
+                            @endfor
+                            <tr class="sinBordetd">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
+                                <th>0 m</th>
+                            </tr>
+
+                            </tbody>
+                    </table>
             </div>
         </body>
     </html>
