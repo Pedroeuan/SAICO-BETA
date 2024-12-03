@@ -26,7 +26,7 @@
 <form role="form">
     <div class="box ">
         <div class="box-body">
-        <h3 align="center">Inventario-123</h3>
+        <h3 align="center">Inventario-123456</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
