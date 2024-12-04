@@ -31,7 +31,7 @@
                 }
                     
                 body {
-                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 248px; /* Ajusta según el tamaño de tu encabezado */
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -442,18 +442,18 @@
                             <thead>
                                 <tr class="celdaGris">
                                     <th rowspan= "2" style="width: 20%;">No.</th>
-                                    <th rowspan= "2">No. De Junta / Componente</th>
+                                    <th rowspan= "2" style="width: 100%;">No. De Junta / Componente</th>
                                     <th rowspan= "2">No. Indicación</th>
                                     <th rowspan= "2">Tipo de Indicación</th>
                                     <th colspan="3">Dim. De Indicación</th>
 
-                                    <th style="width: 50%;">Localización</th>
+                                    <th style="width: 100%;">Localización</th>
                                     <th rowspan= "2" style="width: 100%;">Evaluación</th>
                                     <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
                                 </tr>
                                 <tr class="celdaGris">
-                                    <th style="width: 50%;">Largo</th>
-                                    <th style="width: 50%;">Ancho</th>
+                                    <th style="width: 100%;">Largo</th>
+                                    <th style="width: 100%;">Ancho</th>
                                     <th style="width: 50%;">Ø</th>
                                     <th style="width: 50%;">H.T.</th>
                                 </tr>

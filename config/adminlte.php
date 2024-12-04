@@ -329,7 +329,18 @@ return [
                             'text' => 'FOR-PINS-05/01',
                             'url' => '/Reporte/FOR-PINS-05/01',
                         ],
-
+                        [
+                            'text' => 'FOR-PINS-05/02',
+                            'url' => '/Reporte/FOR-PINS-05/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-06/01',
+                            'url' => '/Reporte/FOR-PINS-06/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-07/01',
+                            'url' => '/Reporte/FOR-PINS-07/01',
+                        ],
                         [
                             'text' => 'FOR-PINS-11/02',
                             'url' => '/Reporte/FOR-PINS-11/02',
