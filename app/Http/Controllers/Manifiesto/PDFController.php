@@ -66,35 +66,6 @@ class PDFController extends Controller
         return $pdf->stream('manifiesto.pdf');
     }
 
-    public function generaManifiestoNewFormatPDF1($id)
-    {
-        $user = Auth::user();
-        $nombre = $user->name;
-        $Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
-        $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();
-
-        $Logo = public_path('images/Logo_AICO_R.jpg');
-    
-        $data = [
-            'title' => 'Manifiesto PDF',
-            'Manifiesto' => $Manifiesto,
-            'DetallesSolicitud' => $DetallesSolicitud,
-            'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,
-            'nombre' => $nombre,
-            'Logo' => $Logo,
-            'Devolucion' => $Devolucion,
-        ];
-
-        // Cargar la vista con los datos
-        $pdf = PDF::loadView('Manifiesto.manifiestoNewFormatPDF', $data);
-
-        return $pdf->stream('Manifiesto.NewFormat.pdf');
-    }
-
     public function generaManifiestoNewFormatPDF($id)
     {
         $user = Auth::user();

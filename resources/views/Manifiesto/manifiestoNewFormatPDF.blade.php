@@ -19,11 +19,11 @@
                     border-bottom: 1px solid #ffffff;
                 }
                 footer {
-                    position: fixed;
+                    position: relative;
                     bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: 0px;
                     text-align: center;
                     line-height: normal;
                     /*background-color: #f2f2f2;*/
@@ -31,11 +31,11 @@
                 }
                     
                 body {
-                    margin-top: 50px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 70px; /* Ajusta según el tamaño de tu encabezado */
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 100px; /* Evita superposición con el footer */
+                    margin-bottom: 0px; /* Evita superposición con el footer */
                 }
 
                 .table-container {
@@ -47,7 +47,7 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 9px !important;
+                    font-size: 11px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
@@ -119,7 +119,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 11px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -191,10 +191,12 @@
         /* Aplica el borde a las celdas de la tabla */
         .DentroFirmas td, .Firmas th {
             border: .6px solid black; 
-            font-size: 11px;
+            /*font-size: 9px;*/
         }
         .celdaAzul{
             background-color: #9BC2E6;
+            /*color: #000000;*/
+            /*font-weight: bold;*/
         }
         .letraNegra{
             color: #000000;
@@ -209,7 +211,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: justify;
-            font-size: 9px;
+            font-size: 11px;
         }
         /* Aplica el borde a las celdas de la tabla */
         .Comentarios td, .Comentarios th {
@@ -224,7 +226,8 @@
         }
         .notas{
             text-align: left;
-            font-size: 10px;
+            font-size: 12px;
+            border: 1px solid black; 
         }
             </style>
         </head>
@@ -233,7 +236,7 @@
             <header>
                 <table class="tablaheader">
                         <tr>
-                            <th rowspan="3" style="width: 500%;" class="titulo">MANIFIESTO / RESGUARDO DE EQUIPAMIENTO</th>
+                            <th rowspan="3" style="width: 500%; font-size: 18pt;">MANIFIESTO / RESGUARDO DE EQUIPAMIENTO</th>
                             <th style="width: 90%;">Código:</th>
                             <th style="width: 100%;">FOR-05-PRO-EQ-01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
@@ -278,101 +281,6 @@
                     </tbody>
                 </table>
             </header>
-
-            <footer>
-                <div class="">
-
-                    <table class="Firmas">
-                        <tr>
-                            <td>
-
-                                <table class="DentroFirmas">
-                                    <tr class="celdaAzul">
-                                        <td COLSPAN=2 class="letraNegra">Entrega</td>
-                                    </tr>
-                                    <tr class="celdaAzul">
-                                        <td class="letraNegra">Nombre</td>
-                                        <td>{{ $nombre }}</td>
-                                    </tr>
-                                    <tr class="celdaAzul">
-                                        <td class="letraNegra">Firma</td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-
-                            <td>
-                                
-                                <table class="DentroFirmas">
-                                        <tr class="celdaAzul">
-                                            <td COLSPAN=2 class="letraNegra">Autoriza</td>
-                                        </tr>
-                                        <tr class="celdaAzul">
-                                            <td class="letraNegra">Nombre</td>
-                                            <td>{{ $Manifiesto->Responsable }} </td>
-                                        </tr>
-                                        <tr class="celdaAzul">
-                                            <td class="letraNegra">Firma</td>
-                                            <td></td>
-                                        </tr>
-                                </table>
-
-                            </td>
-                        </tr>
-                        <br>
-                            <tr>
-                                <td>
-
-                                    <table class="DentroFirmas">
-                                        <tr class="celdaCrema">
-                                            <td COLSPAN=2 class="letraNegra">Fecha de Recepción</td>
-                                            <td> {{ $Solicitud->formatted_date }} </td>
-                                        </tr>
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Nombre</td>
-                                            <td COLSPAN=2>{{ $Solicitud->tecnico }}</td>
-                                        </tr>
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Firma</td>
-                                            <td COLSPAN=2></td>
-                                        </tr>
-                                    </table>
-                                    
-                                    </td>
-                                <td>
-
-                                <table class="DentroFirmas">
-                                    <tr class="celdaCrema">
-                                        <td COLSPAN=2 class="letraNegra">Fecha Devolución</td>
-                                            <td>
-                                                @if (isset($Devolucion->formatted_date) && $Devolucion->formatted_date == null)
-                                                    {{ $Devolucion->formatted_date }}
-                                                    @else
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-                                                @endif
-                                            </td>
-                                    </tr>
-                                    <tr class="celdaCrema">
-                                        <td class="letraNegra">Nombre</td>
-                                            <td COLSPAN=2>
-                                                @if (isset($Devolucion->Recibe) && $Devolucion->Recibe == null)
-                                                    {{ $Devolucion->Recibe }}
-                                                @endif
-                                            </td>
-                                    </tr>
-                                    <tr class="celdaCrema">
-                                        <td class="letraNegra">Firma</td>
-                                        <td COLSPAN=2></td>
-                                    </tr>
-                                </table>
-
-                                </td>
-                            </tr>
-                    </table>
-
-                </div>
-            </footer>
 
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
@@ -473,7 +381,12 @@
                         @endfor
                     </tbody>
                 </table>
-                <br>
+
+            </div>
+
+            <footer>
+
+                    <div style="margin-bottom: 5px;"></div>
                     <table class="Comentarios">
                         <tr>
                             <td >Comentarios:
@@ -496,11 +409,9 @@
                         </tr>     
                     </table>
 
-                <br>
-
-                <table class="">
+                <table class="notas">
                     <tr>
-                        <td class="notas" colspan="4">Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso.<br>
+                        <td class="" colspan="4">Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso.<br>
                         y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio.<br>
                         Nota b): El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo.<br>
                         Nota c): Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
@@ -508,6 +419,222 @@
                     </tr>
                 </table>
 
-            </div>
+                <div style="margin-bottom: 5px;"></div>
+
+                    <table class="Firmas">
+                        <tr>
+                            <td style="width: 7%;">
+
+                                <table class="">
+                                    <tr class="" >
+                                        <td COLSPAN=2 class=""></td>
+                                    </tr>
+                                        
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+
+                            <td>
+
+                                <table class="DentroFirmas">
+                                    <tr class="celdaAzul">
+                                        <td COLSPAN=2 class="letraNegra">Entrega</td>
+                                    </tr>
+                                        
+                                    <tr class="celdaAzul">
+                                        <td class="letraNegra">Nombre</td>
+                                        <td>{{ $nombre }}</td>
+                                    </tr>
+                                    <tr class="celdaAzul">
+                                        <td class="letraNegra">Firma</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+
+                            <td>
+
+                                <table class="" style="width: 10%;">
+                                    <tr class="" >
+                                        <td COLSPAN=2 class=""></td>
+                                    </tr>
+                                        
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+
+
+                            <td>
+                                
+                                <table class="DentroFirmas">
+                                        <tr class="celdaAzul">
+                                            <td COLSPAN=2 class="letraNegra">Autoriza</td>
+                                        </tr>
+                                        <tr class="celdaAzul">
+                                            <td class="letraNegra">Nombre</td>
+                                            <td>{{ $Manifiesto->Responsable }} </td>
+                                        </tr>
+                                        <tr class="celdaAzul">
+                                            <td class="letraNegra">Firma</td>
+                                            <td></td>
+                                        </tr>
+                                </table>
+
+                            </td>
+
+                            <td style="width: 7%;">
+
+                                <table class="">
+                                    <tr class="" >
+                                        <td COLSPAN=2 class=""></td>
+                                    </tr>
+                                        
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+
+                        <br>
+
+                        <tr>
+                            <td style="width: 7%;">
+
+                                <table class="">
+                                    <tr class="" >
+                                        <td COLSPAN=2 class=""></td>
+                                    </tr>
+                                        
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                                <td>
+
+                                    <table class="DentroFirmas">
+                                        <tr class="celdaCrema">
+                                            <td COLSPAN=2 class="letraNegra">Fecha de Recepción</td>
+                                            <td> {{ $Solicitud->formatted_date }} </td>
+                                        </tr>
+                                        <tr class="celdaCrema">
+                                            <td class="letraNegra">Nombre</td>
+                                            <td COLSPAN=2>{{ $Solicitud->tecnico }}</td>
+                                        </tr>
+                                        <tr class="celdaCrema">
+                                            <td class="letraNegra">Firma</td>
+                                            <td COLSPAN=2></td>
+                                        </tr>
+                                    </table>
+                                    
+                                </td>
+
+                            <td style="width: 10%;">
+
+                                <table class="">
+                                    <tr class="" >
+                                        <td COLSPAN=2 class=""></td>
+                                    </tr>
+                                        
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class=""></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+
+                                <td>
+
+                                    <table class="DentroFirmas">
+                                        <tr class="celdaCrema">
+                                            <td COLSPAN=2 class="letraNegra">Fecha Devolución</td>
+                                                <td>
+                                                    @if (isset($Devolucion->formatted_date) && $Devolucion->formatted_date == null)
+                                                        {{ $Devolucion->formatted_date }}
+                                                        @else
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                                                    @endif
+                                                </td>
+                                        </tr>
+
+                                        <tr class="celdaCrema">
+                                            <td class="letraNegra">Nombre</td>
+                                                <td COLSPAN=2>
+                                                    @if (isset($Devolucion->Recibe) && $Devolucion->Recibe == null)
+                                                        {{ $Devolucion->Recibe }}
+                                                    @endif
+                                                </td>
+                                        </tr>
+                                        <tr class="celdaCrema">
+                                            <td class="letraNegra">Firma</td>
+                                            <td COLSPAN=2></td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+
+                                <td style="width: 7%;">
+
+                                    <table class="">
+                                        <tr class="" >
+                                            <td COLSPAN=2 class=""></td>
+                                        </tr>
+                                            
+                                        <tr class="">
+                                            <td class=""></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class=""></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+
+                                </td>                                
+                        </tr>
+                    </table>
+                    <br>
+                    <br>
+                    Documento Controlado, prohibida su reproducción parcial o total sin autorización. Propiedad de AICO S.C.,<br>
+                    Documento Confidencial. La impresión de este documento se considera un Documento No Controlado.
+
+            </footer>
+
+
         </body>
     </html>
