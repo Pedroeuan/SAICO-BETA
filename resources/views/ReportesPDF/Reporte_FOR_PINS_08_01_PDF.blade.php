@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-07/01</title>
+            <title>FORMATO FOR-PINS-08/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -178,16 +178,16 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-07/01</th>
+                            <th style="width: 80%;">FOR-PINS-08/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE MEDICION DE ESPESORES DE PARED EN LA TUBERIA Y ELEMENTOS ESTRUCTURALES </th>
+                            <th rowspan="2"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES </th>
                             <th>Versión</th>
-                            <th>3</th>
+                            <th>2</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -249,7 +249,7 @@
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior"></td>
-                            <th style="width: 160px;">CODIGO APLICABLEA:</th>
+                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
                             <td class="lineaInferior"></td>
                         </tr>
                     </tbody>
@@ -259,7 +259,7 @@
 
                 <table class="encabezadoAzul">
                     <tr>
-                        <th colspan="9">DATOS DEL EQUIPO </th>
+                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
                     </tr>
                 </table>
 
@@ -269,51 +269,36 @@
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
-                            <th colspan="4">TRANSDUCTOR</th>
-                            <th colspan="2">BLOCK DE REFERENCIA</th>
                             <th>ACOPLANTE</th>
+                            <th colspan="4">SONDA #1</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">1</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td colspan="3">2</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">3</td>
-                            <th style="width: 100px;">13</th>
+                            <th class="celdaGris" style="width: 20%;">MARCA:</th>
+                            <td>1</td>
+                            <td>2</td>
+                            <th class="celdaGris">MARCA:</th>
+                            <td colspan="3">2.1</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
                             <td>5</td>
+                            <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
                             <td colspan="3">6</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>7</td>
-                            <th class="celdaGris">LONGITUD DEL CABLE</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris">N.S.:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>8</td>
-                            <th class="celdaGris">N.S.:</th>
-                            <td style="width: 60px;">9</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">10</td>
-                            <th class="celdaGris">N.S.:</th>
-                            <td>11</td>
-                            <td>14</td>
+                            <td>9</td>
+                            <th class="celdaGris">SERIE:</th>
+                            
+                            <td>10</td>
+                            <th class="celdaGris">FRECC:</th>
+                            <td>10.1</td>
+                            
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
 
                 <table class="datosinspeccionsinborde">
                     <tbody>

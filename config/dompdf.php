@@ -64,6 +64,16 @@ return [
          * The temporary directory is required to download remote images and when
          * using the PDFLib back end.
          */
+        'fonts' => [
+            'arial' => [
+                'normal' => resource_path('fonts/arial.ttf'),
+                'bold' => resource_path('fonts/arial_bold.ttf'),
+                'italic' => resource_path('fonts/arial_italic.ttf'),
+                'bold_italic' => resource_path('fonts/arial_bold_italic.ttf'),
+            ],
+        ],
+
+
         'temp_dir' => sys_get_temp_dir(),
 
         /**

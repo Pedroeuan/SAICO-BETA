@@ -119,7 +119,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 10px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {

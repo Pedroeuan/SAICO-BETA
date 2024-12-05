@@ -119,7 +119,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 12px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -318,13 +318,13 @@
                             <th style="width: 15%;">SENSIBILIDAD (Db):</th>
                             <td class="lineaInferior">2</td>
                             <th style="width: 15%;">NIVEL DE CALIDAD:</th>
-                            <td class="lineaInferior">3</td>|
+                            <td class="lineaInferior">3</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">CONDICIÓN SUPERFICIAL:</th>
                             <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">TEMPERATURA::</th>
+                            <th style="width: 15%;">TEMPERATURA:</th>
                             <td class="lineaInferior">2</td>
                             <th style="width: 15%;"></th>
                             <td></td>|
@@ -411,10 +411,10 @@
                                     <th style="width: 20%;">DIBUJO</th>
                                     <th>SOLDADURA</th>
                                     <th>EVALUACIÓN</th>
-                                    <th>FORMA</th>
-                                    <th>TRANSFER</th>
+                                    <th style="width: 80%;">FORMA</th>
+                                    <th style="width: 80%;">TRANSFER</th>
 
-                                    <th style="width: 50%;">LONGITUD</th>
+                                    <th style="width: 80%;">LONGITUD</th>
                                     <th style="width: 100%;">ANCHO</th>
                                     <th style="width: 150%;">OBSERVACIONES</th>
                                 </tr>

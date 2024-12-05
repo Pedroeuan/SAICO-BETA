@@ -161,7 +161,7 @@
                                         </td>
                                     <!--PDF GENERADO-->
                                         <td>
-                                            <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
                                     <!--PDF DE RESGUARDO-->
                                         <td>

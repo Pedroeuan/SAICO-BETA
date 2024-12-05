@@ -120,7 +120,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 12px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -433,14 +433,14 @@
                                     <th rowspan= "2">Tipo de Indicación</th>
                                     <th colspan="3">Dim. De Indicación</th>
 
-                                    <th style="width: 50%;">Localización</th>
+                                    <th style="width: 80%;">Localización</th>
                                     <th rowspan= "2" style="width: 100%;">Evaluación</th>
                                     <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
                                 </tr>
                                 <tr class="celdaGris">
                                     <th style="width: 50%;">Largo</th>
-                                    <th style="width: 50%;">Ancho</th>
-                                    <th style="width: 50%;">Ø</th>
+                                    <th style="width: 80%;">Ancho</th>
+                                    <th style="width: 80%;">Ø</th>
                                     <th style="width: 50%;">H.T.</th>
                                 </tr>
                             </thead>

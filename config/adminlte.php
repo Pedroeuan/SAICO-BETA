@@ -342,6 +342,10 @@ return [
                             'url' => '/Reporte/FOR-PINS-07/01',
                         ],
                         [
+                            'text' => 'FOR-PINS-08/01',
+                            'url' => '/Reporte/FOR-PINS-08/01',
+                        ],
+                        [
                             'text' => 'FOR-PINS-11/02',
                             'url' => '/Reporte/FOR-PINS-11/02',
                         ],
