@@ -32,6 +32,7 @@
                     
                 body {
                     margin-top: 290px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     margin-top: 0px; /* Evita superposición con el header */
@@ -169,7 +170,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> Informe de Inspección con Ultrasonido de  Acuerdo con API RP 2X </th>
+                            <th rowspan="2" style="font-size: 9pt;"> Informe de Inspección con Ultrasonido de  Acuerdo con API RP 2X </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>

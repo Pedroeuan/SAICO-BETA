@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-07/01</title>
+            <title>FOR-05-PRO-EQ-01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -32,6 +32,7 @@
                     
                 body {
                     margin-top: 70px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */

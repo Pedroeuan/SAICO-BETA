@@ -64,7 +64,7 @@ class PDFReportesController extends Controller
             
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('arial', 'normal');
-            $size = 9;
+            $size = 8;
 
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -119,8 +119,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -178,8 +178,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -234,8 +234,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -291,7 +291,7 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
+            $font = $fontMetrics->getFont('arial', 'normal');
             $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
@@ -348,8 +348,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 634; // Ajusta esta posición X según sea necesario
@@ -390,7 +390,7 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_08_01_PDF', $data)->setPaper('letter', 'portrait ');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_08_01_PDF', $data)->setPaper('letter', 'andscape');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
         //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
@@ -405,8 +405,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 634; // Ajusta esta posición X según sea necesario
@@ -414,7 +414,7 @@ class PDFReportesController extends Controller
     
             // Evitar problemas con valores no válidos para coordenadas
             if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
+                $text = "123$pageNumber de $pageCount";
                 $canvas->text($x, $y, $text, $font, $size);
             }
         });

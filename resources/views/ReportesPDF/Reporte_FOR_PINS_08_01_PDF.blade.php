@@ -32,6 +32,7 @@
                     
                 body {
                     margin-top: 292px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -185,7 +186,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES </th>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>

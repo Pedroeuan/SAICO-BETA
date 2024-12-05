@@ -32,6 +32,7 @@
                     
                 body {
                     margin-top: 232px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: -10px; /* Evita superposición con el header */
@@ -170,7 +171,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>
