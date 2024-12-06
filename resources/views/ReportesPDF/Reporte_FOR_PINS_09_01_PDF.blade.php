@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-08/01</title>
+            <title>FORMATO FOR-PINS-09/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -31,7 +31,7 @@
                 }
                     
                 body {
-                    margin-top: 312px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 290px; /* Ajusta según el tamaño de tu encabezado */
                     font-family: 'arial', sans-serif;
                 }
                 .content {
@@ -90,7 +90,7 @@
             text-align: center;
             width: 100%;
             font-size: 8px;
-            background-color: #305496;
+            background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
@@ -179,14 +179,14 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-08/01</th>
+                            <th style="width: 80%;">FOR-PINS-09/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES </th>
+                            <th rowspan="2" style="font-size: 9pt;">  Informe de Inspección Ultrasónica con Haz Ángular </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -260,7 +260,7 @@
 
                 <table class="encabezadoAzul">
                     <tr>
-                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
+                        <th colspan="9">DATOS DEL EQUIPO </th>
                     </tr>
                 </table>
 
@@ -270,74 +270,49 @@
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
-                            <th style="width: 25%;">ACOPLANTE</th>
-                            <th colspan="4">SONDA #1</th>
+                            <th colspan="4">TRANSDUCTOR</th>
+                            <th colspan="2">BLOCK DE REFERENCIA</th>
+                            <th>ACOPLANTE</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <td>2</td>
-                            <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td style="width: 100px;">1</td>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td colspan="3">2</td>
+                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
+                            <td style="width: 100px;">3</td>
+                            <th style="width: 100px;">13</th>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
                             <td>5</td>
-                            <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
                             <td colspan="3">6</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>7</td>
+                            <th class="celdaGris">LONGITUD DEL CABLE</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris">SERIE:</th>
+                            <th class="celdaGris">N.S.:</th>
                             <td>8</td>
-                            <td>9</td>
-                            <th class="celdaGris">SERIE:</th>
-                            
-                            <td style="width: 12%;">10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>10.1</td>
-                            
+                            <th class="celdaGris">N.S.:</th>
+                            <td style="width: 60px;">9</td>
+                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
+                            <td style="width: 50px;">10</td>
+                            <th class="celdaGris">N.S.:</th>
+                            <td>11</td>
+                            <td>14</td>
                         </tr>
+
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="datosinspeccion">
-                    <tbody>
-                        <tr class="celdaGris">
-                            <th colspan="2">BLOCK DE CALIBRACIÓN (DISTANCIA)</th>
-                            <th colspan="2">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</th>
-                            <th colspan="4">SONDA #2</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td style="width: 15%;">2.1</td>
-                            <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>5.1</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
-                            <th class="celdaGris">SERIE:</th>
-                            <td>9</td>
-                            <th class="celdaGris">SERIE:</th>
-                            <td>9.1</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">10</td>
-                            
-                        </tr>
-                    </tbody>
+                <table class="encabezadoAzul">
+                    <tr>
+                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
+                    </tr>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
@@ -347,22 +322,26 @@
                         <tr>
                             <th style="width: 15%;">GANANCIA:</th>
                             <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">TIPO DE JUNTA:</th>
+                            <th style="width: 15%;">RANGO:</th>
                             <td class="lineaInferior">2</td>
-                        </tr>
-
-                        <tr>
                             <th style="width: 15%;">RECHAZO:</th>
-                            <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">DIAMETRO:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">3</td>
                         </tr>
 
                         <tr>
-                            <th style="width: 15%;">TEMPERATURA:</th>
-                            <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">ESPESOR:</th>
-                            <td class="lineaInferior">2</td>
+                            <th style="width: 15%;">PRESION DE OPERACIÓN:</th>
+                            <td class="lineaInferior">4</td>
+                            <th style="width: 15%;">PRESIÓN MÁXIMA DE OPERACIÓN:</th>
+                            <td class="lineaInferior">5</td>
+                            <th style="width: 20%;">TEMPERATURA MAX. DE OPERACION:</th>
+                            <td class="lineaInferior">6</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 15%;">CONDICION SUPERFICIAL:</th>
+                            <td class="lineaInferior" colspan="2">7</td>
+                            <th style="width: 15%;">ESTADO DE PINTURA:</th>
+                            <td class="lineaInferior" colspan="2">8</td>
                         </tr>
 
                     </tbody>
@@ -378,7 +357,96 @@
             </header>
 
             <footer>
-                    <br>
+            <table>
+                    <tr>
+                        <td>
+                            <table class="simbologia">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>NPIR:</strong></td>
+                                        <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                        <td><strong>FP:</strong></td>
+                                        <td>FALTA DE PENETRACIÓN</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>FF:</strong></td>
+                                        <td>FALTA DE FUSIÓN</td>
+                                        <td><strong>G:</strong></td>
+                                        <td>GRIETAS</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>IE:</strong></td>
+                                        <td>INCLUSIÓN DE ESCORIA</td>
+                                        <td><strong>IVL:</strong></td>
+                                        <td>INDICACIÓN VOLUMÉTRICA</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>IL</strong></td>
+                                        <td>INDICACIÓN LINEAL</td>
+                                        <td><strong>IT:</strong></td>
+                                        <td>INDICACIÓN TRANSVERSSAL</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+                    <!--</tr>
+                    <tr>-->
+                        <td>
+                            <table class="simbologia">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>A:</strong></td>
+                                        <td>ÁNGULO (°)</td>
+                                        <td><strong>NI:</strong></td>
+                                        <td>NIVEL DE INDICACIÓN (%)</td>
+                                        <td><strong>d</strong></td>
+                                        <td>PROFUNDIDAD (PULG)</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>G</strong></td>
+                                        <td>GANANCIA (dB)</td>
+                                        <td><strong>L:</strong></td>
+                                        <td>LONGITUD DE LA INDICACIÓN (PULG)</td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>NR:</strong></td>
+                                        <td>NIVEL DE REFERENCIA (%)</td>
+                                        <td><strong>DSR</strong></td>
+                                        <td>DISTANCIA DE LA INDICACIÓN</td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>S:</strong></td>
+                                        <td>DISTANCIA ANGULAR (Pulg)</td>
+                                        <td><strong>Tmin</strong></td>
+                                        <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+                </tr>       
+            </table>
+                    
+                </table>
 
                     <table>                               
                         <tr>                                     
@@ -445,19 +513,32 @@
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th style="width: 30px;">Junta / Elemento</th>
-                                <th style="width: 40px;">No. IndIcación</th>
-                                <th style="width: 30px;">Ang(°)</th>
-                                <th style="width: 30px;">NR (%)</th>
-                                <th style="width: 30px;">NI (%)</th>
-                                <th style="width: 30px;">LA (in)</th>
-                                <th style="width: 30px;">LC (in)</th>
-                                <th style="width: 30px;">PA <br>Distancia frente a la zapata</th>
-                                <th style="width: 30px;">SA (in)</th>
-                                <th style="width: 30px;">DA(prof.)</th>
-                                <th style="width: 30px;">HT</th>
-                                <th style="width: 30px;">Evaluación</th>
-                                <th style="width: 30px;">FOTOS</th>
+                                <th style="width: 30px;" rowspan="2">ID</th>
+                                <th style="width: 40px;" rowspan="2">No. De Junta</th>
+                                <th style="width: 30px;" colspan="2">Elemento de referencia</th>
+                                <th style="width: 30px;" rowspan="2">Ø</th>
+                                <th style="width: 30px;" rowspan="2">No.Ind.</th>
+                                <th style="width: 30px;" rowspan="2">Tipo de Indicación</th>
+                                <th style="width: 30px;" rowspan="2">A (°)</th>
+                                <th style="width: 30px;" rowspan="2">G (dB)</th>
+                                <th style="width: 30px;" rowspan="2">NR (%)</th>
+                                <th style="width: 30px;" rowspan="2">NI (%)</th>
+                                <th style="width: 30px;" colspan="2">DSR</th>
+                                <th style="width: 30px;" rowspan="2">Horario Técnico</th>
+                                <th style="width: 30px;" rowspan="2">No. De Pierna</th>
+                                <th style="width: 30px;" rowspan="2">S</th>
+                                <th style="width: 30px;" rowspan="2">L</th>
+                                <th style="width: 30px;" rowspan="2">d</th>
+                                <th style="width: 30px;" rowspan="2">tmin</th>
+                                <th style="width: 30px;" rowspan="2">Evaluación</th>
+                                <th style="width: 30px;" rowspan="2">Fotos No.</th>
+                                <th style="width: 30px;" rowspan="2">Observaciones</th>
+                            </tr>
+                            <tr class="celdaGris">
+                                <th style="width: 30px;">Lado A</th>
+                                <th style="width: 30px;">Lado B</th>
+                                <th style="width: 30px;">X</th>
+                                <th style="width: 30px;">Y</th>
                             </tr>
                         </thead>
 
@@ -477,21 +558,39 @@
                                     <td>----</td>
                                     <td>----</td>
                                     <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
                                 </tr>
                                 @endfor
-                                <tr class="sinBordeth">
-                                    <td colspan="10" rowspan="2">
-                                        <b>NPIR</b>= No Presenta Indicaciones Relevantes, 
-                                        <b>SC</b>= Soldadura Circunferencial, 
-                                        <b>SA</b>= Distancia Angular, 
-                                        <b>HT</b>= Horario tecncio, 
-                                        <b>SL</b>= Soldadura Longitudinal,
-                                        <b>LA</b>= Largo Axial, 
-                                        <b>LC</b>= Largo circunferencial, 
-                                        <b>DA</b>= Profundidad
-                                    </td>
-                                    <td colspan="2"><strong>TOTAL DE PUNTOS:</strong></td>
-                                    <td><strong>0 m</strong></td>
+                                <tr class="sinBordetd">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <th colspan="2"><strong>TOTAL DE PUNTOS:</strong></th>
+                                    <th><strong>0 m</strong></th>
                                 </tr>
 
                             </tbody>
