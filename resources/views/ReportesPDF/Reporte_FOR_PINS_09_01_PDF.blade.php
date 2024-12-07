@@ -23,7 +23,7 @@
                     bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: 125px;
                     text-align: center;
                     line-height: normal;
                     /*background-color: #f2f2f2;*/
@@ -36,7 +36,7 @@
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 100px; /* Evita superposición con el footer */
+                    margin-bottom: 125px; /* Evita superposición con el footer */
                 }
 
                 .table-container {
@@ -357,96 +357,143 @@
             </header>
 
             <footer>
-            <table>
-                    <tr>
-                        <td>
-                            <table class="simbologia">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
-                                    </tr>
+                <div style="margin-bottom: 5px;"></div>
+                
+                    <table style="margin: auto; border: 0px solid black;">
+                        <tr>
+                            <td>
+                                <table class="simbologia">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>NPIR:</strong></td>
-                                        <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
-                                        <td><strong>FP:</strong></td>
-                                        <td>FALTA DE PENETRACIÓN</td>
-                                    </tr>
+                                        <tr>
+                                            <td><strong>NPIR:</strong></td>
+                                            <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                            <td><strong>FP:</strong></td>
+                                            <td>FALTA DE PENETRACIÓN</td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>FF:</strong></td>
-                                        <td>FALTA DE FUSIÓN</td>
-                                        <td><strong>G:</strong></td>
-                                        <td>GRIETAS</td>
-                                    </tr>
+                                        <tr>
+                                            <td><strong>FF:</strong></td>
+                                            <td>FALTA DE FUSIÓN</td>
+                                            <td><strong>G:</strong></td>
+                                            <td>GRIETAS</td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>IE:</strong></td>
-                                        <td>INCLUSIÓN DE ESCORIA</td>
-                                        <td><strong>IVL:</strong></td>
-                                        <td>INDICACIÓN VOLUMÉTRICA</td>
-                                    </tr>
+                                        <tr>
+                                            <td><strong>IE:</strong></td>
+                                            <td>INCLUSIÓN DE ESCORIA</td>
+                                            <td><strong>IVL:</strong></td>
+                                            <td>INDICACIÓN VOLUMÉTRICA</td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>IL</strong></td>
-                                        <td>INDICACIÓN LINEAL</td>
-                                        <td><strong>IT:</strong></td>
-                                        <td>INDICACIÓN TRANSVERSSAL</td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-                    <!--</tr>
-                    <tr>-->
-                        <td>
-                            <table class="simbologia">
-                                <thead>
-                                    <tr>
-                                        <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
-                                    </tr>
+                                        <tr>
+                                            <td><strong>IL</strong></td>
+                                            <td>INDICACIÓN LINEAL</td>
+                                            <td><strong>IT:</strong></td>
+                                            <td>INDICACIÓN TRANSVERSSAL</td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </td>
 
-                                    <tr>
-                                        <td><strong>A:</strong></td>
-                                        <td>ÁNGULO (°)</td>
-                                        <td><strong>NI:</strong></td>
-                                        <td>NIVEL DE INDICACIÓN (%)</td>
-                                        <td><strong>d</strong></td>
-                                        <td>PROFUNDIDAD (PULG)</td>
-                                    </tr>
+                            <td>
+                            <table class="">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="6" class=""></th>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>G</strong></td>
-                                        <td>GANANCIA (dB)</td>
-                                        <td><strong>L:</strong></td>
-                                        <td>LONGITUD DE LA INDICACIÓN (PULG)</td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
+                                        <tr>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>NR:</strong></td>
-                                        <td>NIVEL DE REFERENCIA (%)</td>
-                                        <td><strong>DSR</strong></td>
-                                        <td>DISTANCIA DE LA INDICACIÓN</td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
+                                        <tr>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><strong>S:</strong></td>
-                                        <td>DISTANCIA ANGULAR (Pulg)</td>
-                                        <td><strong>Tmin</strong></td>
-                                        <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-                </tr>       
-            </table>
-                    
-                </table>
+                                        <tr>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </td>
+
+                            <td>
+                                <table class="simbologia">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>A:</strong></td>
+                                            <td>ÁNGULO (°)</td>
+                                            <td><strong>NI:</strong></td>
+                                            <td>NIVEL DE INDICACIÓN (%)</td>
+                                            <td><strong>d</strong></td>
+                                            <td>PROFUNDIDAD (PULG)</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>G</strong></td>
+                                            <td>GANANCIA (dB)</td>
+                                            <td><strong>L:</strong></td>
+                                            <td>LONGITUD DE LA INDICACIÓN (PULG)</td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>NR:</strong></td>
+                                            <td>NIVEL DE REFERENCIA (%)</td>
+                                            <td><strong>DSR</strong></td>
+                                            <td>DISTANCIA DE LA INDICACIÓN</td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>S:</strong></td>
+                                            <td>DISTANCIA ANGULAR (Pulg)</td>
+                                            <td><strong>Tmin</strong></td>
+                                            <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-bottom: 5px;"></div>
 
                     <table>                               
                         <tr>                                     
@@ -506,7 +553,7 @@
                         </thead>                            
                     </table>
             </footer>
-
+            
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
 
@@ -596,5 +643,6 @@
                             </tbody>
                     </table>
             </div>
+
         </body>
     </html>

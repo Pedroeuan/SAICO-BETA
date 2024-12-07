@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-11/02</title>
+            <title>FORMATO FOR-PINS-11/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -31,7 +31,7 @@
                 }
                     
                 body {
-                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 286px; /* Ajusta según el tamaño de tu encabezado */
                     font-family: 'arial', sans-serif;
                 }
                 .content {
@@ -179,14 +179,14 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-11/02</th>
+                            <th style="width: 80%;">FOR-PINS-11/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASINFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -293,13 +293,13 @@
                             <th class="celdaGris" style="width: 100px;">LONGITUD DEL CABLE</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris">N.S:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>8</td>
-                            <th class="celdaGris">N.S:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td style="width: 60px;">9</td>
                             <th class="celdaGris" style="width: 50px;">FRECC:</th>
                             <td style="width: 50px;">10</td>
-                            <th class="celdaGris">N.S:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>11</td>
                             <td>12</td>
                         </tr>
@@ -308,20 +308,41 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
+                <table class="encabezadoAzul">
+                    <tr>
+                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
+                    </tr>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
                 <table class="datosinspeccionsinborde">
                     <tbody>
                         <tr>
-                            <th style="width: 8%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td><td style="width: 1%;">dB</td>
-                            <th style="width: 8%;">RANGO:</th>
+                            <th style="width: 15%;">GANANCIA:</th>
+                            <td class="lineaInferior">1</td>
+                            <th style="width: 15%;">RANGO:</th>
                             <td class="lineaInferior">2</td>
-                            <th style="width: 8%;">RECHAZO:</th>
+                            <th style="width: 15%;">RECHAZO:</th>
                             <td class="lineaInferior">3</td>
-                            <th style="width: 8%;">SUPERFICIE:</th>
-                            <td class="lineaInferior">4</td>
-                            <th style="width: 8%;">PINTURA:</th>
-                            <td class="lineaInferior">5</td>
                         </tr>
+
+                        <tr>
+                            <th style="width: 15%;">PRESION DE OPERACIÓN:</th>
+                            <td class="lineaInferior">4</td>
+                            <th style="width: 15%;">PRESIÓN MÁXIMA DE OPERACIÓN:</th>
+                            <td class="lineaInferior">5</td>
+                            <th style="width: 20%;">TEMPERATURA MAX. DE OPERACION:</th>
+                            <td class="lineaInferior">6</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 15%;">CONDICION SUPERFICIAL:</th>
+                            <td class="lineaInferior" colspan="2">7</td>
+                            <th style="width: 15%;">ESTADO DE PINTURA:</th>
+                            <td class="lineaInferior" colspan="2">8</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
@@ -335,7 +356,7 @@
             </header>
 
             <footer>
-                <div style="margin-bottom: 5px;"></div>
+            <div style="margin-bottom: 5px;"></div>
                 
                 <table style="margin: auto; border: 0px solid black;">
                     <tr>
@@ -533,37 +554,34 @@
                     <table class="datosresultados">
                         <thead>
                                 <tr class="celdaGris">
-                                    <th colspan="7">DATOS DEL MATERIAL</th>
-                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
-                                </tr>
-                                <tr class="celdaGris">
                                     <th style="width: 5px;">ID</th>
-                                    <th style="width: 20px;">Elemento / Tubo</th>
-                                    <th style="width: 20px;">No. Aceptación</th>
-                                    <th style="width: 20px;">No. Serie</th>
-                                    <th style="width: 20px;">No. Colada</th>
-                                    <th style="width: 20px;">tnominal</th>
-                                    <th style="width: 20px;">Ø</th>
+                                    <th style="width: 20px;">Elemento</th>
+                                    <th style="width: 20px;">Nivel</th>
+                                    <th style="width: 20px;">Ønom</th>
+                                    <th style="width: 20px;">Øext</th>
                                     <th style="width: 20px;">No.Ind.</th>
                                     <th style="width: 20px;">Tipo de Indicación</th>
+                                    <th style="width: 20px;">G (dB)</th>
                                     <th style="width: 20px;">NR (%)</th>
                                     <th style="width: 20px;">NI (%)</th>
-                                    <th style="width: 20px;">H.T.</th>
-                                    <th style="width: 20px;">Prof</th>
+                                    <th style="width: 20px;">DNR</th>
+                                    <th style="width: 20px;">Horario Técnico</th>
+                                    <th style="width: 20px;">S.C. ó Lado de Referencia</th>
                                     <th style="width: 20px;">LA</th>
                                     <th style="width: 20px;">LC</th>
-                                    <th style="width: 20px;">tmáx</th>
                                     <th style="width: 20px;">tmin</th>
-                                    <th style="width: 20px;">Metros Lineales</th>
-                                    <th style="width: 25px;">Evaluación</th>
+                                    <th style="width: 20px;">d</th>
+                                    <th style="width: 20px;">ta</th>
+                                    <th style="width: 25px;">Perdida de Material (%)</th>
+                                    <th style="width: 20px;">Fotos No.</th>
+                                    <th style="width: 5px;">Observaciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                             @for($i = 0; $i < 50; $i++)
                             <tr>
+                                <td>----</td>
                                 <td>----</td>
                                 <td>----</td>
                                 <td>----</td>
@@ -600,11 +618,13 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
                                 <th>0 m</th>
-                                <td></td>
-                                <td></td>
                             </tr>
+
                             </tbody>
                     </table>
             </div>

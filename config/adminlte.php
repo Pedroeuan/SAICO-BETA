@@ -350,8 +350,20 @@ return [
                             'url' => '/Reporte/FOR-PINS-09/01',
                         ],
                         [
+                            'text' => 'FOR-PINS-10/01',
+                            'url' => '/Reporte/FOR-PINS-10/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-11/01',
+                            'url' => '/Reporte/FOR-PINS-11/01',
+                        ],
+                        [
                             'text' => 'FOR-PINS-11/02',
                             'url' => '/Reporte/FOR-PINS-11/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-13/01',
+                            'url' => '/Reporte/FOR-PINS-13/01',
                         ],
                     ],
                 ],
