@@ -23,7 +23,7 @@
                     bottom: 100px; /* Ajustar para que quede dentro del margen inferior */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: 80px;
                     text-align: center;
                     line-height: normal;
                     /*background-color: #f2f2f2;*/
@@ -31,7 +31,7 @@
                 }
                     
                 body {
-                    margin-top: 248px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 255px; /* Ajusta según el tamaño de tu encabezado */
                     font-family: 'arial', sans-serif;
                 }
                 .content {

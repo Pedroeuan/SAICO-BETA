@@ -217,6 +217,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Reporte/FOR-PINS-11/01', [PDFReportesController::class, 'FOR_PINS_11_01'])->name('Reporte_FOR_PINS_11_01.PDF');
     Route::get('/Reporte/FOR-PINS-11/02', [PDFReportesController::class, 'FOR_PINS_11_02'])->name('Reporte_FOR_PINS_11_02.PDF');
     Route::get('/Reporte/FOR-PINS-13/01', [PDFReportesController::class, 'FOR_PINS_13_01'])->name('Reporte_FOR_PINS_13_01.PDF');
+    Route::get('/Reporte/FOR-PINS-14/01', [PDFReportesController::class, 'FOR_PINS_14_01'])->name('Reporte_FOR_PINS_14_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/01', [PDFReportesController::class, 'FOR_PINS_16_01'])->name('Reporte_FOR_PINS_16_01.PDF');
     });
     
     /*admin */
