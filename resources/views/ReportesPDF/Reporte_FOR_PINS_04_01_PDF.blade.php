@@ -31,10 +31,11 @@
                 }
                     
                 body {
-                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 232px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
+                    /*margin-top: -10px; /* Evita superposición con el header */
                     margin-bottom: 200px; /* Evita superposición con el footer */
                 }
 
@@ -120,7 +121,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 12px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -170,7 +171,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>
@@ -433,41 +434,41 @@
                                     <th rowspan= "2">Tipo de Indicación</th>
                                     <th colspan="3">Dim. De Indicación</th>
 
-                                    <th style="width: 50%;">Localización</th>
+                                    <th style="width: 80%;">Localización</th>
                                     <th rowspan= "2" style="width: 100%;">Evaluación</th>
                                     <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
                                 </tr>
                                 <tr class="celdaGris">
                                     <th style="width: 50%;">Largo</th>
-                                    <th style="width: 50%;">Ancho</th>
-                                    <th style="width: 50%;">Ø</th>
+                                    <th style="width: 80%;">Ancho</th>
+                                    <th style="width: 80%;">Ø</th>
                                     <th style="width: 50%;">H.T.</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @for($i = 0; $i < 54; $i++)
-                            <tr>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                            </tr>
-                            @endfor
-                            <tr class="sinBordetd">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
-                                <th>0 m</th>
-                            </tr>
+                                @for($i = 0; $i < 54; $i++)
+                                <tr>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                </tr>
+                                @endfor
+                                <tr class="sinBordetd">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="4"><strong>Longitud total inspeccionada:</strong></td>
+                                    <th>0 m</th>
+                                </tr>
 
                             </tbody>
                     </table>

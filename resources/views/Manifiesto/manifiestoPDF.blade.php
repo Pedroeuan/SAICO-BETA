@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manifiesto</title>
+    <title>FOR-PCVE-01/05</title>
     <style>
         @page {
             margin: 45px 25px;
@@ -105,7 +105,7 @@
         }
         body {
             padding-top: 60px; /* Ajusta el valor según la altura de tu header */
-            /*font-family: "Arial", sans-serif; /* Cambiar a Arial */
+            font-family: 'arial', sans-serif;
         }
         /*muestra solo la linea inferior de la celda*/
         .lineaInferior{

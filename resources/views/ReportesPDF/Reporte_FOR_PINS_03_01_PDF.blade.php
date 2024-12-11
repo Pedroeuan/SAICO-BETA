@@ -23,7 +23,7 @@
                     bottom: 100px; /* Ajustar para que quede dentro del margen inferior */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: 80px;
                     text-align: center;
                     line-height: normal;
                     /*background-color: #f2f2f2;*/
@@ -31,7 +31,8 @@
                 }
                     
                 body {
-                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 255px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -119,7 +120,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 12px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -169,7 +170,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS</th>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS</th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>
@@ -442,18 +443,18 @@
                             <thead>
                                 <tr class="celdaGris">
                                     <th rowspan= "2" style="width: 20%;">No.</th>
-                                    <th rowspan= "2">No. De Junta / Componente</th>
+                                    <th rowspan= "2" style="width: 100%;">No. De Junta / Componente</th>
                                     <th rowspan= "2">No. Indicación</th>
                                     <th rowspan= "2">Tipo de Indicación</th>
                                     <th colspan="3">Dim. De Indicación</th>
 
-                                    <th style="width: 50%;">Localización</th>
+                                    <th style="width: 100%;">Localización</th>
                                     <th rowspan= "2" style="width: 100%;">Evaluación</th>
                                     <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
                                 </tr>
                                 <tr class="celdaGris">
-                                    <th style="width: 50%;">Largo</th>
-                                    <th style="width: 50%;">Ancho</th>
+                                    <th style="width: 100%;">Largo</th>
+                                    <th style="width: 100%;">Ancho</th>
                                     <th style="width: 50%;">Ø</th>
                                     <th style="width: 50%;">H.T.</th>
                                 </tr>
