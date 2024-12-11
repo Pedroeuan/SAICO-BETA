@@ -219,6 +219,11 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Reporte/FOR-PINS-13/01', [PDFReportesController::class, 'FOR_PINS_13_01'])->name('Reporte_FOR_PINS_13_01.PDF');
     Route::get('/Reporte/FOR-PINS-14/01', [PDFReportesController::class, 'FOR_PINS_14_01'])->name('Reporte_FOR_PINS_14_01.PDF');
     Route::get('/Reporte/FOR-PINS-16/01', [PDFReportesController::class, 'FOR_PINS_16_01'])->name('Reporte_FOR_PINS_16_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/02', [PDFReportesController::class, 'FOR_PINS_16_02'])->name('Reporte_FOR_PINS_16_02.PDF');
+    Route::get('/Reporte/FOR-PINS-16/03', [PDFReportesController::class, 'FOR_PINS_16_03'])->name('Reporte_FOR_PINS_16_03.PDF');
+    Route::get('/Reporte/FOR-PINS-17/01', [PDFReportesController::class, 'FOR_PINS_17_01'])->name('Reporte_FOR_PINS_17_01.PDF');
+    Route::get('/Reporte/FOR-PINS-17_01/01', [PDFReportesController::class, 'FOR_PINS_17_01_01'])->name('Reporte_FOR_PINS_17_01_01.PDF');
+    Route::get('/Reporte/FOR-PINS-18/01', [PDFReportesController::class, 'FOR_PINS_18_01'])->name('Reporte_FOR_PINS_18_01.PDF');
     });
     
     /*admin */

@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-16/01</title>
+            <title>FORMATO FOR-PINS-18/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -23,7 +23,7 @@
                     bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
                     left: 0;
                     right: 0;
-                    height: 125px;
+                    height: 140px;
                     text-align: center;
                     line-height: normal;
                     /*background-color: #f2f2f2;*/
@@ -31,12 +31,12 @@
                 }
                     
                 body {
-                    margin-top: 170px; /* Ajusta según el tamaño de tu encabezado */
+                    margin-top: 300px; /* Ajusta según el tamaño de tu encabezado */
                     font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 125px; /* Evita superposición con el footer */
+                    margin-bottom: 175px; /* Evita superposición con el footer */
                 }
 
                 .table-container {
@@ -90,7 +90,7 @@
             text-align: center;
             width: 100%;
             font-size: 8px;
-            background-color: #2F75B5;
+            background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
@@ -179,14 +179,14 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-16/01</th>
+                            <th style="width: 80%;">FOR-PINS-18/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">  Informe de Inspección Ultrasónica con Haz Ángular </th>
+                            <th rowspan="2" style="font-size: 9pt;"> Informe de Detección de Discontinuidades con Corrientes de Eddy </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -248,17 +248,98 @@
                             <td class="lineaInferior"></td>
                         </tr>
                         <tr>
-                            <th>PROCEDIMIENTO:</th>
+                            <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior"></td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
+                            <th style="width: 160px;">CODIGO APLICABLE:</th>
                             <td class="lineaInferior"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 4px;"></div>
+
+                <table class="encabezadoAzul">
+                    <tr>
+                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
+                    </tr>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="datosinspeccion">
+                    <tbody>
+                        <tr class="celdaGris">
+                            <th colspan="2">EQUIPO</th>
+                            <th colspan="2">SONDA</th>
                         </tr>
                         <tr>
-                            <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior"></td>
-                            <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
+                            <td style="width: 15%;">1</td>
+                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
+                            <td style="width: 15%;">2</td>
                         </tr>
+                        <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>3</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>5</td>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>6</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="datosinspeccion">
+                    <tbody>
+                        <tr class="celdaGris">
+                            <th colspan="2">BLOCK DE CALIBRACIÓN</th>
+                            <th colspan="2">CABLE</th>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
+                            <td style="width: 15%;">1</td>
+                            <th class="celdaGris" style="width: 15%;">MARCA:</th>
+                            <td style="width: 15%;">2</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>3</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>5</td>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>6</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+                
+                <table class="datosinspeccionsinborde">
+                    <tbody>
+                        <tr>
+                            <th style="width: 15%;">FRECUENCIA</th>
+                            <td class="lineaInferior">1</td>
+                            <th style="width: 15%;">GANANCIA HORIZONTAL</th>
+                            <td class="lineaInferior">2</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 15%;">ESPESOR DE PINTURA.</th>
+                            <td class="lineaInferior">3</td>
+                            <th style="width: 15%;">GANANCIA VERTICAL</th>
+                            <td class="lineaInferior">4</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
@@ -272,73 +353,47 @@
             </header>
 
             <footer>
-                <div style="margin-bottom: 5px;"></div>
-                
-                <table class="simbologia">
+                    <table class="simbologia">
                         <thead>
                             <tr>
-                                <th colspan="8" class="celdaAmarillo">SIMBOLOGÍA</th>
+                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
                             </tr>
 
                             <tr>
-                                <td style="width: 20px;"><strong>G:</strong></td>
-                                <td style="width: 110px;">Grietas</td>
-                                <td style="width: 20px;"><strong>AG:</strong></td>
-                                <td style="width: 150px;">Apertura de garganta</td>
-                                <td style="width: 20px;"><strong>DCA:</strong></td>
-                                <td style="width: 180px;">Daño caliente</td>
-                                <td style="width: 20px;"><strong>SIR:</strong></td>
-                                <td style="width: 180px;">Sin indicaciones relevantes</td>
+                                <td style="width: 20px;"><strong>GT</strong></td>
+                                <td style="width: 110px;">GRIETA LONGITUDINAL</td>
+                                <td style="width: 20px;"><strong>IR</strong></td>
+                                <td style="width: 150px;">INDICACIÓN REDONDEADA</td>
+                                <td style="width: 20px;"><strong>LA</strong></td>
+                                <td style="width: 180px;">LONGITUD AXIAL</td>
                             </tr>
 
                             <tr>
-                                <td><strong>R:</strong></td>
-                                <td>Rotura</td>
-                                <td><strong>H:</strong></td>
-                                <td>Hendiduras</td>
-                                <td><strong>MH:</strong></td>
-                                <td>Manchas de hidrocarburos</td>
-                                <td></td><td></td>
+                                <td><strong>IL</strong></td>
+                                <td>INDICACIÓN LINEAL</td>
+                                <td><strong>GT</strong></td>
+                                <td>GRIETAS TRANSVERSAL</td>
+                                <td><strong>LC</strong></td>
+                                <td>LONGITUD CIRCUNFERENCIAL</td>
                             </tr>
 
                             <tr>
-                                <td><strong>D,R,DE:</strong></td>
-                                <td>Doblado, retorcido o deformado</td>
-                                <td><strong>D:</strong></td>
-                                <td>Desgaste</td>
-                                <td><strong>DM:</strong></td>
-                                <td>Daño mecanico</td>
-                                <td></td><td></td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>DC:</strong></td>
-                                <td>Daño por calor</td>
-                                <td><strong>EA:</strong></td>
-                                <td>Evidencia de alteraciones</td>
-                                <td><strong>FI:</strong></td>
-                                <td>Falta de identificación</td>
-                                <td></td><td></td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>DCS:</strong></td>
-                                <td>Daño por corrosión severa</td>
-                                <td><strong>MF</strong></td>
-                                <td>Mal funcionamiento</td>
-                                <td><strong>DSA:</strong></td>
-                                <td>Desalineamiento</td>
-                                <td></td><td></td>
+                                <td><strong>CC</strong></td>
+                                <td>CAMBIO DE CONDUCTIVIDAD</td>
+                                <td><strong>ZG</strong></td>
+                                <td>ZONA DE GRIETAS</td>
+                                <td><strong>H.T.</strong></td>
+                                <td>HORARIO TÉCNICO</td>
                             </tr>
                         </thead>
                     </table>
 
-                    <div style="margin-bottom: 5px;"></div>
+                    <br>
 
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 916px;"></td>                            
+                            <td class="lineaInferior" style="width: 675px;"></td>                            
                         </tr>                      
                     </table>
 
@@ -393,33 +448,32 @@
                         </thead>                            
                     </table>
             </footer>
-            
+
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
 
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th style="width: 30px;">ID</th>
-                                <th style="width: 40px;">No. De Junta</th>
-                                <th style="width: 30px;">Elemento de referencia</th>
-                                <th style="width: 30px;">Ø</th>
-                                <th style="width: 30px;">ID</th>
-                                <th style="width: 30px;">Descripción</th>
-                                <th style="width: 30px;">Tipo de indicación</th>
-                                <th style="width: 30px;">No. SERIE</th>
-                                <th style="width: 30px;">MATERIAL</th>
-                                <th style="width: 30px;">Ø</th>
-                                <th style="width: 30px;">Largo (m)</th>
-                                <th style="width: 30px;">Ancho (m)</th>
-                                <th style="width: 30px;">Cumple su función</th>
-                                <th style="width: 30px;">Identificación legible</th>
-                                <th style="width: 30px;">Daño por corrosión</th>
-                                <th style="width: 30px;">Resultados</th>
-                                <th style="width: 30px;">Observaciones</th>
-                            </tr>
+                            <th style="width: 30px;" colspan="2">DATOS DE INSPECCIÓN</th>
+                                <th style="width: 40px;" colspan="5">DATOS DE LA INDICACIÓN</th>
+                                <th style="width: 30px;" colspan="2">Área Inspeccionada</th>
+                                <th style="width: 30px;" rowspan="2">Evaluación</th>
+                                <th style="width: 30px;" rowspan="2">Fotos</th>
+                                <th style="width: 30px;" rowspan="2">Observaciones</th>
+                            </tr>  
+                            <tr class="celdaGris">
+                                <th style="width: 30px;">Junta / Elemento</th>
+                                <th style="width: 40px;">Zona de Barrido</th>
+                                <th style="width: 30px;">No. IndIcación</th>
+                                <th style="width: 30px;">Tipo de Indicación</th>
+                                <th style="width: 30px;">LA</th>
+                                <th style="width: 30px;">LC</th>
+                                <th style="width: 30px;">H.T.</th>
+                                <th style="width: 30px;">Largo</th>
+                                <th style="width: 30px;">Ancho</th>
+                            </tr>                               
                         </thead>
-
                             <tbody>
                                 @for($i = 0; $i < 54; $i++)
                                 <tr>
@@ -435,17 +489,20 @@
                                     <td>----</td>
                                     <td>----</td>
                                     <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
                                 </tr>
                                 @endfor
+                                <tr class="sinBordeth">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="2"><strong>TOTAL DE PUNTOS:</strong></td>
+                                    <td colspan="2"><strong>0 m<sup>2</sup></strong></td>
+                                </tr>
 
                             </tbody>
                     </table>
             </div>
-
         </body>
     </html>
