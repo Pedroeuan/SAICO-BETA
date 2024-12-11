@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Auth;
 //use Barryvdh\Snappy\Facades\SnappyPdf;
 use Barryvdh\DomPDF\Facade\Pdf;
 //use Barryvdh\DomPDF\Facade as PDF;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+/*use Dompdf\Dompdf;*/
+/*use Dompdf\Options;*/
 
 //use Spatie\LaravelPdf\Facades\Pdf;
 
@@ -61,9 +61,10 @@ class PDFReportesController extends Controller
 
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
 
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -103,7 +104,7 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_04_01_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_04_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
         //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_04_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
@@ -118,8 +119,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -162,7 +163,7 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
         //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
@@ -177,8 +178,8 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 9;
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
             $x = 483; // Ajusta esta posición X según sea necesario
@@ -194,6 +195,914 @@ class PDFReportesController extends Controller
         return $pdf->stream('Reporte_FOR_PINS_05_01.PDF');
     }
 
+    public function FOR_PINS_05_02()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+    
+        $data = [
+            'title' => 'Reporte_FOR-PINS-05/02.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_02_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_05_02.PDF');
+    }
+
+    public function FOR_PINS_06_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+    
+        $data = [
+            'title' => 'Reporte_FOR-PINS-06/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_06_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_06_01.PDF');
+    }
+
+    public function FOR_PINS_07_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+    
+        $data = [
+            'title' => 'Reporte_FOR-PINS-07/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_07_01_PDF', $data)->setPaper('letter', 'landscape');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 634; // Ajusta esta posición X según sea necesario
+            $y = 46;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_07_01.PDF');
+    }
+
+
+    public function FOR_PINS_08_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-08/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_08_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_08_01.PDF');
+    }
+
+    public function FOR_PINS_09_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-09/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_09_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 633; // Ajusta esta posición X según sea necesario
+            $y = 47;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_09_01.PDF');
+    }
+
+    public function FOR_PINS_10_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+        
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        $FOR_PINS_10_01 = public_path('images/FOR-PINS-10-01.png');
+        $data = [
+            'title' => 'Reporte_FOR-PINS-10/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            'FOR_PINS_10_01' => $FOR_PINS_10_01,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_10_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 633; // Ajusta esta posición X según sea necesario
+            $y = 47;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_10_01.PDF');
+    }
+
+    public function FOR_PINS_11_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-11/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 634; // Ajusta esta posición X según sea necesario
+            $y = 46;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_11_01.PDF');
+    }
+
+    public function FOR_PINS_11_02()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-11/02.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 634; // Ajusta esta posición X según sea necesario
+            $y = 46;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_11_02.PDF');
+    }
+
+    public function FOR_PINS_13_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-13/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_13_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 634; // Ajusta esta posición X según sea necesario
+            $y = 46;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_13_01.PDF');
+    }
+
+    public function FOR_PINS_14_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-14/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_14_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_14_01.PDF');
+    }
+
+    public function FOR_PINS_16_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-16/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 633; // Ajusta esta posición X según sea necesario
+            $y = 47;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_16_01.PDF');
+    }
+
+    public function FOR_PINS_16_02()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-16/02.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 633; // Ajusta esta posición X según sea necesario
+            $y = 47;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_16_02.PDF');
+    }
+
+    public function FOR_PINS_16_03()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-16/02.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_03_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 633; // Ajusta esta posición X según sea necesario
+            $y = 47;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_PINS_16_03.PDF');
+    }
+
+    public function FOR_PINS_17_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-17/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_17_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_17_01.PDF');
+    }
+
+    public function FOR_PINS_17_01_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-17_01/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_17_01_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_17_01_01.PDF');
+    }
+
+    public function FOR_PINS_18_01()
+    {
+        $user = Auth::user();
+        $nombre = $user->name;
+        /*$Solicitud = Solicitudes::findOrFail($id);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
+        $Devolucion = devolucion::where('idSolicitud', $id)->first();
+        $generalEyC = general_eyc::all();*/
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-PINS-18/01.PDF',
+            /*'Manifiesto' => $Manifiesto,
+            'DetallesSolicitud' => $DetallesSolicitud,
+            'Solicitud' => $Solicitud,
+            'generalEyC' => $generalEyC,*/
+            'nombre' => $nombre,
+            'Logo' => $Logo,
+            //'Devolucion' => $Devolucion,
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_18_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('Reporte_FOR_PINS_18_01.PDF');
+    }
+
+}
     /*public function FOR_PINS_03_01132()
     {
         // Crear instancia de Dompdf
@@ -693,60 +1602,3 @@ class PDFReportesController extends Controller
         $dompdf->stream("FORMATO FOR-PINS-03/01", ["Attachment" => false]);
 
     }*/
-
-    public function FOR_PINS_11_02()
-    {
-        $user = Auth::user();
-        $nombre = $user->name;
-        /*$Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
-        $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();*/
-    
-        $Logo = public_path('images/Logo_AICO_R.jpg');
-
-        $data = [
-            'title' => 'Reporte_FOR-PINS-11/02.PDF',
-            /*'Manifiesto' => $Manifiesto,
-            'DetallesSolicitud' => $DetallesSolicitud,
-            'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,*/
-            'nombre' => $nombre,
-            'Logo' => $Logo,
-            //'Devolucion' => $Devolucion,
-        ];
-    
-        // Cargar la vista con los datos
-        //$pdf = PDF::loadView('ReportesPDF.UltrasonidoFOR_PINS_12PDF', $data)->setPaper('a4', 'landscape');
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
-    
-        // Renderizar el PDF antes de obtener el canvas
-        $dompdf = $pdf->getDomPDF();
-        // Configurar márgenes personalizados (en milímetros)
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
-        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
-        $dompdf->setOptions($options);
-        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
-    
-        $canvas = $dompdf->getCanvas();
-        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-            // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 10;
-    
-            // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 630; // Ajusta esta posición X según sea necesario
-            $y = 72;  // Ajusta esta posición Y según sea necesario
-    
-            // Evitar problemas con valores no válidos para coordenadas
-            if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
-                $canvas->text($x, $y, $text, $font, $size);
-            }
-        });
-    
-        return $pdf->stream('Reporte_FOR_PINS_11_02.PDF');
-    }
-}

@@ -329,10 +329,69 @@ return [
                             'text' => 'FOR-PINS-05/01',
                             'url' => '/Reporte/FOR-PINS-05/01',
                         ],
-
+                        [
+                            'text' => 'FOR-PINS-05/02',
+                            'url' => '/Reporte/FOR-PINS-05/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-06/01',
+                            'url' => '/Reporte/FOR-PINS-06/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-07/01',
+                            'url' => '/Reporte/FOR-PINS-07/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-08/01',
+                            'url' => '/Reporte/FOR-PINS-08/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-09/01',
+                            'url' => '/Reporte/FOR-PINS-09/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-10/01',
+                            'url' => '/Reporte/FOR-PINS-10/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-11/01',
+                            'url' => '/Reporte/FOR-PINS-11/01',
+                        ],
                         [
                             'text' => 'FOR-PINS-11/02',
                             'url' => '/Reporte/FOR-PINS-11/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-13/01',
+                            'url' => '/Reporte/FOR-PINS-13/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-14/01',
+                            'url' => '/Reporte/FOR-PINS-14/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/01',
+                            'url' => '/Reporte/FOR-PINS-16/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/02',
+                            'url' => '/Reporte/FOR-PINS-16/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/03',
+                            'url' => '/Reporte/FOR-PINS-16/03',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-17/01',
+                            'url' => '/Reporte/FOR-PINS-17/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-17_01/01',
+                            'url' => '/Reporte/FOR-PINS-17_01/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-18/01',
+                            'url' => '/Reporte/FOR-PINS-18/01',
                         ],
                     ],
                 ],
@@ -524,12 +583,12 @@ return [
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
                         ],
-                        [
+                        /*[
                             'text' => ' Solicitar recursos',
                             'icon' => 'fa fa-cart-plus',
                             'url' => 'solicitar_recursos/create',
                             'can' => 'equipos-access',
-                        ],
+                        ],*/
                         /*[
                             'text' => 'level_one',
                             'url' => '#',

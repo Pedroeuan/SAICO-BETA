@@ -64,6 +64,16 @@ return [
          * The temporary directory is required to download remote images and when
          * using the PDFLib back end.
          */
+        'fonts' => [
+            'arial' => [
+                'normal' => resource_path('fonts/arial.ttf'),
+                'bold' => resource_path('fonts/arialbd.ttf'),
+                'italic' => resource_path('fonts/ariali.ttf'),
+                'bold_italic' => resource_path('fonts/arialbi.ttf'),
+            ],
+        ],
+
+
         'temp_dir' => sys_get_temp_dir(),
 
         /**
@@ -160,7 +170,7 @@ return [
          *
          * @see CPDF_Adapter::PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
          */
-        'default_paper_size' => 'a4',
+        'default_paper_size' => 'letter',
 
         /**
          * The default paper orientation.
