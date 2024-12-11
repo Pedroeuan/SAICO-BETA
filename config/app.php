@@ -60,7 +60,7 @@ return [
     // Otros aliases existentes...
     'View' => Illuminate\Support\Facades\View::class,
     'Auth' => Illuminate\Support\Facades\Auth::class,
-
+    'PDF' => Barryvdh\DomPDF\Facade::class,
     'Excel' => Maatwebsite\Excel\Facades\Excel::class,  // Agrega esta línea
     ],
 

@@ -32,14 +32,14 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // Validar si la fila contiene un idGeneral_EyC
-        if (empty($row['nombre_e_p_bp'])) { 
+        if (empty($row['no_economico'])) { 
             return null; // Evita procesar filas sin un idGeneral_EyC
         }
 
         // Buscar si ya existe un registro de general_eyc para evitar duplicados
         $generalEyC = general_eyc::updateOrCreate([
             //'idGeneral_EyC' => $row['idgeneral_eyc']], // Condición para encontrar el registro
-            'Nombre_E_P_BP' => $row['nombre_e_p_bp']], // Condición para encontrar el registro
+            'No_economico' => $row['no_economico']], // Condición para encontrar el registro
             [
             'Nombre_E_P_BP' => $row['nombre_e_p_bp'],
             'No_economico' => $row['no_economico'],

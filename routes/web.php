@@ -208,8 +208,22 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Reporte/FOR-PINS-03/01', [PDFReportesController::class, 'FOR_PINS_03_01'])->name('Reporte_FOR_PINS_03_01.PDF');
     Route::get('/Reporte/FOR-PINS-04/01', [PDFReportesController::class, 'FOR_PINS_04_01'])->name('Reporte_FOR_PINS_04_01.PDF');
     Route::get('/Reporte/FOR-PINS-05/01', [PDFReportesController::class, 'FOR_PINS_05_01'])->name('Reporte_FOR_PINS_05_01.PDF');
-    
+    Route::get('/Reporte/FOR-PINS-05/02', [PDFReportesController::class, 'FOR_PINS_05_02'])->name('Reporte_FOR_PINS_05_02.PDF');
+    Route::get('/Reporte/FOR-PINS-06/01', [PDFReportesController::class, 'FOR_PINS_06_01'])->name('Reporte_FOR_PINS_06_01.PDF');
+    Route::get('/Reporte/FOR-PINS-07/01', [PDFReportesController::class, 'FOR_PINS_07_01'])->name('Reporte_FOR_PINS_07_01.PDF');
+    Route::get('/Reporte/FOR-PINS-08/01', [PDFReportesController::class, 'FOR_PINS_08_01'])->name('Reporte_FOR_PINS_08_01.PDF');
+    Route::get('/Reporte/FOR-PINS-09/01', [PDFReportesController::class, 'FOR_PINS_09_01'])->name('Reporte_FOR_PINS_09_01.PDF');
+    Route::get('/Reporte/FOR-PINS-10/01', [PDFReportesController::class, 'FOR_PINS_10_01'])->name('Reporte_FOR_PINS_10_01.PDF');
+    Route::get('/Reporte/FOR-PINS-11/01', [PDFReportesController::class, 'FOR_PINS_11_01'])->name('Reporte_FOR_PINS_11_01.PDF');
     Route::get('/Reporte/FOR-PINS-11/02', [PDFReportesController::class, 'FOR_PINS_11_02'])->name('Reporte_FOR_PINS_11_02.PDF');
+    Route::get('/Reporte/FOR-PINS-13/01', [PDFReportesController::class, 'FOR_PINS_13_01'])->name('Reporte_FOR_PINS_13_01.PDF');
+    Route::get('/Reporte/FOR-PINS-14/01', [PDFReportesController::class, 'FOR_PINS_14_01'])->name('Reporte_FOR_PINS_14_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/01', [PDFReportesController::class, 'FOR_PINS_16_01'])->name('Reporte_FOR_PINS_16_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/02', [PDFReportesController::class, 'FOR_PINS_16_02'])->name('Reporte_FOR_PINS_16_02.PDF');
+    Route::get('/Reporte/FOR-PINS-16/03', [PDFReportesController::class, 'FOR_PINS_16_03'])->name('Reporte_FOR_PINS_16_03.PDF');
+    Route::get('/Reporte/FOR-PINS-17/01', [PDFReportesController::class, 'FOR_PINS_17_01'])->name('Reporte_FOR_PINS_17_01.PDF');
+    Route::get('/Reporte/FOR-PINS-17_01/01', [PDFReportesController::class, 'FOR_PINS_17_01_01'])->name('Reporte_FOR_PINS_17_01_01.PDF');
+    Route::get('/Reporte/FOR-PINS-18/01', [PDFReportesController::class, 'FOR_PINS_18_01'])->name('Reporte_FOR_PINS_18_01.PDF');
     });
     
     /*admin */
