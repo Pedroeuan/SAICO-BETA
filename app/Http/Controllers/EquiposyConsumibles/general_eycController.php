@@ -235,9 +235,9 @@ class general_eycController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(general_eyc $general_eyc)
+    public function PageInConstruction()
     {
-        //
+        return view('PageConstruction.Page_In_Construction');
     }
     
     }
