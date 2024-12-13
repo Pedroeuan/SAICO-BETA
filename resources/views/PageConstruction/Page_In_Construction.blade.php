@@ -19,12 +19,9 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <div style="text-align: center;">
-            <img src="{{ asset('images/Logo_AICO_R1.jpg') }}" alt="logo-aico" width="440" height="350">
-        </div>
 
         <div style="text-align: center; padding: 50px;">
-            <img src="{{ asset('images/under-construction.png') }}" alt="Página en construcción" style="width: 200px; margin-bottom: 20px;">
+            <img src="{{ asset('images/Logo_AICO_R1.jpg') }}" alt="Página en construcción" style="width: 400px; margin-bottom: 20px;">
             <h1 style="font-size: 2.5em; color: #333;">¡Estamos trabajando en ello!</h1>
             <p style="font-size: 1.2em; color: #666;">Esta página está actualmente en construcción. Pronto estará disponible para que disfrutes de todas sus funcionalidades.</p>
             <p style="margin-top: 20px;">Gracias por tu paciencia. Mientras tanto, puedes <a href="/dashboard" style="color: #007BFF; text-decoration: none;">volver al inicio</a> 
