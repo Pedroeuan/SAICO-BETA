@@ -397,7 +397,7 @@ return [
                 ],
         
         // Sidebar Administrativo:
-        [
+        /*[
             'text' => 'Planeacion',
             'icon' => 'fas fa-calendar-alt',
             'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
@@ -440,7 +440,7 @@ return [
                     'url' => '#',
                 ],
             ],
-        ],
+        ],*/
 
                // Sidebar Operativos:
             [
@@ -450,10 +450,16 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                     [
-                        'text' => 'level_one',
-                        'url' => '',
+                        'text' => 'Orden de Trabajo/Servicio',
+                        'icon' => 'fas fa-file-alt',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
+                        'text' => 'Reportes',
+                        'icon' => 'fab fa-wpforms',
+                        'url' => '/Page_In_Construction',
+                    ],
+                    /* [
                         'text' => 'level_one',
                         'url' => '#',
                         'submenu' => 
@@ -478,12 +484,12 @@ return [
                                 ],
                             ],
                         ],
-                    ],
+                    ],*/
     
-                    [
+                    /*[
                         'text' => 'level_one',
                         'url' => '#',
-                    ],
+                    ],*/
                 ],
             ],
 
@@ -498,6 +504,16 @@ return [
                         'text' => 'Clientes',
                         'icon' => 'fas fa-users',
                         'url' => 'clientes/index',
+                    ],
+                    [
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
+                    ],
+                    [
+                        'text' => 'Ordenes de Compras',
+                        'icon' => 'fas fa-clipboard-list',
+                        'url' => '/Page_In_Construction',
                     ],
                     /*[
                         'text' => '',
@@ -525,12 +541,6 @@ return [
                             ],
                         ],
                     ],*/
-    
-                    [
-                        'text' => 'Registro Clientes',
-                        'icon' => 'fas fa-user-plus',
-                        'url' => 'registro/create',
-                    ],
                 ],
             ],
 
@@ -584,12 +594,6 @@ return [
                             'can' => 'tecnicos-equipos-access',
                         ],
                         /*[
-                            'text' => ' Solicitar recursos',
-                            'icon' => 'fa fa-cart-plus',
-                            'url' => 'solicitar_recursos/create',
-                            'can' => 'equipos-access',
-                        ],*/
-                        /*[
                             'text' => 'level_one',
                             'url' => '#',
                             'submenu' => 
@@ -640,7 +644,7 @@ return [
                     'icon' => 'fas fa-user-plus',
                     'url' => 'Admin/create',
                 ],
-                [
+                /*[
                     'text' => 'level_one',
                     'url' => '#',
                     'submenu' => 
@@ -665,12 +669,12 @@ return [
                             ],
                         ],
                     ],
-                ],
+                ],*/
 
-                [
+                /*[
                     'text' => 'level_one',
                     'url' => '#',
-                ],
+                ],*/
             ],
         ],
     ],//Final Menu
