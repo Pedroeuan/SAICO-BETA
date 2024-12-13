@@ -82,6 +82,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
+    /*Page in construction */
+    Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
