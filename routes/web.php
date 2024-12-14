@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
@@ -260,6 +261,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+    /*OC*/
+    /*Rutas de Vista para crear OC*/
+    Route::get('/registroOC/create', [OCController::class, 'create'])->name('registroOC.create');
 });
 });
 
