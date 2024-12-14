@@ -513,7 +513,7 @@ return [
                     [
                         'text' => 'Ordenes de Compras',
                         'icon' => 'fas fa-clipboard-list',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/registroOC/create',
                     ],
                     /*[
                         'text' => '',
