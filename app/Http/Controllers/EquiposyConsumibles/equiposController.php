@@ -342,6 +342,11 @@ class equiposController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
+        Log::info('***********************');
+        Log::info('***********************');
+        Log::info('No_EF: ', ['No_EF' => $No_EF]);
+        Log::info('No_EBD: ', ['No_EBD' => $No_EBD]);
+
         if($No_EF == $No_EBD && $SerF==$SerBD)
         {
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
@@ -498,13 +503,12 @@ class equiposController extends Controller
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
-            
-            // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
-            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
+
+            // Eliminar prefijos como "No. ECO-", "No ECO-", "ECO-" y ceros a la izquierda
+            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
-             // Verifica si el número económico ya existe (compara el número limpio)
-            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''))) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'EQUIPOS')
             ->exists();
 
