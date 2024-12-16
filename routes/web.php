@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
@@ -204,7 +205,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta para ver el manifiesto PDF*/
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
-    
+
+    /*A DEFINIR EL ACCESO */
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
     Route::get('/Reporte/FOR-PINS-03/01', [PDFReportesController::class, 'FOR_PINS_03_01'])->name('Reporte_FOR_PINS_03_01.PDF');
@@ -226,6 +228,12 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Reporte/FOR-PINS-17/01', [PDFReportesController::class, 'FOR_PINS_17_01'])->name('Reporte_FOR_PINS_17_01.PDF');
     Route::get('/Reporte/FOR-PINS-17_01/01', [PDFReportesController::class, 'FOR_PINS_17_01_01'])->name('Reporte_FOR_PINS_17_01_01.PDF');
     Route::get('/Reporte/FOR-PINS-18/01', [PDFReportesController::class, 'FOR_PINS_18_01'])->name('Reporte_FOR_PINS_18_01.PDF');
+
+    /*OC*/
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
+
+    /*A DEFINIR EL ACCESO */
     });
     
     /*admin */
@@ -260,6 +268,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+    /*OC*/
+    /*Rutas de Vista para crear OC*/
+    Route::get('/registroOC/create', [OCController::class, 'create'])->name('registroOC.create');
 });
 });
 
