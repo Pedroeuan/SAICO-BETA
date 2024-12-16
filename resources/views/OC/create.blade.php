@@ -10,17 +10,19 @@
 
 <style>
         table {
-            width: 50%;
-            margin: 20px auto;
-            border-collapse: collapse;
+            width: 100%; /* Opcional: Para que ocupe todo el ancho disponible */
+            border-collapse: collapse; /* Elimina los espacios entre bordes */
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
+
+        table th, table td {
+            text-align: center; /* Centra el texto horizontalmente */
+            vertical-align: middle; /* Centra el texto verticalmente */
+            padding: 8px; /* Espaciado interno para mayor claridad */
         }
-        th {
-            background-color: #f4f4f4;
+
+        table input {
+            text-align: center; /* Centra el texto dentro de los inputs */
+            box-sizing: border-box; /* Garantiza que los inputs respeten los bordes */
         }
         #addRowBtn {
             display: block;
@@ -78,10 +80,11 @@
                                         </div>
                                     </div>
 
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            <input type="text" class="form-control inputForm" name="Fecha_solicitud" placeholder="Ejemplo: DD/MM/AAAA " value="{{old('Fecha_solicitud')}}">
+                                            <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ old('Fecha_solicitud') }}">
                                         </div>
                                     </div>
 
@@ -110,11 +113,11 @@
                                     </div>
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
-                                    <table id="dynamicTable">
+                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad</th>
+                                                <th>Unidad/Medida</th>
                                                 <th>Cantidad</th>
                                                 <th>Descripción</th>
                                                 <th>Acción</th>
@@ -125,8 +128,8 @@
                                         </tbody>
                                     </table>
                                     
-
-
+                                    <p>
+                                    <p>
                                     <div class="container">
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -166,15 +169,13 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
-/*Prevenir el Enter*/
-document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
+    /*Prevenir el Enter*/
+    document.getElementById('OC').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
     });
-</script>
 
-<script>
         document.getElementById("addRowBtn").addEventListener("click", function() {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rowCount = tableBody.rows.length + 1;
@@ -189,30 +190,31 @@ document.getElementById('UsuarioForm').addEventListener('keydown', function(even
 
             // Celda 2: Input para Unidad
             const cell2 = document.createElement("td");
-            const nameInput = document.createElement("input");
-            nameInput.type = "text";
-            nameInput.placeholder = "Unidad";
-            nameInput.style.width = "50%";
-            cell2.appendChild(nameInput);
+            const unidadInput = document.createElement("input");
+            unidadInput.type = "text";
+            unidadInput.placeholder = "Unidad/Medida";
+            unidadInput.style.width = "100%";
+            cell2.appendChild(unidadInput);
             newRow.appendChild(cell2);
 
             // Celda 3: Input para Cantidad
             const cell3 = document.createElement("td");
-            const ageInput = document.createElement("input");
-            ageInput.type = "number";
-            ageInput.placeholder = "Cantidad";
-            ageInput.style.width = "50%";
-            cell3.appendChild(ageInput);
+            const cantidadInput = document.createElement("input");
+            cantidadInput.type = "number";
+            cantidadInput.placeholder = "Cantidad";
+            cantidadInput.style.width = "100%";
+            cell3.appendChild(cantidadInput);
             newRow.appendChild(cell3);
 
-            // Celda 3: Input para Descripción
+            // Celda 4: Input para Descripcion
             const cell4 = document.createElement("td");
-            const ageInput = document.createElement("input");
-            ageInput.type = "number";
-            ageInput.placeholder = "Descripción";
-            ageInput.style.width = "50%";
-            cell4.appendChild(ageInput);
+            const DescripcionInput = document.createElement("input");
+            DescripcionInput.type = "text";
+            DescripcionInput.placeholder = "Descripcion";
+            DescripcionInput.style.width = "100%";
+            cell4.appendChild(DescripcionInput);
             newRow.appendChild(cell4);
+
 
             // Celda 4: Botón de eliminar
             const cell5 = document.createElement("td");
@@ -224,7 +226,7 @@ document.getElementById('UsuarioForm').addEventListener('keydown', function(even
             deleteBtn.style.padding = "5px 10px";
             deleteBtn.style.cursor = "pointer";
             deleteBtn.addEventListener("click", function() {
-                tableBody.removeChild(newRow);
+            tableBody.removeChild(newRow);
             });
             cell5.appendChild(deleteBtn);
             newRow.appendChild(cell5);
