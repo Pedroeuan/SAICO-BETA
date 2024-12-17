@@ -518,7 +518,7 @@ return [
                     [
                         'text' => 'Ordenes de Compras',
                         'icon' => 'fas fa-clipboard-list',
-                        'url' => '/OC/indexOC',
+                        'url' => '/Page_In_Construction',
                     ],
                     /*[
                         'text' => '',
