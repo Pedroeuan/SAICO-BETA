@@ -68,13 +68,22 @@
                             <label for="inputSubject">Rol</label>
                             <select class="form-control select2 @error('RolUsuario') is-invalid @enderror" style="width: 100%;" name="RolUsuario">
                                 <option selected disabled>Selecciona un perfil</option>
-                                <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
-                                <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
-                                <option value="Cliente" {{ old('RolUsuario') == 'Cliente' ? 'selected' : '' }}>Cliente</option>
-                                <option value="Ventas" {{ old('RolUsuario') == 'Ventas' ? 'selected' : '' }}>Ventas</option>
-                                <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
-                                <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
-                                <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                @if($rol=='Administrador')
+                                    <!--<option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>-->
+                                    <option value="Cliente" {{ old('RolUsuario') == 'Cliente' ? 'selected' : '' }}>Cliente</option>
+                                    <option value="Ventas" {{ old('RolUsuario') == 'Ventas' ? 'selected' : '' }}>Ventas</option>
+                                    <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
+                                    <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
+                                    <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                @else
+                                    <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
+                                    <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
+                                    <option value="Cliente" {{ old('RolUsuario') == 'Cliente' ? 'selected' : '' }}>Cliente</option>
+                                    <option value="Ventas" {{ old('RolUsuario') == 'Ventas' ? 'selected' : '' }}>Ventas</option>
+                                    <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
+                                    <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
+                                    <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                @endif
                             </select>
                             @error('RolUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
