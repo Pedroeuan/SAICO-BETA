@@ -511,6 +511,11 @@ return [
                         'url' => 'registro/create',
                     ],
                     [
+                        'text' => 'Registro OC',
+                        'icon' => 'fas fa-chart-line',
+                        'url' => '/OC/createOC',
+                    ],
+                    [
                         'text' => 'Ordenes de Compras',
                         'icon' => 'fas fa-clipboard-list',
                         'url' => '/Page_In_Construction',

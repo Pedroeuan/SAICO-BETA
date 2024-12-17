@@ -50,7 +50,7 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OC" action="{{route('general_eyc.storeEquipos')}}" method="post" enctype="multipart/form-data">
+                            <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -111,6 +111,8 @@
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
                                         </div>
                                     </div>
+
+                                    <input type="hidden" id="dynamicTableData" name="dynamicTableData">
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
                                     <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
@@ -234,6 +236,30 @@
             // Agregar la fila a la tabla
             tableBody.appendChild(newRow);
         });
+
+
+        document.getElementById('OC').addEventListener('submit', function(e) {
+            const tableBody = document.querySelector("#dynamicTable tbody");
+            const rows = tableBody.querySelectorAll("tr");
+            const tableData = [];
+
+            rows.forEach(row => {
+                const unidad = row.querySelector('td:nth-child(2) input').value;
+                const cantidad = row.querySelector('td:nth-child(3) input').value;
+                const descripcion = row.querySelector('td:nth-child(4) input').value;
+
+                // Añadir los datos de la fila al array
+                tableData.push({
+                    unidad: unidad,
+                    cantidad: cantidad,
+                    descripcion: descripcion
+                });
+            });
+
+            // Convertir el array a JSON y asignarlo al campo oculto
+            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
+        });
+
     </script>
 @endsection
 
