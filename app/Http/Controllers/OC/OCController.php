@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\OC;
 
+use App\Models\detallesOC\detallesOC;
 use App\Models\OC\OC;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +19,9 @@ class OCController extends Controller
      */
     public function index()
     {
-        
+        $OC = OC::all();
+
+        return view('OC.index', compact('OC'));
     }
 
     /**
@@ -32,7 +35,7 @@ class OCController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeOC(Request $request)
     {
         //
         $request->validate([
@@ -46,9 +49,9 @@ class OCController extends Controller
 
         if($request->input('Numero_OC')==null)
         {
-            $OC->Numero_OC = $EsperaDato;
+            $OC->Num_OC = $EsperaDato;
         }else{
-            $OC->Numero_OC = $request->input('Numero_OC');
+            $OC->Num_OC = $request->input('Numero_OC');
         }
 
         if($request->input('Proyecto')==null)
@@ -115,7 +118,35 @@ class OCController extends Controller
             $OC->OC_archivo = $EsperaDato;
         }
         $OC->save();
-    
+
+        // Decodificar el input JSON en un arreglo
+        $detallesOC = json_decode($request->input('dynamicTableData'), true);
+
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOC)) {
+            Log::info('detallesOC: ', ['detallesOC' => $detallesOC]);
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOC); 
+
+            Log::info('detallesJSON: ', ['detallesJSON' => $detallesJSON]);
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOCModel = new detallesOC;
+
+            // Asignar el idOC
+            $detallesOCModel->idOC = $OC->idOC;
+
+            // Guardar el JSON en la columna 'Detalles'
+            $detallesOCModel->Detalles = $detallesJSON;
+
+            // Guardar el objeto en la base de datos
+            $detallesOCModel->save();
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
+
+        return redirect()->route('OC.indexOC');
     }
 
     /**

@@ -27,44 +27,38 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Usuarios Registrados</h3>
+        <h3 align="center">Ordenes de Compra Registradas</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Usuario</th>
-                        <th>Rol</th>
-                        <th>Fecha alta</th>
+                        <th>Número de OC</th>
+                        <th>Proyecto</th>
+                        <th>Lugar/Trabajo</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Tipo Servicio</th>
+                        <th>Estatus</th>
+                        <th>OC Original</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($Usuarios as $Usuario)
+                @foreach($OC as $OCS)
                     <tr>
-                        <td>{{ $Usuario->name }}</td>
-                        <td>{{ $Usuario->email}}</td>
-                        <td>{{ $Usuario->rol }}</td>
-                        <td>{{ $Usuario->formatted_date }}</td>
-                        @if($rol == 'Administrador' && $Usuario->rol == 'Super Administrador')
-                            <td>
-                                <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                <i class="fas fa-pencil-alt"></i></a>
-                            </td>
+                        <td>{{ $OCS->Num_OC }}</td>
+                        <td>{{ $OCS->Proyecto}}</td>
+                        <td>{{ $OCS->Lugar_trabajo }}</td>
+                        <td>{{ $OCS->formatted_date }}</td>
+                        <td>{{ $OCS->Tipo_servicio }}</td>
+                        <td>{{ $OCS->Estatus }}</td>
+                        <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
+                        <td>
+                            <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        </td>
 
-                            <td>
-                                <button type="button" class="btn btn-danger"style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                <i class="fa fa-times"></i></button>
-                            </td>
-                        @else
-                            <td>
-                                <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                            </td>
-
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        @endif
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
