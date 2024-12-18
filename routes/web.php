@@ -244,14 +244,6 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Reporte/FOR-PINS-17_01/01', [PDFReportesController::class, 'FOR_PINS_17_01_01'])->name('Reporte_FOR_PINS_17_01_01.PDF');
     Route::get('/Reporte/FOR-PINS-18/01', [PDFReportesController::class, 'FOR_PINS_18_01'])->name('Reporte_FOR_PINS_18_01.PDF');
 
-    /*OC*/
-    /*Ruta de Vista de OC-index*/
-    Route::get('/OC/indexOC', [OCController::class, 'index'])->name('OC.indexOC');
-    /*Ruta de Vista de Registro de OC*/
-    Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
-    /*Ruta de Guardado*/
-    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
-
     /*A DEFINIR EL ACCESO */
     });
     
@@ -280,7 +272,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de Vista de Registro de OC*/
     Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
     /*Ruta de Guardado*/
-    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC');
+    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
 
     /*Rutas de Vistas de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
