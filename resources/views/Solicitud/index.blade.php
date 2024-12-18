@@ -52,9 +52,6 @@
                 </thead>
                 <tbody>
                     @foreach($Solicitudes as $solicitud)
-                    @php 
-                    //dd($solicitud);
-                    @endphp
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>

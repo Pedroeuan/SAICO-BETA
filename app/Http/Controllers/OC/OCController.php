@@ -40,6 +40,7 @@ class OCController extends Controller
         //
         $request->validate([
             'Numero_OC' => 'required|string|max:255',
+            'Requisicion' => 'required|string|max:255',
             'Proyecto' => 'required|string|max:255',
             'Lugar_trabajo' => 'required|string|max:255',
         ]);
@@ -52,6 +53,13 @@ class OCController extends Controller
             $OC->Num_OC = $EsperaDato;
         }else{
             $OC->Num_OC = $request->input('Numero_OC');
+        }
+
+        if($request->input('Requisicion')==null)
+        {
+            $OC->Requisicion = $EsperaDato;
+        }else{
+            $OC->Requisicion = $request->input('Requisicion');
         }
 
         if($request->input('Proyecto')==null)
@@ -160,9 +168,12 @@ class OCController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OC $oC)
+    public function edit($id)
     {
-        //
+        $OC = OC::where('idOC', $id)->first();
+        $detallesOC = detallesOC::where('idOC',$OC->idOC)->first();
+
+        return view('OC.edit', compact('id','OC','detallesOC'));
     }
 
     /**
@@ -176,8 +187,16 @@ class OCController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OC $oC)
+    public function destroy($id)
     {
-        //
+        $OC = OC::find($id);
+        // Eliminar los detalles de la OC
+        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
+        foreach ($detallesOC as $detalle) {
+            $detalle->delete();  // Eliminar cada detalle individualmente
+        }
+        $OC->delete();
+         // Responder con éxito
+        return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 }

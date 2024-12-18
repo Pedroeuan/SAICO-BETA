@@ -80,6 +80,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta /Obtener/CantidadAlmacen/*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
     });
+    
         
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
@@ -110,7 +111,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
     /*EQUIPOS */
     /*Ruta de Guardado*/
-    Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
+    Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos');
     /*Ruta de Actualizar*/
     Route::post('/edicion/editEquipos/{id}', [equiposController::class, 'updateEquipos'])->name('editEquipos.update');
 
@@ -206,6 +207,20 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
 
+    /*CLIENTES*/
+    /*Rutas de Vistas de Tabla de Clientes*/
+    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
+    /*Rutas de Vista para crear CLIENTES*/
+    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
+    /*Rutas de Vistas Clientes-Edición*/
+    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
+    /*Ruta de Actualizar Clientes*/
+    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
+    /*Ruta de botón Eliminación-index-Clientes*/
+    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+
     /*A DEFINIR EL ACCESO */
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
@@ -257,25 +272,22 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     });
 
-    /*CLIENTES*/
-    Route::middleware('can:ventas-access')->group(function () {
-    /*CLIENTES*/
-    /*Rutas de Vistas de Tabla de Clientes*/
-    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
-    /*Rutas de Vista para crear CLIENTES*/
-    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
-    /*Rutas de Vistas Clientes-Edición*/
-    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
-    /*Ruta de Guardado Clientes*/
-    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
-    /*Ruta de Actualizar Clientes*/
-    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
-    /*Ruta de botón Eliminación-index-Clientes*/
-    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+    Route::middleware('can:ventas-equipos-access')->group(function () {
+
     /*OC*/
-    /*Rutas de Vista para crear OC*/
-    Route::get('/registroOC/create', [OCController::class, 'create'])->name('registroOC.create');
-});
+    /*Ruta de Vista de OC-index*/
+    Route::get('/OC/indexOC', [OCController::class, 'index'])->name('OC.indexOC');
+    /*Ruta de Vista de Registro de OC*/
+    Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC');
+
+    /*Rutas de Vistas de Edición-index*/
+    Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
+
+    });
 });
 
 require __DIR__.'/auth.php';
