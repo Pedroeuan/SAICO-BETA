@@ -114,6 +114,14 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+/*Prevenir el Enter*/
+document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+</script>
 
 @endsection
 

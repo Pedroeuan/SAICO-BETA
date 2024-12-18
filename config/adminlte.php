@@ -500,7 +500,7 @@ return [
                 'can' => 'ventas-access',
                 //'topnav' => true,
                 'submenu' => [
-                    [
+                    /*[
                         'text' => 'Clientes',
                         'icon' => 'fas fa-users',
                         'url' => 'clientes/index',
@@ -509,6 +509,16 @@ return [
                         'text' => 'Registro Clientes',
                         'icon' => 'fas fa-user-plus',
                         'url' => 'registro/create',
+                    ],*/
+                    [
+                        'text' => 'Registro OC',
+                        'icon' => 'fas fa-chart-line',
+                        'url' => '/OC/createOC',
+                    ],
+                    [
+                        'text' => 'Registro OC',
+                        'icon' => 'fas fa-chart-line',
+                        'url' => '/OC/createOC',
                     ],
                     [
                         'text' => 'Registro OC',
@@ -566,6 +576,18 @@ return [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'Clientes',
+                            'icon' => 'fas fa-users',
+                            'url' => 'clientes/index',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'Registro Clientes',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'registro/create',
                             'can' => 'equipos-access',
                         ],
                         [
