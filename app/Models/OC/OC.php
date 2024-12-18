@@ -13,6 +13,7 @@ class OC extends Model
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idOC',
         'Num_OC',
+        'Requisicion',
         'Proyecto',
         'Lugar',
         'Fecha_solicitud',

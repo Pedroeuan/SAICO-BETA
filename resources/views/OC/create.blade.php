@@ -65,6 +65,16 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
+                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
+                                            @error('Requisicion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
                                             <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{old('Proyecto')}}">
                                             @error('Proyecto')

@@ -40,6 +40,7 @@ class OCController extends Controller
         //
         $request->validate([
             'Numero_OC' => 'required|string|max:255',
+            'Requisicion' => 'required|string|max:255',
             'Proyecto' => 'required|string|max:255',
             'Lugar_trabajo' => 'required|string|max:255',
         ]);
@@ -52,6 +53,13 @@ class OCController extends Controller
             $OC->Num_OC = $EsperaDato;
         }else{
             $OC->Num_OC = $request->input('Numero_OC');
+        }
+
+        if($request->input('Requisicion')==null)
+        {
+            $OC->Requisicion = $EsperaDato;
+        }else{
+            $OC->Requisicion = $request->input('Requisicion');
         }
 
         if($request->input('Proyecto')==null)
