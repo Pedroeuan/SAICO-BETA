@@ -235,7 +235,12 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de Vista de Registro de OC*/
     Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
     /*Ruta de Guardado*/
-    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
+    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC');
+
+    /*Rutas de Vistas de Edición-index*/
+    Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
 
     /*A DEFINIR EL ACCESO */
     });
