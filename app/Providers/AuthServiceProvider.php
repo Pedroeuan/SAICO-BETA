@@ -39,7 +39,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('ventas-access', function ($user) {
-            return $user->rol === 'Ventas' || $user->rol === 'Super Administrador';
+            return $user->rol === 'Ventas' || $user->rol === 'Administrador' || $user->rol === 'Super Administrador';
+        });
+        Gate::define('ventas-equipos-access', function ($user) {
+            return $user->rol === 'Ventas' || $user->rol === 'Equipos' || $user->rol === 'Administrador' || $user->rol === 'Super Administrador';
         });
 
         Gate::define('tecnicos-access', function ($user) {

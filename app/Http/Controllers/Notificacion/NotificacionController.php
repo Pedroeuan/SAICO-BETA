@@ -60,6 +60,7 @@ class NotificacionController extends Controller
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
             $generalEyc = $certificado->generalEyc;
+            $No_economico = $generalEyc->No_economico;
 
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
@@ -91,7 +92,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
@@ -103,7 +104,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                 } 
                 else 
@@ -112,7 +113,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
@@ -123,7 +124,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     
                 }

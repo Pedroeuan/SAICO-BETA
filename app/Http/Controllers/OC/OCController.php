@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\OC;
 
+use App\Models\detallesOC\detallesOC;
 use App\Models\OC\OC;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +19,9 @@ class OCController extends Controller
      */
     public function index()
     {
-        
+        $OC = OC::all();
+
+        return view('OC.index', compact('OC'));
     }
 
     /**
@@ -32,11 +35,12 @@ class OCController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeOC(Request $request)
     {
         //
         $request->validate([
             'Numero_OC' => 'required|string|max:255',
+            'Requisicion' => 'required|string|max:255',
             'Proyecto' => 'required|string|max:255',
             'Lugar_trabajo' => 'required|string|max:255',
         ]);
@@ -46,9 +50,16 @@ class OCController extends Controller
 
         if($request->input('Numero_OC')==null)
         {
-            $OC->Numero_OC = $EsperaDato;
+            $OC->Num_OC = $EsperaDato;
         }else{
-            $OC->Numero_OC = $request->input('Numero_OC');
+            $OC->Num_OC = $request->input('Numero_OC');
+        }
+
+        if($request->input('Requisicion')==null)
+        {
+            $OC->Requisicion = $EsperaDato;
+        }else{
+            $OC->Requisicion = $request->input('Requisicion');
         }
 
         if($request->input('Proyecto')==null)
@@ -115,7 +126,35 @@ class OCController extends Controller
             $OC->OC_archivo = $EsperaDato;
         }
         $OC->save();
-    
+
+        // Decodificar el input JSON en un arreglo
+        $detallesOC = json_decode($request->input('dynamicTableData'), true);
+
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOC)) {
+            Log::info('detallesOC: ', ['detallesOC' => $detallesOC]);
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOC); 
+
+            Log::info('detallesJSON: ', ['detallesJSON' => $detallesJSON]);
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOCModel = new detallesOC;
+
+            // Asignar el idOC
+            $detallesOCModel->idOC = $OC->idOC;
+
+            // Guardar el JSON en la columna 'Detalles'
+            $detallesOCModel->Detalles = $detallesJSON;
+
+            // Guardar el objeto en la base de datos
+            $detallesOCModel->save();
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
+
+        return redirect()->route('OC.indexOC');
     }
 
     /**
@@ -129,9 +168,12 @@ class OCController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OC $oC)
+    public function edit($id)
     {
-        //
+        $OC = OC::where('idOC', $id)->first();
+        $detallesOC = detallesOC::where('idOC',$OC->idOC)->first();
+
+        return view('OC.edit', compact('id','OC','detallesOC'));
     }
 
     /**
@@ -145,8 +187,16 @@ class OCController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OC $oC)
+    public function destroy($id)
     {
-        //
+        $OC = OC::find($id);
+        // Eliminar los detalles de la OC
+        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
+        foreach ($detallesOC as $detalle) {
+            $detalle->delete();  // Eliminar cada detalle individualmente
+        }
+        $OC->delete();
+         // Responder con éxito
+        return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 }
