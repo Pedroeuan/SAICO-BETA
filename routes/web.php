@@ -265,7 +265,6 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     });
 
     Route::middleware('can:ventas-equipos-access')->group(function () {
-
     /*OC*/
     /*Ruta de Vista de OC-index*/
     Route::get('/OC/indexOC', [OCController::class, 'index'])->name('OC.indexOC');
