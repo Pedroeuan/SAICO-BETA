@@ -118,6 +118,7 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
+
     $(document).on("click", ".btnEliminarOC", function() {
         var idOC = $(this).attr("idOC");
         Swal.fire({
@@ -130,6 +131,7 @@ let table = new DataTable('#tablaJs', {
             if (result.isConfirmed) {
                 $.ajax({
                     url: '/OC/eliminar/' + idOC,
+
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
