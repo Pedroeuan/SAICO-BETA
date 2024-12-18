@@ -53,11 +53,11 @@
                         <td>{{ $OCS->Estatus }}</td>
                         <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
                         <td>
-                            <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarOC" idOC="{{$OCS->idOC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -118,8 +118,8 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-    $(document).on("click", ".btnEliminarUsuario", function() {
-        var idUsuario = $(this).attr("idUsuario");
+    $(document).on("click", ".btnEliminarOC", function() {
+        var idOC = $(this).attr("idOC");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
             showDenyButton: true,
@@ -129,7 +129,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Usuarios/eliminar/' + idUsuario,
+                    url: '/OC/eliminar/' + idOC,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
