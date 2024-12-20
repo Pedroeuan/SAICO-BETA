@@ -250,7 +250,7 @@
 
                         <tr>
                             <th>Fecha de emisión:</th>
-                            <th>29-nov-2024</th>
+                            <th>29-nov-24</th>
                         </tr>
                 </table>
 

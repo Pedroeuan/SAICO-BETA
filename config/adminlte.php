@@ -513,22 +513,12 @@ return [
                     [
                         'text' => 'Registro OC',
                         'icon' => 'fas fa-chart-line',
-                        'url' => '/OC/createOC',
-                    ],
-                    [
-                        'text' => 'Registro OC',
-                        'icon' => 'fas fa-chart-line',
-                        'url' => '/OC/createOC',
-                    ],
-                    [
-                        'text' => 'Registro OC',
-                        'icon' => 'fas fa-chart-line',
-                        'url' => '/OC/createOC',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Ordenes de Compras',
                         'icon' => 'fas fa-clipboard-list',
-                        'url' => '/OC/indexOC',
+                        'url' => '/Page_In_Construction',
                     ],
                     /*[
                         'text' => '',

@@ -51,7 +51,13 @@
                         <td>{{ $OCS->formatted_date }}</td>
                         <td>{{ $OCS->Tipo_servicio }}</td>
                         <td>{{ $OCS->Estatus }}</td>
-                        <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
+                        @if($OCS->OC_archivo == 'ESPERA DE DATO')
+                                <td>
+                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                </td>
+                            @else
+                                <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
+                            @endif
                         <td>
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
