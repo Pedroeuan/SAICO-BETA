@@ -260,6 +260,7 @@
                 const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
 
 
+
                 // Añadir los datos de la fila al array
                 tableData.push({
                     unidad: unidad,
