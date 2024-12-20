@@ -65,6 +65,16 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
+                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{$OC->Requisicion}}">
+                                            @error('Requisicion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
                                             <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{ $OC->Proyecto }}">
                                             @error('Proyecto')
@@ -280,6 +290,73 @@
             // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
+
+    /*TRAE LOS DATOS DE DETALLES_OC*/
+
+    const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
+    console.log(detallesOC); // Verifica la estructura aquí
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.querySelector("#dynamicTable tbody");
+
+    // Iterar sobre cada detalle y agregarlo a la tabla
+    detallesOC.forEach((detalle, index) => {
+            const newRow = document.createElement("tr");
+
+            // Celda 1: Número de fila
+            const cell1 = document.createElement("td");
+            cell1.textContent = index + 1; // Índice basado en 1
+            newRow.appendChild(cell1);
+
+            // Celda 2: Unidad/Medida
+            const cell2 = document.createElement("td");
+            const unidadInput = document.createElement("input");
+            unidadInput.type = "text";
+            unidadInput.value = detalle.unidad; // Obtiene 'unidad' del JSON
+            unidadInput.style.width = "100%";
+            cell2.appendChild(unidadInput);
+            newRow.appendChild(cell2);
+
+            // Celda 3: Cantidad
+            const cell3 = document.createElement("td");
+            const cantidadInput = document.createElement("input");
+            cantidadInput.type = "number";
+            cantidadInput.value = detalle.cantidad; // Obtiene 'cantidad' del JSON
+            cantidadInput.style.width = "100%";
+            cell3.appendChild(cantidadInput);
+            newRow.appendChild(cell3);
+
+            // Celda 4: Descripción
+            const cell4 = document.createElement("td");
+            const descripcionInput = document.createElement("textarea");
+            //descripcionInput.type = "text";
+            descripcionInput.value = detalle.descripcion; // Obtiene 'descripcion' del JSON
+            descripcionInput.style.width = "100%";
+            cell4.appendChild(descripcionInput);
+            newRow.appendChild(cell4);
+
+            // Celda 5: Acción (Eliminar)
+            const cell5 = document.createElement("td");
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Eliminar";
+            deleteBtn.style.color = "white";
+            deleteBtn.style.backgroundColor = "red";
+            deleteBtn.style.border = "none";
+            deleteBtn.style.padding = "5px 10px";
+            deleteBtn.style.cursor = "pointer";
+
+            deleteBtn.addEventListener("click", function () {
+                tableBody.removeChild(newRow);
+            });
+
+            cell5.appendChild(deleteBtn);
+            newRow.appendChild(cell5);
+
+            // Agregar la fila al cuerpo de la tabla
+            tableBody.appendChild(newRow);
+        });
+    });
+
 
     </script>
 @endsection

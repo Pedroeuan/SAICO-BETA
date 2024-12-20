@@ -171,7 +171,11 @@ class OCController extends Controller
     public function edit($id)
     {
         $OC = OC::where('idOC', $id)->first();
-        $detallesOC = detallesOC::where('idOC',$OC->idOC)->first();
+        $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
+
+        // Decodificar JSON de la columna 'Detalles'
+        $detallesOC = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+
 
         return view('OC.edit', compact('id','OC','detallesOC'));
     }
