@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
 use Illuminate\Http\Request;
