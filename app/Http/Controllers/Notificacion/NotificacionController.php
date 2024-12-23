@@ -81,6 +81,8 @@ class NotificacionController extends Controller
 
                 // Determinar los días restantes para la calibración
                 $diasRestantes = Carbon::parse($fechaCalibracion)->diffInDays($fechaActual);
+                Log::info('***********************');
+                Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
 
                 // Asegúrate de que $diasRestantes es un entero
                 $diasRestantes = (int) $diasRestantes;
@@ -129,19 +131,23 @@ class NotificacionController extends Controller
                     
                 }
 
+                if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
+                {
                 // Verificar si la notificación ya existe
                 $notificacionExistente = Notificacion::where('users_id', $user->id)
                     ->where('Mensaje_Corto', $mensajeCorto)
                     ->where('Mensaje_Largo', $mensajeLargo)
                     ->first();
 
-                if (!$notificacionExistente) {
-                    // Crear la notificación solo si no existe
-                    $notificacion = new Notificacion();
-                    $notificacion->users_id = $user->id;
-                    $notificacion->Mensaje_Corto = $mensajeCorto;
-                    $notificacion->Mensaje_Largo = $mensajeLargo;
-                    $notificacion->save();
+                    if (!$notificacionExistente) 
+                    {
+                        // Crear la notificación solo si no existe
+                        $notificacion = new Notificacion();
+                        $notificacion->users_id = $user->id;
+                        $notificacion->Mensaje_Corto = $mensajeCorto;
+                        $notificacion->Mensaje_Largo = $mensajeLargo;
+                        $notificacion->save();
+                    }
                 }
             }
         }
