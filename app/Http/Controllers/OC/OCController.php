@@ -184,9 +184,7 @@ class OCController extends Controller
         ]);
 
         $OC = OC::find($id);
-        
-
-        // Actualizar los datos del equipo
+        // Actualizar los datos de la OC
         $OC->update([
             'Num_OC' => $request->input('Numero_OC'),
             'Requisicion' => $request->input('Requisicion'),
@@ -204,8 +202,6 @@ class OCController extends Controller
 
             // Convertir el arreglo en una cadena JSON
             $detallesJSON = json_encode($detallesOC); 
-            Log::info('***********************');
-            Log::info('detallesJSON: ', ['detallesJSON' => $detallesJSON]);
 
             // Crear un nuevo registro en la tabla detallesOC
             $detallesOCModel = new detallesOC;

@@ -256,10 +256,7 @@
             rows.forEach(row => {
                 const unidad = row.querySelector('td:nth-child(2) input').value;
                 const cantidad = row.querySelector('td:nth-child(3) input').value;
-                //const descripcion = row.querySelector('td:nth-child(4) input').value;
                 const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
-
-
 
                 // Añadir los datos de la fila al array
                 tableData.push({

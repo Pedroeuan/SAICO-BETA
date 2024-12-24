@@ -48,7 +48,11 @@
                         <td>{{ $OCS->Num_OC }}</td>
                         <td>{{ $OCS->Proyecto}}</td>
                         <td>{{ $OCS->Lugar_trabajo }}</td>
-                        <td>{{ $OCS->formatted_date }}</td>
+                        @if($OCS->Fecha_solicitud == '2001-01-01')
+                                <td scope="row">SIN FECHA ASIGNADA</td>
+                            @else
+                                <td>{{ $OCS->formatted_date }}</td>                   
+                        @endif
                         <td>{{ $OCS->Tipo_servicio }}</td>
                         <td>{{ $OCS->Estatus }}</td>
                         @if($OCS->OC_archivo == 'ESPERA DE DATO')
