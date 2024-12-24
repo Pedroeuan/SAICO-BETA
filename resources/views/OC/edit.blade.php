@@ -45,12 +45,12 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Orden de Compra</h3>
+<h3 align="center">Edición de la Orden de Compra</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
+                            <form id="OC" action="{{ route('OC.updateOC', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -142,7 +142,7 @@
                                         </div>
                                     </div>
 
-                                    <input type="hidden" id="dynamicTableData" name="dynamicTableData">
+                                    <input type="text" id="dynamicTableData" name="dynamicTableData">
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
                                     <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
@@ -208,6 +208,7 @@
             }
     });
 
+        /*Agrega las filas */
         document.getElementById("addRowBtn").addEventListener("click", function() {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rowCount = tableBody.rows.length + 1;
@@ -292,9 +293,8 @@
         });
 
     /*TRAE LOS DATOS DE DETALLES_OC*/
-
     const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
-    console.log(detallesOC); // Verifica la estructura aquí
+    //console.log(detallesOC); // Verifica la estructura aquí
 
     document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.querySelector("#dynamicTable tbody");
@@ -355,6 +355,7 @@
             // Agregar la fila al cuerpo de la tabla
             tableBody.appendChild(newRow);
         });
+        
     });
 
 

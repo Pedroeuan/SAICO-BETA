@@ -15,7 +15,7 @@ class OC extends Model
         'Num_OC',
         'Requisicion',
         'Proyecto',
-        'Lugar',
+        'Lugar_trabajo',
         'Fecha_solicitud',
         'Tipo_servicio',
         'Estatus',

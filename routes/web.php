@@ -272,6 +272,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
     /*Ruta de Guardado*/
     Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
 
     /*Rutas de Vistas de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');

@@ -39,7 +39,7 @@ class OCController extends Controller
     {
         //
         $request->validate([
-            'Numero_OC' => 'required|string|max:255',
+            'Numero_OC' => 'required|integer|max:255',
             'Requisicion' => 'required|string|max:255',
             'Proyecto' => 'required|string|max:255',
             'Lugar_trabajo' => 'required|string|max:255',
@@ -78,16 +78,9 @@ class OCController extends Controller
 
         if($request->input('Fecha_solicitud')==null)
         {
-            $OC->Fecha_solicitud = $EsperaDato;
+            $OC->Fecha_solicitud = '2001-01-01';
         }else{
             $OC->Fecha_solicitud = $request->input('Fecha_solicitud');
-        }
-
-        if($request->input('Tipo_servicio')==null)
-        {
-            $OC->Tipo_servicio = $EsperaDato;
-        }else{
-            $OC->Tipo_servicio = $request->input('Tipo_servicio');
         }
 
         if($request->input('Tipo_servicio')==null)
@@ -132,12 +125,9 @@ class OCController extends Controller
 
         // Comprobar si el arreglo tiene elementos antes de continuar
         if (!empty($detallesOC)) {
-            Log::info('detallesOC: ', ['detallesOC' => $detallesOC]);
 
             // Convertir el arreglo en una cadena JSON
             $detallesJSON = json_encode($detallesOC); 
-
-            Log::info('detallesJSON: ', ['detallesJSON' => $detallesJSON]);
 
             // Crear un nuevo registro en la tabla detallesOC
             $detallesOCModel = new detallesOC;
@@ -183,9 +173,54 @@ class OCController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OC $oC)
+    public function updateOC(Request $request, $id)
     {
         //
+        $request->validate([
+            'Numero_OC' => 'required|integer|max:255',
+            'Requisicion' => 'required|string|max:255',
+            'Proyecto' => 'required|string|max:255',
+            'Lugar_trabajo' => 'required|string|max:255',
+        ]);
+
+        $OC = OC::find($id);
+        
+
+        // Actualizar los datos del equipo
+        $OC->update([
+            'Num_OC' => $request->input('Numero_OC'),
+            'Requisicion' => $request->input('Requisicion'),
+            'Proyecto' => $request->input('Proyecto'),
+            'Lugar_trabajo' => $request->input('Lugar_trabajo'),
+            'Fecha_solicitud' => $request->input('Fecha_solicitud'),
+            'Tipo_servicio' => $request->input('Tipo_servicio'),
+        ]);
+
+        // Decodificar el input JSON en un arreglo
+        $detallesOC = json_decode($request->input('dynamicTableData'), true);
+
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOC)) {
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOC); 
+            Log::info('***********************');
+            Log::info('detallesJSON: ', ['detallesJSON' => $detallesJSON]);
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOCModel = new detallesOC;
+
+            // Asignar el idOC
+            $detallesOCModel = detallesOC::find($id);
+
+            $detallesOCModel->update([
+                'Detalles' =>  $detallesJSON,
+            ]);
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
+
+        return redirect()->route('OC.indexOC');
     }
 
     /**
