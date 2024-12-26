@@ -23,7 +23,7 @@
             <div class="card-body row">
                 <div class="col-5 text-center d-flex align-items-center justify-content-center">
                     <div class>
-                        <h2>Registrar un nuevo usuario</h2>
+                        <h2>Edición de datos del usuario</h2>
                         <br>
                         <img src="{{ asset('images/usuario.png') }}" alt="logo-aico" width="340" height="350">
                     </div>

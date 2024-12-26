@@ -86,6 +86,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::middleware('can:equipos-access')->group(function () {
     /*Page in construction */
     Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
+    /*Page welcome*/
+    Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
@@ -272,6 +274,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
     /*Ruta de Guardado*/
     Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
 
     /*Rutas de Vistas de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');

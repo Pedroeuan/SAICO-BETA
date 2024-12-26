@@ -239,5 +239,10 @@ class general_eycController extends Controller
     {
         return view('PageConstruction.Page_In_Construction');
     }
+
+    public function Welcome()
+    {
+        return view('Welcome.Welcome');
+    }
     
     }
