@@ -45,12 +45,12 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Orden de Compra</h3>
+<h3 align="center">Edición de la Orden de Compra</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
+                            <form id="OC" action="{{ route('OC.updateOC', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -94,7 +94,11 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OC->Fecha_solicitud }}">
+                                            @if($OC->Fecha_solicitud == '2001-01-01')
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud">
+                                                @else
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OC->Fecha_solicitud }}">
+                                            @endif
                                         </div>
                                     </div>
 
@@ -208,6 +212,7 @@
             }
     });
 
+        /*Agrega las filas */
         document.getElementById("addRowBtn").addEventListener("click", function() {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rowCount = tableBody.rows.length + 1;
@@ -247,7 +252,6 @@
             cell4.appendChild(DescripcionInput);
             newRow.appendChild(cell4);
 
-
             // Celda 4: Botón de eliminar
             const cell5 = document.createElement("td");
             const deleteBtn = document.createElement("button");
@@ -267,17 +271,20 @@
             tableBody.appendChild(newRow);
         });
 
-
         document.getElementById('OC').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rows = tableBody.querySelectorAll("tr");
             const tableData = [];
 
             rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                //const descripcion = row.querySelector('td:nth-child(4) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
+                const unidadElement = row.querySelector('td:nth-child(2) input');
+                const cantidadElement = row.querySelector('td:nth-child(3) input');
+                const descripcionElement = row.querySelector('td:nth-child(4) textarea');
+
+
+                const unidad = unidadElement ? unidadElement.value : 'ESPERA DE DATO';
+                const cantidad = cantidadElement ? cantidadElement.value : 'ESPERA DE DATO';
+                const descripcion = descripcionElement ? descripcionElement.value : 'ESPERA DE DATO';
 
                 // Añadir los datos de la fila al array
                 tableData.push({
@@ -285,16 +292,17 @@
                     cantidad: cantidad,
                     descripcion: descripcion
                 });
+                
             });
 
             // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
 
-    /*TRAE LOS DATOS DE DETALLES_OC*/
 
+    /*TRAE LOS DATOS DE DETALLES_OC*/
     const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
-    console.log(detallesOC); // Verifica la estructura aquí
+    //console.log(detallesOC); // Verifica la estructura aquí
 
     document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.querySelector("#dynamicTable tbody");
@@ -355,8 +363,8 @@
             // Agregar la fila al cuerpo de la tabla
             tableBody.appendChild(newRow);
         });
+        
     });
-
 
     </script>
 @endsection
