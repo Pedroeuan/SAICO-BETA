@@ -9,7 +9,7 @@
     @if($user->rol == 'Equipos')
         @include('Equipos.indicadoresEquipos')
             @else
-        @include('MenuPrincipal')
+        @include('Welcome.Welcome')
     @endif
 @stop
 

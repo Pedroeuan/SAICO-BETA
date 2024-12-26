@@ -39,10 +39,10 @@ class OCController extends Controller
     {
         //
         $request->validate([
-            'Numero_OC' => 'required|integer|max:255',
-            'Requisicion' => 'required|string|max:255',
-            'Proyecto' => 'required|string|max:255',
-            'Lugar_trabajo' => 'required|string|max:255',
+            'Numero_OC' => 'required|integer',
+            'Requisicion' => 'required|string',
+            'Proyecto' => 'required|string',
+            'Lugar_trabajo' => 'required|string',
         ]);
 
         $OC = new OC;
@@ -94,7 +94,7 @@ class OCController extends Controller
 
         $OC->save();
 
-                // Validar que se ha enviado el archivo de factura
+        // Validar que se ha enviado el archivo de factura
         if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
             $pdf = $request->file('OC_archivo');
             // Obtener el último número consecutivo
@@ -110,9 +110,9 @@ class OCController extends Controller
             }
             // Incrementar el número consecutivo
             $newNumber = $lastNumber + 1;
-            $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
-            // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-            $pdfPath = $pdf->storeAs('Ventas/OC', $newFileNameFactura, 'public');
+            $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
+            // Guardar el archivo PDF en la carpeta "public/Ventas/OC"
+            $pdfPath = $pdf->storeAs('Ventas/OC', $newFileNameOC, 'public');
             // Guardar la ruta en la base de datos
             $OC->OC_archivo = $pdfPath;
         } else {
@@ -177,10 +177,10 @@ class OCController extends Controller
     {
         //
         $request->validate([
-            'Numero_OC' => 'required|integer|max:255',
-            'Requisicion' => 'required|string|max:255',
-            'Proyecto' => 'required|string|max:255',
-            'Lugar_trabajo' => 'required|string|max:255',
+            'Numero_OC' => 'required|integer',
+            'Requisicion' => 'required|string',
+            'Proyecto' => 'required|string',
+            'Lugar_trabajo' => 'required|string',
         ]);
 
         $OC = OC::find($id);
@@ -193,6 +193,37 @@ class OCController extends Controller
             'Fecha_solicitud' => $request->input('Fecha_solicitud'),
             'Tipo_servicio' => $request->input('Tipo_servicio'),
         ]);
+
+        // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+        if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
+            // Obtener la ruta del archivo anterior desde la base de datos
+            $rutaAnterior = $OC->OC_archivo;
+            // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+            // Guardar el nuevo archivo PDF
+            $pdf = $request->file('OC_archivo');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Ventas/OC'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
+            
+            $pdfPath = $pdf->storeAs('Ventas/OC', $newFileNameOC, 'public');
+            // Actualizar la ruta de la OC_archivo en la base de datos
+            $OC->OC_archivo = $pdfPath;
+            $OC->save();
+        }
 
         // Decodificar el input JSON en un arreglo
         $detallesOC = json_decode($request->input('dynamicTableData'), true);
