@@ -27,8 +27,8 @@
     <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ANALISIS QUIMICO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>ANALISIS QUIMICO</title>
                     <image href="{{ asset('images/MenuServicios/ANALISIS_QUIMICO.png') }}" width="100%" height="100%" />
                 </svg>
 
