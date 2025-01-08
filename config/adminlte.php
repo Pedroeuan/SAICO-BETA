@@ -457,7 +457,7 @@ return [
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/Menu/Servicios',
                     ],
                     /* [
                         'text' => 'level_one',

@@ -9,6 +9,7 @@ use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
+use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
@@ -88,6 +89,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
     /*Page welcome*/
     Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
+    /*Page Menu Servicios*/
+    Route::get('/Menu/Servicios', [PruebaController::class, 'index'])->name('Menu.Servicios');
+
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
