@@ -25,90 +25,148 @@
 <br>
 <br>
     <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
+
+        <!-- 1ra columna -->
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ANALISIS QUIMICO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>ANALISIS QUIMICO</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS_QUIMICO.png') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ANÁLISIS QUÍMICO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>ANÁLISIS QUÍMICO</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
+                </svg>
+                
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="CORRIENTES EDDY" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>CORRIENTES EDDY</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CORRIENTES EDDY</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="METALOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>METALOGRAFIA</title>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFIA</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PRECALENTAMIENTO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>PRECALENTAMIENTO</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PRECALENTAMIENTO</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="TERMOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>TERMOGRAFIA</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFIA</text>
                 </svg>
 
         </div>
+
+        <!-- 2da columna -->
         
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">            
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">         
+            
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ARREGLO DE FASES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>ARREGLO DE FASES</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ARREGLO DE FASES</text>
                 </svg>
 
             <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="DUREZAS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>DUREZAS</title>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/DUREZAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">DUREZAS</text>
                 </svg>
 
             <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PARTÍCULAS MAGNÉTICAS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>PARTÍCULAS MAGNÉTICAS</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/PARTICULAS_MAGNETICAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PARTÍCULAS MAGNÉTICAS</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>RADIOGRAFIA</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ULTRASONIDO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>ULTRASONIDO</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
                 </svg>
         </div>
-        
+
+            <!-- 3ra columna -->
+            
             <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 66.6667%; top: 0px;">
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="CARACTERIZACIÓN DE MATERIALES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>CARACTERIZACIÓN DE MATERIALES</title>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CARACTERIZACIÓN DE MATERIALES</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="LÍQUIDOS PENETRANTES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>LQUIDOS PENETRANTES</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/LIQUIDOS_PENETRANTES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">LÍQUIDOS PENETRANTES</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PMI" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>PMI</title>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PMI</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="Placeholder: Capa de imagen" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <image href="{{ asset('images/MenuServicios/ANALISIS QUIMICO.jpg') }}" width="100%" height="100%" />
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RELEVADO DE ESFUERZOS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>RELEVADO DE ESFUERZOS</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="OTROS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>OTROS</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
                 </svg>
         </div>
 

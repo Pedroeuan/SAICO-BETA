@@ -85,12 +85,16 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
-    /*Page in construction */
+    /*vista Page in construction */
     Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
-    /*Page welcome*/
+    /*vista Page welcome*/
     Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
-    /*Page Menu Servicios*/
-    Route::get('/Menu/Servicios', [PruebaController::class, 'index'])->name('Menu.Servicios');
+    /*Vista Menu Servicios*/
+    Route::get('/Menu/Servicios', [PruebaController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+    /*Vista Menu Pruebas*/
+    Route::get('/index/Pruebas', [PruebaController::class, 'indexPruebas'])->name('index.Pruebas');
+    /*vista Pruebas, Norma. Codio y Formato*/
+    Route::get('/Pruebas/Create', [PruebaController::class, 'create'])->name('Pruebas.Create');
 
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/

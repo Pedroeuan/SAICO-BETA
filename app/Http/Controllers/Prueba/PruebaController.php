@@ -16,9 +16,14 @@ class PruebaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexMenuServicios()
     {
         return view('Pruebas.pruebas');
+    }
+
+    public function indexPruebas()
+    {
+        return view('Pruebas.index');
     }
 
     /**
@@ -27,6 +32,8 @@ class PruebaController extends Controller
     public function create()
     {
         //
+        $Pruebas = prueba::all();
+        return view('Pruebas.create', compact('Pruebas'));
     }
 
     /**
