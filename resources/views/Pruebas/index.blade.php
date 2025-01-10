@@ -27,19 +27,11 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Ordenes de Compra Registradas</h3>
+        <h3 align="center">Pruebas Registradas</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Número de OC</th>
-                        <th>Proyecto</th>
-                        <th>Lugar/Trabajo</th>
-                        <th>Fecha Solicitud</th>
-                        <th>Tipo Servicio</th>
-                        <th>Estatus</th>
-                        <th>OC Original</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
+                        <th>Tipo de Prueba</th>
                     </tr>
                 </thead>
                 <tbody>

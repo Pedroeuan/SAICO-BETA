@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Prueba;
 
 use App\Models\Prueba\prueba;
+use App\Models\Norma_Codigo\norma_codigo;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,7 +24,8 @@ class PruebaController extends Controller
 
     public function indexPruebas()
     {
-        return view('Pruebas.index');
+        $PruebaconNormaOCodigo = general_eyc::with('certificados')->with('almacen')->get();
+        return view('Pruebas.index',compact('Pruebas'));
     }
 
     /**
@@ -32,8 +34,7 @@ class PruebaController extends Controller
     public function create()
     {
         //
-        $Pruebas = prueba::all();
-        return view('Pruebas.create', compact('Pruebas'));
+        return view('Pruebas.create');
     }
 
     /**
@@ -42,6 +43,24 @@ class PruebaController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'Tipo_Prueba' => 'required|string',
+        ]);
+
+        $Prueba = new prueba;
+        $Prueba->Nombre = $request->input('Tipo_Prueba');
+        $Prueba->save();
+
+        $normasCodigos = json_decode($request->input('normas_codigos'), true);
+
+        foreach ($normasCodigos as $normaCodigo) {
+            norma_codigo::create([
+                'idPrueba' => $Prueba->idPrueba,
+                'Nombre' => $normaCodigo['norma_codigo']
+            ]);
+        }
+        
+        return redirect()->route('Pruebas.index');
     }
 
     /**

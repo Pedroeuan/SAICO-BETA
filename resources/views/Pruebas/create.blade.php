@@ -7,6 +7,8 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
         table {
@@ -50,93 +52,30 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
+                            <form id="Prueba_Norma_Codigo" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
+                                <div class="row justify-content-center">
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo de Prueba</label>
-                                            <select class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba"  placeholder="Análisis Químico" value="{{old('Tipo_Prueba')}}">
-                                            @foreach($ordenesCompra as $orden)
-                                                <option value="{{ $orden->Numero_OC }}">{{ $orden->Numero_OC }}</option>
-                                            @endforeach
-                                            </select>
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
+                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ old('Tipo_Prueba') }}">
                                             @error('Tipo_Prueba')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
-                                            @error('Requisicion')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                <input type="hidden" name="normas_codigos" id="normas_codigos">
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{old('Proyecto')}}">
-                                            @error('Proyecto')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <input type="text" class="form-control inputForm" name="Lugar_trabajo" placeholder="Ejemplo: " value="{{old('Lugar_trabajo')}}">
-                                        </div>
-                                    </div>
-
-                                    
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ old('Fecha_solicitud') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo de Servicio</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_servicio" placeholder="Ejemplo: PT, R.G., MT, UT, DUREZA " value="{{old('Tipo_servicio')}}">
-                                            </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Compra Original</label>
-                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
-                                            @if ($errors->any())
-                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
-                                        </div>
-                                    </div>
-
-                                    <input type="hidden" id="dynamicTableData" name="dynamicTableData">
-
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
-                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;" class="center-table">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad/Medida</th>
-                                                <th>Cantidad</th>
-                                                <th>Descripción</th>
-                                                <th>Acción</th>
+                                                <th>Norma o Codigo Aplicable</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -151,9 +90,9 @@
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                         </div>
 
-                                        <div class="float-left">
+                                        <!--<div class="float-left">
                                             <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
-                                        </div>
+                                        </di>-->
                                     </div>
 
                                 </div>
@@ -175,6 +114,8 @@
 <link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -185,17 +126,8 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
-
-$(document).ready(function() {
-        $('#Tipo_Prueba').select2({
-            tags: true,
-            placeholder: "Seleccione o ingrese una Nueva Prueba",
-            allowClear: true
-        });
-    });
-
     /*Prevenir el Enter*/
-    document.getElementById('OC').addEventListener('keydown', function(event) {
+    document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
@@ -215,31 +147,12 @@ $(document).ready(function() {
 
             // Celda 2: Input para Unidad
             const cell2 = document.createElement("td");
-            const unidadInput = document.createElement("input");
-            unidadInput.type = "text";
-            unidadInput.placeholder = "Unidad/Medida";
-            unidadInput.style.width = "100%";
-            cell2.appendChild(unidadInput);
+            const No_CoInput = document.createElement("input");
+            No_CoInput.type = "text";
+            No_CoInput.placeholder = "Norma o Codigo Aplicable";
+            No_CoInput.style.width = "100%";
+            cell2.appendChild(No_CoInput);
             newRow.appendChild(cell2);
-
-            // Celda 3: Input para Cantidad
-            const cell3 = document.createElement("td");
-            const cantidadInput = document.createElement("input");
-            cantidadInput.type = "number";
-            cantidadInput.placeholder = "Cantidad";
-            cantidadInput.style.width = "100%";
-            cell3.appendChild(cantidadInput);
-            newRow.appendChild(cell3);
-
-            // Celda 4: Input para Descripcion
-            const cell4 = document.createElement("td");
-            const DescripcionInput = document.createElement("textarea");
-            //DescripcionInput.type = "text";
-            DescripcionInput.placeholder = "Descripcion";
-            DescripcionInput.style.width = "100%";
-            cell4.appendChild(DescripcionInput);
-            newRow.appendChild(cell4);
-
 
             // Celda 4: Botón de eliminar
             const cell5 = document.createElement("td");
@@ -252,36 +165,36 @@ $(document).ready(function() {
             deleteBtn.style.cursor = "pointer";
             deleteBtn.addEventListener("click", function() {
             tableBody.removeChild(newRow);
+            updateHiddenField();
             });
             cell5.appendChild(deleteBtn);
             newRow.appendChild(cell5);
 
             // Agregar la fila a la tabla
             tableBody.appendChild(newRow);
+            updateHiddenField();
         });
 
-
-        document.getElementById('OC').addEventListener('submit', function(e) {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            const tableData = [];
-
-            rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
-
-                // Añadir los datos de la fila al array
-                tableData.push({
-                    unidad: unidad,
-                    cantidad: cantidad,
-                    descripcion: descripcion
-                });
-            });
-
-            // Convertir el array a JSON y asignarlo al campo oculto
-            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
+        document.getElementById("Prueba_Norma_Codigo").addEventListener("submit", function() {
+            updateHiddenField();
         });
+
+        function updateHiddenField() {
+        const tableBody = document.querySelector("#dynamicTable tbody");
+        const rows = tableBody.querySelectorAll("tr");
+        const data = [];
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const rowData = {
+                numero: cells[0].textContent,
+                norma_codigo: cells[1].querySelector("input").value
+            };
+            data.push(rowData);
+        });
+
+        document.getElementById("normas_codigos").value = JSON.stringify(data);
+    }
 
     </script>
 @endsection
