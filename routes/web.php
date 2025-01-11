@@ -71,7 +71,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         /*Rutas de Vistas Pruebas/Norma_Codigo*/
         Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
         /*Ruta de Actualizar Prueba/Norma_Codigo*/
-        Route::post('/Pruebas/Norma_Codigo/update/{id}', [equiposController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
         //});
     });
 

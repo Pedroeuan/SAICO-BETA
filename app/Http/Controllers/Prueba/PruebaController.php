@@ -94,14 +94,15 @@ class PruebaController extends Controller
             'Tipo_Prueba' => 'required|string',
         ]);
 
-        $Prueba = prueba::find($prueba->idPrueba);
+        $Prueba = prueba::where('idPrueba', $id)->first();
         // Actualizar los datos del equipo
         $Prueba ->update([
             'Nombre' => $request->input('Tipo_Prueba'),
         ]);
 
-    // Redirigir a una ruta específica con un mensaje de éxito
-    return redirect()->route('Pruebas.index');
+        // Redirigir a una ruta específica con un mensaje de éxito
+        $Pruebas = prueba::with('norma_codigo.formato')->get();
+        return view('Pruebas.index',compact('Pruebas'));
 
     }
 
