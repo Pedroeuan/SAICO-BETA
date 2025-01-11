@@ -68,19 +68,19 @@
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="normas_codigos" id="normas_codigos">
-
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
-                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;" class="center-table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Norma o Codigo Aplicable</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                        </tbody>
+
+                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Norma o Codigo Aplicable</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Filas dinámicas aparecerán aquí -->
+                                            </tbody>
                                     </table>
                                     
                                     <p>
@@ -126,75 +126,35 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+
+$(document).ready(function() {
+        var rowCount = 0;
+
+        function updateRowNumbers() {
+            $('#Norma_Codigo tbody tr').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+            rowCount = $('#Norma_Codigo tbody tr').length;
+        }
+
+        $('#addRowBtn').click(function() {
+            rowCount++;
+            var newRow = '<tr><td>' + rowCount + '</td><td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td><td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>';
+            $('#Norma_Codigo tbody').append(newRow);
+        });
+
+        $('#Norma_Codigo').on('click', '.btnEliminar', function() {
+            $(this).closest('tr').remove();
+            updateRowNumbers();
+        });
+    });
+
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
     });
-
-        document.getElementById("addRowBtn").addEventListener("click", function() {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rowCount = tableBody.rows.length + 1;
-
-            // Crear una nueva fila
-            const newRow = document.createElement("tr");
-
-            // Celda 1: Número de fila
-            const cell1 = document.createElement("td");
-            cell1.textContent = rowCount;
-            newRow.appendChild(cell1);
-
-            // Celda 2: Input para Unidad
-            const cell2 = document.createElement("td");
-            const No_CoInput = document.createElement("input");
-            No_CoInput.type = "text";
-            No_CoInput.placeholder = "Norma o Codigo Aplicable";
-            No_CoInput.style.width = "100%";
-            cell2.appendChild(No_CoInput);
-            newRow.appendChild(cell2);
-
-            // Celda 4: Botón de eliminar
-            const cell5 = document.createElement("td");
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Eliminar";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.backgroundColor = "red";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px 10px";
-            deleteBtn.style.cursor = "pointer";
-            deleteBtn.addEventListener("click", function() {
-            tableBody.removeChild(newRow);
-            updateHiddenField();
-            });
-            cell5.appendChild(deleteBtn);
-            newRow.appendChild(cell5);
-
-            // Agregar la fila a la tabla
-            tableBody.appendChild(newRow);
-            updateHiddenField();
-        });
-
-        document.getElementById("Prueba_Norma_Codigo").addEventListener("submit", function() {
-            updateHiddenField();
-        });
-
-        function updateHiddenField() {
-        const tableBody = document.querySelector("#dynamicTable tbody");
-        const rows = tableBody.querySelectorAll("tr");
-        const data = [];
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            const rowData = {
-                numero: cells[0].textContent,
-                norma_codigo: cells[1].querySelector("input").value
-            };
-            data.push(rowData);
-        });
-
-        document.getElementById("normas_codigos").value = JSON.stringify(data);
-    }
 
     </script>
 @endsection

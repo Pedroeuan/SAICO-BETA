@@ -125,7 +125,8 @@
                                     <input type="hidden" id="dynamicTableData" name="dynamicTableData">
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
-                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
+
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -181,6 +182,7 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+
     /*Prevenir el Enter*/
     document.getElementById('OC').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {

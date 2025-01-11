@@ -52,16 +52,16 @@ class PruebaController extends Controller
         $Prueba->Nombre = $request->input('Tipo_Prueba');
         $Prueba->save();
 
-        $normasCodigos = json_decode($request->input('normas_codigos'), true);
-
-        foreach ($normasCodigos as $normaCodigo) {
-            norma_codigo::create([
-                'idPrueba' => $Prueba->idPrueba,
-                'Nombre' => $normaCodigo['norma_codigo']
+        // Guardar los datos en la tabla norma_codigo
+        foreach ($request->input('codigo') as $codigo) {
+            $Prueba->norma_codigo()->create([
+                'Nombre' => $codigo,
             ]);
         }
-        
-        return redirect()->route('Pruebas.index');
+
+        // Redirigir a una ruta específica con un mensaje de éxito
+        $Pruebas = prueba::with('norma_codigo.formato')->get();
+        return view('Pruebas.index',compact('Pruebas'));
     }
 
     /**
@@ -100,6 +100,7 @@ class PruebaController extends Controller
             'Nombre' => $request->input('Tipo_Prueba'),
         ]);
 
+        
         // Redirigir a una ruta específica con un mensaje de éxito
         $Pruebas = prueba::with('norma_codigo.formato')->get();
         return view('Pruebas.index',compact('Pruebas'));
