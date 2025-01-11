@@ -67,7 +67,11 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         /*vista Pruebas, Norma. Codio y Formato*/
         Route::get('/Pruebas/Create', [PruebaController::class, 'create'])->name('Pruebas.Create');
         /*Ruta de Guardado*/
-        Route::post('/Prueba_Norma_Codigo/store', [PruebaController::class, 'store'])->name('Prueba_Norma_Codigo.store'); 
+        Route::post('/Prueba_Norma_Codigo/store', [PruebaController::class, 'store'])->name('Prueba_Norma_Codigo.store');
+        /*Rutas de Vistas Pruebas/Norma_Codigo*/
+        Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
+        /*Ruta de Actualizar Prueba/Norma_Codigo*/
+        Route::post('/Pruebas/Norma_Codigo/update/{id}', [equiposController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
         //});
     });
 
@@ -93,9 +97,6 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
-
-    /*Ruta /Obtener/CantidadAlmacen/*/
-    Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
     });
     
     /*EQUIPOS INVENTARIO-REGISTRO*/

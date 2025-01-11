@@ -4,6 +4,7 @@ namespace App\Models\Prueba;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Norma_Codigo\norma_codigo; 
 
 class prueba extends Model
 {
@@ -18,4 +19,10 @@ class prueba extends Model
     protected $table = 'Prueba';
     protected $primaryKey = 'idPrueba';
     public $timestamps = false;
+
+    // Relación uno a muchos con NormaCodigo
+    public function norma_codigo()
+    {
+        return $this->hasMany(norma_codigo::class, 'idPrueba', 'idPrueba');
+    }
 }

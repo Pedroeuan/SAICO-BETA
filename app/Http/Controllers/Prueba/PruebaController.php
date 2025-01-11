@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Prueba;
 
 use App\Models\Prueba\prueba;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\Formato\formato;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class PruebaController extends Controller
 
     public function indexPruebas()
     {
-        $PruebaconNormaOCodigo = general_eyc::with('certificados')->with('almacen')->get();
+        $Pruebas = prueba::with('norma_codigo.formato')->get();
         return view('Pruebas.index',compact('Pruebas'));
     }
 
@@ -74,17 +75,34 @@ class PruebaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(prueba $prueba)
+    public function edit($id)
     {
         //
+        $Prueba = prueba::where('idPrueba', $id)->first();
+        $Norma_Codigo = norma_codigo::where('idPrueba',$Prueba->idPrueba)->get();
+
+        return view('Pruebas.edit', compact('id','Prueba','Norma_Codigo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, prueba $prueba)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'Tipo_Prueba' => 'required|string',
+        ]);
+
+        $Prueba = prueba::find($prueba->idPrueba);
+        // Actualizar los datos del equipo
+        $Prueba ->update([
+            'Nombre' => $request->input('Tipo_Prueba'),
+        ]);
+
+    // Redirigir a una ruta específica con un mensaje de éxito
+    return redirect()->route('Pruebas.index');
+
     }
 
     /**

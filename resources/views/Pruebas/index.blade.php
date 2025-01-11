@@ -32,34 +32,21 @@
                 <thead>
                     <tr>
                         <th>Tipo de Prueba</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($OC as $OCS)
+                @foreach($Pruebas as $Prueba)
                     <tr>
-                        <td>{{ $OCS->Num_OC }}</td>
-                        <td>{{ $OCS->Proyecto}}</td>
-                        <td>{{ $OCS->Lugar_trabajo }}</td>
-                        @if($OCS->Fecha_solicitud == '2001-01-01')
-                                <td scope="row">SIN FECHA ASIGNADA</td>
-                            @else
-                                <td>{{ $OCS->formatted_date }}</td>                   
-                        @endif
-                        <td>{{ $OCS->Tipo_servicio }}</td>
-                        <td>{{ $OCS->Estatus }}</td>
-                        @if($OCS->OC_archivo == 'ESPERA DE DATO')
-                                <td>
-                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                </td>
-                            @else
-                                <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
-                            @endif
+                        <td>{{ $Prueba->Nombre }}</td>
+
                         <td>
-                            <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('Pruebas.Norma_Codigo.edit', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarOC" idOC="{{$OCS->idOC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarPrueba" idPrueba="{{$Prueba->idPrueba}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -121,8 +108,8 @@ let table = new DataTable('#tablaJs', {
 });
 
 
-    $(document).on("click", ".btnEliminarOC", function() {
-        var idOC = $(this).attr("idOC");
+    $(document).on("click", ".btnEliminarPrueba", function() {
+        var idOC = $(this).attr("idPrueba");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
             showDenyButton: true,
