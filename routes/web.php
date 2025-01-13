@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
+use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
@@ -52,6 +54,26 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     });
     
 
+    Route::middleware('auth')->group(function () {
+        //Route::middleware('can:administrador-access')->group(function () {
+        /*vista Page in construction */
+        Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
+        /*vista Page welcome*/
+        Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
+        /*Vista Menu Servicios*/
+        Route::get('/Menu/Servicios', [PruebaController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+        /*Vista Menu Pruebas*/
+        Route::get('/index/Pruebas', [PruebaController::class, 'indexPruebas'])->name('index.Pruebas');
+        /*vista Pruebas, Norma. Codio y Formato*/
+        Route::get('/Pruebas/Create', [PruebaController::class, 'create'])->name('Pruebas.Create');
+        /*Ruta de Guardado*/
+        Route::post('/Prueba_Norma_Codigo/store', [PruebaController::class, 'store'])->name('Prueba_Norma_Codigo.store');
+        /*Rutas de Vistas Pruebas/Norma_Codigo*/
+        Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
+        /*Ruta de Actualizar Prueba/Norma_Codigo*/
+        Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        //});
+    });
 
     Route::middleware('auth')->group(function () {
         
@@ -75,13 +97,11 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/Obtener/Kits/{id}', [SolicitudesController::class, 'obtenerDetallesKits'])->name('Obtener.Kits');
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
-
-    /*Ruta /Obtener/CantidadAlmacen/*/
-    Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
     });
-        
+    
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
+
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
@@ -107,7 +127,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
     /*EQUIPOS */
     /*Ruta de Guardado*/
-    Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos'); 
+    Route::post('/general_eyc/storeEquipos', [equiposController::class, 'storeEquipos'])->name('general_eyc.storeEquipos');
     /*Ruta de Actualizar*/
     Route::post('/edicion/editEquipos/{id}', [equiposController::class, 'updateEquipos'])->name('editEquipos.update');
 
@@ -202,14 +222,45 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta para ver el manifiesto PDF*/
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
-    
+
+    /*CLIENTES*/
+    /*Rutas de Vistas de Tabla de Clientes*/
+    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
+    /*Rutas de Vista para crear CLIENTES*/
+    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
+    /*Rutas de Vistas Clientes-Edición*/
+    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
+    /*Ruta de Guardado Clientes*/
+    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
+    /*Ruta de Actualizar Clientes*/
+    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
+    /*Ruta de botón Eliminación-index-Clientes*/
+    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
+
+    /*A DEFINIR EL ACCESO */
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
     Route::get('/Reporte/FOR-PINS-03/01', [PDFReportesController::class, 'FOR_PINS_03_01'])->name('Reporte_FOR_PINS_03_01.PDF');
     Route::get('/Reporte/FOR-PINS-04/01', [PDFReportesController::class, 'FOR_PINS_04_01'])->name('Reporte_FOR_PINS_04_01.PDF');
     Route::get('/Reporte/FOR-PINS-05/01', [PDFReportesController::class, 'FOR_PINS_05_01'])->name('Reporte_FOR_PINS_05_01.PDF');
-    
+    Route::get('/Reporte/FOR-PINS-05/02', [PDFReportesController::class, 'FOR_PINS_05_02'])->name('Reporte_FOR_PINS_05_02.PDF');
+    Route::get('/Reporte/FOR-PINS-06/01', [PDFReportesController::class, 'FOR_PINS_06_01'])->name('Reporte_FOR_PINS_06_01.PDF');
+    Route::get('/Reporte/FOR-PINS-07/01', [PDFReportesController::class, 'FOR_PINS_07_01'])->name('Reporte_FOR_PINS_07_01.PDF');
+    Route::get('/Reporte/FOR-PINS-08/01', [PDFReportesController::class, 'FOR_PINS_08_01'])->name('Reporte_FOR_PINS_08_01.PDF');
+    Route::get('/Reporte/FOR-PINS-09/01', [PDFReportesController::class, 'FOR_PINS_09_01'])->name('Reporte_FOR_PINS_09_01.PDF');
+    Route::get('/Reporte/FOR-PINS-10/01', [PDFReportesController::class, 'FOR_PINS_10_01'])->name('Reporte_FOR_PINS_10_01.PDF');
+    Route::get('/Reporte/FOR-PINS-11/01', [PDFReportesController::class, 'FOR_PINS_11_01'])->name('Reporte_FOR_PINS_11_01.PDF');
     Route::get('/Reporte/FOR-PINS-11/02', [PDFReportesController::class, 'FOR_PINS_11_02'])->name('Reporte_FOR_PINS_11_02.PDF');
+    Route::get('/Reporte/FOR-PINS-13/01', [PDFReportesController::class, 'FOR_PINS_13_01'])->name('Reporte_FOR_PINS_13_01.PDF');
+    Route::get('/Reporte/FOR-PINS-14/01', [PDFReportesController::class, 'FOR_PINS_14_01'])->name('Reporte_FOR_PINS_14_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/01', [PDFReportesController::class, 'FOR_PINS_16_01'])->name('Reporte_FOR_PINS_16_01.PDF');
+    Route::get('/Reporte/FOR-PINS-16/02', [PDFReportesController::class, 'FOR_PINS_16_02'])->name('Reporte_FOR_PINS_16_02.PDF');
+    Route::get('/Reporte/FOR-PINS-16/03', [PDFReportesController::class, 'FOR_PINS_16_03'])->name('Reporte_FOR_PINS_16_03.PDF');
+    Route::get('/Reporte/FOR-PINS-17/01', [PDFReportesController::class, 'FOR_PINS_17_01'])->name('Reporte_FOR_PINS_17_01.PDF');
+    Route::get('/Reporte/FOR-PINS-17_01/01', [PDFReportesController::class, 'FOR_PINS_17_01_01'])->name('Reporte_FOR_PINS_17_01_01.PDF');
+    Route::get('/Reporte/FOR-PINS-18/01', [PDFReportesController::class, 'FOR_PINS_18_01'])->name('Reporte_FOR_PINS_18_01.PDF');
+
+    /*A DEFINIR EL ACCESO */
     });
     
     /*admin */
@@ -229,22 +280,23 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     });
 
-    /*CLIENTES*/
-    Route::middleware('can:ventas-access')->group(function () {
-    /*CLIENTES*/
-    /*Rutas de Vistas de Tabla de Clientes*/
-    Route::get('/clientes/index', [ClientesController::class, 'index'])->name('clientes.index');
-    /*Rutas de Vista para crear CLIENTES*/
-    Route::get('/registro/create', [ClientesController::class, 'create'])->name('registro.create');
-    /*Rutas de Vistas Clientes-Edición*/
-    Route::get('/edicion/editclientes/{id}', [ClientesController::class, 'edit'])->name('edicion.editClientes');
-    /*Ruta de Guardado Clientes*/
-    Route::post('/registro/storeclientes', [ClientesController::class, 'store'])->name('registro.storeClientes');
-    /*Ruta de Actualizar Clientes*/
-    Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
-    /*Ruta de botón Eliminación-index-Clientes*/
-    Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-});
+    Route::middleware('can:ventas-equipos-access')->group(function () {
+    /*OC*/
+    /*Ruta de Vista de OC-index*/
+    Route::get('/OC/indexOC', [OCController::class, 'index'])->name('OC.indexOC');
+    /*Ruta de Vista de Registro de OC*/
+    Route::get('/OC/createOC', [OCController::class, 'create'])->name('OC.createOC');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
+
+    /*Rutas de Vistas de Edición-index*/
+    Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
+
+    });
 });
 
 require __DIR__.'/auth.php';

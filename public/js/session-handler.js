@@ -1,5 +1,4 @@
-// public/js/session-handler.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let idleTime = 0;
     const sessionLifetime = 120; // Duración de la sesión en minutos
 
@@ -13,21 +12,52 @@ document.addEventListener('DOMContentLoaded', function() {
             if (idleTime >= sessionLifetime) {
                 Swal.fire({
                     title: 'Sesión Expirada',
-                    text: 'Tu sesión ha expirado debido a inactividad. Serás redirigido a la página de inicio de sesión.',
+                    text: 'Tu sesión ha expirado debido a inactividad. La sesión se cerrará automáticamente.',
                     icon: 'warning',
                     confirmButtonText: 'Aceptar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/login';
+                        cerrarSesion(); // Llamar a la función para cerrar sesión
                     }else{
-                        window.location.href = '/login';
+                        cerrarSesion(); // Llamar a la función para cerrar sesión
                     }
                 });
             }
-        }, 60000); // Incrementar el contador de inactividad cada minuto (60000 ms)
+        }, 60000); // Incrementar el contador cada minuto (60000 ms)
     }
 
-    // Reiniciar el tiempo de inactividad al detectar actividad del usuario
+    function cerrarSesion() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); // Recargar la página o redirigir a una pantalla específica
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo cerrar la sesión correctamente.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error al cerrar la sesión:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al intentar cerrar la sesión.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    }
+
+    // Detectar actividad del usuario
     window.onmousemove = resetIdleTime;
     window.onkeypress = resetIdleTime;
     window.onscroll = resetIdleTime;

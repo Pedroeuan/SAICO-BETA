@@ -52,9 +52,6 @@
                 </thead>
                 <tbody>
                     @foreach($Solicitudes as $solicitud)
-                    @php 
-                    //dd($solicitud);
-                    @endphp
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
@@ -111,7 +108,7 @@
 
                                             <!--PDF GENERADO-->
                                         <td>
-                                            <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
                                     <!--PDF DE SALIDA-->
                                         <td>
@@ -161,7 +158,7 @@
                                         </td>
                                     <!--PDF GENERADO-->
                                         <td>
-                                            <a class="btn btn-primary" href="{{ route('Manifiesto.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
                                     <!--PDF DE RESGUARDO-->
                                         <td>

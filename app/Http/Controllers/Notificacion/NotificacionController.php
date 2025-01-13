@@ -45,21 +45,36 @@ class NotificacionController extends Controller
 
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
+        /*$fecha40DiasAntes = $fechaActual->copy()->subDays(40)->toDateString();
+        $fecha35DiasAntes = $fechaActual->copy()->subDays(35)->toDateString();
         $fecha30DiasAntes = $fechaActual->copy()->subDays(30)->toDateString();
+        $fecha25DiasAntes = $fechaActual->copy()->subDays(25)->toDateString();
         $fecha15DiasAntes = $fechaActual->copy()->subDays(15)->toDateString();
+        $fecha10DiasAntes = $fechaActual->copy()->subDays(10)->toDateString();
         $fecha7DiasAntes = $fechaActual->copy()->subDays(7)->toDateString();
-        $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();
+        $fecha5DiasAntes = $fechaActual->copy()->subDays(5)->toDateString();
+        $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();*/
+        $fecha40DiasAntes = $fechaActual->copy()->addDays(40)->toDateString();
+        $fecha35DiasAntes = $fechaActual->copy()->addDays(35)->toDateString();
+        $fecha30DiasAntes = $fechaActual->copy()->addDays(30)->toDateString();
+        $fecha25DiasAntes = $fechaActual->copy()->addDays(25)->toDateString();
+        $fecha15DiasAntes = $fechaActual->copy()->addDays(15)->toDateString();
+        $fecha10DiasAntes = $fechaActual->copy()->addDays(10)->toDateString();
+        $fecha7DiasAntes = $fechaActual->copy()->addDays(7)->toDateString();
+        $fecha5DiasAntes = $fechaActual->copy()->addDays(5)->toDateString();
+        $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
         $certificados = Certificados::with('generaleyc') // Cargar la relación con general_eyc
-            ->whereIn('Prox_fecha_calibracion', [$fecha30DiasAntes, $fecha15DiasAntes, $fecha7DiasAntes, $fecha0DiasAntes])
-            ->orWhereIn('Fecha_calibracion', [$fecha30DiasAntes, $fecha15DiasAntes, $fecha7DiasAntes, $fecha0DiasAntes])
+            ->whereIn('Prox_fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->orWhereIn('Fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
             $generalEyc = $certificado->generalEyc;
+            $No_economico = $generalEyc->No_economico;
 
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
@@ -79,10 +94,12 @@ class NotificacionController extends Controller
                 $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
 
                 // Determinar los días restantes para la calibración
-                $diasRestantes = Carbon::parse($fechaCalibracion)->diffInDays($fechaActual);
+                $diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
 
                 // Asegúrate de que $diasRestantes es un entero
                 $diasRestantes = (int) $diasRestantes;
+                Log::info('***********************');
+                Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
 
                 // Crear los mensajes corto y largo
                 if ($diasRestantes === 0) 
@@ -91,7 +108,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
@@ -103,7 +120,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                 } 
                 else 
@@ -112,7 +129,7 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
@@ -123,24 +140,28 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. certificado: " . $certificado->No_certificado . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     
                 }
 
+                if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
+                {
                 // Verificar si la notificación ya existe
                 $notificacionExistente = Notificacion::where('users_id', $user->id)
                     ->where('Mensaje_Corto', $mensajeCorto)
                     ->where('Mensaje_Largo', $mensajeLargo)
                     ->first();
 
-                if (!$notificacionExistente) {
-                    // Crear la notificación solo si no existe
-                    $notificacion = new Notificacion();
-                    $notificacion->users_id = $user->id;
-                    $notificacion->Mensaje_Corto = $mensajeCorto;
-                    $notificacion->Mensaje_Largo = $mensajeLargo;
-                    $notificacion->save();
+                    if (!$notificacionExistente) 
+                    {
+                        // Crear la notificación solo si no existe
+                        $notificacion = new Notificacion();
+                        $notificacion->users_id = $user->id;
+                        $notificacion->Mensaje_Corto = $mensajeCorto;
+                        $notificacion->Mensaje_Largo = $mensajeLargo;
+                        $notificacion->save();
+                    }
                 }
             }
         }

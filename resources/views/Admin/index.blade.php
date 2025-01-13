@@ -46,13 +46,25 @@
                         <td>{{ $Usuario->email}}</td>
                         <td>{{ $Usuario->rol }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
-                        <td>
-                            <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        </td>
+                        @if($rol == 'Administrador' && $Usuario->rol == 'Super Administrador')
+                            <td>
+                                <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                <i class="fas fa-pencil-alt"></i></a>
+                            </td>
 
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
+                            <td>
+                                <button type="button" class="btn btn-danger"style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                <i class="fa fa-times"></i></button>
+                            </td>
+                        @else
+                            <td>
+                                <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

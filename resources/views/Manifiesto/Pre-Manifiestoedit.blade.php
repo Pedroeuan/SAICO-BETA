@@ -286,5 +286,13 @@
         offText: 'No'
     });*/
 </script>
+<script>
+/*Prevenir el Enter*/
+document.getElementById('manifiestoForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+</script>
 
 @endsection

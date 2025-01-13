@@ -32,6 +32,7 @@
                     
                 body {
                     margin-top: 282px; /* Ajusta según el tamaño de tu encabezado */
+                    font-family: 'arial', sans-serif;
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -119,7 +120,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 12px;
+            font-size: 8px;
         }
 
         .datosresultados td, .datosresultados th {
@@ -152,16 +153,22 @@
             width: 100%;
             /*font-size: 10px;*/
         }
-        .rotar-texto {
-            font-size: 12px !important; /* Ajusta el tamaño de la fuente aquí */
+        .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
             padding: 0;
-        }
-
-        .rotar-texto span{
             display: inline-block; /* Necesario para la rotación */
             transform: rotate(270deg); /* Rota solo el texto */
-    }
+            white-space: normal;
+        }
+
+        .rotar-texto-sin-dividir {
+            text-align: center; /* Centra el texto horizontalmente */
+            padding: 0;
+            display: inline-block; /* Necesario para la rotación */
+            transform: rotate(270deg); /* Rota solo el texto */
+            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+            max-width: 20px; /* Ajusta al ancho máximo deseado */
+        }
             </style>
         </head>
         <body>
@@ -179,7 +186,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
+                            <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -253,7 +260,7 @@
 
                 <table class="encabezadoAzul">
                     <tr>
-                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
+                        <th colspan="9">DATOS DEL EQUIPO </th>
                     </tr>
                 </table>
 
@@ -286,13 +293,13 @@
                             <td rowspan="2">12</td>
                         </tr>
                         <tr>
-                            <th class="celdaGris">N.S.:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>8</td>
-                            <th class="celdaGris">N.S.:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td style="width: 60px;">9</td>
                             <th class="celdaGris" style="width: 50px;">FRECC:</th>
                             <td style="width: 50px;">10</td>
-                            <th class="celdaGris">N.S.:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>11</td>
                         </tr>
                     </tbody>
@@ -409,33 +416,31 @@
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th rowspan= "3" class="rotar-texto"><span>Número de junta</span></th>
-                                <th rowspan= "3" class="rotar-texto"><span>No. Indicación</span></th>
-                                <th rowspan= "3" class="rotar-texto"><span>Ángulo de inspección</span></th>
-                                <th rowspan= "3" class="rotar-texto"><span>Desde la cara</span></th>
-                                <th rowspan= "3" class="rotar-texto"><span>Pierna</span></th>
+                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
+                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
+                                <th rowspan= "3"><span class="rotar-texto-dividido"><span>Ángulo de inspección</span></th>
+                                <th rowspan= "3"><span class="rotar-texto-sin-dividir"><span>Desde la cara</span></th>
+                                <th rowspan= "3"><span class="rotar-texto-dividido"><span>Pierna</span></th>
 
                                 <th colspan= "4">Decibeles</th>
 
                                 <th colspan= "5">Discontinuidad</th>
 
-                                <th rowspan="3" class="rotar-texto"><span>Clase de la discontinuidad</span></th>
-                                <th rowspan="3" class="rotar-texto"><span>Evaluación</span></th>
+                                <th rowspan="3"><span class="rotar-texto-dividido">Clase de la discontinuidad</span></th>
+                                <th rowspan="3"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
 
                                 <th rowspan= "3" style="width: 70px;">Observaciones</th>
-
                             </tr>
 
-
                             <tr class="celdaGris">
-                                <th class="rotar-texto" style="height: 60px;"><span>Nivel de indicación</span></th>
-                                <th class="rotar-texto"><span>Nivel de referencia</span></th>
-                                <th class="rotar-texto"><span>Factor de atenuación</span></th>
-                                <th class="rotar-texto"><span>Relación de indicación</span></th>
+                                <th style="height: 60px;"><span class="rotar-texto-dividido">Nivel de indicación</span></th>
+                                <th><span class="rotar-texto-dividido">Nivel de referencia</span></th>
+                                <th><span class="rotar-texto-dividido">Factor de atenuación</span></th>
+                                <th><span class="rotar-texto-dividido">Relación de indicación</span></th>
 
-                                <th rowspan= "2" class="rotar-texto"><span>Longitud</span></th>
-                                <th rowspan= "2" class="rotar-texto"><span>Distancia angular</span></th>
-                                <th rowspan= "2" class="rotar-texto"><span>Profundidad desde A</span></th>
+                                <th rowspan= "2"><span class="rotar-texto-dividido">Longitud</span></th>
+                                <th rowspan= "2"><span class="rotar-texto-dividido">Distancia angular</span></th>
+                                <th rowspan= "2"><span class="rotar-texto-dividido">Profundidad desde A</span></th>
 
                                 <th colspan= "2">Posición</th>
                             </tr>
@@ -446,8 +451,8 @@
                                 <th>c</th>
                                 <th>d</th>
 
-                                <th style="width: 30px;">X</th>
-                                <th style="width: 30px;">Y</th>
+                                <th style="width: 20px;">X</th>
+                                <th style="width: 20px;">Y</th>
                             </tr>
                         </thead>
 

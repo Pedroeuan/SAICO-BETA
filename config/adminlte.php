@@ -329,16 +329,75 @@ return [
                             'text' => 'FOR-PINS-05/01',
                             'url' => '/Reporte/FOR-PINS-05/01',
                         ],
-
+                        [
+                            'text' => 'FOR-PINS-05/02',
+                            'url' => '/Reporte/FOR-PINS-05/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-06/01',
+                            'url' => '/Reporte/FOR-PINS-06/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-07/01',
+                            'url' => '/Reporte/FOR-PINS-07/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-08/01',
+                            'url' => '/Reporte/FOR-PINS-08/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-09/01',
+                            'url' => '/Reporte/FOR-PINS-09/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-10/01',
+                            'url' => '/Reporte/FOR-PINS-10/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-11/01',
+                            'url' => '/Reporte/FOR-PINS-11/01',
+                        ],
                         [
                             'text' => 'FOR-PINS-11/02',
                             'url' => '/Reporte/FOR-PINS-11/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-13/01',
+                            'url' => '/Reporte/FOR-PINS-13/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-14/01',
+                            'url' => '/Reporte/FOR-PINS-14/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/01',
+                            'url' => '/Reporte/FOR-PINS-16/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/02',
+                            'url' => '/Reporte/FOR-PINS-16/02',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-16/03',
+                            'url' => '/Reporte/FOR-PINS-16/03',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-17/01',
+                            'url' => '/Reporte/FOR-PINS-17/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-17_01/01',
+                            'url' => '/Reporte/FOR-PINS-17_01/01',
+                        ],
+                        [
+                            'text' => 'FOR-PINS-18/01',
+                            'url' => '/Reporte/FOR-PINS-18/01',
                         ],
                     ],
                 ],
         
         // Sidebar Administrativo:
-        [
+        /*[
             'text' => 'Planeacion',
             'icon' => 'fas fa-calendar-alt',
             'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
@@ -381,7 +440,7 @@ return [
                     'url' => '#',
                 ],
             ],
-        ],
+        ],*/
 
                // Sidebar Operativos:
             [
@@ -391,10 +450,26 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                     [
-                        'text' => 'level_one',
-                        'url' => '',
+                        'text' => 'Orden de Trabajo/Servicio',
+                        'icon' => 'fas fa-file-alt',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
+                        'text' => 'Reportes',
+                        'icon' => 'fab fa-wpforms',
+                        'url' => '/Menu/Servicios',
+                    ],
+                    [
+                        'text' => 'Registro de Pruebas',
+                        'icon' => 'fas fa-indent',
+                        'url' => '/Pruebas/Create',
+                    ],
+                    [
+                        'text' => 'Pruebas',
+                        'icon' => 'fas fa-table',
+                        'url' => '/index/Pruebas',
+                    ],
+                    /* [
                         'text' => 'level_one',
                         'url' => '#',
                         'submenu' => 
@@ -419,12 +494,12 @@ return [
                                 ],
                             ],
                         ],
-                    ],
+                    ],*/
     
-                    [
+                    /*[
                         'text' => 'level_one',
                         'url' => '#',
-                    ],
+                    ],*/
                 ],
             ],
 
@@ -435,10 +510,25 @@ return [
                 'can' => 'ventas-access',
                 //'topnav' => true,
                 'submenu' => [
-                    [
+                    /*[
                         'text' => 'Clientes',
                         'icon' => 'fas fa-users',
                         'url' => 'clientes/index',
+                    ],
+                    [
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
+                    ],*/
+                    [
+                        'text' => 'Registro OC',
+                        'icon' => 'fas fa-chart-line',
+                        'url' => '/OC/createOC',
+                    ],
+                    [
+                        'text' => 'Ordenes de Compras',
+                        'icon' => 'fas fa-clipboard-list',
+                        'url' => '/OC/indexOC',
                     ],
                     /*[
                         'text' => '',
@@ -466,12 +556,6 @@ return [
                             ],
                         ],
                     ],*/
-    
-                    [
-                        'text' => 'Registro Clientes',
-                        'icon' => 'fas fa-user-plus',
-                        'url' => 'registro/create',
-                    ],
                 ],
             ],
 
@@ -492,6 +576,18 @@ return [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'Clientes',
+                            'icon' => 'fas fa-users',
+                            'url' => 'clientes/index',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'Registro Clientes',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'registro/create',
                             'can' => 'equipos-access',
                         ],
                         [
@@ -523,12 +619,6 @@ return [
                             'icon' => 'far fa-clipboard',
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
-                        ],
-                        [
-                            'text' => ' Solicitar recursos',
-                            'icon' => 'fa fa-cart-plus',
-                            'url' => 'solicitar_recursos/create',
-                            'can' => 'equipos-access',
                         ],
                         /*[
                             'text' => 'level_one',
@@ -581,7 +671,7 @@ return [
                     'icon' => 'fas fa-user-plus',
                     'url' => 'Admin/create',
                 ],
-                [
+                /*[
                     'text' => 'level_one',
                     'url' => '#',
                     'submenu' => 
@@ -606,12 +696,12 @@ return [
                             ],
                         ],
                     ],
-                ],
+                ],*/
 
-                [
+                /*[
                     'text' => 'level_one',
                     'url' => '#',
-                ],
+                ],*/
             ],
         ],
     ],//Final Menu

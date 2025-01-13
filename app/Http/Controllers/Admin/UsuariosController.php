@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Admin\Usuario;
 
@@ -19,8 +19,14 @@ class UsuariosController extends Controller
      */
     public function index()
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
         $Usuarios = Usuario::all();
-        return view('Admin.index', compact('Usuarios'));
+        return view('Admin.index', compact('Usuarios','rol'));
         //dd($Usuarios);
     }
 
@@ -29,7 +35,13 @@ class UsuariosController extends Controller
      */
     public function create()
     {
-        return view('Admin.create');
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+        
+        return view('Admin.create', compact('rol'));
     }
 
     /**
@@ -37,6 +49,11 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         //Registro de Usuarios
         // Validar los datos de entrada
         $request->validate([
@@ -68,7 +85,7 @@ class UsuariosController extends Controller
 
         // Redirigir a la página de administración
         $Usuarios = Usuario::all();
-        return view('Admin.index', compact('Usuarios'));
+        return view('Admin.index', compact('Usuarios'.'rol'));
     }
 
     /**
@@ -94,6 +111,12 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+        
         if ($request->filled('ContrasenaUsuario') && $request->filled('RepetirContrasena')) {
         // Validar los datos de entrada
         $request->validate([
@@ -141,10 +164,9 @@ class UsuariosController extends Controller
         ]);
 
     }
-
         // Redirigir a la página de administración
         $Usuarios = Usuario::all();
-        return view('Admin.index', compact('Usuarios'));
+        return view('Admin.index', compact('Usuarios','rol'));
     }
 
     /**
