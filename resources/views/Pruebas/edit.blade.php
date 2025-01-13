@@ -67,7 +67,7 @@
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
 
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas">
+                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -76,7 +76,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
+                                        @php $count = 0; @endphp
+                                        @foreach ($Norma_Codigo as $NC)
+                                        @php $count++; @endphp
+                                            <tr id="row-{{ $NC->idPrueba }}">
+                                                <td>{{ $count }}</td>
+                                                <td>{{ $NC->Nombre ?? 'N/A' }}</td>
+                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                     
@@ -121,27 +129,32 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
-$(document).ready(function() {
-        var rowCount = 0;
 
-        function updateRowNumbers() {
-            $('#Norma_Codigo tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
+        $(document).ready(function() {
+            var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
+
+            function updateRowNumbers() {
+                $('#Norma_Codigo tbody tr').each(function(index) {
+                    $(this).find('td:first').text(index + 1);
+                });
+                rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
+            }
+
+            $('#addRowBtn').click(function() {
+                rowCount++;
+                var newRow = `<tr>
+                    <td>${rowCount}</td>
+                    <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                </tr>`;
+                $('#Norma_Codigo tbody').append(newRow);
             });
-            rowCount = $('#Norma_Codigo tbody tr').length;
-        }
 
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow = '<tr><td>' + rowCount + '</td><td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td><td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>';
-            $('#Norma_Codigo tbody').append(newRow);
+            $('#Norma_Codigo').on('click', '.btnEliminar', function() {
+                $(this).closest('tr').remove();
+                updateRowNumbers();
+            });
         });
-
-        $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
 
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {

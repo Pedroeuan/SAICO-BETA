@@ -139,7 +139,11 @@ $(document).ready(function() {
 
         $('#addRowBtn').click(function() {
             rowCount++;
-            var newRow = '<tr><td>' + rowCount + '</td><td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td><td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>';
+            var newRow =`<tr>
+            <td>${rowCount}</td>
+            <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
+            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`;
             $('#Norma_Codigo tbody').append(newRow);
         });
 

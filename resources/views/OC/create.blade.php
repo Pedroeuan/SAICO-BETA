@@ -133,7 +133,7 @@
                                                 <th>Unidad/Medida</th>
                                                 <th>Cantidad</th>
                                                 <th>Descripción</th>
-                                                <th>Acción</th>
+                                                <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -149,7 +149,7 @@
                                         </div>
 
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
+                                            <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
                                         </div>
                                     </div>
 
@@ -190,7 +190,34 @@
             }
     });
 
-        document.getElementById("addRowBtn").addEventListener("click", function() {
+    $(document).ready(function() {
+        var rowCount = 0;
+
+        function updateRowNumbers() {
+            $('#dynamicTable tbody tr').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+            rowCount = $('#dynamicTable tbody tr').length;
+        }
+
+        $('#addRowBtn').click(function() {
+            rowCount++;
+            var newRow = `<tr>
+                <td>${rowCount}</td>
+                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`;
+            $('#dynamicTable tbody').append(newRow);
+        });
+
+        $('#dynamicTable').on('click', '.btnEliminar', function() {
+            $(this).closest('tr').remove();
+            updateRowNumbers();
+        });
+    });
+        /*document.getElementById("addRowBtn").addEventListener("click", function() {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rowCount = tableBody.rows.length + 1;
 
@@ -233,22 +260,18 @@
             // Celda 4: Botón de eliminar
             const cell5 = document.createElement("td");
             const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Eliminar";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.backgroundColor = "red";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px 10px";
-            deleteBtn.style.cursor = "pointer";
+            deleteBtn.type = "button";
+            deleteBtn.className = "btn btn-danger btnEliminar";
+            deleteBtn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
             deleteBtn.addEventListener("click", function() {
-            tableBody.removeChild(newRow);
+                tableBody.removeChild(newRow);
             });
             cell5.appendChild(deleteBtn);
             newRow.appendChild(cell5);
 
             // Agregar la fila a la tabla
             tableBody.appendChild(newRow);
-        });
-
+        });*/
 
         document.getElementById('OC').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
