@@ -89,6 +89,13 @@ class UsuariosController extends Controller
         return view('Admin.edit', compact('id','Usuario'));
     }
 
+    public function actualizar($id)
+    {
+        $Usuario = Usuario::where('id', $id)->first();
+
+        return view('Admin.actualizar', compact('id','Usuario'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -145,6 +152,72 @@ class UsuariosController extends Controller
         // Redirigir a la página de administración
         $Usuarios = Usuario::all();
         return view('Admin.index', compact('Usuarios'));
+    }
+
+
+
+
+
+
+    public function userupdate(Request $request, $id)
+    {
+        $Usuario  = Usuario::find($id);
+        if ($request->filled('ContrasenaUsuario') && $request->filled('RepetirContrasena')) {
+            // Validar los datos de entrada
+            $request->validate([
+                'NombreUsuario' => 'required|string|max:255',
+                //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+                'ContrasenaUsuario' => 'required|string|max:255',
+                'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+                'RolUsuario' => [
+                    'required',
+                    'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                ],
+                'Telefono' => 'required|string|max:50',
+                
+            ]);
+            // Obtener el equipo existente
+
+            // Actualizar los datos del equipo
+            $Usuario ->update([
+                'name' => $request->input('NombreUsuario'),
+                'email' => $request->input('CorreoUsuario'),
+                'password' => Hash::make($request->input('ContrasenaUsuario')),
+                'rol' => $request->input('RolUsuario'),
+                'telefono' => $request->input('Telefono'),
+            ]);
+        }
+        else{
+            // Validar los datos de entrada
+            $request->validate([
+                'NombreUsuario' => 'required|string|max:255',
+                //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+                //'ContrasenaUsuario' => 'required|string|max:255',
+                //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
+                'Telefono' => 'required|string|max:50',
+                'RolUsuario' => [
+                    'required',
+                    'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                ],
+            ]);
+            // Obtener el equipo existente
+            $Usuario  = Usuario::find($id);
+
+            // Actualizar los datos del equipo
+            $Usuario ->update([
+                'name' => $request->input('NombreUsuario'),
+                'email' => $request->input('CorreoUsuario'),
+                //'password' => Hash::make($request->input('ContrasenaUsuario')),
+                'telefono' => $request->input('Telefono'),
+                'rol' => $request->input('RolUsuario'),
+            ]);
+
+        }
+
+        // Redirigir a la página de administración
+        $Usuarios = Usuario::all();
+        return view('Admin.actualizar', compact('Usuario','id'));
+        //echo "Esta llegando al función actua."." Id de registro: ".$id;
     }
 
     /**

@@ -225,6 +225,13 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/edicion/editusuarios/{id}', [UsuariosController::class, 'edit'])->name('edicion.editUsuarios');
     /*Ruta de Actualizar Usuarios*/
     Route::post('/edicion/updateUsuario/{id}', [UsuariosController::class, 'update'])->name('editUsuarios.update');
+
+    Route::get('/actualizar/actualizarusuarios/{id}', [UsuariosController::class, 'actualizar'])->name('actualizar.actualizarUsuarios');
+    
+    /*Route::post('/actualizar/Usuario/{id}', [UsuariosController::class, 'userupdate'])->name('actualizar.Usuario');*/
+
+    Route::post('/ediciones/Usuario/{id}', [UsuariosController::class, 'userupdate'])->name('editar.usuarios');
+ 
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Usuarios/eliminar/{id}', [UsuariosController::class, 'destroy'])->name('Usuarios.destroy');
     });

@@ -35,8 +35,10 @@
                         <th>Usuario</th>
                         <th>Rol</th>
                         <th>Fecha alta</th>
+                        <th>Telefono</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
+                        <th>Actualizar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,12 +48,16 @@
                         <td>{{ $Usuario->email}}</td>
                         <td>{{ $Usuario->rol }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
+                        <td>{{ $Usuario->telefono }}</td>
                         <td>
                             <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
                             <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                        <td>
+                        <a href="{{ route('actualizar.actualizarUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 @endforeach
