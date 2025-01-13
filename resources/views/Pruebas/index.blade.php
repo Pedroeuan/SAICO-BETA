@@ -33,6 +33,7 @@
                     <tr>
                         <th>Tipo de Prueba</th>
                         <th>Editar</th>
+                        <th>Normas</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
@@ -43,6 +44,10 @@
 
                         <td>
                             <a href="{{ route('Pruebas.Norma_Codigo.edit', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        </td>
+
+                        <td>
+                            <a href="{{ route('Normas_Aplicables.normas', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
