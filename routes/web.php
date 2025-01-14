@@ -296,7 +296,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de Actualizar OC*/
     Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
 
-    /*Rutas de Vistas de Edición-index*/
+    /*Rutas de Vista de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');

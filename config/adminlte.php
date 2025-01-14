@@ -457,7 +457,17 @@ return [
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/Menu/Servicios',
+                    ],
+                    [
+                        'text' => 'Registro de Pruebas',
+                        'icon' => 'fas fa-indent',
+                        'url' => '/Pruebas/Create',
+                    ],
+                    [
+                        'text' => 'Pruebas',
+                        'icon' => 'fas fa-table',
+                        'url' => '/index/Pruebas',
                     ],
                     /* [
                         'text' => 'level_one',

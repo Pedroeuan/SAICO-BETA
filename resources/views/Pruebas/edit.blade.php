@@ -45,7 +45,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición de la Orden de Compra</h3>
+<h3 align="center">Edición del tipo de Prueba y Norma o codigo</h3>
 <br>
                 <section class="content">
                     <div class="card">
