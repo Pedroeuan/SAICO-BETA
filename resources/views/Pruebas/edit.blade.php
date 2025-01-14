@@ -172,31 +172,6 @@
                     });
                 });
             });
-        /*$(document).ready(function() {
-            var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
-
-            function updateRowNumbers() {
-                $('#Norma_Codigo tbody tr').each(function(index) {
-                    $(this).find('td:first').text(index + 1);
-                });
-                rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
-            }
-
-            $('#addRowBtn').click(function() {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
-                $('#Norma_Codigo tbody').append(newRow);
-            });
-
-            $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers();
-            });
-        });*/
 
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
@@ -204,57 +179,6 @@
                 event.preventDefault();
             }
     });
-
-        // Delegación de eventos para el botón "Eliminar"
-        /*$('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
-        var idDetalles_Kits = $(this).data('id');
-        var token = $('meta[name="csrf-token"]').attr('content');
-        var row = $(this).closest('tr');
-        var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
-
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-            icon: "warning",
-            showDenyButton: true,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Kits).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
-                        });
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Cancelado',
-                    text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
-                });
-            }
-        });
-    });*/
 
     </script>
 @endsection
