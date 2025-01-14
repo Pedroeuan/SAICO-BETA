@@ -13,12 +13,12 @@ class norma_codigo extends Model
     
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
-        'idNorma_Codigo',
+        'idNorma_codigo',
         'idPrueba',
         'Nombre',
     ];
     protected $table = 'Norma_Codigo';
-    protected $primaryKey = 'idNorma_Codigo';
+    protected $primaryKey = 'idNorma_codigo';
     public $timestamps = false;
 
     // Relación inversa con Prueba
@@ -30,6 +30,6 @@ class norma_codigo extends Model
     // Relación uno a muchos con Formato
     public function formato()
     {
-        return $this->hasMany(formato::class, 'idNorma_Codigo', 'idNorma_Codigo');
+        return $this->hasMany(formato::class, 'idNorma_codigo', 'idNorma_codigo');
     }
 }

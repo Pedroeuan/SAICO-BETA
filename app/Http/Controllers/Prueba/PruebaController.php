@@ -110,8 +110,22 @@ class PruebaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    
+    public function destroyNormaCodigo($id)
+    {
+        $normaCodigo = norma_codigo::findOrFail($id);
+
+        Log::info('***********************');
+        Log::info('normaCodigo: ', ['normaCodigo' => $normaCodigo]);
+        
+        $normaCodigo->delete();
+
+        return response()->json(['success' => 'Registro eliminado correctamente']);
+    }
+
     public function destroy(prueba $prueba)
     {
         //
     }
+
 }
