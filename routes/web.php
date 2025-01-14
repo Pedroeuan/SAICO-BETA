@@ -9,6 +9,7 @@ use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
+use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
@@ -53,6 +54,28 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     });
     
 
+    Route::middleware('auth')->group(function () {
+        //Route::middleware('can:administrador-access')->group(function () {
+        /*vista Page in construction */
+        Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
+        /*vista Page welcome*/
+        Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
+        /*Vista Menu Servicios*/
+        Route::get('/Menu/Servicios', [PruebaController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+        /*Vista Menu Pruebas*/
+        Route::get('/index/Pruebas', [PruebaController::class, 'indexPruebas'])->name('index.Pruebas');
+        /*vista Pruebas, Norma. Codio y Formato*/
+        Route::get('/Pruebas/Create', [PruebaController::class, 'create'])->name('Pruebas.Create');
+        /*Ruta de Guardado*/
+        Route::post('/Prueba_Norma_Codigo/store', [PruebaController::class, 'store'])->name('Prueba_Norma_Codigo.store');
+        /*Rutas de Vistas Pruebas/Norma_Codigo*/
+        Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
+        /*Ruta de Actualizar Prueba/Norma_Codigo*/
+        Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
+        Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
+        //});
+    });
 
     Route::middleware('auth')->group(function () {
         
@@ -77,17 +100,13 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de botón obtener-datos de general_EyC para kits-Solicitud.create*/
     Route::get('/Obtener/generaleyc/{id}', [SolicitudesController::class, 'obtenerGeneralKits'])->name('Obtener.generaleyc');
 
-    /*Ruta /Obtener/CantidadAlmacen/*/
+    /*Ruta /Obtener/CantidadAlmacen/ de la vista create de equipos(Kits) y editkits*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
     });
     
-        
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
-    /*Page in construction */
-    Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
-    /*Page welcome*/
-    Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
+
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');

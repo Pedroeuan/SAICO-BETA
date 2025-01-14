@@ -149,7 +149,7 @@
                                     <input type="hidden" id="dynamicTableData" name="dynamicTableData">
 
                                     <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
-                                    <table id="dynamicTable" style="margin: 0 auto; width: 80%;">
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -172,7 +172,7 @@
                                         </div>
 
                                         <div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
+                                            <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
                                         </div>
                                     </div>
 
@@ -212,66 +212,107 @@
             }
     });
 
-        /*Agrega las filas */
-        document.getElementById("addRowBtn").addEventListener("click", function() {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rowCount = tableBody.rows.length + 1;
+    /*TRAE LOS DATOS DE DETALLES_OC*/
+       const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
+    //console.log(detallesOC); // Verifica la estructura aquí
 
-            // Crear una nueva fila
+    document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.querySelector("#dynamicTable tbody");
+
+    // Iterar sobre cada detalle y agregarlo a la tabla
+    detallesOC.forEach((detalle, index) => {
             const newRow = document.createElement("tr");
 
             // Celda 1: Número de fila
             const cell1 = document.createElement("td");
-            cell1.textContent = rowCount;
+            cell1.textContent = index + 1; // Índice basado en 1
             newRow.appendChild(cell1);
 
-            // Celda 2: Input para Unidad
             const cell2 = document.createElement("td");
             const unidadInput = document.createElement("input");
             unidadInput.type = "text";
-            unidadInput.placeholder = "Unidad/Medida";
-            unidadInput.style.width = "100%";
+            unidadInput.value = detalle.unidad; // Obtiene 'unidad' del JSON
+            unidadInput.className = "form-control"; // Añadir clase de Bootstrap
+            unidadInput.name = "unidad[]"; // Añadir nombre para el input
+            unidadInput.placeholder = "Unidad/Medida"; // Añadir placeholder
             cell2.appendChild(unidadInput);
             newRow.appendChild(cell2);
 
-            // Celda 3: Input para Cantidad
             const cell3 = document.createElement("td");
             const cantidadInput = document.createElement("input");
             cantidadInput.type = "number";
-            cantidadInput.placeholder = "Cantidad";
-            cantidadInput.style.width = "100%";
+            cantidadInput.value = detalle.cantidad; // Obtiene 'cantidad' del JSON
+            cantidadInput.className = "form-control"; // Añadir clase de Bootstrap
+            cantidadInput.name = "cantidad[]"; // Añadir nombre para el input
+            cantidadInput.placeholder = "Cantidad"; // Añadir placeholder
             cell3.appendChild(cantidadInput);
             newRow.appendChild(cell3);
 
-            // Celda 4: Input para Descripcion
+
             const cell4 = document.createElement("td");
-            const DescripcionInput = document.createElement("textarea");
-            //DescripcionInput.type = "text";
-            DescripcionInput.placeholder = "Descripcion";
-            DescripcionInput.style.width = "100%";
-            cell4.appendChild(DescripcionInput);
+            const descripcionInput = document.createElement("textarea");
+            descripcionInput.value = detalle.descripcion; // Obtiene 'descripcion' del JSON
+            descripcionInput.className = "form-control"; // Añadir clase de Bootstrap
+            descripcionInput.name = "descripcion[]"; // Añadir nombre para el textarea
+            descripcionInput.placeholder = "Descripcion"; // Añadir placeholder
+            cell4.appendChild(descripcionInput);
             newRow.appendChild(cell4);
 
-            // Celda 4: Botón de eliminar
+
             const cell5 = document.createElement("td");
             const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Eliminar";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.backgroundColor = "red";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px 10px";
-            deleteBtn.style.cursor = "pointer";
-            deleteBtn.addEventListener("click", function() {
-            tableBody.removeChild(newRow);
+            deleteBtn.type = "button";
+            deleteBtn.className = "btn btn-danger btnEliminar";
+            deleteBtn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
+
+            deleteBtn.addEventListener("click", function () {
+                tableBody.removeChild(newRow);
             });
+
             cell5.appendChild(deleteBtn);
             newRow.appendChild(cell5);
 
-            // Agregar la fila a la tabla
+            // Agregar la fila al cuerpo de la tabla
             tableBody.appendChild(newRow);
         });
+        
+        let rowCount = tableBody.rows.length; // Inicializar con el número de filas existentes
+        //console.log(rowCount);
 
-        document.getElementById('OC').addEventListener('submit', function(e) {
+        $(document).ready(function() {
+            var rowCount = $('#dynamicTable tbody tr').length; // Inicializar con el número de filas existentes
+            //console.log(rowCount);
+
+            function updateRowNumbers() {
+                $('#dynamicTable tbody tr').each(function(index) {
+                    $(this).find('td:first').text(index + 1);
+                });
+                rowCount = $('#dynamicTable tbody tr').length; // Actualizar rowCount
+            }
+
+            $('#addRowBtn').click(function() {
+            rowCount++;
+            var newRow = `<tr>
+                <td>${rowCount}</td>
+                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`;
+            $('#dynamicTable tbody').append(newRow);
+        });
+
+            $('#dynamicTable').on('click', '.btnEliminar', function() {
+                $(this).closest('tr').remove();
+                updateRowNumbers();
+            });
+        });
+    });
+
+    
+
+
+    document.getElementById('OC').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rows = tableBody.querySelectorAll("tr");
             const tableData = [];
@@ -298,73 +339,6 @@
             // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
-
-
-    /*TRAE LOS DATOS DE DETALLES_OC*/
-    const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
-    //console.log(detallesOC); // Verifica la estructura aquí
-
-    document.addEventListener('DOMContentLoaded', function () {
-    const tableBody = document.querySelector("#dynamicTable tbody");
-
-    // Iterar sobre cada detalle y agregarlo a la tabla
-    detallesOC.forEach((detalle, index) => {
-            const newRow = document.createElement("tr");
-
-            // Celda 1: Número de fila
-            const cell1 = document.createElement("td");
-            cell1.textContent = index + 1; // Índice basado en 1
-            newRow.appendChild(cell1);
-
-            // Celda 2: Unidad/Medida
-            const cell2 = document.createElement("td");
-            const unidadInput = document.createElement("input");
-            unidadInput.type = "text";
-            unidadInput.value = detalle.unidad; // Obtiene 'unidad' del JSON
-            unidadInput.style.width = "100%";
-            cell2.appendChild(unidadInput);
-            newRow.appendChild(cell2);
-
-            // Celda 3: Cantidad
-            const cell3 = document.createElement("td");
-            const cantidadInput = document.createElement("input");
-            cantidadInput.type = "number";
-            cantidadInput.value = detalle.cantidad; // Obtiene 'cantidad' del JSON
-            cantidadInput.style.width = "100%";
-            cell3.appendChild(cantidadInput);
-            newRow.appendChild(cell3);
-
-            // Celda 4: Descripción
-            const cell4 = document.createElement("td");
-            const descripcionInput = document.createElement("textarea");
-            //descripcionInput.type = "text";
-            descripcionInput.value = detalle.descripcion; // Obtiene 'descripcion' del JSON
-            descripcionInput.style.width = "100%";
-            cell4.appendChild(descripcionInput);
-            newRow.appendChild(cell4);
-
-            // Celda 5: Acción (Eliminar)
-            const cell5 = document.createElement("td");
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Eliminar";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.backgroundColor = "red";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px 10px";
-            deleteBtn.style.cursor = "pointer";
-
-            deleteBtn.addEventListener("click", function () {
-                tableBody.removeChild(newRow);
-            });
-
-            cell5.appendChild(deleteBtn);
-            newRow.appendChild(cell5);
-
-            // Agregar la fila al cuerpo de la tabla
-            tableBody.appendChild(newRow);
-        });
-        
-    });
 
     </script>
 @endsection
