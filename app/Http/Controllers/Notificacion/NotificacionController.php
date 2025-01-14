@@ -45,7 +45,7 @@ class NotificacionController extends Controller
 
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
-        $fecha40DiasAntes = $fechaActual->copy()->subDays(40)->toDateString();
+        /*$fecha40DiasAntes = $fechaActual->copy()->subDays(40)->toDateString();
         $fecha35DiasAntes = $fechaActual->copy()->subDays(35)->toDateString();
         $fecha30DiasAntes = $fechaActual->copy()->subDays(30)->toDateString();
         $fecha25DiasAntes = $fechaActual->copy()->subDays(25)->toDateString();
@@ -53,7 +53,16 @@ class NotificacionController extends Controller
         $fecha10DiasAntes = $fechaActual->copy()->subDays(10)->toDateString();
         $fecha7DiasAntes = $fechaActual->copy()->subDays(7)->toDateString();
         $fecha5DiasAntes = $fechaActual->copy()->subDays(5)->toDateString();
-        $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();
+        $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();*/
+        $fecha40DiasAntes = $fechaActual->copy()->addDays(40)->toDateString();
+        $fecha35DiasAntes = $fechaActual->copy()->addDays(35)->toDateString();
+        $fecha30DiasAntes = $fechaActual->copy()->addDays(30)->toDateString();
+        $fecha25DiasAntes = $fechaActual->copy()->addDays(25)->toDateString();
+        $fecha15DiasAntes = $fechaActual->copy()->addDays(15)->toDateString();
+        $fecha10DiasAntes = $fechaActual->copy()->addDays(10)->toDateString();
+        $fecha7DiasAntes = $fechaActual->copy()->addDays(7)->toDateString();
+        $fecha5DiasAntes = $fechaActual->copy()->addDays(5)->toDateString();
+        $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
         $certificados = Certificados::with('generaleyc') // Cargar la relación con general_eyc
@@ -85,7 +94,7 @@ class NotificacionController extends Controller
                 $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
 
                 // Determinar los días restantes para la calibración
-                $diasRestantes = Carbon::parse($fechaCalibracion)->diffInDays($fechaActual);
+                $diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
 
                 // Asegúrate de que $diasRestantes es un entero
                 $diasRestantes = (int) $diasRestantes;
