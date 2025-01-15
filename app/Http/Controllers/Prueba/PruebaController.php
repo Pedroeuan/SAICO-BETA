@@ -87,13 +87,14 @@ class PruebaController extends Controller
     /**
      * 
      */
+    
     public function normas($id)
     {
         //
         $Prueba = prueba::where('idPrueba', $id)->first();
         $Norma_Codigo = norma_codigo::where('idPrueba',$Prueba->idPrueba)->get();
 
-        return view('Pruebas.edit', compact('id','Prueba','Norma_Codigo'));
+        return view('Pruebas.normas', compact('id','Prueba','Norma_Codigo'));
     }
 
     /**

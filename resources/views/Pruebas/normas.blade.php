@@ -47,20 +47,20 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Pruebas</h3>
+<h3 align="center">Norma o Codigo Aplicable</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo" action="{{route('Normas_Aplicables.normas')}}" method="get" enctype="multipart/form-data">
+                            <form id="Prueba_Norma_Codigo" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
 
                                 <div class="row justify-content-center">
                                     <div class="col-sm-4">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ old('Tipo_Prueba') }}">
+                                            <label class="col-form-label" for="Tipo_Prueba">Norma o Codigo Aplicable</label>
+                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Norma o Codigo Aplicable" value="{{ old('Tipo_Prueba') }}">
                                             @error('Tipo_Prueba')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -68,13 +68,13 @@
                                     </div>
                                 </div>
 
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Formato</button>
 
                                     <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Norma o Codigo Aplicable</th>
+                                                    <th>Formato</th>
                                                     <th>Eliminar</th>
                                                 </tr>
                                             </thead>

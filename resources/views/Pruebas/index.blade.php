@@ -47,7 +47,7 @@
                         </td>
 
                         <td>
-                            <a href="{{ route('Normas_Aplicables.normas', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('Pruebas.Normas_Aplicables.normas', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
