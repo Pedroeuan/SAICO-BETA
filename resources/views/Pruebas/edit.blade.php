@@ -45,7 +45,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición del tipo de Prueba y Norma o codigo</h3>
+<h3 align="center">Edición del Tipo de Prueba y Norma o codigo Aplicable</h3>
 <br>
                 <section class="content">
                     <div class="card">
