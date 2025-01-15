@@ -74,6 +74,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
         /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
         Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
+        /*Menu de Servicios-Pruebas */
+        Route::get('/Servicios-Pruebas', [PruebaController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
+
         //});
     });
 
@@ -296,7 +299,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de Actualizar OC*/
     Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
 
-    /*Rutas de Vistas de Edición-index*/
+    /*Rutas de Vista de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');

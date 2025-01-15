@@ -29,6 +29,15 @@ class PruebaController extends Controller
         return view('Pruebas.index',compact('Pruebas'));
     }
 
+    public function Servicios_Pruebas(Request $request)
+    {
+        // Obtener el nombre del servicio de los parámetros de la URL
+        $servicio = $request->query('servicio');
+    
+        // Pasar el nombre del servicio a la vista
+        return view('Pruebas.Servicios', ['servicio' => $servicio]);
+    }    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -100,6 +109,12 @@ class PruebaController extends Controller
             'Nombre' => $request->input('Tipo_Prueba'),
         ]);
 
+        foreach ($request->input('codigo') as $codigo) {
+            $normaCodigo = new norma_codigo();
+            $normaCodigo->idPrueba = $id;
+            $normaCodigo->Nombre = $codigo;
+            $normaCodigo->save();
+        }
         
         // Redirigir a una ruta específica con un mensaje de éxito
         $Pruebas = prueba::with('norma_codigo.formato')->get();
@@ -110,13 +125,10 @@ class PruebaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    
+    /*botón del eliminar de la vista Prueba\edit.blade */
     public function destroyNormaCodigo($id)
     {
         $normaCodigo = norma_codigo::findOrFail($id);
-
-        Log::info('***********************');
-        Log::info('normaCodigo: ', ['normaCodigo' => $normaCodigo]);
         
         $normaCodigo->delete();
 

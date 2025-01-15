@@ -45,15 +45,6 @@ class NotificacionController extends Controller
 
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
-        /*$fecha40DiasAntes = $fechaActual->copy()->subDays(40)->toDateString();
-        $fecha35DiasAntes = $fechaActual->copy()->subDays(35)->toDateString();
-        $fecha30DiasAntes = $fechaActual->copy()->subDays(30)->toDateString();
-        $fecha25DiasAntes = $fechaActual->copy()->subDays(25)->toDateString();
-        $fecha15DiasAntes = $fechaActual->copy()->subDays(15)->toDateString();
-        $fecha10DiasAntes = $fechaActual->copy()->subDays(10)->toDateString();
-        $fecha7DiasAntes = $fechaActual->copy()->subDays(7)->toDateString();
-        $fecha5DiasAntes = $fechaActual->copy()->subDays(5)->toDateString();
-        $fecha0DiasAntes = $fechaActual->copy()->subDays(0)->toDateString();*/
         $fecha40DiasAntes = $fechaActual->copy()->addDays(40)->toDateString();
         $fecha35DiasAntes = $fechaActual->copy()->addDays(35)->toDateString();
         $fecha30DiasAntes = $fechaActual->copy()->addDays(30)->toDateString();
