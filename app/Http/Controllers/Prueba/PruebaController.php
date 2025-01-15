@@ -29,6 +29,15 @@ class PruebaController extends Controller
         return view('Pruebas.index',compact('Pruebas'));
     }
 
+    public function Servicios_Pruebas(Request $request)
+    {
+        // Obtener el nombre del servicio de los parámetros de la URL
+        $servicio = $request->query('servicio');
+    
+        // Pasar el nombre del servicio a la vista
+        return view('Pruebas.Servicios', ['servicio' => $servicio]);
+    }    
+
     /**
      * Show the form for creating a new resource.
      */
