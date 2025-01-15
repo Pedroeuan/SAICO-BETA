@@ -25,6 +25,6 @@ class formato extends Model
     // Relación inversa con NormaCodigo
     public function norma_codigo()
     {
-        return $this->belongsTo(norma_codigo::class, 'idNormaCodigo', 'idNormaCodigo');
+        return $this->belongsTo(norma_codigo::class, 'idNorma_codigo', 'idNorma_codigo');
     }
 }

@@ -10,6 +10,18 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+
+    #tablaSeleccionados td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaSeleccionados th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+
+    .custom-container {
+        max-width: 1405px;
+    }
+
 </style>
 
 @section('content')
@@ -20,12 +32,14 @@
 <h3 align="center"> Formulario para el alta de datos</h3>
 <br>
 
-<div class="container">
+<div class="custom-container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
+
             <div id="tab-warning" class="alert alert-warning text-center" style="display: none;">
                 Por favor, seleccione una pestaña.
             </div>
+
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
@@ -912,7 +926,7 @@
                                     </div>
                                 </div>
                                     <!-- Tabla de Elementos Disponibles -->
-                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
+                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -923,7 +937,7 @@
                                                 <th>Stock</th>
                                                 <th>Disponibilidad</th>
                                                 <th>Fecha calibración</th>
-                                                <th>Ver Presentación</th>
+                                                <th>Ver</th>
                                                 <th>Agregar</th>
                                             </tr>
                                         </thead>
@@ -976,7 +990,7 @@
                                 <div class="alert alert-info alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                     <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                    <p>Estos son los elemtos que has agregado al nuevo KIT</p>
+                                    <p>Estos son los elementos que has agregado al nuevo KIT</p>
                                 </div>
                                 <br>
                                 <!-- Tabla de Elementos Seleccionados -->
@@ -1094,12 +1108,6 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-function attachAddListeners() {
-    $('.btnAgregar').on('click', function() {
-        var id = $(this).data('id');
-        // Lógica para agregar el elemento
-    });
-}
 
 function actualizarTabla() {
     $.ajax({
@@ -1185,8 +1193,6 @@ function actualizarTabla() {
                 }
             });
 
-            // Vuelve a adjuntar los listeners si es necesario
-            attachAddListeners();
         },
         error: function(xhr, status, error) {
             console.error('Error al obtener los datos:', error);
@@ -1206,18 +1212,18 @@ function actualizarTabla() {
             });
         });
     
-function consultarCantidadAlmacen(id, callback) {
-    $.ajax({
-        url: '/Obtener/CantidadAlmacen/' + id,
-        method: 'GET',
-        success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
-        },
-        error: function(error) {
-            callback(error);
+        function consultarCantidadAlmacen(id, callback) {
+            $.ajax({
+                url: '/Obtener/CantidadAlmacen/' + id,
+                method: 'GET',
+                success: function(data) {
+                    callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+                },
+                error: function(error) {
+                    callback(error);
+                }
+            });
         }
-    });
-}
 
 $(document).on('click', '.btnAgregar', function() {
     let row = $(this).closest('tr');
@@ -1262,8 +1268,6 @@ $(document).on('click', '.btnAgregar', function() {
         // Agregar la nueva fila a la tabla de seleccionados
         $('#tablaSeleccionados tbody').append(newRow);
 
-        // Re-attach the delete listeners to the new button
-        attachDeleteListeners();
 
         // Validar la cantidad ingresada para que no exceda el máximo permitido
         $(`input[name="cantidad_${id}"]`).on('input', function() {
@@ -1284,7 +1288,7 @@ $(document).on('click', '.btnAgregar', function() {
             icon: 'success',
             title: 'Elemento Agregado',
             text: `El elemento "${nombreElemento}" ha sido agregado exitosamente.`,
-            showConfirmButton: false,
+            showConfirmButton: true,
             timer: 2000
         });
     });
@@ -1308,51 +1312,49 @@ $(document).ready(function() {
     });
 });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('#tablaSeleccionados').addEventListener('click', function(event) {
+            if (event.target.classList.contains('btnEliminar') || event.target.closest('.btnEliminar')) {
+                let button = event.target.closest('.btnEliminar');
+                let row = button.closest('tr');
+                let nombreElemento = row.querySelector('td').textContent; // Asume que el nombre del elemento está en la primera celda (primer <td>)
 
-function attachDeleteListeners() {
-    document.querySelectorAll('.btnEliminar').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let row = this.closest('tr');
-            let nombreElemento = row.querySelector('td').textContent; // Asume que el nombre del elemento está en la primera celda (primer <td>)
+                // Mostrar una alerta de confirmación antes de eliminar
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Eliminar la fila de la tabla
+                        row.remove();
 
-            // Mostrar una alerta de confirmación antes de eliminar
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Eliminar la fila de la tabla
-                    row.remove();
-
-                    // Mostrar una alerta de éxito después de eliminar
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Elemento Eliminado',
-                        text: `El elemento "${nombreElemento}" ha sido eliminado exitosamente.`,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else {
-                    // Mostrar una alerta de cancelación si el usuario decide no eliminar
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Cancelado',
-                        text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
-                        confirmButtonText: 'Entendido'
-                    });
-                }
-            });
+                        // Mostrar una alerta de éxito después de eliminar
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Elemento Eliminado',
+                            text: `El elemento "${nombreElemento}" ha sido eliminado exitosamente.`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        // Mostrar una alerta de cancelación si el usuario decide no eliminar
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cancelado',
+                            text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
+                            confirmButtonText: 'Entendido'
+                        });
+                    }
+                });
+            }
         });
     });
-}
-
-    
 
 // Manejar el envío del formulario
 document.querySelector('#kitForm').addEventListener('submit', function(event) {

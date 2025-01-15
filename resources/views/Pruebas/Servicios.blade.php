@@ -47,7 +47,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Prueba y Norma o codigo Aplicable</h3>
+<h3 align="center">Registro de Pruebas</h3>
 <br>
                 <section class="content">
                     <div class="card">

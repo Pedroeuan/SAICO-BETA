@@ -29,16 +29,31 @@
         <!-- 1ra columna -->
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ANÁLISIS QUÍMICO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="ANÁLISIS QUÍMICO" 
+                    data-name="ANÁLISIS QUÍMICO"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    
                     <title>ANÁLISIS QUÍMICO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" 
+                        x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
                 </svg>
                 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="CORRIENTES EDDY" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="CORRIENTES EDDY"
+                    data-name="CORRIENTES EDDY"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>CORRIENTES EDDY</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -47,7 +62,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="METALOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="METALOGRAFIA"
+                    data-name="METALOGRAFIA"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>METALOGRAFIA</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -56,7 +78,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PRECALENTAMIENTO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="PRECALENTAMIENTO"
+                    data-name="PRECALENTAMIENTO"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>PRECALENTAMIENTO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -65,7 +94,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="TERMOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="TERMOGRAFIA" 
+                    data-name="TERMOGRAFIA"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>TERMOGRAFIA</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -78,7 +114,14 @@
         
         <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">         
             
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ARREGLO DE FASES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="ARREGLO DE FASES" 
+                    data-name="ARREGLO DE FASES"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>ARREGLO DE FASES</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -87,7 +130,15 @@
 
             <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="DUREZAS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="DUREZAS" 
+                    data-name="DUREZAS"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+
                     <title>DUREZAS</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/DUREZAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -96,7 +147,14 @@
 
             <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PARTÍCULAS MAGNÉTICAS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="PARTÍCULAS MAGNÉTICAS" 
+                    data-name="PARTÍCULAS MAGNÉTICAS"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>PARTÍCULAS MAGNÉTICAS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/PARTICULAS_MAGNETICAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -114,7 +172,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="ULTRASONIDO" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="ULTRASONIDO" 
+                    data-name="ULTRASONIDO"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>ULTRASONIDO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -126,7 +191,14 @@
             
             <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 66.6667%; top: 0px;">
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="CARACTERIZACIÓN DE MATERIALES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="CARACTERIZACIÓN DE MATERIALES" 
+                    data-name="CARACTERIZACIÓN DE MATERIALES"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>CARACTERIZACIÓN DE MATERIALES</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -135,8 +207,15 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="LÍQUIDOS PENETRANTES" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>LQUIDOS PENETRANTES</title>
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="LÍQUIDOS PENETRANTES" 
+                    data-name="LÍQUIDOS PENETRANTES"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                    <title>LÍQUIDOS PENETRANTES</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/LIQUIDOS_PENETRANTES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">LÍQUIDOS PENETRANTES</text>
@@ -144,7 +223,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="PMI" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="PMI" 
+                    data-name="PMI"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    
                     <title>PMI</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -153,7 +239,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RELEVADO DE ESFUERZOS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="RELEVADO DE ESFUERZOS" 
+                    data-name="RELEVADO DE ESFUERZOS"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>RELEVADO DE ESFUERZOS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -162,7 +255,14 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="OTROS" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="OTROS" 
+                    data-name="OTROS"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
                     <title>OTROS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
@@ -176,6 +276,15 @@
 
 @section('js')
 <script>
+
+function redirectToView(element) {
+    // Obtener el nombre del servicio del atributo data-name
+    const serviceName = element.getAttribute('data-name');
+
+    // Redirigir a una nueva vista con el nombre como parámetro en la URL
+    const url = `/Servicios-Pruebas?servicio=${encodeURIComponent(serviceName)}`;
+    window.location.href = url;
+}
 
 </script>
 

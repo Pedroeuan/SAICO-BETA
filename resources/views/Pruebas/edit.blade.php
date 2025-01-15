@@ -45,7 +45,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición de la Orden de Compra</h3>
+<h3 align="center">Edición del Tipo de Prueba y Norma o codigo Aplicable</h3>
 <br>
                 <section class="content">
                     <div class="card">
@@ -79,7 +79,7 @@
                                         @php $count = 0; @endphp
                                         @foreach ($Norma_Codigo as $NC)
                                         @php $count++; @endphp
-                                            <tr id="row-{{ $NC->idPrueba }}">
+                                        <tr id="row-{{ $NC->idNorma_codigo }}">
                                                 <td>{{ $count }}</td>
                                                 <td>{{ $NC->Nombre ?? 'N/A' }}</td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
@@ -130,31 +130,48 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-        $(document).ready(function() {
-            var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
+            $(document).ready(function() {
+                var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
 
-            function updateRowNumbers() {
-                $('#Norma_Codigo tbody tr').each(function(index) {
-                    $(this).find('td:first').text(index + 1);
+                function updateRowNumbers() {
+                    $('#Norma_Codigo tbody tr').each(function(index) {
+                        $(this).find('td:first').text(index + 1);
+                    });
+                    rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
+                }
+
+                $('#addRowBtn').click(function() {
+                    rowCount++;
+                    var newRow = `<tr>
+                        <td>${rowCount}</td>
+                        <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                    </tr>`;
+                    $('#Norma_Codigo tbody').append(newRow);
                 });
-                rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
-            }
 
-            $('#addRowBtn').click(function() {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
-                $('#Norma_Codigo tbody').append(newRow);
-            });
+                $('#Norma_Codigo').on('click', '.btnEliminar', function() {
+                    var row = $(this).closest('tr');
+                    var id = row.attr('id').split('-')[1]; // Obtener el ID del registro
+                    console.log(id);
 
-            $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers();
+                    $.ajax({
+                        url: '/Eliminar/NormaCodigo/Tabla/' + id,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                        },
+                        success: function(response) {
+                            row.remove();
+                            updateRowNumbers();
+                            alert(response.success);
+                        },
+                        error: function(xhr) {
+                            alert('Error al eliminar el registro');
+                        }
+                    });
+                });
             });
-        });
 
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {

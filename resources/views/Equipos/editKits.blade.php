@@ -10,6 +10,17 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+
+    #TablaKits td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #TablaKits th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }
+
+    .custom-container {
+        max-width: 1405px;
+    }
 </style>
 
 @section('content')
@@ -19,7 +30,7 @@
         <h3 align="center"> Edición de Kits</h3>
     <br>
 
-<div class="container">
+<div class="custom-container">
     <div class="row justify-content-center">
         <div class="col-sm-12">
             <div class="card">
@@ -67,7 +78,7 @@
                                                 <th>Stock</th>
                                                 <th>Disponibilidad</th>
                                                 <th>Fecha calibración</th>
-                                                <th>Hoja de Presentación</th>
+                                                <th>Ver</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -360,7 +371,7 @@ $(document).ready(function() {
             Swal.fire({
                 icon: 'warning',
                 title: 'Elemento duplicado',
-                text: `El elemento ya está en la segunda tabla.`,
+                text: `El elemento ya se encuentra agregado.`,
                 confirmButtonText: 'Entendido'
             });
             $(this).prop('disabled', false);
@@ -523,10 +534,6 @@ $(document).ready(function() {
 });
 
 });
-
-
-                
-
 
 </script>
 @endsection
