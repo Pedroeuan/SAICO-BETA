@@ -72,6 +72,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
         /*Ruta de Actualizar Prueba/Norma_Codigo*/
         Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        /*Ruta de Norma Aplicable*/
+        Route::get('/Pruebas/Normas_Aplicables/normas/{id}', [PruebaController::class, 'normas'])->name('Pruebas.Normas_Aplicables.normas');
         /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
         Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
         /*Menu de Servicios-Pruebas */
