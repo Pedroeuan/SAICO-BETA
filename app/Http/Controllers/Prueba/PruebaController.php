@@ -97,7 +97,7 @@ class PruebaController extends Controller
      * 
      */
     
-    public function normas($id)
+    public function editnormas($id)
     {
         //
         $Prueba = prueba::where('idPrueba', $id)->first();

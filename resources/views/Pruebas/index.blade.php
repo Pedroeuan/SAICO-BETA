@@ -32,8 +32,8 @@
                 <thead>
                     <tr>
                         <th>Tipo de Prueba</th>
-                        <th>Editar</th>
-                        <th>Normas</th>
+                        <th>Editar Prueba</th>
+                        <th>Editar Normas</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
