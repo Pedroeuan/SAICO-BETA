@@ -47,6 +47,7 @@
                                 <th>Folio</th>
                                 <th>Fecha de servicio</th>
                                 <th>Estatus</th>
+                                <th>PDF Generado</th>
                         @endif
                     </tr>
                 </thead>
@@ -203,6 +204,20 @@
                                         @endif 
                                     </div>
                                 @endif
+
+                                @else
+
+                                    @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        </td>   
+                                    @endif
 
                             @endif
                             </tr>

@@ -107,6 +107,10 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
     /*Ruta /Obtener/CantidadAlmacen/ de la vista create de equipos(Kits) y editkits*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
+    
+    /*manifiestos*/
+    /*Ruta para ver el manifiesto PDF*/
+    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
     /*EQUIPOS INVENTARIO-REGISTRO*/
@@ -228,9 +232,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*SOLICITAR RECURSOS*/
     Route::get('solicitar_recursos/create', [SolicitudRecursosController::class, 'create'])->name('solicitar_recursos.create');
 
-    /*manifiestos*/
-    /*Ruta para ver el manifiesto PDF*/
-    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
+
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
 
     /*CLIENTES*/

@@ -101,9 +101,9 @@ class PruebaController extends Controller
     {
         //
         $Prueba = prueba::where('idPrueba', $id)->first();
-        $Norma_Codigo = norma_codigo::where('idPrueba',$Prueba->idPrueba)->get();
+        $Norma_Codigo = norma_codigo::where('idPrueba',$id)->get();
 
-        return view('Pruebas.normas', compact('id','Prueba','Norma_Codigo'));
+        return view('Pruebas.indexnormas', compact('id','Prueba','Norma_Codigo'));
     }
 
     /**
