@@ -106,6 +106,14 @@ class PruebaController extends Controller
         return view('Pruebas.indexnormas', compact('id','Prueba','Norma_Codigo'));
     }
 
+    public function editformatos($id)
+    {
+        //
+        $Norma_Codigo = norma_codigo::where('idNorma_codigo',$id)->first();
+
+        return view('Pruebas.editformatos', compact('id','Norma_Codigo'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -145,7 +153,7 @@ class PruebaController extends Controller
         
         $normaCodigo->delete();
 
-        return response()->json(['success' => 'Registro eliminado correctamente']);
+        //return response()->json(['success' => 'Registro eliminado correctamente']);
     }
 
     public function destroy(prueba $prueba)

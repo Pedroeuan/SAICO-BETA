@@ -42,12 +42,12 @@
                         <td>{{ $NC->Nombre }}</td>
 
                         <td>
-                            <a href="{{ route('Pruebas.Norma_Codigo.edit', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('Pruebas.Norma_Codigo.Formatos.edit', ['id' => $NC->idNorma_codigo]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
 
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarPrueba" idPrueba="{{$Prueba->idPrueba}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarPrueba" idNorma_codigo="{{$NC->idNorma_codigo}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach

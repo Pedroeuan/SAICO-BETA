@@ -45,46 +45,37 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición del Tipo de Prueba y Norma o codigo Aplicable</h3>
+<h3 align="center">Edición de la Norma o codigo Aplicable y Formato</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo" action="{{ route('Pruebas.Norma_Codigo.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                            <form id="Prueba_Norma_Codigo_Formato" action="" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="row justify-content-center">
                                         <div class="col-sm-4">
                                             <div class="form-group text-center">
-                                                <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                                <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ $Prueba->Nombre }}" style="text-align: center;">
-                                                @error('Tipo_Prueba')
+                                                <label class="col-form-label" for="Norma_Codigo">Norma o Codigo</label>
+                                                <input class="form-control inputForm @error('Norma_Codigo') is-invalid @enderror" name="Norma_Codigo" id="Norma_Codigo" type="text" value="{{ $Norma_Codigo->Nombre }}" style="text-align: center;">
+                                                @error('Norma_Codigo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Formato</button>
 
-                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
+                                    <table id="Formato" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Norma o Codigo Aplicable</th>
+                                                <th>Formato</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php $count = 0; @endphp
-                                        @foreach ($Norma_Codigo as $NC)
-                                        @php $count++; @endphp
-                                        <tr id="row-{{ $NC->idNorma_codigo }}">
-                                                <td>{{ $count }}</td>
-                                                <td>{{ $NC->Nombre ?? 'N/A' }}</td>
-                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                            </tr>
-                                        @endforeach
                                         </tbody>
                                     </table>
                                     
@@ -131,13 +122,13 @@
 <script>
 
             $(document).ready(function() {
-                var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
+                var rowCount = $('#Formato tbody tr').length; // Inicializar con el número de filas existentes
 
                 function updateRowNumbers() {
-                    $('#Norma_Codigo tbody tr').each(function(index) {
+                    $('#Formato tbody tr').each(function(index) {
                         $(this).find('td:first').text(index + 1);
                     });
-                    rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
+                    rowCount = $('#Formato tbody tr').length; // Actualizar rowCount
                 }
 
                 $('#addRowBtn').click(function() {
@@ -147,10 +138,10 @@
                         <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
-                    $('#Norma_Codigo tbody').append(newRow);
+                    $('#Formato tbody').append(newRow);
                 });
 
-                $('#Norma_Codigo').on('click', '.btnEliminar', function() {
+                $('#Formato').on('click', '.btnEliminar', function() {
                     var row = $(this).closest('tr');
                     var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
 
@@ -168,7 +159,7 @@
                             if (id) {
                                 // Si la fila tiene un ID, realizar la eliminación en el servidor
                                 $.ajax({
-                                    url: '/Eliminar/NormaCodigo/Tabla/' + id,
+                                    url: '/Eliminar/NormaCodigo/Tabla/' + id, /*Cambiar ruta */
                                     type: 'DELETE',
                                     data: {
                                         _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
@@ -206,7 +197,7 @@
             });
 
     /*Prevenir el Enter*/
-    document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
+    document.getElementById('Prueba_Norma_Codigo_Formato').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
