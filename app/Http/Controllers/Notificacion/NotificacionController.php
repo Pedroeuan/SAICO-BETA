@@ -23,6 +23,8 @@ use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\Notificacion\Notificacion;
+use App\Models\User;
+
 
 class NotificacionController extends Controller
 {
@@ -60,6 +62,9 @@ class NotificacionController extends Controller
             ->whereIn('Prox_fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->orWhereIn('Fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
+
+        // Obtener todos los usuarios con los roles especificados
+        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
@@ -136,8 +141,9 @@ class NotificacionController extends Controller
                     
                 }
 
-                if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
-                {
+                //if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
+                // Crear notificaciones para todos los usuarios con los roles especificados
+                foreach ($usuarios as $usuario){
                 // Verificar si la notificación ya existe
                 $notificacionExistente = Notificacion::where('users_id', $user->id)
                     ->where('Mensaje_Corto', $mensajeCorto)
