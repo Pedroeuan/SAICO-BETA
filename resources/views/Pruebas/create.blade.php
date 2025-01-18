@@ -153,6 +153,18 @@ $(document).ready(function() {
         });
     });
 
+    $('#Prueba_Norma_Codigo').submit(function(event) {
+        if ($('#Norma_Codigo tbody tr').length === 0) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Advertencia',
+                text: 'Debe agregar al menos una norma o código aplicable.',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {

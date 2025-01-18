@@ -68,9 +68,7 @@ class PruebaController extends Controller
             ]);
         }
 
-        // Redirigir a una ruta específica con un mensaje de éxito
-        $Pruebas = prueba::with('norma_codigo.formato')->get();
-        return view('Pruebas.index',compact('Pruebas'));
+        return redirect()->route('index.Pruebas');
     }
     
 
@@ -150,9 +148,7 @@ class PruebaController extends Controller
             }
         }
         
-        // Redirigir a una ruta específica con un mensaje de éxito
-        $Pruebas = prueba::with('norma_codigo.formato')->get();
-        return view('Pruebas.index',compact('Pruebas'));
+        return redirect()->route('index.Pruebas');
 
     }
 
@@ -193,10 +189,8 @@ class PruebaController extends Controller
             }
         }
 
-        $Prueba = prueba::where('idPrueba', $idPrueba)->first();
-        $Norma_Codigo = norma_codigo::where('idPrueba',$idPrueba)->get();
-
-        return view('Pruebas.indexnormas', compact('id','Prueba','Norma_Codigo'));
+        // Redirigir a una ruta específica con el parámetro $idPrueba
+        return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
 
     }
 
