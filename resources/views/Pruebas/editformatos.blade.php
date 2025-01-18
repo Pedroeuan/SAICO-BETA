@@ -50,7 +50,7 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo_Formato" action="" method="post" enctype="multipart/form-data">
+                            <form id="Prueba_Norma_Codigo_Formato" action="{{ route('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="row justify-content-center">
@@ -76,6 +76,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @php $count = 0; @endphp
+                                        @foreach ($Formatos as $Formato)
+                                        @php $count++; @endphp
+                                        <tr id="row-{{ $Formato->idFormato }}">
+                                                <td>{{ $count }}</td>
+                                                <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
+                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                     
@@ -135,7 +144,7 @@
                     rowCount++;
                     var newRow = `<tr>
                         <td>${rowCount}</td>
-                        <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
+                        <td><input type="text" class="form-control" name="Formato[new_${rowCount}]" placeholder="Formato" required></td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
                     $('#Formato tbody').append(newRow);
@@ -159,7 +168,7 @@
                             if (id) {
                                 // Si la fila tiene un ID, realizar la eliminación en el servidor
                                 $.ajax({
-                                    url: '/Eliminar/NormaCodigo/Tabla/' + id, /*Cambiar ruta */
+                                    url: '/Eliminar/Formato/Tabla/' + id,
                                     type: 'DELETE',
                                     data: {
                                         _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF

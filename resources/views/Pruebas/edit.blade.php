@@ -81,7 +81,7 @@
                                         @php $count++; @endphp
                                         <tr id="row-{{ $NC->idNorma_codigo }}">
                                                 <td>{{ $count }}</td>
-                                                <td>{{ $NC->Nombre ?? 'N/A' }}</td>
+                                                <td><input type="text" class="form-control" name="Norma_Codigo[{{ $NC->idNorma_codigo }}]" value="{{ $NC->Nombre ?? 'N/A' }}"></td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                         @endforeach
@@ -130,81 +130,80 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-            $(document).ready(function() {
-                var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
+        $(document).ready(function() {
+            var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
 
-                function updateRowNumbers() {
-                    $('#Norma_Codigo tbody tr').each(function(index) {
-                        $(this).find('td:first').text(index + 1);
-                    });
-                    rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
-                }
-
-                $('#addRowBtn').click(function() {
-                    rowCount++;
-                    var newRow = `<tr>
-                        <td>${rowCount}</td>
-                        <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                    </tr>`;
-                    $('#Norma_Codigo tbody').append(newRow);
+            function updateRowNumbers() {
+                $('#Norma_Codigo tbody tr').each(function(index) {
+                    $(this).find('td:first').text(index + 1);
                 });
+                rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
+            }
 
-                $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                    var row = $(this).closest('tr');
-                    var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
-
-                    Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "¡De Eliminarlo!",
-                        icon: 'error',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, eliminarlo!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            if (id) {
-                                // Si la fila tiene un ID, realizar la eliminación en el servidor
-                                $.ajax({
-                                    url: '/Eliminar/NormaCodigo/Tabla/' + id,
-                                    type: 'DELETE',
-                                    data: {
-                                        _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
-                                    },
-                                    success: function(response) {
-                                        row.remove();
-                                        updateRowNumbers();
-                                        Swal.fire(
-                                            'Eliminado!',
-                                            'El registro ha sido eliminado.',
-                                            'success'
-                                        );
-                                    },
-                                    error: function(xhr) {
-                                        Swal.fire(
-                                            'Error!',
-                                            'Hubo un problema al eliminar el registro.',
-                                            'error'
-                                        );
-                                    }
-                                });
-                            } else {
-                                // Si la fila no tiene un ID, simplemente eliminarla del DOM
-                                row.remove();
-                                updateRowNumbers();
-                                Swal.fire(
-                                    'Eliminado!',
-                                    'El registro ha sido eliminado.',
-                                    'success'
-                                );
-                            }
-                        }
-                    });
-                });
+            $('#addRowBtn').click(function() {
+                rowCount++;
+                var newRow = `<tr>
+                    <td>${rowCount}</td>
+                    <td><input type="text" class="form-control" name="Norma_Codigo[new_${rowCount}]" placeholder="Codigo o Norma Aplicable" required></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                </tr>`;
+                $('#Norma_Codigo tbody').append(newRow);
             });
 
+            $('#Norma_Codigo').on('click', '.btnEliminar', function() {
+                var row = $(this).closest('tr');
+                var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Se Eliminarán los Formatos Relacionados a esta Norma!",
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminarlo!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (id) {
+                            // Si la fila tiene un ID, realizar la eliminación en el servidor
+                            $.ajax({
+                                url: '/Eliminar/NormaCodigo/Tabla/' + id,
+                                type: 'DELETE',
+                                data: {
+                                    _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                                },
+                                success: function(response) {
+                                    row.remove();
+                                    updateRowNumbers();
+                                    Swal.fire(
+                                        'Eliminado!',
+                                        'Norma y formatos eliminados correctamente.',
+                                        'success'
+                                    );
+                                },
+                                error: function(xhr) {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Hubo un problema al eliminar la Norma y formatos.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        } else {
+                            // Si la fila no tiene un ID, simplemente eliminarla del DOM
+                            row.remove();
+                            updateRowNumbers();
+                            Swal.fire(
+                                'Eliminado!',
+                                'El registro ha sido eliminado.',
+                                'success'
+                            );
+                        }
+                    }
+                });
+            });
+        });
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {

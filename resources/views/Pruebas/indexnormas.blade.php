@@ -31,7 +31,7 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Norma</th>
+                        <th>Norma o Codigo Aplicable</th>
                         <th>Editar Formato</th>
                         <th>Eliminar</th>
                     </tr>
@@ -47,7 +47,7 @@
 
 
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarPrueba" idNorma_codigo="{{$NC->idNorma_codigo}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarNorma" idNorma_codigo="{{$NC->idNorma_codigo}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -109,46 +109,47 @@ let table = new DataTable('#tablaJs', {
 });
 
 
-    $(document).on("click", ".btnEliminarPrueba", function() {
-        var idOC = $(this).attr("idPrueba");
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/OC/eliminar/' + idOC,
-
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: "Eliminado!",
-                                text: response.message,
-                                icon: "success",
-                                didClose: function() {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Swal.fire("Error!", response.message, "error");
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+$(document).on("click", ".btnEliminarNorma", function() {
+    var id = $(this).attr("idNorma_codigo");
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        text: "¡Se Eliminarán los Formatos Relacionados a esta Norma!",
+        icon: 'error',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Eliminar/NormaCodigo/Tabla/' + id,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Eliminado!",
+                            text: response.message,
+                            icon: "success",
+                            didClose: function() {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire("Error!", response.message, "error");
                     }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+                },
+                error: function() {
+                    Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
     });
+});
 </script>
 
 @endsection

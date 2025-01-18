@@ -114,9 +114,11 @@ let table = new DataTable('#tablaJs', {
 
 
     $(document).on("click", ".btnEliminarPrueba", function() {
-        var idOC = $(this).attr("idPrueba");
+        var idPrueba = $(this).attr("idPrueba");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
+            text: "¡Se Eliminarán las Normas y Formatos Relacionados a esta Prueba!",
+            icon: 'error',
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
@@ -124,7 +126,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/OC/eliminar/' + idOC,
+                    url: '/Eliminar/Prueba/Tabla/' + idPrueba,
 
                     type: 'DELETE',
                     data: {

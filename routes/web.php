@@ -76,8 +76,14 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Pruebas/Normas_Aplicables/normas/{id}', [PruebaController::class, 'editnormas'])->name('Pruebas.Normas_Aplicables.normas');
         /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
         Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
+        /*Ruta del botón del eliminar de la vista Prueba\editformatos.blade */
+        Route::delete('/Eliminar/Formato/Tabla/{id}', [PruebaController::class, 'destroyFormato'])->name('Eliminar.Formato.Tabla');
+        /*Ruta del botón del eliminar del index de Pruebas Registradas index.blade */
+        Route::delete('/Eliminar/Prueba/Tabla/{id}', [PruebaController::class, 'destroyPrueba'])->name('Eliminar.Prueba.Tabla');
         /*Rutas de Vistas Pruebas/Norma_Codigo/Formatos*/
         Route::get('/Pruebas/Norma_Codigo/Formatos/edit/{id}', [PruebaController::class, 'editformatos'])->name('Pruebas.Norma_Codigo.Formatos.edit');
+        /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
+        Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
         /*Menu de Servicios-Pruebas */
         Route::get('/Servicios-Pruebas', [PruebaController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
 
