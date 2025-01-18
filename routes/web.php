@@ -72,8 +72,18 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
         /*Ruta de Actualizar Prueba/Norma_Codigo*/
         Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        /*Ruta la vista para editar la Norma Aplicable con los formatos*/
+        Route::get('/Pruebas/Normas_Aplicables/normas/{id}', [PruebaController::class, 'editnormas'])->name('Pruebas.Normas_Aplicables.normas');
         /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
         Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
+        /*Ruta del botón del eliminar de la vista Prueba\editformatos.blade */
+        Route::delete('/Eliminar/Formato/Tabla/{id}', [PruebaController::class, 'destroyFormato'])->name('Eliminar.Formato.Tabla');
+        /*Ruta del botón del eliminar del index de Pruebas Registradas index.blade */
+        Route::delete('/Eliminar/Prueba/Tabla/{id}', [PruebaController::class, 'destroyPrueba'])->name('Eliminar.Prueba.Tabla');
+        /*Rutas de Vistas Pruebas/Norma_Codigo/Formatos*/
+        Route::get('/Pruebas/Norma_Codigo/Formatos/edit/{id}', [PruebaController::class, 'editformatos'])->name('Pruebas.Norma_Codigo.Formatos.edit');
+        /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
+        Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
         /*Menu de Servicios-Pruebas */
         Route::get('/Servicios-Pruebas', [PruebaController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
 
@@ -105,6 +115,10 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
     /*Ruta /Obtener/CantidadAlmacen/ de la vista create de equipos(Kits) y editkits*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
+    
+    /*manifiestos*/
+    /*Ruta para ver el manifiesto PDF*/
+    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
     /*EQUIPOS INVENTARIO-REGISTRO*/
@@ -226,9 +240,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*SOLICITAR RECURSOS*/
     Route::get('solicitar_recursos/create', [SolicitudRecursosController::class, 'create'])->name('solicitar_recursos.create');
 
-    /*manifiestos*/
-    /*Ruta para ver el manifiesto PDF*/
-    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
+
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
 
     /*CLIENTES*/

@@ -13,7 +13,8 @@ class formato extends Model
     
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
-        'idNorma_Codigo',
+        'idFormato',
+        'idNorma_codigo',
         'idPrueba',
         'Nombre',
     ];

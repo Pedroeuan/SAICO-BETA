@@ -13,7 +13,7 @@ class norma_codigo extends Model
     
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
-        'idNorma_codigo',
+        //'idNorma_codigo',
         'idPrueba',
         'Nombre',
     ];

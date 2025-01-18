@@ -45,43 +45,43 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición del Tipo de Prueba y Norma o codigo Aplicable</h3>
+<h3 align="center">Edición de la Norma o codigo Aplicable y Formato</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo" action="{{ route('Pruebas.Norma_Codigo.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                            <form id="Prueba_Norma_Codigo_Formato" action="{{ route('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="row justify-content-center">
                                         <div class="col-sm-4">
                                             <div class="form-group text-center">
-                                                <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                                <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ $Prueba->Nombre }}" style="text-align: center;">
-                                                @error('Tipo_Prueba')
+                                                <label class="col-form-label" for="Norma_Codigo">Norma o Codigo</label>
+                                                <input class="form-control inputForm @error('Norma_Codigo') is-invalid @enderror" name="Norma_Codigo" id="Norma_Codigo" type="text" value="{{ $Norma_Codigo->Nombre }}" style="text-align: center;">
+                                                @error('Norma_Codigo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Formato</button>
 
-                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
+                                    <table id="Formato" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Norma o Codigo Aplicable</th>
+                                                <th>Formato</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         @php $count = 0; @endphp
-                                        @foreach ($Norma_Codigo as $NC)
+                                        @foreach ($Formatos as $Formato)
                                         @php $count++; @endphp
-                                        <tr id="row-{{ $NC->idNorma_codigo }}">
+                                        <tr id="row-{{ $Formato->idFormato }}">
                                                 <td>{{ $count }}</td>
-                                                <td><input type="text" class="form-control" name="Norma_Codigo[{{ $NC->idNorma_codigo }}]" value="{{ $NC->Nombre ?? 'N/A' }}"></td>
+                                                <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                         @endforeach
@@ -130,82 +130,83 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-        $(document).ready(function() {
-            var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
+            $(document).ready(function() {
+                var rowCount = $('#Formato tbody tr').length; // Inicializar con el número de filas existentes
 
-            function updateRowNumbers() {
-                $('#Norma_Codigo tbody tr').each(function(index) {
-                    $(this).find('td:first').text(index + 1);
+                function updateRowNumbers() {
+                    $('#Formato tbody tr').each(function(index) {
+                        $(this).find('td:first').text(index + 1);
+                    });
+                    rowCount = $('#Formato tbody tr').length; // Actualizar rowCount
+                }
+
+                $('#addRowBtn').click(function() {
+                    rowCount++;
+                    var newRow = `<tr>
+                        <td>${rowCount}</td>
+                        <td><input type="text" class="form-control" name="Formato[new_${rowCount}]" placeholder="Formato" required></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                    </tr>`;
+                    $('#Formato tbody').append(newRow);
                 });
-                rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
-            }
 
-            $('#addRowBtn').click(function() {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="Norma_Codigo[new_${rowCount}]" placeholder="Codigo o Norma Aplicable" required></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
-                $('#Norma_Codigo tbody').append(newRow);
-            });
+                $('#Formato').on('click', '.btnEliminar', function() {
+                    var row = $(this).closest('tr');
+                    var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
 
-            $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                var row = $(this).closest('tr');
-                var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
-
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "¡Se Eliminarán los Formatos Relacionados a esta Norma!",
-                    icon: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, eliminarlo!',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (id) {
-                            // Si la fila tiene un ID, realizar la eliminación en el servidor
-                            $.ajax({
-                                url: '/Eliminar/NormaCodigo/Tabla/' + id,
-                                type: 'DELETE',
-                                data: {
-                                    _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
-                                },
-                                success: function(response) {
-                                    row.remove();
-                                    updateRowNumbers();
-                                    Swal.fire(
-                                        'Eliminado!',
-                                        'Norma y formatos eliminados correctamente.',
-                                        'success'
-                                    );
-                                },
-                                error: function(xhr) {
-                                    Swal.fire(
-                                        'Error!',
-                                        'Hubo un problema al eliminar la Norma y formatos.',
-                                        'error'
-                                    );
-                                }
-                            });
-                        } else {
-                            // Si la fila no tiene un ID, simplemente eliminarla del DOM
-                            row.remove();
-                            updateRowNumbers();
-                            Swal.fire(
-                                'Eliminado!',
-                                'El registro ha sido eliminado.',
-                                'success'
-                            );
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "¡De Eliminarlo!",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminarlo!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (id) {
+                                // Si la fila tiene un ID, realizar la eliminación en el servidor
+                                $.ajax({
+                                    url: '/Eliminar/Formato/Tabla/' + id,
+                                    type: 'DELETE',
+                                    data: {
+                                        _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                                    },
+                                    success: function(response) {
+                                        row.remove();
+                                        updateRowNumbers();
+                                        Swal.fire(
+                                            'Eliminado!',
+                                            'El registro ha sido eliminado.',
+                                            'success'
+                                        );
+                                    },
+                                    error: function(xhr) {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Hubo un problema al eliminar el registro.',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            } else {
+                                // Si la fila no tiene un ID, simplemente eliminarla del DOM
+                                row.remove();
+                                updateRowNumbers();
+                                Swal.fire(
+                                    'Eliminado!',
+                                    'El registro ha sido eliminado.',
+                                    'success'
+                                );
+                            }
                         }
-                    }
+                    });
                 });
             });
-        });
+
     /*Prevenir el Enter*/
-    document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
+    document.getElementById('Prueba_Norma_Codigo_Formato').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
