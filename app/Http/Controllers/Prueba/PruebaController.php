@@ -18,25 +18,11 @@ class PruebaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexMenuServicios()
-    {
-        return view('Pruebas.pruebas');
-    }
-
     public function indexPruebas()
     {
         $Pruebas = prueba::with('norma_codigo.formato')->get();
         return view('Pruebas.index',compact('Pruebas'));
     }
-
-    public function Servicios_Pruebas(Request $request)
-    {
-        // Obtener el nombre del servicio de los parámetros de la URL
-        $servicio = $request->query('servicio');
-    
-        // Pasar el nombre del servicio a la vista
-        return view('Pruebas.Servicios', ['servicio' => $servicio]);
-    }    
 
     /**
      * Show the form for creating a new resource.
