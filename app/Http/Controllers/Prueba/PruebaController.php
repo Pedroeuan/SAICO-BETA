@@ -189,12 +189,8 @@ class PruebaController extends Controller
             }
         }
 
-        $Prueba = prueba::where('idPrueba', $idPrueba)->first();
-        $Norma_Codigo = norma_codigo::where('idPrueba',$idPrueba)->get();
-
-        //return view('Pruebas.indexnormas', compact('id','Prueba','Norma_Codigo'));
-
-        return redirect()->route('Pruebas.indexnormas');
+        // Redirigir a una ruta específica con el parámetro $idPrueba
+        return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
 
     }
 
