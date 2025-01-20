@@ -298,14 +298,31 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-function redirectToView(element) {
-    // Obtener el nombre del servicio del atributo data-name
-    const serviceName = element.getAttribute('data-name');
+    function redirectToView(element) {
+        // Capturamos el valor del atributo data-name del SVG
+        const serviceName = element.getAttribute('data-name');
 
-    // Redirigir a una nueva vista con el nombre como parámetro en la URL
-    const url = `/Servicios-Pruebas?servicio=${encodeURIComponent(serviceName)}`;
-    window.location.href = url;
-}
+        // Preparamos los datos que enviaremos en la solicitud POST
+        const data = { service: serviceName };
+
+        // Enviamos la solicitud POST con Fetch API
+        fetch('/Servicios-Pruebas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+                body: JSON.stringify(data), // Convierte los datos a JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+    }
+
 
 </script>
 

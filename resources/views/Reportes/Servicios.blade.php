@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Servicio')
 
 @section('css')
 <!--datatable -->
@@ -52,7 +52,7 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="Reporte" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
 
@@ -60,28 +60,13 @@
                                     <div class="col-sm-4">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ old('Tipo_Prueba') }}">
+                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ $servicio }}">
                                             @error('Tipo_Prueba')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
                                 </div>
-
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
-
-                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Norma o Codigo Aplicable</th>
-                                                    <th>Eliminar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
-                                    </table>
                                     
                                     <p>
                                     <p>
@@ -127,34 +112,9 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-$(document).ready(function() {
-        var rowCount = 0;
-
-        function updateRowNumbers() {
-            $('#Norma_Codigo tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#Norma_Codigo tbody tr').length;
-        }
-
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow =`<tr>
-            <td>${rowCount}</td>
-            <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#Norma_Codigo tbody').append(newRow);
-        });
-
-        $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
 
     /*Prevenir el Enter*/
-    document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
+    document.getElementById('Reporte').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }

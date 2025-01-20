@@ -30,6 +30,7 @@ use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
+use App\Http\Controllers\Reporte\ReporteController;
 
 
     Route::get('/', function () {
@@ -60,8 +61,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
         /*vista Page welcome*/
         Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
-        /*Vista Menu Servicios*/
-        Route::get('/Menu/Servicios', [PruebaController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+
+        /*PRUEBAS*/
         /*Vista Menu Pruebas*/
         Route::get('/index/Pruebas', [PruebaController::class, 'indexPruebas'])->name('index.Pruebas');
         /*vista Pruebas, Norma. Codio y Formato*/
@@ -84,8 +85,12 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Pruebas/Norma_Codigo/Formatos/edit/{id}', [PruebaController::class, 'editformatos'])->name('Pruebas.Norma_Codigo.Formatos.edit');
         /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
         Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
+
+        /*REPORTES*/
+        /*Vista Menu Servicios*/
+        Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Menu de Servicios-Pruebas */
-        Route::get('/Servicios-Pruebas', [PruebaController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
+        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
 
         //});
     });
