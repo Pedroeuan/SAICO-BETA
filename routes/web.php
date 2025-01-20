@@ -90,7 +90,7 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Menu de Servicios-Pruebas */
-        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
+        Route::get('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
 
         //});
     });

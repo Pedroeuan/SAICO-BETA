@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
+
 class ReporteController extends Controller
 {
     /**
@@ -23,14 +24,13 @@ class ReporteController extends Controller
 
     public function Servicios_Pruebas(Request $request)
     {
-        $servicio = $request->input('servicio');
+        // Captura el nombre del servicio
+        $servicio = $request->query('serviceName');
 
-        // Devuelve un JSON válido
-        return response()->json([
-            'success' => true,
-            'message' => 'Solicitud procesada correctamente',
-            'servicio' => $servicio,
-        ]);
+
+        // Lógica según el servicio seleccionado
+        return view('Reportes.Servicios', compact('servicio'));
+
     }    
 
     /**
