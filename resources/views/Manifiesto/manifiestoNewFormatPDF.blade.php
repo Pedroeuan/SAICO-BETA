@@ -292,13 +292,14 @@
                                     <th class="" style="width: 4%;">No.</th>
                                     <th class="" style="width: 4%;">Cantidad</th>
                                     <th class="" style="width: 4%;">Unidad</th>
-                                    <th class="" style="width: 25%;">Descripción</th>
+                                    <th class="" style="width: 20%;">Descripción</th>
                                     <th class="" style="width: 10%;">No. ECO</th>
                                     <th class="">No. De Serie</th>
                                     <th class="">Marca</th>
                                     <th class="">Modelo</th>
                                     <th class="">SAT</th>
                                     <th class="">BMPRO</th>
+                                    <th class="">NOTA</th>
                                 </tr>
                             @else
                                 <tr class="celdaAzul">
@@ -335,6 +336,7 @@
                                                     <td class="">{{ $general->Modelo ?? 'N/A' }}</td>
                                                     <td class="">{{ $general->SAT ?? 'N/A' }}</td>
                                                     <td class="">{{ $general->BMPRO ?? 'N/A' }}</td>
+                                                    <td class="">{{ $general->Comentario ?? 'N/A' }}</td>
                                                 </tr>
                                             @else
                                                 <tr>
@@ -358,6 +360,7 @@
                         @for($i = $contador; $i <= $minFilas; $i++)
                             <tr>
                                 @if($Manifiesto->SATBMPRO == 'SI')
+                                    <td class="">----</td>
                                     <td class="">----</td>
                                     <td class="">----</td>
                                     <td class="">----</td>
