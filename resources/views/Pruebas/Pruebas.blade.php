@@ -17,7 +17,7 @@
         transform: scale(1.1);
     }
 </style>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('content')
@@ -65,15 +65,15 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="METALOGRAFIA"
-                    data-name="METALOGRAFIA"
+                    role="img" aria-label="METALOGRAFÍA"
+                    data-name="METALOGRAFÍA"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>METALOGRAFIA</title>
+                    <title>METALOGRAFÍA</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFIA</text>
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFÍA</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
@@ -97,15 +97,15 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="TERMOGRAFIA" 
-                    data-name="TERMOGRAFIA"
+                    role="img" aria-label="TERMOGRAFÍA" 
+                    data-name="TERMOGRAFÍA"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>TERMOGRAFIA</title>
+                    <title>TERMOGRAFÍA</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFIA</text>
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFÍA</text>
                 </svg>
 
         </div>
@@ -298,15 +298,39 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-function redirectToView(element) {
-    // Obtiene el valor del atributo 'data-name'
-    const serviceName = element.getAttribute('data-name');
-    
-    // Redirige a la ruta del controlador con el parámetro
-    const url = `/Servicios-Pruebas?serviceName=${encodeURIComponent(serviceName)}`;
-    window.location.href = url;
-}
+    function redirectToView(element) {
+        // Capturamos el valor del atributo data-name del SVG
+        const serviceName = element.getAttribute('data-name');
 
+        // Preparamos los datos que enviaremos en la solicitud POST
+        const data = { service: serviceName };
+        //console.log('Datos a enviar:', data);
+
+        // Enviamos la solicitud POST con Fetch API
+        fetch('/Servicios-Pruebas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify(data), // Convierte los datos a JSON
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data) {
+                console.log('Respuesta del servidor:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
+    }
 
 </script>
 

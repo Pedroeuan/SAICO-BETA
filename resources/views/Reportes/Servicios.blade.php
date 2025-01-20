@@ -52,22 +52,38 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Reporte" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="Seleccion" action="" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
 
-                                <div class="row justify-content-center">
-                                    <div class="col-sm-4">
-                                        <div class="form-group text-center">
-                                            <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ $servicio }}">
-                                            @error('Tipo_Prueba')
-                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Pruebas</label>
+                                        <select class="form-control inputForm" name="Prueba" id="PruebaSelect" required>
+                                            <option value="">Seleccione una Prueba</option>
+                                            @foreach ($Pruebas as $Prueba)
+                                                <option value="{{ $Prueba->idPrueba }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                    {{ $Prueba->Nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('Prueba')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
                                     </div>
                                 </div>
-                                    
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Norma Código</label>
+                                        <select class="form-control inputForm" name="NormaCodigo" id="NormaCodigoSelect" required>
+                                        </select>
+                                        @error('NormaCodigo')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                                                    
                                     <p>
                                     <p>
                                     <div class="container">
@@ -114,10 +130,45 @@
 
 
     /*Prevenir el Enter*/
-    document.getElementById('Reporte').addEventListener('keydown', function(event) {
+    document.getElementById('Seleccion').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const pruebaSelect = document.getElementById('PruebaSelect');
+    const normaSelect = document.getElementById('NormaCodigoSelect');
+
+        pruebaSelect.addEventListener('change', function () {
+            const pruebaId = this.value;
+
+            // Limpia las opciones del segundo select
+            normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+
+            if (pruebaId) {
+                fetch(`/Obtener/normas/${pruebaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(norma => {
+                                const option = document.createElement('option');
+                                option.value = norma.idPrueba; // Ajusta el campo según la estructura de tu modelo
+                                option.textContent = norma.Nombre; // Ajusta según lo que quieras mostrar
+                                normaSelect.appendChild(option);
+                            });
+                        } else {
+                            normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener las normas:', error));
+            }
+        });
+
+                // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
+                if (pruebaSelect.value) {
+            pruebaSelect.dispatchEvent(new Event('change'));
+        }
     });
 
     </script>
