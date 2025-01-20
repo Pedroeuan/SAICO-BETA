@@ -145,7 +145,7 @@ class NotificacionController extends Controller
                 // Crear notificaciones para todos los usuarios con los roles especificados
                 foreach ($usuarios as $usuario){
                 // Verificar si la notificación ya existe
-                $notificacionExistente = Notificacion::where('users_id', $user->id)
+                $notificacionExistente = Notificacion::where('users_id', $usuario->id)
                     ->where('Mensaje_Corto', $mensajeCorto)
                     ->where('Mensaje_Largo', $mensajeLargo)
                     ->first();
@@ -154,7 +154,7 @@ class NotificacionController extends Controller
                     {
                         // Crear la notificación solo si no existe
                         $notificacion = new Notificacion();
-                        $notificacion->users_id = $user->id;
+                        $notificacion->users_id = $usuario->id;
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
