@@ -34,6 +34,7 @@
                     width="100%" height="200" 
                     role="img" aria-label="ANÁLISIS QUÍMICO" 
                     data-name="ANÁLISIS QUÍMICO"
+                    data-img="{{ asset('images/MenuServicios/ANALISIS_QUIMICO.png') }}"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     
@@ -51,6 +52,7 @@
                     width="100%" height="200" 
                     role="img" aria-label="CORRIENTES EDDY"
                     data-name="CORRIENTES EDDY"
+                    data-img="{{ asset('images/MenuServicios/CORRIENTES_EDDY.png') }}"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
