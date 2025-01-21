@@ -48,6 +48,11 @@ class ReporteController extends Controller
         return response()->json($normas); // Devuelve las normas como JSON
     }
 
+    public function ObtenerFormatos($id)
+    {
+        $formatos = formato::where('idPrueba', $id)->get();
+        return response()->json($formatos);
+    }
 
     /**
      * Show the form for creating a new resource.

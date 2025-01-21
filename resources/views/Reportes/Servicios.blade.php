@@ -58,7 +58,7 @@
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="inputSuccess">Pruebas</label>
+                                        <label class="col-form-label" for="inputSuccess">Prueba</label>
                                         <select class="form-control inputForm" name="Prueba" id="PruebaSelect" required>
                                             <option value="">Seleccione una Prueba</option>
                                             @foreach ($Pruebas as $Prueba)
@@ -75,10 +75,21 @@
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="inputSuccess">Norma Código</label>
+                                        <label class="col-form-label" for="inputSuccess">Norma o Código</label>
                                         <select class="form-control inputForm" name="NormaCodigo" id="NormaCodigoSelect" required>
                                         </select>
                                         @error('NormaCodigo')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Formato</label>
+                                        <select class="form-control inputForm" name="Formato" id="FormatoSelect" required>
+                                        </select>
+                                        @error('Formato')
                                             <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                                         @enderror
                                     </div>
@@ -136,15 +147,18 @@
             }
     });
 
+
     document.addEventListener('DOMContentLoaded', function () {
-    const pruebaSelect = document.getElementById('PruebaSelect');
-    const normaSelect = document.getElementById('NormaCodigoSelect');
+        const pruebaSelect = document.getElementById('PruebaSelect');
+        const normaSelect = document.getElementById('NormaCodigoSelect');
+        const formatoSelect = document.getElementById('FormatoSelect');
 
         pruebaSelect.addEventListener('change', function () {
             const pruebaId = this.value;
 
             // Limpia las opciones del segundo select
             normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
             if (pruebaId) {
                 fetch(`/Obtener/normas/${pruebaId}`)
@@ -153,8 +167,8 @@
                         if (data.length > 0) {
                             data.forEach(norma => {
                                 const option = document.createElement('option');
-                                option.value = norma.idPrueba; // Ajusta el campo según la estructura de tu modelo
-                                option.textContent = norma.Nombre; // Ajusta según lo que quieras mostrar
+                                option.value = norma.idPrueba; 
+                                option.textContent = norma.Nombre;
                                 normaSelect.appendChild(option);
                             });
                         } else {
@@ -165,8 +179,33 @@
             }
         });
 
-                // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
-                if (pruebaSelect.value) {
+        normaSelect.addEventListener('change', function () {
+            const normaId = this.value;
+
+            // Limpia las opciones del tercer select
+            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+            if (normaId) {
+                fetch(`/Obtener/formatos/${normaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(formato => {
+                                const option = document.createElement('option');
+                                option.value = formato.idPrueba;
+                                option.textContent = formato.Nombre; 
+                                formatoSelect.appendChild(option);
+                            });
+                        } else {
+                            formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener los formatos:', error));
+            }
+        });
+
+        // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
+        if (pruebaSelect.value) {
             pruebaSelect.dispatchEvent(new Event('change'));
         }
     });

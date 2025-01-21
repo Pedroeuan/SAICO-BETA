@@ -95,6 +95,8 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios.Pruebas');
         /*Obtiene las Normas segun La prueba del select*/
         Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
+        /*Obtiene los Formatos segun La prueba del select*/
+        Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
 
 
         //});
