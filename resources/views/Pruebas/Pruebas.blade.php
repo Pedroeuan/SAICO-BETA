@@ -80,18 +80,18 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
-                    <svg class="bd-placeholder-img card-img-top expansive-effect"
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="PRECALENTAMIENTO"
-                    data-name="PRECALENTAMIENTO"
+                    role="img" aria-label="ULTRASONIDO" 
+                    data-name="ULTRASONIDO"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>PRECALENTAMIENTO</title>
+                    <title>ULTRASONIDO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PRECALENTAMIENTO</text>
+                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
@@ -126,7 +126,7 @@
 
                     <title>ARREGLO DE FASES</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ARREGLO DE FASES</text>
                 </svg>
 
@@ -177,15 +177,15 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="ULTRASONIDO" 
-                    data-name="ULTRASONIDO"
+                    role="img" aria-label="OTROS" 
+                    data-name="OTROS"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>ULTRASONIDO</title>
+                    <title>OTROS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
+                    <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
                 </svg>
         </div>
 
@@ -203,7 +203,7 @@
 
                     <title>CARACTERIZACIÓN DE MATERIALES</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CARACTERIZACIÓN DE MATERIALES</text>
                 </svg>
 
@@ -255,21 +255,6 @@
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
                 </svg>
 
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
-
-                    width="100%" height="200" 
-                    role="img" aria-label="OTROS" 
-                    data-name="OTROS"
-                    onclick="redirectToView(this)"
-                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-
-                    <title>OTROS</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
-                </svg>
         </div>
 
 
