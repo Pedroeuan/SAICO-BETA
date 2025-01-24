@@ -90,7 +90,14 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Menu de Servicios-Pruebas */
-        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios-Pruebas');
+        Route::get('/Seleccion-Servicios-Pruebas', [ReporteController::class, 'Seleccion_Servicios_Pruebas'])->name('Seleccion.Servicios.Pruebas');
+        /*Controlador para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/
+        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios.Pruebas');
+        /*Obtiene las Normas segun La prueba del select*/
+        Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
+        /*Obtiene los Formatos segun La prueba del select*/
+        Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
+
 
         //});
     });

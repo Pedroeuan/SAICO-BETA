@@ -17,7 +17,7 @@
         transform: scale(1.1);
     }
 </style>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('content')
@@ -34,12 +34,13 @@
                     width="100%" height="200" 
                     role="img" aria-label="ANÁLISIS QUÍMICO" 
                     data-name="ANÁLISIS QUÍMICO"
+                    data-img="{{ asset('images/MenuServicios/ANALISIS_QUIMICO.png') }}"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     
                     <title>ANÁLISIS QUÍMICO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" 
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ANALISIS_QUIMICO.svg') }}" 
                         x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
                 </svg>
@@ -51,12 +52,13 @@
                     width="100%" height="200" 
                     role="img" aria-label="CORRIENTES EDDY"
                     data-name="CORRIENTES EDDY"
+                    data-img="{{ asset('images/MenuServicios/CORRIENTES_EDDY.png') }}"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
                     <title>CORRIENTES EDDY</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CORRIENTES EDDY</text>
                 </svg>
 
@@ -65,31 +67,15 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="METALOGRAFIA"
-                    data-name="METALOGRAFIA"
+                    role="img" aria-label="METALOGRAFÍA"
+                    data-name="METALOGRAFÍA"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>METALOGRAFIA</title>
+                    <title>METALOGRAFÍA</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFIA</text>
-                </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                    <svg class="bd-placeholder-img card-img-top expansive-effect"
-
-                    width="100%" height="200" 
-                    role="img" aria-label="PRECALENTAMIENTO"
-                    data-name="PRECALENTAMIENTO"
-                    onclick="redirectToView(this)"
-                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-
-                    <title>PRECALENTAMIENTO</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PRECALENTAMIENTO</text>
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFÍA</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
@@ -97,15 +83,31 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="TERMOGRAFIA" 
-                    data-name="TERMOGRAFIA"
+                    role="img" aria-label="ULTRASONIDO" 
+                    data-name="ULTRASONIDO"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>TERMOGRAFIA</title>
+                    <title>ULTRASONIDO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFIA</text>
+                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="TERMOGRAFÍA" 
+                    data-name="TERMOGRAFÍA"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                    <title>TERMOGRAFÍA</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFÍA</text>
                 </svg>
 
         </div>
@@ -124,7 +126,7 @@
 
                     <title>ARREGLO DE FASES</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ARREGLO DE FASES</text>
                 </svg>
 
@@ -175,15 +177,15 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="ULTRASONIDO" 
-                    data-name="ULTRASONIDO"
+                    role="img" aria-label="OTROS" 
+                    data-name="OTROS"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>ULTRASONIDO</title>
+                    <title>OTROS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
+                    <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
                 </svg>
         </div>
 
@@ -201,7 +203,7 @@
 
                     <title>CARACTERIZACIÓN DE MATERIALES</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CARACTERIZACIÓN DE MATERIALES</text>
                 </svg>
 
@@ -233,7 +235,7 @@
                     
                     <title>PMI</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PMI</text>
                 </svg>
 
@@ -253,21 +255,6 @@
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
                 </svg>
 
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
-
-                    width="100%" height="200" 
-                    role="img" aria-label="OTROS" 
-                    data-name="OTROS"
-                    onclick="redirectToView(this)"
-                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-
-                    <title>OTROS</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/OTROS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
-                </svg>
         </div>
 
 
@@ -304,6 +291,7 @@
 
         // Preparamos los datos que enviaremos en la solicitud POST
         const data = { service: serviceName };
+        //console.log('Datos a enviar:', data);
 
         // Enviamos la solicitud POST con Fetch API
         fetch('/Servicios-Pruebas', {
@@ -312,17 +300,24 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             },
-                body: JSON.stringify(data), // Convierte los datos a JSON
-            })
-            .then(response => response.json())
-            .then(data => {
+            body: JSON.stringify(data), // Convierte los datos a JSON
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data) {
                 console.log('Respuesta del servidor:', data);
-            })
-            .catch(error => {
-                console.error('Error en la solicitud:', error);
-            });
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
     }
-
 
 </script>
 
