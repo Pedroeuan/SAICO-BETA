@@ -224,6 +224,9 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::get('/solicitudplusvista/edit/{id}', [SolicitudesController::class, 'editplusvista'])->name('solicitudplusvista.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
+    /* */
+    Route::get('/solicitudindex/solicitud/', [SolicitudesController::class, 'SolicitudIndex'])->name('solicitud.solicitudindex');
+
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
