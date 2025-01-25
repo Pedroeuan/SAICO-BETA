@@ -97,6 +97,8 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
         /*Obtiene los Formatos segun La prueba del select*/
         Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
+        /*Rutas de Vistas del index de Solicitudes para seleccionar manifiesto*/
+        Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
 
 
         //});

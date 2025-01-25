@@ -52,7 +52,7 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Seleccion" action="" method="post" enctype="multipart/form-data">
+                            <form id="Seleccion" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
 

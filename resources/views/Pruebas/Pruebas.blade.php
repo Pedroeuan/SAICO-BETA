@@ -40,7 +40,7 @@
                     
                     <title>ANÁLISIS QUÍMICO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ANALISIS_QUIMICO.svg') }}" 
+                    <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" 
                         x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
                 </svg>
@@ -58,7 +58,7 @@
 
                     <title>CORRIENTES EDDY</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CORRIENTES EDDY</text>
                 </svg>
 
@@ -74,7 +74,7 @@
 
                     <title>METALOGRAFÍA</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFÍA</text>
                 </svg>
 
@@ -90,7 +90,7 @@
 
                     <title>ULTRASONIDO</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
                 </svg>
 
@@ -106,7 +106,7 @@
 
                     <title>TERMOGRAFÍA</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFÍA</text>
                 </svg>
 
@@ -126,7 +126,7 @@
 
                     <title>ARREGLO DE FASES</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ARREGLO DE FASES</text>
                 </svg>
 
@@ -168,7 +168,7 @@
                 <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     <title>RADIOGRAFIA</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
                 </svg>
 
@@ -203,7 +203,7 @@
 
                     <title>CARACTERIZACIÓN DE MATERIALES</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CARACTERIZACIÓN DE MATERIALES</text>
                 </svg>
 
@@ -235,7 +235,7 @@
                     
                     <title>PMI</title>
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PMI</text>
                 </svg>
 
@@ -251,7 +251,7 @@
 
                     <title>RELEVADO DE ESFUERZOS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/Nueva carpeta/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
                 </svg>
 
