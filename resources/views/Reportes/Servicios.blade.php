@@ -52,6 +52,8 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
+{{--                             <form id="Seleccion" action="{{ route('solicitudes.updateSolicitud', ['id' => $Solicitud->idSolicitud]) }}" method="post" enctype="multipart/form-data">
+ --}}
                             <form id="Seleccion" action="" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
@@ -131,7 +133,7 @@
                                     <p>
                                     <div class="container">
                                         <div class="float-right">
-                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                            <a href="{{ route('solicitud.solicitudindex') }}"  class="btn btn-success" role="button">Guardar y continuar</a>
                                         </div>
 
                                         <!--<div class="float-left">
