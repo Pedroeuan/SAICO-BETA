@@ -457,17 +457,7 @@ return [
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-                        'url' => '/Menu/Servicios',
-                    ],
-                    [
-                        'text' => 'Registro de Pruebas',
-                        'icon' => 'fas fa-indent',
-                        'url' => '/Pruebas/Create',
-                    ],
-                    [
-                        'text' => 'Pruebas',
-                        'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
                     ],
                     /* [
                         'text' => 'level_one',
@@ -523,12 +513,12 @@ return [
                     [
                         'text' => 'Registro OC',
                         'icon' => 'fas fa-chart-line',
-                        'url' => '/OC/createOC',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Ordenes de Compras',
                         'icon' => 'fas fa-clipboard-list',
-                        'url' => '/OC/indexOC',
+                        'url' => '/Page_In_Construction',
                     ],
                     /*[
                         'text' => '',
