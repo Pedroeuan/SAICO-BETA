@@ -33,22 +33,12 @@ class ReporteController extends Controller
         $normaCodigo = $request->input('NormaCodigo');
         $formato = $request->input('Formato');
 
-        // Obtener el usuario autenticado
-        //$user = Auth::user();
-        // Obtener el nombre del usuario
-        /*$Nombre = $user->name;
-        $rol = Auth::user()->rol;
 
-        if($rol == 'Técnicos')
-        {
-            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
-        }
-        else
-        {*/
-            // Obtener todas las solicitudes
-            //$Solicitudes = Solicitudes::all();
-            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
-        //}
+        //$Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+        $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
+        ->where('Estatus', 'MANIFIESTO')
+        ->get();
+
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
         $ultimoFolioPorGrupo = [];

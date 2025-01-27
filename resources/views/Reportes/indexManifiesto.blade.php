@@ -47,27 +47,31 @@
                             <td scope="row">{{$solicitud->formatted_date}}</td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
 
-                                @if($solicitud->Estatus == 'MANIFIESTO')
-
                                     <div class="btn-group">
-
-                                    <!--PDF GENERADO-->
+                                        <!--PDF GENERADO-->
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
 
-                                        @if(!$solicitud->hidePlus)
-                                            <td>
-                                                <a href="" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
-                                            </td>
-                                        @endif 
+                                        <td>
+                                            <input type="radio" name="selectedSolicitud" value="{{ $solicitud->idSolicitud }}">
+                                        </td>
                                     </div>
-                                @endif
-
                             </tr>
                     @endforeach
                 </tbody>
             </table>
+            <p>
+            <p>
+            <div class="container">
+                <div class="float-right">
+                    <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
+                </div>
+
+                <!--<div class="float-left">
+                    <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
+                </di>-->
+            </div>
         </div>
     </div>
 </form>
