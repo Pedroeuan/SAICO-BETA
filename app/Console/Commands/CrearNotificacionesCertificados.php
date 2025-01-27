@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Admin\Usuario;
@@ -146,5 +147,6 @@ class CrearNotificacionesCertificados extends Command
         }
 
         $this->info('Notificaciones creadas exitosamente.');
+        Log::info('Notificaciones creadas exitosamente.');
     }
 }
