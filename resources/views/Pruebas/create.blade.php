@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Prueba')
 
 @section('css')
 <!--datatable -->
@@ -47,7 +47,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Pruebas</h3>
+<h3 align="center">Registro de Prueba y Norma o codigo Aplicable</h3>
 <br>
                 <section class="content">
                     <div class="card">
@@ -151,6 +151,18 @@ $(document).ready(function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
         });
+    });
+
+    $('#Prueba_Norma_Codigo').submit(function(event) {
+        if ($('#Norma_Codigo tbody tr').length === 0) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Advertencia',
+                text: 'Debe agregar al menos una norma o código aplicable.',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+        }
     });
 
     /*Prevenir el Enter*/

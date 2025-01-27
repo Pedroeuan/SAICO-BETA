@@ -30,6 +30,7 @@ use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
+use App\Http\Controllers\Reporte\ReporteController;
 
 
     Route::get('/', function () {
@@ -60,8 +61,8 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
         /*vista Page welcome*/
         Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
-        /*Vista Menu Servicios*/
-        Route::get('/Menu/Servicios', [PruebaController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+
+        /*PRUEBAS*/
         /*Vista Menu Pruebas*/
         Route::get('/index/Pruebas', [PruebaController::class, 'indexPruebas'])->name('index.Pruebas');
         /*vista Pruebas, Norma. Codio y Formato*/
@@ -72,8 +73,34 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
         Route::get('/Pruebas/Norma_Codigo/edit/{id}', [PruebaController::class, 'edit'])->name('Pruebas.Norma_Codigo.edit');
         /*Ruta de Actualizar Prueba/Norma_Codigo*/
         Route::post('/Pruebas/Norma_Codigo/update/{id}', [PruebaController::class, 'update'])->name('Pruebas.Norma_Codigo.update');
+        /*Ruta la vista para editar la Norma Aplicable con los formatos*/
+        Route::get('/Pruebas/Normas_Aplicables/normas/{id}', [PruebaController::class, 'editnormas'])->name('Pruebas.Normas_Aplicables.normas');
         /*Ruta del botón del eliminar de la vista Prueba\edit.blade */
         Route::delete('/Eliminar/NormaCodigo/Tabla/{id}', [PruebaController::class, 'destroyNormaCodigo'])->name('Eliminar.NormaCodigo.Tabla');
+        /*Ruta del botón del eliminar de la vista Prueba\editformatos.blade */
+        Route::delete('/Eliminar/Formato/Tabla/{id}', [PruebaController::class, 'destroyFormato'])->name('Eliminar.Formato.Tabla');
+        /*Ruta del botón del eliminar del index de Pruebas Registradas index.blade */
+        Route::delete('/Eliminar/Prueba/Tabla/{id}', [PruebaController::class, 'destroyPrueba'])->name('Eliminar.Prueba.Tabla');
+        /*Rutas de Vistas Pruebas/Norma_Codigo/Formatos*/
+        Route::get('/Pruebas/Norma_Codigo/Formatos/edit/{id}', [PruebaController::class, 'editformatos'])->name('Pruebas.Norma_Codigo.Formatos.edit');
+        /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
+        Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
+
+        /*REPORTES*/
+        /*Vista Menu Servicios*/
+        Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+        /*Menu de Servicios-Pruebas */
+        Route::get('/Seleccion-Servicios-Pruebas', [ReporteController::class, 'Seleccion_Servicios_Pruebas'])->name('Seleccion.Servicios.Pruebas');
+        /*Controlador para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/
+        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios.Pruebas');
+        /*Obtiene las Normas segun La prueba del select*/
+        Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
+        /*Obtiene los Formatos segun La prueba del select*/
+        Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
+        /*Rutas de Vistas del index de Solicitudes para seleccionar manifiesto*/
+        Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
+
+
         //});
     });
 
@@ -102,6 +129,10 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 
     /*Ruta /Obtener/CantidadAlmacen/ de la vista create de equipos(Kits) y editkits*/
     Route::get('/Obtener/CantidadAlmacen/{id}', [AlmacenController::class, 'obtenerCantidadAlmacen']);
+    
+    /*manifiestos*/
+    /*Ruta para ver el manifiesto PDF*/
+    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
     /*EQUIPOS INVENTARIO-REGISTRO*/
@@ -193,6 +224,9 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     Route::get('/solicitudplusvista/edit/{id}', [SolicitudesController::class, 'editplusvista'])->name('solicitudplusvista.edit');
     /*Ruta de Eliminación-de Solicitud-index*/
     Route::delete('/solicitudes/eliminar/{id}', [SolicitudesController::class, 'destroySolicitud'])->name('solicitudes.destroySolicitud');
+    /* */
+    Route::get('/solicitudindex/solicitud/', [SolicitudesController::class, 'SolicitudIndex'])->name('solicitud.solicitudindex');
+
 
     /*MANIFIESTO*/
     /*Rutas de Vistas de Solicitudes-Aprobar solicitudes*/
@@ -223,9 +257,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*SOLICITAR RECURSOS*/
     Route::get('solicitar_recursos/create', [SolicitudRecursosController::class, 'create'])->name('solicitar_recursos.create');
 
-    /*manifiestos*/
-    /*Ruta para ver el manifiesto PDF*/
-    Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
+
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
 
     /*CLIENTES*/
@@ -296,7 +328,7 @@ use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
     /*Ruta de Actualizar OC*/
     Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
 
-    /*Rutas de Vistas de Edición-index*/
+    /*Rutas de Vista de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');

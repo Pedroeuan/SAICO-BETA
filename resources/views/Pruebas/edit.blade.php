@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Prueba')
 
 @section('css')
 <!--datatable -->
@@ -45,7 +45,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Edición de la Orden de Compra</h3>
+<h3 align="center">Edición del Tipo de Prueba y Norma o codigo Aplicable</h3>
 <br>
                 <section class="content">
                     <div class="card">
@@ -81,7 +81,7 @@
                                         @php $count++; @endphp
                                         <tr id="row-{{ $NC->idNorma_codigo }}">
                                                 <td>{{ $count }}</td>
-                                                <td>{{ $NC->Nombre ?? 'N/A' }}</td>
+                                                <td><input type="text" class="form-control" name="Norma_Codigo[{{ $NC->idNorma_codigo }}]" value="{{ $NC->Nombre ?? 'N/A' }}"></td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                         @endforeach
@@ -130,49 +130,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
 
-            $(document).ready(function() {
-                var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
-
-                function updateRowNumbers() {
-                    $('#Norma_Codigo tbody tr').each(function(index) {
-                        $(this).find('td:first').text(index + 1);
-                    });
-                    rowCount = $('#Norma_Codigo tbody tr').length; // Actualizar rowCount
-                }
-
-                $('#addRowBtn').click(function() {
-                    rowCount++;
-                    var newRow = `<tr>
-                        <td>${rowCount}</td>
-                        <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                    </tr>`;
-                    $('#Norma_Codigo tbody').append(newRow);
-                });
-
-                $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                    var row = $(this).closest('tr');
-                    var id = row.attr('id').split('-')[1]; // Obtener el ID del registro
-                    console.log(id);
-
-                    $.ajax({
-                        url: '/Eliminar/NormaCodigo/Tabla/' + id,
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
-                        },
-                        success: function(response) {
-                            row.remove();
-                            updateRowNumbers();
-                            alert(response.success);
-                        },
-                        error: function(xhr) {
-                            alert('Error al eliminar el registro');
-                        }
-                    });
-                });
-            });
-        /*$(document).ready(function() {
+        $(document).ready(function() {
             var rowCount = $('#Norma_Codigo tbody tr').length; // Inicializar con el número de filas existentes
 
             function updateRowNumbers() {
@@ -186,75 +144,85 @@
                 rowCount++;
                 var newRow = `<tr>
                     <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
+                    <td><input type="text" class="form-control" name="Norma_Codigo[new_${rowCount}]" placeholder="Codigo o Norma Aplicable" required></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>`;
                 $('#Norma_Codigo tbody').append(newRow);
             });
 
             $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers();
-            });
-        });*/
+                var row = $(this).closest('tr');
+                var id = row.attr('id') ? row.attr('id').split('-')[1] : null; // Obtener el ID del registro si existe
 
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Se Eliminarán los Formatos Relacionados a esta Norma!",
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminarlo!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (id) {
+                            // Si la fila tiene un ID, realizar la eliminación en el servidor
+                            $.ajax({
+                                url: '/Eliminar/NormaCodigo/Tabla/' + id,
+                                type: 'DELETE',
+                                data: {
+                                    _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                                },
+                                success: function(response) {
+                                    row.remove();
+                                    updateRowNumbers();
+                                    Swal.fire(
+                                        'Eliminado!',
+                                        'Norma y formatos eliminados correctamente.',
+                                        'success'
+                                    );
+                                },
+                                error: function(xhr) {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Hubo un problema al eliminar la Norma y formatos.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        } else {
+                            // Si la fila no tiene un ID, simplemente eliminarla del DOM
+                            row.remove();
+                            updateRowNumbers();
+                            Swal.fire(
+                                'Eliminado!',
+                                'El registro ha sido eliminado.',
+                                'success'
+                            );
+                        }
+                    }
+                });
+            });
+        });
+
+        $('#Prueba_Norma_Codigo').submit(function(event) {
+        if ($('#Norma_Codigo tbody tr').length === 0) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Advertencia',
+                text: 'Debe agregar al menos una norma o código aplicable.',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+    
     /*Prevenir el Enter*/
     document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
     });
-
-        // Delegación de eventos para el botón "Eliminar"
-        /*$('#TablaKits').on('click', '.btnEliminarDetallesKits', function() {
-        var idDetalles_Kits = $(this).data('id');
-        var token = $('meta[name="csrf-token"]').attr('content');
-        var row = $(this).closest('tr');
-        var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera celda
-
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-            icon: "warning",
-            showDenyButton: true,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Detalles_Kits/eliminar/' + idDetalles_Kits,
-                    type: 'DELETE',
-                    data: {
-                        "_token": token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#row-' + idDetalles_Kits).remove();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Confirmado!',
-                                text: `El elemento "${nombreElemento}" ha sido eliminado correctamente.`,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        var errorMessage = xhr.responseJSON?.error || 'Se produjo un error al eliminar el registro.';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: errorMessage,
-                        });
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Cancelado',
-                    text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
-                });
-            }
-        });
-    });*/
 
     </script>
 @endsection

@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Prueba')
 
 @section('css')
 <!--datatable -->
@@ -32,7 +32,8 @@
                 <thead>
                     <tr>
                         <th>Tipo de Prueba</th>
-                        <th>Editar</th>
+                        <th>Editar Prueba</th>
+                        <th>Editar Normas</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
@@ -43,6 +44,10 @@
 
                         <td>
                             <a href="{{ route('Pruebas.Norma_Codigo.edit', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        </td>
+
+                        <td>
+                            <a href="{{ route('Pruebas.Normas_Aplicables.normas', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
                         <td>
@@ -109,9 +114,11 @@ let table = new DataTable('#tablaJs', {
 
 
     $(document).on("click", ".btnEliminarPrueba", function() {
-        var idOC = $(this).attr("idPrueba");
+        var idPrueba = $(this).attr("idPrueba");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
+            text: "¡Se Eliminarán las Normas y Formatos Relacionados a esta Prueba!",
+            icon: 'error',
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
@@ -119,7 +126,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/OC/eliminar/' + idOC,
+                    url: '/Eliminar/Prueba/Tabla/' + idPrueba,
 
                     type: 'DELETE',
                     data: {

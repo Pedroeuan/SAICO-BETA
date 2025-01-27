@@ -154,7 +154,7 @@ class NotificacionController extends Controller
                     {
                         // Crear la notificación solo si no existe
                         $notificacion = new Notificacion();
-                        $notificacion->users_id = $usuario->id;
+                        $notificacion->users_id = $usuario->id; // Asociar la notificación al usuario correspondiente
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
