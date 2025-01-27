@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Registra aquí los comandos personalizados
-        Commands\EnviarNotificacionesCalibracion::class, // Añade tu comando aquí
+        Commands\CrearNotificacionesCertificados::class, // Añade tu comando aquí
     ];
 
     /**
@@ -26,19 +26,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Programar el comando para que se ejecute diariamente
-        //$schedule->command('notificaciones:calibracion')->daily(); //cada dia
-        $schedule->command('notificaciones:calibracion')->everyMinute(); //cada minuto
+        $schedule->command('notificaciones:crear-certificados')->daily(); //cada dia
+        //$schedule->command('notificaciones:crear-certificados')->everyMinute(); //cada minuto
+        //$schedule->command('notificaciones:crear-certificados')->dailyAt('02:00'); //ejecutar en un horario específico (por ejemplo, a las 2 am
     }
-
-    /*Middleware Global: Si deseas que se ejecute en todas las solicitudes, debes registrarlo en el archivo app/Http/Kernel.php en la propiedad $middleware: */
-    /*protected $middleware = [
-        // Otros middlewares...
-        \App\Http\Middleware\VerificarCertificados::class,
-    ];*/
 
     protected $routeMiddleware = [
         // Otros middlewares...
-        'verificar.certificados' => \App\Http\Middleware\VerificarCertificados::class,
     ];
 
     

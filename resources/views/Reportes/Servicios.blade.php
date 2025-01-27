@@ -47,32 +47,91 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Pruebas</h3>
+<h3 align="center">SELECCIÓN DE PRUEBA, NORMA O CODIGO Y FORMATO</h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Reporte" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="Seleccion" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Prueba Seleccionada</label>
+                                        <select class="form-control inputForm" name="Prueba" id="PruebaSelect" required>
+                                            <option value="">Seleccione una Prueba</option>
+                                            @foreach ($Pruebas as $Prueba)
+                                                <option value="{{ $Prueba->idPrueba }}" data-image="{{ asset('images/Menu Servicios SVG/' . 
+                                                ($Prueba->Nombre == 'PARTÍCULAS MAGNÉTICAS' ? 'PARTICULAS_MAGNETICAS.svg' :
+                                                ($Prueba->Nombre == 'LÍQUIDOS PENETRANTES' ? 'LIQUIDOS_PENETRANTES.svg' :
+                                                ($Prueba->Nombre == 'CORRIENTES EDDY' ? 'CORRIENTES_EDDY.svg' :
+                                                ($Prueba->Nombre == 'TERMOGRAFÍA' ? 'TERMOGRAFIA.svg' :
+                                                ($Prueba->Nombre == 'ULTRASONIDO' ? 'ULTRASONIDO.svg' :
+                                                ($Prueba->Nombre == 'RADIOGRAFIA' ? 'RADIOGRAFIA.svg' :
+                                                ($Prueba->Nombre == 'PMI' ? 'PMI.svg' :
+                                                ($Prueba->Nombre == 'PRECALENTAMIENTO' ? 'PRECALENTAMIENTO.svg' :
+                                                ($Prueba->Nombre == 'ARREGLO DE FASES' ? 'ARREGLO_FASES.svg' :
+                                                ($Prueba->Nombre == 'CARACTERIZACIÓN DE MATERIALES' ? 'CARACTERIZACION_MATERIALES.svg' :
+                                                ($Prueba->Nombre == 'DUREZAS' ? 'DUREZAS.svg' :
+                                                ($Prueba->Nombre == 'METALOGRAFÍA' ? 'METALOGRAFIA.svg' :
+                                                ($Prueba->Nombre == 'ANÁLISIS QUÍMICO' ? 'ANALISIS_QUIMICO.svg' :
+                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_DE_ESFUERZO.svg' : 'FOCO_BLANCO.svg'))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                    {{ $Prueba->Nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('Prueba')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Norma o Código</label>
+                                        <select class="form-control inputForm" name="NormaCodigo" id="NormaCodigoSelect" required>
+                                        </select>
+                                        @error('NormaCodigo')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Formato</label>
+                                        <select class="form-control inputForm" name="Formato" id="FormatoSelect" required>
+                                        </select>
+                                        @error('Formato')
+                                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                                        @enderror
+                                    </div>
+                                </div>
+
 
                                 <div class="row justify-content-center">
                                     <div class="col-sm-4">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ $servicio }}">
-                                            @error('Tipo_Prueba')
-                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                            <label class="col-form-label" for="Tipo_Prueba">IMAGEN DE LA PRUEBA SELECCIONADA</label>
+                                            <svg 
+                                                width="100%" height="200" 
+                                                role="img" aria-label="IMAGEN DE LA PRUEBA" 
+                                                focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                                                <title>IMAGEN DE LA PRUEBA</title>
+                                                <rect width="100%" height="100%" fill="#C04040"></rect>
+                                                <image id="pruebaImagen" href="{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}" x="10%" y="10%" width="80%" height="70%" alt="Imagen de la prueba" />
+                                                <text id="pruebaTexto" x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">IMAGEN DE LA PRUEBA</text>
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
-                                    
+
                                     <p>
                                     <p>
                                     <div class="container">
                                         <div class="float-right">
-                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                            <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
                                         </div>
 
                                         <!--<div class="float-left">
@@ -114,10 +173,113 @@
 
 
     /*Prevenir el Enter*/
-    document.getElementById('Reporte').addEventListener('keydown', function(event) {
+    document.getElementById('Seleccion').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const pruebaSelect = document.getElementById('PruebaSelect');
+        const normaSelect = document.getElementById('NormaCodigoSelect');
+        const formatoSelect = document.getElementById('FormatoSelect');
+        const pruebaImagen = document.getElementById('pruebaImagen');
+        const pruebaTexto = document.getElementById('pruebaTexto');
+        const pruebaRect = document.querySelector("rect");
+
+            // Lista de pruebas que necesitan el color azul
+            const pruebasAzul = [
+            "CARACTERIZACIÓN DE MATERIALES",
+            "DUREZAS",
+            "PMI",
+            "METALOGRAFÍA",
+            ];
+        
+        
+        pruebaSelect.addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const imageUrl = selectedOption.getAttribute('data-image');
+            const textContent = selectedOption.getAttribute('data-text');
+            const pruebaNombre = selectedOption.dataset.text;
+
+            // Cambia el color según la prueba seleccionada
+            if (pruebasAzul.includes(pruebaNombre)) {
+                pruebaRect.setAttribute("fill", "#0070C0"); // Azul
+            } else {
+                pruebaRect.setAttribute("fill", "#C04040"); // Color original
+            }
+
+            // Actualiza la imagen dentro del SVG
+            if (imageUrl) {
+                pruebaImagen.setAttribute('href', imageUrl);
+            } else {
+                pruebaImagen.setAttribute('href', '{{ asset('images/Menu Servicios SVG/default.svg') }}');
+            }
+
+            // Actualiza el texto dentro del SVG
+            if (textContent) {
+                pruebaTexto.textContent = textContent;
+            } else {
+                pruebaTexto.textContent = 'IMAGEN DE LA PRUEBA';
+            }
+        });
+
+        pruebaSelect.addEventListener('change', function () {
+            const pruebaId = this.value;
+
+            // Limpia las opciones del segundo select
+            normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+            if (pruebaId) {
+                fetch(`/Obtener/normas/${pruebaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(norma => {
+                                const option = document.createElement('option');
+                                option.value = norma.idPrueba; 
+                                option.textContent = norma.Nombre;
+                                normaSelect.appendChild(option);
+                            });
+                        } else {
+                            normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener las normas:', error));
+            }
+        });
+
+        normaSelect.addEventListener('change', function () {
+            const normaId = this.value;
+
+            // Limpia las opciones del tercer select
+            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+            if (normaId) {
+                fetch(`/Obtener/formatos/${normaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(formato => {
+                                const option = document.createElement('option');
+                                option.value = formato.idPrueba;
+                                option.textContent = formato.Nombre; 
+                                formatoSelect.appendChild(option);
+                            });
+                        } else {
+                            formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener los formatos:', error));
+            }
+        });
+
+        // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
+        if (pruebaSelect.value) {
+            pruebaSelect.dispatchEvent(new Event('change'));
+        }
     });
 
     </script>

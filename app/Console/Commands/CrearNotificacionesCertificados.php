@@ -1,46 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Notificacion;
+namespace App\Console\Commands;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
-
-use App\Models\EquiposyConsumibles\general_eyc;
-use App\Models\EquiposyConsumibles\equipos;
-use App\Models\EquiposyConsumibles\certificados;
-use App\Models\EquiposyConsumibles\consumibles;
-use App\Models\EquiposyConsumibles\almacen;
-use App\Models\EquiposyConsumibles\Historial_Almacen;
-use App\Models\EquiposyConsumibles\accesorios;
-use App\Models\EquiposyConsumibles\block_y_probeta;
-use App\Models\EquiposyConsumibles\herramientas;
-use App\Models\EquiposyConsumibles\historial_certificado;
-use App\Models\EquiposyConsumibles\detalles_kits;
-use App\Models\EquiposyConsumibles\kits;
-use App\Models\Notificacion\Notificacion;
 use App\Models\User;
+use Carbon\Carbon;
+use App\Models\Admin\Usuario;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Notifications\NotificacionesEyC;
 
 
-class NotificacionController extends Controller
+
+class CrearNotificacionesCertificados extends Command
 {
-    public function index()
+    protected $signature = 'notificaciones:crear-certificados';
+    protected $description = 'Crear notificaciones para los certificados según sus fechas de calibración';
+
+    public function __construct()
     {
-        $user = Auth::user();
-
-        // Obtener solo las notificaciones del usuario autenticado
-        $notificaciones = Notificacion::where('users_id', $user->id)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
-
-        return view('notifications.index', compact('notificaciones'));
+        parent::__construct();
     }
 
-    public function crearNotificacionesCertificados()
+    public function handle()
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -162,31 +144,7 @@ class NotificacionController extends Controller
                 }
             }
         }
-    }
 
-    public function getNotificaciones()
-    {
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-        
-        // Obtener notificaciones para el usuario
-        $notificaciones = Notificacion::where('users_id', $user->id)
-                                       //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
-                                        ->orderBy('created_at', 'desc')
-                                       ->get(['idNotificaciones', 'Mensaje_Corto']); // Asegúrate de tener el 'id' también
-    
-        // Formatear las notificaciones para AdminLTE
-        $formattedNotifications = $notificaciones->map(function ($notificacion) {
-            return [
-                'id' => $notificacion->idNotificaciones,
-                'message' => $notificacion->Mensaje_Corto,
-                'url' => '#', // Aquí puedes poner la URL real de la notificación o alguna acción relevante
-            ];
-        });
-    
-        // Retornar las notificaciones en formato JSON
-        return response()->json($formattedNotifications);
+        $this->info('Notificaciones creadas exitosamente.');
     }
-    
-    
 }
