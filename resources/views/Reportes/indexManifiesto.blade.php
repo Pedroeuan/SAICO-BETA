@@ -63,6 +63,24 @@
             </table>
             <p>
             <p>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                    <input type="text" class="form-control inputForm" name="idPrueba" placeholder="Ejemplo: PROP-040/24" value="{{ $Prueba }}" readonly>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                    <input type="text" class="form-control inputForm" name="idNorma_Codigo" placeholder="Ejemplo: PROP-040/24" value="{{ $NormaCodigo }}" readonly>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                    <input type="text" class="form-control inputForm" name="idFormato" placeholder="Ejemplo: PROP-040/24" value="{{ $Formato }}" readonly>
+                </div>
+            </div>
             <div class="container">
                 <div class="float-right">
                     <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
