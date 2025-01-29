@@ -99,7 +99,8 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
         /*Rutas de Vistas del index de Solicitudes para seleccionar manifiesto*/
         Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
-
+        /*Ruta Para pasar las variables al reporte*/
+        Route::post('/Asignacion/manifiesto', [ReporteController::class, 'Asignacion_manifiesto'])->name('Asignacion.manifiesto');
 
         //});
     });

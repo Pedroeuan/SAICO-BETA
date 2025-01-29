@@ -229,7 +229,6 @@
 
         pruebaSelect.addEventListener('change', function () {
             const pruebaId = this.value;
-            //console.log(pruebaId);
             // Limpia las opciones del segundo select
             normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
             formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
@@ -242,8 +241,8 @@
                             //console.log(data);
                             data.forEach(norma => {
                                 const option = document.createElement('option');
-                                //option.value = norma.idNorma_codigo; 
-                                option.value = norma.idPrueba;
+                                option.value = norma.idNorma_codigo;
+                                //option.value = norma.idPrueba;
                                 option.textContent = norma.Nombre;
                                 normaSelect.appendChild(option);
                             });
@@ -256,18 +255,18 @@
         });
 
         normaSelect.addEventListener('change', function () {
-            const normaId = this.value;
-
+            const pruebaId = pruebaSelect.value;
             // Limpia las opciones del tercer select
             formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
-            if (normaId) {
-                fetch(`/Obtener/formatos/${normaId}`)
+            if (pruebaId) {
+                fetch(`/Obtener/formatos/${pruebaId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
                             data.forEach(formato => {
                                 const option = document.createElement('option');
+                                //option.value = formato.idPrueba;
                                 option.value = formato.idFormato;
                                 option.textContent = formato.Nombre; 
                                 formatoSelect.appendChild(option);
