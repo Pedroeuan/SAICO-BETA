@@ -29,10 +29,9 @@ class ReporteController extends Controller
     public function indexManifiesto(Request $request)
     {
         // Obtener los valores de los selects
-        $prueba = $request->input('Prueba');
-        $normaCodigo = $request->input('NormaCodigo');
-        $formato = $request->input('Formato');
-
+        $idPrueba = $request->input('Prueba');
+        $idNorma_Codigo = $request->input('NormaCodigo');
+        $idFormato = $request->input('Formato');
 
         //$Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
@@ -91,29 +90,7 @@ class ReporteController extends Controller
             }
         }
         
-
-        // Marcar los folios que deben ocultar el botón
-        foreach ($Solicitudes as $solicitud) 
-        {
-            // Intentar coincidir con el patrón del folio base
-            if (preg_match('/^([A-Z]+-\d+)/', $solicitud->folio, $matches)) {
-                $folioBase = $matches[1];  // Si coincide, asignar el valor
-            } else {
-                $folioBase = '';  // Si no coincide, asignar un valor predeterminado
-            }
-        
-            // Intentar coincidir con el patrón de la letra del folio
-            if (preg_match('/([A-Z]?)\/\d{2}$/', $solicitud->folio, $matches)) {
-                $folioLetra = $matches[1] ?? '';  // Si coincide, asignar la letra o cadena vacía
-            } else {
-                $folioLetra = '';  // Si no coincide, asignar una cadena vacía
-            }
-        
-            // Si este folio no es el último en su grupo, ocultar el botón
-            $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
-        }
-
-        return view("Reportes.indexManifiesto", compact('Solicitudes'));
+        return view("Reportes.indexManifiesto", compact('Solicitudes','idPrueba','idNorma_Codigo','idFormato'));
     }
 
     public function indexMenuServicios()
@@ -147,6 +124,18 @@ class ReporteController extends Controller
     {
         $formatos = formato::where('idPrueba', $id)->get();
         return response()->json($formatos);
+    }
+
+    public function Asignacion_manifiesto(Request $request)
+    {
+        //Obtener los Valores de los campos ocultos de indexManifiesto
+        $idPrueba = $request->input('idPrueba');
+        $idNorma_Codigo = $request->input('idNorma_Codigo');
+        $idFormato = $request->input('idFormato');
+        $idSolicitud = $request->input('selectedSolicitud');
+        dd($idSolicitud);
+
+        return view("Reportes.Reporte", compact('Solicitudes','idPrueba','idNorma_Codigo','idFormato','idSolicitud'));
     }
 
     /**

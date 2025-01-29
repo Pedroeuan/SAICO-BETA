@@ -18,7 +18,7 @@
     @csrf 
     <h3 >Formulario para aprobar solicitud de equipos y consumibles</h3>
     <br>
-    <div class="alert alert-info alert-dismissible">
+        <div class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Importante</h5>
             <p>Selecciona en el boton de acciones para agregar un equipo o consumible a la solicitud</p>

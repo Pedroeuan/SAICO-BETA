@@ -22,55 +22,79 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form">
-    <div class="box">
-        <h3 align="center">Manifiestos</h3>
-        <br>
-        <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                <thead>
-                    <tr>
-                                <th>Técnico</th>
-                                <th>Folio</th>
-                                <th>Fecha de servicio</th>
-                                <th>Estatus</th>
-                                <th>PDF Generado</th>
-
-                                <th>Seleccionar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($Solicitudes as $solicitud)
+<form id="AsignaManifiestoForm" action="{{ route('Asignacion.manifiesto') }}" method="post" enctype="multipart/form-data" role="form">
+    <div class="card-body row">
+        <div class="box">
+            <h3 align="center">Asignación del Manifiesto al Reporte</h3>
+            <br>
+            <div class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                <p>Selecciona el manifiesto CORRESPONDIENTE al Reporte</p>
+            </div>
+            <div class="box-body">
+                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                    <thead>
                         <tr>
-                            <td scope="row">{{$solicitud->tecnico}}</td>
-                            <td scope="row">{{$solicitud->folio}}</td>
-                            <td scope="row">{{$solicitud->formatted_date}}</td>
-                            <td scope="row">{{$solicitud->Estatus}}</td>
+                            <th>Técnico</th>
+                            <th>Folio</th>
+                            <th>Fecha de servicio</th>
+                            <th>Estatus</th>
+                            <th>PDF Generado</th>
+                            <th>Seleccionar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($Solicitudes as $solicitud)
+                            <tr>
+                                <td scope="row">{{$solicitud->tecnico}}</td>
+                                <td scope="row">{{$solicitud->folio}}</td>
+                                <td scope="row">{{$solicitud->formatted_date}}</td>
+                                <td scope="row">{{$solicitud->Estatus}}</td>
 
-                                    <div class="btn-group">
-                                        <!--PDF GENERADO-->
-                                        <td>
-                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                        </td>
+                                <div class="btn-group">
+                                    <!--PDF GENERADO-->
+                                    <td>
+                                        <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                    </td>
 
-                                        <td>
-                                            <input type="radio" name="selectedSolicitud" value="{{ $solicitud->idSolicitud }}">
-                                        </td>
-                                    </div>
+                                    <td>
+                                        <input type="radio" name="selectedSolicitud" value="{{ $solicitud->idSolicitud }}">
+                                    </td>
+                                </div>
                             </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <p>
-            <p>
-            <div class="container">
-                <div class="float-right">
-                    <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p>
+                <p>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idPrueba" placeholder="Ejemplo: PROP-040/24" value="{{ $idPrueba }}" readonly>
+                    </div>
                 </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idNorma_Codigo" placeholder="Ejemplo: PROP-040/24" value="{{ $idNorma_Codigo }}" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idFormato" placeholder="Ejemplo: PROP-040/24" value="{{ $idFormato }}" readonly>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar al Reporte</button>
+                    </div>
 
-                <!--<div class="float-left">
-                    <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
-                </di>-->
+                    <!--<div class="float-left">
+                        <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
+                    </di>-->
+                </div>
             </div>
         </div>
     </div>

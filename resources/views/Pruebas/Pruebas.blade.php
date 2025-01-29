@@ -39,7 +39,7 @@
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     
                     <title>ANÁLISIS QUÍMICO</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}" 
                         x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
@@ -250,7 +250,7 @@
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
                     <title>RELEVADO DE ESFUERZOS</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
                 </svg>

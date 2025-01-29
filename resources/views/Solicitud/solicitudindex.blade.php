@@ -277,7 +277,6 @@
                         }
                     }
     });
-
     $(document).on("click", ".btnEliminarSolicitud", function() {
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
@@ -328,6 +327,7 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
+
 });
 </script>
 

@@ -4,11 +4,13 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Admin\Usuario;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Notifications\NotificacionesEyC;
+use App\Models\Notificacion\Notificacion;
 
 
 
@@ -141,10 +143,12 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
                     }
+                    $this->info('Notificaciones creadas exitosamente.');
+                    Log::info('Notificaciones creadas exitosamente.');
                 }
             }
         }
 
-        $this->info('Notificaciones creadas exitosamente.');
+
     }
 }
