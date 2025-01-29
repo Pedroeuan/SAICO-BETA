@@ -35,7 +35,13 @@
                                 <th>Folio</th>
                                 <th>Fecha de servicio</th>
                                 <th>Estatus</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
                                 <th>PDF Generado</th>
+                                <th>PDF de Salida</th>
+                                <th>PDF de Resguardo</th>
+                                <th>Complementar</th>
+                                <th>Devolver</th>
                             @else
                                 <th>Técnico</th>
                                 <th>Folio</th>
@@ -52,15 +58,169 @@
                             <td scope="row">{{$solicitud->folio}}</td>
                             <td scope="row">{{$solicitud->formatted_date}}</td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
-                                    
-                                <div class="btn-group">
-                                <!--PDF GENERADO-->
-                                    <td>
-                                        <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                    </td>
-                                </div>
+                            @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
+                                @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
+                                    <div class="btn-group">
+                                        <td>
+                                            <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                        </td>
 
-                        </tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        </td>
+                                        <!-- -->
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>    
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>   
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>   
+
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fas fa-plus-square"></i>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <a class="btn btn-info" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                        </td>
+                                    </div>
+                                @elseif($solicitud->Estatus == 'CONCLUIDO')
+                                    <div class="btn-group">
+                                        <td>
+                                            <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fas fa-pencil-alt"></i></a>
+                                        </td>
+
+                                        <td>
+                                            <button type="button" class="btn btn-danger"style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fa fa-times"></i></button>
+                                        </td>
+
+                                            <!--PDF GENERADO-->
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        </td>
+                                    <!--PDF DE SALIDA-->
+                                        <td>
+                                            @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
+                                                        class="btn btn-primary" target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                    </a>
+                                            @endif
+                                        </td>
+                                    <!--PDF DE RESGUARDO-->
+                                        <td>
+                                            @if ($solicitud->devolucion_pdf)
+                                                <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
+                                                    <i class="far fa-file-pdf"></i> 
+                                                </a>
+                                            @else
+                                                <span class="btn btn-secondary" style="cursor: not-allowed; background-color: gray; border-color: gray;">
+                                                    <i class="far fa-file-pdf"></i> 
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="fas fa-plus-square"></i>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <a class="btn btn-info" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                        </td>
+                                    </div>
+                                @else <!-- MANIFIESTO, PRE-CONCLUIDO -->
+
+                                    <div class="btn-group">
+                                        <td>
+                                            <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                        </td>
+
+                                        <td>        
+                                            <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
+                                        </td>
+                                    <!--PDF GENERADO-->
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        </td>
+                                    <!--PDF DE RESGUARDO-->
+                                        <td>
+                                            @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $solicitud->pdf) }}" 
+                                                        class="btn btn-primary" target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                    </a>
+                                            @endif
+                                        </td>
+                                    <!--PDF DE SALIDA-->
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>
+
+                                        @if(!$solicitud->hidePlus)
+                                            <td>
+                                                <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                            </td>
+
+                                            <td>
+                                                <a href="{{ route('devolucion.EyC', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-info" role="button"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fas fa-plus-square"></i>
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fas fa-undo-alt"></i>
+                                                </span>
+                                            </td>
+                                        @endif 
+                                    </div>
+                                @endif
+
+                                @else
+
+                                    @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
+                                        <td>
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        </td>   
+                                    @endif
+
+                            @endif
+                            </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -117,6 +277,57 @@
                         }
                     }
     });
+    $(document).on("click", ".btnEliminarSolicitud", function() {
+    //valor del id a eliminar
+    var idSolicitud = $(this).attr("id-Solicitud");
+    Swal.fire({
+        title: "Seguro de eliminar este elemento?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Enviar la solicitud DELETE al servidor
+            $.ajax({
+                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
+                type: 'DELETE', // Método HTTP DELETE
+                data: {
+                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                },
+                success: function(response) {
+                    // Manejar la respuesta del servidor si es necesario
+                    if (response.success) {
+                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
+                        location.reload();
+                    } else {
+                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                    }
+                },
+                error: function() {
+                     // Manejar errores de la solicitud AJAX
+                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
+                    Swal.fire({
+                        title: "Confirmado!",
+                        text: "Solicitud Eliminado Correctamente!",
+                        icon: "success",
+                        didClose: function() {
+                            location.reload();
+                            }
+                        });
+                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
+                        /*  setTimeout(function() {
+                            location.reload();
+                        }, 3000);*/
+                }
+            });
+        } 
+        else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
+    });
+
 });
 </script>
 

@@ -52,7 +52,7 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="Seleccion" action="" method="post" enctype="multipart/form-data">
+                            <form id="Seleccion" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
 
@@ -76,7 +76,7 @@
                                                 ($Prueba->Nombre == 'DUREZAS' ? 'DUREZAS.svg' :
                                                 ($Prueba->Nombre == 'METALOGRAFÍA' ? 'METALOGRAFIA.svg' :
                                                 ($Prueba->Nombre == 'ANÁLISIS QUÍMICO' ? 'ANALISIS_QUIMICO.svg' :
-                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_DE_ESFUERZO.svg' : 'FOCO_BLANCO.svg'))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg'))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
                                                     {{ $Prueba->Nombre }}
                                                 </option>
                                             @endforeach
@@ -131,7 +131,7 @@
                                     <p>
                                     <div class="container">
                                         <div class="float-right">
-                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                            <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
                                         </div>
 
                                         <!--<div class="float-left">
@@ -194,6 +194,8 @@
             "DUREZAS",
             "PMI",
             "METALOGRAFÍA",
+            "ANÁLISIS QUÍMICO",
+            "RELEVADO DE ESFUERZOS",
             ];
         
         
@@ -214,7 +216,7 @@
             if (imageUrl) {
                 pruebaImagen.setAttribute('href', imageUrl);
             } else {
-                pruebaImagen.setAttribute('href', '{{ asset('images/Menu Servicios SVG/default.svg') }}');
+                pruebaImagen.setAttribute('href', '{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}');
             }
 
             // Actualiza el texto dentro del SVG
@@ -227,7 +229,6 @@
 
         pruebaSelect.addEventListener('change', function () {
             const pruebaId = this.value;
-
             // Limpia las opciones del segundo select
             normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
             formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
@@ -237,9 +238,11 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
+                            //console.log(data);
                             data.forEach(norma => {
                                 const option = document.createElement('option');
-                                option.value = norma.idPrueba; 
+                                option.value = norma.idNorma_codigo;
+                                //option.value = norma.idPrueba;
                                 option.textContent = norma.Nombre;
                                 normaSelect.appendChild(option);
                             });
@@ -252,19 +255,19 @@
         });
 
         normaSelect.addEventListener('change', function () {
-            const normaId = this.value;
-
+            const pruebaId = pruebaSelect.value;
             // Limpia las opciones del tercer select
             formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
-            if (normaId) {
-                fetch(`/Obtener/formatos/${normaId}`)
+            if (pruebaId) {
+                fetch(`/Obtener/formatos/${pruebaId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
                             data.forEach(formato => {
                                 const option = document.createElement('option');
-                                option.value = formato.idPrueba;
+                                //option.value = formato.idPrueba;
+                                option.value = formato.idFormato;
                                 option.textContent = formato.Nombre; 
                                 formatoSelect.appendChild(option);
                             });
