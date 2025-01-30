@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Solicitudes')
+@section('title', 'Asignación Manifiesto')
 
 @section('css')
 <!--datatable -->
@@ -23,6 +23,7 @@
 <br>
 <!-- form start -->
 <form id="AsignaManifiestoForm" action="{{ route('Asignacion.manifiesto') }}" method="post" enctype="multipart/form-data" role="form">
+    @csrf 
     <div class="card-body row">
         <div class="box">
             <h3 align="center">Asignación del Manifiesto al Reporte</h3>

@@ -95,7 +95,7 @@ class ReporteController extends Controller
 
     public function indexMenuServicios()
     {
-        return view('Pruebas.pruebas');
+        return view('Pruebas.Pruebas');
     }
 
     public function Servicios_Pruebas(Request $request)
@@ -133,9 +133,10 @@ class ReporteController extends Controller
         $idNorma_Codigo = $request->input('idNorma_Codigo');
         $idFormato = $request->input('idFormato');
         $idSolicitud = $request->input('selectedSolicitud');
-        dd($idSolicitud);
 
-        return view("Reportes.Reporte", compact('Solicitudes','idPrueba','idNorma_Codigo','idFormato','idSolicitud'));
+        $Prueba = prueba::where('idPrueba', $idPrueba)->first();
+
+        return view("Reportes.createReportes", compact('idPrueba','idNorma_Codigo','idFormato','idSolicitud','Prueba'));
     }
 
     /**
