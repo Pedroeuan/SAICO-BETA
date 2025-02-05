@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-17/01</title>
+            <title>FORMATO FOR-INS-16/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -179,7 +179,7 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-17/01</th>
+                            <th style="width: 80%;">FOR-INS-16/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>

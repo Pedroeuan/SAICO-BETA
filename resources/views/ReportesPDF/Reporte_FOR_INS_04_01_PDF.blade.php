@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-05/01</title>
+            <title>FORMATO FOR-INS-04/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -179,7 +179,7 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-05/01</th>
+                            <th style="width: 80%;">FOR-INS-04/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -322,7 +322,7 @@
                             <td class="lineaInferior">1</td><td style="text-align: left; width: 2%;"> dB </td>
                             <th style="width: 100px;">TIPO DE JUNTA:</th>
                             <td class="lineaInferior">2</td>
-                            <th rowspan="3" style="width: 100px;"><img class="FOR_PINS_05_01" src="{{ $FOR_PINS_05_01 }}" alt="FOR_PINS_05_01" style="width: 80px; height: auto;"></th>
+                            <th rowspan="3" style="width: 100px;"><img class="FOR_INS_04_01" src="{{ $FOR_INS_04_01 }}" alt="FOR_INS_04_01" style="width: 80px; height: auto;"></th>
                         </tr>
                         <tr class="">
                             <th>RECHAZO:</th>
