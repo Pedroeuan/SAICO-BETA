@@ -200,7 +200,7 @@
 
                     <title>ONDAS GUIADAS</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/ONDAS GUIADAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <image href="{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ONDAS GUIADAS</text>
                 </svg>
 
