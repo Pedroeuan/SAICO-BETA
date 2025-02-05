@@ -76,7 +76,10 @@
                                                 ($Prueba->Nombre == 'DUREZAS' ? 'DUREZAS.svg' :
                                                 ($Prueba->Nombre == 'METALOGRAFÍA' ? 'METALOGRAFIA.svg' :
                                                 ($Prueba->Nombre == 'ANÁLISIS QUÍMICO' ? 'ANALISIS_QUIMICO.svg' :
-                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg'))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                ($Prueba->Nombre == 'TOFD' ? 'TOFD.svg' :
+                                                ($Prueba->Nombre == 'ACFM' ? 'ACFM.svg' :
+                                                ($Prueba->Nombre == 'ONDAS GUIADAS' ? 'ONDAS_GUIADAS.svg' :
+                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg')))))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
                                                     {{ $Prueba->Nombre }}
                                                 </option>
                                             @endforeach
