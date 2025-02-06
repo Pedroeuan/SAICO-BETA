@@ -126,7 +126,7 @@ class ReporteController extends Controller
         return response()->json($formatos);
     }
 
-    public function Asignacion_manifiesto(Request $request)
+    public function CreateReporte(Request $request)
     {
         //Obtener los Valores de los campos ocultos de indexManifiesto
         $idPrueba = $request->input('idPrueba');

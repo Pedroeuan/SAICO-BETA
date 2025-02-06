@@ -7,18 +7,7 @@ use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-//use FPDF;
-//use Spipu\Html2Pdf\Html2Pdf;
-//use Mpdf\Mpdf;
-//use Spatie\Browsershot\Browsershot;
-//use Smalot\PdfParser\Parser;
-//use Barryvdh\Snappy\Facades\SnappyPdf;
 use Barryvdh\DomPDF\Facade\Pdf;
-//use Barryvdh\DomPDF\Facade as PDF;
-/*use Dompdf\Dompdf;*/
-/*use Dompdf\Options;*/
-
-//use Spatie\LaravelPdf\Facades\Pdf;
 
 class PDFReportesController extends Controller
 {

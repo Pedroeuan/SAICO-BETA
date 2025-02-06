@@ -28,7 +28,7 @@
 <br>
 <br>
 <!-- form start -->
-<form id="AsignaManifiestoForm" action="{{ route('Asignacion.manifiesto') }}" method="post" enctype="multipart/form-data" role="form">
+<form id="AsignaManifiestoForm" action="{{ route('Create.Reporte') }}" method="post" enctype="multipart/form-data" role="form">
     @csrf 
     <div class="card-body row">
         <div class="box">
