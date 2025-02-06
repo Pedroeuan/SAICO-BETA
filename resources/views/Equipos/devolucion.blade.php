@@ -18,6 +18,11 @@
     .cantidad-input {
             text-align: center; /* Centra el texto dentro del campo de entrada */
         }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 @endsection
 

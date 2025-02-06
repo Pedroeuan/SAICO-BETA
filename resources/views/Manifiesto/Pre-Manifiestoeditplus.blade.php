@@ -3,6 +3,15 @@
 
 @section('title', 'Pre-Manifiesto-Plus')
 
+@section('css')
+<style>
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+</style>
+@endsection
+
 @section('content')
 <br>
 <br>

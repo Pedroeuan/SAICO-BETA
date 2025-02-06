@@ -16,6 +16,11 @@
     .expansive-effect:hover {
         transform: scale(1.1);
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection

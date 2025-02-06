@@ -39,6 +39,12 @@
         #addRowBtn:hover {
             background-color: #0056b3;
         }
+
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
     </style>
 @endsection
 
