@@ -278,7 +278,7 @@ use App\Http\Controllers\Reporte\ReporteController;
     /*A DEFINIR EL ACCESO */
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
-    Route::get('/Reporte/FOR-INS-02/01', [PDFReportesController::class, 'FOR_INS_02_01'])->name('Reporte_FOR_INS_02_01.PDF');
+    Route::get('/Reporte/FOR-INS-02/02', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
     Route::get('/Reporte/FOR-INS-03/01', [PDFReportesController::class, 'FOR_INS_03_01'])->name('Reporte_FOR_INS_03_01.PDF');
     Route::get('/Reporte/FOR-INS-04/01', [PDFReportesController::class, 'FOR_INS_04_01'])->name('Reporte_FOR_INS_04_01.PDF');
     Route::get('/Reporte/FOR-INS-04/02', [PDFReportesController::class, 'FOR_INS_04_02'])->name('Reporte_FOR_INS_04_02.PDF');

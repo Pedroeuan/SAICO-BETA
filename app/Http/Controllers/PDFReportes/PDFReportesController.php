@@ -23,7 +23,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class PDFReportesController extends Controller
 {
     /*DOMPDF*/
-    public function FOR_INS_02_01()
+    public function FOR_INS_02_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -36,7 +36,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-INS-02/01.PDF',
+            'title' => 'Reporte_FOR-INS-02/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -47,8 +47,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -77,7 +77,7 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_INS_02_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_02_02.PDF');
     }
 
     public function FOR_INS_03_01()

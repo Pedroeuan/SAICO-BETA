@@ -318,7 +318,7 @@ return [
                     'submenu' => [
                         [
                             'text' => 'FOR-INS-02/01',
-                            'url' => '/Reporte/FOR-INS-02/01',
+                            'url' => '/Reporte/FOR-INS-02/02',
                             //can => 'nombre-ruta'
                         ],
                         [

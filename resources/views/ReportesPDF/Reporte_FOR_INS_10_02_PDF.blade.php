@@ -186,7 +186,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASINFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
