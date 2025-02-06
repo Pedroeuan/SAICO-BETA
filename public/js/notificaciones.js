@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const config = {
         updateUrl: updateNotificationUrl, // URL para obtener nuevas notificaciones
         viewAllUrl: viewAllNotificationsUrl, // URL para ver todas las notificaciones
-        updatePeriod: 60000 // Período de actualización en milisegundos (60 segundos) 
+        updatePeriod: 60000 
+        // Período de actualización en milisegundos (60 segundos) 
         //si lo agregas aqui, quitarlo del archivo adminlte, porque causa conflicto o viceversa 
         //Manejarlo aqui ya que se actualiza cuando se le da click al icono o cada 60 segundo, en el adminlte se actualiza 
         //cada 60 segundos hagas click en el icono o no, generando carga.
@@ -46,6 +47,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const listItem = document.createElement('li');
         listItem.classList.add('dropdown-item', 'd-flex', 'align-items-center');
 
+        const link = document.createElement('a');
+        link.href = notificacion.url; // URL asociada a la notificación
+        link.classList.add('d-flex', 'align-items-center');
+        link.style.textDecoration = 'none';
+        link.style.color = 'inherit';
+
         const icon = document.createElement('i');
         icon.classList.add('mr-2');
 
@@ -63,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 icon.classList.add('fas', 'fa-bell', 'text-secondary');
         }
 
-        listItem.appendChild(icon);
+        link.appendChild(icon);
 
         const messageText = document.createElement('span');
         messageText.textContent = shortenText(notificacion.message, 40);
@@ -71,7 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
         messageText.style.overflow = 'hidden';
         messageText.style.textOverflow = 'ellipsis';
         messageText.style.flexGrow = '1';
-        listItem.appendChild(messageText);
+        link.appendChild(messageText);
+
+        listItem.appendChild(link);
 
         return listItem;
     }
