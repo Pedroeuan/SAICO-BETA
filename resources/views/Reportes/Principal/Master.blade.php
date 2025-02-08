@@ -39,6 +39,7 @@
         #addRowBtn:hover {
             background-color: #0056b3;
         }
+
     #my-notification .dropdown-menu {
     max-height: 200px; /* Ajusta la altura según sea necesario */
     overflow-y: auto;
@@ -48,63 +49,13 @@
 @endsection
 
 @section('content')
-<br>
-<br>
-<br>
-<br>
-<h3 align="center">Registro de Prueba y Norma o codigo Aplicable</h3>
-<br>
-                <section class="content">
-                    <div class="card">
-                        <div class="card-body row">
-                            <form id="Prueba_Norma_Codigo" action="{{route('Prueba_Norma_Codigo.store')}}" method="post" enctype="multipart/form-data">
-                                @csrf 
-                                <div class="row">
 
-                                <div class="row justify-content-center">
-                                    <div class="col-sm-4">
-                                        <div class="form-group text-center">
-                                            <label class="col-form-label" for="Tipo_Prueba">Tipo de Prueba</label>
-                                            <input class="form-control inputForm @error('Tipo_Prueba') is-invalid @enderror" name="Tipo_Prueba" id="Tipo_Prueba" type="text" placeholder="Análisis Químico, Arreglo de fases, Caracterización de materiales, etc." value="{{ old('Tipo_Prueba') }}">
-                                            @error('Tipo_Prueba')
-                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
+@if($Nombre_Formato == 'FOR-02-PRO-INS-10') 
+        @include('Reportes.INS.FOR-02-PRO-INS-10')
+    @endif
 
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+        @include('Reportes.INS.FOR-02-PRO-INS-10')
 
-                                    <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Norma o Codigo Aplicable</th>
-                                                    <th>Eliminar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
-                                    </table>
-                                    
-                                    <p>
-                                    <p>
-                                    <div class="container">
-                                        <div class="float-right">
-                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
-                                        </div>
-
-                                        <!--<div class="float-left">
-                                            <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
-                                        </di>-->
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </section>
 @stop
 
 

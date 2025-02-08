@@ -32,6 +32,7 @@ class ReporteController extends Controller
         $idPrueba = $request->input('Prueba');
         $idNorma_Codigo = $request->input('NormaCodigo');
         $idFormato = $request->input('Formato');
+        $formatoNombrePersonalizado = $request->input('formatoNombrePersonalizado');
 
         //$Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
@@ -90,7 +91,7 @@ class ReporteController extends Controller
             }
         }
         
-        return view("Reportes.indexManifiesto", compact('Solicitudes','idPrueba','idNorma_Codigo','idFormato'));
+        return view("Reportes.indexManifiesto", compact('Solicitudes','idPrueba','idNorma_Codigo','idFormato','formatoNombrePersonalizado'));
     }
 
     public function indexMenuServicios()
@@ -133,10 +134,12 @@ class ReporteController extends Controller
         $idNorma_Codigo = $request->input('idNorma_Codigo');
         $idFormato = $request->input('idFormato');
         $idSolicitud = $request->input('selectedSolicitud');
+        $formatoNombrePersonalizado = $request->input('formatoNombrePersonalizado');
 
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
+        $Nombre_Formato = formato::where('idFormato', $idFormato)->first();
 
-        return view("Reportes.createReportes", compact('idPrueba','idNorma_Codigo','idFormato','idSolicitud','Prueba'));
+        return view("Reportes.Principal.Master", compact('idPrueba','idNorma_Codigo','idFormato','idSolicitud','Prueba','Nombre_Formato','formatoNombrePersonalizado'));
     }
 
     /**

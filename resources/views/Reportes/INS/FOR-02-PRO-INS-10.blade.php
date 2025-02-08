@@ -49,6 +49,7 @@
 <br>
 <br>
 <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}"</h4>
 <br>
                 <section class="content">
                     <div class="card">

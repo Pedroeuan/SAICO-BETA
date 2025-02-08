@@ -134,6 +134,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--Campo oculto para pasar el nombre al reporte -->
+                                <input type="hidden" name="formatoNombrePersonalizado" id="formatoNombrePersonalizado">
 
                                     <p>
                                     <p>
@@ -195,6 +197,7 @@
     const pruebaTexto = document.getElementById('pruebaTexto');
     const pruebaRect = document.querySelector("rect");
     const formatoNombreLabel = document.getElementById('formatoNombre');
+    const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizado');
 
     // Lista de pruebas que necesitan el color azul
     const pruebasAzul = [
@@ -215,7 +218,6 @@
         "FOR-01-PRO-INS-05": "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
         "FOR-01-PRO-INS-06": "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
         "FOR-01-PRO-INS-07": "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES",
-
         "FOR-01-PRO-INS-08": "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
         "FOR-01-PRO-INS-09": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
         "FOR-01-PRO-INS-10": "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
@@ -233,7 +235,7 @@
         "FOR-01-PRO-INS-19": "INFORME DE INSPECCIÓN CON ACFM",
         "FOR-01-PRO-INS-20": " Informe de Análisis mediante Corriente Eddy Pulsada (PECT).",
         "FOR-01-PRO-INS-21": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-        "FOR-01-PRO-INS-22": "Ondas Guiadas",
+        "FOR-01-PRO-INS-22": "Ondas Guiadas"
     };
 
     pruebaSelect.addEventListener('change', function () {
@@ -319,8 +321,10 @@
         if (selectedOption) {
             const nombrePersonalizado = selectedOption.getAttribute('data-nombre-personalizado');
             formatoNombreLabel.textContent = nombrePersonalizado || selectedOption.textContent;
+            formatoNombrePersonalizadoInput.value = nombrePersonalizado || selectedOption.textContent; // Actualiza el campo oculto
         } else {
             formatoNombreLabel.textContent = 'IMAGEN DE LA PRUEBA SELECCIONADA';
+            formatoNombrePersonalizadoInput.value = ''; // Limpia el campo oculto
         }
     });
 

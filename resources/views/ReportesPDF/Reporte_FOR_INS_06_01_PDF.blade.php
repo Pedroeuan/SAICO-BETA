@@ -250,7 +250,7 @@
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior"></td>
-                            <th style="width: 160px;">CODIGO APLICABLEA:</th>
+                            <th style="width: 160px;">CODIGO APLICABLE:</th>
                             <td class="lineaInferior"></td>
                         </tr>
                     </tbody>

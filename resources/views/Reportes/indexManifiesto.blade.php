@@ -93,6 +93,14 @@
                         <input type="hidden" class="form-control inputForm" name="idFormato" placeholder="Ejemplo: PROP-040/24" value="{{ $idFormato }}" readonly>
                     </div>
                 </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="formatoNombrePersonalizado" placeholder="Ejemplo: PROP-040/24" value="{{ $formatoNombrePersonalizado }}" readonly>
+                    </div>
+                </div>
+
                 <div class="container">
                     <div class="float-right">
                         <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar al Reporte</button>
