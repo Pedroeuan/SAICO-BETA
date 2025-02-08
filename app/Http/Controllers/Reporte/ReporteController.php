@@ -129,18 +129,20 @@ class ReporteController extends Controller
 
     public function CreateReporte(Request $request)
     {
-        //Obtener los Valores de los campos ocultos de indexManifiesto
+        // Obtener los valores de los campos ocultos de indexManifiesto
         $idPrueba = $request->input('idPrueba');
         $idNorma_Codigo = $request->input('idNorma_Codigo');
         $idFormato = $request->input('idFormato');
         $idSolicitud = $request->input('selectedSolicitud');
         $formatoNombrePersonalizado = $request->input('formatoNombrePersonalizado');
-
+    
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
-        $Nombre_Formato = formato::where('idFormato', $idFormato)->first();
-
-        return view("Reportes.Principal.Master", compact('idPrueba','idNorma_Codigo','idFormato','idSolicitud','Prueba','Nombre_Formato','formatoNombrePersonalizado'));
+        $formato = formato::where('idFormato', $idFormato)->first();
+        $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
+    
+        return view("Reportes.Principal.Master", compact('idPrueba', 'idNorma_Codigo', 'idFormato', 'idSolicitud', 'Prueba', 'Nombre_Formato', 'formatoNombrePersonalizado'));
     }
+
 
     /**
      * Show the form for creating a new resource.

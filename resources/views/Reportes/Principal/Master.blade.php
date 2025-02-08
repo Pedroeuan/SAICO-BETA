@@ -51,11 +51,9 @@
 @section('content')
 
 @if($Nombre_Formato == 'FOR-02-PRO-INS-10') 
-        @include('Reportes.INS.FOR-02-PRO-INS-10')
-    @endif
-
-        @include('Reportes.INS.FOR-02-PRO-INS-10')
-
+    @include('Reportes.INS.FOR-02-PRO-INS-10')
+@endif
+    
 @stop
 
 
