@@ -101,6 +101,8 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
         /*Ruta Para pasar las variables al reporte*/
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
+        /*Ruta de Guardado Reportes*/
+        Route::post('/ReportesINS/store', [ReporteController::class, 'storeINS'])->name('ReportesINS.store');
 
         //Route::get('/reporte/create', [PDFReportesController::class, 'Reportecreate'])->name('reporte.create');
 

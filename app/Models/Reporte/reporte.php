@@ -13,10 +13,8 @@ class reporte extends Model
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idReportes',
-        'idFirmas_Reportes',
-        'idGrupo_Juntas_Detalles_Re',
-        'idReportes_Pruebas',
-        'Contrato',
+        'idPrueba_Aplica',
+        'Detalles_Generales',
         'Estatus',
     ];
 
