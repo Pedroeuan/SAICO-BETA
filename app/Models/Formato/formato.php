@@ -28,4 +28,16 @@ class formato extends Model
     {
         return $this->belongsTo(norma_codigo::class, 'idNorma_codigo', 'idNorma_codigo');
     }
+
+    // Relación inversa con Prueba
+    public function prueba()
+    {
+        return $this->belongsTo(Prueba::class, 'idPrueba', 'idPrueba');
+    }
+
+    // Relación uno a muchos con Prueba_Aplica
+    public function pruebaAplica()
+    {
+        return $this->hasMany(Prueba_Aplica::class, 'idFormato', 'idFormato');
+    }
 }

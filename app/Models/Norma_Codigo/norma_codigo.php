@@ -32,4 +32,10 @@ class norma_codigo extends Model
     {
         return $this->hasMany(formato::class, 'idNorma_codigo', 'idNorma_codigo');
     }
+
+    // Relación uno a muchos con Prueba_Aplica
+    public function pruebaAplica()
+    {
+        return $this->hasMany(Prueba_Aplica::class, 'idNorma_Codigo', 'idNorma_Codigo');
+    }
 }

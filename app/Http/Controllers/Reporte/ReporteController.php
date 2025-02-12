@@ -12,6 +12,7 @@ use App\Models\Solicitudes\Solicitudes;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\EquiposyConsumibles\devolucion;
+use App\Models\PruebaAplica\Prueba_Aplica;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -135,12 +136,38 @@ class ReporteController extends Controller
         $idFormato = $request->input('idFormato');
         $idSolicitud = $request->input('selectedSolicitud');
         $formatoNombrePersonalizado = $request->input('formatoNombrePersonalizado');
+
+        // Verificar si el registro ya existe
+        $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
+        ->where('idNorma_Codigo', $idNorma_Codigo)
+        ->where('idFormato', $idFormato)
+        ->exists();
+
+        $ObteneridRegistroExistente = Prueba_Aplica::where('idPrueba', $idPrueba)
+        ->where('idNorma_Codigo', $idNorma_Codigo)
+        ->where('idFormato', $idFormato)->first();
+
+        if (!$existeRegistro) 
+        {
+        $Prueba_Aplica = new Prueba_Aplica;
+        $Prueba_Aplica->idPrueba = $idPrueba;
+        $Prueba_Aplica->idNorma_Codigo = $idNorma_Codigo;
+        $Prueba_Aplica->idFormato = $idFormato;
+        $Prueba_Aplica->save();
+
+        // Obtener el idPrueba_Aplica del registro recién creado
+        $idPrueba_Aplica = $Prueba_Aplica->idPrueba_Aplica;
+        }
+        else
+        {
+        $idPrueba_Aplica = $ObteneridRegistroExistente->idPrueba_Aplica;
+        }
     
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
     
-        return view("Reportes.Principal.Master", compact('idPrueba', 'idNorma_Codigo', 'idFormato', 'idSolicitud', 'Prueba', 'Nombre_Formato', 'formatoNombrePersonalizado'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud'));
     }
 
 
@@ -157,7 +184,82 @@ class ReporteController extends Controller
      */
     public function storeINS(Request $request)
     {
-        //
+        $Estatus = "CREADO";
+        // Validar los Detalles_Generales
+        $validatedData = $request->validate([
+            /*DETALLES GENERALES */
+            'Detalles_Generales' => 'required|array',  // Asegura que es un array
+            'Detalles_Generales.Fecha' => 'required|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'required|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
+            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+            /*FIRMAS */
+            'Firmas3_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas3_Reportes.NOMBRE_TECNICO' => 'required|string|max:255',
+            'Firmas3_Reportes.NOMBRE_ENCARGADO' => 'required|string|max:255',
+            'Firmas3_Reportes.NOMBRE_2DO_ENCARGADO' => 'required|string|max:255',
+
+            'Firmas3_Reportes.CARGO_TECNICO' => 'required|string|max:255',
+            'Firmas3_Reportes.PUESTO_ENCARGADO' => 'required|string|max:255',
+            'Firmas3_Reportes.PUESTO_2DO_ENCARGADO' => 'required|string|max:255',
+
+            'Firmas3_Reportes.EMPRESA_TECNICO' => 'required|string|max:255',
+            'Firmas3_Reportes.EMPRESA_ENCARGADO' => 'required|string|max:255',
+            'Firmas3_Reportes.EMPRESA_2DO_ENCARGADO' => 'required|string|max:255',
+        ]);
+
+        //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
+        // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
+        // cuando tienes campos opcionales en tu formulario.
+
+        // Asignar valores
+        $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
+        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica'); 
+
+        // Guardar Detalles_Generales como JSON en la base de datos
+        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        
+        $datosEquipo = $validatedData['Datos_Equipo'];
+        //$datosEquipo['PINTURA'] = $request->input('Datos_Equipo.PINTURA'); // Asignar manualmente el campo PINTURA si está presente
+        $Reportes->Datos_Equipo = json_encode($datosEquipo);
+        $Reportes->Estatus = $Estatus; // Asignar el estatus
+
+        // Guardar el registro en la base de datos   
+        $Reportes->save();
+
+        $Firmas_Reportes = new Firma_Reporte();  // Modelo de la tabla donde guardas los datos
+        
         
     }
 

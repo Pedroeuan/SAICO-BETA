@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Formato;
 
 use App\Models\Formato\formato;
 use Illuminate\Http\Request;
