@@ -225,18 +225,18 @@ class ReporteController extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*FIRMAS */
-            'Firmas3_Reportes' => 'required|array',  // Asegura que es un array
-            'Firmas3_Reportes.NOMBRE_TECNICO' => 'required|string|max:255',
-            'Firmas3_Reportes.NOMBRE_ENCARGADO' => 'required|string|max:255',
-            'Firmas3_Reportes.NOMBRE_2DO_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes.NOMBRE_TECNICO' => 'required|string|max:255',
+            'Firmas_Reportes.NOMBRE_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes.NOMBRE_2DO_ENCARGADO' => 'required|string|max:255',
 
-            'Firmas3_Reportes.CARGO_TECNICO' => 'required|string|max:255',
-            'Firmas3_Reportes.PUESTO_ENCARGADO' => 'required|string|max:255',
-            'Firmas3_Reportes.PUESTO_2DO_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes.CARGO_TECNICO' => 'required|string|max:255',
+            'Firmas_Reportes.PUESTO_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes.PUESTO_2DO_ENCARGADO' => 'required|string|max:255',
 
-            'Firmas3_Reportes.EMPRESA_TECNICO' => 'required|string|max:255',
-            'Firmas3_Reportes.EMPRESA_ENCARGADO' => 'required|string|max:255',
-            'Firmas3_Reportes.EMPRESA_2DO_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes.EMPRESA_TECNICO' => 'required|string|max:255',
+            'Firmas_Reportes.EMPRESA_ENCARGADO' => 'required|string|max:255',
+            'Firmas_Reportes.EMPRESA_2DO_ENCARGADO' => 'required|string|max:255',
         ]);
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
