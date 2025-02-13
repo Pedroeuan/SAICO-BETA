@@ -357,6 +357,26 @@ class ReporteController extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
+        /*Fotos y Comentarios */
+
+                /*Fotos */
+        // Procesar las imágenes y los comentarios
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                $image = $request->file("image$i");
+                $path = $image->store('public/fotos_reportes');
+                $comment = $request->input("comment$i");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment,
+                ];
+            }
+        }
+
+        // Convertir el array de fotos a JSON
+        $jsonFotos = json_encode($fotos); /*Falta guardado */
+
     }
 
 
