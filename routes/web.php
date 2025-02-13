@@ -87,24 +87,24 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
 
         /*REPORTES*/
-        /*Vista Menu Servicios*/
-        Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
-        /*Menu de Servicios-Pruebas */
-        Route::get('/Seleccion-Servicios-Pruebas', [ReporteController::class, 'Seleccion_Servicios_Pruebas'])->name('Seleccion.Servicios.Pruebas');
-        /*Controlador para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/
-        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios.Pruebas');
         /*Obtiene las Normas segun La prueba del select*/
         Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
         /*Obtiene los Formatos segun La prueba del select*/
         Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
+
+        /*Vista Menu Servicios*/
+        Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
+        /*Controlador del a vista Menu.Servicios (Prueba/Prueba) para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/
+        Route::post('/Servicios-Pruebas', [ReporteController::class, 'Servicios_Pruebas'])->name('Servicios.Pruebas');
+        /*Menu de Servicios-Pruebas Vista Selección rpueba, norma y formato*/
+        Route::get('/Seleccion-Servicios-Pruebas', [ReporteController::class, 'Seleccion_Servicios_Pruebas'])->name('Seleccion.Servicios.Pruebas');
         /*Rutas de Vistas del index de Solicitudes para seleccionar manifiesto*/
         Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
         /*Ruta Para pasar las variables al reporte*/
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
-        /*Ruta de Guardado Reportes*/
-        Route::post('/ReportesINS/store', [ReporteController::class, 'storeINS'])->name('ReportesINS.store');
+        /*Ruta de Guardado Reportes/INS*/
+        Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10'])->name('Reportes_FOR_02_PRO_INS_10.store');
 
-        //Route::get('/reporte/create', [PDFReportesController::class, 'Reportecreate'])->name('reporte.create');
 
         //});
     });
