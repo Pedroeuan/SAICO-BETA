@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Solicitudes;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+use Carbon\Carbon;
 
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Solicitudes\Solicitudes;

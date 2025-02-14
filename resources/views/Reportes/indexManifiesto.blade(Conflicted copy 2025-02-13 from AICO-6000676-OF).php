@@ -129,6 +129,8 @@
 <script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css">
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
@@ -165,20 +167,20 @@
                     }
     });
 
-        document.getElementById('AsignaManifiestoForm').addEventListener('submit', function(event) {
-            // Verificar si algún radio button está seleccionado
-            const selectedSolicitud = document.querySelector('input[name="selectedSolicitud"]:checked');
-            if (!selectedSolicitud) {
-                // Si no hay ningún radio button seleccionado, mostrar una alerta y prevenir el envío del formulario
-                event.preventDefault();
-                Swal.fire({
-                    title: 'Advertencia',
-                    text: 'Por favor, selecciona un manifiesto antes de continuar.',
-                    icon: 'warning',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
+    document.getElementById('AsignaManifiestoForm').addEventListener('submit', function(event) {
+    // Verificar si algún radio button está seleccionado
+    const selectedSolicitud = document.querySelector('input[name="selectedSolicitud"]:checked');
+    if (!selectedSolicitud) {
+        // Si no hay ningún radio button seleccionado, mostrar una alerta y prevenir el envío del formulario
+        event.preventDefault();
+        Swal.fire({
+            title: 'Error',
+            text: 'Por favor, selecciona un manifiesto antes de continuar.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
         });
+    }
+});
 
     $(document).on("click", ".btnEliminarSolicitud", function() {
     //valor del id a eliminar

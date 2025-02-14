@@ -15,7 +15,6 @@ use App\Models\Norma_Codigo\norma_codigo;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
-use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
 use Illuminate\Http\Request;
@@ -140,24 +139,8 @@ class ReporteController extends Controller
         $idNorma_Codigo = $request->input('idNorma_Codigo');
         $idFormato = $request->input('idFormato');
         $idSolicitud = $request->input('selectedSolicitud');
+        dd($idSolicitud);
         $formatoNombrePersonalizado = $request->input('formatoNombrePersonalizado');
-
-        $Solicitud = Solicitudes::findOrFail($idSolicitud);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
-
-        // Buscar el idGeneral_EyC de cada detalle
-        $idGeneral_EyCs = [];
-        foreach ($DetallesSolicitud as $detalle) {
-            $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
-        }
-
-        // Buscar los registros en la tabla General_EyC
-        //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
-        //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
-        //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
 
         // Verificar si el registro ya existe
         $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
@@ -189,7 +172,7 @@ class ReporteController extends Controller
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
     
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud'));
     }
 
 

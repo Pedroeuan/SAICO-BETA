@@ -70,6 +70,9 @@
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
+@php 
+dd($DetallesSolicitud);
+@endphp
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
