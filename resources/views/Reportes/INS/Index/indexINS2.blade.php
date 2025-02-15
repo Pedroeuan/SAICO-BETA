@@ -32,38 +32,48 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Reportes del Contrato: "Nombre del Contrato"</h3>
+        <h3 align="center">Reportes del Contrato:  y Proyecto: </h3>
+
+
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Contrato</th>
                         <th>Nombre del Proyecto</th>
-                        <th>Fecha</th>
                         <th>No. Reporte</th>
-                        <th>Editar Reporte</th>
+                        <th>Fecha</th>
+                        <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($Pruebas as $Prueba)
-                    <tr>
-                        <td>{{ $Prueba->Nombre }}</td>
-
-                        <td>
-                            <a href="{{ route('Pruebas.Norma_Codigo.edit', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        </td>
-
-                        <td>
-                            <a href="{{ route('Pruebas.Normas_Aplicables.normas', ['id' => $Prueba->idPrueba]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                        </td>
-
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarPrueba" idPrueba="{{$Prueba->idPrueba}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
+                    @foreach($reportesEncontrados as $reporte)
+                        @php
+                            $detalles = json_decode($reporte->Detalles_Generales, true);
+                        @endphp
+                        <tr>
+                            <td>{{ $detalles['Contrato'] }}</td>
+                            <td>{{ $detalles['Proyecto'] }}</td>
+                            <td>{{ $detalles['No_Reporte'] }}</td>
+                            <td>{{ $detalles['Fecha'] }}</td>
+                            <td>
+                                <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            </td>
+                            
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminarReporte" id-Solicitud=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
             </tbody>
             </table>
+            <p>
+            <p>
+                <div class="container">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar al Reporte</button>
+                    </div>
+                </div>
         </div>
     </div>
 </form>

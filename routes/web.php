@@ -92,6 +92,11 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Obtiene los Formatos segun La prueba del select*/
         Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
 
+        /*Rutas de Vistas del index de selección de los contratos*/
+        Route::get('/index/ContratoProyecto', [ReporteController::class, 'indexContratoProyecto'])->name('index.ContratoProyecto');
+        /*Rutas de Vistas del index despues de la selección de los contratos/Reportes de estos*/
+        Route::post('/index/ReporteProyectoContrato', [ReporteController::class, 'indexReporteProyectoContrato'])->name('index.ReporteProyectoContrato');
+
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Controlador del a vista Menu.Servicios (Prueba/Prueba) para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/

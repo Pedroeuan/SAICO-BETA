@@ -103,12 +103,9 @@
 
                 <div class="container">
                     <div class="float-right">
-                        <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar al Reporte</button>
+                        <button type="submit" class="btn btn-info bg-primary">Seleccionar y Continuar al Reporte</button>
                     </div>
 
-                    <!--<div class="float-left">
-                        <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
-                    </di>-->
                 </div>
             </div>
         </div>
@@ -179,58 +176,6 @@
                 });
             }
         });
-
-    $(document).on("click", ".btnEliminarSolicitud", function() {
-    //valor del id a eliminar
-    var idSolicitud = $(this).attr("id-Solicitud");
-    Swal.fire({
-        title: "Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Enviar la solicitud DELETE al servidor
-            $.ajax({
-                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
-                type: 'DELETE', // Método HTTP DELETE
-                data: {
-                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
-                },
-                success: function(response) {
-                    // Manejar la respuesta del servidor si es necesario
-                    if (response.success) {
-                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
-                        location.reload();
-                    } else {
-                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
-                    }
-                },
-                error: function() {
-                     // Manejar errores de la solicitud AJAX
-                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
-                    Swal.fire({
-                        title: "Confirmado!",
-                        text: "Solicitud Eliminado Correctamente!",
-                        icon: "success",
-                        didClose: function() {
-                            location.reload();
-                            }
-                        });
-                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                        /*  setTimeout(function() {
-                            location.reload();
-                        }, 3000);*/
-                }
-            });
-        } 
-        else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
-    });
-});
 </script>
 
 @endsection

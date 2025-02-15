@@ -29,6 +29,45 @@ use Illuminate\Support\Facades\Storage;
 class ReporteController extends Controller
 {
 
+    public function indexContratoProyecto()
+    {
+        $Reportes = reporte::all();
+
+        $reportesDetalles_Generales = [];
+        foreach ($Reportes as $reporte) {
+            $detalles = json_decode($reporte->Detalles_Generales, true);
+            $reportesDetalles_Generales[] = [
+                'Contrato' => $detalles['Contrato'],
+                'Proyecto' => $detalles['Proyecto'],
+                'Fecha' => $detalles['Fecha'],
+                'No_Reporte' => $detalles['No_Reporte'],
+                'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
+            ];
+        }
+
+        // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
+        $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
+            return $item['Contrato'] . $item['Proyecto'];
+        })->values()->all();
+
+        return view('Reportes.INS.Index.indexINS1', compact('reportesDetalles_Generales'));
+    }
+
+    public function indexReporteProyectoContrato(Request $request)
+    {
+            // Obtener el valor seleccionado
+            $contratoSeleccionado = $request->input('selectedContrato_Proyecto');
+
+            // Obtener todos los reportes que coincidan con el contrato seleccionado
+            $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+
+            if ($reportesEncontrados->isNotEmpty()) {
+                return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados'));
+            } else {
+                return "No se encontraron reportes con ese contrato.";
+            }
+    }
+
     public function ObtenerNormas($id)
     {
         $normas = norma_codigo::where('idPrueba', $id)->get(); // Ajusta según tu estructura de base de datos
@@ -314,7 +353,7 @@ class ReporteController extends Controller
 
         $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica'); 
 
-        $Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
