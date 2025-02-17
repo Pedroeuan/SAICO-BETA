@@ -69,11 +69,6 @@
             </table>
             <p>
             <p>
-                <div class="container">
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar al Reporte</button>
-                    </div>
-                </div>
         </div>
     </div>
 </form>
