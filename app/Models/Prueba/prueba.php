@@ -20,9 +20,21 @@ class prueba extends Model
     protected $primaryKey = 'idPrueba';
     public $timestamps = false;
 
+    // Relación uno a muchos con Prueba_Aplica
+    public function pruebaAplica()
+    {
+        return $this->hasMany(Prueba_Aplica::class, 'idPrueba', 'idPrueba');
+    }
+
     // Relación uno a muchos con NormaCodigo
     public function norma_codigo()
     {
         return $this->hasMany(norma_codigo::class, 'idPrueba', 'idPrueba');
+    }
+
+    // Relación uno a muchos con Formato
+    public function formato()
+    {
+        return $this->hasMany(Formato::class, 'idPrueba', 'idPrueba');
     }
 }

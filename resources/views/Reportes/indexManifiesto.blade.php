@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Solicitudes')
+@section('title', 'Asignación Manifiesto')
 
 @section('css')
 <!--datatable -->
@@ -14,6 +14,12 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 @endsection
 
@@ -22,55 +28,85 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form">
-    <div class="box">
-        <h3 align="center">Manifiestos</h3>
-        <br>
-        <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                <thead>
-                    <tr>
-                                <th>Técnico</th>
-                                <th>Folio</th>
-                                <th>Fecha de servicio</th>
-                                <th>Estatus</th>
-                                <th>PDF Generado</th>
-
-                                <th>Seleccionar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($Solicitudes as $solicitud)
+<form id="AsignaManifiestoForm" action="{{ route('Create.Reporte') }}" method="post" enctype="multipart/form-data" role="form">
+    @csrf 
+    <div class="card-body row">
+        <div class="box">
+            <h3 align="center">Asignación del Manifiesto al Reporte</h3>
+            <br>
+            <div class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                <p>Selecciona el manifiesto CORRESPONDIENTE al Reporte</p>
+            </div>
+            <div class="box-body">
+                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                    <thead>
                         <tr>
-                            <td scope="row">{{$solicitud->tecnico}}</td>
-                            <td scope="row">{{$solicitud->folio}}</td>
-                            <td scope="row">{{$solicitud->formatted_date}}</td>
-                            <td scope="row">{{$solicitud->Estatus}}</td>
+                            <th>Técnico</th>
+                            <th>Folio</th>
+                            <th>Fecha de servicio</th>
+                            <th>Estatus</th>
+                            <th>PDF Generado</th>
+                            <th>Seleccionar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($Solicitudes as $solicitud)
+                            <tr>
+                                <td scope="row">{{$solicitud->tecnico}}</td>
+                                <td scope="row">{{$solicitud->folio}}</td>
+                                <td scope="row">{{$solicitud->formatted_date}}</td>
+                                <td scope="row">{{$solicitud->Estatus}}</td>
 
-                                    <div class="btn-group">
-                                        <!--PDF GENERADO-->
-                                        <td>
-                                            <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                        </td>
+                                <div class="btn-group">
+                                    <!--PDF GENERADO-->
+                                    <td>
+                                        <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                    </td>
 
-                                        <td>
-                                            <input type="radio" name="selectedSolicitud" value="{{ $solicitud->idSolicitud }}">
-                                        </td>
-                                    </div>
+                                    <td>
+                                        <input type="radio" name="selectedSolicitud" value="{{ $solicitud->idSolicitud }}">
+                                    </td>
+                                </div>
                             </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <p>
-            <p>
-            <div class="container">
-                <div class="float-right">
-                    <button type="submit" class="btn btn-info bg-primary">Guardar y Continuar</button>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p>
+                <p>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idPrueba" placeholder="Ejemplo: PROP-040/24" value="{{ $idPrueba }}" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idNorma_Codigo" placeholder="Ejemplo: PROP-040/24" value="{{ $idNorma_Codigo }}" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="idFormato" placeholder="Ejemplo: PROP-040/24" value="{{ $idFormato }}" readonly>
+                    </div>
                 </div>
 
-                <!--<div class="float-left">
-                    <button type="button" class="btn btn-info bg-success" id="guardarContinuarEquipos">Guardar y continuar</button>
-                </di>-->
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!--<label class="col-form-label" for="inputSuccess">Folio</label>-->
+                        <input type="hidden" class="form-control inputForm" name="formatoNombrePersonalizado" placeholder="Ejemplo: PROP-040/24" value="{{ $formatoNombrePersonalizado }}" readonly>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-info bg-primary">Seleccionar y Continuar al Reporte</button>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -126,57 +162,20 @@
                     }
     });
 
-    $(document).on("click", ".btnEliminarSolicitud", function() {
-    //valor del id a eliminar
-    var idSolicitud = $(this).attr("id-Solicitud");
-    Swal.fire({
-        title: "Seguro de eliminar este elemento?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Enviar la solicitud DELETE al servidor
-            $.ajax({
-                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
-                type: 'DELETE', // Método HTTP DELETE
-                data: {
-                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
-                },
-                success: function(response) {
-                    // Manejar la respuesta del servidor si es necesario
-                    if (response.success) {
-                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
-                        location.reload();
-                    } else {
-                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
-                    }
-                },
-                error: function() {
-                     // Manejar errores de la solicitud AJAX
-                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
-                    Swal.fire({
-                        title: "Confirmado!",
-                        text: "Solicitud Eliminado Correctamente!",
-                        icon: "success",
-                        didClose: function() {
-                            location.reload();
-                            }
-                        });
-                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                        /*  setTimeout(function() {
-                            location.reload();
-                        }, 3000);*/
-                }
-            });
-        } 
-        else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
-        }
-    });
-});
+        document.getElementById('AsignaManifiestoForm').addEventListener('submit', function(event) {
+            // Verificar si algún radio button está seleccionado
+            const selectedSolicitud = document.querySelector('input[name="selectedSolicitud"]:checked');
+            if (!selectedSolicitud) {
+                // Si no hay ningún radio button seleccionado, mostrar una alerta y prevenir el envío del formulario
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Por favor, selecciona un manifiesto antes de continuar.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
 </script>
 
 @endsection

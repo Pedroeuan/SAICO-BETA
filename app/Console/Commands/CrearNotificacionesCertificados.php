@@ -141,6 +141,8 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
                     }
+                    $this->info('Notificaciones creadas exitosamente.');
+                    Log::info('Notificaciones creadas exitosamente.');
                 }
             }
         }

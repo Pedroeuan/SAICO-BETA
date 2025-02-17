@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Solicitudes;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use Carbon\Carbon;
-use App\Models\EquiposyConsumibles\general_eyc;
-use App\Models\Solicitudes\Solicitudes;
-use App\Models\Solicitudes\detalles_solicitud;
-use App\Models\EquiposyConsumibles\detalles_kits;
-use App\Models\EquiposyConsumibles\kits;
 use App\Models\Manifiesto\manifiesto;
+use App\Models\Solicitudes\Solicitudes;
+use App\Models\EquiposyConsumibles\kits;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\devolucion;
+use App\Models\Solicitudes\detalles_solicitud;
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
 use App\Models\Clientes\clientes;
 

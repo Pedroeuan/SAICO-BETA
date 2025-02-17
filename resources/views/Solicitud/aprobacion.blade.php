@@ -7,6 +7,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 
+<style>
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+</style>
+
 @endsection
 
 @section('content')
@@ -18,7 +25,7 @@
     @csrf 
     <h3 >Formulario para aprobar solicitud de equipos y consumibles</h3>
     <br>
-    <div class="alert alert-info alert-dismissible">
+        <div class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5><i class="icon fas fa-info"></i> Importante</h5>
             <p>Selecciona en el boton de acciones para agregar un equipo o consumible a la solicitud</p>

@@ -21,6 +21,12 @@
     .custom-container {
         max-width: 1405px;
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
+
 </style>
 
 @section('content')

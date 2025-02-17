@@ -14,6 +14,12 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 @endsection
 
@@ -277,7 +283,6 @@
                         }
                     }
     });
-
     $(document).on("click", ".btnEliminarSolicitud", function() {
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
@@ -328,6 +333,7 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
+
 });
 </script>
 
