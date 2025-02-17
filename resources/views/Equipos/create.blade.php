@@ -21,6 +21,11 @@
     .custom-container {
         max-width: 1405px;
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 
 </style>
 
@@ -1226,9 +1231,13 @@ function actualizarTabla() {
         }
 
 $(document).on('click', '.btnAgregar', function() {
+    let button = $(this);
     let row = $(this).closest('tr');
     let id = $(this).data('id');
     let nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre del elemento está en la primera columna
+
+    // Deshabilitar el botón
+    button.prop('disabled', true);
 
     // Verificar si el elemento ya está en la tabla de seleccionados
     if ($(`#tablaSeleccionados tr[data-id='${id}']`).length) {
@@ -1238,6 +1247,7 @@ $(document).on('click', '.btnAgregar', function() {
             text: `El elemento "${nombreElemento}" ya ha sido agregado.`,
             confirmButtonText: 'Entendido'
         });
+        button.prop('disabled', false); // Habilitar el botón
         return; // Si ya está, no hacemos nada
     }
 
@@ -1245,6 +1255,7 @@ $(document).on('click', '.btnAgregar', function() {
     consultarCantidadAlmacen(id, function(error, cantidad) {
         if (error) {
             alert('Error al obtener cantidad de almacén.');
+            button.prop('disabled', false); // Habilitar el botón en caso de error
             return;
         }
 
@@ -1291,6 +1302,8 @@ $(document).on('click', '.btnAgregar', function() {
             showConfirmButton: true,
             timer: 2000
         });
+                // Habilitar el botón después de agregar el elemento
+                button.prop('disabled', false);
     });
 });
 
@@ -1448,16 +1461,28 @@ function validateForm() {
     return true;
 }
 
-// Guardar y continuar
+// Guardar y continuar Kits
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('guardarContinuarKits').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+    const form = document.getElementById('kitForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarKits');
+
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
 
         if (!validateForm()) {
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
             return; // No continuar si la validación falla
         }
 
-        var form = document.getElementById('kitForm');
         var formData = new FormData(form);
 
         // Agregar datos de los kits seleccionados
@@ -1491,6 +1516,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Limpiar la tabla de elementos seleccionados
                 document.querySelector('#tablaSeleccionados tbody').innerHTML = '';
+
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             },
             error: function(xhr, status, error) {
                 var errorMessage = xhr.status + ': ' + xhr.statusText;
@@ -1504,55 +1532,58 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
 });
 
-    /*HERRAMIENTAS*/
-    document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
-    document.getElementById('guardarContinuarHerramientas').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
 
-        var form = document.getElementById('herramientasForm');
+/*HERRAMIENTAS*/
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('herramientasForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarHerramientas');
+
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+
         var formData = new FormData(form);
 
-        // Obtener los valores de los campos
+        // Validaciones
         var nombre = formData.get('Nombre_E_P_BP');
-            var numeroEconomico = formData.get('No_economico');
-            var marca = formData.get('Marca');
-            var modelo = formData.get('Modelo');
-            var serie = formData.get('Serie');
+        var numeroEconomico = formData.get('No_economico');
+        var marca = formData.get('Marca');
+        var modelo = formData.get('Modelo');
+        var serie = formData.get('Serie');
 
-            // Validaciones
-            var camposVacios = [];
+        var camposVacios = [];
+        if (!nombre) camposVacios.push('Nombre');
+        if (!numeroEconomico) camposVacios.push('Número Económico');
+        if (!marca) camposVacios.push('Marca');
+        if (!modelo) camposVacios.push('Modelo');
+        if (!serie) camposVacios.push('Número de Serie');
 
-            if (!nombre) {
-                camposVacios.push('Nombre');
-            }
-            if (!numeroEconomico) {
-                camposVacios.push('Número Económico');
-            }
-            if (!marca) {
-                camposVacios.push('Marca');
-            }
-            if (!modelo) {
-                camposVacios.push('Modelo');
-            }
-            if (!serie) {
-                camposVacios.push('Número de Serie');
-            }
-
-            if (camposVacios.length > 0) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
+        if (camposVacios.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
 
         // Validación de duplicados en No_economico y Serie
         $.ajax({
@@ -1571,6 +1602,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
+                    finalizarButton.disabled = false;
+                    guardarContinuarButton.disabled = false;
                 } else {
                     // Enviar el formulario usando AJAX si no hay duplicados
                     $.ajax({
@@ -1587,6 +1620,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 confirmButtonText: 'Aceptar'
                             });
                             form.reset();
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -1595,6 +1630,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar'
                             });
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         }
                     });
                 }
@@ -1606,6 +1643,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
@@ -1613,48 +1652,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*BLOCKS*/
 document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
-    document.getElementById('guardarContinuarBlocks').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+    const form = document.getElementById('blocksForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarBlocks');
 
-        var form = document.getElementById('blocksForm');
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+
         var formData = new FormData(form);
 
-        // Obtener los valores de los campos
+        // Validaciones
         var nombre = formData.get('Nombre_E_P_BP');
-            var numeroEconomico = formData.get('No_economico');
-            var marca = formData.get('Marca');
-            var modelo = formData.get('Modelo');
-            var serie = formData.get('Serie');
+        var numeroEconomico = formData.get('No_economico');
+        var marca = formData.get('Marca');
+        var modelo = formData.get('Modelo');
+        var serie = formData.get('Serie');
 
-            // Validaciones
-            var camposVacios = [];
+        var camposVacios = [];
+        if (!nombre) camposVacios.push('Nombre');
+        if (!numeroEconomico) camposVacios.push('Número Económico');
+        if (!marca) camposVacios.push('Marca');
+        if (!modelo) camposVacios.push('Modelo');
+        if (!serie) camposVacios.push('Número de Serie');
 
-            if (!nombre) {
-                camposVacios.push('Nombre');
-            }
-            if (!numeroEconomico) {
-                camposVacios.push('Número Económico');
-            }
-            if (!marca) {
-                camposVacios.push('Marca');
-            }
-            if (!modelo) {
-                camposVacios.push('Modelo');
-            }
-            if (!serie) {
-                camposVacios.push('Número de Serie');
-            }
-
-            if (camposVacios.length > 0) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
+        if (camposVacios.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
 
         // Validación de duplicados en No_economico y Serie
         $.ajax({
@@ -1673,6 +1711,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
+                    finalizarButton.disabled = false;
+                    guardarContinuarButton.disabled = false;
                 } else {
                     // Enviar el formulario usando AJAX si no hay duplicados
                     $.ajax({
@@ -1689,6 +1729,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 confirmButtonText: 'Aceptar'
                             });
                             form.reset();
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -1697,6 +1739,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar'
                             });
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         }
                     });
                 }
@@ -1708,55 +1752,57 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
 });
 
+
 /*ACCESORIOS*/
 document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
-    document.getElementById('guardarContinuarAccesorios').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+    const form = document.getElementById('accesoriosForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarAccesorios');
 
-        var form = document.getElementById('accesoriosForm');
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+
         var formData = new FormData(form);
 
-        // Obtener los valores de los campos
+        // Validaciones
         var nombre = formData.get('Nombre_E_P_BP');
-            var numeroEconomico = formData.get('No_economico');
-            var marca = formData.get('Marca');
-            var modelo = formData.get('Modelo');
-            var serie = formData.get('Serie');
+        var numeroEconomico = formData.get('No_economico');
+        var marca = formData.get('Marca');
+        var modelo = formData.get('Modelo');
+        var serie = formData.get('Serie');
 
-            // Validaciones
-            var camposVacios = [];
+        var camposVacios = [];
+        if (!nombre) camposVacios.push('Nombre');
+        if (!numeroEconomico) camposVacios.push('Número Económico');
+        if (!marca) camposVacios.push('Marca');
+        if (!modelo) camposVacios.push('Modelo');
+        if (!serie) camposVacios.push('Número de Serie');
 
-            if (!nombre) {
-                camposVacios.push('Nombre');
-            }
-            if (!numeroEconomico) {
-                camposVacios.push('Número Económico');
-            }
-            if (!marca) {
-                camposVacios.push('Marca');
-            }
-            if (!modelo) {
-                camposVacios.push('Modelo');
-            }
-            if (!serie) {
-                camposVacios.push('Número de Serie');
-            }
-
-            if (camposVacios.length > 0) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
+        if (camposVacios.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
 
         // Validación de duplicados en No_economico y Serie
         $.ajax({
@@ -1775,6 +1821,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
+                    finalizarButton.disabled = false;
+                    guardarContinuarButton.disabled = false;
                 } else {
                     // Enviar el formulario usando AJAX si no hay duplicados
                     $.ajax({
@@ -1791,6 +1839,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 confirmButtonText: 'Aceptar'
                             });
                             form.reset();
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -1799,6 +1849,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar'
                             });
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         }
                     });
                 }
@@ -1810,55 +1862,55 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
 });
 
+
 /*CONSUMIBLES*/
 document.addEventListener('DOMContentLoaded', function() {
-    // Evento click para el botón "Guardar y continuar"
-    document.getElementById('guardarContinuarConsumibles').addEventListener('click', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de manera convencional
+    const form = document.getElementById('consumiblesForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarConsumibles');
 
-        var form = document.getElementById('consumiblesForm');
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+
         var formData = new FormData(form);
 
-        // Obtener los valores de los campos
-            var nombre = formData.get('Nombre_E_P_BP');
-            var marca = formData.get('Marca');
-            var modelo = formData.get('Modelo');
-            //var serie = formData.get('Serie');
-            var stock = formData.get('Stock');
+        // Validaciones
+        var nombre = formData.get('Nombre_E_P_BP');
+        var marca = formData.get('Marca');
+        var modelo = formData.get('Modelo');
+        var stock = formData.get('Stock');
 
-            // Validaciones
-            var camposVacios = [];
+        var camposVacios = [];
+        if (!nombre) camposVacios.push('Nombre');
+        if (!marca) camposVacios.push('Marca');
+        if (!modelo) camposVacios.push('Modelo');
+        if (!stock) camposVacios.push('Stock');
 
-            if (!nombre) {
-                camposVacios.push('Nombre');
-            }
-            if (!marca) {
-                camposVacios.push('Marca');
-            }
-            if (!modelo) {
-                camposVacios.push('Modelo');
-            }
-            /*if (!serie) {
-                camposVacios.push('Número de Serie');
-            }*/
-            if (!stock) {
-                camposVacios.push('Stock');
-            }
-
-            if (camposVacios.length > 0) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
+        if (camposVacios.length > 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
 
         $.ajax({
             url: form.action,
@@ -1867,45 +1919,58 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Usar SweetAlert2 para mostrar una alerta atractiva
                 Swal.fire({
                     title: 'Datos guardados',
                     text: 'Datos guardados exitosamente. Puedes continuar ingresando más datos.',
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 });
+
                 // Limpiar el formulario
                 form.reset();
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             },
             error: function(xhr, status, error) {
-                // Usar SweetAlert2 para mostrar una alerta de error
                 Swal.fire({
                     title: 'Error',
                     text: 'Ocurrió un error al guardar los datos.',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
 });
 
+
 /*Equipos*/
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('guardarContinuarEquipos').addEventListener('click', function(event) {
-        event.preventDefault();
+    const form = document.getElementById('equiposForm');
+    const finalizarButton = form.querySelector('button[type="submit"]');
+    const guardarContinuarButton = document.getElementById('guardarContinuarEquipos');
 
-        var form = document.getElementById('equiposForm');
+    form.addEventListener('submit', function(event) {
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+    });
+
+    guardarContinuarButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        finalizarButton.disabled = true;
+        guardarContinuarButton.disabled = true;
+
         var formData = new FormData(form);
 
-        // Obtener los valores de los campos
+        // Validaciones
         var nombre = formData.get('Nombre_E_P_BP');
         var numeroEconomico = formData.get('No_economico');
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
 
-        // Validaciones
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
         if (!numeroEconomico) camposVacios.push('Número Económico');
@@ -1920,6 +1985,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
             return;
         }
 
@@ -1940,6 +2007,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
+                    finalizarButton.disabled = false;
+                    guardarContinuarButton.disabled = false;
                 } else {
                     // Enviar el formulario usando AJAX si no hay duplicados
                     $.ajax({
@@ -1955,7 +2024,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon: 'success',
                                 confirmButtonText: 'Aceptar'
                             });
+
+                            // Limpiar el formulario
                             form.reset();
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         },
                         error: function(xhr, status, error) {
                             Swal.fire({
@@ -1964,6 +2037,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar'
                             });
+                            finalizarButton.disabled = false;
+                            guardarContinuarButton.disabled = false;
                         }
                     });
                 }
@@ -1975,6 +2050,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
+                finalizarButton.disabled = false;
+                guardarContinuarButton.disabled = false;
             }
         });
     });
@@ -2040,6 +2117,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Crear un objeto FormData con el formulario
     var form = document.getElementById('importarExcelForm');
     var formData = new FormData(form);
+    var btnImportar = document.getElementById('btnImportar');
+
+        // Deshabilitar el botón
+        btnImportar.disabled = true;
 
     // Realizar la solicitud AJAX
     $.ajax({
@@ -2059,7 +2140,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Resetear el campo de archivo después de la importación exitosa
-        $('input[type="file"]').val(''); // Resetea el campo de tipo file
+            $('input[type="file"]').val(''); // Resetea el campo de tipo file
+
+            // Habilitar el botón
+            btnImportar.disabled = false;
         },
         error: function(error) {
             // Manejar errores con SweetAlert2
@@ -2070,12 +2154,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Entendido',
                 confirmButtonColor: '#d33'
             });
-            console.error(error);
+            // Habilitar el botón
+            btnImportar.disabled = false;
         }
     });
 });
 
-/*PREVENIR CLICS */
+/*PREVENIR Enters*/
 /*Prevenir el Enter Equipos*/
 document.getElementById('equiposForm').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {

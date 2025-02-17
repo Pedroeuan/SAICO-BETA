@@ -7,23 +7,12 @@ use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-//use FPDF;
-//use Spipu\Html2Pdf\Html2Pdf;
-//use Mpdf\Mpdf;
-//use Spatie\Browsershot\Browsershot;
-//use Smalot\PdfParser\Parser;
-//use Barryvdh\Snappy\Facades\SnappyPdf;
 use Barryvdh\DomPDF\Facade\Pdf;
-//use Barryvdh\DomPDF\Facade as PDF;
-/*use Dompdf\Dompdf;*/
-/*use Dompdf\Options;*/
-
-//use Spatie\LaravelPdf\Facades\Pdf;
 
 class PDFReportesController extends Controller
 {
     /*DOMPDF*/
-    public function FOR_PINS_03_01()
+    public function FOR_INS_02_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -36,7 +25,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-03/01.PDF',
+            'title' => 'Reporte_FOR-INS-02/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -47,8 +36,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -77,10 +66,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_03_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_02_02.PDF');
     }
 
-    public function FOR_PINS_04_01()
+    public function FOR_INS_03_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -93,7 +82,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
     
         $data = [
-            'title' => 'Reporte_FOR-PINS-04/01.PDF',
+            'title' => 'Reporte_FOR-INS-03/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -104,8 +93,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_04_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_04_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_03_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_03_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -133,10 +122,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_04_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_03_01.PDF');
     }
 
-    public function FOR_PINS_05_01()
+    public function FOR_INS_04_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -148,23 +137,23 @@ class PDFReportesController extends Controller
     
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
-        $FOR_PINS_05_01 = public_path('images/FOR-PINS-05-01.png');
+        $FOR_INS_04_01 = public_path('images/FOR-INS-04-01.png');
     
         $data = [
-            'title' => 'Reporte_FOR-PINS-05/01.PDF',
+            'title' => 'Reporte_FOR-INS-04/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
             'generalEyC' => $generalEyC,*/
             'nombre' => $nombre,
             'Logo' => $Logo,
-            'FOR_PINS_05_01' => $FOR_PINS_05_01,
+            'FOR_INS_04_01' => $FOR_INS_04_01,
             //'Devolucion' => $Devolucion,
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_04_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_04_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -192,10 +181,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_05_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_04_01.PDF');
     }
 
-    public function FOR_PINS_05_02()
+    public function FOR_INS_04_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -208,7 +197,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
     
         $data = [
-            'title' => 'Reporte_FOR-PINS-05/02.PDF',
+            'title' => 'Reporte_FOR-INS-04/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -219,8 +208,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_02_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_04_02_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_04_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -248,10 +237,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_05_02.PDF');
+        return $pdf->stream('Reporte_FOR_INS_04_02.PDF');
     }
 
-    public function FOR_PINS_06_01()
+    public function FOR_INS_05_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -265,7 +254,7 @@ class PDFReportesController extends Controller
 
     
         $data = [
-            'title' => 'Reporte_FOR-PINS-06/01.PDF',
+            'title' => 'Reporte_FOR-INS-05/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -276,8 +265,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_06_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_05_01_PDF', $data)->setPaper('letter', 'portrait');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -305,10 +294,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_06_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_05_01.PDF');
     }
 
-    public function FOR_PINS_07_01()
+    public function FOR_INS_06_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -322,7 +311,7 @@ class PDFReportesController extends Controller
 
     
         $data = [
-            'title' => 'Reporte_FOR-PINS-07/01.PDF',
+            'title' => 'Reporte_FOR-INS-06/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -333,8 +322,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_07_01_PDF', $data)->setPaper('letter', 'landscape');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_05_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_06_01_PDF', $data)->setPaper('letter', 'landscape');//Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_06_01_PDF', $data)->setPaper([0, 0, 760, 800]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -362,11 +351,11 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_07_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_06_01.PDF');
     }
 
 
-    public function FOR_PINS_08_01()
+    public function FOR_INS_07_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -379,7 +368,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-08/01.PDF',
+            'title' => 'Reporte_FOR-INS-07/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -390,8 +379,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_08_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_07_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_07_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -420,10 +409,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_08_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_07_01.PDF');
     }
 
-    public function FOR_PINS_09_01()
+    public function FOR_INS_08_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -436,7 +425,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-09/01.PDF',
+            'title' => 'Reporte_FOR-INS-08/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -447,8 +436,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_09_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_08_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_08_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -477,10 +466,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_09_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_08_01.PDF');
     }
 
-    public function FOR_PINS_10_01()
+    public function FOR_INS_09_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -492,22 +481,22 @@ class PDFReportesController extends Controller
         
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-        $FOR_PINS_10_01 = public_path('images/FOR-PINS-10-01.png');
+        $FOR_INS_09_01 = public_path('images/FOR-INS-09-01.png');
         $data = [
-            'title' => 'Reporte_FOR-PINS-10/01.PDF',
+            'title' => 'Reporte_FOR-INS-09/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
             'generalEyC' => $generalEyC,*/
             'nombre' => $nombre,
             'Logo' => $Logo,
-            'FOR_PINS_10_01' => $FOR_PINS_10_01,
+            'FOR_INS_09_01' => $FOR_INS_09_01,
             //'Devolucion' => $Devolucion,
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_10_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_09_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_09_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -536,10 +525,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_10_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_09_01.PDF');
     }
 
-    public function FOR_PINS_11_01()
+    public function FOR_INS_10_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -552,7 +541,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-11/01.PDF',
+            'title' => 'Reporte_FOR-INS-10/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -563,8 +552,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_10_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -592,10 +581,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_11_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_10_01.PDF');
     }
 
-    public function FOR_PINS_11_02()
+    public function FOR_INS_10_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -608,7 +597,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-11/02.PDF',
+            'title' => 'Reporte_FOR-INS-10/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -619,8 +608,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -648,10 +637,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_11_02.PDF');
+        return $pdf->stream('Reporte_FOR_INS_10_02.PDF');
     }
 
-    public function FOR_PINS_13_01()
+    public function FOR_INS_12_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -664,7 +653,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-13/01.PDF',
+            'title' => 'Reporte_FOR-INS-12/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -675,8 +664,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_13_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_12_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_12_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -704,10 +693,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_13_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_12_01.PDF');
     }
 
-    public function FOR_PINS_14_01()
+    public function FOR_INS_13_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -720,7 +709,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-14/01.PDF',
+            'title' => 'Reporte_FOR-INS-13/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -731,8 +720,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_14_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_13_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_13_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -760,10 +749,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_14_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_13_01.PDF');
     }
 
-    public function FOR_PINS_16_01()
+    public function FOR_INS_15_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -776,7 +765,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-16/01.PDF',
+            'title' => 'Reporte_FOR-INS-15/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -787,8 +776,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_15_01_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_15_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -817,10 +806,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_16_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_15_01.PDF');
     }
 
-    public function FOR_PINS_16_02()
+    public function FOR_INS_15_02()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -833,7 +822,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-16/02.PDF',
+            'title' => 'Reporte_FOR-INS-15/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -844,8 +833,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_15_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -874,10 +863,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_16_02.PDF');
+        return $pdf->stream('Reporte_FOR_INS_15_02.PDF');
     }
 
-    public function FOR_PINS_16_03()
+    public function FOR_INS_15_03()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -890,7 +879,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-16/02.PDF',
+            'title' => 'Reporte_FOR-INS-15/02.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -901,8 +890,8 @@ class PDFReportesController extends Controller
         ];
 
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_16_03_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_15_03_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_03_01_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
 
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -931,10 +920,10 @@ class PDFReportesController extends Controller
             }
         });
 
-        return $pdf->stream('Reporte_FOR_PINS_16_03.PDF');
+        return $pdf->stream('Reporte_FOR_INS_15_03.PDF');
     }
 
-    public function FOR_PINS_17_01()
+    public function FOR_INS_16_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -947,7 +936,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-17/01.PDF',
+            'title' => 'Reporte_FOR-INS-16/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -958,8 +947,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_17_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_16_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_16_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -987,10 +976,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_17_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_16_01.PDF');
     }
 
-    public function FOR_PINS_17_01_01()
+    public function FOR_INS_17_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -1003,7 +992,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-17_01/01.PDF',
+            'title' => 'Reporte_FOR-INS-17/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -1014,8 +1003,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_17_01_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_17_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -1043,10 +1032,10 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_17_01_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_17_01.PDF');
     }
 
-    public function FOR_PINS_18_01()
+    public function FOR_INS_18_01()
     {
         $user = Auth::user();
         $nombre = $user->name;
@@ -1059,7 +1048,7 @@ class PDFReportesController extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            'title' => 'Reporte_FOR-PINS-18/01.PDF',
+            'title' => 'Reporte_FOR-INS-18/01.PDF',
             /*'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
@@ -1070,8 +1059,8 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_18_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_PINS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
+        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_18_01_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
         $dompdf = $pdf->getDomPDF();
@@ -1099,11 +1088,11 @@ class PDFReportesController extends Controller
             }
         });
     
-        return $pdf->stream('Reporte_FOR_PINS_18_01.PDF');
+        return $pdf->stream('Reporte_FOR_INS_18_01.PDF');
     }
 
 }
-    /*public function FOR_PINS_03_01132()
+    /*public function FOR_INS_03_01132()
     {
         // Crear instancia de Dompdf
         $dompdf = new Dompdf();
@@ -1124,7 +1113,7 @@ class PDFReportesController extends Controller
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-03/01</title>
+            <title>FORMATO FOR-INS-03/01</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -1260,7 +1249,7 @@ class PDFReportesController extends Controller
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-03/01</th>
+                            <th style="width: 80%;">FOR-INS-03/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="' . $image_src . '" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -1599,6 +1588,6 @@ class PDFReportesController extends Controller
         $canvas = $dompdf->getCanvas();
         $canvas->page_text(470, 36, "{PAGE_NUM} de {PAGE_COUNT}", null, 8, array(0, 0, 0)); // Ajuste la posición y estilo según necesite
 
-        $dompdf->stream("FORMATO FOR-PINS-03/01", ["Attachment" => false]);
+        $dompdf->stream("FORMATO FOR-INS-03/01", ["Attachment" => false]);
 
     }*/

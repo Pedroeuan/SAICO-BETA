@@ -37,6 +37,11 @@
         #addRowBtn:hover {
             background-color: #0056b3;
         }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
     </style>
 @endsection
 
@@ -217,61 +222,6 @@
             updateRowNumbers();
         });
     });
-        /*document.getElementById("addRowBtn").addEventListener("click", function() {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rowCount = tableBody.rows.length + 1;
-
-            // Crear una nueva fila
-            const newRow = document.createElement("tr");
-
-            // Celda 1: Número de fila
-            const cell1 = document.createElement("td");
-            cell1.textContent = rowCount;
-            newRow.appendChild(cell1);
-
-            // Celda 2: Input para Unidad
-            const cell2 = document.createElement("td");
-            const unidadInput = document.createElement("input");
-            unidadInput.type = "text";
-            unidadInput.placeholder = "Unidad/Medida";
-            unidadInput.style.width = "100%";
-            cell2.appendChild(unidadInput);
-            newRow.appendChild(cell2);
-
-            // Celda 3: Input para Cantidad
-            const cell3 = document.createElement("td");
-            const cantidadInput = document.createElement("input");
-            cantidadInput.type = "number";
-            cantidadInput.placeholder = "Cantidad";
-            cantidadInput.style.width = "100%";
-            cell3.appendChild(cantidadInput);
-            newRow.appendChild(cell3);
-
-            // Celda 4: Input para Descripcion
-            const cell4 = document.createElement("td");
-            const DescripcionInput = document.createElement("textarea");
-            //DescripcionInput.type = "text";
-            DescripcionInput.placeholder = "Descripcion";
-            DescripcionInput.style.width = "100%";
-            cell4.appendChild(DescripcionInput);
-            newRow.appendChild(cell4);
-
-
-            // Celda 4: Botón de eliminar
-            const cell5 = document.createElement("td");
-            const deleteBtn = document.createElement("button");
-            deleteBtn.type = "button";
-            deleteBtn.className = "btn btn-danger btnEliminar";
-            deleteBtn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
-            deleteBtn.addEventListener("click", function() {
-                tableBody.removeChild(newRow);
-            });
-            cell5.appendChild(deleteBtn);
-            newRow.appendChild(cell5);
-
-            // Agregar la fila a la tabla
-            tableBody.appendChild(newRow);
-        });*/
 
         document.getElementById('OC').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
