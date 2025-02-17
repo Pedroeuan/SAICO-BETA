@@ -338,6 +338,7 @@ $(document).ready(function() {
 
     // Agregar elemento de inventario
     $(document).on('click', '.btnAgregarInventario', function() {
+        var button = $(this);
         var rowId = $(this).data('id');
         var row = $('#row-' + rowId);
         var nombre = row.find('td:eq(0)').text();
@@ -345,6 +346,10 @@ $(document).ready(function() {
         var marca = row.find('td:eq(2)').text();
         var ultimaCalibracion = row.find('td:eq(7)').text();
         var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
+
+            // Deshabilitar el botón
+            button.prop('disabled', true);
+
 
         // Verificar si el elemento ya está agregado
         if ($('#tablaAgregados tbody tr').find(`input[name="general_eyc_id[]"][value="${rowId}"]`).length > 0) {
@@ -356,6 +361,7 @@ $(document).ready(function() {
                 text: `El elemento "${nombre}" ya está agregado.`,
                 confirmButtonText: 'Entendido'
             });
+            button.prop('disabled', false); // Habilitar el botón
             return;
         }
 
@@ -367,6 +373,7 @@ $(document).ready(function() {
                     text: 'Sin Stock en Almacen',
                     confirmButtonText: 'OK'
                 });
+                button.prop('disabled', false); // Habilitar el botón en caso de error
                 return;
             }
 
@@ -406,13 +413,20 @@ $(document).ready(function() {
                 text: `El elemento "${nombre}" ha sido agregado correctamente.`,
                 confirmButtonText: 'OK'
             });
+
+            // Habilitar el botón después de agregar el elemento
+            button.prop('disabled', false);
         });
     });
 
     // Agregar elemento de kits
     $(document).on('click', '.btnAgregarKit', function() {
+        var button = $(this);
         var kitId = $(this).data('id');
         var nombresDuplicados = []; // Array para almacenar los nombres de los elementos duplicados
+
+        // Deshabilitar el botón
+        button.prop('disabled', true);
 
         $.ajax({
             url: '/Obtener/Kits/' + kitId,
@@ -511,6 +525,8 @@ $(document).ready(function() {
                                 confirmButtonText: 'Entendido'
                             });
                         }
+                        // Habilitar el botón después de agregar el kit
+                        button.prop('disabled', false);
                     })
                     .catch(function(errorMessage) {
                         Swal.fire({
@@ -519,6 +535,9 @@ $(document).ready(function() {
                             text: errorMessage,
                             confirmButtonText: 'OK'
                         });
+
+                        // Habilitar el botón en caso de error
+                        button.prop('disabled', false);
                     });
             },
             error: function() {
@@ -528,6 +547,9 @@ $(document).ready(function() {
                     text: 'Error al obtener detalles de Kits.',
                     confirmButtonText: 'OK'
                 });
+
+                // Habilitar el botón en caso de error
+                button.prop('disabled', false);
             }
         });
     });

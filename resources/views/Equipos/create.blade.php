@@ -1255,6 +1255,7 @@ $(document).on('click', '.btnAgregar', function() {
     consultarCantidadAlmacen(id, function(error, cantidad) {
         if (error) {
             alert('Error al obtener cantidad de almacén.');
+            button.prop('disabled', false); // Habilitar el botón en caso de error
             return;
         }
 
@@ -1301,6 +1302,8 @@ $(document).on('click', '.btnAgregar', function() {
             showConfirmButton: true,
             timer: 2000
         });
+                // Habilitar el botón después de agregar el elemento
+                button.prop('disabled', false);
     });
 });
 
