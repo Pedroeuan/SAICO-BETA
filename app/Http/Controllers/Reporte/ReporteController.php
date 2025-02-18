@@ -101,6 +101,90 @@ class ReporteController extends Controller
         return view('Reportes.Servicios', compact('service', 'Pruebas'));
     }
 
+    public function Edicion_Reportes($id)
+    {
+        /*Obtener datos del Reporte */
+        $Reporte = reporte::where('idReportes',$id)->first();
+        // Decodificar el JSON de Detalles_Generales
+        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
+        // Decodificar el JSON de Datos_Equipo
+        $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        //dd($Datos_Equipo);
+        // Obtener el idSolicitud
+        $idSolicitud = $Detalles_Generales['idSolicitud'];
+        $Solicitud = Solicitudes::findOrFail($idSolicitud);
+        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
+
+        // Buscar el idGeneral_EyC de cada detalle
+        $idGeneral_EyCs = [];
+        foreach ($DetallesSolicitud as $detalle) {
+            $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
+        }
+
+        // Buscar los registros en la tabla General_EyC
+        //Equipos
+        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        //Accesorios
+        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        //Block y Probeta
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+
+        /*Obtener id de Prueba_Aplica */
+        $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
+        /*Obtener datos de Prueba_Aplica */
+        $Prueba_Aplica = Prueba_Aplica::where('idPrueba_Aplica',$idPrueba_Aplica)->first();
+        /*Obtener id de Prueba */
+        $Obtener_idPrueba = $Prueba_Aplica->idPrueba;
+        /*Obtener datos del id del Prueba */
+        $Buscar_idFormato = prueba::where('idPrueba',$Obtener_idPrueba)->first();
+        /*Obtener Nombre de Prueba */
+        $Prueba = $Buscar_idFormato->Nombre;
+        /*Obtener id de Formato */
+        $Obtener_idFormato = $Prueba_Aplica->idFormato;
+        /*Obtener datos del id del Formato */
+        $Buscar_idFormato = formato::where('idFormato',$Obtener_idFormato)->first();
+        /*Obtener el Nombre del Formato */
+        $Nombre_Formato = $Buscar_idFormato->Nombre;
+        /* Llamar a la función formatoNombrePersonalizado */
+        $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
+
+        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo'));
+
+    }
+
+    public function formatoNombrePersonalizado ($Nombre_Formato)
+    {
+        $nombresPersonalizados = [
+            "FOR-02-PRO-INS-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
+            "FOR-01-PRO-INS-03" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
+            "FOR-01-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
+            "FOR-02-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
+            "FOR-01-PRO-INS-05" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
+            "FOR-01-PRO-INS-06" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
+            "FOR-01-PRO-INS-07" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES",
+            "FOR-01-PRO-INS-08" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
+            "FOR-01-PRO-INS-09" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
+            "FOR-01-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
+            "FOR-02-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
+            "FOR-01-PRO-INS-11" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
+            "FOR-01-PRO-INS-12" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
+            "FOR-01-PRO-INS-13" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
+            "FOR-01-PRO-INS-14" => "PROCEDIMIENTO DE INSPECCIÓN CON ULTRASONIDO POR EL METODO TOFD (TIME OF FLIGHT DIFFRACTION)",
+            "FOR-01-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL",
+            "FOR-02-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION",
+            "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES",
+            "FOR-01-PRO-INS-16" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
+            "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
+            "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
+            "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
+            "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
+            "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
+            "FOR-01-PRO-INS-22" => "Ondas Guiadas"
+        ];
+    
+        return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -264,6 +348,7 @@ class ReporteController extends Controller
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',

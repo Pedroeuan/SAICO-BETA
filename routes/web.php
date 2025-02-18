@@ -47,10 +47,10 @@ use App\Http\Controllers\Reporte\ReporteController;
 
     Route::middleware('auth')->group(function () {
     Route::middleware('can:equipos-access')->group(function () {
-    /*Creación de Notificaciones*/
-    Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
-    /*Obtener Notificaciones*/
-    Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
+        /*Creación de Notificaciones*/
+        Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
+        /*Obtener Notificaciones*/
+        Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
         });
     });
     
@@ -107,8 +107,11 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
         /*Ruta Para pasar las variables al reporte*/
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
+        /*Ruta Para pasar las variables al reporte*/
+        Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta de Guardado Reportes/INS*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10'])->name('Reportes_FOR_02_PRO_INS_10.store');
+
 
 
         //});
@@ -225,7 +228,7 @@ use App\Http\Controllers\Reporte\ReporteController;
     /*Ruta de botón Guardar-updateKits-edición*/
     Route::post('/Update/kits/{id}', [KitsController::class, 'updateKits'])->name('kits.update');
 
-    /*SOLICITUDES-2*/
+    /*SOLICITUDES-PLUS*/
     /*Rutas de Vistas de Solicitudes-Edición-index*/
     Route::get('/solicitud/edit/{id}', [SolicitudesController::class, 'edit'])->name('solicitud.edit');
     /*Rutas de controlador para duplicar los datos y redirigir*/
@@ -266,7 +269,6 @@ use App\Http\Controllers\Reporte\ReporteController;
 
     /*SOLICITAR RECURSOS*/
     Route::get('solicitar_recursos/create', [SolicitudRecursosController::class, 'create'])->name('solicitar_recursos.create');
-
 
     Route::get('/Manifiesto/create/{id}', [PDFController::class, 'generaManifiestoPDF'])->name('Manifiesto.pdf');
 

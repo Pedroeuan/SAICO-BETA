@@ -56,11 +56,11 @@
                             <td>{{ $detalles['No_Reporte'] }}</td>
                             <td>{{ $detalles['Fecha'] }}</td>
                             <td>
-                            <a href="{{ route('solicitud.edit', ['id' => $reporte->idPrueba_Aplica]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             
                             <td>
-                                <button type="button" class="btn btn-danger btnEliminarReporte" id-Solicitud=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="$reporte->idReportes"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -125,10 +125,10 @@ let table = new DataTable('#tablaJs', {
 
 
     $(document).on("click", ".btnEliminarPrueba", function() {
-        var idPrueba = $(this).attr("idPrueba");
+        var idReporte = $(this).attr("idReporte");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
-            text: "¡Se Eliminarán las Normas y Formatos Relacionados a esta Prueba!",
+            text: "¡Se Eliminara el Reporte¡",
             icon: 'error',
             showDenyButton: true,
             showCancelButton: false,
@@ -137,7 +137,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Eliminar/Prueba/Tabla/' + idPrueba,
+                    url: '/Eliminar/Prueba/Tabla/' + idReporte,
 
                     type: 'DELETE',
                     data: {
@@ -158,7 +158,7 @@ let table = new DataTable('#tablaJs', {
                         }
                     },
                     error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el Reporte.", "error");
                     }
                 });
             } else if (result.isDenied) {
