@@ -395,6 +395,31 @@ return [
                         ],
                     ],
                 ],
+
+                   // Sidebar Operativos:
+            [
+                'text' => 'REPORTE',
+                'icon' => 'fas fa-clipboard',
+                'can' => 'administrador-access',
+                //'topnav' => true,
+                'submenu' => [
+                        [
+                            'text' => 'FORMATO/01',
+                            'url' => '/Reporte/FORMATO/01',
+                            //can => 'nombre-ruta'
+                        ],
+                        [
+                            'text' => 'FORMATO/02',
+                            'url' => '/Reporte/FORMATO/02',
+                        ],
+                        [
+                            'text' => 'Registro de Reportes',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'reporte/create',
+                            'can' => 'equipos-access',
+                        ],
+                    ],
+            ],
         
         // Sidebar Administrativo:
         /*[

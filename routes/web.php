@@ -308,6 +308,17 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::get('/Reporte/FOR-INS-18/01', [PDFReportesController::class, 'FOR_INS_18_01'])->name('Reporte_FOR_INS_18_01.PDF');
 
     /*A DEFINIR EL ACCESO */
+
+    Route::get('/Reporte/FORMATO/01', [PDFReportesController::class, 'FORMATO_01'])->name('Reporte_FOR_PINS_03_01.PDF');
+    Route::get('/Reporte/FORMATO/02', [PDFReportesController::class, 'FORMATO_02'])->name('Reporte_FOR_PINS_04_01.PDF');
+
+    Route::get('/reporte/create', [PDFReportesController::class, 'Reportecreate'])->name('reporte.create');
+
+
+    /*A DEFINIR EL ACCESO */
+
+
+
     });
 
     /*admin */
@@ -315,11 +326,11 @@ use App\Http\Controllers\Reporte\ReporteController;
     /*admin */
     /*Ruta para ver los usuarios*/
     Route::get('/Admin/index', [UsuariosController::class, 'index'])->name('Admin/index');
-    /*Ruta vista para alta de usuarios*/
+    /*Ruta vista para alta e usuarios*/
     Route::get('/Admin/create', [UsuariosController::class, 'create'])->name('Admin/create');
     /*Ruta de Guardado Clientes*/
     Route::post('/registro/storeusuarios', [UsuariosController::class, 'store'])->name('registro.storeUsuarios');
-    /*Rutas de Vistas Usuarios-Edición*/
+    /*Rutas de Vistas Usuadrios-Edición*/
     Route::get('/edicion/editusuarios/{id}', [UsuariosController::class, 'edit'])->name('edicion.editUsuarios');
     /*Ruta de Actualizar Usuarios*/
     Route::post('/edicion/updateUsuario/{id}', [UsuariosController::class, 'update'])->name('editUsuarios.update');
