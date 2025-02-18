@@ -306,7 +306,7 @@ return [
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
             'update_cfg' => [
                 'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
-                //'period' => 60,                       // The update period for get new data (in seconds, optional).
+                'period' => 60,                       // The update period for get new data (in seconds, optional).
             ],
         ],
                 // Sidebar Administrativo:
@@ -317,81 +317,81 @@ return [
                     //'topnav' => true,
                     'submenu' => [
                         [
-                            'text' => 'FOR-INS-02/01',
-                            'url' => '/Reporte/FOR-INS-02/02',
+                            'text' => 'FOR-PINS-03/01',
+                            'url' => '/Reporte/FOR-PINS-03/01',
                             //can => 'nombre-ruta'
                         ],
                         [
-                            'text' => 'FOR-INS-03/01',
-                            'url' => '/Reporte/FOR-INS-03/01',
+                            'text' => 'FOR-PINS-04/01',
+                            'url' => '/Reporte/FOR-PINS-04/01',
                         ],
                         [
-                            'text' => 'FOR-INS-04/01',
-                            'url' => '/Reporte/FOR-INS-04/01',
+                            'text' => 'FOR-PINS-05/01',
+                            'url' => '/Reporte/FOR-PINS-05/01',
                         ],
                         [
-                            'text' => 'FOR-INS-04/02',
-                            'url' => '/Reporte/FOR-INS-04/02',
+                            'text' => 'FOR-PINS-05/02',
+                            'url' => '/Reporte/FOR-PINS-05/02',
                         ],
                         [
-                            'text' => 'FOR-INS-05/01',
-                            'url' => '/Reporte/FOR-INS-05/01',
+                            'text' => 'FOR-PINS-06/01',
+                            'url' => '/Reporte/FOR-PINS-06/01',
                         ],
                         [
-                            'text' => 'FOR-INS-06/01',
-                            'url' => '/Reporte/FOR-INS-06/01',
+                            'text' => 'FOR-PINS-07/01',
+                            'url' => '/Reporte/FOR-PINS-07/01',
                         ],
                         [
-                            'text' => 'FOR-INS-07/01',
-                            'url' => '/Reporte/FOR-INS-07/01',
+                            'text' => 'FOR-PINS-08/01',
+                            'url' => '/Reporte/FOR-PINS-08/01',
                         ],
                         [
-                            'text' => 'FOR-INS-08/01',
-                            'url' => '/Reporte/FOR-INS-08/01',
+                            'text' => 'FOR-PINS-09/01',
+                            'url' => '/Reporte/FOR-PINS-09/01',
                         ],
                         [
-                            'text' => 'FOR-INS-09/01',
-                            'url' => '/Reporte/FOR-INS-09/01',
+                            'text' => 'FOR-PINS-10/01',
+                            'url' => '/Reporte/FOR-PINS-10/01',
                         ],
                         [
-                            'text' => 'FOR-INS-10/01',
-                            'url' => '/Reporte/FOR-INS-10/01',
+                            'text' => 'FOR-PINS-11/01',
+                            'url' => '/Reporte/FOR-PINS-11/01',
                         ],
                         [
-                            'text' => 'FOR-INS-10/02',
-                            'url' => '/Reporte/FOR-INS-10/02',
+                            'text' => 'FOR-PINS-11/02',
+                            'url' => '/Reporte/FOR-PINS-11/02',
                         ],
                         [
-                            'text' => 'FOR-INS-12/01',
-                            'url' => '/Reporte/FOR-INS-12/01',
+                            'text' => 'FOR-PINS-13/01',
+                            'url' => '/Reporte/FOR-PINS-13/01',
                         ],
                         [
-                            'text' => 'FOR-INS-13/01',
-                            'url' => '/Reporte/FOR-INS-13/01',
+                            'text' => 'FOR-PINS-14/01',
+                            'url' => '/Reporte/FOR-PINS-14/01',
                         ],
                         [
-                            'text' => 'FOR-INS-15/01',
-                            'url' => '/Reporte/FOR-INS-15/01',
+                            'text' => 'FOR-PINS-16/01',
+                            'url' => '/Reporte/FOR-PINS-16/01',
                         ],
                         [
-                            'text' => 'FOR-INS-15/02',
-                            'url' => '/Reporte/FOR-INS-15/02',
+                            'text' => 'FOR-PINS-16/02',
+                            'url' => '/Reporte/FOR-PINS-16/02',
                         ],
                         [
-                            'text' => 'FOR-INS-15/03',
-                            'url' => '/Reporte/FOR-INS-15/03',
+                            'text' => 'FOR-PINS-16/03',
+                            'url' => '/Reporte/FOR-PINS-16/03',
                         ],
                         [
-                            'text' => 'FOR-INS-16/01',
-                            'url' => '/Reporte/FOR-INS-17/01',
+                            'text' => 'FOR-PINS-17/01',
+                            'url' => '/Reporte/FOR-PINS-17/01',
                         ],
                         [
-                            'text' => 'FOR-INS-17/01',
-                            'url' => '/Reporte/FOR-INS-17/01',
+                            'text' => 'FOR-PINS-17_01/01',
+                            'url' => '/Reporte/FOR-PINS-17_01/01',
                         ],
                         [
-                            'text' => 'FOR-INS-18/01',
-                            'url' => '/Reporte/FOR-INS-18/01',
+                            'text' => 'FOR-PINS-18/01',
+                            'url' => '/Reporte/FOR-PINS-18/01',
                         ],
                     ],
                 ],
@@ -451,28 +451,13 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Orden de Trabajo/Servicio',
-                        'icon' => 'far fa-file-alt',
+                        'icon' => 'fas fa-file-alt',
                         'url' => '/Page_In_Construction',
-                    ],
-                    [
-                        'text' => 'Crear Reportes',
-                        'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-                        'url' => '/index/ContratoProyecto',
-                    ],
-                    [
-                        'text' => 'Registro de Pruebas',
-                        'icon' => 'fas fa-indent',
-                        'url' => '/Pruebas/Create',
-                    ],
-                    [
-                        'text' => 'Pruebas',
-                        'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
                     ],
                     /* [
                         'text' => 'level_one',
