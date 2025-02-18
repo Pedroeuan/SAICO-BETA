@@ -25,6 +25,10 @@
         padding: 10px 20px;
         font-size: 1em;
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+}
 </style>
 
 @endsection

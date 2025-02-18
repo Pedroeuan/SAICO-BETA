@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Servicio')
+@section('title', 'Servicio Seleccionado')
 
 @section('css')
 <!--datatable -->
@@ -39,6 +39,11 @@
         #addRowBtn:hover {
             background-color: #0056b3;
         }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
     </style>
 @endsection
 
@@ -76,7 +81,10 @@
                                                 ($Prueba->Nombre == 'DUREZAS' ? 'DUREZAS.svg' :
                                                 ($Prueba->Nombre == 'METALOGRAFÍA' ? 'METALOGRAFIA.svg' :
                                                 ($Prueba->Nombre == 'ANÁLISIS QUÍMICO' ? 'ANALISIS_QUIMICO.svg' :
-                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg'))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                ($Prueba->Nombre == 'TOFD' ? 'TOFD.svg' :
+                                                ($Prueba->Nombre == 'ACFM' ? 'ACFM.svg' :
+                                                ($Prueba->Nombre == 'ONDAS GUIADAS' ? 'ONDAS_GUIADAS.svg' :
+                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg')))))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
                                                     {{ $Prueba->Nombre }}
                                                 </option>
                                             @endforeach
@@ -113,7 +121,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-sm-4">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="Tipo_Prueba">IMAGEN DE LA PRUEBA SELECCIONADA</label>
+                                            <label class="col-form-label" for="Tipo_Prueba" id="formatoNombre">IMAGEN DE LA PRUEBA SELECCIONADA</label>
                                             <svg 
                                                 width="100%" height="200" 
                                                 role="img" aria-label="IMAGEN DE LA PRUEBA" 
@@ -126,6 +134,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--Campo oculto para pasar el nombre al reporte -->
+                                <input type="hidden" name="formatoNombrePersonalizado" id="formatoNombrePersonalizado">
 
                                     <p>
                                     <p>
@@ -179,112 +189,150 @@
             }
     });
 
-
     document.addEventListener('DOMContentLoaded', function () {
-        const pruebaSelect = document.getElementById('PruebaSelect');
-        const normaSelect = document.getElementById('NormaCodigoSelect');
-        const formatoSelect = document.getElementById('FormatoSelect');
-        const pruebaImagen = document.getElementById('pruebaImagen');
-        const pruebaTexto = document.getElementById('pruebaTexto');
-        const pruebaRect = document.querySelector("rect");
+    const pruebaSelect = document.getElementById('PruebaSelect');
+    const normaSelect = document.getElementById('NormaCodigoSelect');
+    const formatoSelect = document.getElementById('FormatoSelect');
+    const pruebaImagen = document.getElementById('pruebaImagen');
+    const pruebaTexto = document.getElementById('pruebaTexto');
+    const pruebaRect = document.querySelector("rect");
+    const formatoNombreLabel = document.getElementById('formatoNombre');
+    const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizado');
 
-            // Lista de pruebas que necesitan el color azul
-            const pruebasAzul = [
-            "CARACTERIZACIÓN DE MATERIALES",
-            "DUREZAS",
-            "PMI",
-            "METALOGRAFÍA",
-            "ANÁLISIS QUÍMICO",
-            "RELEVADO DE ESFUERZOS",
-            ];
-        
-        
-        pruebaSelect.addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const imageUrl = selectedOption.getAttribute('data-image');
-            const textContent = selectedOption.getAttribute('data-text');
-            const pruebaNombre = selectedOption.dataset.text;
+    // Lista de pruebas que necesitan el color azul
+    const pruebasAzul = [
+        "CARACTERIZACIÓN DE MATERIALES",
+        "DUREZAS",
+        "PMI",
+        "METALOGRAFÍA",
+        "ANÁLISIS QUÍMICO",
+        "RELEVADO DE ESFUERZOS",
+    ];
 
-            // Cambia el color según la prueba seleccionada
-            if (pruebasAzul.includes(pruebaNombre)) {
-                pruebaRect.setAttribute("fill", "#0070C0"); // Azul
-            } else {
-                pruebaRect.setAttribute("fill", "#C04040"); // Color original
-            }
+    // Objeto de mapeo para los nombres personalizados
+    const nombresPersonalizados = {
+        "FOR-02-PRO-INS-02": "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
+        "FOR-01-PRO-INS-03": "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
+        "FOR-01-PRO-INS-04": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
+        "FOR-02-PRO-INS-04": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
+        "FOR-01-PRO-INS-05": "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
+        "FOR-01-PRO-INS-06": "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
+        "FOR-01-PRO-INS-07": "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES",
+        "FOR-01-PRO-INS-08": "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
+        "FOR-01-PRO-INS-09": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
+        "FOR-01-PRO-INS-10": "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
+        "FOR-02-PRO-INS-10": "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
+        "FOR-01-PRO-INS-11": "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
+        "FOR-01-PRO-INS-12": "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
+        "FOR-01-PRO-INS-13": "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
+        "FOR-01-PRO-INS-14": "PROCEDIMIENTO DE INSPECCIÓN CON ULTRASONIDO POR EL METODO TOFD (TIME OF FLIGHT DIFFRACTION)",
+        "FOR-01-PRO-INS-15": "INFORME DE  INSPECCIÓN VISUAL",
+        "FOR-02-PRO-INS-15": "INFORME DE  INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION",
+        "FOR-03-PRO-INS-15": "LISTADO DE COMPONENTES",
+        "FOR-01-PRO-INS-16": "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
+        "FOR-01-PRO-INS-17": "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
+        "FOR-01-PRO-INS-18": "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
+        "FOR-01-PRO-INS-19": "INFORME DE INSPECCIÓN CON ACFM",
+        "FOR-01-PRO-INS-20": " Informe de Análisis mediante Corriente Eddy Pulsada (PECT).",
+        "FOR-01-PRO-INS-21": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
+        "FOR-01-PRO-INS-22": "Ondas Guiadas"
+    };
 
-            // Actualiza la imagen dentro del SVG
-            if (imageUrl) {
-                pruebaImagen.setAttribute('href', imageUrl);
-            } else {
-                pruebaImagen.setAttribute('href', '{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}');
-            }
+    pruebaSelect.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const imageUrl = selectedOption.getAttribute('data-image');
+        const textContent = selectedOption.getAttribute('data-text');
+        const pruebaNombre = selectedOption.dataset.text;
 
-            // Actualiza el texto dentro del SVG
-            if (textContent) {
-                pruebaTexto.textContent = textContent;
-            } else {
-                pruebaTexto.textContent = 'IMAGEN DE LA PRUEBA';
-            }
-        });
+        // Cambia el color según la prueba seleccionada
+        if (pruebasAzul.includes(pruebaNombre)) {
+            pruebaRect.setAttribute("fill", "#0070C0"); // Azul
+        } else {
+            pruebaRect.setAttribute("fill", "#C04040"); // Color original
+        }
 
-        pruebaSelect.addEventListener('change', function () {
-            const pruebaId = this.value;
-            // Limpia las opciones del segundo select
-            normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
-            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+        // Actualiza la imagen dentro del SVG
+        if (imageUrl) {
+            pruebaImagen.setAttribute('href', imageUrl);
+        } else {
+            pruebaImagen.setAttribute('href', '{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}');
+        }
 
-            if (pruebaId) {
-                fetch(`/Obtener/normas/${pruebaId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            //console.log(data);
-                            data.forEach(norma => {
-                                const option = document.createElement('option');
-                                option.value = norma.idNorma_codigo;
-                                //option.value = norma.idPrueba;
-                                option.textContent = norma.Nombre;
-                                normaSelect.appendChild(option);
-                            });
-                        } else {
-                            normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
-                        }
-                    })
-                    .catch(error => console.error('Error al obtener las normas:', error));
-            }
-        });
-
-        normaSelect.addEventListener('change', function () {
-            const pruebaId = pruebaSelect.value;
-            // Limpia las opciones del tercer select
-            formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
-
-            if (pruebaId) {
-                fetch(`/Obtener/formatos/${pruebaId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            data.forEach(formato => {
-                                const option = document.createElement('option');
-                                //option.value = formato.idPrueba;
-                                option.value = formato.idFormato;
-                                option.textContent = formato.Nombre; 
-                                formatoSelect.appendChild(option);
-                            });
-                        } else {
-                            formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
-                        }
-                    })
-                    .catch(error => console.error('Error al obtener los formatos:', error));
-            }
-        });
-
-        // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
-        if (pruebaSelect.value) {
-            pruebaSelect.dispatchEvent(new Event('change'));
+        // Actualiza el texto dentro del SVG
+        if (textContent) {
+            pruebaTexto.textContent = textContent;
+        } else {
+            pruebaTexto.textContent = 'IMAGEN DE LA PRUEBA';
         }
     });
 
+    pruebaSelect.addEventListener('change', function () {
+        const pruebaId = this.value;
+        // Limpia las opciones del segundo select
+        normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+        if (pruebaId) {
+            fetch(`/Obtener/normas/${pruebaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(norma => {
+                            const option = document.createElement('option');
+                            option.value = norma.idNorma_codigo;
+                            option.textContent = norma.Nombre;
+                            normaSelect.appendChild(option);
+                        });
+                    } else {
+                        normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
+                    }
+                })
+                .catch(error => console.error('Error al obtener las normas:', error));
+        }
+    });
+
+    normaSelect.addEventListener('change', function () {
+        const pruebaId = pruebaSelect.value;
+        // Limpia las opciones del tercer select
+        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+        if (pruebaId) {
+            fetch(`/Obtener/formatos/${pruebaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(formato => {
+                            const option = document.createElement('option');
+                            option.value = formato.idFormato;
+                            option.textContent = formato.Nombre;
+                            option.setAttribute('data-nombre-personalizado', nombresPersonalizados[formato.Nombre] || formato.Nombre); // Agregar nombre personalizado como atributo de datos
+                            formatoSelect.appendChild(option);
+                        });
+                    } else {
+                        formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
+                    }
+                })
+                .catch(error => console.error('Error al obtener los formatos:', error));
+        }
+    });
+
+    formatoSelect.addEventListener('change', function () {
+        const selectedOption = formatoSelect.options[formatoSelect.selectedIndex];
+        if (selectedOption) {
+            const nombrePersonalizado = selectedOption.getAttribute('data-nombre-personalizado');
+            formatoNombreLabel.textContent = nombrePersonalizado || selectedOption.textContent;
+            formatoNombrePersonalizadoInput.value = nombrePersonalizado || selectedOption.textContent; // Actualiza el campo oculto
+        } else {
+            formatoNombreLabel.textContent = 'IMAGEN DE LA PRUEBA SELECCIONADA';
+            formatoNombrePersonalizadoInput.value = ''; // Limpia el campo oculto
+        }
+    });
+
+    // Dispara el evento 'change' en el select 'PruebaSelect' al cargar la página
+    if (pruebaSelect.value) {
+        pruebaSelect.dispatchEvent(new Event('change'));
+    }
+});
     </script>
 @endsection
 

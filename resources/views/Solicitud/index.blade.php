@@ -14,6 +14,11 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 @endsection
 
@@ -182,8 +187,8 @@
                                         </td>
 
                                         @if(!$solicitud->hidePlus)
-                                            <td>
-                                                <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                            <td><!--BOTÓN PLUS (COMPLEMENTAR)-->
+                                                <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success btn-plus" role="button" data-id="{{ $solicitud->idSolicitud }}"><i class="fas fa-plus-square"></i></a>
                                             </td>
 
                                             <td>
@@ -327,6 +332,24 @@
         else if (result.isDenied) {
             Swal.fire("Cancelado", "", "error");
         }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-plus').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault(); // Evita la navegación inmediata
+            let url = this.href; // Guarda la URL del enlace
+
+            // Deshabilitar el botón inmediatamente
+            this.setAttribute('disabled', 'true');
+            this.style.pointerEvents = 'none'; // Evita más clics en el botón
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Muestra el spinner de carga
+
+            // Redirigir de inmediato
+            window.location.href = url;
+        });
     });
 });
 </script>

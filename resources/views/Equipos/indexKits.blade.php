@@ -14,6 +14,11 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
+
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
 </style>
 @endsection
 

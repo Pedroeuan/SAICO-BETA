@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Usuarios')
+@section('title', 'Servicios/Pruebas')
 
 @section('css')
 <!--datatable -->
@@ -16,6 +16,11 @@
     .expansive-effect:hover {
         transform: scale(1.1);
     }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
@@ -110,6 +115,22 @@
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFÍA</text>
                 </svg>
 
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="ACFM" 
+                    data-name="ACFM"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                    <title>ACFM</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/ACFM.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ACFM</text>
+                </svg>
+
         </div>
 
         <!-- 2da columna -->
@@ -170,6 +191,22 @@
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="ONDAS GUIADAS" 
+                    data-name="ONDAS GUIADAS"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                    <title>ONDAS GUIADAS</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ONDAS GUIADAS</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
@@ -253,6 +290,22 @@
                     <rect width="100%" height="100%" fill="#0070C0"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
+                <svg class="bd-placeholder-img card-img-top expansive-effect"
+
+                    width="100%" height="200" 
+                    role="img" aria-label="TOFD" 
+                    data-name="TOFD"
+                    onclick="redirectToView(this)"
+                    focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                    <title>TOFD</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/TOFD.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TOFD</text>
                 </svg>
 
         </div>
