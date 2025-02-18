@@ -34,7 +34,6 @@
         <div class="box-body">
         <h3 align="center">Reportes del Contrato:  y Proyecto: </h3>
 
-
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -57,7 +56,7 @@
                             <td>{{ $detalles['No_Reporte'] }}</td>
                             <td>{{ $detalles['Fecha'] }}</td>
                             <td>
-                                <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('solicitud.edit', ['id' => $reporte->idPrueba_Aplica]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             
                             <td>
