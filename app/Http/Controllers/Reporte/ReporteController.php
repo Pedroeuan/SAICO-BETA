@@ -105,11 +105,16 @@ class ReporteController extends Controller
     {
         /*Obtener datos del Reporte */
         $Reporte = reporte::where('idReportes',$id)->first();
+        /*Obtener datos Firmas del Reporte */
+        $Firmas_Reportes = Firma_Reporte::where('idReportes',$id)->first();
         // Decodificar el JSON de Detalles_Generales
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el JSON de Datos_Equipo
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        //dd($Datos_Equipo);
+        // Decodificar el JSON de Datos_Equipo
+        $Firmas = json_decode($Firmas_Reportes->Firmas, true);
+        // Obtener el numero de firmas
+        $numFirmas = $Firmas ['numFirmas'];
         // Obtener el idSolicitud
         $idSolicitud = $Detalles_Generales['idSolicitud'];
         $Solicitud = Solicitudes::findOrFail($idSolicitud);
@@ -148,7 +153,7 @@ class ReporteController extends Controller
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo'));
+        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','numFirmas'));
 
     }
 
@@ -349,6 +354,7 @@ class ReporteController extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+            
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
@@ -392,6 +398,8 @@ class ReporteController extends Controller
             'evaluacion' => 'required|array',
             'observaciones' => 'required|array',
 
+            //Validar el campo NumFirmas
+            'numFirmas' => 'required|integer|in:3,4',
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
@@ -493,9 +501,11 @@ class ReporteController extends Controller
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
         }
         else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
         }
 
