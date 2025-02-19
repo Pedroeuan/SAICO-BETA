@@ -109,6 +109,8 @@ class ReporteController extends Controller
         $Firmas_Reportes = Firma_Reporte::where('idReportes',$id)->first();
         /*Obtener datos Fotos y Comentarios del Reporte */
         $Fotos_Reporte = Fotos_Reporte::where('idReportes',$id)->first();
+        /*Obtener datos Juntas del Reporte */
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
         // Decodificar el JSON de Detalles_Generales
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el JSON de Datos_Equipo
@@ -117,6 +119,8 @@ class ReporteController extends Controller
         $Firmas = json_decode($Firmas_Reportes->Firmas, true);
         // Decodificar el JSON de Datos_Equipo
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        // Decodificar el JSON de Grupo_Juntas_Detalles_Re
+        $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
         // Iterar sobre el arreglo y obtener los comentarios
         /*foreach ($Fotos_Comentarios as $foto) {
             $comentarios[] = $foto['comment'];
@@ -161,7 +165,7 @@ class ReporteController extends Controller
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas'));
+        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
 
     }
 
@@ -409,6 +413,17 @@ class ReporteController extends Controller
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:3,4',
 
+            /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
@@ -508,7 +523,11 @@ class ReporteController extends Controller
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
-        if ($numFirmas == 3) {
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+        }
+        else if ($numFirmas == 3) {
             $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
         }

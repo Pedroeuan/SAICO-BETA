@@ -57,6 +57,7 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+
     </style>
 @endsection
 
@@ -596,10 +597,56 @@
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
                                                     <option value="4">4 Firmas</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <!-- 2 DOS FIRMAS-->
+                                        <div id="firmas2" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Realizó</th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th>Vo.Bo.</th>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                                                        
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
                                         </div>
 
                                         <!-- 3 TRES FIRMAS-->
@@ -732,6 +779,30 @@
 
                                         <!--IMAGENES CON COMENTARIOS-->
 
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="cropperModalLabel">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="imageToCrop" src="" alt="Imagen a recortar" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Subir</button>
+                                                        <button type="button" class="btn btn-primary" id="uploadWithoutCropBtn">Subir sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <!-- Campos para subir imágenes y comentarios -->
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -807,6 +878,19 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+
+<!-- Biblioteca para recorte de imagenes -->
+<!-- Incluir Cropper.js CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<!-- Incluir Cropper.js JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
 
     /*Prevenir el Enter*/
@@ -871,9 +955,157 @@
                 });
             });
         });
+        
 
         // Mostrar vista previa de las imágenes seleccionadas
-        function readURL(input, previewId) {
+        $(document).ready(function() {
+            var cropper;
+            var currentInput;
+            var currentPreview;
+
+            // Función para mostrar la vista previa de la imagen
+            function readURL(input, previewId) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $(previewId).html('<img src="' + e.target.result + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Eventos para abrir el modal de recorte al seleccionar una imagen
+            $('#image1').change(function() {
+                currentInput = this;
+                currentPreview = '#image1-preview';
+                showCropperModal(this);
+            });
+
+            $('#image2').change(function() {
+                currentInput = this;
+                currentPreview = '#image2-preview';
+                showCropperModal(this);
+            });
+
+            $('#image3').change(function() {
+                currentInput = this;
+                currentPreview = '#image3-preview';
+                showCropperModal(this);
+            });
+
+            $('#image4').change(function() {
+                currentInput = this;
+                currentPreview = '#image4-preview';
+                showCropperModal(this);
+            });
+
+            // Función para mostrar el modal de recorte
+            function showCropperModal(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imageToCrop').attr('src', e.target.result);
+                        $('#cropperModal').modal('show');
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Inicializar Cropper.js cuando el modal se muestra
+            $('#cropperModal').on('shown.bs.modal', function() {
+                console.log('Modal abierto, inicializando Cropper');
+                cropper = new Cropper(document.getElementById('imageToCrop'), {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                });
+            });
+
+            // Destruir Cropper.js cuando el modal se oculta
+            $('#cropperModal').on('hidden.bs.modal', function() {
+                console.log('Modal cerrado, destruyendo Cropper');
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+            });
+
+            // Evento para recortar la imagen y cerrar el modal
+            $('#cropImageBtn').click(function() {
+                if (cropper) {
+                    var canvas = cropper.getCroppedCanvas({
+                        width: 400,
+                        height: 400,
+                    });
+
+                    canvas.toBlob(function(blob) {
+                        var reader = new FileReader();
+                        reader.readAsDataURL(blob);
+                        reader.onloadend = function() {
+                            var base64data = reader.result;
+                            $(currentPreview).html('<img src="' + base64data + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
+                            $(currentInput).data('cropped', base64data);
+                            $('#cropperModal').modal('hide');
+                        }
+                    });
+                }
+            });
+
+            // Evento para subir la imagen sin recortar y cerrar el modal
+            $('#uploadWithoutCropBtn').click(function() {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var base64data = e.target.result;
+                    $(currentPreview).html('<img src="' + base64data + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
+                    $(currentInput).data('cropped', base64data);
+                    $('#cropperModal').modal('hide');
+                }
+                reader.readAsDataURL(currentInput.files[0]);
+            });
+
+            // Evento para cerrar el modal manualmente al hacer clic en "Cancelar" o en la "X"
+            $('.close, .btn-secondary').click(function() {
+                console.log('Cerrar modal manualmente');
+                $('#cropperModal').modal('hide');
+            });
+
+            // Evento para enviar el formulario con las imágenes recortadas
+            $('form').submit(function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $('input[type="file"]').each(function() {
+                    if ($(this).data('cropped')) {
+                        var blob = dataURLtoBlob($(this).data('cropped'));
+                        formData.append($(this).attr('name'), blob, $(this).attr('name') + '.png');
+                    }
+                });
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log('Respuesta del servidor:', response);
+                    },
+                    error: function(response) {
+                        console.error('Error del servidor:', response);
+                    }
+                });
+            });
+
+            // Función para convertir una URL de datos (data URL) en un Blob
+            function dataURLtoBlob(dataurl) {
+                var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], { type: mime });
+            }
+        });
+        /*function readURL(input, previewId) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
@@ -897,7 +1129,7 @@
 
         $('#image4').change(function() {
             readURL(this, '#image4-preview');
-        });
+        });*/
 
 
     });
@@ -927,24 +1159,39 @@
 
         document.addEventListener('DOMContentLoaded', function() {
         const numFirmasSelect = document.getElementById('numFirmas');
+        const firmas2 = document.getElementById('firmas2');
         const firmas3 = document.getElementById('firmas3');
         const firmas4 = document.getElementById('firmas4');
 
         numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '3') {
+            if (this.value == '2') {
+                firmas2.style.display = 'block';
+                firmas3.style.display = 'none';
+                firmas4.style.display = 'none';
+            }
+            else if (this.value == '3') {
+                firmas2.style.display = 'none';
                 firmas3.style.display = 'block';
                 firmas4.style.display = 'none';
             } else if (this.value == '4') {
+                firmas2.style.display = 'none';
                 firmas3.style.display = 'none';
                 firmas4.style.display = 'block';
             }
         });
 
         // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '3') {
+        if (numFirmasSelect.value == '2') {
+            firmas2.style.display = 'block';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
+        }
+        else if (numFirmasSelect.value == '3') {
+            firmas2.style.display = 'none';
             firmas3.style.display = 'block';
             firmas4.style.display = 'none';
         } else if (numFirmasSelect.value == '4') {
+            firmas2.style.display = 'none';
             firmas3.style.display = 'none';
             firmas4.style.display = 'block';
         }
