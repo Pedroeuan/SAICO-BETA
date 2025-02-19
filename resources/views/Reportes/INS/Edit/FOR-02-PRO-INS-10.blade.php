@@ -735,8 +735,12 @@
                                             <div class="form-group">
                                                 <label for="image1">Imagen 1:</label>
                                                 <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
+                                                <div style="margin-bottom: 2px;"></div>
                                                 <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
+                                                @if(isset($Fotos_Comentarios[0]['path']))
+                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[0]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
+                                                @endif
+                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1">{{ old('comment1', $Fotos_Comentarios[0]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 
@@ -744,8 +748,12 @@
                                             <div class="form-group">
                                                 <label for="image2">Imagen 2:</label>
                                                 <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
+                                                <div style="margin-bottom: 2px;"></div>
                                                 <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
+                                                @if(isset($Fotos_Comentarios[1]['path']))
+                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[1]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
+                                                @endif
+                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2">{{ old('comment1', $Fotos_Comentarios[1]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 
@@ -753,8 +761,12 @@
                                             <div class="form-group">
                                                 <label for="image3">Imagen 3:</label>
                                                 <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
+                                                <div style="margin-bottom: 2px;"></div>
                                                 <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
+                                                @if(isset($Fotos_Comentarios[2]['path']))
+                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[2]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
+                                                @endif
+                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3">{{ old('comment1', $Fotos_Comentarios[2]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 
@@ -762,8 +774,12 @@
                                             <div class="form-group">
                                                 <label for="image4">Imagen 4:</label>
                                                 <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
+                                                <div style="margin-bottom: 2px;"></div>
                                                 <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
+                                                @if(isset($Fotos_Comentarios[3]['path']))
+                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[3]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
+                                                @endif
+                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4">{{ old('comment1', $Fotos_Comentarios[3]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 

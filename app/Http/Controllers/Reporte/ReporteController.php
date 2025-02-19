@@ -107,12 +107,20 @@ class ReporteController extends Controller
         $Reporte = reporte::where('idReportes',$id)->first();
         /*Obtener datos Firmas del Reporte */
         $Firmas_Reportes = Firma_Reporte::where('idReportes',$id)->first();
+        /*Obtener datos Fotos y Comentarios del Reporte */
+        $Fotos_Reporte = Fotos_Reporte::where('idReportes',$id)->first();
         // Decodificar el JSON de Detalles_Generales
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el JSON de Datos_Equipo
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el JSON de Datos_Equipo
         $Firmas = json_decode($Firmas_Reportes->Firmas, true);
+        // Decodificar el JSON de Datos_Equipo
+        $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        // Iterar sobre el arreglo y obtener los comentarios
+        /*foreach ($Fotos_Comentarios as $foto) {
+            $comentarios[] = $foto['comment'];
+        }*/
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
         // Obtener el idSolicitud
@@ -153,7 +161,7 @@ class ReporteController extends Controller
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','numFirmas'));
+        return view("Reportes.Principal.editMaster", compact('Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas'));
 
     }
 
