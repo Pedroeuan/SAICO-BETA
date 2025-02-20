@@ -688,16 +688,80 @@ class ReporteController extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
         ]);
 
-        // Actualizar los datos en la base de datos
-        $Reporte = reporte::find($id);
+        // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
+        $Reporte = reporte::where('idReportes',$id);
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id);
+        $Firmas = Firma_Reporte::where('idReportes',$id);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-        // Guardar los detalles generales como JSON en la base de datos
+        // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
-            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']) 
+            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
+
+        /*Resultados Juntas*/
+        // Guardar las filas dinámicas
+        $Resultados_Juntas = [];
+        foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
+            $Resultados_Juntas[] = [
+                'elemento_tubo' => $elemento_tubo,
+                'no_aceptacion' => $validatedData['no_aceptacion'][$index],
+                'no_serie' => $validatedData['no_serie'][$index],
+                'no_colada' => $validatedData['no_colada'][$index],
+                'tnominal' => $validatedData['tnominal'][$index],
+                'diametro' => $validatedData['diametro'][$index],
+                'no_ind' => $validatedData['no_ind'][$index],
+                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                'nr' => $validatedData['nr'][$index],
+                'ni' => $validatedData['ni'][$index],
+                'ht' => $validatedData['ht'][$index],
+                'prof' => $validatedData['prof'][$index],
+                'la' => $validatedData['la'][$index],
+                'lc' => $validatedData['lc'][$index],
+                'tmax' => $validatedData['tmax'][$index],
+                'tmin' => $validatedData['tmin'][$index],
+                'metros_lineales' => $validatedData['metros_lineales'][$index],
+                'evaluacion' => $validatedData['evaluacion'][$index],
+                'observaciones' => $validatedData['observaciones'][$index],
+            ];
+        }
+
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => $ResultadosJuntas
+        ]);
+
+        /*Firmas */
+        // Guardar las firmas
+        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
+            $Firmas->update([
+                'Firmas' => $Firmas3
+            ]);
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
+            $Firmas->update([
+                'Firmas' => $Firmas4
+            ]);
+        }
 
         $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $Contrato)->get();
 
