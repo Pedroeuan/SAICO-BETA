@@ -110,7 +110,9 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta de Guardado Reportes/INS*/
-        Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10'])->name('Reportes_FOR_02_PRO_INS_10.store');
+        Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10_store'])->name('Reportes_FOR_02_PRO_INS_10.store');
+        /*Ruta de Actualización Reportes/INS*/
+        Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
 
 
 
