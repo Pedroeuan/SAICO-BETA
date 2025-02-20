@@ -779,6 +779,10 @@
 
                                         <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+                                        
+                                        <p>
+
                                         <!--IMAGENES CON COMENTARIOS-->
 
                                         <!-- Modal para recortar la imagen -->

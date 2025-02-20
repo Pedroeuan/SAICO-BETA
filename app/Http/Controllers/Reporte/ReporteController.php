@@ -556,7 +556,7 @@ class ReporteController extends Controller
         }
 
         // Convertir el array de fotos a JSON
-        $Fotos = json_encode($fotos); /*Falta guardado */
+        $Fotos = json_encode($fotos); 
 
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
@@ -689,9 +689,10 @@ class ReporteController extends Controller
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
-        $Reporte = reporte::where('idReportes',$id);
-        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id);
-        $Firmas = Firma_Reporte::where('idReportes',$id);
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -762,6 +763,48 @@ class ReporteController extends Controller
                 'Firmas' => $Firmas4
             ]);
         }
+
+         /*Fotos y Comentarios */
+        // Procesar las imágenes y los comentarios
+
+        // Obtener las rutas de las imágenes guardadas anteriormente
+        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+        // Procesar las nuevas imágenes y los comentarios
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                // Eliminar la imagen anterior si existe
+                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
+                    Storage::delete($previousFotos[$i - 1]['path']);
+                }
+
+                // Guardar la nueva imagen
+                $image = $request->file("image$i");
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
+                $comment = $request->input("comment$i");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment,
+                ];
+            } else {
+                // Mantener la imagen anterior si no se está actualizando
+                if (isset($previousFotos[$i - 1])) {
+                    $fotos[] = $previousFotos[$i - 1];
+                }
+            }
+        }
+
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($fotos);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => $Fotos
+        ]);
+
 
         $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $Contrato)->get();
 
