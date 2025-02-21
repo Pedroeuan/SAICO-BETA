@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\PDFReportes;
 
-use App\Http\Controllers\Controller;
-use App\Models\PDFReportes\PDFReportes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Models\PDFReportes\PDFReportes;
+
+use App\Models\Reporte\reporte;
+use App\Models\Reporte\Firma_Reporte;
+use App\Models\Reporte\Fotos_Reporte;
+use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -588,27 +593,43 @@ class PDFReportesController extends Controller
         return $pdf->stream('Reporte_FOR_INS_10_01.PDF');
     }
 
-    public function FOR_INS_10_02()
+    public function FOR_INS_10_02($id)
     {
-        $user = Auth::user();
-        $nombre = $user->name;
-        /*$Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
-        $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();*/
-    
+        // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas_Reportes = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+        /*$user = Auth::user();
+        $nombre = $user->name;*/
+
+        // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
+        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
+        // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
+        $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+        $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+        $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
+        $numFirmas = $Firmas_Reportes['numFirmas'];
+
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
             'title' => 'Reporte_FOR-INS-10/02.PDF',
-            /*'Manifiesto' => $Manifiesto,
-            'DetallesSolicitud' => $DetallesSolicitud,
-            'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,*/
-            'nombre' => $nombre,
             'Logo' => $Logo,
-            //'Devolucion' => $Devolucion,
+            //Detalles_Generales
+            'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Fotos_Reportes
+            'Fotos_Reportes' => $Fotos_Reportes,
+            //Numero de Firmas
+            'numFirmas' => $numFirmas,
+            //Firmas
+            'Firmas_Reportes' => $Firmas_Reportes,
         ];
     
         // Cargar la vista con los datos

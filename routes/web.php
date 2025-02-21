@@ -114,8 +114,6 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Ruta de Actualización Reportes/INS*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
 
-
-
         //});
     });
 
@@ -291,25 +289,27 @@ use App\Http\Controllers\Reporte\ReporteController;
     /*A DEFINIR EL ACCESO */
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
-    Route::get('/Reporte/FOR-INS-02/02', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
-    Route::get('/Reporte/FOR-INS-03/01', [PDFReportesController::class, 'FOR_INS_03_01'])->name('Reporte_FOR_INS_03_01.PDF');
-    Route::get('/Reporte/FOR-INS-04/01', [PDFReportesController::class, 'FOR_INS_04_01'])->name('Reporte_FOR_INS_04_01.PDF');
-    Route::get('/Reporte/FOR-INS-04/02', [PDFReportesController::class, 'FOR_INS_04_02'])->name('Reporte_FOR_INS_04_02.PDF');
-    Route::get('/Reporte/FOR-INS-05/01', [PDFReportesController::class, 'FOR_INS_05_01'])->name('Reporte_FOR_INS_05_01.PDF');
-    Route::get('/Reporte/FOR-INS-06/01', [PDFReportesController::class, 'FOR_INS_06_01'])->name('Reporte_FOR_INS_06_01.PDF');
-    Route::get('/Reporte/FOR-INS-07/01', [PDFReportesController::class, 'FOR_INS_07_01'])->name('Reporte_FOR_INS_07_01.PDF');
-    Route::get('/Reporte/FOR-INS-08/01', [PDFReportesController::class, 'FOR_INS_08_01'])->name('Reporte_FOR_INS_08_01.PDF');
-    Route::get('/Reporte/FOR-INS-09/01', [PDFReportesController::class, 'FOR_INS_09_01'])->name('Reporte_FOR_INS_09_01.PDF');
-    Route::get('/Reporte/FOR-INS-10/01', [PDFReportesController::class, 'FOR_INS_10_01'])->name('Reporte_FOR_INS_10_01.PDF');
-    Route::get('/Reporte/FOR-INS-10/02', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
-    Route::get('/Reporte/FOR-INS-12/01', [PDFReportesController::class, 'FOR_INS_12_01'])->name('Reporte_FOR_INS_12_01.PDF');
-    Route::get('/Reporte/FOR-INS-13/01', [PDFReportesController::class, 'FOR_INS_13_01'])->name('Reporte_FOR_INS_13_01.PDF');
-    Route::get('/Reporte/FOR-INS-15/01', [PDFReportesController::class, 'FOR_INS_15_01'])->name('Reporte_FOR_INS_15_01.PDF');
-    Route::get('/Reporte/FOR-INS-15/02', [PDFReportesController::class, 'FOR_INS_15_02'])->name('Reporte_FOR_INS_15_02.PDF');
-    Route::get('/Reporte/FOR-INS-15/03', [PDFReportesController::class, 'FOR_INS_15_03'])->name('Reporte_FOR_INS_15_03.PDF');
-    Route::get('/Reporte/FOR-INS-16/01', [PDFReportesController::class, 'FOR_INS_16_01'])->name('Reporte_FOR_INS_16_01.PDF');
-    Route::get('/Reporte/FOR-INS-17/01', [PDFReportesController::class, 'FOR_INS_17_01'])->name('Reporte_FOR_INS_17_01.PDF');
-    Route::get('/Reporte/FOR-INS-18/01', [PDFReportesController::class, 'FOR_INS_18_01'])->name('Reporte_FOR_INS_18_01.PDF');
+    Route::get('/Reporte/FOR-INS-02/02/PDF', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
+    Route::get('/Reporte/FOR-INS-03/01/PDF', [PDFReportesController::class, 'FOR_INS_03_01'])->name('Reporte_FOR_INS_03_01.PDF');
+    Route::get('/Reporte/FOR-INS-04/01/PDF', [PDFReportesController::class, 'FOR_INS_04_01'])->name('Reporte_FOR_INS_04_01.PDF');
+    Route::get('/Reporte/FOR-INS-04/02/PDF', [PDFReportesController::class, 'FOR_INS_04_02'])->name('Reporte_FOR_INS_04_02.PDF');
+    Route::get('/Reporte/FOR-INS-05/01/PDF', [PDFReportesController::class, 'FOR_INS_05_01'])->name('Reporte_FOR_INS_05_01.PDF');
+    Route::get('/Reporte/FOR-INS-06/01/PDF', [PDFReportesController::class, 'FOR_INS_06_01'])->name('Reporte_FOR_INS_06_01.PDF');
+    Route::get('/Reporte/FOR-INS-07/01/PDF', [PDFReportesController::class, 'FOR_INS_07_01'])->name('Reporte_FOR_INS_07_01.PDF');
+    Route::get('/Reporte/FOR-INS-08/01/PDF', [PDFReportesController::class, 'FOR_INS_08_01'])->name('Reporte_FOR_INS_08_01.PDF');
+    Route::get('/Reporte/FOR-INS-09/01/PDF', [PDFReportesController::class, 'FOR_INS_09_01'])->name('Reporte_FOR_INS_09_01.PDF');
+    Route::get('/Reporte/FOR-INS-10/01/PDF', [PDFReportesController::class, 'FOR_INS_10_01'])->name('Reporte_FOR_INS_10_01.PDF');
+
+    Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
+
+    Route::get('/Reporte/FOR-INS-12/01/PDF', [PDFReportesController::class, 'FOR_INS_12_01'])->name('Reporte_FOR_INS_12_01.PDF');
+    Route::get('/Reporte/FOR-INS-13/01/PDF', [PDFReportesController::class, 'FOR_INS_13_01'])->name('Reporte_FOR_INS_13_01.PDF');
+    Route::get('/Reporte/FOR-INS-15/01/PDF', [PDFReportesController::class, 'FOR_INS_15_01'])->name('Reporte_FOR_INS_15_01.PDF');
+    Route::get('/Reporte/FOR-INS-15/02/PDF', [PDFReportesController::class, 'FOR_INS_15_02'])->name('Reporte_FOR_INS_15_02.PDF');
+    Route::get('/Reporte/FOR-INS-15/03/PDF', [PDFReportesController::class, 'FOR_INS_15_03'])->name('Reporte_FOR_INS_15_03.PDF');
+    Route::get('/Reporte/FOR-INS-16/01/PDF', [PDFReportesController::class, 'FOR_INS_16_01'])->name('Reporte_FOR_INS_16_01.PDF');
+    Route::get('/Reporte/FOR-INS-17/01/PDF', [PDFReportesController::class, 'FOR_INS_17_01'])->name('Reporte_FOR_INS_17_01.PDF');
+    Route::get('/Reporte/FOR-INS-18/01/PDF', [PDFReportesController::class, 'FOR_INS_18_01'])->name('Reporte_FOR_INS_18_01.PDF');
 
     /*A DEFINIR EL ACCESO */
 

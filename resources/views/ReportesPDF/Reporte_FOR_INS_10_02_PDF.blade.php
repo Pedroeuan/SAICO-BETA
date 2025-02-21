@@ -35,7 +35,7 @@
                     font-family: 'arial', sans-serif;
                 }
                 .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
+                    margin-top:30px; /* Evita superposición con el header */
                     margin-bottom: 200px; /* Evita superposición con el footer */
                 }
 
@@ -209,49 +209,49 @@
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -264,7 +264,7 @@
                     </tr>
                 </table>
 
-                <div style="margin-bottom: 2px;"></div>
+                <div style="margin-bottom: 5px;"></div>
 
                 <table class="datosinspeccion">
                     <tbody>
@@ -276,32 +276,32 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">1</td>
+                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td colspan="3">2</td>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">3</td>
-                            <th class="" style="width: 100px;">4</th>
+                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_BLOCK'] }}</td>
+                            <th class="" style="width: 100px;">{{ $Datos_Equipo['ACOPLANTE'] }}</th>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>7</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK'] }}</td>
                             <th class="celdaGris" style="width: 100px;">LONGITUD DEL CABLE</th>
                         </tr>
                         <tr>
                             <th class="celdaGris">N.S:</th>
-                            <td>8</td>
+                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
                             <th class="celdaGris">N.S:</th>
-                            <td style="width: 60px;">9</td>
+                            <td style="width: 60px;">{{ $Datos_Equipo['N_S_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">10</td>
+                            <td style="width: 50px;">{{ $Datos_Equipo['FRECC_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris">N.S:</th>
-                            <td>11</td>
-                            <td>12</td>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>
+                            <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -312,15 +312,15 @@
                     <tbody>
                         <tr>
                             <th style="width: 8%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td><td style="width: 1%;">dB</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td><td style="width: 1%;">dB</td>
                             <th style="width: 8%;">RANGO:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RANGO'] }}</td>
                             <th style="width: 8%;">RECHAZO:</th>
-                            <td class="lineaInferior">3</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] }}</td>
                             <th style="width: 8%;">SUPERFICIE:</th>
-                            <td class="lineaInferior">4</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['SUPERFICIE'] }}</td>
                             <th style="width: 8%;">PINTURA:</th>
-                            <td class="lineaInferior">5</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['PINTURA'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -328,11 +328,72 @@
                 <div style="margin-bottom: 5px;"></div>
 
                 <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
+                    <tr><th colspan="9">RESULTADOS</th></tr>
                 </table>
+                
             </header>
+
+            <div class="content">
+                <div style="margin-bottom: 5px;"></div>
+                    <table class="datosresultados">
+                        <thead>
+                                <tr class="celdaGris">
+                                    <th colspan="7">DATOS DEL MATERIAL</th>
+                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
+                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
+                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
+                                </tr>
+                                <tr class="celdaGris">
+                                    <th style="width: 5px;">ID</th>
+                                    <th style="width: 20px;">Elemento / Tubo</th>
+                                    <th style="width: 20px;">No. Aceptación</th>
+                                    <th style="width: 20px;">No. Serie</th>
+                                    <th style="width: 20px;">No. Colada</th>
+                                    <th style="width: 20px;">tnominal</th>
+                                    <th style="width: 20px;">Ø</th>
+                                    <th style="width: 20px;">No.Ind.</th>
+                                    <th style="width: 20px;">Tipo de Indicación</th>
+                                    <th style="width: 20px;">NR (%)</th>
+                                    <th style="width: 20px;">NI (%)</th>
+                                    <th style="width: 20px;">H.T.</th>
+                                    <th style="width: 20px;">Prof</th>
+                                    <th style="width: 20px;">LA</th>
+                                    <th style="width: 20px;">LC</th>
+                                    <th style="width: 20px;">tmáx</th>
+                                    <th style="width: 20px;">tmin</th>
+                                    <th style="width: 20px;">Metros Lineales</th>
+                                    <th style="width: 25px;">Evaluación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $junta['elemento_tubo'] }}</td>
+                                        <td>{{ $junta['no_aceptacion'] }}</td>
+                                        <td>{{ $junta['no_serie'] }}</td>
+                                        <td>{{ $junta['no_colada'] }}</td>
+                                        <td>{{ $junta['tnominal'] }}</td>
+                                        <td>{{ $junta['diametro'] }}</td>
+                                        <td>{{ $junta['no_ind'] }}</td>
+                                        <td>{{ $junta['tipo_indicacion'] }}</td>
+                                        <td>{{ $junta['nr'] }}</td>
+                                        <td>{{ $junta['ni'] }}</td>
+                                        <td>{{ $junta['ht'] }}</td>
+                                        <td>{{ $junta['prof'] }}</td>
+                                        <td>{{ $junta['la'] }}</td>
+                                        <td>{{ $junta['lc'] }}</td>
+                                        <td>{{ $junta['tmax'] }}</td>
+                                        <td>{{ $junta['tmin'] }}</td>
+                                        <td>{{ $junta['metros_lineales'] }}</td>
+                                        <td>{{ $junta['evaluacion'] }}</td>
+                                        <td>{{ $junta['observaciones'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                    </table>
+                </div>
+
 
             <footer>
                 <div style="margin-bottom: 5px;"></div>
@@ -354,22 +415,19 @@
                                     </tr>
 
                                     <tr>
-                                        <td><strong>I:</strong></td>
-                                        <td>INCLUSIÓN NO METÁLICA</td>
+                                        <td><strong>ZI:</strong></td>
+                                        <td>ZONA DE INCLUSIONES NO METALICAS</td>
                                         <td><strong>L:</strong></td>
                                         <td>LAMINACIÓN</td>
                                     </tr>
 
                                     <tr>
-                                        <td><strong>ZI:</strong></td>
-                                        <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                                        <td colspan="2" rowspan="2"><strong></strong></td>
-                                    </tr>
-
-                                    <tr>
                                         <td><strong>LE:</strong></td>
                                         <td>LAMINACIÓN ESCALONADA</td>
+                                        <td><strong>I:</strong></td>
+                                        <td>INCLUSIÓN NO METÁLICA</td>
                                     </tr>
+
                                 </thead>
                             </table>
                         </td>
@@ -428,12 +486,12 @@
                                     </tr>
 
                                     <tr>
-                                        <td><strong>A:</strong></td>
-                                        <td>ÁNGULO (°)</td>
+                                        <td><strong>tmin</strong></td>
+                                        <td>ESPESOR NÓMINAL (in)</td>
                                         <td><strong>LA:</strong></td>
                                         <td>LONGITUD AXIAL (IN)</td>
-                                        <td rowspan="2"><strong>ta:</strong></td>
-                                        <td rowspan="2">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                                        <td><strong>tmin</strong></td>
+                                        <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
                                     </tr>
 
                                     <tr>
@@ -441,25 +499,19 @@
                                         <td>GANANCIA (dB)</td>
                                         <td><strong>LC:</strong></td>
                                         <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
+                                        <td><strong>tmax</strong></td>
+                                        <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
                                     </tr>
 
                                     <tr>
                                         <td><strong>NR:</strong></td>
                                         <td>NIVEL DE REFERENCIA (%)</td>
-                                        <td><strong>DNR:</strong></td>
-                                        <td>DISTANCIA DE NIVEL DE REFERENCIA (IN)</td>
-                                        <td><strong>H.T.</strong></td>
-                                        <td>HORARIO TÉCNICO</td>
-                                    </tr>
-
-                                    <tr>
                                         <td><strong>NI:</strong></td>
                                         <td>NIVEL DE INDICACIÓN (%)</td>
-                                        <td><strong>Tmin</strong></td>
-                                        <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                        <td><strong>d</strong></td>
-                                        <td>PROFUNDIDAD DE LA INDICACION(IN)</td>
+                                        <td><strong>Prof</strong></td>
+                                        <td>PROFUNDIDAD DE LA INDICACIÓN</td>
                                     </tr>
+
                                 </thead>
                             </table>
                         </td>
@@ -471,7 +523,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 915px;"></td>                            
+                            <td class="lineaInferior" style="width: 915px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
@@ -479,134 +531,145 @@
                                                 
                     <table class="datosgenerales">
                         <thead>
-                            <tr>
-                                <td style="width: 30px;"></td>
-                                <th>Realizó</th>
-                                <td style="width: 30px;"></td>
-                                <th>Vo.Bo.</th>
-                                <td style="width: 30px;"></td>
-                                <th>Vo.Bo.</th>
-                            </tr>
+                            @if( $numFirmas == 2)
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>Realizó</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                </tr>
 
-                            <tr>
-                                <th></th>
-                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                <td></td>
-                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                <td></td>
-                                <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                </tr>
 
-                            <tr>
-                                <th></th>
-                                <td><strong>NOMBRE DEL TÉCNICO</strong></td>
-                                <td></td>
-                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                                <td></td>
-                                <td><strong>NOMBRE DEL ENCARGADO</strong></td>
-                            </tr>
-                                                                
-                            <tr>
-                                <th></th>
-                                <td><strong>Técnico N-II SNT-TC-1A</strong></td>
-                                <td></td>
-                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                                <td></td>
-                                <td><strong>PUESTO DEL ENCARGADO</strong></td>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                                </tr>
 
-                            <tr>
-                                <th></th>
-                                <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                <td></td>
-                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                                <td></td>
-                                <td><strong>EMPRESA A LA QUE PERTENECE</strong></td>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 3)
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>Realizó</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>Realizó</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>Vo.Bo.</th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</strong></td>
+                                </tr>
+                            @endif
                         </thead>                            
                     </table>
             </footer>
 
-            <div class="content">
-                <div style="margin-bottom: 0px;"></div>
-
-                    <table class="datosresultados">
-                        <thead>
-                                <tr class="celdaGris">
-                                    <th colspan="7">DATOS DEL MATERIAL</th>
-                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
-                                </tr>
-                                <tr class="celdaGris">
-                                    <th style="width: 5px;">ID</th>
-                                    <th style="width: 20px;">Elemento / Tubo</th>
-                                    <th style="width: 20px;">No. Aceptación</th>
-                                    <th style="width: 20px;">No. Serie</th>
-                                    <th style="width: 20px;">No. Colada</th>
-                                    <th style="width: 20px;">tnominal</th>
-                                    <th style="width: 20px;">Ø</th>
-                                    <th style="width: 20px;">No.Ind.</th>
-                                    <th style="width: 20px;">Tipo de Indicación</th>
-                                    <th style="width: 20px;">NR (%)</th>
-                                    <th style="width: 20px;">NI (%)</th>
-                                    <th style="width: 20px;">H.T.</th>
-                                    <th style="width: 20px;">Prof</th>
-                                    <th style="width: 20px;">LA</th>
-                                    <th style="width: 20px;">LC</th>
-                                    <th style="width: 20px;">tmáx</th>
-                                    <th style="width: 20px;">tmin</th>
-                                    <th style="width: 20px;">Metros Lineales</th>
-                                    <th style="width: 25px;">Evaluación</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                            @for($i = 0; $i < 50; $i++)
-                            <tr>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                            </tr>
-                            @endfor
-                            <tr class="sinBordetd">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
-                                <th>0 m</th>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            </tbody>
-                    </table>
-            </div>
         </body>
     </html>
