@@ -96,6 +96,10 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/index/ContratoProyecto', [ReporteController::class, 'indexContratoProyecto'])->name('index.ContratoProyecto');
         /*Rutas de Vistas del index despues de la selección de los contratos/Reportes de estos*/
         Route::post('/index/ReporteProyectoContrato', [ReporteController::class, 'indexReporteProyectoContrato'])->name('index.ReporteProyectoContrato');
+        /*Rutas de Vistas del index despues del Guardado de Reportes */
+        Route::get('/indexINS2', [ReporteController::class, 'indexINS2'])->name('indexINS2');
+        /*Rutas de Vistas del index despues de la seleccion del Contrato */
+        Route::get('/indexINS1', [ReporteController::class, 'indexINS1'])->name('indexINS1');
 
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');

@@ -28,11 +28,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ReporteController extends Controller
 {
-
+    /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
-        $Reportes = reporte::all();
+        return redirect()->route('indexINS1');
+    }
 
+    public function indexINS1(Request $request)
+    {
+        $Reportes = reporte::all();
         $reportesDetalles_Generales = [];
         foreach ($Reportes as $reporte) {
             $detalles = json_decode($reporte->Detalles_Generales, true);
@@ -44,7 +48,6 @@ class ReporteController extends Controller
                 'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
             ];
         }
-
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
             return $item['Contrato'] . $item['Proyecto'];
@@ -348,6 +351,20 @@ class ReporteController extends Controller
         //
     }
 
+    public function indexINS2(Request $request)
+    {
+        $contratoSeleccionado = $request->input('contratoSeleccionado');
+        $Proyecto = $request->input('Proyecto');
+
+        $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+
+        if ($reportesEncontrados->isNotEmpty()) {
+            return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
+        } else {
+            return "No se encontraron reportes con ese contrato.";
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -573,13 +590,7 @@ class ReporteController extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
-        $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
-
-        if ($reportesEncontrados->isNotEmpty()) {
-            return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados','contratoSeleccionado','Proyecto'));
-        } else {
-            return "No se encontraron reportes con ese contrato.";
-        }
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
 
     }
 
@@ -813,16 +824,11 @@ class ReporteController extends Controller
             'Fotos_Reportes' => $Fotos
         ]);
 
+        // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        
-        $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $Contrato)->get();
 
-        if ($reportesEncontrados->isNotEmpty()) {
-            return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados','contratoSeleccionado','Proyecto'));
-        } else {
-            return "No se encontraron reportes con ese contrato.";
-        }
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
     /**
