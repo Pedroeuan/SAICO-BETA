@@ -333,68 +333,6 @@
                 
             </header>
 
-            <div class="content">
-                <div style="margin-bottom: 5px;"></div>
-                    <table class="datosresultados">
-                        <thead>
-                                <tr class="celdaGris">
-                                    <th colspan="7">DATOS DEL MATERIAL</th>
-                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
-                                </tr>
-                                <tr class="celdaGris">
-                                    <th style="width: 5px;">ID</th>
-                                    <th style="width: 20px;">Elemento / Tubo</th>
-                                    <th style="width: 20px;">No. Aceptación</th>
-                                    <th style="width: 20px;">No. Serie</th>
-                                    <th style="width: 20px;">No. Colada</th>
-                                    <th style="width: 20px;">tnominal</th>
-                                    <th style="width: 20px;">Ø</th>
-                                    <th style="width: 20px;">No.Ind.</th>
-                                    <th style="width: 20px;">Tipo de Indicación</th>
-                                    <th style="width: 20px;">NR (%)</th>
-                                    <th style="width: 20px;">NI (%)</th>
-                                    <th style="width: 20px;">H.T.</th>
-                                    <th style="width: 20px;">Prof</th>
-                                    <th style="width: 20px;">LA</th>
-                                    <th style="width: 20px;">LC</th>
-                                    <th style="width: 20px;">tmáx</th>
-                                    <th style="width: 20px;">tmin</th>
-                                    <th style="width: 20px;">Metros Lineales</th>
-                                    <th style="width: 25px;">Evaluación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $junta['elemento_tubo'] }}</td>
-                                        <td>{{ $junta['no_aceptacion'] }}</td>
-                                        <td>{{ $junta['no_serie'] }}</td>
-                                        <td>{{ $junta['no_colada'] }}</td>
-                                        <td>{{ $junta['tnominal'] }}</td>
-                                        <td>{{ $junta['diametro'] }}</td>
-                                        <td>{{ $junta['no_ind'] }}</td>
-                                        <td>{{ $junta['tipo_indicacion'] }}</td>
-                                        <td>{{ $junta['nr'] }}</td>
-                                        <td>{{ $junta['ni'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['prof'] }}</td>
-                                        <td>{{ $junta['la'] }}</td>
-                                        <td>{{ $junta['lc'] }}</td>
-                                        <td>{{ $junta['tmax'] }}</td>
-                                        <td>{{ $junta['tmin'] }}</td>
-                                        <td>{{ $junta['metros_lineales'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['observaciones'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                    </table>
-                </div>
-
-
             <footer>
                 <div style="margin-bottom: 5px;"></div>
                 
@@ -670,6 +608,68 @@
                         </thead>                            
                     </table>
             </footer>
+
+            <div class="content">
+                <div style="margin-bottom: 5px;"></div>
+                    <table class="datosresultados">
+                        <thead>
+                                <tr class="celdaGris">
+                                    <th colspan="7">DATOS DEL MATERIAL</th>
+                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
+                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
+                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
+                                </tr>
+                                <tr class="celdaGris">
+                                    <th style="width: 5px;">ID</th>
+                                    <th style="width: 20px;">Elemento / Tubo</th>
+                                    <th style="width: 20px;">No. Aceptación</th>
+                                    <th style="width: 20px;">No. Serie</th>
+                                    <th style="width: 20px;">No. Colada</th>
+                                    <th style="width: 20px;">tnominal</th>
+                                    <th style="width: 20px;">Ø</th>
+                                    <th style="width: 20px;">No.Ind.</th>
+                                    <th style="width: 20px;">Tipo de Indicación</th>
+                                    <th style="width: 20px;">NR (%)</th>
+                                    <th style="width: 20px;">NI (%)</th>
+                                    <th style="width: 20px;">H.T.</th>
+                                    <th style="width: 20px;">Prof</th>
+                                    <th style="width: 20px;">LA</th>
+                                    <th style="width: 20px;">LC</th>
+                                    <th style="width: 20px;">tmáx</th>
+                                    <th style="width: 20px;">tmin</th>
+                                    <th style="width: 20px;">Metros Lineales</th>
+                                    <th style="width: 25px;">Evaluación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $junta['elemento_tubo'] }}</td>
+                                        <td>{{ $junta['no_aceptacion'] }}</td>
+                                        <td>{{ $junta['no_serie'] }}</td>
+                                        <td>{{ $junta['no_colada'] }}</td>
+                                        <td>{{ $junta['tnominal'] }}</td>
+                                        <td>{{ $junta['diametro'] }}</td>
+                                        <td>{{ $junta['no_ind'] }}</td>
+                                        <td>{{ $junta['tipo_indicacion'] }}</td>
+                                        <td>{{ $junta['nr'] }}</td>
+                                        <td>{{ $junta['ni'] }}</td>
+                                        <td>{{ $junta['ht'] }}</td>
+                                        <td>{{ $junta['prof'] }}</td>
+                                        <td>{{ $junta['la'] }}</td>
+                                        <td>{{ $junta['lc'] }}</td>
+                                        <td>{{ $junta['tmax'] }}</td>
+                                        <td>{{ $junta['tmin'] }}</td>
+                                        <td>{{ $junta['metros_lineales'] }}</td>
+                                        <td>{{ $junta['evaluacion'] }}</td>
+                                        <td>{{ $junta['observaciones'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                    </table>
+                </div>
+            </div>
 
         </body>
     </html>
