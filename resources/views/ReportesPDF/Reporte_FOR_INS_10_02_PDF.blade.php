@@ -314,7 +314,7 @@
                             <td colspan="3">{{ $Datos_Equipo['MARCA_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
                             <td style="width: 100px;">{{ $Datos_Equipo['MARCA_BLOCK'] }}</td>
-                            <th class="" style="width: 100px;">{{ $Datos_Equipo['ACOPLANTE'] }}</th>
+                            <td class="" style="width: 100px;">{{ $Datos_Equipo['ACOPLANTE'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
