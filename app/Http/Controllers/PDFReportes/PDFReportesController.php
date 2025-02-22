@@ -641,7 +641,7 @@ class PDFReportesController extends Controller
         // Configurar márgenes personalizados (en milímetros)
         $options = $dompdf->getOptions();
         $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
-        $options->set('defaultPaperMargins', [10, 15, 10, 15]);  // [arriba, derecha, abajo, izquierda]
+        //$options->set('defaultPaperMargins', [5, 5, 5, 5]);  // [arriba, derecha, abajo, izquierda]
         $dompdf->setOptions($options);
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
     

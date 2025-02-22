@@ -498,8 +498,7 @@ return [
                     [
                         'text' => 'Pruebas',
                         'icon' => 'fas fa-table',
-
-                        'url' => '/Page_In_Construction',
+                        'url' => '/index/Pruebas',
 
                     ],
                     /* [

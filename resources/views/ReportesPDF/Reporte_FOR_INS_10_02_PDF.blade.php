@@ -4,45 +4,78 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-10/02</title>
             <style>
-                @page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
-                }
+                /* Estilos para la visualización en pantalla */
                 header {
-                    position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: fixed;
-                    bottom: 100px; /* Ajustar para que quede dentro del margen inferior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 242px; /* Ajusta según el tamaño de tu encabezado */
-                    font-family: 'arial', sans-serif;
-                }
-                .content {
-                    margin-top:30px; /* Evita superposición con el header */
-                    margin-bottom: 200px; /* Evita superposición con el footer */
-                }
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 370px; /* Altura fija del header */
+                        text-align: center;
+                        line-height: normal;
+                        background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    }
 
-                .table-container {
-                    margin: 100px 0;
-                }
+                    footer {
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: 200px; /* Altura fija del footer */
+                        text-align: center;
+                        line-height: normal;
+                        background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    }
 
+                    body {
+                        margin: 0;
+                        padding-top: 370px; /* Altura del header */
+                        padding-bottom: 200px; /* Altura del footer */
+                        font-family: 'arial', sans-serif;
+                        background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                    }
+
+                    /* Contenedor principal para el contenido */
+                    .content {
+                        padding: 0px; /* Espacio adicional para el contenido */
+                    }
+
+                    /* Estilos para la impresión */
+                    @media print {
+                        header {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 150px; /* Altura fija del header */
+                            text-align: center;
+                            line-height: normal;
+                            background-color: #f2f2f2; /* Fondo para que sea visible */
+                        }
+
+                        footer {
+                            position: fixed;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            height: 100px; /* Altura fija del footer */
+                            text-align: center;
+                            line-height: normal;
+                            background-color: #f2f2f2; /* Fondo para que sea visible */
+                        }
+
+                        body {
+                            margin: 0;
+                            padding-top: 150px; /* Altura del header */
+                            padding-bottom: 100px; /* Altura del footer */
+                            font-family: 'arial', sans-serif;
+                        }
+
+                        .content {
+                            page-break-before: always;
+                            page-break-after: always;
+                        }
+                    }
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
@@ -330,12 +363,9 @@
                 <table class="encabezadoAzul">
                     <tr><th colspan="9">RESULTADOS</th></tr>
                 </table>
-                
             </header>
-
+            
             <footer>
-                <div style="margin-bottom: 5px;"></div>
-                
                 <table style="margin: auto; border: 0px solid black;">
                     <tr>
                         <td>
@@ -610,7 +640,6 @@
             </footer>
 
             <div class="content">
-                <div style="margin-bottom: 5px;"></div>
                     <table class="datosresultados">
                         <thead>
                                 <tr class="celdaGris">
@@ -666,6 +695,30 @@
                                         <td>{{ $junta['observaciones'] }}</td>
                                     </tr>
                                 @endforeach
+                                @for($i = 0; $i < 50; $i++)
+                            <tr>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                                <td>----</td>
+                            </tr>
+                            @endfor
                             </tbody>
                     </table>
                 </div>
