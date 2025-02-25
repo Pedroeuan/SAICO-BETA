@@ -4,78 +4,31 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-10/02</title>
             <style>
-                /* Estilos para la visualización en pantalla */
+                @page {
+                    /*margin: 100px 50px; /* Ajusta el margen superior para el header */
+                }
+
                 header {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        height: 370px; /* Altura fija del header */
-                        text-align: center;
-                        line-height: normal;
-                        background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
-                    }
+                    position: fixed;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                }
 
-                    footer {
-                        position: fixed;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        height: 200px; /* Altura fija del footer */
-                        text-align: center;
-                        line-height: normal;
-                        background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
-                    }
+                footer {
+                    position: fixed;
+                    bottom: 100px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: 50px;
+                    text-align: center;
+                }
 
-                    body {
-                        margin: 0;
-                        padding-top: 370px; /* Altura del header */
-                        padding-bottom: 200px; /* Altura del footer */
-                        font-family: 'arial', sans-serif;
-                        background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
-                    }
-
-                    /* Contenedor principal para el contenido */
-                    .content {
-                        padding: 0px; /* Espacio adicional para el contenido */
-                    }
-
-                    /* Estilos para la impresión */
-                    @media print {
-                        header {
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            right: 0;
-                            height: 150px; /* Altura fija del header */
-                            text-align: center;
-                            line-height: normal;
-                            background-color: #f2f2f2; /* Fondo para que sea visible */
-                        }
-
-                        footer {
-                            position: fixed;
-                            bottom: 0;
-                            left: 0;
-                            right: 0;
-                            height: 100px; /* Altura fija del footer */
-                            text-align: center;
-                            line-height: normal;
-                            background-color: #f2f2f2; /* Fondo para que sea visible */
-                        }
-
-                        body {
-                            margin: 0;
-                            padding-top: 150px; /* Altura del header */
-                            padding-bottom: 100px; /* Altura del footer */
-                            font-family: 'arial', sans-serif;
-                        }
-
-                        .content {
-                            page-break-before: always;
-                            page-break-after: always;
-                        }
-                    }
+                body {
+                    margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                }
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
