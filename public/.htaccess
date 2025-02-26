@@ -1,3 +1,11 @@
+<IfModule mod_php7.c> 
+    php_value post_max_size 512M
+    php_value upload_max_filesize 512M
+    php_value memory_limit 512M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -19,8 +27,7 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
-    RewriteEngine On
-    RewriteCond
-    RewriteRuIe https://%{HTTP-HOST)%{REOUEST-URl)[CR=301]
-    
+    # Redirect HTTP to HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
