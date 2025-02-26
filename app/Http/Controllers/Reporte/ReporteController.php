@@ -390,7 +390,7 @@ class ReporteController extends Controller
      */
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
 
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -525,68 +525,68 @@ class ReporteController extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
-        try {
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
 
-        /*Resultados Juntas*/
-        // Guardar las filas dinámicas
-        $Resultados_Juntas = [];
-        foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
-            $Resultados_Juntas[] = [
-                'elemento_tubo' => $elemento_tubo,
-                'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                'no_serie' => $validatedData['no_serie'][$index],
-                'no_colada' => $validatedData['no_colada'][$index],
-                'tnominal' => $validatedData['tnominal'][$index],
-                'diametro' => $validatedData['diametro'][$index],
-                'no_ind' => $validatedData['no_ind'][$index],
-                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                'nr' => $validatedData['nr'][$index],
-                'ni' => $validatedData['ni'][$index],
-                'ht' => $validatedData['ht'][$index],
-                'prof' => $validatedData['prof'][$index],
-                'la' => $validatedData['la'][$index],
-                'lc' => $validatedData['lc'][$index],
-                'tmax' => $validatedData['tmax'][$index],
-                'tmin' => $validatedData['tmin'][$index],
-                'metros_lineales' => $validatedData['metros_lineales'][$index],
-                'evaluacion' => $validatedData['evaluacion'][$index],
-                'observaciones' => $validatedData['observaciones'][$index],
-            ];
-        }
+            Log::info('***********************');
+            Log::info('Iniciando el guardado de datos.');
 
+            // Verificar si validatedData contiene datos
+            if (empty($validatedData['elemento_tubo'])) {
+                Log::error('validatedData[elemento_tubo] está vacío.');
+            }
+            /*Resultados Juntas*/
+            // Guardar las filas dinámicas
+            $Resultados_Juntas = [];
+            Log::info('Cantidad de elementos a procesar: ' . count($validatedData['elemento_tubo']));
+            foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
+                $Resultados_Juntas[] = [
+                    'elemento_tubo' => $elemento_tubo,
+                    'no_aceptacion' => $validatedData['no_aceptacion'][$index],
+                    'no_serie' => $validatedData['no_serie'][$index],
+                    'no_colada' => $validatedData['no_colada'][$index],
+                    'tnominal' => $validatedData['tnominal'][$index],
+                    'diametro' => $validatedData['diametro'][$index],
+                    'no_ind' => $validatedData['no_ind'][$index],
+                    'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                    'nr' => $validatedData['nr'][$index],
+                    'ni' => $validatedData['ni'][$index],
+                    'ht' => $validatedData['ht'][$index],
+                    'prof' => $validatedData['prof'][$index],
+                    'la' => $validatedData['la'][$index],
+                    'lc' => $validatedData['lc'][$index],
+                    'tmax' => $validatedData['tmax'][$index],
+                    'tmin' => $validatedData['tmin'][$index],
+                    'metros_lineales' => $validatedData['metros_lineales'][$index],
+                    'evaluacion' => $validatedData['evaluacion'][$index],
+                    'observaciones' => $validatedData['observaciones'][$index],
+                ];
+            }
 
-        // Convertir el array de resultados juntas a JSON
-        $ResultadosJuntas = json_encode($Resultados_Juntas);
-        //dd($ResultadosJuntas);
+            Log::info('Cantidad de registros a guardar: ' . count($Resultados_Juntas));
+    
+            // Convertir el array de resultados juntas a JSON
+            $ResultadosJuntas = json_encode($Resultados_Juntas);
 
-        // Obtener el número de caracteres
-        /*$numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
-        $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
-        Log::info('***********************');
-        Log::info('numCaracteres: ', ['numCaracteres' => $numCaracteres]);
-        Log::info('numBytes: ', ['numBytes' => $numBytes]);*/
-        
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error('Error en json_encode: ' . json_last_error_msg());
+            }
+            
+            Log::info('JSON generado correctamente.');
+            // Obtener el número de caracteres
+            $numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
+            $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
+            Log::info('numCaracteres: ', ['numCaracteres' => $numCaracteres]);
+            Log::info('numBytes: ', ['numBytes' => $numBytes]);
+            
+    
+            $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
+            //Guardar Datos_Equipo como JSON en la base de datos
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_Re->save();
 
-        $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-        //Guardar Datos_Equipo como JSON en la base de datos
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
-        $Grupo_Juntas_Detalles_Re->save();
-        // Guardar en la base de datos en bloques de 30 registros
-        /*$chunkSize = 30;
-        $chunks = array_chunk($Resultados_Juntas, $chunkSize);
-
-        foreach ($chunks as $chunk) {
-            DB::table('grupo_juntas_detalles_re')->insert($chunk);
-        }*/
-
-        return redirect()->back()->with('success', 'Datos guardados correctamente.');
-    } catch (\Exception $e) {
-        Log::error('Error al guardar: ' . $e->getMessage());
-        return back()->with('error', 'Ocurrió un error al guardar los datos.');
-    }
-
+            Log::info('Datos de Juntas guardados correctamente.');
+            Log::info('***********************');
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas

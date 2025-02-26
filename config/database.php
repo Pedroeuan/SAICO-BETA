@@ -56,7 +56,8 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-                defined('PDO::MYSQL_ATTR_MAX_BUFFER_SIZE') ? PDO::MYSQL_ATTR_MAX_BUFFER_SIZE : null => 134217728, // 128MB
+                //PDO::ATTR_TIMEOUT => 300, // Aumentar el tiempo de espera
+                //defined('PDO::MYSQL_ATTR_MAX_BUFFER_SIZE') ? PDO::MYSQL_ATTR_MAX_BUFFER_SIZE : null => 134217728, // 128MB
             ]) : [],
         ],
 
