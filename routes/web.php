@@ -100,7 +100,11 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/indexINS2', [ReporteController::class, 'indexINS2'])->name('indexINS2');
         /*Rutas de Vistas del index despues de la seleccion del Contrato */
         Route::get('/indexINS1', [ReporteController::class, 'indexINS1'])->name('indexINS1');
-
+        /*Rutas de Vistas del index despues de la seleccion del Manifiesto */
+        Route::get('/ReportesPrincipalMaster', [ReporteController::class, 'ReportesPrincipalMaster'])->name('ReportesPrincipalMaster');
+        /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
+        Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
+        
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Controlador del a vista Menu.Servicios (Prueba/Prueba) para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/

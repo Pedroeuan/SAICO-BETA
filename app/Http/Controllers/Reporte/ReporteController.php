@@ -217,7 +217,17 @@ class ReporteController extends Controller
      */
     public function indexManifiesto(Request $request)
     {
-        // Obtener los valores de los selects
+        return redirect()->route('ReportesindexManifiesto', [
+            'Prueba' => $request->input('Prueba'),
+            'NormaCodigo' => $request->input('NormaCodigo'),
+            'Formato' => $request->input('Formato'),
+            'formatoNombrePersonalizado' => $request->input('formatoNombrePersonalizado'),
+        ]);
+        
+    }
+
+    public function ReportesindexManifiesto(Request $request)
+    {
         $idPrueba = $request->input('Prueba');
         $idNorma_Codigo = $request->input('NormaCodigo');
         $idFormato = $request->input('Formato');
@@ -227,7 +237,6 @@ class ReporteController extends Controller
         $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
         ->where('Estatus', 'MANIFIESTO')
         ->get();
-
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
         $ultimoFolioPorGrupo = [];
@@ -284,6 +293,17 @@ class ReporteController extends Controller
     }
 
     public function CreateReporte(Request $request)
+    {
+        return redirect()->route('ReportesPrincipalMaster', [
+            'idPrueba' => $request->input('idPrueba'),
+            'idNorma_Codigo' => $request->input('idNorma_Codigo'),
+            'idFormato' => $request->input('idFormato'),
+            'selectedSolicitud' => $request->input('selectedSolicitud'),
+            'formatoNombrePersonalizado' => $request->input('formatoNombrePersonalizado'),
+        ]);
+    }
+
+    public function ReportesPrincipalMaster(Request $request)
     {
         // Obtener los valores de los campos ocultos de indexManifiesto
         $idPrueba = $request->input('idPrueba');
@@ -370,6 +390,8 @@ class ReporteController extends Controller
      */
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
+        dd($request->all());
+
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -414,28 +436,28 @@ class ReporteController extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
+            'elemento_tubo' => 'nullable|array',
+            'no_aceptacion' => 'nullable|array',
+            'no_serie' => 'nullable|array',
+            'no_colada' => 'nullable|array',
+            'tnominal' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_ind' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'prof' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'metros_lineales' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:2,3,4',
 
             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
@@ -503,6 +525,7 @@ class ReporteController extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
+        try {
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
 
@@ -533,14 +556,36 @@ class ReporteController extends Controller
             ];
         }
 
+
         // Convertir el array de resultados juntas a JSON
         $ResultadosJuntas = json_encode($Resultados_Juntas);
+        //dd($ResultadosJuntas);
+
+        // Obtener el número de caracteres
+        /*$numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
+        $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
+        Log::info('***********************');
+        Log::info('numCaracteres: ', ['numCaracteres' => $numCaracteres]);
+        Log::info('numBytes: ', ['numBytes' => $numBytes]);*/
+        
 
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-        // Guardar Datos_Equipo como JSON en la base de datos
+        //Guardar Datos_Equipo como JSON en la base de datos
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
-
         $Grupo_Juntas_Detalles_Re->save();
+        // Guardar en la base de datos en bloques de 30 registros
+        /*$chunkSize = 30;
+        $chunks = array_chunk($Resultados_Juntas, $chunkSize);
+
+        foreach ($chunks as $chunk) {
+            DB::table('grupo_juntas_detalles_re')->insert($chunk);
+        }*/
+
+        return redirect()->back()->with('success', 'Datos guardados correctamente.');
+    } catch (\Exception $e) {
+        Log::error('Error al guardar: ' . $e->getMessage());
+        return back()->with('error', 'Ocurrió un error al guardar los datos.');
+    }
 
         /*Firmas */
         // Guardar las firmas
