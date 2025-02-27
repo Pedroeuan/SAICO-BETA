@@ -15,19 +15,26 @@
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                 }
 
                 footer {
                     position: fixed;
-                    bottom: 100px; /* Ajusta la posición */
+                    bottom: 0px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
-                    height: 50px;
+                    height: auto;
                     text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
                 }
 
                 body {
-                    margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin: 0;
+                    padding-top: 320px; /* Altura del header */
+                    padding-bottom: 220px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
                 .datosgenerales{
                     border: 0px !important;
@@ -41,6 +48,7 @@
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 8px;
                 }
                     
                 .simbologia {
@@ -311,11 +319,6 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                    <tr><th colspan="9">RESULTADOS</th></tr>
-                </table>
             </header>
             
             <footer>
@@ -593,7 +596,12 @@
             </footer>
 
             <div class="content">
+                
                     <table class="datosresultados">
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="20">RESULTADOS</th></tr>
+                        </thead>
                         <thead>
                                 <tr class="celdaGris">
                                     <th colspan="7">DATOS DEL MATERIAL</th>
@@ -648,30 +656,6 @@
                                         <td>{{ $junta['observaciones'] }}</td>
                                     </tr>
                                 @endforeach
-                                @for($i = 0; $i < 50; $i++)
-                            <tr>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                            </tr>
-                            @endfor
                             </tbody>
                     </table>
                 </div>
