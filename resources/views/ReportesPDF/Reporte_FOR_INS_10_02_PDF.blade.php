@@ -7,7 +7,32 @@
                 @page {
                     /*margin: 100px 50px; /* Ajusta el margen superior para el header */
                 }
+                @if ($TotalJuntas <=15)
+                header {
+                    width: 100%;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    height: auto; /* Permite crecer según el contenido */
+                    text-align: center;
+                    /*background-color: rgb(226, 45, 45);*/
+                }
 
+                footer {
+                    position: fixed;
+                    bottom: -30px;
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18);*/
+                }
+
+                body {
+                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(45, 78, 226);*/
+                }
+            @else
                 header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -20,7 +45,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: 0px; /* Ajusta la posición */
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -32,10 +57,11 @@
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
                     padding-top: 320px; /* Altura del header */
-                    padding-bottom: 220px; /* Altura del footer */
+                    padding-bottom: 160px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
+                @endif
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
@@ -174,7 +200,7 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-10/02</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 45%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -442,25 +468,25 @@
                     </tr>
                 </table>
 
-                <br>
+                <div style="margin-bottom: 5px;"></div>
 
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 915px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                            <td class="lineaInferior" style="width: 885px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
-                    <br>
+                    <div style="margin-bottom: 5px;"></div>
                                                 
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
                                 <tr>
                                     <td style="width: 30px;"></td>
-                                    <th>Realizó</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
                                 </tr>
 
                                 <tr>
@@ -493,11 +519,11 @@
                             @elseif( $numFirmas == 3)
                                 <tr>
                                     <td style="width: 30px;"></td>
-                                    <th>Realizó</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
                                 </tr>
 
                                 <tr>
@@ -538,13 +564,13 @@
                             @else
                                 <tr>
                                     <td style="width: 30px;"></td>
-                                    <th>Realizó</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>Vo.Bo.</th>
+                                    <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
                                 </tr>
 
                                 <tr>

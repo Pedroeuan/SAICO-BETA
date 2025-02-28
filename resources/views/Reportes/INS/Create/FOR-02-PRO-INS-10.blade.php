@@ -77,7 +77,7 @@
                             <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
+                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
@@ -492,7 +492,7 @@
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
+                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
                                     <p>
 
@@ -611,9 +611,9 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Realizó" value="Realizó"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 
@@ -656,11 +656,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Realizó" value="Realizó"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 

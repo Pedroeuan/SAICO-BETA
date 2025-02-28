@@ -609,6 +609,7 @@ class PDFReportesController extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
         $numFirmas = $Firmas_Reportes['numFirmas'];
@@ -624,6 +625,8 @@ class PDFReportesController extends Controller
             'Datos_Equipo' => $Datos_Equipo,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            'TotalJuntas' => $TotalJuntas,
             //Fotos_Reportes
             'Fotos_Reportes' => $Fotos_Reportes,
             //Numero de Firmas
@@ -653,7 +656,7 @@ class PDFReportesController extends Controller
             $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 630; // Ajusta esta posición X según sea necesario
+            $x = 626; // Ajusta esta posición X según sea necesario
             $y = 46;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas

@@ -461,6 +461,9 @@ class ReporteController extends Controller
 
             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
@@ -472,6 +475,10 @@ class ReporteController extends Controller
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -486,6 +493,11 @@ class ReporteController extends Controller
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -708,8 +720,11 @@ class ReporteController extends Controller
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:2,3,4',
 
-            /*2 FIRMAS */
+             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
@@ -721,6 +736,10 @@ class ReporteController extends Controller
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -735,6 +754,11 @@ class ReporteController extends Controller
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -744,7 +768,6 @@ class ReporteController extends Controller
             'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
-
 
             'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
