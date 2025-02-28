@@ -611,9 +611,9 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th>Realizó</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 
@@ -656,11 +656,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th>Realizó</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 
@@ -714,13 +714,13 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th>Realizó</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Vo.Bo." value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Vo.Bo." value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 

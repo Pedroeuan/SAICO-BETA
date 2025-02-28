@@ -641,6 +641,7 @@ class PDFReportesController extends Controller
         // Configurar márgenes personalizados (en milímetros)
         $options = $dompdf->getOptions();
         $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('isPhpEnabled', true);
         //$options->set('defaultPaperMargins', [5, 5, 5, 5]);  // [arriba, derecha, abajo, izquierda]
         $dompdf->setOptions($options);
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
@@ -652,7 +653,7 @@ class PDFReportesController extends Controller
             $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 634; // Ajusta esta posición X según sea necesario
+            $x = 630; // Ajusta esta posición X según sea necesario
             $y = 46;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
