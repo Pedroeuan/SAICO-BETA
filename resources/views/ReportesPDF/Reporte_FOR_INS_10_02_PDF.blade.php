@@ -5,7 +5,11 @@
             <title>FORMATO FOR-INS-10/02</title>
             <style>
                 @page {
-                    /*margin: 2.5cm 2.5cm 1.5cm 2.5cm; /* Márgenes personalizados */
+                    margin: 
+                    3.0cm /* superior */
+                    2.1cm /* derecho */
+                    2.1cm /* inferior */
+                    2.4cm; /* izquierdo */
                 }
                 @if ($TotalJuntas <=15)
                 header {
