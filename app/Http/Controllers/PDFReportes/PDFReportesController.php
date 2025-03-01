@@ -656,8 +656,8 @@ class PDFReportesController extends Controller
             $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 626; // Ajusta esta posición X según sea necesario
-            $y = 46;  // Ajusta esta posición Y según sea necesario
+            $x = 610; // Ajusta esta posición X según sea necesario
+            $y = 94;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
             if (is_numeric($x) && is_numeric($y)) {

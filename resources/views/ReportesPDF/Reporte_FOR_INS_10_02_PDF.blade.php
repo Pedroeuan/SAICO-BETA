@@ -60,8 +60,8 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 320px; /* Altura del header */
-                    padding-bottom: 100px; /* Altura del footer */
+                    padding-top: 275px; /* Altura del header */
+                    padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
@@ -71,14 +71,14 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 7px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 7px;
                 }
                     
                 .simbologia {
@@ -86,7 +86,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 6px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -113,7 +113,7 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
+            font-size: 7px;
             background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
@@ -124,7 +124,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
@@ -140,18 +140,40 @@
         }
 
         .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
+            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
             font-size: 8px;
+            /*border : 2px solid black;*/
+        }
+        .datosresultadosinterno{
+            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 8px;
+            border : 2px solid black;
         }
 
         .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
+            border: .6px solid black; /* Borde grueso de 2px */
         }
         .celdaGris{
             background-color: #DBDBDB;
+            font-size: 7px;
+        }
+
+        .juntas{
+            font-size: 7.5px;
+        }
+
+        .contorno
+        {
+            /*border-bottom: 1px solid black;
+            border-top: 1px solid black;
+            border-right: 1px solid black;*/
+            border-left: 5px solid black;
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -159,7 +181,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -167,7 +188,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -175,7 +195,6 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
         }
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
@@ -477,11 +496,10 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 885px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
-                    <div style="margin-bottom: 5px;"></div>
                                                 
                     <table class="datosgenerales">
                         <thead>
@@ -532,11 +550,11 @@
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                 </tr>
 
                                 <tr>
@@ -626,76 +644,77 @@
             </footer>
 
             <div class="content">
-                
                     <table class="datosresultados">
 
                         <thead class="encabezadoAzul">
                             <tr><th colspan="20">RESULTADOS</th></tr>
                         </thead>
-                        <thead>
-                                <tr class="celdaGris">
-                                    <th colspan="7">DATOS DEL MATERIAL</th>
-                                    <th colspan="8">DATOS DE LA INDICACIÓN</th>
-                                    <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
-                                    <th rowspan="2" style="width: 20px;">Observaciones</th>
-                                </tr>
-                                <tr class="celdaGris">
-                                    <th style="width: 5px;">ID</th>
-                                    <th style="width: 20px;">Elemento / Tubo</th>
-                                    <th style="width: 20px;">No. Aceptación</th>
-                                    <th style="width: 20px;">No. Serie</th>
-                                    <th style="width: 20px;">No. Colada</th>
-                                    <th style="width: 20px;">tnominal</th>
-                                    <th style="width: 20px;">Ø</th>
-                                    <th style="width: 20px;">No.Ind.</th>
-                                    <th style="width: 20px;">Tipo de Indicación</th>
-                                    <th style="width: 20px;">NR (%)</th>
-                                    <th style="width: 20px;">NI (%)</th>
-                                    <th style="width: 20px;">H.T.</th>
-                                    <th style="width: 20px;">Prof</th>
-                                    <th style="width: 20px;">LA</th>
-                                    <th style="width: 20px;">LC</th>
-                                    <th style="width: 20px;">tmáx</th>
-                                    <th style="width: 20px;">tmin</th>
-                                    <th style="width: 20px;">Metros Lineales</th>
-                                    <th style="width: 25px;">Evaluación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @php
-                                $filasPorPagina = 15; // Define cuántas filas quieres por página
-                                $totalMetros = 0; // Inicializa el acumulador de metros lineales
-                                $contadorFilas = 0; // Contador para controlar las filas por página
-                            @endphp
 
-                                @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
-                                @php
-                                    $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
-                                    $contadorFilas++;
-                                @endphp
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $junta['elemento_tubo'] }}</td>
-                                        <td>{{ $junta['no_aceptacion'] }}</td>
-                                        <td>{{ $junta['no_serie'] }}</td>
-                                        <td>{{ $junta['no_colada'] }}</td>
-                                        <td>{{ $junta['tnominal'] }}</td>
-                                        <td>{{ $junta['diametro'] }}</td>
-                                        <td>{{ $junta['no_ind'] }}</td>
-                                        <td>{{ $junta['tipo_indicacion'] }}</td>
-                                        <td>{{ $junta['nr'] }}</td>
-                                        <td>{{ $junta['ni'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['prof'] }}</td>
-                                        <td>{{ $junta['la'] }}</td>
-                                        <td>{{ $junta['lc'] }}</td>
-                                        <td>{{ $junta['tmax'] }}</td>
-                                        <td>{{ $junta['tmin'] }}</td>
-                                        <td>{{ $junta['metros_lineales'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['observaciones'] }}</td>
+                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead>
+                                <thead>
+                                    <tr class="celdaGris">
+                                        <th colspan="7">DATOS DEL MATERIAL</th>
+                                        <th colspan="8">DATOS DE LA INDICACIÓN</th>
+                                        <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
+                                        <th rowspan="2" style="width: 20px;">Observaciones</th>
                                     </tr>
+                                    <tr class="celdaGris">
+                                        <th style="width: 5px;">ID</th>
+                                        <th style="width: 20px;">Elemento / Tubo</th>
+                                        <th style="width: 20px;">No. Aceptación</th>
+                                        <th style="width: 20px;">No. Serie</th>
+                                        <th style="width: 20px;">No. Colada</th>
+                                        <th style="width: 20px;">tnominal</th>
+                                        <th style="width: 20px;">Ø</th>
+                                        <th style="width: 20px;">No.Ind.</th>
+                                        <th style="width: 20px;">Tipo de Indicación</th>
+                                        <th style="width: 20px;">NR (%)</th>
+                                        <th style="width: 20px;">NI (%)</th>
+                                        <th style="width: 20px;">H.T.</th>
+                                        <th style="width: 20px;">Prof</th>
+                                        <th style="width: 20px;">LA</th>
+                                        <th style="width: 20px;">LC</th>
+                                        <th style="width: 20px;">tmáx</th>
+                                        <th style="width: 20px;">tmin</th>
+                                        <th style="width: 20px;">Metros Lineales</th>
+                                        <th style="width: 25px;">Evaluación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @php
+                                    $filasPorPagina = 15; // Define cuántas filas quieres por página
+                                    $totalMetros = 0; // Inicializa el acumulador de metros lineales
+                                    $contadorFilas = 0; // Contador para controlar las filas por página
+                                @endphp
 
+                                    @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
+                                    @php
+                                        $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
+                                        $contadorFilas++;
+                                    @endphp
+                                        <tr class="juntas">
+                                            <td class="izquierda">{{ $index + 1 }}</td>
+                                            <td>{{ $junta['elemento_tubo'] }}</td>
+                                            <td>{{ $junta['no_aceptacion'] }}</td>
+                                            <td>{{ $junta['no_serie'] }}</td>
+                                            <td>{{ $junta['no_colada'] }}</td>
+                                            <td>{{ $junta['tnominal'] }}</td>
+                                            <td>{{ $junta['diametro'] }}</td>
+                                            <td>{{ $junta['no_ind'] }}</td>
+                                            <td>{{ $junta['tipo_indicacion'] }}</td>
+                                            <td>{{ $junta['nr'] }}</td>
+                                            <td>{{ $junta['ni'] }}</td>
+                                            <td>{{ $junta['ht'] }}</td>
+                                            <td>{{ $junta['prof'] }}</td>
+                                            <td>{{ $junta['la'] }}</td>
+                                            <td>{{ $junta['lc'] }}</td>
+                                            <td>{{ $junta['tmax'] }}</td>
+                                            <td>{{ $junta['tmin'] }}</td>
+                                            <td>{{ $junta['metros_lineales'] }}</td>
+                                            <td>{{ $junta['evaluacion'] }}</td>
+                                            <td>{{ $junta['observaciones'] }}</td>
+                                        </tr>
+                                
                                     @if ($contadorFilas % $filasPorPagina === 0)
                                         <!-- Fila de total antes del salto de página -->
                                         <tr style="page-break-after: always;" class="sinBordetd">
@@ -710,7 +729,7 @@
 
 
                                     @endif
-
+                                    
                                 @endforeach
 
                                     <!-- Fila de total final si no se alcanzó el límite de filas por página -->

@@ -71,12 +71,9 @@ class ReporteController extends Controller
             }
             $Proyecto = $reportesEncontrados[0]->detalles['Proyecto'];
 
-            if ($reportesEncontrados->isNotEmpty()) {
-                return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados','contratoSeleccionado','Proyecto'));
-            } else {
-                return "No se encontraron reportes con ese contrato.";
-            }
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto, 'reportesEncontrados' => $reportesEncontrados]);
     }
+
 
     public function ObtenerNormas($id)
     {
