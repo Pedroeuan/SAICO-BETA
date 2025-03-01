@@ -5,7 +5,7 @@
             <title>FORMATO FOR-INS-10/02</title>
             <style>
                 @page {
-                    /*margin: 100px 50px; /* Ajusta el margen superior para el header */
+                    /*margin: 2.5cm 2.5cm 1.5cm 2.5cm; /* Márgenes personalizados */
                 }
                 @if ($TotalJuntas <=15)
                 header {
@@ -57,7 +57,7 @@
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
                     padding-top: 320px; /* Altura del header */
-                    padding-bottom: 160px; /* Altura del footer */
+                    padding-bottom: 100px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
@@ -217,14 +217,14 @@
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
         
                 <table class="encabezadoAzul">
                     <tr>
                         <th colspan="4">DATOS GENERALES</th>
                     </tr>
                 </table>   
-                <div style="margin-bottom: 5px;"></div>         
+                <div style="margin-bottom: 4px;"></div>         
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
@@ -284,7 +284,7 @@
                     </tr>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
 
                 <table class="datosinspeccion">
                     <tbody>
@@ -326,7 +326,7 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
 
                 <table class="datosinspeccionsinborde">
                     <tbody>
@@ -344,7 +344,7 @@
                         </tr>
                     </tbody>
                 </table>
-
+                <div style="margin-bottom: 4px;"></div>
             </header>
             
             <footer>
@@ -658,7 +658,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @php
+                                $filasPorPagina = 15; // Define cuántas filas quieres por página
+                                $totalMetros = 0; // Inicializa el acumulador de metros lineales
+                                $contadorFilas = 0; // Contador para controlar las filas por página
+                            @endphp
+
                                 @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
+                                @php
+                                    $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
+                                    $contadorFilas++;
+                                @endphp
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $junta['elemento_tubo'] }}</td>
@@ -681,7 +691,32 @@
                                         <td>{{ $junta['evaluacion'] }}</td>
                                         <td>{{ $junta['observaciones'] }}</td>
                                     </tr>
+
+                                    @if ($contadorFilas % $filasPorPagina === 0)
+                                        <!-- Fila de total antes del salto de página -->
+                                        <tr style="page-break-after: always;" class="sinBordetd">
+                                            <td colspan="13"></td>
+                                            <th colspan="4"><strong>Longitud inspeccionada:</strong></th>
+                                            <th>{{ number_format($totalMetros, 2) }} m</th>
+                                        </tr>
+
+                                        @php
+                                            $totalMetros = 0; // Reinicia el acumulador para la siguiente página
+                                        @endphp
+
+
+                                    @endif
+
                                 @endforeach
+
+                                    <!-- Fila de total final si no se alcanzó el límite de filas por página -->
+                                    @if ($contadorFilas % $filasPorPagina !== 0)
+                                        <tr style="page-break-after: always;" class="sinBordetd">
+                                            <td colspan="13"></td>
+                                            <th colspan="4"><strong>Longitud inspeccionada:</strong></th>
+                                            <th>{{ number_format($totalMetros, 2) }} m</th>
+                                        </tr>
+                                    @endif
                             </tbody>
                     </table>
                 </div>
