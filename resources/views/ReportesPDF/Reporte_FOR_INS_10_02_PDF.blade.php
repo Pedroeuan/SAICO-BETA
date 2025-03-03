@@ -60,7 +60,7 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 275px; /* Altura del header */
+                    padding-top: 235px; /* Altura del header */
                     padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
@@ -71,14 +71,14 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 7px !important;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                    font-size: 7px;
+                    font-size: 6px;
                 }
                     
                 .simbologia {
@@ -118,25 +118,30 @@
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
+
+        .border {
+            border: 1px solid black; 
+        }
             
         .datosinspeccion{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 7px;
+            font-size: 6px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
         }
+        
 
         .datosinspeccionsinborde{
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
+            font-size: 6px;
         }
 
         .datosresultados{
@@ -144,28 +149,25 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
-            /*border : 2px solid black;*/
-        }
-        .datosresultadosinterno{
-            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
-            border : 2px solid black;
+            font-size: 10px;
+            /*border : 1px solid black;*/
         }
 
         .datosresultados td, .datosresultados th {
-            border: .6px solid black; /* Borde grueso de 2px */
+            border: .1px solid black; /* Borde grueso de 2px */
         }
         .celdaGris{
             background-color: #DBDBDB;
-            font-size: 7px;
+            font-size: 6px;
+        }
+
+        .celdaGrisResultados{
+            background-color: #DBDBDB;
+            font-size: 9px;
         }
 
         .juntas{
-            font-size: 7.5px;
+            font-size: 9px;
         }
 
         .contorno
@@ -239,16 +241,17 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 4px;"></div>         
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -301,15 +304,14 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS DEL EQUIPO </th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 4px;"></div>
-
                 <table class="datosinspeccion">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
@@ -374,7 +376,7 @@
                 <table style="margin: auto; border: 0px solid black;">
                     <tr>
                         <td>
-                            <table class="simbologia">
+                            <table class="simbologia" style="border: 1px solid black;">
                                 <thead>
                                     <tr>
                                         <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
@@ -452,7 +454,7 @@
                         </td>
 
                         <td>
-                            <table class="simbologia">
+                            <table class="simbologia" style="border: 1px solid black;">
                                 <thead>
                                     <tr>
                                         <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
@@ -504,11 +506,13 @@
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
+                            <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <td style="width: 30px;"></td>
                                 </tr>
 
                                 <tr>
@@ -539,6 +543,7 @@
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                 </tr>
                             @elseif( $numFirmas == 3)
+                            <!-- 3 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
@@ -546,6 +551,7 @@
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                                    <td style="width: 30px;"></td>
                                 </tr>
 
                                 <tr>
@@ -584,8 +590,9 @@
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
                             @else
+                            <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 10px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
@@ -593,17 +600,19 @@
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
+                                    <td style="width: 30px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <th></th>
                                 </tr>
 
                                 <tr>
@@ -615,6 +624,7 @@
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
+                                    <th></th>
                                 </tr>
                                                                     
                                 <tr>
@@ -626,6 +636,7 @@
                                     <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</strong></td>
+                                    <th></th>
                                 </tr>
 
                                 <tr>
@@ -637,6 +648,7 @@
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</strong></td>
+                                    <th></th>
                                 </tr>
                             @endif
                         </thead>                            
@@ -644,21 +656,23 @@
             </footer>
 
             <div class="content">
+
                     <table class="datosresultados">
 
                         <thead class="encabezadoAzul">
                             <tr><th colspan="20">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead>
+                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+
                                 <thead>
-                                    <tr class="celdaGris">
+                                    <tr class="celdaGrisResultados">
                                         <th colspan="7">DATOS DEL MATERIAL</th>
                                         <th colspan="8">DATOS DE LA INDICACIÓN</th>
                                         <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
                                         <th rowspan="2" style="width: 20px;">Observaciones</th>
                                     </tr>
-                                    <tr class="celdaGris">
+                                    <tr class="celdaGrisResultados">
                                         <th style="width: 5px;">ID</th>
                                         <th style="width: 20px;">Elemento / Tubo</th>
                                         <th style="width: 20px;">No. Aceptación</th>
@@ -714,12 +728,12 @@
                                             <td>{{ $junta['evaluacion'] }}</td>
                                             <td>{{ $junta['observaciones'] }}</td>
                                         </tr>
-                                
+
                                     @if ($contadorFilas % $filasPorPagina === 0)
                                         <!-- Fila de total antes del salto de página -->
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="13"></td>
-                                            <th colspan="4"><strong>Longitud inspeccionada:</strong></th>
+                                            <th colspan="4" ><strong>Longitud inspeccionada:</strong></th>
                                             <th>{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
 
