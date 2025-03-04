@@ -306,7 +306,7 @@ return [
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
             'update_cfg' => [
                 'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
-                //'period' => 60,                       // The update period for get new data (in seconds, optional).
+                'period' => 60,                       // The update period for get new data (in seconds, optional).
             ],
         ],
                 // Sidebar Administrativo:
@@ -393,6 +393,8 @@ return [
                             'text' => 'FOR-INS-18/01/PDF',
                             'url' => '/Reporte/FOR-INS-18/01/PDF',
                         ],
+                        
+                        ],
                     ],
                 ],
 
@@ -476,18 +478,12 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Orden de Trabajo/Servicio',
-                        'icon' => 'far fa-file-alt',
+                        'icon' => 'fas fa-file-alt',
                         'url' => '/Page_In_Construction',
-                    ],
-                    [
-                        'text' => 'Crear Reportes',
-                        'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
