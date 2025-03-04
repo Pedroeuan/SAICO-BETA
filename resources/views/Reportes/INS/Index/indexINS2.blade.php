@@ -32,8 +32,7 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Reportes del Contrato:  y Proyecto: </h3>
-
+        <h3 align="center">Reportes del Contrato: {{$contratoSeleccionado}}  y Proyecto: {{$Proyecto}} </h3>
 
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
@@ -42,6 +41,7 @@
                         <th>Nombre del Proyecto</th>
                         <th>No. Reporte</th>
                         <th>Fecha</th>
+                        <th>PDF</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -57,15 +57,18 @@
                             <td>{{ $detalles['No_Reporte'] }}</td>
                             <td>{{ $detalles['Fecha'] }}</td>
                             <td>
-                                <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <a class="btn btn-primary" href="{{ route('Reporte_FOR_INS_10_02.PDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                            </td>  
+                            <td>
+                                <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             
                             <td>
-                                <button type="button" class="btn btn-danger btnEliminarReporte" id-Solicitud=""><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="$reporte->idReportes"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     @endforeach
-            </tbody>
+                </tbody>
             </table>
             <p>
             <p>
@@ -126,10 +129,10 @@ let table = new DataTable('#tablaJs', {
 
 
     $(document).on("click", ".btnEliminarPrueba", function() {
-        var idPrueba = $(this).attr("idPrueba");
+        var idReporte = $(this).attr("idReporte");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
-            text: "¡Se Eliminarán las Normas y Formatos Relacionados a esta Prueba!",
+            text: "¡Se Eliminara el Reporte¡",
             icon: 'error',
             showDenyButton: true,
             showCancelButton: false,
@@ -138,7 +141,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Eliminar/Prueba/Tabla/' + idPrueba,
+                    url: '/Eliminar/Prueba/Tabla/' + idReporte,
 
                     type: 'DELETE',
                     data: {
@@ -159,7 +162,7 @@ let table = new DataTable('#tablaJs', {
                         }
                     },
                     error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo eliminar el Reporte.", "error");
                     }
                 });
             } else if (result.isDenied) {

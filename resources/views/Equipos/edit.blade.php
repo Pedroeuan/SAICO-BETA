@@ -508,7 +508,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Serie }}" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
+                                            @error('Serie')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -644,7 +647,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            @error('No_economico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -662,7 +668,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Serie }}" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
+                                            @error('Serie')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -863,7 +872,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número Económico</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" value="{{ $generalEyC->No_economico }}" name="No_economico" placeholder="Enter ...">
+                                            @error('No_economico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -881,7 +893,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No.Serie</label>
-                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Serie }}" name="Serie" placeholder="Enter ...">
+                                            <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" value="{{ $generalEyC->Serie }}" placeholder="Ejemplo: N3199">
+                                            @error('Serie')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -1104,39 +1119,52 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <Script>
-    /*Prevenir el Enter Equipos*/
-document.getElementById('equiposForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Consumibles*/
-document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Accesorios*/
-document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Blocks*/
-document.getElementById('blocksForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    /*Prevenir el Enter Herramientas*/
-document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        /*Prevenir el Enter Equipos*/
+    var equiposForm = document.getElementById('equiposForm');
+    if (equiposForm) {
+        equiposForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
+        /*Prevenir el Enter Consumibles*/
+    var consumiblesForm = document.getElementById('consumiblesForm');
+    if (consumiblesForm) {
+        consumiblesForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
+        /*Prevenir el Enter Accesorios*/
+    var accesoriosForm = document.getElementById('accesoriosForm');
+    if (accesoriosForm) {
+        accesoriosForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
+        /*Prevenir el Enter Blocks*/
+    var blocksForm = document.getElementById('blocksForm');
+    if (blocksForm) {
+        blocksForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
+        /*Prevenir el Enter Herramientas*/
+    var herramientasForm = document.getElementById('herramientasForm');
+    if (herramientasForm) {
+        herramientasForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
+});
 </script>
 @endsection

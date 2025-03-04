@@ -49,7 +49,6 @@
 @endsection
 
 @section('content')
-
 @if($Nombre_Formato == 'FOR-02-PRO-INS-10') 
     @include('Reportes.INS.Create.FOR-02-PRO-INS-10')
 @endif
@@ -79,54 +78,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script>
 
-$(document).ready(function() {
-        var rowCount = 0;
-
-        function updateRowNumbers() {
-            $('#Norma_Codigo tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#Norma_Codigo tbody tr').length;
-        }
-
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow =`<tr>
-            <td>${rowCount}</td>
-            <td><input type="text" class="form-control" name="codigo[]" placeholder="Codigo o Norma Aplicable"></td>
-            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#Norma_Codigo tbody').append(newRow);
-        });
-
-        $('#Norma_Codigo').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
-
-    $('#Prueba_Norma_Codigo').submit(function(event) {
-        if ($('#Norma_Codigo tbody tr').length === 0) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Advertencia',
-                text: 'Debe agregar al menos una norma o código aplicable.',
-                icon: 'warning',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    });
-
-    /*Prevenir el Enter*/
-    document.getElementById('Prueba_Norma_Codigo').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
-    </script>
 @endsection
 
 
