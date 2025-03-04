@@ -670,20 +670,20 @@
                                         <th style="width: 20px; border: 1px solid black;">No. Aceptación</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Serie</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Colada</th>
-                                        <th style="width: 20px; border: 1px solid black;">tnominal</th>
-                                        <th style="width: 20px; border: 1px solid black;">Ø</th>
+                                        <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>nominal</th>
+                                        <th style="width: 22px; border: 1px solid black;">Ø</th>
                                         <th style="width: 20px; border: 1px solid black;">No.Ind.</th>
                                         <th style="width: 20px; border: 1px solid black;">Tipo de Indicación</th>
-                                        <th style="width: 20px; border: 1px solid black;">NR (%)</th>
-                                        <th style="width: 20px; border: 1px solid black;">NI (%)</th>
+                                        <th style="width: 18px; border: 1px solid black;">NR (%)</th>
+                                        <th style="width: 18px; border: 1px solid black;">NI (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">H.T.</th>
                                         <th style="width: 20px; border: 1px solid black;">Prof</th>
                                         <th style="width: 20px; border: 1px solid black;">LA</th>
                                         <th style="width: 20px; border: 1px solid black;">LC</th>
-                                        <th style="width: 20px; border: 1px solid black;">tmáx</th>
-                                        <th style="width: 20px; border: 1px solid black;">tmin</th>
+                                        <th style="width: 25px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>máx</th>
+                                        <th style="width: 25px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>min</th>
                                         <th style="width: 20px; border: 1px solid black;">Metros Lineales</th>
-                                        <th style="width: 25px; border: 1px solid black;">Evaluación</th>
+                                        <th style="width: 30px; border: 1px solid black;">Evaluación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
