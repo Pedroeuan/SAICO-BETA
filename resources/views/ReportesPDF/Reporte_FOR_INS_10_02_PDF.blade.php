@@ -453,11 +453,11 @@
                                     </tr>
 
                                     <tr>
-                                        <td><strong>tmin</strong></td>
+                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>min</strong></td>
                                         <td>ESPESOR NÓMINAL (in)</td>
                                         <td><strong>LA:</strong></td>
                                         <td>LONGITUD AXIAL (IN)</td>
-                                        <td><strong><span style="font-size: 10px; position: relative; top: 3px;"><sup>t</sup></span>min</strong></td>
+                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>min</strong></td>
                                         <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
                                     </tr>
 
@@ -466,7 +466,7 @@
                                         <td>GANANCIA (dB)</td>
                                         <td><strong>LC:</strong></td>
                                         <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
-                                        <td><strong>tmax</strong></td>
+                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>max</strong></td>
                                         <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
                                     </tr>
 
@@ -662,19 +662,19 @@
                                         <th colspan="7" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">DATOS DEL MATERIAL</th>
                                         <th colspan="8" style="border: 1px solid black; border-top: 2px solid black;">DATOS DE LA INDICACIÓN</th>
                                         <th colspan="4" style="border: 1px solid black; border-top: 2px solid black;">RESULTADOS DE LA INSPECCIÓN</th>
-                                        <th rowspan="2" style="width: 20px; border: 1px solid black; border-right: 2px solid black; border-top: 2px solid black; border-bottom: 2px solid black;">Observaciones</th>
+                                        <th rowspan="2" style="width: 10px; border: 1px solid black; border-right: 2px solid black; border-top: 2px solid black; border-bottom: 2px solid black;">Observaciones</th>
                                     </tr>
                                     <tr class="celdaGrisResultados">
                                         <th style="width: 5px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
                                         <th style="width: 50px; border: 1px solid black;">Elemento / Tubo</th>
-                                        <th style="width: 1px; border: 1px solid black;">No. Aceptación</th>
-                                        <th style="width: 20px; border: 1px solid black;">No. Serie</th>
+                                        <th style="width: 50px; border: 1px solid black;">No. Aceptación</th>
+                                        <th style="width: 30px; border: 1px solid black;">No. Serie</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Colada</th>
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>nominal</th>
                                         <th style="width: 20px; border: 1px solid black;">Ø</th>
-                                        <th style="width: 20px; border: 1px solid black;">No.Ind.</th>
+                                        <th style="width: 18px; border: 1px solid black;">No.Ind.</th>
                                         <th style="width: 20px; border: 1px solid black;">Tipo de Indicación</th>
-                                        <th style="width: 20px; border: 1px solid black;">NR (%)</th>
+                                        <th style="width: 22px; border: 1px solid black;">NR (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">NI (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">H.T.</th>
                                         <th style="width: 20px; border: 1px solid black;">Prof</th>
@@ -727,7 +727,7 @@
                                         <!-- Fila de total antes del salto de página -->
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="13" style="border-top: 2px solid black;"></td>
-                                            <th colspan="4" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                             <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
 
@@ -744,7 +744,7 @@
                                     @if ($contadorFilas % $filasPorPagina !== 0)
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="13"></td>
-                                            <th colspan="4" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                             <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
                                     @endif
