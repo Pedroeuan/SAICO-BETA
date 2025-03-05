@@ -13,6 +13,8 @@ use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
 
 class PDFReportesController extends Controller
 {
@@ -596,12 +598,10 @@ class PDFReportesController extends Controller
     public function FOR_INS_10_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
-        $Reporte = reporte::where('idReportes',$id)->first();
-        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
-        $Firmas_Reportes = Firma_Reporte::where('idReportes',$id)->first();
-        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
-        /*$user = Auth::user();
-        $nombre = $user->name;*/
+        $Reporte = reporte::where('idReportes', $id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        $Firmas_Reportes = Firma_Reporte::where('idReportes', $id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
 
         // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
@@ -634,39 +634,46 @@ class PDFReportesController extends Controller
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
         ];
-    
-        // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
-    
-        // Renderizar el PDF antes de obtener el canvas
-        $dompdf = $pdf->getDomPDF();
-        // Configurar márgenes personalizados (en milímetros)
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
-        $options->set('isPhpEnabled', true);
-        //$options->set('defaultPaperMargins', [5, 5, 5, 5]);  // [arriba, derecha, abajo, izquierda]
-        $dompdf->setOptions($options);
-        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
-    
-        $canvas = $dompdf->getCanvas();
-        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-            // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('arial', 'normal');
-            $size = 8;
-    
-            // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 610; // Ajusta esta posición X según sea necesario
-            $y = 94;  // Ajusta esta posición Y según sea necesario
-    
-            // Evitar problemas con valores no válidos para coordenadas
-            if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
-                $canvas->text($x, $y, $text, $font, $size);
-            }
-        });
-    
-        return $pdf->stream('Reporte_FOR_INS_10_02.PDF');
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
+
+        // Generar el PDF adicional en orientación vertical
+        $pdf2 = PDF::loadView('ReportesPDF.Reporte_FOTOS_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        $pdf2Content = $pdf2->output();
+
+        $combinedPdf = new Fpdi();
+        $pageCount1 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        $totalPageCount = 0;
+
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId);
+            $totalPageCount++;
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(152, -180);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        $pageCount2 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId);
+            $totalPageCount++;
+
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(130, -265);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        return response($combinedPdf->Output(), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_INS_10_02.PDF"');
     }
 
     public function FOR_INS_12_01()
