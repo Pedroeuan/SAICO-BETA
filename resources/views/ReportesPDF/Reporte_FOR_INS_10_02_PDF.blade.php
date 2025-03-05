@@ -457,7 +457,7 @@
                                         <td>ESPESOR NÓMINAL (in)</td>
                                         <td><strong>LA:</strong></td>
                                         <td>LONGITUD AXIAL (IN)</td>
-                                        <td><strong>tmin</strong></td>
+                                        <td><strong><span style="font-size: 10px; position: relative; top: 3px;"><sup>t</sup></span>min</strong></td>
                                         <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
                                     </tr>
 
@@ -666,24 +666,24 @@
                                     </tr>
                                     <tr class="celdaGrisResultados">
                                         <th style="width: 5px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
-                                        <th style="width: 20px; border: 1px solid black;">Elemento / Tubo</th>
-                                        <th style="width: 20px; border: 1px solid black;">No. Aceptación</th>
+                                        <th style="width: 50px; border: 1px solid black;">Elemento / Tubo</th>
+                                        <th style="width: 1px; border: 1px solid black;">No. Aceptación</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Serie</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Colada</th>
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>nominal</th>
-                                        <th style="width: 22px; border: 1px solid black;">Ø</th>
+                                        <th style="width: 20px; border: 1px solid black;">Ø</th>
                                         <th style="width: 20px; border: 1px solid black;">No.Ind.</th>
                                         <th style="width: 20px; border: 1px solid black;">Tipo de Indicación</th>
-                                        <th style="width: 18px; border: 1px solid black;">NR (%)</th>
-                                        <th style="width: 18px; border: 1px solid black;">NI (%)</th>
+                                        <th style="width: 20px; border: 1px solid black;">NR (%)</th>
+                                        <th style="width: 20px; border: 1px solid black;">NI (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">H.T.</th>
                                         <th style="width: 20px; border: 1px solid black;">Prof</th>
                                         <th style="width: 20px; border: 1px solid black;">LA</th>
                                         <th style="width: 20px; border: 1px solid black;">LC</th>
-                                        <th style="width: 25px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>máx</th>
-                                        <th style="width: 25px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>min</th>
+                                        <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>máx</th>
+                                        <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>min</th>
                                         <th style="width: 20px; border: 1px solid black;">Metros Lineales</th>
-                                        <th style="width: 30px; border: 1px solid black;">Evaluación</th>
+                                        <th style="width: 20px; border: 1px solid black;">Evaluación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -691,16 +691,18 @@
                                     $filasPorPagina = 15; // Define cuántas filas quieres por página
                                     $totalMetros = 0; // Inicializa el acumulador de metros lineales
                                     $contadorFilas = 0; // Contador para controlar las filas por página
+                                    $totalFilas = count($Grupo_Juntas_Detalles_Re); // Total de filas
                                 @endphp
 
                                     @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
                                     @php
                                         $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
                                         $contadorFilas++;
+                                        $esUltimaFila = ($index + 1) === $totalFilas; // Verifica si es la última fila de la tabla
                                     @endphp
                                         <tr class="juntas">
-                                            <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @endif">{{ $index + 1 }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['elemento_tubo'] }}</td>
+                                            <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $index + 1 }}</td>
+                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif>{{ $junta['elemento_tubo'] }}</td>
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_aceptacion'] }}</td>
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_serie'] }}</td>
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_colada'] }}</td>
@@ -718,15 +720,15 @@
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['tmin'] }}</td>
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['metros_lineales'] }}</td>
                                             <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['evaluacion'] }}</td>
-                                            <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
+                                            <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
                                         </tr>
 
                                     @if ($contadorFilas % $filasPorPagina === 0)
                                         <!-- Fila de total antes del salto de página -->
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="13" style="border-top: 2px solid black;"></td>
-                                            <th colspan="4" style="border-right: 2px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                            <th style="border-right: 2px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            <th colspan="4" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
 
                                         @php
@@ -742,8 +744,8 @@
                                     @if ($contadorFilas % $filasPorPagina !== 0)
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="13"></td>
-                                            <th colspan="4" style="border: 1px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                            <th style="border: 1px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            <th colspan="4" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
                                     @endif
                             </tbody>
