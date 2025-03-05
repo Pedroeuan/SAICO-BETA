@@ -702,24 +702,24 @@
                                     @endphp
                                         <tr class="juntas">
                                             <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $index + 1 }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif>{{ $junta['elemento_tubo'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_aceptacion'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_serie'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_colada'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['tnominal'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['diametro'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['no_ind'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['tipo_indicacion'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['nr'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['ni'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['ht'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['prof'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['la'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['lc'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['tmax'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['tmin'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['metros_lineales'] }}</td>
-                                            <td @if ($contadorFilas % $filasPorPagina === 0) style="border-bottom: 2px solid black;" @endif>{{ $junta['evaluacion'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['elemento_tubo'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_aceptacion'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_serie'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_colada'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tnominal'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['diametro'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_ind'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tipo_indicacion'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['nr'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ni'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ht'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['prof'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['la'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['lc'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmax'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmin'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['metros_lineales'] }}</td>
+                                            <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['evaluacion'] }}</td>
                                             <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
                                         </tr>
 
