@@ -7,37 +7,35 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    2.1cm /* derecho */
-                    2.1cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    1.5cm /* derecho */
+                    1cm /* inferior */
+                    .5cm; /* izquierdo */
                 }
                 header {
-                    position: fixed;
+                    width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    left: 0;
-                    right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
+                    height: auto; /* Permite crecer según el contenido */
                     text-align: center;
-                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(226, 45, 45);*/
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -30px;
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(7, 231, 18);*/
                 }
 
                 body {
-                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
-                    margin: 0;
-                    padding-top: 235px; /* Altura del header */
-                    padding-bottom: 95px; /* Altura del footer */
+                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
                     font-family: 'arial', sans-serif;
-                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                    /*background-color: rgb(45, 78, 226);*/
                 }
 
                 .datosgenerales{
@@ -45,29 +43,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 6px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                    font-size: 6px;
-                }
-                    
-                .simbologia {
-                    border-collapse: collapse;  /*separate No colapsar bordes */
-                    border-spacing: 0px;        /* Espacio entre celdas */
-                    width: 100%;
-                    text-align: center;
-                    font-size: 6px;
-                }
-
-                .simbologia td, .simbologia th {
-                    border: .6px solid black; 
-                }
-                .celdaAmarillo{
-                    background-color: #FFF2CC;
+                    font-size: 9px;
                 }
 
                 .tablaheader {
@@ -75,7 +59,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -87,63 +71,16 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 7px;
+            font-size: 10px;
             background-color: #2F75B5;
             color: #ffffff;
-            outline: 1px double #000000; /* Contorno externo */
+            outline: 2px double #000000; /* Contorno externo */
         }
 
         .border {
             border: 1px solid black; 
         }
-            
-        .datosinspeccion{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 6px;
-        }
 
-        .datosinspeccion td, .datosinspeccion th {
-            border: .6px solid black; 
-        }
-        
-
-        .datosinspeccionsinborde{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 6px;
-        }
-
-        .datosresultados{
-            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 10px;
-            /*border : 1px solid black;*/
-        }
-
-        .datosresultados td, .datosresultados th {
-            border: .1px solid black; /* Borde grueso de 2px */
-        }
-        .celdaGris{
-            background-color: #DBDBDB;
-            font-size: 6px;
-        }
-
-        .celdaGrisResultados{
-            background-color: #DBDBDB;
-            font-size: 9px;
-        }
-
-        .juntas{
-            font-size: 9px;
-        }
-        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
@@ -164,22 +101,42 @@
             border-collapse: collapse;
             width: 100%;
         }
-        .rotar-texto-dividido {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: normal;
+
+        /* Contenedor con borde grueso */
+        .foto-container {
+            border: 1px solid black; /* Borde grueso de 2px */
+            padding: 0; /* Sin padding en el contenedor */
         }
 
-        .rotar-texto-sin-dividir {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-            max-width: 20px; /* Ajusta al ancho máximo deseado */
+        /* Tabla con separación entre celdas y márgenes ajustados */
+        .imagenes-reporte {
+            border-collapse: separate; /* Permite separación entre celdas */
+            border-spacing: 20px; /* Espacio entre imágenes */
+            width: 100%; /* Ajustar al ancho disponible */
+            margin-left: 0; /* Asegura que la tabla se alinee al margen izquierdo */
+            margin-right: 0; /* Asegura que la tabla se alinee al margen derecho */
         }
+
+        /* Estilo de las imágenes */
+        .imagenes-reporte img { 
+            width: 100%; /* Las imágenes ocupan todo el ancho disponible */
+            max-height: 200px; /* Máxima altura de la imagen */
+            object-fit: contain; /* Mantener la proporción de la imagen */
+            display: block;
+            margin: 0; /* Elimina cualquier margen adicional */
+            padding: 0; /* Asegura que no haya espacio interno */
+            box-sizing: border-box; /* El borde es parte del tamaño total */
+
+        }
+        
+        /* Estilo para los comentarios */
+        .comment { 
+            font-size: 10px; 
+            font-weight: bold; 
+            margin-top: 5px; 
+            text-align: center;
+        }
+        
             </style>
         </head>
         <body>
@@ -191,13 +148,13 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-10/02</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 45%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 7pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -276,8 +233,8 @@
                         <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="4"><br></th></tr></thead> <!-- Fila vacia -->
                 </table>
+
             </header>
             
             <footer>
@@ -435,14 +392,21 @@
 
             <div class="content">
 
-            @if ($Foto1)
-                <div>
-                    <img src="{{ $Foto1['path'] }}" alt="Foto" style="width: 100%; max-width: 600px;">
-                    <p>{{ $Foto1['comment'] }}</p>
-                </div>
-            @else
-                <p>No hay fotos disponibles.</p>
-            @endif
+                <table class="imagenes-reporte">
+                    <tr>
+                        @foreach($Fotos as $index => $foto)
+                            <td class="foto-container">
+                                <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                <p class="comment">{{ $foto['comment'] }}</p>
+                            </td>
+                            @if(($index + 1) % 2 == 0)
+                                </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                            @endif
+                        @endforeach
+                    </tr>
+                </table>
+
+            </div>
 
         </body>
     </html>

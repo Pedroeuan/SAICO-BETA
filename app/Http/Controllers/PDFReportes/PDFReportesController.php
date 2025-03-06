@@ -615,33 +615,18 @@ class PDFReportesController extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-
-        // Obtener la primera foto con comentario
-        $Foto1 = null;
-
+        // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-
-            if (!empty($fotos) && is_array($fotos) && isset($fotos[0])) {
-                $Foto1 = [
-                    'path' => asset('storage/' . str_replace('public/', '', $fotos[0]['path'])), // Usa asset() para obtener la URL accesible
-                    'comment' => $fotos[0]['comment'] ?? '', // Asegura que no haya error si falta 'comment'
+            $Fotos = [];
+        
+            for ($i = 0; $i < min(4, count($fotos)); $i++) { // Solo obtener hasta 4 imágenes
+                $Fotos[] = [
+                    'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['path'])),
+                    'comment' => $fotos[$i]['comment'] ?? ''
                 ];
             }
         }
-
-        dd($Foto1);
-
-        /*$Foto1 = null;
-        if ($Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-            if (!empty($fotos)) {
-                $Foto1 = [
-                    'path' => public_path(str_replace('public/', '', $fotos[0]['path'])), // Ruta absoluta
-                    'comment' => $fotos[0]['comment']
-                ];
-            }
-        }*/
 
         $data = [
             'title' => 'Reporte_FOR-INS-10/02.PDF',
@@ -655,7 +640,7 @@ class PDFReportesController extends Controller
             //Total de Juntas
             'TotalJuntas' => $TotalJuntas,
             //Fotos_Reportes
-            'Foto1' => $Foto1,
+            'Fotos' => $Fotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
@@ -679,7 +664,7 @@ class PDFReportesController extends Controller
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId);
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210); // Ajusta las dimensiones a las del papel Letter
             $totalPageCount++;
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(152, -180);
@@ -690,11 +675,11 @@ class PDFReportesController extends Controller
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId);
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297); // Ajusta las dimensiones a las del papel Letter
             $totalPageCount++;
 
-            $combinedPdf->SetFont('Arial', 'B', 7);
-            $combinedPdf->SetXY(133, -270);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(136, -267);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 

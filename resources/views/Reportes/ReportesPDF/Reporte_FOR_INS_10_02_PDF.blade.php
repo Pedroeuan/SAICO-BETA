@@ -18,6 +18,7 @@
                     height: auto; /* Permite crecer según el contenido */
                     text-align: center;
                     /*background-color: rgb(226, 45, 45);*/
+                    font-family: 'arial', sans-serif;
                 }
 
                 footer {
@@ -28,6 +29,7 @@
                     height: auto;
                     text-align: center;
                     /*background-color: rgb(7, 231, 18);*/
+                    font-family: 'arial', sans-serif;
                 }
 
                 body {
@@ -35,6 +37,7 @@
                     padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
+                    font-family: 'arial', sans-serif;
                 }
             @else
                 header {
@@ -45,6 +48,7 @@
                     height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
                     /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
                 }
 
                 footer {
@@ -55,6 +59,7 @@
                     height: auto;
                     text-align: center;
                     /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
                 }
 
                 body {
