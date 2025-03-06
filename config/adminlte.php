@@ -441,6 +441,12 @@ return [
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
+                        'text' => 'Registro de Reportes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'reporte/create',
+                        'can' => 'equipos-access',
+                    ],
+                    [
                         'text' => 'Registro de Pruebas',
                         'icon' => 'fas fa-indent',
                         'url' => '/Pruebas/Create',

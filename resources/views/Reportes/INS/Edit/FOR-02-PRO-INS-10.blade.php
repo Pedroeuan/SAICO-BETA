@@ -857,7 +857,7 @@
                                                 @if(isset($Fotos_Comentarios[1]['path']))
                                                     <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[1]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
                                                 @endif
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2">{{ old('comment1', $Fotos_Comentarios[1]['comment'] ?? '') }}</textarea>
+                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2">{{ old('comment2', $Fotos_Comentarios[1]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 
@@ -870,7 +870,7 @@
                                                 @if(isset($Fotos_Comentarios[2]['path']))
                                                     <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[2]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
                                                 @endif
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3">{{ old('comment1', $Fotos_Comentarios[2]['comment'] ?? '') }}</textarea>
+                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3">{{ old('comment3', $Fotos_Comentarios[2]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 
@@ -883,7 +883,7 @@
                                                 @if(isset($Fotos_Comentarios[3]['path']))
                                                     <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[3]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
                                                 @endif
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4">{{ old('comment1', $Fotos_Comentarios[3]['comment'] ?? '') }}</textarea>
+                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4">{{ old('comment4', $Fotos_Comentarios[3]['comment'] ?? '') }}</textarea>
                                             </div>
                                         </div>
 

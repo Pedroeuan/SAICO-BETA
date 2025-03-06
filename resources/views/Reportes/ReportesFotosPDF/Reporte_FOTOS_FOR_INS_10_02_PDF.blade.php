@@ -75,7 +75,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 8px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -197,7 +197,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 7pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -268,207 +268,19 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 4px;"></div>
+                <div style="margin-bottom: 6px;"></div>
 
-                <table class="datosinspeccion">
+                <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
-                
-                    <tbody>
-                        <tr class="celdaGris">
-                            <th colspan="2">EQUIPO</th>
-                            <th colspan="4">TRANSDUCTOR</th>
-                            <th colspan="2">BLOCK DE REFERENCIA</th>
-                            <th>ACOPLANTE (MARCA Y TIPO):</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td colspan="3">{{ $Datos_Equipo['MARCA_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_BLOCK'] }}</td>
-                            <td class="" style="width: 100px;">{{ $Datos_Equipo['ACOPLANTE'] }}</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">{{ $Datos_Equipo['MODELO_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>{{ $Datos_Equipo['MODELO_BLOCK'] }}</td>
-                            <th class="celdaGris" style="width: 100px;">LONGITUD DEL CABLE</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">N.S:</th>
-                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
-                            <th class="celdaGris">N.S:</th>
-                            <td style="width: 60px;">{{ $Datos_Equipo['N_S_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">{{ $Datos_Equipo['FRECC_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris">N.S:</th>
-                            <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>
-                            <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
-                        </tr>
-                    </tbody>
+                    <thead><tr class="sinBordeth"><th colspan="4"><br></th></tr></thead> <!-- Fila vacia -->
                 </table>
-
-                <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                        <tr>
-                            <th style="width: 8%;">GANANCIA:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td><td style="width: 1%;">dB</td>
-                            <th style="width: 8%;">RANGO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['RANGO'] }}</td>
-                            <th style="width: 8%;">RECHAZO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] }}</td>
-                            <th style="width: 8%;">SUPERFICIE:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['SUPERFICIE'] }}</td>
-                            <th style="width: 8%;">PINTURA:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['PINTURA'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="margin-bottom: 4px;"></div>
             </header>
             
             <footer>
-                <table style="margin: auto; border: 0px solid black;">
-                    <tr>
-                        <td>
-                            <table class="simbologia" style="border: 1px solid black;">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4" class="celdaAmarillo">INDICACIONES Y HALLAZGOS</th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>NPIR:</strong></td>
-                                        <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
-                                        <td><strong>CI:</strong></td>
-                                        <td>CORROSIÓN INTERNA</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>ZI:</strong></td>
-                                        <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                                        <td><strong>L:</strong></td>
-                                        <td>LAMINACIÓN</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>LE:</strong></td>
-                                        <td>LAMINACIÓN ESCALONADA</td>
-                                        <td><strong>I:</strong></td>
-                                        <td>INCLUSIÓN NO METÁLICA</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </td>
-
-                        <td>
-                        <table class="">
-                                <thead>
-                                    <tr>
-                                        <th colspan="6" class=""></th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-
-                        <td>
-                            <table class="simbologia" style="border: 1px solid black;">
-                                <thead>
-                                    <tr>
-                                        <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>min</strong></td>
-                                        <td>ESPESOR NÓMINAL (in)</td>
-                                        <td><strong>LA:</strong></td>
-                                        <td>LONGITUD AXIAL (IN)</td>
-                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>min</strong></td>
-                                        <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>G:</strong></td>
-                                        <td>GANANCIA (dB)</td>
-                                        <td><strong>LC:</strong></td>
-                                        <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
-                                        <td><strong><span style="font-size: 8px; position: relative; top: 1px;"><sup>t</sup></span>max</strong></td>
-                                        <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>NR:</strong></td>
-                                        <td>NIVEL DE REFERENCIA (%)</td>
-                                        <td><strong>NI:</strong></td>
-                                        <td>NIVEL DE INDICACIÓN (%)</td>
-                                        <td><strong>Prof</strong></td>
-                                        <td>PROFUNDIDAD DE LA INDICACIÓN</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                    <table>                               
-                        <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
-                        </tr>                      
-                    </table>
-
-                                                
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -571,13 +383,13 @@
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
                                     <th></th>
                                 </tr>
 
@@ -626,10 +438,11 @@
                 @if ($Fotos_Reportes)
                     @php
                         $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+                        //dd($fotos);
                     @endphp
                     @foreach ($fotos as $foto)
                         <div style="margin-bottom: 20px;">
-                            <img src="{{ public_path($foto['path']) }}" alt="Foto" style="width: 100%; max-width: 600px;">
+                        <img src="{{ asset($foto['path']) }}" alt="Foto" style="width: 100%; max-width: 600px;">
                             <p>{{ $foto['comment'] }}</p>
                         </div>
                     @endforeach
