@@ -595,6 +595,8 @@ class PDFReportesController extends Controller
         return $pdf->stream('Reporte_FOR_INS_10_01.PDF');
     }
 
+
+    public function FOR_INS_10_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -617,6 +619,19 @@ class PDFReportesController extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
+        // Obtener las fotos con su comentario
+        if ($Fotos_Reportes) {
+            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+            $Fotos = [];
+        
+            for ($i = 0; $i < min(4, count($fotos)); $i++) { // Solo obtener hasta 4 imágenes
+                $Fotos[] = [
+                    'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['path'])),
+                    'comment' => $fotos[$i]['comment'] ?? ''
+                ];
+            }
+        }
+
         $data = [
             'title' => 'Reporte_FOR-INS-10/02.PDF',
             'Logo' => $Logo,
@@ -629,7 +644,7 @@ class PDFReportesController extends Controller
             //Total de Juntas
             'TotalJuntas' => $TotalJuntas,
             //Fotos_Reportes
-            'Fotos_Reportes' => $Fotos_Reportes,
+            'Fotos' => $Fotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
@@ -637,7 +652,7 @@ class PDFReportesController extends Controller
         ];
     
         // Cargar la vista con los datos
-        $pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        $pdf = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
         //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_11_01_PDF', $data)->setPaper([0, 0, 800, 760]); // Ancho x Alto en milímetros
     
         // Renderizar el PDF antes de obtener el canvas
