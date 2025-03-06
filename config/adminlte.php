@@ -424,7 +424,7 @@ return [
             ],
 
                // Sidebar Operativos:
-            [
+                [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -432,19 +432,19 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Orden de Trabajo/Servicio',
-                        'icon' => 'fas fa-file-alt',
+                        'icon' => 'far fa-file-alt',
                         'url' => '/Page_In_Construction',
+                    ],
+                    [
+                        'text' => 'Crear Reportes',
+                        'icon' => 'far fa-file',
+                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
+
                         'url' => '/index/ContratoProyecto',
-                    ],
-                    [
-                        'text' => 'Registro de Reportes',
-                        'icon' => 'fas fa-user-plus',
-                        'url' => 'reporte/create',
-                        'can' => 'equipos-access',
                     ],
                     [
                         'text' => 'Registro de Pruebas',
@@ -454,7 +454,7 @@ return [
                     [
                         'text' => 'Pruebas',
                         'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
 
                     ],
                 ],

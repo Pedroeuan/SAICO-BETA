@@ -616,6 +616,33 @@ class PDFReportesController extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
+        // Obtener la primera foto con comentario
+        $Foto1 = null;
+
+        if ($Fotos_Reportes) {
+            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+            if (!empty($fotos) && is_array($fotos) && isset($fotos[0])) {
+                $Foto1 = [
+                    'path' => asset('storage/' . str_replace('public/', '', $fotos[0]['path'])), // Usa asset() para obtener la URL accesible
+                    'comment' => $fotos[0]['comment'] ?? '', // Asegura que no haya error si falta 'comment'
+                ];
+            }
+        }
+
+        dd($Foto1);
+
+        /*$Foto1 = null;
+        if ($Fotos_Reportes) {
+            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+            if (!empty($fotos)) {
+                $Foto1 = [
+                    'path' => public_path(str_replace('public/', '', $fotos[0]['path'])), // Ruta absoluta
+                    'comment' => $fotos[0]['comment']
+                ];
+            }
+        }*/
+
         $data = [
             'title' => 'Reporte_FOR-INS-10/02.PDF',
             'Logo' => $Logo,
@@ -628,7 +655,7 @@ class PDFReportesController extends Controller
             //Total de Juntas
             'TotalJuntas' => $TotalJuntas,
             //Fotos_Reportes
-            'Fotos_Reportes' => $Fotos_Reportes,
+            'Foto1' => $Foto1,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas

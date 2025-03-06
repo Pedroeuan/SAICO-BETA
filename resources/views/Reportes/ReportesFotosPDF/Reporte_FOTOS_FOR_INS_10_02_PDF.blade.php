@@ -273,7 +273,7 @@
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                        <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
 
                     <thead><tr class="sinBordeth"><th colspan="4"><br></th></tr></thead> <!-- Fila vacia -->
@@ -334,11 +334,11 @@
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
                                 </tr>
 
                                 <tr>
@@ -434,22 +434,15 @@
             </footer>
 
             <div class="content">
-            <h2>Fotos y Comentarios</h2>
-                @if ($Fotos_Reportes)
-                    @php
-                        $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-                        //dd($fotos);
-                    @endphp
-                    @foreach ($fotos as $foto)
-                        <div style="margin-bottom: 20px;">
-                        <img src="{{ asset($foto['path']) }}" alt="Foto" style="width: 100%; max-width: 600px;">
-                            <p>{{ $foto['comment'] }}</p>
-                        </div>
-                    @endforeach
-                @else
-                    <p>No hay fotos disponibles.</p>
-                @endif
-            </div>
+
+            @if ($Foto1)
+                <div>
+                    <img src="{{ $Foto1['path'] }}" alt="Foto" style="width: 100%; max-width: 600px;">
+                    <p>{{ $Foto1['comment'] }}</p>
+                </div>
+            @else
+                <p>No hay fotos disponibles.</p>
+            @endif
 
         </body>
     </html>
