@@ -393,7 +393,7 @@
                                             <td><strong>IL</strong></td>
                                             <td>INDICACIÓN LINEAL</td>
                                             <td><strong>IT:</strong></td>
-                                            <td>INDICACIÓN TRANSVERSSAL</td>
+                                            <td>INDICACIÓN TRANSVERSAL</td>
                                         </tr>
                                     </thead>
                                 </table>

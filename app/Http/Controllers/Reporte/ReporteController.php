@@ -29,6 +29,78 @@ use Illuminate\Support\Facades\Storage;
 class ReporteController extends Controller
 {
 
+    public function FOR_01_PRO_INS_02()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
+    }
+    public function FOR_01_PRO_INS_03()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-03');
+    }
+    public function FOR_01_PRO_INS_04()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-04');
+    }
+    public function FOR_02_PRO_INS_04()
+    {
+        return view('Reportes.INS.Create.FOR-02-PRO-INS-04');
+    }
+    public function FOR_01_PRO_INS_05()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-05');
+    }
+    public function FOR_01_PRO_INS_06()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-06');
+    }
+    public function FOR_01_PRO_INS_07()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-07');
+    }
+    public function FOR_01_PRO_INS_08()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-08');
+    }
+    public function FOR_01_PRO_INS_09()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-09');
+    }
+    public function FOR_01_PRO_INS_10()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-10');
+    }
+    public function FOR_01_PRO_INS_12()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-12');
+    }
+    public function FOR_01_PRO_INS_13()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
+    }
+    public function FOR_01_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
+    }
+    public function FOR_02_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
+    }
+    public function FOR_03_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-03-PRO-INS-15');
+    }
+    public function FOR_01_PRO_INS_16()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-16');
+    }
+    public function FOR_01_PRO_INS_17()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-17');
+    }
+    public function FOR_01_PRO_INS_18()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
+    }
     public function indexContratoProyecto()
     {
         $Reportes = reporte::all();
