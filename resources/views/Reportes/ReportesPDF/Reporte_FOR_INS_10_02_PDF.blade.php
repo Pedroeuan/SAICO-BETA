@@ -672,14 +672,14 @@
                                     <tr class="celdaGrisResultados">
                                         <th style="width: 5px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
                                         <th style="width: 50px; border: 1px solid black;">Elemento / Tubo</th>
-                                        <th style="width: 50px; border: 1px solid black;">No. Aceptación</th>
+                                        <th style="width: 60px; border: 1px solid black;">No. Aceptación</th>
                                         <th style="width: 30px; border: 1px solid black;">No. Serie</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Colada</th>
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>nominal</th>
                                         <th style="width: 20px; border: 1px solid black;">Ø</th>
                                         <th style="width: 18px; border: 1px solid black;">No.Ind.</th>
-                                        <th style="width: 20px; border: 1px solid black;">Tipo de Indicación</th>
-                                        <th style="width: 22px; border: 1px solid black;">NR (%)</th>
+                                        <th style="width: 15px; border: 1px solid black;">Tipo de Indicación</th>
+                                        <th style="width: 24px; border: 1px solid black;">NR (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">NI (%)</th>
                                         <th style="width: 20px; border: 1px solid black;">H.T.</th>
                                         <th style="width: 20px; border: 1px solid black;">Prof</th>
@@ -688,7 +688,7 @@
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>máx</th>
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>min</th>
                                         <th style="width: 20px; border: 1px solid black;">Metros Lineales</th>
-                                        <th style="width: 20px; border: 1px solid black;">Evaluación</th>
+                                        <th style="width: 15px; border: 1px solid black;">Evaluación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
