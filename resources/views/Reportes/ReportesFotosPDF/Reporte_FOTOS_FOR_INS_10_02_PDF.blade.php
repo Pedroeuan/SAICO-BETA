@@ -7,9 +7,9 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    1.5cm /* derecho */
-                    1cm /* inferior */
-                    .5cm; /* izquierdo */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
                 header {
                     width: 100%;
@@ -22,7 +22,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: 30px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -32,7 +32,7 @@
                 }
 
                 body {
-                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    margin: 6px, 0; /* Ajusta el margen de la página */
                     padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
@@ -51,7 +51,7 @@
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                    font-size: 9px;
+                    font-size: 8px;
                 }
 
                 .tablaheader {
@@ -111,22 +111,17 @@
         /* Tabla con separación entre celdas y márgenes ajustados */
         .imagenes-reporte {
             border-collapse: separate; /* Permite separación entre celdas */
-            border-spacing: 20px; /* Espacio entre imágenes */
+            border-spacing: 15px; /* Espacio entre imágenes */
             width: 100%; /* Ajustar al ancho disponible */
-            margin-left: 0; /* Asegura que la tabla se alinee al margen izquierdo */
+            margin-left: -13; /* Asegura que la tabla se alinee al margen izquierdo */
             margin-right: 0; /* Asegura que la tabla se alinee al margen derecho */
         }
 
         /* Estilo de las imágenes */
         .imagenes-reporte img { 
-            width: 100%; /* Las imágenes ocupan todo el ancho disponible */
-            max-height: 200px; /* Máxima altura de la imagen */
-            object-fit: contain; /* Mantener la proporción de la imagen */
-            display: block;
-            margin: 0; /* Elimina cualquier margen adicional */
-            padding: 0; /* Asegura que no haya espacio interno */
-            box-sizing: border-box; /* El borde es parte del tamaño total */
-
+            width: 329px; /* Las imágenes ocupan todo el ancho disponible */
+            max-height: 180px; /* Máxima altura de la imagen */
+            overflow: hidden; /* Evita que la imagen sobresalga */
         }
         
         /* Estilo para los comentarios */
@@ -224,17 +219,7 @@
                         </tr>
                     </tbody>
                 </table>
-
                 <div style="margin-bottom: 6px;"></div>
-
-                <table class="datosgenerales">
-
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>  
-
-                </table>
-
             </header>
             
             <footer>
@@ -280,22 +265,22 @@
                             @elseif( $numFirmas == 3)
                             <!-- 3 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 120px; height:20px" class="lineaInferior"></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
                                 </tr>
 
                                 <tr>
@@ -327,26 +312,26 @@
                             @else
                             <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 10px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 120px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <th></th>
                                 </tr>
 
@@ -391,7 +376,15 @@
             </footer>
 
             <div class="content">
+                <table class="datosgenerales">
 
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
+
+                </table>
+
+                
                 <table class="imagenes-reporte">
                     <tr>
                         @foreach($Fotos as $index => $foto)
@@ -399,6 +392,7 @@
                                 <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
                                 <p class="comment">{{ $foto['comment'] }}</p>
                             </td>
+                            <div style="margin-bottom: 50px;"></div>
                             @if(($index + 1) % 2 == 0)
                                 </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
                             @endif

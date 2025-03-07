@@ -12,19 +12,22 @@ use App\Models\Reporte\Firma_Reporte;
 use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-//use TCPDF;
-use FPDF;
+
+/*PDF */
 use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use Barryvdh\DomPDF\Facade\Pdf;
+//use TCPDF;
+//use FPDF;
 
 //use iio\libmergepdf\Merger;
-//use setasign\Fpdi\PdfParser\StreamReader;
+
 
 class PDFReportesController extends Controller
 {
@@ -605,7 +608,7 @@ class PDFReportesController extends Controller
         return $pdf->stream('Reporte_FOR_INS_10_01.PDF');
     }
 
-    public function FOR_INS_10_02($id)
+    /*public function FOR_INS_10_02($id)
     {
         // Obtener el reporte y otros datos como ya lo haces
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -647,17 +650,17 @@ class PDFReportesController extends Controller
         ];
 
         // Crear el primer PDF
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
-        $pdf1Path = storage_path('app/public/Reporte_FOR_INS_10_02_1.pdf');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        $pdf1Path = storage_path('app/temp/Reporte_FOR_INS_10_02_1.pdf');
         $pdf1->save($pdf1Path);
 
         // Crear el segundo PDF (si tienes otro archivo PDF para combinar)
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
-        $pdf2Path = storage_path('app/public/Reporte_FOR_INS_10_02_2.pdf');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2Path = storage_path('app/temp/Reporte_FOR_INS_10_02_2.pdf');
         $pdf2->save($pdf2Path);
 
         // Usar FPDF para combinar los PDFs
-        $outputPath = storage_path('app/public/Reporte_FOR_INS_10_02_combined.pdf');
+        $outputPath = storage_path('app/temp/Reporte_FOR_INS_10_02_combined.pdf');
         $this->mergePDFs($pdf1Path, $pdf2Path, $outputPath);
 
         // Devolver el PDF combinado
@@ -665,38 +668,35 @@ class PDFReportesController extends Controller
     }
 
     public function mergePDFs($pdf1Path, $pdf2Path, $outputPath)
-{
-    $pdf = new FPDF();
-    $pdf->SetAutoPageBreak(false);
+    {
+        $pdf = new Fpdi();
 
-    // Combinar el primer PDF
-    $this->addPdfToFPDF($pdf, $pdf1Path);
+        // Agregar el primer PDF
+        $this->addPdfToFPDI($pdf, $pdf1Path);
+        
+        // Agregar el segundo PDF
+        $this->addPdfToFPDI($pdf, $pdf2Path);
 
-    // Combinar el segundo PDF
-    $this->addPdfToFPDF($pdf, $pdf2Path);
-
-    // Guardar el PDF combinado
-    $pdf->Output('F', $outputPath);
-}
-
-public function addPdfToFPDF($pdf, $filePath)
-{
-    // Usamos FPDF para agregar las páginas del PDF de entrada
-    $pdfReader = new Fpdi();
-    $pdfReader->setSourceFile($filePath);
-
-    // Contar el número de páginas en el PDF
-    $pageCount = $pdfReader->numPages; // Usar la propiedad numPages en lugar de getPageCount()
-
-    for ($i = 1; $i <= $pageCount; $i++) {
-        $templateId = $pdfReader->importPage($i);
-        $size = $pdfReader->getTemplateSize($templateId);
-
-        // Agregar una página en FPDF y usar el contenido de la página del PDF
-        $pdf->AddPage();
-        $pdf->useTemplate($templateId);
+        // Guardar el PDF combinado
+        $pdf->Output('F', $outputPath);
     }
-}
+
+    public function addPdfToFPDI($pdf, $filePath)
+    {
+        // Establecer el archivo fuente
+        $pageCount = $pdf->setSourceFile($filePath); // Retorna el número de páginas del PDF
+
+        for ($i = 1; $i <= $pageCount; $i++) {
+            $templateId = $pdf->importPage($i);
+            $size = $pdf->getTemplateSize($templateId);
+
+            // Añadir una nueva página con el mismo tamaño que la original
+            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $pdf->useTemplate($templateId);
+        }
+    } */
+
+    
 
     /*public function FOR_INS_10_02($id)
     {
@@ -849,7 +849,7 @@ public function addPdfToFPDF($pdf, $filePath)
     }*/
 
 
-    /*public function FOR_INS_10_02($id)
+    public function FOR_INS_10_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -921,7 +921,7 @@ public function addPdfToFPDF($pdf, $filePath)
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210); // Ajusta las dimensiones a las del papel Letter
             $totalPageCount++;
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(152, -180);
+            $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -933,13 +933,13 @@ public function addPdfToFPDF($pdf, $filePath)
             $totalPageCount++;
 
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(136, -267);
+            $combinedPdf->SetXY(138, -256);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
         return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
-    }*/
+    }
 
     public function FOR_INS_12_01()
     {
