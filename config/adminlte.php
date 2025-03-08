@@ -383,7 +383,7 @@ return [
                         ],
                         [
                             'text' => 'FOR-INS-16/01/PDF',
-                            'url' => '/Reporte/FOR-INS-17/01/PDF',
+                            'url' => '/Reporte/FOR-INS-16/01/PDF',
                         ],
                         [
                             'text' => 'FOR-INS-17/01/PDF',
@@ -396,7 +396,7 @@ return [
                         
                         ],
                     ],
-                ],
+
 
                    // Sidebar Operativos:
             [
@@ -422,55 +422,9 @@ return [
                         ],
                     ],
             ],
-        
-        // Sidebar Administrativo:
-        /*[
-            'text' => 'Planeacion',
-            'icon' => 'fas fa-calendar-alt',
-            'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
-            //'topnav' => true,
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    //can => 'nombre-ruta'
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => 
-                    [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => 
-                            [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],*/
 
                // Sidebar Operativos:
-            [
+                [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -478,12 +432,18 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Orden de Trabajo/Servicio',
-                        'icon' => 'fas fa-file-alt',
+                        'icon' => 'far fa-file-alt',
                         'url' => '/Page_In_Construction',
+                    ],
+                    [
+                        'text' => 'Crear Reportes',
+                        'icon' => 'far fa-file',
+                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
+
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
@@ -494,40 +454,9 @@ return [
                     [
                         'text' => 'Pruebas',
                         'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
 
                     ],
-                    /* [
-                        'text' => 'level_one',
-                        'url' => '#',
-                        'submenu' => 
-                        [
-                            [
-                                'text' => 'level_two',
-                                'url' => '#',
-                            ],
-                            [
-                                'text' => 'level_two',
-                                'url' => '#',
-                                'submenu' => 
-                                [
-                                    [
-                                        'text' => 'level_three',
-                                        'url' => '#',
-                                    ],
-                                    [
-                                        'text' => 'level_three',
-                                        'url' => '#',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],*/
-    
-                    /*[
-                        'text' => 'level_one',
-                        'url' => '#',
-                    ],*/
                 ],
             ],
 
@@ -538,16 +467,6 @@ return [
                 'can' => 'ventas-access',
                 //'topnav' => true,
                 'submenu' => [
-                    /*[
-                        'text' => 'Clientes',
-                        'icon' => 'fas fa-users',
-                        'url' => 'clientes/index',
-                    ],
-                    [
-                        'text' => 'Registro Clientes',
-                        'icon' => 'fas fa-user-plus',
-                        'url' => 'registro/create',
-                    ],*/
                     [
                         'text' => 'Registro OC',
                         'icon' => 'fas fa-chart-line',
@@ -558,32 +477,6 @@ return [
                         'icon' => 'fas fa-clipboard-list',
                         'url' => '/Page_In_Construction',
                     ],
-                    /*[
-                        'text' => '',
-                        'url' => '#',
-                        'submenu' => 
-                        [
-                            [
-                                'text' => 'level_two',
-                                'url' => '#',
-                            ],
-                            [
-                                'text' => 'level_two',
-                                'url' => '#',
-                                'submenu' => 
-                                [
-                                    [
-                                        'text' => 'level_three',
-                                        'url' => '#',
-                                    ],
-                                    [
-                                        'text' => 'level_three',
-                                        'url' => '#',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],*/
                 ],
             ],
 
@@ -648,37 +541,6 @@ return [
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
                         ],
-                        /*[
-                            'text' => 'level_one',
-                            'url' => '#',
-                            'submenu' => 
-                            [
-                                [
-                                    'text' => 'level_two',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_two',
-                                    'url' => '#',
-                                    'submenu' => 
-                                    [
-                                        [
-                                            'text' => 'level_three',
-                                            'url' => '#',
-                                        ],
-                                        [
-                                            'text' => 'level_three',
-                                            'url' => '#',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-        
-                        [
-                            'text' => 'level_one',
-                            'url' => '#',
-                        ],*/
                     ],
                 ],
 
@@ -699,37 +561,6 @@ return [
                     'icon' => 'fas fa-user-plus',
                     'url' => 'Admin/create',
                 ],
-                /*[
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => 
-                    [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => 
-                            [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],*/
-
-                /*[
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],*/
             ],
         ],
     ],//Final Menu
