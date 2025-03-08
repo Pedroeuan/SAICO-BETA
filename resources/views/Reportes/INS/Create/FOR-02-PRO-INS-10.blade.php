@@ -535,28 +535,25 @@
 
                                                         <tr>
                                                             <td><strong>NPIR:</strong></td>
-                                                            <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                                            <td>NO PRESENTA INDICACIONES RELEVANTES</td>
                                                             <td><strong>CI:</strong></td>
                                                             <td>CORROSIÓN INTERNA</td>
                                                         </tr>
 
                                                         <tr>
-                                                            <td><strong>I:</strong></td>
-                                                            <td>INCLUSIÓN NO METÁLICA</td>
+                                                            <td><strong>ZI:</strong></td>
+                                                            <td>ZONA DE INCLUSIONES NO METALICAS</td>
                                                             <td><strong>L:</strong></td>
                                                             <td>LAMINACIÓN</td>
                                                         </tr>
 
                                                         <tr>
-                                                            <td><strong>ZI:</strong></td>
-                                                            <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                                                            <td colspan="2" rowspan="2"><strong></strong></td>
-                                                        </tr>
-
-                                                        <tr>
                                                             <td><strong>LE:</strong></td>
                                                             <td>LAMINACIÓN ESCALONADA</td>
+                                                            <td><strong>I:</strong></td>
+                                                            <td>INCLUSIÓN NO METÁLICA</td>
                                                         </tr>
+
                                                     </thead>
                                                 </table>
                                             </td>
@@ -572,12 +569,12 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td><strong>A:</strong></td>
-                                                            <td>ÁNGULO (°)</td>
+                                                            <td><strong><span style="font-size: 30px; position: relative; top: 8px;"><sup>t</sup></span>min:</strong></td>
+                                                            <td>ESPESOR NÓMINAL (in)</td>
                                                             <td><strong>LA:</strong></td>
-                                                            <td>LONGITUD AXIAL (IN)</td>
-                                                            <td rowspan="2"><strong>ta:</strong></td>
-                                                            <td rowspan="2">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                                                            <td>LONGITUD AXIAN (IN)</td>
+                                                            <td><strong><span style="font-size: 30px; position: relative; top: 8px;"><sup>t</sup></span>min:</strong></td>
+                                                            <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
                                                         </tr>
 
                                                         <tr>
@@ -585,25 +582,22 @@
                                                             <td>GANANCIA (dB)</td>
                                                             <td><strong>LC:</strong></td>
                                                             <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
+                                                            <td><strong><span style="font-size: 30px; position: relative; top: 8px;"><sup>t</sup></span>max:</strong></td>
+                                                            <td>ESPESOR MÁXIMO REGISTRADO (PULG)</td>
+
                                                         </tr>
 
                                                         <tr>
+
                                                             <td><strong>NR:</strong></td>
                                                             <td>NIVEL DE REFERENCIA (%)</td>
-                                                            <td><strong>DNR:</strong></td>
-                                                            <td>DISTANCIA DE NIVEL DE REFERENCIA (IN)</td>
-                                                            <td><strong>H.T.</strong></td>
-                                                            <td>HORARIO TÉCNICO</td>
-                                                        </tr>
-
-                                                        <tr>
                                                             <td><strong>NI:</strong></td>
                                                             <td>NIVEL DE INDICACIÓN (%)</td>
-                                                            <td><strong>Tmin:</strong></td>
-                                                            <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                                            <td><strong>d:</strong></td>
-                                                            <td>PROFUNDIDAD DE LA INDICACION(IN)</td>
+                                                            <td><strong>Prof:</strong></td>
+                                                            <td>PROFUNDIDAD DE LA INDICACIÓN</td>
+
                                                         </tr>
+
                                                     </thead>
                                                 </table>
                                             </td>
@@ -937,11 +931,11 @@
                 rowCount++;
                 var newRow = `<tr>
                     <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="elemento_tubo[]" placeholder="Elemento / Tubo" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. Aceptación" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="No. Serie" style="width: 80px;"></td>
+                    <td><input type="text" class="form-control" name="elemento_tubo[]" placeholder="Elemento / Tubo" style="width: 100px;"></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. Aceptación" style="width: 100px;"></td>
+                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="No. Serie" style="width: 100px;"></td>
                     <td><input type="text" class="form-control" name="no_colada[]" placeholder="No. Colada" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="tnominal" style="width: 80px;"></td>
+                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="tnominal" style="width: 100px;"></td>
                     <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" style="width: 60px;"></td>
                     <td><input type="text" class="form-control" name="no_ind[]" placeholder="No.Ind." style="width: 50px;"></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo de Indicación"></td>
