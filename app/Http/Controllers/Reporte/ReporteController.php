@@ -537,9 +537,6 @@ class ReporteController extends Controller
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
 
-            Log::info('***********************');
-            Log::info('Iniciando el guardado de datos.');
-
             // Verificar si validatedData contiene datos
             if (empty($validatedData['elemento_tubo'])) {
                 Log::error('validatedData[elemento_tubo] está vacío.');
@@ -571,8 +568,6 @@ class ReporteController extends Controller
                     'observaciones' => $validatedData['observaciones'][$index],
                 ];
             }
-
-            Log::info('Cantidad de registros a guardar: ' . count($Resultados_Juntas));
     
             // Convertir el array de resultados juntas a JSON
             $ResultadosJuntas = json_encode($Resultados_Juntas);
@@ -581,21 +576,15 @@ class ReporteController extends Controller
                 Log::error('Error en json_encode: ' . json_last_error_msg());
             }
             
-            Log::info('JSON generado correctamente.');
             // Obtener el número de caracteres
             $numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
             $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
-            Log::info('numCaracteres: ', ['numCaracteres' => $numCaracteres]);
-            Log::info('numBytes: ', ['numBytes' => $numBytes]);
-            
-    
+
             $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
             //Guardar Datos_Equipo como JSON en la base de datos
             $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
             $Grupo_Juntas_Detalles_Re->save();
 
-            Log::info('Datos de Juntas guardados correctamente.');
-            Log::info('***********************');
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
@@ -857,33 +846,37 @@ class ReporteController extends Controller
         // Procesar las nuevas imágenes y los comentarios
         $fotos = [];
         for ($i = 1; $i <= 4; $i++) {
+            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
+            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
+        
             if ($request->hasFile("image$i")) {
                 // Eliminar la imagen anterior si existe
                 if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
                     Storage::delete($previousFotos[$i - 1]['path']);
                 }
-
+        
                 // Guardar la nueva imagen
                 $image = $request->file("image$i");
                 $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
                 $Contrato = $validatedData['Detalles_Generales']['Contrato'];
                 $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
-                $comment = $request->input("comment$i");
+        
                 $fotos[] = [
                     'path' => $path,
-                    'comment' => $comment,
+                    'comment' => $comment, // Guardar el comentario actualizado
                 ];
             } else {
-                // Mantener la imagen anterior si no se está actualizando
+                // Mantener la imagen anterior pero actualizar el comentario si cambió
                 if (isset($previousFotos[$i - 1])) {
-                    $fotos[] = $previousFotos[$i - 1];
+                    $fotos[] = [
+                        'path' => $previousFotos[$i - 1]['path'],
+                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                    ];
                 }
             }
         }
-
         // Convertir el array de fotos a JSON
         $Fotos = json_encode($fotos);
-
         // Actualiza los detalles generales como JSON en la base de datos
         $Fotos_Reportes->update([
             'Fotos_Reportes' => $Fotos

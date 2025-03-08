@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Reporte;
 
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use Illuminate\Http\Request;
