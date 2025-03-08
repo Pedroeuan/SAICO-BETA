@@ -382,8 +382,8 @@ return [
                             'url' => '/Reporte/FOR-PINS-16/03',
                         ],
                         [
-                            'text' => 'FOR-INS-16/01/PDF',
-                            'url' => '/Reporte/FOR-INS-16/01/PDF',
+                            'text' => 'FOR-PINS-17/01',
+                            'url' => '/Reporte/FOR-PINS-17/01',
                         ],
                         [
                             'text' => 'FOR-PINS-17_01/01',
@@ -394,35 +394,56 @@ return [
                             'url' => '/Reporte/FOR-PINS-18/01',
                         ],
                     ],
-
-                   // Sidebar Operativos:
-            [
-                'text' => 'REPORTE',
-                'icon' => 'fas fa-clipboard',
-                'can' => 'administrador-access',
-                //'topnav' => true,
-                'submenu' => [
+                ],
+        
+        // Sidebar Administrativo:
+        /*[
+            'text' => 'Planeacion',
+            'icon' => 'fas fa-calendar-alt',
+            'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
+            //'topnav' => true,
+            'submenu' => [
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                    //can => 'nombre-ruta'
+                ],
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                    'submenu' => 
+                    [
                         [
-                            'text' => 'FORMATO/01',
-                            'url' => '/Reporte/FORMATO/01',
-                            //can => 'nombre-ruta'
+                            'text' => 'level_two',
+                            'url' => '#',
                         ],
                         [
-                            'text' => 'FORMATO/02',
-                            'url' => '/Reporte/FORMATO/02',
-                        ],
-                        [
-                            'text' => 'Registro de Reportes',
-                            'icon' => 'fas fa-user-plus',
-                            'url' => 'reporte/create',
-                            'can' => 'equipos-access',
+                            'text' => 'level_two',
+                            'url' => '#',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'level_three',
+                                    'url' => '#',
+                                ],
+                                [
+                                    'text' => 'level_three',
+                                    'url' => '#',
+                                ],
+                            ],
                         ],
                     ],
-            ],
+                ],
 
+                [
+                    'text' => 'level_one',
+                    'url' => '#',
+                ],
+            ],
+        ],*/
 
                // Sidebar Operativos:
-                [
+            [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -430,29 +451,13 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Orden de Trabajo/Servicio',
-                        'icon' => 'far fa-file-alt',
+                        'icon' => 'fas fa-file-alt',
                         'url' => '/Page_In_Construction',
-                    ],
-                    [
-                        'text' => 'Crear Reportes',
-                        'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
-                        'url' => '/index/ContratoProyecto',
-                    ],
-                    [
-                        'text' => 'Registro de Pruebas',
-                        'icon' => 'fas fa-indent',
-                        'url' => '/Pruebas/Create',
-                    ],
-                    [
-                        'text' => 'Pruebas',
-                        'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
                     ],
                 ],
             ],
@@ -474,6 +479,7 @@ return [
                         'icon' => 'fas fa-clipboard-list',
                         'url' => '/Page_In_Construction',
                     ],
+                    
                 ],
             ],
 
@@ -538,6 +544,7 @@ return [
                             'url' => 'solicitud/index',
                             'can' => 'tecnicos-equipos-access',
                         ],
+                        
                     ],
                 ],
 
@@ -558,6 +565,7 @@ return [
                     'icon' => 'fas fa-user-plus',
                     'url' => 'Admin/create',
                 ],
+                
             ],
         ],
     ],//Final Menu
