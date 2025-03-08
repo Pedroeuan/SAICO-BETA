@@ -471,6 +471,30 @@
                                                     <th>Metros Lineales</th>
                                                     <th>Evaluación</th>
                                                 </tr>
+
+                                                <tr id="inputRow">
+                                                    <th></th> <!-- Para ID vacío -->
+                                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="13"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="14"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="15"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="16"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="17"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="18"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="19"></th>
+                                                    <th></th> <!-- Para botón de eliminar -->
+                                                </tr>
                                             </thead>
 
                                             <tbody>
@@ -998,6 +1022,24 @@
                 $(this).find('input').each(function() {
                     if ($(this).val() === '') {
                         $(this).val('----');
+                    }
+                });
+            });
+        });
+
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const inputFields = document.querySelectorAll(".default-input");
+
+        // Evento para actualizar filas cuando se escriba en los inputs superiores
+        inputFields.forEach(input => {
+            input.addEventListener("input", function () {
+                const column = input.getAttribute("data-column");
+                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
+                    const cellInput = row.querySelectorAll("td input")[column - 1];
+                    if (cellInput) {
+                        cellInput.value = input.value;
                     }
                 });
             });
