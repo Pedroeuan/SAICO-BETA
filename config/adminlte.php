@@ -446,7 +446,7 @@ return [
                 [
                 'text' => 'Operativos',
                 'icon' => 'fas fa-clipboard',
-                'can' => 'administrador-access',
+                'can' => 'tecnicos-access',
                 //'topnav' => true,
                 'submenu' => [
                     [

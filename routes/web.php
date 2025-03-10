@@ -56,11 +56,30 @@ use App\Http\Controllers\Reporte\ReporteController;
     
 
     Route::middleware('auth')->group(function () {
-        //Route::middleware('can:administrador-access')->group(function () {
+        Route::middleware('can:tecnicos-access')->group(function () {
         /*vista Page in construction */
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
         /*vista Page welcome*/
         Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
+
+        /*REPORTES*/
+        /*Obtiene las Normas segun La prueba del select*/
+        Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
+        /*Obtiene los Formatos segun La prueba del select*/
+        Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
+
+        /*Rutas de Vistas del index de selección de los contratos*/
+        Route::get('/index/ContratoProyecto', [ReporteController::class, 'indexContratoProyecto'])->name('index.ContratoProyecto');
+        /*Rutas de Vistas del index despues de la selección de los contratos/Reportes de estos*/
+        Route::post('/index/ReporteProyectoContrato', [ReporteController::class, 'indexReporteProyectoContrato'])->name('index.ReporteProyectoContrato');
+        /*Rutas de Vistas del index despues del Guardado de Reportes */
+        Route::get('/indexINS2', [ReporteController::class, 'indexINS2'])->name('indexINS2');
+        /*Rutas de Vistas del index despues de la seleccion del Contrato */
+        Route::get('/indexINS1', [ReporteController::class, 'indexINS1'])->name('indexINS1');
+        /*Rutas de Vistas del index despues de la seleccion del Manifiesto */
+        Route::get('/ReportesPrincipalMaster', [ReporteController::class, 'ReportesPrincipalMaster'])->name('ReportesPrincipalMaster');
+        /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
+        Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
 
         /*PRUEBAS*/
         /*Vista Menu Pruebas*/
@@ -85,27 +104,6 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/Pruebas/Norma_Codigo/Formatos/edit/{id}', [PruebaController::class, 'editformatos'])->name('Pruebas.Norma_Codigo.Formatos.edit');
         /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
         Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
-
-        /*REPORTES*/
-        /*Obtiene las Normas segun La prueba del select*/
-        Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
-        /*Obtiene los Formatos segun La prueba del select*/
-        Route::get('/Obtener/formatos/{id}', [ReporteController::class, 'ObtenerFormatos'])->name('Obtener.formatos');
-
-        /*Rutas de Vistas del index de selección de los contratos*/
-        Route::get('/index/ContratoProyecto', [ReporteController::class, 'indexContratoProyecto'])->name('index.ContratoProyecto');
-        /*Rutas de Vistas del index despues de la selección de los contratos/Reportes de estos*/
-        Route::post('/index/ReporteProyectoContrato', [ReporteController::class, 'indexReporteProyectoContrato'])->name('index.ReporteProyectoContrato');
-        /*Rutas de Vistas del index despues del Guardado de Reportes */
-        Route::get('/indexINS2', [ReporteController::class, 'indexINS2'])->name('indexINS2');
-        /*Rutas de Vistas del index despues de la seleccion del Contrato */
-        Route::get('/indexINS1', [ReporteController::class, 'indexINS1'])->name('indexINS1');
-        /*Rutas de Vistas del index despues de la seleccion del Contrato */
-        //Route::get('/indexINS3', [ReporteController::class, 'indexINS3'])->name('indexINS3');
-        /*Rutas de Vistas del index despues de la seleccion del Manifiesto */
-        Route::get('/ReportesPrincipalMaster', [ReporteController::class, 'ReportesPrincipalMaster'])->name('ReportesPrincipalMaster');
-        /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
-        Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
         
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
@@ -124,7 +122,9 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Ruta de Actualización Reportes/INS*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
 
-        //});
+        Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
+
+        });
     });
 
     Route::middleware('auth')->group(function () {
@@ -158,9 +158,9 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
+    
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-access')->group(function () {
-
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
@@ -310,7 +310,7 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::get('/Reporte/FOR-INS-09/01/PDF', [PDFReportesController::class, 'FOR_INS_09_01'])->name('Reporte_FOR_INS_09_01.PDF');
     Route::get('/Reporte/FOR-INS-10/01/PDF', [PDFReportesController::class, 'FOR_INS_10_01'])->name('Reporte_FOR_INS_10_01.PDF');
 
-    Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
+    //Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF'); //Ya definido en tecnicos 
 
     Route::get('/Reporte/FOR-INS-12/01/PDF', [PDFReportesController::class, 'FOR_INS_12_01'])->name('Reporte_FOR_INS_12_01.PDF');
     Route::get('/Reporte/FOR-INS-13/01/PDF', [PDFReportesController::class, 'FOR_INS_13_01'])->name('Reporte_FOR_INS_13_01.PDF');

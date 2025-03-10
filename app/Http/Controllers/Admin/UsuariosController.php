@@ -85,7 +85,7 @@ class UsuariosController extends Controller
 
         // Redirigir a la página de administración
         $Usuarios = Usuario::all();
-        return view('Admin.index', compact('Usuarios'.'rol'));
+        return view('Admin.index', compact('Usuarios','rol'));
     }
 
     /**
