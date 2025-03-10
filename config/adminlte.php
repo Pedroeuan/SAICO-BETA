@@ -442,6 +442,123 @@ return [
             ],
         ],*/
 
+            [
+                'text' => 'REPORTE',
+                'icon' => 'fas fa-clipboard',
+                'can' => 'administrador-access',
+                //'topnav' => true,
+                'submenu' => [
+                        [
+                            'text' => 'FOR-01-PRO-INS-02',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_02',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-03',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_03',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-04',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_04',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-02-PRO-INS-04',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_02_PRO_INS_04',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-05',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_05',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-06',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_06',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-07',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_07',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-08',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_08',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-09',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_09',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-10',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_10',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-12',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_12',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-13',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_13',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-02-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_02_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-03-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_03_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-16',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_16',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-17',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_17',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-18',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_18',
+                            'can' => 'equipos-access',
+                        ],
+                    ],
+            ],
+
                // Sidebar Operativos:
                 [
                 'text' => 'Operativos',
