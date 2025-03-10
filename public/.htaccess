@@ -1,4 +1,4 @@
-<IfModule mod_php7.c> 
+<IfModule mod_php7.c>
     php_value post_max_size 512M
     php_value upload_max_filesize 512M
     php_value memory_limit 512M
@@ -9,16 +9,17 @@
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
-        RewriteEngine On
-        RewriteCond %{HTTPS} !=on
-        RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     </IfModule>
 
     RewriteEngine On
 
+    # Redirect HTTP to HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
-    RewriteCond %{HTTPS:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTPS:Authorization}]
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -29,8 +30,4 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
-    # Redirect HTTP to HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>

@@ -30,6 +30,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\VerificarCertificados::class,
 
         \App\Http\Middleware\RedirectToHttps::class,
+
+        \App\Http\Middleware\ForceHttps::class,
     ];
 
     /**
