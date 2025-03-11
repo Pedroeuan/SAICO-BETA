@@ -457,6 +457,12 @@ public function FOR_01_PRO_INS_02()
     /**
      * Store a newly created resource in storage.
      */
+    public function OS_OC(Request $request)
+    {
+
+
+    }
+
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
         //dd($request->all());
@@ -616,7 +622,6 @@ public function FOR_01_PRO_INS_02()
             /*Resultados Juntas*/
             // Guardar las filas dinámicas
             $Resultados_Juntas = [];
-            Log::info('Cantidad de elementos a procesar: ' . count($validatedData['elemento_tubo']));
             foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
                 $Resultados_Juntas[] = [
                     'elemento_tubo' => $elemento_tubo,
@@ -700,6 +705,17 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
+
+        $Cliente = $validatedData['Detalles_Generales']['Cliente'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        $datosParaGuardar = [
+            'Cliente' => $Cliente,
+            'Proyecto' => $Proyecto,
+            //'' => '',
+        ];
+
+        $this->OS_OC($datosParaGuardar);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
