@@ -323,7 +323,7 @@
                                 @php
                                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                                 @endphp
-                                    @if($general->Tipo != 'CONSUMIBLES')
+                                   
                                             @if($Manifiesto->SATBMPRO == 'SI')
                                                 <tr>
                                                     <td class="">{{ $contador }}</td>
@@ -349,7 +349,6 @@
                                                     <td class="">{{ $general->Marca ?? 'N/A' }}</td>
                                                     <td class="">{{ $general->Modelo ?? 'N/A' }}</td>
                                                 </tr>
-                                    @endif
 
                                     @php
                                         $contador++; // Incrementa el contador
