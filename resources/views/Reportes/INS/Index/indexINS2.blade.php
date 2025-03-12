@@ -62,7 +62,6 @@
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
-                            
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="$reporte->idReportes"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>

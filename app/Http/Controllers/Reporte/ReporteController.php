@@ -122,7 +122,8 @@ public function FOR_01_PRO_INS_02()
         }
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
-            return $item['Contrato'] . $item['Proyecto'];
+            //return $item['Contrato'] . $item['Proyecto'];
+            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios ¬¬).
         })->values()->all();
 
         return view('Reportes.INS.Index.indexINS1', compact('reportesDetalles_Generales'));

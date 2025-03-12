@@ -91,7 +91,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 6px;
+                    font-size: 5px;
                 }
 
                 .simbologia td, .simbologia th {

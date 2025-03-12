@@ -911,30 +911,38 @@ class PDFReportesController extends Controller
         $pdf1Content = $pdf1->output();
         $pdf2Content = $pdf2->output();
 
-        $combinedPdf = new Fpdi();
-        $pageCount1 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
-        $totalPageCount = 0;
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
+        $tempPdf2 = new Fpdi();
+        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1 + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210); // Ajusta las dimensiones a las del papel Letter
-            $totalPageCount++;
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
-        $pageCount2 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        // Añadir páginas del segundo PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297); // Ajusta las dimensiones a las del papel Letter
-            $totalPageCount++;
-
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -256);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetXY(138, -255.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
         return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
