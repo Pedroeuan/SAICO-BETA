@@ -465,8 +465,6 @@ public function FOR_01_PRO_INS_02()
 
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
-        //dd($request->all());
-
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -598,8 +596,9 @@ public function FOR_01_PRO_INS_02()
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
         $Firmas_Reportes = new Firma_Reporte();  // Modelo de la tabla donde guardas los datos
         $Fotos_Reportes = new Fotos_Reporte();  // Modelo de la tabla donde guardas los datos
+        $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
-        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica'); 
+        $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
 
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
@@ -707,19 +706,32 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Reportes->save();
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
+        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+        $Material = $validatedData['Detalles_Generales']['Material'];
+        $Plano_Isometrico = $validatedData['Detalles_Generales']['Plano_Isometrico'];
+        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Norma_cod_Criterio_Eva'];
 
         $datosParaGuardar = [
+            '$idPrueba_Aplica' => $$idPrueba_Aplica,
             'Cliente' => $Cliente,
+            'Lugar' => $Lugar,
+            'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
-            //'' => '',
+            'Material' => $Material,
+            'Plano_Isometrico' => $Plano_Isometrico,
+            'Pieza' => $Pieza,
+            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
+            
         ];
 
         $this->OS_OC($datosParaGuardar);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+        
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
 
