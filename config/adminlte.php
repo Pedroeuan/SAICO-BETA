@@ -480,26 +480,26 @@ return [
             ],
 
 
-             // Sidebar Clientes:
+                // Sidebar Clientes:
                 [
-                'text' => 'Ventas',
-                'icon' => 'fas fa-money-bill-wave',
-                'can' => 'ventas-access',
-                //'topnav' => true,
-                'submenu' => [
-                    [
-                        'text' => 'Registro OC',
-                        'icon' => 'fas fa-chart-line',
-                        'url' => '/Page_In_Construction',
+                    'text' => 'Ventas',
+                    'icon' => 'fas fa-money-bill-wave',
+                    'can' => 'ventas-access',
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'Registro OC',
+                            'icon' => 'fas fa-chart-line',
+                            'url' => '/OC/createOC',
+                        ],
+                        [
+                            'text' => 'Ordenes de Compras',
+                            'icon' => 'fas fa-clipboard-list',
+                            'url' => '/OC/indexOC',
+                        ],
+                        
                     ],
-                    [
-                        'text' => 'Ordenes de Compras',
-                        'icon' => 'fas fa-clipboard-list',
-                        'url' => '/Page_In_Construction',
-                    ],
-                    
                 ],
-            ],
 
                 // Sidebar Equipos y Consumibles:
                 [
