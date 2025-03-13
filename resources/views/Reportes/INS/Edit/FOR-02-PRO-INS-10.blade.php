@@ -331,8 +331,8 @@
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FRECC_TRANSDUCTOR', $Datos_Equipo['FRECC_TRANSDUCTOR'] ?? '')}}">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR', $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -964,10 +964,16 @@
 <script>
 
     /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    }
+                });
             }
+        });
     });
 
     $(document).ready(function() {

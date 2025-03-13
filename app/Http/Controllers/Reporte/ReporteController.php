@@ -495,7 +495,7 @@ public function FOR_01_PRO_INS_02()
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
@@ -711,7 +711,7 @@ public function FOR_01_PRO_INS_02()
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
-        $Plano_Isometrico = $validatedData['Detalles_Generales']['Plano_Isometrico'];
+        $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Norma_cod_Criterio_Eva'];
 
@@ -722,7 +722,7 @@ public function FOR_01_PRO_INS_02()
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
             'Material' => $Material,
-            'Plano_Isometrico' => $Plano_Isometrico,
+            'Isometrico_Plano' => $Isometrico_Plano,
             'Pieza' => $Pieza,
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             
@@ -769,7 +769,7 @@ public function FOR_01_PRO_INS_02()
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',

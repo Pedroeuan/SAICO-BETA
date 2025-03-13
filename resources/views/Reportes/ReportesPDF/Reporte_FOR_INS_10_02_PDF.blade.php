@@ -339,7 +339,7 @@
                             <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
                             <th class="celdaGris">N.S:</th>
                             <td style="width: 60px;">{{ $Datos_Equipo['N_S_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
+                            <th class="celdaGris" style="width: 50px;">FREC:</th>
                             <td style="width: 50px;">{{ $Datos_Equipo['FRECC_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris">N.S:</th>
                             <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>

@@ -124,7 +124,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -134,7 +134,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                                            <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                                             @error('Orden_Trabajo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -174,7 +174,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Isometrico_Plano]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Isometrico_Plano')}}</textarea>
                                             @error('Isometrico_Plano')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -214,7 +214,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
-                                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  ASTM A-435" value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
                                             @error('Criterio_Evaluacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -332,8 +332,8 @@
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FRECC_TRANSDUCTOR')}}">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR')}}">
                                         </div>
                                     </div>
 
@@ -610,12 +610,12 @@
                                         </tr>
                                     </table>
 
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
-                                            </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
+                                            <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                                         </div>
+                                    </div>
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
@@ -915,12 +915,150 @@
 <script>
 
     /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    }
+                });
             }
+        });
     });
 
+    $(document).ready(function () {
+    var rowCount = 0;
+
+    // Función para renumerar las filas
+    function renumerarFilas() {
+        $('#dynamicTable tbody tr').each(function (index) {
+            $(this).find('td:first').text(index + 1);
+        });
+        rowCount = $('#dynamicTable tbody tr').length;
+    }
+
+    // Cargar datos desde localStorage si existen
+    function cargarDesdeLocalStorage() {
+        const dataGuardada = localStorage.getItem('tablaMaterial');
+        if (dataGuardada) {
+            const filas = JSON.parse(dataGuardada);
+            filas.forEach(fila => {
+                agregarFilaDesdeDatos(fila);
+            });
+            renumerarFilas(); // Renumerar al cargar
+        }
+    }
+
+    // Guardar la tabla completa en localStorage
+    function guardarEnLocalStorage() {
+        const datos = [];
+        $('#dynamicTable tbody tr').each(function () {
+            const fila = {};
+            $(this).find('input').each(function () {
+                const name = $(this).attr('name');
+                fila[name] = $(this).val();
+            });
+            datos.push(fila);
+        });
+        localStorage.setItem('tablaMaterial', JSON.stringify(datos));
+    }
+
+    // Agrega una fila usando un objeto con valores
+    function agregarFilaDesdeDatos(data) {
+        rowCount++;
+        const fila = `<tr>
+            <td>${rowCount}</td>
+            <td><input type="text" class="form-control" name="elemento_tubo[]" value="${data.elemento_tubo || ''}" style="width: 100px;"></td>
+            <td><input type="text" class="form-control" name="no_aceptacion[]" value="${data.no_aceptacion || ''}" style="width: 100px;"></td>
+            <td><input type="text" class="form-control" name="no_serie[]" value="${data.no_serie || ''}" style="width: 100px;"></td>
+            <td><input type="text" class="form-control" name="no_colada[]" value="${data.no_colada || ''}" style="width: 100px;"></td>
+            <td><input type="text" class="form-control" name="tnominal[]" value="${data.tnominal || ''}" style="width: 100px;"></td>
+            <td><input type="text" class="form-control" name="diametro[]" value="${data.diametro || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="no_ind[]" value="${data.no_ind || ''}" style="width: 50px;"></td>
+            <td><input type="text" class="form-control" name="tipo_indicacion[]" value="${data.tipo_indicacion || ''}"></td>
+            <td><input type="text" class="form-control" name="nr[]" value="${data.nr || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="ni[]" value="${data.ni || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="ht[]" value="${data.ht || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="prof[]" value="${data.prof || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="la[]" value="${data.la || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="lc[]" value="${data.lc || ''}" style="width: 60px;"></td>
+            <td><input type="text" class="form-control" name="tmax[]" value="${data.tmax || ''}" style="width: 80px;"></td>
+            <td><input type="text" class="form-control" name="tmin[]" value="${data.tmin || ''}" style="width: 80px;"></td>
+            <td><input type="text" class="form-control" name="metros_lineales[]" value="${data.metros_lineales || ''}" style="width: 80px;"></td>
+            <td><input type="text" class="form-control" name="evaluacion[]" value="${data.evaluacion || ''}" style="width: 120px;"></td>
+            <td><input type="text" class="form-control" name="observaciones[]" value="${data.observaciones || ''}" style="width: 150px;"></td>
+            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"></i></button></td>
+        </tr>`;
+        $('#dynamicTable tbody').append(fila);
+    }
+
+    // Botón para agregar nuevas filas
+    $('#addBtn').click(function () {
+        const numRows = $('#numRows').val();
+        for (let i = 0; i < numRows; i++) {
+            agregarFilaDesdeDatos({});
+        }
+        renumerarFilas(); // Renumerar después de agregar
+        guardarEnLocalStorage();
+    });
+
+    // Eliminar fila
+    $('#dynamicTable').on('click', '.btnEliminar', function () {
+        $(this).closest('tr').remove();
+        renumerarFilas(); // Renumerar después de eliminar
+        guardarEnLocalStorage();
+    });
+
+    // Rellenar vacíos
+    $('#preFillBtn').click(function () {
+        $('#dynamicTable tbody tr').each(function () {
+            $(this).find('input').each(function () {
+                if ($(this).val() === '') {
+                    $(this).val('----');
+                }
+            });
+        });
+        guardarEnLocalStorage();
+    });
+
+    // Guardar automáticamente cada vez que se cambia algo
+    $('#dynamicTable').on('input', 'input', function () {
+        guardarEnLocalStorage();
+    });
+
+    // Validar antes de enviar
+    $('form').submit(function (e) {
+        if ($('#dynamicTable tbody tr').length === 0) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+            });
+            return;
+        }
+
+        // Desactivar botón submit
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+
+        // Opcional: Limpiar el localStorage después de guardar
+        // localStorage.removeItem('tablaMaterial');
+    });
+
+    // Limpiar LocalStorage (opcional: botón)
+    $('#clearStorageBtn').click(function () {
+        localStorage.removeItem('tablaMaterial');
+        location.reload();
+    });
+
+    // Cargar si existe algo
+    cargarDesdeLocalStorage();
+});
+
+    /*
     $(document).ready(function() {
         var rowCount = 0;
 
@@ -996,7 +1134,7 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-    });
+    });*/
 
     document.addEventListener("DOMContentLoaded", function () {
     const inputFields = document.querySelectorAll(".default-input");
@@ -1191,9 +1329,9 @@
             });
 
             // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
+            /*if ($('#equiposSelect option').length > 0) {
                 $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }
+            }*/
 
         });
 
@@ -1217,9 +1355,9 @@
                 });
 
                 // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
+                /*if ($('#accesoriosSelect option').length > 0) {
                     $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
+                }*/
                 
             });
 
@@ -1244,9 +1382,9 @@
             });
 
             // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
+            /*if ($('#blockyprobetaSelect option').length > 0) {
                 $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-            }
+            }*/
         });
 
     </script>
