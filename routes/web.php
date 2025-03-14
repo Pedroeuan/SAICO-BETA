@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Prueba\PruebaController;
@@ -183,6 +184,12 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::post('/verificar-duplicado-BlockyProbeta', [general_eycController::class, 'verificarDuplicadoBlockyProbeta']);
     /*Ruta para verificar duplicados de las Herramientas de No economico y Serie de la tabla general_EyC*/
     Route::post('/verificar-duplicado-Herramientas', [general_eycController::class, 'verificarDuplicadoHerramientas']);
+
+    /*TICS*/
+    /*Ruta de Guardado*/
+    Route::post('/general_eyc/storeTICS', [TICSController::class, 'storeTICS'])->name('general_eyc.storeTICS');
+    /*Ruta de Actualizar*/
+    Route::post('/edicion/editTICS/{id}', [TICSController::class, 'updateTICS'])->name('editTICS.update');
 
     /*EQUIPOS */
     /*Ruta de Guardado*/

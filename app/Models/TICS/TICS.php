@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Models\EquiposyConsumibles;
+namespace App\Models\TICS;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class equipos extends Model
+class TICS extends Model
 {
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
-        'idEquipos',
+        'idTICS',
         'idGeneral_EyC',
     ];
-    protected $primaryKey = 'idGeneral_EyC';
+    protected $primaryKey = 'idTICS';
     public $timestamps = false; 
     use HasFactory;
 }
