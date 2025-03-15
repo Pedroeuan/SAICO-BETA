@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reporte;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Clientes\clientes;
 use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
@@ -13,6 +14,7 @@ use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Norma_Codigo\norma_codigo;
 use App\Models\PruebaAplica\Prueba_Aplica;
+use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -156,7 +158,8 @@ public function FOR_01_PRO_INS_02()
 
     public function ObtenerFormatos($id)
     {
-        $formatos = formato::where('idPrueba', $id)->get();
+        //$formatos = formato::where('idPrueba', $id)->get();
+        $formatos = formato::where('idNorma_codigo', $id)->get();
         return response()->json($formatos);
     }
 
@@ -458,9 +461,30 @@ public function FOR_01_PRO_INS_02()
     /**
      * Store a newly created resource in storage.
      */
-    public function OS_OC(Request $request)
+    public function OS_OC($datosParaCrearOS_OC)
     {
+        $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
+        $Cliente = $datosParaCrearOS_OC['Cliente'];
+        $Lugar = $datosParaCrearOS_OC['Lugar'];
+        $Contrato= $datosParaCrearOS_OC['Contrato'];
+        $Proyecto = $datosParaCrearOS_OC['Proyecto'];
+        $Material = $datosParaCrearOS_OC['Material'];
+        $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
+        $Pieza = $datosParaCrearOS_OC['Pieza'];
+        $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
 
+        $Orden_Servicio = new Orden_Servicio;
+
+        $BusquedaCliente = Cliente::where('Nombre', 'like', '%' . $Cliente . '%')->first();
+
+        if ($BusquedaCliente) {
+            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
+        } else {
+            // Cliente no encontrado
+            $Cliente = "POR DEFINIR";
+            $Busqueda2Cliente = Cliente::where('Nombre', 'like', '%' . $Cliente . '%')->first();
+        }
 
     }
 
@@ -713,10 +737,10 @@ public function FOR_01_PRO_INS_02()
         $Material = $validatedData['Detalles_Generales']['Material'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Norma_cod_Criterio_Eva'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
-        $datosParaGuardar = [
-            '$idPrueba_Aplica' => $$idPrueba_Aplica,
+        $datosParaCrearOS_OC = [
+            'idPrueba_Aplica' => $idPrueba_Aplica,
             'Cliente' => $Cliente,
             'Lugar' => $Lugar,
             'Contrato' => $Contrato,
@@ -728,7 +752,7 @@ public function FOR_01_PRO_INS_02()
             
         ];
 
-        $this->OS_OC($datosParaGuardar);
+        $this->OS_OC($datosParaCrearOS_OC);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];

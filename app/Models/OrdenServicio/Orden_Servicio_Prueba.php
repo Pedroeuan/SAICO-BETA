@@ -18,4 +18,9 @@ class Orden_Servicio_Prueba extends Model
     protected $table = 'Orden_Servicio_Prueba';
     //protected $primaryKey = 'idOrden_Servicio';
     public $timestamps = false;
+
+    public function ordenServicio()
+    {
+        return $this->belongsTo(Orden_Servicio::class, 'orden_servicio_id');
+    }
 }
