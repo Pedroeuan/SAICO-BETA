@@ -2,6 +2,7 @@
 
 namespace App\Models\TICS;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TICS extends Model
@@ -11,7 +12,8 @@ class TICS extends Model
         'idTICS',
         'idGeneral_EyC',
     ];
+    protected $table = 'TICS';
     protected $primaryKey = 'idTICS';
-    public $timestamps = false; 
+    public $timestamps = false;
     use HasFactory;
 }

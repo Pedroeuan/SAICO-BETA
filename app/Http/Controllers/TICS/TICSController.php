@@ -189,7 +189,7 @@ class TICSController extends Controller
             $newNumber = $lastNumber + 1;
             $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
             // Guardar el archivo PDF en la carpeta "public/Equipos/Facturas"
-            $pdfPath = $pdf->storeAs('TICS/Facturas/Equipos', $newFileNameFactura, 'public');
+            $pdfPath = $pdf->storeAs('TICS/Facturas/Equipos/', $newFileNameFactura, 'public');
             // Guardar la ruta en la base de datos
             $general->Factura = $pdfPath;
         } else {
@@ -200,7 +200,7 @@ class TICSController extends Controller
         if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
             $foto = $request->file('Foto');
             // Obtener el último número consecutivo
-            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Equipos'))
+            $lastFile = collect(Storage::disk('public')->files('TICS/Foto/Equipos'))
                 ->filter(function ($file) {
                     return preg_match('/^\d+_/', basename($file));
                 })
@@ -213,17 +213,18 @@ class TICSController extends Controller
             // Incrementar el número consecutivo
             $newNumber = $lastNumber + 1;
             $newFileNameFoto = $newNumber . '_' . $foto->getClientOriginalName();
-            // Guardar el archivo en la carpeta "public/Equipos/Fotos"
-            $fotoPath = $foto->storeAs('Equipos y Consumibles/Fotos/Equipos', $newFileNameFoto, 'public');
+            // Guardar el archivo en la carpeta "public/Equipos/Foto"
+            $fotoPath = $foto->storeAs('TICS/Foto/Equipos', $newFileNameFoto, 'public');
             $general->Foto = $fotoPath;
         } else {
             $general->Foto = $EsperaDato;
         }
         $general->save();
-        // Equipos
-        $generalConEquipos = new equipos;
-        $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConEquipos->save();
+
+        /* TICS */
+        $generalConTICS = new TICS;
+        $generalConTICS->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConTICS->save();
 
         /* Certificados */
         $generalConCertificados = new certificados;
@@ -251,7 +252,7 @@ class TICSController extends Controller
             $Certificado_Actual = $request->file('Certificado_Actual');
             
             // Obtener el último número consecutivo
-            $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Accesorios'))
+            $lastFile = collect(Storage::disk('public')->files('TICS/Certificados/'))
                 ->filter(function ($file) {
                     return preg_match('/^\d+_/', basename($file));
                 })
@@ -265,20 +266,15 @@ class TICSController extends Controller
             $newNumber = $lastNumber + 1;
             $newFileNameCertificado = $newNumber . '_' . $Certificado_Actual->getClientOriginalName();
 
-            $Certificado_ActualPath = $Certificado_Actual->storeAs('Equipos y Consumibles/Certificados/Accesorios', $newFileNameCertificado, 'public');
+            $Certificado_ActualPath = $Certificado_Actual->storeAs('TICS/Certificados/', $newFileNameCertificado, 'public');
             $generalConCertificados->Certificado_Actual = $Certificado_ActualPath; // Guarda la ruta del archivo de factura
         } else {
             if($request->input('Certificado_Actual') == null)
         {
-            $generalConCertificados->Certificado_Actual = $EsperaDato;
+            $generalConCertificados->Certificado_Actual = 'N/A';
         }
         }
         $generalConCertificados->save();
-
-        /* TICS */
-        $generalConTICS = new TICS;
-        $generalConTICS->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConTICS->save();
 
         /*Almacen */
         $generalConAlmacen = new almacen;
@@ -342,7 +338,7 @@ class TICSController extends Controller
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
-            'No_economico' => 'required|string|max:255',
+            'ID' => 'required|string|max:255',
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
@@ -356,7 +352,7 @@ class TICSController extends Controller
         $No_EBD = $generalEyC->No_economico;
         $SerBD = $generalEyC->Serie;
 
-        $No_EF = $request->input('No_economico');
+        $No_EF = $request->input('ID');
         $SerF = $request->input('Serie');
 
         if($No_EF == $No_EBD && $SerF==$SerBD)
@@ -370,7 +366,7 @@ class TICSController extends Controller
             // Actualizar los datos del equipo
             $generalEyC ->update([
                 'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
-                'No_economico' => $request->input('No_economico'),
+                'No_economico' => $request->input('ID'),
                 'Serie' => $request->input('Serie'),
                 'Marca' => $request->input('Marca'),
                 'Modelo' => $request->input('Modelo'),
@@ -384,7 +380,7 @@ class TICSController extends Controller
             ]);
 
             // Actualizar los datos del equipo asociado
-            $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+            $generalConTICS = TICS::where('idGeneral_EyC', $id)->first();
             // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
@@ -396,7 +392,7 @@ class TICSController extends Controller
                 // Guardar el nuevo archivo PDF
                 $pdf = $request->file('Factura');
                 // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Equipos'))
+                $lastFile = collect(Storage::disk('public')->files('TICS/Facturas/Equipos'))
                     ->filter(function ($file) {
                         return preg_match('/^\d+_/', basename($file));
                     })
@@ -410,7 +406,7 @@ class TICSController extends Controller
                 $newNumber = $lastNumber + 1;
                 $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
                 
-                $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Equipos/', $newFileNameFactura, 'public');
+                $pdfPath = $pdf->storeAs('TICS/Facturas/Equipos/', $newFileNameFactura, 'public');
                 // Actualizar la ruta de la factura en la base de datos
                 $generalEyC->Factura = $pdfPath;
                 $generalEyC->save();
@@ -426,7 +422,7 @@ class TICSController extends Controller
                 // Guardar el nuevo archivo de imagen
                 $imagen = $request->file('Foto');
                 // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Equipos'))
+                $lastFile = collect(Storage::disk('public')->files('TICS/Foto/Equipos'))
                     ->filter(function ($file) {
                         return preg_match('/^\d+_/', basename($file));
                     })
@@ -440,89 +436,31 @@ class TICSController extends Controller
                 $newNumber = $lastNumber + 1;
                 $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName();  
                 
-                $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Equipos/', $newFileNameFoto, 'public');
+                $imagenPath = $imagen->storeAs('TICS/Foto/Equipos/', $newFileNameFoto, 'public');
                 // Actualizar la ruta de la imagen en la base de datos
                 $generalEyC->Foto = $imagenPath;
                 $generalEyC->save();
             }
 
-            $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-            if($request->input('Fecha_calibracion')==null)
-            {
-                $fechaCalibracion = '2001-01-01';
-            }else{
-                $fechaCalibracion = $request->input('Fecha_calibracion');
-            }  
-            if($request->input('Prox_fecha_calibracion')==null)
-            {
-                $proxFechaCalibracion = '2001-01-01';
-            }else{
-                    $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
-            }  
-            $generalConCertificado->update([
-                'No_certificado' => $request->input('No_certificado'),
-                'Fecha_calibracion' => $fechaCalibracion,
-                'Prox_fecha_calibracion' => $proxFechaCalibracion,
-            ]);
-
-            // Verificar si se ha proporcionado un nuevo certificado actual
-            if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
-                // Obtener la ruta del certificado actual desde la base de datos
-                $rutaAnterior = $generalConCertificado->Certificado_Actual;
-                // Guardar el nuevo certificado en la carpeta original
-                $certificado = $request->file('Certificado_Actual');
-                // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Equipos'))
-                    ->filter(function ($file) {
-                        return preg_match('/^\d+_/', basename($file));
-                    })
-                    ->sort()
-                    ->last();
-                $lastNumber = 0;
-                if ($lastFile) {
-                    $lastNumber = (int)explode('_', basename($lastFile))[0];
-                }
-                // Incrementar el número consecutivo
-                $newNumber = $lastNumber + 1;
-                $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
-                
-                $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Equipos', $newFileNameCertificado, 'public');
-                // Actualizar la ruta del certificado en la base de datos
-                $generalConCertificado->Certificado_Actual = $certificadoPath;
-                $generalConCertificado->save();
-
-                // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
-                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                    // Obtener el nombre del archivo
-                    $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
-                    // Construir la nueva ruta para mover el archivo
-                    $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Equipos/' . $nombreArchivo;
-                    // Mover el archivo
-                    Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
-                    /* Tabla Historial_certificados */
-                    $CertificadosHistorialCertificados = new historial_certificado;
-                    $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
-                    $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
-                    //$CertificadosHistorialCertificados->idGeneral_EyC = $generalConCertificado->idGeneral_EyC;
-                    $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
-                    $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
-                    $CertificadosHistorialCertificados->save();
-                    }
-                }
+                    // Actualizar los datos del Almacen asociado
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen->update([
+            'Stock' => $request->input('Stock'),
+        ]);
         }
         else
         {
             // Limpia y normaliza el número económico
-            $noEconomico = $request->input('No_economico');
+            $noEconomico = $request->input('ID');
             $serie = Str::lower($request->input('Serie'));
             
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
-            $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
+            $noEconomicoLimpio = preg_replace('/^(ID\.?\s*ID[- ]?|ID[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
              // Verifica si el número económico ya existe (compara el número limpio)
-            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
-            ->where('Tipo', 'EQUIPOS')
+            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(ID\\.\\s*ID-?|ID-?)', '')) = ?", [$noEconomicoLimpio])
+            ->where('Tipo', 'TICS')
             ->exists();
 
             $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
@@ -558,7 +496,7 @@ class TICSController extends Controller
             // Actualizar los datos del equipo
             $generalEyC ->update([
                 'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
-                'No_economico' => $request->input('No_economico'),
+                'No_economico' => $request->input('ID'),
                 'Serie' => $request->input('Serie'),
                 'Marca' => $request->input('Marca'),
                 'Modelo' => $request->input('Modelo'),
@@ -572,7 +510,7 @@ class TICSController extends Controller
             ]);
 
             // Actualizar los datos del equipo asociado
-            $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+            $generalConTICS = TICS::where('idGeneral_EyC', $id)->first();
             // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
@@ -614,7 +552,7 @@ class TICSController extends Controller
                 // Guardar el nuevo archivo de imagen
                 $imagen = $request->file('Foto');
                 // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Fotos/Equipos'))
+                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Foto/Equipos'))
                     ->filter(function ($file) {
                         return preg_match('/^\d+_/', basename($file));
                     })
@@ -628,75 +566,18 @@ class TICSController extends Controller
                 $newNumber = $lastNumber + 1;
                 $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName();  
                 
-                $imagenPath = $imagen->storeAs('Equipos y Consumibles/Fotos/Equipos/', $newFileNameFoto, 'public');
+                $imagenPath = $imagen->storeAs('Equipos y Consumibles/Foto/Equipos/', $newFileNameFoto, 'public');
                 // Actualizar la ruta de la imagen en la base de datos
                 $generalEyC->Foto = $imagenPath;
                 $generalEyC->save();
             }
 
-            $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
-            if($request->input('Fecha_calibracion')==null)
-            {
-                $fechaCalibracion = '2001-01-01';
-            }else{
-                $fechaCalibracion = $request->input('Fecha_calibracion');
-            }  
-            if($request->input('Prox_fecha_calibracion')==null)
-            {
-                $proxFechaCalibracion = '2001-01-01';
-            }else{
-                    $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
-            }  
-            $generalConCertificado->update([
-                'No_certificado' => $request->input('No_certificado'),
-                'Fecha_calibracion' => $fechaCalibracion,
-                'Prox_fecha_calibracion' => $proxFechaCalibracion,
+            // Actualizar los datos del Almacen asociado
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Stock' => $request->input('Stock'),
             ]);
 
-            // Verificar si se ha proporcionado un nuevo certificado actual
-            if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
-                // Obtener la ruta del certificado actual desde la base de datos
-                $rutaAnterior = $generalConCertificado->Certificado_Actual;
-                // Guardar el nuevo certificado en la carpeta original
-                $certificado = $request->file('Certificado_Actual');
-                // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Certificados/Equipos'))
-                    ->filter(function ($file) {
-                        return preg_match('/^\d+_/', basename($file));
-                    })
-                    ->sort()
-                    ->last();
-                $lastNumber = 0;
-                if ($lastFile) {
-                    $lastNumber = (int)explode('_', basename($lastFile))[0];
-                }
-                // Incrementar el número consecutivo
-                $newNumber = $lastNumber + 1;
-                $newFileNameCertificado = $newNumber . '_' . $certificado->getClientOriginalName();
-                
-                $certificadoPath = $certificado->storeAs('Equipos y Consumibles/Certificados/Equipos', $newFileNameCertificado, 'public');
-                // Actualizar la ruta del certificado en la base de datos
-                $generalConCertificado->Certificado_Actual = $certificadoPath;
-                $generalConCertificado->save();
-
-                // Si hay un certificado anterior, moverlo a la carpeta de certificados caducados
-                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                    // Obtener el nombre del archivo
-                    $nombreArchivo = pathinfo($rutaAnterior, PATHINFO_BASENAME);
-                    // Construir la nueva ruta para mover el archivo
-                    $nuevaRuta = 'Equipos y Consumibles/Certificados Caducados/Equipos/' . $nombreArchivo;
-                    // Mover el archivo
-                    Storage::disk('public')->move($rutaAnterior, $nuevaRuta);
-                    /* Tabla Historial_certificados */
-                    $CertificadosHistorialCertificados = new historial_certificado;
-                    $CertificadosHistorialCertificados->idCertificados = $generalConCertificado->idCertificados;
-                    $CertificadosHistorialCertificados->idGeneral_EyC = $generalEyC->idGeneral_EyC;
-                    //$CertificadosHistorialCertificados->idGeneral_EyC = $generalConCertificado->idGeneral_EyC;
-                    $CertificadosHistorialCertificados->Certificado_Caducado = $nuevaRuta;
-                    $CertificadosHistorialCertificados->Ultima_Fecha_calibracion = $generalConCertificado->Fecha_calibracion;
-                    $CertificadosHistorialCertificados->save();
-                    }
-                }
         }
             return redirect()->route('inventario');
     }

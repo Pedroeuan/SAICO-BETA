@@ -67,17 +67,7 @@
                             <form id="TICSForm" action="{{route('general_eyc.storeTICS')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
-                                            @error('Nombre_E_P_BP')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>-->
-
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">NOMBRE</label>
@@ -128,7 +118,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
                                             <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: SD45N3199" value="{{old('Serie')}}">
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -191,37 +181,6 @@
                                             @enderror
                                         </div>
                                     </div>
-
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No de certificado</label>
-                                            <input type="text" class="form-control inputForm" name="No_certificado" placeholder="" value="{{old('No_certificado')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado actual</label>
-                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="Certificado_Actual" placeholder="">
-                                            @if ($errors->any())
-                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
-                                            <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
-                                        </div>
-                                    </div> -->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -311,7 +270,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
                                             <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -645,7 +604,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
                                             <input type="text" class="form-control inputForm inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: N3199" value="{{old('Serie')}}">
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -791,7 +750,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
                                             <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 102021CUT05" value="{{old('Serie')}}">
                                             @error('Serie')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -962,7 +921,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No.Serie</label>
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
                                             <input type="text" class="form-control inputForm @error('Serie') is-invalid @enderror" name="Serie" placeholder="Ejemplo: 190776" value="{{old('Serie')}}">
                                             @error('Serie')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>

@@ -17,6 +17,9 @@
     <br>
     <br>
         <h3 align="center"> Edición de 
+                        @if($generalEyC->Tipo=='TICS')
+                            TIC´S
+                        @endif
                         @if($generalEyC->Tipo=='EQUIPOS')
                             Equipos
                         @endif
@@ -39,36 +42,208 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-2">
-                <ul class="nav nav-pills justify-content-center"> 
-                    @if($generalEyC->Tipo=='EQUIPOS')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Equipos</a></li>
-                    @endif
-                    @if($generalEyC->Tipo=='CONSUMIBLES')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_2" data-toggle="tab">Consumibles</a></li>
-                    @endif
-                    @if($generalEyC->Tipo=='ACCESORIOS')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab">Accesorios</a></li>
-                    @endif
-                    @if($generalEyC->Tipo=='BLOCK Y PROBETA')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_4" data-toggle="tab">Block y Probeta</a></li>
-                    @endif
-                    @if($generalEyC->Tipo=='HERRAMIENTAS')
-                        <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">Herramientas</a></li>
-                    @endif
-                        <!-- Agrega más tabs según sea necesario -->
+                    <ul class="nav nav-pills justify-content-center">
+                        @if($generalEyC->Tipo=='TICS')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">TICS</a></li>
+                        @endif
+                        @if($generalEyC->Tipo=='EQUIPOS')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                        @endif
+                        @if($generalEyC->Tipo=='CONSUMIBLES')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                        @endif
+                        @if($generalEyC->Tipo=='ACCESORIOS')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_4" data-toggle="tab">Accesorios</a></li>
+                        @endif
+                        @if($generalEyC->Tipo=='BLOCK Y PROBETA')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_5" data-toggle="tab">Block y Probeta</a></li>
+                        @endif
+                        @if($generalEyC->Tipo=='HERRAMIENTAS')
+                            <li class="nav-item"><a class="nav-link active" href="#tab_6" data-toggle="tab">Herramientas</a></li>
+                        @endif
+                            <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header -->  
                 <div class="card-body">
-                @if($generalEyC->Tipo=='EQUIPOS')  
                     <div class="tab-content">
+
+                    @if($generalEyC->Tipo=='TICS')
                         <div class="tab-pane active" id="tab_1">
+                            <form id="TICSForm" action="{{ route('editTICS.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf 
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">NOMBRE</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Nombre_E_P_BP">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="LAPTOP" @if($generalEyC->Nombre_E_P_BP == 'LAPTOP') selected="selected" @endif >LAPTOP</option>
+                                                <option value="CARGADOR" @if($generalEyC->Nombre_E_P_BP == 'CARGADOR') selected="selected" @endif >CARGADOR</option>
+                                                <option value="IMPRESORA" @if($generalEyC->Nombre_E_P_BP == 'IMPRESORA') selected="selected" @endif >IMPRESORA</option>
+                                                <option value="TINTA" @if($generalEyC->Nombre_E_P_BP == 'TINTA') selected="selected" @endif >TINTA</option>
+                                                <option value="ESCANER" @if($generalEyC->Nombre_E_P_BP == 'ESCANER') selected="selected" @endif >ESCANER</option>
+                                                <option value="MODEM PORTATIL" @if($generalEyC->Nombre_E_P_BP == 'MODEM PORTATIL') selected="selected" @endif >MODEM PORTATIL</option>
+                                                <option value="USB" @if($generalEyC->Nombre_E_P_BP == 'USB') selected="selected" @endif >USB</option>
+                                                <option value="MOUSE" @if($generalEyC->Nombre_E_P_BP == 'MOUSE') selected="selected" @endif >MOUSE</option>
+                                                <option value="ADAPTADOR" @if($generalEyC->Nombre_E_P_BP == 'ADAPTADOR') selected="selected" @endif >ADAPTADOR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ID</label>
+                                            <input type="text" class="form-control inputForm" name="ID" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ID-58">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Marca</label>
+                                            <input type="text" class="form-control inputForm" name="Marca" value="{{ $generalEyC->Marca }}" placeholder="Ejemplo: MANGAFLUX">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Modelo</label>
+                                            <input type="text" class="form-control inputForm" name="Modelo" value="{{ $generalEyC->Modelo }}" placeholder="Ejemplo: DPM">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No. Serie</label>
+                                            <input type="text" class="form-control inputForm" value="{{ $generalEyC->Serie }}" name="Serie" placeholder="Ejemplo: SD45N3199">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ubicación</label>
+                                            <input type="text" class="form-control inputForm" name="Ubicacion" value="{{ $generalEyC->Ubicacion }}" placeholder="Ejemplo: OFICINA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
+                                            <input type="text" class="form-control inputForm" name="Almacenamiento" value="{{ $generalEyC->Almacenamiento }}" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Factura</label>
+                                            <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
+                                        </div>
+                                    </div>
+                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                            <label class="col-form-label" for="inputSuccess">Ver Factura</label> 
+                                            <div>
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
+                                            </div>                                              
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                            <label class="col-form-label" for="inputSuccess">No se encontraron Facturas</label>  
+                                            <div>
+                                                <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            </div>                                                                                              
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
+                                            <input type="file" class="form-control inputForm" name="Foto" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <label class="col-form-label" for="inputSuccess">Ver Hoja de presentación</label>      
+                                                <div>                                       
+                                                    <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>  
+                                                </div>                                              
+                                        </div>
+                                    </div>
+                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <label class="col-form-label" for="inputSuccess">No hay Hoja de presentación</label>   
+                                            <div>
+                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
+                                            </div>                                           
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Ejemplo: 1.2.3..20..">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">SAT</label>
+                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="TICS">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Comentario</label>
+                                            <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="container">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-info bg-success">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+
+                    @if($generalEyC->Tipo=='EQUIPOS')  
+                        <div class="tab-pane active" id="tab_2">
                             <form id="equiposForm" action="{{ route('editEquipos.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}" onclick="cambiarColor(this.value)"  placeholder="Ejemplo: Yugo">
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}"  placeholder="Ejemplo: Yugo">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -269,7 +444,7 @@
                             <!-- Contenido de la primera pestaña -->
                     @endif
                     @if($generalEyC->Tipo=='CONSUMIBLES')
-                            <div class="tab-pane" id="tab_2">
+                        <div class="tab-pane active" id="tab_3">
                             <form id="consumiblesForm" action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
@@ -471,11 +646,11 @@
                                 </div>
                             </form>
                         </div>
-                        <!--ACCESORIOS -->
                     @endif
+                    <!--ACCESORIOS -->
                     @if($generalEyC->Tipo=='ACCESORIOS')
-                        <div class="tab-pane" id="tab_3">
-                        <form id="accesoriosForm" action="{{ route('editAccesorios.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <div class="tab-pane active" id="tab_4">
+                            <form id="accesoriosForm" action="{{ route('editAccesorios.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -634,8 +809,8 @@
                         </div>
                     @endif
                     @if($generalEyC->Tipo=='BLOCK Y PROBETA')
-                        <div class="tab-pane" id="tab_4">
-                        <form id="blocksForm" action="{{ route('editBlocks.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <div class="tab-pane active" id="tab_5">
+                            <form id="blocksForm" action="{{ route('editBlocks.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -859,8 +1034,8 @@
                         </div>
                     @endif
                     @if($generalEyC->Tipo=='HERRAMIENTAS')
-                        <div class="tab-pane" id="tab_5">
-                        <form id="herramientasForm" action="{{ route('editHerramientas.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <div class="tab-pane active" id="tab_6">
+                            <form id="herramientasForm" action="{{ route('editHerramientas.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -1120,6 +1295,16 @@
 
 <Script>
     document.addEventListener('DOMContentLoaded', function() {
+
+                /*Prevenir el Enter TICS*/
+    var equiposForm = document.getElementById('TICSForm');
+    if (equiposForm) {
+        equiposForm.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+    }
         /*Prevenir el Enter Equipos*/
     var equiposForm = document.getElementById('equiposForm');
     if (equiposForm) {
