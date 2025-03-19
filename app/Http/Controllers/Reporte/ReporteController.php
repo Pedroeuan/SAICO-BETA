@@ -4,21 +4,24 @@ namespace App\Http\Controllers\Reporte;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Clientes\clientes;
 use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
+use App\Models\Clientes\clientes;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
 use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
+use App\Models\OrdenServicio\Orden_Servicio_Prueba;
+use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -472,18 +475,78 @@ public function FOR_01_PRO_INS_02()
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
         $Pieza = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
+        $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
 
         $Orden_Servicio = new Orden_Servicio;
+        $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
+        $Firmantes_OS = new Firmantes_OS;
+        $Grupo_Juntas_Detalles_OS = new Grupo_Juntas_Detalles_OS;
 
-        $BusquedaCliente = Cliente::where('Nombre', 'like', '%' . $Cliente . '%')->first();
+        $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
             $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
-            $nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
+            //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
+            $Orden_Servicio->idClientes = $idCliente;
+            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Lugar = $Lugar;
+            $Orden_Servicio->Contrato = $Contrato;
+            $Orden_Servicio->Proyecto_actividad = $Proyecto;
+            $Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
+            $Orden_Servicio->save();
+
+            // Obtén el ID del registro recién creado
+            $idOrdenServicio = $Orden_Servicio->idOrden_Servicio;
+
+            $Orden_Servicio_Prueba->idOrden_Servicio = $idOrdenServicio;
+            $Orden_Servicio_Prueba->idPrueba_Aplica = $idPrueba_Aplica;
+            $Orden_Servicio_Prueba->save();
+
+            $Firmantes_OS->idOrden_Servicio = $idOrdenServicio;
+            $Firmantes_OS->Nombre_Cargo = '[]';
+            $Firmantes_OS->save();
+
+            $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->save();
+
         } else {
             // Cliente no encontrado
             $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = Cliente::where('Nombre', 'like', '%' . $Cliente . '%')->first();
+            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            // Si no existe, crea el cliente "POR DEFINIR"
+            if (!$Busqueda2Cliente) {
+                $Busqueda2Cliente = new clientes();
+                $Busqueda2Cliente->Cliente = $Cliente;
+                $Busqueda2Cliente->save();
+            }
+
+            // Obtén el ID del cliente "POR DEFINIR"
+            $idClientes = $Busqueda2Cliente->idClientes;
+            $Orden_Servicio->idClientes = $idClientes;
+            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Lugar = $Lugar;
+            $Orden_Servicio->Contrato = $Contrato;
+            $Orden_Servicio->Proyecto_actividad = $Proyecto;
+            $Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
+            $Orden_Servicio->save();
+
+            // Obtén el ID del registro recién creado
+            $idOrdenServicio = $Orden_Servicio->idOrden_Servicio;
+
+            $Orden_Servicio_Prueba->idOrden_Servicio = $idOrdenServicio;
+            $Orden_Servicio_Prueba->idPrueba_Aplica = $idPrueba_Aplica;
+            $Orden_Servicio_Prueba->save();
+
+            $Firmantes_OS->idOrden_Servicio = $idOrdenServicio;
+            $Firmantes_OS->Nombre_Cargo = '[]';
+            $Firmantes_OS->save();
+
+            $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->save();
         }
 
     }
@@ -669,17 +732,8 @@ public function FOR_01_PRO_INS_02()
                     'observaciones' => $validatedData['observaciones'][$index],
                 ];
             }
-    
             // Convertir el array de resultados juntas a JSON
             $ResultadosJuntas = json_encode($Resultados_Juntas);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('Error en json_encode: ' . json_last_error_msg());
-            }
-            
-            // Obtener el número de caracteres
-            $numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
-            $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
 
             $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
             //Guardar Datos_Equipo como JSON en la base de datos
@@ -748,7 +802,8 @@ public function FOR_01_PRO_INS_02()
             'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
             'Pieza' => $Pieza,
-            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
+            'ResultadosJuntas' => $ResultadosJuntas,
+            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,//Quitar es criterio- no norma que aplica
             
         ];
 
