@@ -322,7 +322,9 @@ class SolicitudesController extends Controller
 
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         $general = general_eyc::get();
-        $clientes = clientes::all();
+        //$clientes = clientes::all();
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
     
         foreach ($DetallesSolicitud as $detalle) {
@@ -432,7 +434,9 @@ class SolicitudesController extends Controller
     
             $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
             $general = general_eyc::get();
-            $clientes = clientes::all();
+            //$clientes = clientes::all();
+            // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+            $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
     
             if ($Solicitud->Estatus == 'PENDIENTE') {
 

@@ -17,7 +17,8 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $clientes = clientes::all();
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
         return view('Clientes.index', compact('clientes'));
     }
