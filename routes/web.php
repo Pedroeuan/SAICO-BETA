@@ -304,6 +304,8 @@ use App\Http\Controllers\Reporte\ReporteController;
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
 
     /*A DEFINIR EL ACCESO */
+    /*Obtener Ruta del PDF */
+    Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
     Route::get('/Reporte/FOR-INS-02/02/PDF', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
