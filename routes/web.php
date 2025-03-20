@@ -118,12 +118,14 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
-        /*Ruta de Guardado Reportes/INS*/
+        /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_10*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10_store'])->name('Reportes_FOR_02_PRO_INS_10.store');
-        /*Ruta de Actualización Reportes/INS*/
+        /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_10*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
-
+        /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_10*/
         Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
+        /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_02*/
+        Route::post('/Reportes_FOR_02_PRO_INS_02/store', [ReporteController::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
 
         });
     });

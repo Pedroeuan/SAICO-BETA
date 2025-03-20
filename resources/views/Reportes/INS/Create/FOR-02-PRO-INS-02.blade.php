@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-01-PRO-INS-02')
+@section('title', 'FOR-02-PRO-INS-02')
 
 @section('css')
 <!--datatable -->
@@ -66,16 +66,15 @@
 <br>
 <br>
 
-{{-- <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4> --}}
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4> 
 <br>
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-01-PRO-INS-02" action="{{route('Reportes_FOR_01_PRO_INS_02.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-02-PRO-INS-02" action="{{route('Reportes_FOR_02_PRO_INS_02.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS</strong></div>
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
