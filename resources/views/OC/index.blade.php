@@ -36,6 +36,7 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
+                        <th>Contrato</th>
                         <th>Número de OC</th>
                         <th>Proyecto</th>
                         <th>Lugar/Trabajo</th>
@@ -50,6 +51,7 @@
                 <tbody>
                 @foreach($OC as $OCS)
                     <tr>
+                        <td>{{ $OCS->Contrato }}</td>
                         <td>{{ $OCS->Num_OC }}</td>
                         <td>{{ $OCS->Proyecto}}</td>
                         <td>{{ $OCS->Lugar_trabajo }}</td>
