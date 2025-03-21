@@ -84,7 +84,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-02" action="{{route('Reportes_FOR_02_PRO_INS_02.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-02-PRO-INS-02" action="route('Reportes_FOR_02_PRO_INS_02.update', ['id' => $id])" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -941,8 +941,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
+
+        /*Prevenir el Enter*/
+        document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    }
+                });
+            }
+        });
+    });
+
     $(document).ready(function() {
-        var rowCount = 0;
+        var rowCount = $('#dynamicTable tbody tr').length;
 
         function updateRowNumbers() {
             $('#dynamicTable tbody tr').each(function(index) {
@@ -956,7 +970,7 @@
             for (var i = 0; i < numRows; i++) {
                 rowCount++;
                 var newRow = `<tr>
-                    <td>${rowCount}</td>
+                                        <td>${rowCount}</td>
                     <td><input type="text" class="form-control" name="componente[]" placeholder="No. Junta/Componente"></td>
                     <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo Indicación"></td>
@@ -986,7 +1000,7 @@
                 });
             });
         });
-
+        
         $('form').submit(function(e) {
         // Validar que la tabla no esté vacía
         if ($('#dynamicTable tbody tr').length === 0) {
@@ -1005,8 +1019,9 @@
         // Opcional: Agregar un indicador de carga
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
-
+        
     });
+
 
     document.addEventListener("DOMContentLoaded", function () {
     const inputFields = document.querySelectorAll(".default-input");

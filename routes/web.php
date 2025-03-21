@@ -32,6 +32,8 @@ use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 use App\Http\Controllers\Reporte\ReporteController;
+use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
+use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 
 
     Route::get('/', function () {
@@ -119,15 +121,15 @@ use App\Http\Controllers\Reporte\ReporteController;
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_10*/
-        Route::post('/Reportes_FOR_02_PRO_INS_10/store', [ReporteController::class, 'FOR_02_PRO_INS_10_store'])->name('Reportes_FOR_02_PRO_INS_10.store');
+        Route::post('/Reportes_FOR_02_PRO_INS_10/store', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_PRO_INS_10_store'])->name('Reportes_FOR_02_PRO_INS_10.store');
         /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_10*/
-        Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
+        Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_PRO_INS_10_update'])->name('Reportes_FOR_02_PRO_INS_10.update');
         /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_10*/
-        Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
+        Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_02*/
         Route::post('/Reportes_FOR_02_PRO_INS_02/store', [ReporteController::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
         /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_02*/
-        Route::post('/Reportes_FOR_02_PRO_INS_02/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_02_update'])->name('Reportes_FOR_02_PRO_INS_02.update');
+        Route::post('/Reportes_FOR_02_PRO_INS_02/update/{id}', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_PRO_INS_02_update'])->name('Reportes_FOR_02_PRO_INS_02.update');
 
         });
     });
