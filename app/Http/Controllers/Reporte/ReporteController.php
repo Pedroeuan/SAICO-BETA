@@ -457,7 +457,6 @@ public function FOR_01_PRO_INS_02()
 
     public function ObtenerRutaPDF($id)
     {
-        //
         $Reporte = reporte::where('idReportes',$id)->first();
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
 
@@ -470,12 +469,10 @@ public function FOR_01_PRO_INS_02()
         if($Nombre_Formato == "FOR-02-PRO-INS-02")
         {
             return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
-
-        }elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
             return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
-        }else{
-            return 'NADA';
         }
     }
 

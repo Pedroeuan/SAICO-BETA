@@ -84,7 +84,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-02" action="route('Reportes_FOR_02_PRO_INS_02.update', ['id' => $id])" method="post" enctype="multipart/form-data">
+                            <form id="FOR-02-PRO-INS-02" action="{{ route('Reportes_FOR_02_PRO_INS_02.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
