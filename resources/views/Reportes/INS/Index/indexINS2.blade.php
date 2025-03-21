@@ -57,7 +57,7 @@
                             <td>{{ $detalles['No_Reporte'] }}</td>
                             <td>{{ $detalles['Fecha'] }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('Reporte_FOR_INS_10_02.PDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                             </td>  
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>

@@ -127,9 +127,11 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_10*/
         Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_02*/
-        Route::post('/Reportes_FOR_02_PRO_INS_02/store', [ReporteController::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
+        Route::post('/Reportes_FOR_02_PRO_INS_02/store', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
         /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_02*/
         Route::post('/Reportes_FOR_02_PRO_INS_02/update/{id}', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_PRO_INS_02_update'])->name('Reportes_FOR_02_PRO_INS_02.update');
+        /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_10*/
+        Route::get('/Reporte/FOR-INS-02/02/PDF/{id}', [FOR_02_PRO_INS_02Controller::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
 
         });
     });
@@ -314,7 +316,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
     Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
     /*REPORTES PDF*/
     /*Ruta para ver los PDF de los Reportes*/
-    Route::get('/Reporte/FOR-INS-02/02/PDF', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
+    //Route::get('/Reporte/FOR-INS-02/02/PDF', [PDFReportesController::class, 'FOR_INS_02_02'])->name('Reporte_FOR_INS_02_02.PDF');
     Route::get('/Reporte/FOR-INS-03/01/PDF', [PDFReportesController::class, 'FOR_INS_03_01'])->name('Reporte_FOR_INS_03_01.PDF');
     Route::get('/Reporte/FOR-INS-04/01/PDF', [PDFReportesController::class, 'FOR_INS_04_01'])->name('Reporte_FOR_INS_04_01.PDF');
     Route::get('/Reporte/FOR-INS-04/02/PDF', [PDFReportesController::class, 'FOR_INS_04_02'])->name('Reporte_FOR_INS_04_02.PDF');

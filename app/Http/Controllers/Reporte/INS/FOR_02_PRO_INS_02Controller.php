@@ -32,6 +32,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
+/*PDF */
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class FOR_02_PRO_INS_02Controller extends Controller
@@ -410,6 +416,93 @@ class FOR_02_PRO_INS_02Controller extends Controller
     public function FOR_02_PRO_INS_02_update(Request $request)
     {
 
+    }
+
+    public function FOR_INS_02_02($id)
+    {
+        // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
+        /*$Reporte = reporte::where('idReportes', $id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        $Firmas_Reportes = Firma_Reporte::where('idReportes', $id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
+
+        // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
+        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
+        // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
+        $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+        $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
+        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+        $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
+        $numFirmas = $Firmas_Reportes['numFirmas'];*/
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        // Obtener las fotos con su comentario
+        /*if ($Fotos_Reportes) {
+            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+            $Fotos = [];
+        
+            for ($i = 0; $i < min(4, count($fotos)); $i++) { // Solo obtener hasta 4 imágenes
+                $Fotos[] = [
+                    'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['path'])),
+                    'comment' => $fotos[$i]['comment'] ?? ''
+                ];
+            }
+        }*/
+
+        $data = [
+            'title' => 'Reporte_FOR-INS-02/02.PDF',
+            'Logo' => $Logo,
+            /*//Detalles_Generales
+            'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            'TotalJuntas' => $TotalJuntas,
+            //Fotos_Reportes
+            'Fotos' => $Fotos,
+            //Numero de Firmas
+            'numFirmas' => $numFirmas,
+            //Firmas
+            'Firmas_Reportes' => $Firmas_Reportes,*/
+        ];
+
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
+        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        // Configurar márgenes personalizados (en milímetros)
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
+        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
+        $dompdf->setOptions($options);
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('arial', 'normal');
+            $size = 8;
+
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 37;  // Ajusta esta posición Y según sea necesario
+
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+
+        return $pdf->stream('Reporte_FOR_INS_02_02.PDF');
     }
 
     /**

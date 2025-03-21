@@ -32,7 +32,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
+/*PDF */
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_02_PRO_INS_10Controller extends Controller
 {

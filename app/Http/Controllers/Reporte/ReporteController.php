@@ -455,6 +455,31 @@ public function FOR_01_PRO_INS_02()
         }
     }
 
+    public function ObtenerRutaPDF($id)
+    {
+        //
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
+
+        $Prueba_Aplica = Prueba_Aplica::where('idPrueba_Aplica',$idPrueba_Aplica)->first();
+        $idFormato = $Prueba_Aplica->idFormato;
+
+        $Formato = formato::where('idFormato',$idFormato)->first();
+        $Nombre_Formato = $Formato->Nombre;
+
+        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        {
+            return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
+
+        }elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
+        {
+            return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
+        }else{
+            return 'NADA';
+        }
+    }
+
+
     /**
      * Display the specified resource.
      */
