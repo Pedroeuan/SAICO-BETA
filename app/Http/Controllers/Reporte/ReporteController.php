@@ -595,29 +595,45 @@ public function FOR_01_PRO_INS_02()
         // Guardar Resultados Juntas
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
         $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
-            'componente' => $validatedData['componente'],
-            'no_indicacion' => $validatedData['no_indicacion'],
-            'tipo_indicacion' => $validatedData['tipo_indicacion'],
-            'largo' => $validatedData['largo'],
-            'ancho' => $validatedData['ancho'],
-            'diametro' => $validatedData['diametro'],
-            'ht' => $validatedData['ht'],
-            'evaluacion' => $validatedData['evaluacion'],
-            'longitud_inspeccionada' => $validatedData['longitud_inspeccionada'],
-        ]);
+
+        $Resultados_Juntas = [];
+        foreach ($validatedData['componente'] as $index => $componente) {
+            $Resultados_Juntas[] = [
+                'componente' => $componente,
+                'no_indicacion' => $validatedData['no_indicacion'][$index],
+                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                'largo' => $validatedData['largo'][$index],
+                'ancho' => $validatedData['ancho'][$index],
+                'diametro' => $validatedData['diametro'][$index],
+                'ht' => $validatedData['ht'][$index],
+                'evaluacion' => $validatedData['evaluacion'][$index],
+                'longitud_inspeccionada' => $validatedData['longitud_inspeccionada'][$index],
+            ];
+        }
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
         $Grupo_Juntas_Detalles_Re->save();
     
         // Guardar Firmas
         $Firmas_Reportes = new Firma_Reporte();
         $Firmas_Reportes->idReportes = $Reportes->idReportes;
-        $numFirmas = $request->input('numFirmas');
-    
+
+         /*Firmas */
+        // Guardar las firmas
+        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        
         if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
-        } elseif ($numFirmas == 3) {
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
-        } else {
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
         }
         $Firmas_Reportes->save();
@@ -985,10 +1001,6 @@ public function FOR_01_PRO_INS_02()
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
 
-            // Verificar si validatedData contiene datos
-            if (empty($validatedData['elemento_tubo'])) {
-                Log::error('validatedData[elemento_tubo] está vacío.');
-            }
             /*Resultados Juntas*/
             // Guardar las filas dinámicas
             $Resultados_Juntas = [];

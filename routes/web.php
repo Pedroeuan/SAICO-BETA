@@ -126,6 +126,8 @@ use App\Http\Controllers\Reporte\ReporteController;
         Route::get('/Reporte/FOR-INS-10/02/PDF/{id}', [PDFReportesController::class, 'FOR_INS_10_02'])->name('Reporte_FOR_INS_10_02.PDF');
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_02*/
         Route::post('/Reportes_FOR_02_PRO_INS_02/store', [ReporteController::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
+        /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_02*/
+        Route::post('/Reportes_FOR_02_PRO_INS_02/update/{id}', [ReporteController::class, 'FOR_02_PRO_INS_02_update'])->name('Reportes_FOR_02_PRO_INS_02.update');
 
         });
     });
