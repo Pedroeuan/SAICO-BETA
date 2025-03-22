@@ -1328,11 +1328,6 @@
                 actualizarInputsE();
             });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            /*if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }*/
-
         });
 
         $(document).ready(function() {
@@ -1353,11 +1348,6 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                /*if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }*/
                 
             });
 
@@ -1381,10 +1371,6 @@
                 actualizarInputsbyp();
             });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            /*if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-            }*/
         });
 
     </script>

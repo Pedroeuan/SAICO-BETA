@@ -261,16 +261,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">PARTICULAS:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione una Particula</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -278,42 +278,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputP" name="Datos_Equipo[MARCA_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MARCA_PARTICULAS', $Datos_Equipo['MARCA_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC1" name="Datos_Equipo[MARCA_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MARCA_PARTICULAS', $Datos_Equipo['MARCA_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputP" name="Datos_Equipo[MODELO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MODELO_PARTICULAS', $Datos_Equipo['MODELO_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC1" name="Datos_Equipo[MODELO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MODELO_PARTICULAS', $Datos_Equipo['MODELO_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputP" name="Datos_Equipo[LOTE_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.LOTE_PARTICULAS', $Datos_Equipo['LOTE_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC1" name="Datos_Equipo[LOTE_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.LOTE_PARTICULAS', $Datos_Equipo['LOTE_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipoInputP" name="Datos_Equipo[TIPO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.TIPO_PARTICULAS', $Datos_Equipo['TIPO_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.TIPO_PARTICULAS', $Datos_Equipo['TIPO_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">COLOR:</label>
-                                            <input type="text" class="form-control  inputForm" id="colorInputP" name="Datos_Equipo[COLOR_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.COLOR_PARTICULAS', $Datos_Equipo['COLOR_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[COLOR_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.COLOR_PARTICULAS', $Datos_Equipo['COLOR_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputP" name="Datos_Equipo[APLICACION_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.APLICACION_PARTICULAS', $Datos_Equipo['APLICACION_PARTICULAS'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm"  name="Datos_Equipo[APLICACION_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.APLICACION_PARTICULAS', $Datos_Equipo['APLICACION_PARTICULAS'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -322,16 +322,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">CONTRASTANTE:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Contrastante</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -387,14 +387,14 @@
                                             <label class="col-form-label" for="inputSuccess">EQUIPOS:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
                                                             data-modelo="{{ $equipo->Modelo }}"
                                                             data-ns="{{ $equipo->Serie }}">
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -1202,6 +1202,46 @@
     });
 
     $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#consumiblesSelect1').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var lote = selectedOption.data('lote') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputC1').val(marca);
+                $('#modeloInputC1').val(modelo);
+                $('#loteInputC1').val(lote);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect1').on('change', function() {
+                    actualizarInputsA();
+                });
+            });
+
+            $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#consumiblesSelect2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var lote = selectedOption.data('lote') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputC2').val(marca);
+                $('#modeloInputC2').val(modelo);
+                $('#loteInputC2').val(lote);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect2').on('change', function() {
+                    actualizarInputsA();
+                });
+            });
+
+            $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 
@@ -1216,67 +1256,12 @@
             $('#nsInputE').val(ns);
         }
 
-        // Evento cuando se cambia la selección en el select
-        $('#equiposSelect').on('change', function() {
-            actualizarInputsE();
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
         });
 
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#equiposSelect option').length > 0) {
-            $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-        }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsA() {
-            var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputA').val(marca);
-            $('#modeloInputA').val(modelo);
-            $('#nsInputA').val(ns);
-        }
-
-        // Evento cuando se cambia la selección en el select
-        $('#accesoriosSelect').on('change', function() {
-            actualizarInputsA();
-        });
-
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#accesoriosSelect option').length > 0) {
-            $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-        }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsbyp() {
-            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputbyp').val(marca);
-            $('#modeloInputbyp').val(modelo);
-            $('#nsInputbyp').val(ns);
-        }
-
-        // Evento cuando se cambia la selección en el select
-        $('#blockyprobetaSelect').on('change', function() {
-            actualizarInputsbyp();
-        });
-
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#blockyprobetaSelect option').length > 0) {
-            $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-        }
-    });
 </script>
 @endsection

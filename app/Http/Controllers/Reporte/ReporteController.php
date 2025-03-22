@@ -229,11 +229,20 @@ public function FOR_01_PRO_INS_02()
 
         // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        /*$idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
         $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();*/
+
+        //Equipos
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        //Accesorios
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        //Block y Probeta
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         /*Obtener id de Prueba_Aplica */
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
@@ -402,11 +411,22 @@ public function FOR_01_PRO_INS_02()
 
         // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        /*$idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
         $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
         $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();*/
+
+        //Equipos
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        //Accesorios
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        //Block y Probeta
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         // Verificar si el registro ya existe
         $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
@@ -438,7 +458,7 @@ public function FOR_01_PRO_INS_02()
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
     
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
     }
 
     public function indexINS2(Request $request)
