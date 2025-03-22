@@ -317,81 +317,86 @@ return [
                     //'topnav' => true,
                     'submenu' => [
                         [
-                            'text' => 'FOR-PINS-03/01',
-                            'url' => '/Reporte/FOR-PINS-03/01',
+                            'text' => 'FOR-INS-02/02',
+                            'url' => '/Reporte/FOR-INS-02/02/PDF/183',
                             //can => 'nombre-ruta'
                         ],
                         [
-                            'text' => 'FOR-PINS-04/01',
-                            'url' => '/Reporte/FOR-PINS-04/01',
+                            'text' => 'FOR-INS-03/01',
+                            'url' => '/Reporte/FOR-INS-03/01/PDF',
+                            //can => 'nombre-ruta'
                         ],
                         [
-                            'text' => 'FOR-PINS-05/01',
-                            'url' => '/Reporte/FOR-PINS-05/01',
+                            'text' => 'FOR-INS-04/01',
+                            'url' => '/Reporte/FOR-INS-04/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-05/02',
-                            'url' => '/Reporte/FOR-PINS-05/02',
+                            'text' => 'FOR-INS-05/01',
+                            'url' => '/Reporte/FOR-INS-05/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-06/01',
-                            'url' => '/Reporte/FOR-PINS-06/01',
+                            'text' => 'FOR-INS-05/02',
+                            'url' => '/Reporte/FOR-INS-05/02/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-07/01',
-                            'url' => '/Reporte/FOR-PINS-07/01',
+                            'text' => 'FOR-INS-06/01',
+                            'url' => '/Reporte/FOR-INS-06/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-08/01',
-                            'url' => '/Reporte/FOR-PINS-08/01',
+                            'text' => 'FOR-INS-07/01',
+                            'url' => '/Reporte/FOR-INS-07/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-09/01',
-                            'url' => '/Reporte/FOR-PINS-09/01',
+                            'text' => 'FOR-INS-08/01',
+                            'url' => '/Reporte/FOR-INS-08/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-10/01',
-                            'url' => '/Reporte/FOR-PINS-10/01',
+                            'text' => 'FOR-INS-09/01',
+                            'url' => '/Reporte/FOR-INS-09/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-11/01',
-                            'url' => '/Reporte/FOR-PINS-11/01',
+                            'text' => 'FOR-INS-10/01',
+                            'url' => '/Reporte/FOR-INS-10/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-11/02',
-                            'url' => '/Reporte/FOR-PINS-11/02',
+                            'text' => 'FOR-INS-11/01',
+                            'url' => '/Reporte/FOR-INS-11/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-13/01',
-                            'url' => '/Reporte/FOR-PINS-13/01',
+                            'text' => 'FOR-INS-11/02',
+                            'url' => '/Reporte/FOR-INS-11/02/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-14/01',
-                            'url' => '/Reporte/FOR-PINS-14/01',
+                            'text' => 'FOR-INS-13/01',
+                            'url' => '/Reporte/FOR-INS-13/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-16/01',
-                            'url' => '/Reporte/FOR-PINS-16/01',
+                            'text' => 'FOR-INS-14/01',
+                            'url' => '/Reporte/FOR-INS-14/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-16/02',
-                            'url' => '/Reporte/FOR-PINS-16/02',
+                            'text' => 'FOR-INS-16/01',
+                            'url' => '/Reporte/FOR-INS-16/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-16/03',
-                            'url' => '/Reporte/FOR-PINS-16/03',
+                            'text' => 'FOR-INS-16/02',
+                            'url' => '/Reporte/FOR-INS-16/02/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-17/01',
-                            'url' => '/Reporte/FOR-PINS-17/01',
+                            'text' => 'FOR-INS-16/03',
+                            'url' => '/Reporte/FOR-INS-16/03/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-17_01/01',
-                            'url' => '/Reporte/FOR-PINS-17_01/01',
+                            'text' => 'FOR-INS-17/01',
+                            'url' => '/Reporte/FOR-INS-17/01/PDF',
                         ],
                         [
-                            'text' => 'FOR-PINS-18/01',
-                            'url' => '/Reporte/FOR-PINS-18/01',
+                            'text' => 'FOR-INS-17_01/01',
+                            'url' => '/Reporte/FOR-INS-17_01/01/PDF',
+                        ],
+                        [
+                            'text' => 'FOR-INS-18/01',
+                            'url' => '/Reporte/FOR-INS-18/01/PDF',
                         ],
                     ],
                 ],
@@ -441,6 +446,123 @@ return [
                 ],
             ],
         ],*/
+
+            [
+                'text' => 'REPORTE',
+                'icon' => 'fas fa-clipboard',
+                'can' => 'administrador-access',
+                //'topnav' => true,
+                'submenu' => [
+                        [
+                            'text' => 'FOR-02-PRO-INS-02',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_02_PRO_INS_02',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-03',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_03',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-04',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_04',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-02-PRO-INS-04',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_02_PRO_INS_04',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-05',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_05',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-06',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_06',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-07',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_07',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-08',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_08',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-09',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_09',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-10',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_10',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-12',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_12',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-13',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_13',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-02-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_02_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-03-PRO-INS-15',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_03_PRO_INS_15',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-16',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_16',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-17',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_17',
+                            'can' => 'equipos-access',
+                        ],
+                        [
+                            'text' => 'FOR-01-PRO-INS-18',
+                            'icon' => 'fa fa-file',
+                            'url' => 'Reporte/FOR_01_PRO_INS_18',
+                            'can' => 'equipos-access',
+                        ],
+                    ],
+            ],
 
                // Sidebar Operativos:
                 [

@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date; // Importa esta clase para convertir fechas de Excel
 use Illuminate\Support\Facades\Log;
 
-
+use App\Models\TICS\TICS;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\certificados;
@@ -19,7 +19,6 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
-
 
 class ImporExcelEyC implements ToModel, WithHeadingRow
 {
@@ -147,6 +146,14 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Garantia' => $row['garantia'],
                 'Plano' => $row['planoh'],
+            ]);
+        }
+
+        // Comprobamos si hay datos para almacenar en la tabla TICS
+        if (!empty($row['idTICS'])) {
+            TICS::updateOrCreate([
+                'idTICS' => $row['idTICS'],
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
             ]);
         }
 

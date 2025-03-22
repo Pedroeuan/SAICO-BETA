@@ -9,11 +9,8 @@ class equipos extends Model
 {
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
+        'idEquipos',
         'idGeneral_EyC',
-        'Proceso',
-        'idGeneral_EyC',
-        'Metodo',
-        'Tipo_E',
     ];
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 

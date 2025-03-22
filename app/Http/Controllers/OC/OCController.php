@@ -48,6 +48,13 @@ class OCController extends Controller
         $OC = new OC;
         $EsperaDato ='ESPERA DE DATO';
 
+        if($request->input('Contrato')==null)
+        {
+            $OC->Contrato = $EsperaDato;
+        }else{
+            $OC->Contrato = $request->input('Contrato');
+        }
+
         if($request->input('Numero_OC')==null)
         {
             $OC->Num_OC = $EsperaDato;
@@ -186,6 +193,7 @@ class OCController extends Controller
         $OC = OC::find($id);
         // Actualizar los datos de la OC
         $OC->update([
+            'Contrato' => $request->input('Contrato'),
             'Num_OC' => $request->input('Numero_OC'),
             'Requisicion' => $request->input('Requisicion'),
             'Proyecto' => $request->input('Proyecto'),

@@ -64,45 +64,70 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Convierte la colección de resultados a JSON para JavaScript
-            const consumibles = {!! json_encode($consumibles) !!};
+    document.addEventListener('DOMContentLoaded', function () {
+        // Convierte la colección de resultados a JSON para JavaScript
+        const consumibles = {!! json_encode($consumibles) !!};
 
-            // Mapea los nombres y stocks de los datos
-            const nombres = consumibles.map(item => item.Nombre_E_P_BP);
-            const stocks = consumibles.map(item => item.almacen ? item.almacen.Stock : 0); // Usa 0 si 'almacen' es null
+        // Mapea los nombres y stocks de los datos
+        const nombres = consumibles.map(item => item.Nombre_E_P_BP);
+        const stocks = consumibles.map(item => item.almacen ? item.almacen.Stock : 0); // Usa 0 si 'almacen' es null
 
-            // Verifica los datos en la consola
-            //console.log('Nombres:', nombres);
-            //console.log('Stocks:', stocks);
+        // Obtén el contexto del canvas
+        const abc = document.querySelector('#grafico').getContext('2d');
 
-            // Obtén el contexto del canvas
-            const abc = document.querySelector('#grafico').getContext('2d');
-
-            // Crea el gráfico de barras
-            const stackedBar = new Chart(abc, {
-                type: 'bar',
-                data: {
-                    labels: nombres,
-                    datasets: [{
-                        label: 'Stock en consumibles',
-                        data: stocks,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 0.1)',
-                        borderWidth: 1
-                    }]
+        // Crea el gráfico de barras
+        const stackedBar = new Chart(abc, {
+            type: 'bar',
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Stock en consumibles',
+                    data: stocks,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 0.1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    // Complemento para mostrar etiquetas encima de las barras
+                    tooltip: {
+                        enabled: true // Habilita los tooltips (opcional)
+                    },
+                    datalabels: {
+                        display: true,
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value
+                    }
                 },
-                options: {
-                    scales: {
-                        x: {
-                            stacked: true
-                        },
-                        y: {
-                            stacked: true
-                        }
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true
                     }
                 }
-            });
+            },
+            plugins: [{
+                id: 'customLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx, data } = chart;
+                    chart.data.datasets.forEach((dataset, i) => {
+                        const meta = chart.getDatasetMeta(i);
+                        meta.data.forEach((bar, index) => {
+                            const value = dataset.data[index];
+                            ctx.fillStyle = 'black'; // Color del texto
+                            ctx.font = '12px Arial'; // Estilo de la fuente
+                            ctx.textAlign = 'center';
+                            //ctx.fillText(value, bar.x, bar.y - 5); // Posición del texto Arriba de la barra
+                            ctx.fillText(value, bar.x, bar.y + 545); // Posición del texto Debajo de la barra
+                        });
+                    });
+                }
+            }]
         });
+    });
     </script>
 @stop

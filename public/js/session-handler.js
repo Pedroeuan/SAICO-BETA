@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let idleTime = 0;
-    const sessionLifetime = 120; // Duración de la sesión en minutos
+    const sessionLifetime = 300; // Duración de la sesión en minutos 5 horas
 
     function resetIdleTime() {
         idleTime = 0;

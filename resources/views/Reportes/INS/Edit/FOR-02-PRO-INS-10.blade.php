@@ -331,8 +331,8 @@
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FRECC_TRANSDUCTOR', $Datos_Equipo['FRECC_TRANSDUCTOR'] ?? '')}}">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR', $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -643,9 +643,6 @@
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
-                                                @php 
-                                                //dd($numFirmas);
-                                                @endphp
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
                                                     <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
@@ -964,10 +961,16 @@
 <script>
 
     /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    }
+                });
             }
+        });
     });
 
     $(document).ready(function() {

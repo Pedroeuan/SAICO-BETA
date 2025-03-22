@@ -274,7 +274,7 @@
 
         if (pruebaId) {
             fetch(`/Obtener/normas/${pruebaId}`)
-                .then(response => response.json())
+                .then(response => response.json()) //Espera la respuesta del servidor y la convierte en un objeto JSON.
                 .then(data => {
                     if (data.length > 0) {
                         data.forEach(norma => {
@@ -292,7 +292,8 @@
     });
 
     normaSelect.addEventListener('change', function () {
-        const pruebaId = pruebaSelect.value;
+        //const pruebaId = pruebaSelect.value; NormaCodigoSelect
+        const pruebaId = NormaCodigoSelect.value;
         // Limpia las opciones del tercer select
         formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
