@@ -68,23 +68,35 @@
                                 @csrf 
                                 <div class="row">
                                     
-                                    <div class="col-sm-4">
+                                <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Nombre</label>
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
+                                            @error('Nombre_E_P_BP')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">NOMBRE</label>
                                             <select class="form-control select2" style="width: 100%;" name="Nombre_E_P_BP">
                                                 <option selected="selected">Elige un Tipo</option>
+                                                <option value="COMPUTADORA" {{ old('Nombre_E_P_BP') == 'ADAPTADOR' ? 'selected' : '' }}>ADAPTADOR</option>
+                                                <option value="ESCRITORIO" {{ old('Nombre_E_P_BP') == 'ESCRITORIO' ? 'selected' : '' }}>ESCRITORIO</option>
                                                 <option value="LAPTOP" {{ old('Nombre_E_P_BP') == 'LAPTOP' ? 'selected' : '' }}>LAPTOP</option>
-                                                <option value="CARGADOR" {{ old('Nombre_E_P_BP') == 'CARGADOR' ? 'selected' : '' }}>CARGADOR</option>
+                                                <option value="ELIMINADOR DE CORRIENTE" {{ old('Nombre_E_P_BP') == 'ELIMINADOR DE CORRIENTE' ? 'selected' : '' }}>ELIMINADOR DE CORRIENTE</option>
                                                 <option value="IMPRESORA" {{ old('Nombre_E_P_BP') == 'IMPRESORA' ? 'selected' : '' }}>IMPRESORA</option>
                                                 <option value="TINTA" {{ old('Nombre_E_P_BP') == 'TINTA' ? 'selected' : '' }}>TINTA</option>
                                                 <option value="ESCANER" {{ old('Nombre_E_P_BP') == 'ESCANER' ? 'selected' : '' }}>ESCANER</option>
                                                 <option value="MODEM PORTATIL" {{ old('Nombre_E_P_BP') == 'MODEM PORTATIL' ? 'selected' : '' }}>MODEM PORTATIL</option>
                                                 <option value="USB" {{ old('Nombre_E_P_BP') == 'USB' ? 'selected' : '' }}>USB</option>
                                                 <option value="MOUSE" {{ old('Nombre_E_P_BP') == 'MOUSE' ? 'selected' : '' }}>MOUSE</option>
+                                                <option value="TECLADO" {{ old('Nombre_E_P_BP') == 'TECLADO' ? 'selected' : '' }}>TECLADO</option>
                                                 <option value="ADAPTADOR" {{ old('Nombre_E_P_BP') == 'ADAPTADOR' ? 'selected' : '' }}>ADAPTADOR</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">

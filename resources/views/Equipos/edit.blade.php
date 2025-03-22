@@ -72,23 +72,34 @@
                             <form id="TICSForm" action="{{ route('editTICS.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
                                     <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Nombre</label>
+                                            <input type="text" class="form-control inputForm" name="Nombre_E_P_BP" value="{{ $generalEyC->Nombre_E_P_BP }}"  placeholder="Ejemplo: Yugo">
+                                        </div>
+                                    </div>
+                                    
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">NOMBRE</label>
                                             <select class="form-control select2" style="width: 100%;" name="Nombre_E_P_BP">
                                                 <option selected="selected">Elige un Tipo</option>
+                                                <option value="ESCRITORIO" @if($generalEyC->Nombre_E_P_BP == 'ESCRITORIO') selected="selected" @endif >ESCRITORIO</option>
                                                 <option value="LAPTOP" @if($generalEyC->Nombre_E_P_BP == 'LAPTOP') selected="selected" @endif >LAPTOP</option>
-                                                <option value="CARGADOR" @if($generalEyC->Nombre_E_P_BP == 'CARGADOR') selected="selected" @endif >CARGADOR</option>
+                                                <option value="ELIMINADOR DE CORRIENTE" @if($generalEyC->Nombre_E_P_BP == 'ELIMINADOR DE CORRIENTE') selected="selected" @endif >ELIMINADOR DE CORRIENTE</option>
                                                 <option value="IMPRESORA" @if($generalEyC->Nombre_E_P_BP == 'IMPRESORA') selected="selected" @endif >IMPRESORA</option>
                                                 <option value="TINTA" @if($generalEyC->Nombre_E_P_BP == 'TINTA') selected="selected" @endif >TINTA</option>
                                                 <option value="ESCANER" @if($generalEyC->Nombre_E_P_BP == 'ESCANER') selected="selected" @endif >ESCANER</option>
                                                 <option value="MODEM PORTATIL" @if($generalEyC->Nombre_E_P_BP == 'MODEM PORTATIL') selected="selected" @endif >MODEM PORTATIL</option>
                                                 <option value="USB" @if($generalEyC->Nombre_E_P_BP == 'USB') selected="selected" @endif >USB</option>
                                                 <option value="MOUSE" @if($generalEyC->Nombre_E_P_BP == 'MOUSE') selected="selected" @endif >MOUSE</option>
+                                                <option value="TECLADO" @if($generalEyC->Nombre_E_P_BP == 'TECLADO') selected="selected" @endif >TECLADO</option>
                                                 <option value="ADAPTADOR" @if($generalEyC->Nombre_E_P_BP == 'ADAPTADOR') selected="selected" @endif >ADAPTADOR</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ID</label>
