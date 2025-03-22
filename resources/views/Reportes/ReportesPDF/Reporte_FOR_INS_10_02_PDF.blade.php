@@ -91,7 +91,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 6px;
+                    font-size: 5px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -339,8 +339,8 @@
                             <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
                             <th class="celdaGris">N.S:</th>
                             <td style="width: 60px;">{{ $Datos_Equipo['N_S_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">{{ $Datos_Equipo['FRECC_TRANSDUCTOR'] }}</td>
+                            <th class="celdaGris" style="width: 50px;">FREC:</th>
+                            <td style="width: 50px;">{{ $Datos_Equipo['FREC_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris">N.S:</th>
                             <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>
                             <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>

@@ -323,7 +323,6 @@
                                 @php
                                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                                 @endphp
-                                   
                                             @if($Manifiesto->SATBMPRO == 'SI')
                                                 <tr>
                                                     <td class="">{{ $contador }}</td>

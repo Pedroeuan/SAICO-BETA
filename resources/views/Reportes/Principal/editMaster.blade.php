@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Crear Reporte')
+@section('title', 'Editar Reporte')
 
 @section('css')
 <!--datatable -->
@@ -50,9 +50,11 @@
 
 @section('content')
 
-@if($Nombre_Formato == 'FOR-02-PRO-INS-10') 
-    @include('Reportes.INS.Edit.FOR-02-PRO-INS-10')
-@endif
+    @if($Nombre_Formato == 'FOR-02-PRO-INS-10') 
+        @include('Reportes.INS.Edit.FOR-02-PRO-INS-10')
+    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-02') 
+        @include('Reportes.INS.Edit.FOR-02-PRO-INS-02')
+    @endif
     
 @stop
 

@@ -41,4 +41,9 @@ class Prueba_Aplica extends Model
     {
         return $this->belongsTo(Formato::class, 'idFormato', 'idFormato');
     }
+
+    public function ordenesServicioPrueba()
+    {
+        return $this->hasMany(OrdenServicioPrueba::class, 'idPrueba_Aplica');
+    }
 }

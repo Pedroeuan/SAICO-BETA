@@ -166,7 +166,9 @@ class ManifiestoController extends Controller
 
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
 
-        $clientes = clientes::all();
+        //$clientes = clientes::all();
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
         if ($Solicitud->Estatus == 'APROBADO') {
             if ($Manifiestos) {
@@ -266,7 +268,9 @@ class ManifiestoController extends Controller
 
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
 
-        $clientes = clientes::all();
+        //$clientes = clientes::all();
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
         if ($Solicitud->Estatus == 'APROBADO') {
             if ($Manifiestos) {

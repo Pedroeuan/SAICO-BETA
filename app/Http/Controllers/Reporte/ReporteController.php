@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Reporte;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\OC\OC;
 use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
+use App\Models\Clientes\clientes;
+use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
 use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Solicitudes\Solicitudes;
+use App\Models\Lineal_Ideal\Lineal_Ideal;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\PruebaAplica\Prueba_Aplica;
+use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
+use App\Models\OrdenServicio\Orden_Servicio_Prueba;
+use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +36,78 @@ use Illuminate\Support\Facades\Storage;
 
 class ReporteController extends Controller
 {
+public function FOR_01_PRO_INS_02()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
+    }
+    public function FOR_01_PRO_INS_03()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-03');
+    }
+    public function FOR_01_PRO_INS_04()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-04');
+    }
+    public function FOR_02_PRO_INS_04()
+    {
+        return view('Reportes.INS.Create.FOR-02-PRO-INS-04');
+    }
+    public function FOR_01_PRO_INS_05()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-05');
+    }
+    public function FOR_01_PRO_INS_06()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-06');
+    }
+    public function FOR_01_PRO_INS_07()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-07');
+    }
+    public function FOR_01_PRO_INS_08()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-08');
+    }
+    public function FOR_01_PRO_INS_09()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-09');
+    }
+    public function FOR_01_PRO_INS_10()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-10');
+    }
+    public function FOR_01_PRO_INS_12()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-12');
+    }
+    public function FOR_01_PRO_INS_13()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
+    }
+    public function FOR_01_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
+    }
+    public function FOR_02_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
+    }
+    public function FOR_03_PRO_INS_15()
+    {
+        return view('Reportes.INS.Create.FOR-03-PRO-INS-15');
+    }
+    public function FOR_01_PRO_INS_16()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-16');
+    }
+    public function FOR_01_PRO_INS_17()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-17');
+    }
+    public function FOR_01_PRO_INS_18()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
+    }
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -50,7 +130,8 @@ class ReporteController extends Controller
         }
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
-            return $item['Contrato'] . $item['Proyecto'];
+            //return $item['Contrato'] . $item['Proyecto'];
+            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios ¬¬).
         })->values()->all();
 
         return view('Reportes.INS.Index.indexINS1', compact('reportesDetalles_Generales'));
@@ -83,7 +164,8 @@ class ReporteController extends Controller
 
     public function ObtenerFormatos($id)
     {
-        $formatos = formato::where('idPrueba', $id)->get();
+        //$formatos = formato::where('idPrueba', $id)->get();
+        $formatos = formato::where('idNorma_codigo', $id)->get();
         return response()->json($formatos);
     }
 
@@ -359,15 +441,6 @@ class ReporteController extends Controller
         return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     public function indexINS2(Request $request)
     {
         $contratoSeleccionado = $request->input('contratoSeleccionado');
@@ -382,512 +455,27 @@ class ReporteController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function ObtenerRutaPDF($id)
     {
-        //dd($request->all());
-
-        $Estatus = "CREADO";
-        // Validar los Detalles_Generales
-        $validatedData = $request->validate([
-            /*DETALLES GENERALES */
-            'Detalles_Generales' => 'required|array',  // Asegura que es un array
-            'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
-            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
-            
-            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
-
-            //Validar el campo NumFirmas
-            'numFirmas' => 'nullable|integer|in:2,3,4',
-
-            /*2 FIRMAS */
-            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-
-            /*3 FIRMAS */
-            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            /*4 FIRMAS */
-            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
-        ]);
-
-        //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
-        // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
-        // cuando tienes campos opcionales en tu formulario.
-
-        /*Detalles Generales y Datos del Equipo */
-        $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
-        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
-        $Firmas_Reportes = new Firma_Reporte();  // Modelo de la tabla donde guardas los datos
-        $Fotos_Reportes = new Fotos_Reporte();  // Modelo de la tabla donde guardas los datos
-
-        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica'); 
-
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
-        // Guardar Detalles_Generales como JSON en la base de datos
-        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
-        // Guardar Datos_Equipo como JSON en la base de datos
-        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
-
-        $Reportes->Estatus = $Estatus; // Asignar el estatus
-
-        // Guardar el registro en la base de datos   
-        $Reportes->save();
-
-        // Obtener el idReportes del registro recién creado
-        $idReportes = $Reportes->idReportes;
-
-            // Verificar si validatedData contiene datos
-            if (empty($validatedData['elemento_tubo'])) {
-                Log::error('validatedData[elemento_tubo] está vacío.');
-            }
-            /*Resultados Juntas*/
-            // Guardar las filas dinámicas
-            $Resultados_Juntas = [];
-            Log::info('Cantidad de elementos a procesar: ' . count($validatedData['elemento_tubo']));
-            foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
-                $Resultados_Juntas[] = [
-                    'elemento_tubo' => $elemento_tubo,
-                    'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                    'no_serie' => $validatedData['no_serie'][$index],
-                    'no_colada' => $validatedData['no_colada'][$index],
-                    'tnominal' => $validatedData['tnominal'][$index],
-                    'diametro' => $validatedData['diametro'][$index],
-                    'no_ind' => $validatedData['no_ind'][$index],
-                    'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                    'nr' => $validatedData['nr'][$index],
-                    'ni' => $validatedData['ni'][$index],
-                    'ht' => $validatedData['ht'][$index],
-                    'prof' => $validatedData['prof'][$index],
-                    'la' => $validatedData['la'][$index],
-                    'lc' => $validatedData['lc'][$index],
-                    'tmax' => $validatedData['tmax'][$index],
-                    'tmin' => $validatedData['tmin'][$index],
-                    'metros_lineales' => $validatedData['metros_lineales'][$index],
-                    'evaluacion' => $validatedData['evaluacion'][$index],
-                    'observaciones' => $validatedData['observaciones'][$index],
-                ];
-            }
-    
-            // Convertir el array de resultados juntas a JSON
-            $ResultadosJuntas = json_encode($Resultados_Juntas);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('Error en json_encode: ' . json_last_error_msg());
-            }
-            
-            // Obtener el número de caracteres
-            $numCaracteres = mb_strlen($ResultadosJuntas, '8bit'); // Tamaño en bytes
-            $numBytes = strlen($ResultadosJuntas); // Tamaño en bytes
-
-            $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-            //Guardar Datos_Equipo como JSON en la base de datos
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
-            $Grupo_Juntas_Detalles_Re->save();
-
-        /*Firmas */
-        // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
-        
-        if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
-        }
-        else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
-        }
-        else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
-        }
-
-        $Firmas_Reportes->idReportes = $idReportes;
-        $Firmas_Reportes->save();
-
-        /*Fotos y Comentarios */
-        // Procesar las imágenes y los comentarios
-        $fotos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            if ($request->hasFile("image$i")) {
-                $image = $request->file("image$i");
-                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
-                $comment = $request->input("comment$i");
-                $fotos[] = [
-                    'path' => $path,
-                    'comment' => $comment,
-                ];
-            }
-        }
-
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($fotos); 
-
-        $Fotos_Reportes->idReportes = $idReportes;
-        $Fotos_Reportes->Fotos_Reportes = $Fotos;
-        $Fotos_Reportes->save();
-
-        // Obtener el valor de 'Detalles_Generales.Contrato'
-        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-
-        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
-
-    }
-
-    public function FOR_02_PRO_INS_10_update(Request $request, $id)
-    {
-        $Estatus = "ACTUALIZADO";
-        // Validar los Detalles_Generales
-        $validatedData = $request->validate([
-            /*DETALLES GENERALES */
-            'Detalles_Generales' => 'required|array',  // Asegura que es un array
-            'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
-            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
-            
-            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
-
-            //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
-
-             /*2 FIRMAS */
-            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-
-            /*3 FIRMAS */
-            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            /*4 FIRMAS */
-            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
-        ]);
-
-        // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
-        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
-        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
-        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+        $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
 
-        // Obtener el valor de 'Detalles_Generales.Contrato'
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $Prueba_Aplica = Prueba_Aplica::where('idPrueba_Aplica',$idPrueba_Aplica)->first();
+        $idFormato = $Prueba_Aplica->idFormato;
 
-        // Actualiza los detalles generales como JSON en la base de datos
-        $Reporte->update([
-            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
-        ]);
+        $Formato = formato::where('idFormato',$idFormato)->first();
+        $Nombre_Formato = $Formato->Nombre;
 
-        /*Resultados Juntas*/
-        // Guardar las filas dinámicas
-        $Resultados_Juntas = [];
-        foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
-            $Resultados_Juntas[] = [
-                'elemento_tubo' => $elemento_tubo,
-                'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                'no_serie' => $validatedData['no_serie'][$index],
-                'no_colada' => $validatedData['no_colada'][$index],
-                'tnominal' => $validatedData['tnominal'][$index],
-                'diametro' => $validatedData['diametro'][$index],
-                'no_ind' => $validatedData['no_ind'][$index],
-                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                'nr' => $validatedData['nr'][$index],
-                'ni' => $validatedData['ni'][$index],
-                'ht' => $validatedData['ht'][$index],
-                'prof' => $validatedData['prof'][$index],
-                'la' => $validatedData['la'][$index],
-                'lc' => $validatedData['lc'][$index],
-                'tmax' => $validatedData['tmax'][$index],
-                'tmin' => $validatedData['tmin'][$index],
-                'metros_lineales' => $validatedData['metros_lineales'][$index],
-                'evaluacion' => $validatedData['evaluacion'][$index],
-                'observaciones' => $validatedData['observaciones'][$index],
-            ];
+        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        {
+            return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
         }
-
-        // Convertir el array de resultados juntas a JSON
-        $ResultadosJuntas = json_encode($Resultados_Juntas);
-
-        // Actualiza los detalles generales como JSON en la base de datos
-        $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => $ResultadosJuntas
-        ]);
-
-        /*Firmas */
-        // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
-        
-        if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
-            $Firmas->update([
-                'Firmas' => $Firmas2
-            ]);
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
+        {
+            return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
         }
-        else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
-            $Firmas->update([
-                'Firmas' => $Firmas3
-            ]);
-        }
-        else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
-            $Firmas->update([
-                'Firmas' => $Firmas4
-            ]);
-        }
-
-         /*Fotos y Comentarios */
-        // Procesar las imágenes y los comentarios
-
-        // Obtener las rutas de las imágenes guardadas anteriormente
-        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-
-        // Procesar las nuevas imágenes y los comentarios
-        $fotos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
-            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
-        
-            if ($request->hasFile("image$i")) {
-                // Eliminar la imagen anterior si existe
-                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
-                    Storage::delete($previousFotos[$i - 1]['path']);
-                }
-        
-                // Guardar la nueva imagen
-                $image = $request->file("image$i");
-                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
-        
-                $fotos[] = [
-                    'path' => $path,
-                    'comment' => $comment, // Guardar el comentario actualizado
-                ];
-            } else {
-                // Mantener la imagen anterior pero actualizar el comentario si cambió
-                if (isset($previousFotos[$i - 1])) {
-                    $fotos[] = [
-                        'path' => $previousFotos[$i - 1]['path'],
-                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
-                    ];
-                }
-            }
-        }
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($fotos);
-        // Actualiza los detalles generales como JSON en la base de datos
-        $Fotos_Reportes->update([
-            'Fotos_Reportes' => $Fotos
-        ]);
-
-        // Obtener el valor de 'Detalles_Generales.Contrato'
-        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-
-        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
+
 
     /**
      * Display the specified resource.
