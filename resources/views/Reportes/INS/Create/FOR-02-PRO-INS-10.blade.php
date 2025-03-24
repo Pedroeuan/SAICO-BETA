@@ -480,25 +480,25 @@
 
                                                 <tr id="inputRow">
                                                     <th></th> <!-- Para ID vacío -->
-                                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="18"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="19"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 50px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 120px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 150px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                                 
@@ -927,139 +927,34 @@
         });
     });
 
-    $(document).ready(function () {
-    var rowCount = 0;
-
-    // Función para renumerar las filas
-    function renumerarFilas() {
-        $('#dynamicTable tbody tr').each(function (index) {
-            $(this).find('td:first').text(index + 1);
-        });
-        rowCount = $('#dynamicTable tbody tr').length;
-    }
-
-    // Cargar datos desde localStorage si existen
-    function cargarDesdeLocalStorage() {
-        const dataGuardada = localStorage.getItem('tablaMaterial');
-        if (dataGuardada) {
-            const filas = JSON.parse(dataGuardada);
-            filas.forEach(fila => {
-                agregarFilaDesdeDatos(fila);
-            });
-            renumerarFilas(); // Renumerar al cargar
-        }
-    }
-
-    // Guardar la tabla completa en localStorage
-    function guardarEnLocalStorage() {
-        const datos = [];
-        $('#dynamicTable tbody tr').each(function () {
-            const fila = {};
-            $(this).find('input').each(function () {
-                const name = $(this).attr('name');
-                fila[name] = $(this).val();
+    function guardarEnSessionStorage() {
+    var datos = [];
+        $('#dynamicTable tbody tr').each(function() {
+            var fila = {};
+            $(this).find('input').each(function() {
+                fila[$(this).attr('name')] = $(this).val();
             });
             datos.push(fila);
         });
-        localStorage.setItem('tablaMaterial', JSON.stringify(datos));
+        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
     }
 
-    // Agrega una fila usando un objeto con valores
-    function agregarFilaDesdeDatos(data) {
-        rowCount++;
-        const fila = `<tr>
-            <td>${rowCount}</td>
-            <td><input type="text" class="form-control" name="elemento_tubo[]" value="${data.elemento_tubo || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_aceptacion[]" value="${data.no_aceptacion || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_serie[]" value="${data.no_serie || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_colada[]" value="${data.no_colada || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="tnominal[]" value="${data.tnominal || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="diametro[]" value="${data.diametro || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="no_ind[]" value="${data.no_ind || ''}" style="width: 50px;"></td>
-            <td><input type="text" class="form-control" name="tipo_indicacion[]" value="${data.tipo_indicacion || ''}"></td>
-            <td><input type="text" class="form-control" name="nr[]" value="${data.nr || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="ni[]" value="${data.ni || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="ht[]" value="${data.ht || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="prof[]" value="${data.prof || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="la[]" value="${data.la || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="lc[]" value="${data.lc || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="tmax[]" value="${data.tmax || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="tmin[]" value="${data.tmin || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="metros_lineales[]" value="${data.metros_lineales || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="evaluacion[]" value="${data.evaluacion || ''}" style="width: 120px;"></td>
-            <td><input type="text" class="form-control" name="observaciones[]" value="${data.observaciones || ''}" style="width: 150px;"></td>
-            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"></i></button></td>
-        </tr>`;
-        $('#dynamicTable tbody').append(fila);
-    }
-
-    // Botón para agregar nuevas filas
-    $('#addBtn').click(function () {
-        const numRows = $('#numRows').val();
-        for (let i = 0; i < numRows; i++) {
-            agregarFilaDesdeDatos({});
-        }
-        renumerarFilas(); // Renumerar después de agregar
-        guardarEnLocalStorage();
-    });
-
-    // Eliminar fila
-    $('#dynamicTable').on('click', '.btnEliminar', function () {
-        $(this).closest('tr').remove();
-        renumerarFilas(); // Renumerar después de eliminar
-        guardarEnLocalStorage();
-    });
-
-    // Rellenar vacíos
-    $('#preFillBtn').click(function () {
-        $('#dynamicTable tbody tr').each(function () {
-            $(this).find('input').each(function () {
-                if ($(this).val() === '') {
-                    $(this).val('----');
+    function cargarDesdeSessionStorage() {
+        var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
+        if (datos) {
+            datos.forEach(function(filaData, index) {
+                var newRow = `<tr><td>${index + 1}</td>`;
+                for (var key in filaData) {
+                    newRow += `<td><input type="text" class="form-control" name="${key}" value="${filaData[key]}" /></td>`;
                 }
+                newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
+                $('#dynamicTable tbody').append(newRow);
             });
-        });
-        guardarEnLocalStorage();
-    });
-
-    // Guardar automáticamente cada vez que se cambia algo
-    $('#dynamicTable').on('input', 'input', function () {
-        guardarEnLocalStorage();
-    });
-
-    // Validar antes de enviar
-    $('form').submit(function (e) {
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
         }
+    }
 
-        // Desactivar botón submit
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-
-        // Opcional: Limpiar el localStorage después de guardar
-        // localStorage.removeItem('tablaMaterial');
-    });
-
-    // Limpiar LocalStorage (opcional: botón)
-    $('#clearStorageBtn').click(function () {
-        localStorage.removeItem('tablaMaterial');
-        location.reload();
-    });
-
-    // Cargar si existe algo
-    cargarDesdeLocalStorage();
-});
-
-    /*
     $(document).ready(function() {
+        cargarDesdeSessionStorage();
         var rowCount = 0;
 
         function updateRowNumbers() {
@@ -1098,11 +993,17 @@
                 </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            setTimeout(guardarEnSessionStorage, 100);
+        });
+
+        $('#dynamicTable').on('input', 'input', function() {
+            guardarEnSessionStorage(); // Guardar cuando se edita algo
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            guardarEnSessionStorage(); // Guardar al eliminar
         });
 
         $('#preFillBtn').click(function() {
@@ -1134,7 +1035,11 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-    });*/
+    window.addEventListener('beforeunload', function () {
+        guardarEnSessionStorage(); // Asegurar que se guarda antes de salir
+    });
+
+    });
 
     document.addEventListener("DOMContentLoaded", function () {
     const inputFields = document.querySelectorAll(".default-input");

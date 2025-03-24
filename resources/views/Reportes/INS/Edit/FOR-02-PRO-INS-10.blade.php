@@ -1047,8 +1047,6 @@
         // Opcional: Agregar un indicador de carga
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
-        
-
     });
 
     document.addEventListener("DOMContentLoaded", function () {

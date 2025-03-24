@@ -123,6 +123,7 @@ public function FOR_01_PRO_INS_02()
             $reportesDetalles_Generales[] = [
                 'Contrato' => $detalles['Contrato'],
                 'Proyecto' => $detalles['Proyecto'],
+                'Cliente' => $detalles['Cliente'],
                 'Fecha' => $detalles['Fecha'],
                 'No_Reporte' => $detalles['No_Reporte'],
                 'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
@@ -263,7 +264,7 @@ public function FOR_01_PRO_INS_02()
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
 
     }
 
