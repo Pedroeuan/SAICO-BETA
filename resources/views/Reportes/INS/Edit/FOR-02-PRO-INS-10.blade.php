@@ -74,7 +74,8 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
+                        <form id="FOR-02-PRO-INS-10" action="{{ route('Reportes_FOR_02_PRO_INS_10.update', ['id' => $id]) }} method="post" enctype="multipart/form-data">
+
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -859,8 +860,9 @@
                                         @endif
                                         </div>
 
+
                                         <!-- Modal para recortar la imagen -->
-                                        <!--<div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -875,66 +877,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <!--<div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div style="margin-bottom: 2px;"></div>
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                @if(isset($Fotos_Comentarios[0]['path']))
-                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[0]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
-                                                @endif
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1">{{ old('comment1', $Fotos_Comentarios[0]['comment'] ?? '') }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div style="margin-bottom: 2px;"></div>
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                @if(isset($Fotos_Comentarios[1]['path']))
-                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[1]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
-                                                @endif
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2">{{ old('comment2', $Fotos_Comentarios[1]['comment'] ?? '') }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div style="margin-bottom: 2px;"></div>
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                @if(isset($Fotos_Comentarios[2]['path']))
-                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[2]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
-                                                @endif
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3">{{ old('comment3', $Fotos_Comentarios[2]['comment'] ?? '') }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div style="margin-bottom: 2px;"></div>
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                @if(isset($Fotos_Comentarios[3]['path']))
-                                                    <img src="{{ asset(str_replace('public/', 'storage/', $Fotos_Comentarios[3]['path'])) }}" alt="Imagen 1" style="max-width: 100%; max-height: 100%;">
-                                                @endif
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4">{{ old('comment4', $Fotos_Comentarios[3]['comment'] ?? '') }}</textarea>
-                                            </div>
-                                        </div>-->
 
                                         <div class="container">
                                             <div class="float-right">
@@ -994,8 +945,178 @@
         });
     });
 
+    let cropper;
+    let currentInput; // Para saber qué input de imagen abrió el modal
+
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (cropper) {
+            cropper.rotate(-90);
+        }
+    });
+
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (cropper) {
+            cropper.rotate(90);
+        }
+    });
+
+    // Botón: Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        $('#cropperModal').modal('hide');
+        if (cropper) cropper.destroy();
+    });
+
+
+        // Botón: Guardar sin recortar (manteniendo rotación)
+        document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const canvas = cropper.getCanvasData(); // Obtener la imagen con la rotación aplicada
+            const finalCanvas = cropper.getCroppedCanvas({
+                width: canvas.naturalWidth,  // Mantener el tamaño original
+                height: canvas.naturalHeight
+            });
+
+            if (finalCanvas) {
+                const base64data = finalCanvas.toDataURL(); // Convertir la imagen a Base64
+
+                // Mostrar preview
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+
+                // Guardar en input hidden
+                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+                hiddenInput.value = base64data;
+            }
+        }
+
+        $('#cropperModal').modal('hide');
+        if (cropper) cropper.destroy();
+    });
+
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            // Obtén el área recortada como un canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL(); // Convertir la imagen recortada a Base64
+
+                // Mostrar preview
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+
+                // Guardar en input hidden
+                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+                hiddenInput.value = base64data;
+            }
+
+            $('#cropperModal').modal('hide');
+            if (cropper) cropper.destroy();
+        }
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    const imageCountSelect = document.getElementById('imageCount');
+    const container = document.getElementById('imageFieldsContainer');
+    const cropperImage = document.getElementById('cropperImage');
+
+    // Restaurar selección de imágenes si ya había un valor guardado
+    const savedCount = localStorage.getItem('imageCount');
+    if (savedCount) {
+        imageCountSelect.value = savedCount;
+        generateImageFields(parseInt(savedCount));
+    }
+
+    imageCountSelect.addEventListener('change', function () {
+        const count = parseInt(this.value);
+        localStorage.setItem('imageCount', count); // Guardar la selección
+        generateImageFields(count);
+    });
+
+    function generateImageFields(count) {
+        container.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos campos
+
+        for (let i = 1; i <= count; i++) {
+            const col = document.createElement('div');
+            col.classList.add('col-sm-6');
+
+            col.innerHTML = `
+                <div class="form-group">
+                    <label for="image${i}">Imagen ${i}:</label>
+                    <input type="file" class="form-control image-input" id="image${i}" accept="image/*" data-index="${i}">
+                    <div class="image-preview mt-2" id="image${i}-preview"></div>
+                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario para la imagen ${i}"></textarea>
+                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                </div>
+            `;
+
+            container.appendChild(col);
+        }
+
+        // Volver a asignar eventos a todos los nuevos inputs
+        document.querySelectorAll('.image-input').forEach(input => {
+            input.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        if (cropper) cropper.destroy(); // Limpiar anterior
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    }
+    // Limpiar el valor guardado al enviar el formulario (para evitar que persista después de un envío exitoso)
+    document.querySelector("form").addEventListener("submit", function () {
+        localStorage.removeItem('imageCount');
+    });
+});
+
+
+    function guardarEnSessionStorage() {
+    var datos = [];
+        $('#dynamicTable tbody tr').each(function() {
+            var fila = {};
+            $(this).find('input').each(function() {
+                fila[$(this).attr('name')] = $(this).val();
+            });
+            datos.push(fila);
+        });
+        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
+    }
+
+    function cargarDesdeSessionStorage() {
+        var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
+        if (datos) {
+            datos.forEach(function(filaData, index) {
+                var newRow = `<tr><td>${index + 1}</td>`;
+                for (var key in filaData) {
+                    newRow += `<td><input type="text" class="form-control" name="${key}" value="${filaData[key]}" /></td>`;
+                }
+                newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
+                $('#dynamicTable tbody').append(newRow);
+            });
+        }
+    }
+
     $(document).ready(function() {
-        var rowCount = $('#dynamicTable tbody tr').length;
+        cargarDesdeSessionStorage();
+        var rowCount = 0;
 
         function updateRowNumbers() {
             $('#dynamicTable tbody tr').each(function(index) {
@@ -1033,11 +1154,17 @@
                 </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            setTimeout(guardarEnSessionStorage, 100);
+        });
+
+        $('#dynamicTable').on('input', 'input', function() {
+            guardarEnSessionStorage(); // Guardar cuando se edita algo
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            guardarEnSessionStorage(); // Guardar al eliminar
         });
 
         $('#preFillBtn').click(function() {
@@ -1068,6 +1195,11 @@
         // Opcional: Agregar un indicador de carga
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
+
+    window.addEventListener('beforeunload', function () {
+        guardarEnSessionStorage(); // Asegurar que se guarda antes de salir
+    });
+
     });
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -1084,107 +1216,6 @@
                     }
                 });
             });
-        });
-
-    });
-
-    $(document).ready(function() {
-        var cropper;
-        var selectedInput;
-
-        // Función para leer la imagen seleccionada y mostrarla en el modal
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#cropperImage').attr('src', e.target.result);
-                    $('#cropperModal').modal('show');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-        $('input[type="file"]').change(function() {
-            selectedInput = this;
-            readURL(this);
-        });
-
-        // Inicializar el Cropper cuando se muestre el modal
-        $('#cropperModal').on('shown.bs.modal', function() {
-            var image = document.getElementById('cropperImage');
-            cropper = new Cropper(image, {
-                aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-                viewMode: 2,
-                autoCropArea: 1
-            });
-        }).on('hidden.bs.modal', function() {
-            // Asegurarse de que el Cropper se destruye al cerrar el modal
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-        });
-
-        // Acción para recortar la imagen y guardarla
-        $('#cropImageBtn').click(function() {
-            var canvas = cropper.getCroppedCanvas({
-                width: 300, // Ajusta el tamaño de la imagen recortada
-                height: 300
-            });
-
-            canvas.toBlob(function(blob) {
-                var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-                var dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                selectedInput.files = dataTransfer.files;
-
-                var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-                $(previewId).html(''); // Limpiar el contenido del contenedor de vista previa
-                $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%; max-height: 100%;">');
-
-                $('#cropperModal').modal('hide');
-            }, 'image/jpeg');
-        });
-
-        // Acción para guardar la imagen sin recortarla
-        $('#saveWithoutCropBtn').click(function() {
-            var file = selectedInput.files[0];
-
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html(''); // Limpiar el contenido del contenedor de vista previa
-            $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%; max-height: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        });
-
-        // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-        $('#cropperModal').on('hidden.bs.modal', function() {
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-        });
-
-        // Hacer que el botón de cancelar cierre el modal
-        $('#cancelBtn').click(function() {
-            $('#cropperModal').modal('hide');
-        });
-
-        // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-        $('.close').click(function() {
-            $('#cropperModal').modal('hide');
-        });
-
-        // Limpiar la imagen previa cuando se selecciona una nueva imagen
-        $('input[type="file"]').change(function() {
-            var previewId = '#' + $(this).attr('id') + '-preview';
-            $(previewId).html(''); // Limpiar el contenido del contenedor de vista previa
-            $(this).siblings('img').remove(); // Eliminar la imagen previa cargada visualmente
         });
     });
 
@@ -1271,7 +1302,6 @@
                 actualizarInputsE();
             });
 
-
         });
 
         $(document).ready(function() {
@@ -1292,7 +1322,6 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-
                 
             });
 
@@ -1315,6 +1344,7 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
         });
 
     </script>

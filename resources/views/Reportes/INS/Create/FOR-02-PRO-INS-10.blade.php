@@ -841,8 +841,6 @@
                                                         <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
                                                         <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -953,6 +951,29 @@
 
         $('#cropperModal').modal('hide');
         if (cropper) cropper.destroy();
+    });
+
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            // Obtén el área recortada como un canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL(); // Convertir la imagen recortada a Base64
+
+                // Mostrar preview
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+
+                // Guardar en input hidden
+                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+                hiddenInput.value = base64data;
+            }
+
+            $('#cropperModal').modal('hide');
+            if (cropper) cropper.destroy();
+        }
     });
     
     document.addEventListener("DOMContentLoaded", function () {
