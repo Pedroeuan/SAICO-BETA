@@ -830,9 +830,37 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagén</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                        @if ($Fotos_Comentarios && isset($Fotos_Comentarios['imagenes_comentarios']))
+                                            <div class="row">
+                                                @foreach ($Fotos_Comentarios['imagenes_comentarios'] as $imagen)
+                                                    <div class="col-md-4">
+                                                        <div class="card">
+                                                            <img src="{{ asset($imagen['ruta']) }}" class="card-img-top" alt="Imagen">
+                                                            <div class="card-body">
+                                                                <p class="card-text">{{ $imagen['comentario'] }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
+                                        </div>
 
                                         <!-- Modal para recortar la imagen -->
-                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <!--<div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -856,7 +884,7 @@
                                         </div>
 
                                         <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
+                                        <!--<div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="image1">Imagen 1:</label>
                                                 <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
@@ -906,7 +934,7 @@
                                                 @endif
                                                 <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4">{{ old('comment4', $Fotos_Comentarios[3]['comment'] ?? '') }}</textarea>
                                             </div>
-                                        </div>
+                                        </div>-->
 
                                         <div class="container">
                                             <div class="float-right">

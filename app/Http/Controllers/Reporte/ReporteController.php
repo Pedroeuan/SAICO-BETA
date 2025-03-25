@@ -211,10 +211,7 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
-        // Iterar sobre el arreglo y obtener los comentarios
-        /*foreach ($Fotos_Comentarios as $foto) {
-            $comentarios[] = $foto['comment'];
-        }*/
+
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
         // Obtener el idSolicitud
@@ -227,14 +224,6 @@ public function FOR_01_PRO_INS_02()
         foreach ($DetallesSolicitud as $detalle) {
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
-
-        // Buscar los registros en la tabla General_EyC
-        //Equipos
-        /*$idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
-        //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
-        //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();*/
 
         //Equipos
         $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
@@ -409,16 +398,6 @@ public function FOR_01_PRO_INS_02()
         foreach ($DetallesSolicitud as $detalle) {
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
-
-        // Buscar los registros en la tabla General_EyC
-        //Equipos
-        /*$idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
-        //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
-        //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
-        //Consumibles
-        $idsGeneral_EyCs_Consumibles = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();*/
 
         //Equipos
         $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
