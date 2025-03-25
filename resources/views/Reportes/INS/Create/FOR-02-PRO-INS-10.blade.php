@@ -801,12 +801,24 @@
                                         </div>
 
                                         <p>
-
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                                        
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagén</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
+
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -824,48 +836,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+
+
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
                                             </div>
                                         </div>
 
@@ -926,6 +905,125 @@
             }
         });
     });
+
+    let cropper;
+    let currentInput; // Para saber qué input de imagen abrió el modal
+
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (cropper) {
+            cropper.rotate(-90);
+        }
+    });
+
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (cropper) {
+            cropper.rotate(90);
+        }
+    });
+
+    // Botón: Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        $('#cropperModal').modal('hide');
+        if (cropper) cropper.destroy();
+    });
+
+        // Botón: Guardar sin recortar (manteniendo rotación)
+        document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const canvas = cropper.getCanvasData(); // Obtener la imagen con la rotación aplicada
+            const finalCanvas = cropper.getCroppedCanvas({
+                width: canvas.naturalWidth,  // Mantener el tamaño original
+                height: canvas.naturalHeight
+            });
+
+            if (finalCanvas) {
+                const base64data = finalCanvas.toDataURL(); // Convertir la imagen a Base64
+
+                // Mostrar preview
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+
+                // Guardar en input hidden
+                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+                hiddenInput.value = base64data;
+            }
+        }
+
+        $('#cropperModal').modal('hide');
+        if (cropper) cropper.destroy();
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    const imageCountSelect = document.getElementById('imageCount');
+    const container = document.getElementById('imageFieldsContainer');
+    const cropperImage = document.getElementById('cropperImage');
+
+    // Restaurar selección de imágenes si ya había un valor guardado
+    const savedCount = localStorage.getItem('imageCount');
+    if (savedCount) {
+        imageCountSelect.value = savedCount;
+        generateImageFields(parseInt(savedCount));
+    }
+
+    imageCountSelect.addEventListener('change', function () {
+        const count = parseInt(this.value);
+        localStorage.setItem('imageCount', count); // Guardar la selección
+        generateImageFields(count);
+    });
+
+    function generateImageFields(count) {
+        container.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos campos
+
+        for (let i = 1; i <= count; i++) {
+            const col = document.createElement('div');
+            col.classList.add('col-sm-6');
+
+            col.innerHTML = `
+                <div class="form-group">
+                    <label for="image${i}">Imagen ${i}:</label>
+                    <input type="file" class="form-control image-input" id="image${i}" accept="image/*" data-index="${i}">
+                    <div class="image-preview mt-2" id="image${i}-preview"></div>
+                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario para la imagen ${i}"></textarea>
+                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                </div>
+            `;
+
+            container.appendChild(col);
+        }
+
+        // Volver a asignar eventos a todos los nuevos inputs
+        document.querySelectorAll('.image-input').forEach(input => {
+            input.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        if (cropper) cropper.destroy(); // Limpiar anterior
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    }
+    // Limpiar el valor guardado al enviar el formulario (para evitar que persista después de un envío exitoso)
+    document.querySelector("form").addEventListener("submit", function () {
+        localStorage.removeItem('imageCount');
+    });
+});
+
 
     function guardarEnSessionStorage() {
     var datos = [];
@@ -1056,99 +1154,7 @@
                 });
             });
         });
-
     });
-
-    $(document).ready(function() {
-    var cropper;
-    var selectedInput;
-
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
-
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
-
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {

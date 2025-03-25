@@ -421,26 +421,44 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
-        /*Fotos y Comentarios */
-        // Procesar las imágenes y los comentarios
-        $fotos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            if ($request->hasFile("image$i")) {
-                $image = $request->file("image$i");
-                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
-                $comment = $request->input("comment$i");
-                $fotos[] = [
-                    'path' => $path,
-                    'comment' => $comment,
-                ];
-            }
+        /* Fotos y Comentarios */
+        $imageCount = $request->input('imageCount'); // Número de imágenes
+        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+
+        foreach ($request->images_base64 as $index => $base64Image) {
+            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+            // Decodificar Base64
+            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+            
+            // Crear un nombre único para la imagen
+            $imageName = 'imagen_' . time() . '_' . $index . '.png';
+
+            // Definir la ruta personalizada
+            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+            
+            // Guardar la imagen en la ruta personalizada
+            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+            // Guardar la ruta en el array con su comentario correspondiente
+            $imagenesGuardadas[] = [
+                'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+            ];
+
         }
 
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($fotos); 
+        // Crear el JSON incluyendo el número de imágenes
+        $datosParaGuardar = [
+            'image_count' => $imageCount,
+            'imagenes_comentarios' => $imagenesGuardadas
+        ];
 
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($datosParaGuardar, JSON_PRETTY_PRINT); 
+
+        // Guardar en la base de datos
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
