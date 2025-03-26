@@ -1082,6 +1082,31 @@
         });
 
         function generateImageFields(count) {
+        const existingImages = container.querySelectorAll('.existing-image'); // Mantener imágenes ya guardadas
+        container.innerHTML = ''; // Limpia solo las nuevas imágenes
+
+        // Volver a agregar las imágenes existentes
+        existingImages.forEach(image => container.appendChild(image));
+
+        // Agregar nuevas imágenes sin borrar las existentes
+        for (let i = 1; i <= count; i++) {
+            const col = document.createElement('div');
+            col.classList.add('col-sm-6', 'new-image');
+
+            col.innerHTML = `
+                <div class="form-group">
+                    <label for="image${i}">Imagen por Subir ${i}:</label>
+                    <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                    <div class="image-preview mt-2" id="image${i}-preview"></div>
+                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                </div>
+            `;
+            container.appendChild(col);
+        }
+    }
+        
+        /*function generateImageFields(count) {
             container.innerHTML = '';
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
@@ -1127,14 +1152,26 @@
                 reader.readAsDataURL(file);
             });
         });
-        }
+        }*/
 
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
             localStorage.removeItem('imageCount');
         });
     });
-    
+
+    /*Juntas-Resultados */
+    function guardarEnSessionStorage() {
+    var datos = [];
+        $('#dynamicTable tbody tr').each(function() {
+            var fila = {};
+            $(this).find('input').each(function() {
+                fila[$(this).attr('name')] = $(this).val();
+            });
+            datos.push(fila);
+        });
+        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
+    }
 
     function cargarDesdeSessionStorage() {
             var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
@@ -1149,19 +1186,6 @@
                 });
             }
         }
-
-    /*Juntas-Resultados */
-    function guardarEnSessionStorage() {
-    var datos = [];
-        $('#dynamicTable tbody tr').each(function() {
-            var fila = {};
-            $(this).find('input').each(function() {
-                fila[$(this).attr('name')] = $(this).val();
-            });
-            datos.push(fila);
-        });
-        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
-    }
 
     $(document).ready(function() {
         //cargarDesdeSessionStorage();
