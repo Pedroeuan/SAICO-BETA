@@ -924,24 +924,56 @@
 
     // Botón: Guardar sin recortar (manteniendo rotación)
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const data = cropper.getData();
-            const finalCanvas = cropper.getCroppedCanvas({
-                width: data.width,
-                height: data.height
-            });
-
-            if (finalCanvas) {
-                const base64data = finalCanvas.toDataURL();
-                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Guardado!</span>
-                `;
-                document.getElementById(`${currentInput.id}-base64`).value = base64data;
-            }
+        if (!cropper) {
+            console.error('El objeto cropper no está inicializado.');
+            return;
         }
-        $('#cropperModal').modal('hide');
+
+        if (!currentInput) {
+            console.error('No se ha seleccionado ninguna imagen.');
+            return;
+        }
+
+        try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
+        }
     });
 
     // Botón: Recortar y guardar
