@@ -807,10 +807,10 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount">
-                                                <option value="">Selecciona Cuantas Imagenes Quieres</option>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
-                                                    <option value="{{ $i }}">{{ $i }} Imagén</option>
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
                                                 @endfor
                                             </select>
                                         </div>
@@ -818,7 +818,6 @@
                                         <div id="imageFieldsContainer" class="row">
                                             <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -904,127 +903,122 @@
         });
     });
 
+    /* Imágenes */
     let cropper;
-    let currentInput; // Para saber qué input de imagen abrió el modal
+    let currentInput;
 
     // Botón: Rotar -90° (Antihorario)
     document.getElementById('rotateLeftBtn').addEventListener('click', function () {
-        if (cropper) {
-            cropper.rotate(-90);
-        }
+        if (cropper) cropper.rotate(-90);
     });
 
     // Botón: Rotar +90° (Horario)
     document.getElementById('rotateRightBtn').addEventListener('click', function () {
-        if (cropper) {
-            cropper.rotate(90);
-        }
+        if (cropper) cropper.rotate(90);
     });
 
     // Botón: Cancelar
     document.getElementById('cancelBtn').addEventListener('click', function () {
         $('#cropperModal').modal('hide');
-        if (cropper) cropper.destroy();
     });
 
-        // Botón: Guardar sin recortar (manteniendo rotación)
-        document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
         if (cropper && currentInput) {
-            const canvas = cropper.getCanvasData(); // Obtener la imagen con la rotación aplicada
+            const data = cropper.getData();
             const finalCanvas = cropper.getCroppedCanvas({
-                width: canvas.naturalWidth,  // Mantener el tamaño original
-                height: canvas.naturalHeight
+                width: data.width,
+                height: data.height
             });
 
             if (finalCanvas) {
-                const base64data = finalCanvas.toDataURL(); // Convertir la imagen a Base64
-
-                // Mostrar preview
+                const base64data = finalCanvas.toDataURL();
                 const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
-
-                // Guardar en input hidden
-                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
-                hiddenInput.value = base64data;
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Guardado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
             }
         }
-
         $('#cropperModal').modal('hide');
-        if (cropper) cropper.destroy();
     });
 
     // Botón: Recortar y guardar
     document.getElementById('cropImageBtn').addEventListener('click', function () {
         if (cropper && currentInput) {
-            // Obtén el área recortada como un canvas
             const croppedCanvas = cropper.getCroppedCanvas();
-
             if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL(); // Convertir la imagen recortada a Base64
-
-                // Mostrar preview
+                const base64data = croppedCanvas.toDataURL();
                 const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            }
+        }
+        $('#cropperModal').modal('hide');
+    });
 
-                // Guardar en input hidden
-                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
-                hiddenInput.value = base64data;
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal').on('hidden.bs.modal', function () {
+        if (cropper) cropper.destroy();
+    });
+
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+
+        // Cargar valor guardado
+        /*const savedCount = localStorage.getItem('imageCount');
+        if (savedCount) {
+            imageCountSelect.value = savedCount;
+            generateImageFields(parseInt(savedCount));
+        }*/
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields(count);
+        });
+
+        function generateImageFields(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                    </div>
+                `;
+                container.appendChild(col);
             }
 
-            $('#cropperModal').modal('hide');
-            if (cropper) cropper.destroy();
-        }
-    });
-    
-    document.addEventListener("DOMContentLoaded", function () {
-    const imageCountSelect = document.getElementById('imageCount');
-    const container = document.getElementById('imageFieldsContainer');
-    const cropperImage = document.getElementById('cropperImage');
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
 
-    // Restaurar selección de imágenes si ya había un valor guardado
-    const savedCount = localStorage.getItem('imageCount');
-    if (savedCount) {
-        imageCountSelect.value = savedCount;
-        generateImageFields(parseInt(savedCount));
-    }
-
-    imageCountSelect.addEventListener('change', function () {
-        const count = parseInt(this.value);
-        localStorage.setItem('imageCount', count); // Guardar la selección
-        generateImageFields(count);
-    });
-
-    function generateImageFields(count) {
-        container.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos campos
-
-        for (let i = 1; i <= count; i++) {
-            const col = document.createElement('div');
-            col.classList.add('col-sm-6');
-
-            col.innerHTML = `
-                <div class="form-group">
-                    <label for="image${i}">Imagen ${i}:</label>
-                    <input type="file" class="form-control image-input" id="image${i}" accept="image/*" data-index="${i}">
-                    <div class="image-preview mt-2" id="image${i}-preview"></div>
-                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario para la imagen ${i}"></textarea>
-                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                </div>
-            `;
-
-            container.appendChild(col);
-        }
-
-        // Volver a asignar eventos a todos los nuevos inputs
-        document.querySelectorAll('.image-input').forEach(input => {
-            input.addEventListener('change', function (e) {
-                const file = e.target.files[0];
-                if (file) {
                     currentInput = e.target;
                     const reader = new FileReader();
                     reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
                         cropperImage.src = event.target.result;
                         $('#cropperModal').modal('show');
-                        if (cropper) cropper.destroy(); // Limpiar anterior
                         cropper = new Cropper(cropperImage, {
                             aspectRatio: 4 / 3,
                             viewMode: 1,
@@ -1035,17 +1029,17 @@
                         });
                     };
                     reader.readAsDataURL(file);
-                }
+                });
             });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem('imageCount');
         });
-    }
-    // Limpiar el valor guardado al enviar el formulario (para evitar que persista después de un envío exitoso)
-    document.querySelector("form").addEventListener("submit", function () {
-        localStorage.removeItem('imageCount');
     });
-});
 
-
+    /*Juntas-Resultados */
     function guardarEnSessionStorage() {
     var datos = [];
         $('#dynamicTable tbody tr').each(function() {
@@ -1146,6 +1140,9 @@
             });
             return;
         }
+
+        // Eliminar los datos de sessionStorage al guardar
+        sessionStorage.removeItem('tabla_dinamica');
          // Deshabilitar el botón de submit y cambiar el texto (opcional)
         let submitButton = $(this).find('button[type="submit"]');
         submitButton.prop('disabled', true).text('Guardando...');
@@ -1240,6 +1237,7 @@
         }
     });
 
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');

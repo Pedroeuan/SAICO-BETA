@@ -450,13 +450,29 @@ class FOR_02_PRO_INS_10Controller extends Controller
         }
 
         // Crear el JSON incluyendo el número de imágenes
-        $datosParaGuardar = [
+        /*$datosParaGuardar = [
             'image_count' => $imageCount,
             'imagenes_comentarios' => $imagenesGuardadas
         ];
+        sigue la siguiente forma: 
+                {
+        "image_count": "2",
+        "imagenes_comentarios": [
+                {
+                    "ruta": "storage\/Reportes\/FOR_02_PRO_INS_10\/---\/---\/Fotos\/imagen_1742861345_0.png",
+                    "comentario": "---"
+                },
+                {
+                    "ruta": "storage\/Reportes\/FOR_02_PRO_INS_10\/---\/---\/Fotos\/imagen_1742861345_1.png",
+                    "comentario": "---"
+                }
+            ]
+        }
+        */
 
         // Convertir el array de fotos a JSON
-        $Fotos = json_encode($datosParaGuardar, JSON_PRETTY_PRINT); 
+        //$Fotos = json_encode($datosParaGuardar, JSON_PRETTY_PRINT); 
+        $Fotos = json_encode($imagenesGuardadas); 
 
         // Guardar en la base de datos
         $Fotos_Reportes->idReportes = $idReportes;
