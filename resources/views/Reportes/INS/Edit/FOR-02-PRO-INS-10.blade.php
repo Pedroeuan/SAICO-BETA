@@ -829,7 +829,7 @@
 
                                         <p>
 
-                                        <!-- Selección del número de imágenes -->
+                                        <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -840,26 +840,40 @@
                                             </select>
                                         </div>
 
-                                        <!-- Contenedor de imágenes -->
-                                        <div id="imageFieldsContainer" class="row">
-                                            @if (!empty($Fotos_Comentarios))
-                                                @foreach ($Fotos_Comentarios as $index => $img)
-                                                    <div class="col-sm-6 existing-image">
+                                        @if(!empty($Fotos_Comentarios))
+                                            <div class="row">
+                                                @foreach($Fotos_Comentarios as $index => $foto)
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
-                                                            <label>Imagen Subida {{ $index + 1 }}:</label>
-                                                            <!-- Input para seleccionar nueva imagen -->
-                                                            <input type="file" class="form-control mt-2 replace-image" data-index="{{ $index }}" accept="image/*">
-                                                            <img src="{{ asset($img['ruta']) }}" class="img-fluid img-thumbnail preview-image-{{ $index }}">
-                                                            <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario">{{ $img['comentario'] }}</textarea>
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
-                                                            <input type="hidden" name="existing_images[]" value="{{ $img['ruta'] }}">
-                                                            
+                                                            <!-- Vista previa de la imagen existente -->
+                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                            <div class="image-preview mt-2">
+                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                            </div>
+
+                                                            <!-- Campo para seleccionar una nueva imagen -->
+                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+
+                                                            <!-- Campo oculto para la imagen en base64 -->
+                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
                                                         </div>
                                                     </div>
                                                 @endforeach
-                                            @endif
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-                                    
+
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -944,29 +958,29 @@
         });
     });
 
-    // Delegación de eventos para inputs de tipo "file" (incluyendo los creados dinámicamente)
-    document.getElementById('imageFieldsContainer').addEventListener('change', function (e) {
-        if (e.target && e.target.type === 'file') {
+    /*Modal para las imagenes que ya estan subidos */
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('image-input')) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function (event) {
+                    // Mostrar la imagen seleccionada en el modal
                     const cropperImage = document.getElementById('cropperImage');
                     cropperImage.src = event.target.result;
 
-                    // Mostrar el modal
+                    // Mostrar el modal automáticamente
                     $('#cropperModal').modal('show');
 
                     // Inicializar Cropper.js
                     if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
                     cropper = new Cropper(cropperImage, {
-                        aspectRatio: 4 / 3, // Cambia según tus necesidades
+                        aspectRatio: 1, // Cambia según tus necesidades
                         viewMode: 1,
                         minContainerWidth: 760,
                         minContainerHeight: 600,
                         responsive: true,
                     });
-
                     // Guardar el input actual para referencia
                     currentInput = e.target;
                 };
@@ -975,91 +989,7 @@
         }
     });
 
-    document.addEventListener('change', function (e) {
-    if (e.target.classList.contains('replace-image') || e.target.classList.contains('image-input')) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const cropperImage = document.getElementById('cropperImage');
-                cropperImage.src = event.target.result;
-
-                // Mostrar el modal
-                $('#cropperModal').modal('show');
-
-                // Inicializar Cropper.js
-                if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
-                cropper = new Cropper(cropperImage, {
-                    aspectRatio: 4 / 3, // Cambia según tus necesidades
-                    viewMode: 1,
-                    minContainerWidth: 760,
-                    minContainerHeight: 600,
-                    responsive: true 
-                });
-
-                // Guardar el input actual para referencia
-                currentInput = e.target;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-});
-
-    document.addEventListener('DOMContentLoaded', function () {
-    const imageCountSelect = document.getElementById('imageCount');
-    const container = document.getElementById('imageFieldsContainer');
-
-    // Evento para manejar el cambio en el número de imágenes
-    imageCountSelect.addEventListener('change', function () {
-    const selectedCount = parseInt(this.value); // Número seleccionado
-    if (isNaN(selectedCount)) return; // Si no es un número, salir
-
-    // Obtén el número actual de imágenes nuevas en el contenedor
-    const currentNewImages = container.querySelectorAll('.new-image').length;
-
-    // Calcula cuántas imágenes adicionales se necesitan
-    const imagesToAdd = selectedCount - currentNewImages;
-
-    if (imagesToAdd > 0) {
-        // Agregar nuevas imágenes
-        for (let i = 0; i < imagesToAdd; i++) {
-            const newIndex = currentNewImages + i + 1; // Índice de la nueva imagen
-            const col = document.createElement('div');
-            col.classList.add('col-sm-6', 'new-image');
-
-            col.innerHTML = `
-                <div class="form-group">
-                    <label>Imagen por Subir ${newIndex}:</label>
-                    <input type="file" class="form-control mt-2" name="new_images[]" accept="image/*">
-                    
-                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario para la imagen ${newIndex}"></textarea>
-                    <button type="button" class="btn btn-danger mt-2 remove-image">Eliminar</button>
-                </div>
-            `;
-
-            container.appendChild(col);
-            }
-        } else if (imagesToAdd < 0) {
-            // Eliminar imágenes adicionales
-            const imagesToRemove = Math.abs(imagesToAdd);
-            const newImages = container.querySelectorAll('.new-image');
-            for (let i = 0; i < imagesToRemove; i++) {
-                const lastImage = newImages[newImages.length - 1 - i];
-                if (lastImage) lastImage.remove();
-            }
-        }
-    });
-
-    // Evento para eliminar imágenes dinámicamente
-    container.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-image')) {
-            const imageDiv = e.target.closest('.col-sm-6');
-            if (imageDiv) imageDiv.remove();
-        }
-    });
-});
-
-    /* Imágenes */
+    /* Imágenes Al seleccionar numero de imagenes a subir*/
     let cropper;
     let currentInput;
 
@@ -1079,41 +1009,32 @@
     });
 
     // Botón: Recortar y Guardar
-document.getElementById('cropImageBtn').addEventListener('click', function () {
-    if (cropper && currentInput) {
-        // Obtener la imagen recortada como un blob
-        cropper.getCroppedCanvas().toBlob(function (blob) {
-            // Crear un objeto URL para mostrar la imagen recortada
-            const previewUrl = URL.createObjectURL(blob);
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
 
-            // Mostrar la imagen recortada como vista previa
-            const previewImage = currentInput.closest('.form-group').querySelector('img');
-            if (previewImage) {
-                previewImage.src = previewUrl; // Actualizar la vista previa
-            } else {
-                // Si no hay una imagen de vista previa, crearla
-                const newPreviewImage = document.createElement('img');
-                newPreviewImage.src = previewUrl;
-                newPreviewImage.classList.add('img-fluid', 'img-thumbnail', 'mt-2');
-                currentInput.closest('.form-group').appendChild(newPreviewImage);
+                // Actualizar la vista previa de la imagen
+                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+
+                // Actualizar el campo oculto con la imagen en base64
+                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
+                if (base64Input) {
+                    base64Input.value = base64data;
+                }
             }
-
-            // Crear un nuevo input oculto para enviar la imagen recortada al servidor
-            const hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'cropped_images[]';
-            hiddenInput.value = previewUrl; // Puedes usar un método para enviar el blob al servidor si es necesario
-            currentInput.closest('.form-group').appendChild(hiddenInput);
-
-            // Cerrar el modal
             $('#cropperModal').modal('hide');
-        });
-    } else {
-        console.error('Cropper o currentInput no están inicializados.');
-    }
-});
+        } else {
+            console.error('Cropper o currentInput no están inicializados.');
+        }
+    });
 
-    // Botón: Guardar Sin Recortar (manteniendo rotación)
+    // Botón: Guardar Sin Recortar
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
         if (cropper && currentInput) {
             try {
@@ -1123,7 +1044,7 @@ document.getElementById('cropImageBtn').addEventListener('click', function () {
                 const ctx = canvas.getContext('2d');
 
                 // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-                if (Math.abs(imageData.rotate) % 180 === 90) {
+                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
                     canvas.width = imageData.naturalHeight;
                     canvas.height = imageData.naturalWidth;
                 } else {
@@ -1135,7 +1056,7 @@ document.getElementById('cropImageBtn').addEventListener('click', function () {
                 ctx.translate(canvas.width / 2, canvas.height / 2);
                 ctx.rotate((imageData.rotate * Math.PI) / 180);
                 ctx.drawImage(
-                    cropper.element, // Usamos el elemento de la imagen directamente
+                    cropper.element, // Aquí usamos el elemento de la imagen directamente
                     -imageData.naturalWidth / 2,
                     -imageData.naturalHeight / 2,
                     imageData.naturalWidth,
@@ -1143,26 +1064,20 @@ document.getElementById('cropImageBtn').addEventListener('click', function () {
                 );
 
                 // Convertir el lienzo a base64
-                const base64data = canvas.toDataURL('image/jpeg');
+                const base64data = canvas.toDataURL();
 
-                // Mostrar la imagen rotada como vista previa
-                const previewImage = currentInput.closest('.form-group').querySelector('img');
-                if (previewImage) {
-                    previewImage.src = base64data; // Actualizar la vista previa
-                } else {
-                    // Si no hay una imagen de vista previa, crearla
-                    const newPreviewImage = document.createElement('img');
-                    newPreviewImage.src = base64data;
-                    newPreviewImage.classList.add('img-fluid', 'img-thumbnail', 'mt-2');
-                    currentInput.closest('.form-group').appendChild(newPreviewImage);
+                // Actualizar la vista previa de la imagen
+                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Guardado!</span>
+                `;
+
+                // Actualizar el campo oculto con la imagen en base64
+                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
+                if (base64Input) {
+                    base64Input.value = base64data;
                 }
-
-                // Crear un nuevo input oculto para enviar la imagen rotada al servidor
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'rotated_images[]';
-                hiddenInput.value = base64data; // Base64 de la imagen rotada
-                currentInput.closest('.form-group').appendChild(hiddenInput);
 
                 // Cerrar el modal
                 $('#cropperModal').modal('hide');
@@ -1174,66 +1089,154 @@ document.getElementById('cropImageBtn').addEventListener('click', function () {
         }
     });
 
-// Botón: Guardar sin recortar (manteniendo rotación)
-document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-    if (!cropper) {
-        console.error('El objeto cropper no está inicializado.');
-        return;
-    }
-
-    if (!currentInput) {
-        console.error('No se ha seleccionado ninguna imagen.');
-        return;
-    }
-
-    try {
-        // Obtener los datos de la imagen original (incluyendo rotación)
-        const imageData = cropper.getImageData();
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-        if (Math.abs(imageData.rotate) % 180 === 90) {
-            canvas.width = imageData.naturalHeight;
-            canvas.height = imageData.naturalWidth;
-        } else {
-            canvas.width = imageData.naturalWidth;
-            canvas.height = imageData.naturalHeight;
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    /*document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        /*if (!cropper) {
+            console.error('El objeto cropper no está inicializado.');
+            return;
         }
 
-        // Dibujar la imagen rotada en el lienzo
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate((imageData.rotate * Math.PI) / 180);
-        ctx.drawImage(
-            cropper.element, // Usamos el elemento de la imagen directamente
-            -imageData.naturalWidth / 2,
-            -imageData.naturalHeight / 2,
-            imageData.naturalWidth,
-            imageData.naturalHeight
-        );
+        if (!currentInput) {
+            console.error('No se ha seleccionado ninguna imagen.');
+            return;
+        }*/
 
-        // Convertir el lienzo a base64
-        const base64data = canvas.toDataURL('image/jpeg');
-        
-        // Actualizar la vista previa de la imagen en el formulario
-        const previewImage = currentInput.closest('.form-group').querySelector('img');
-        if (previewImage) {
-            previewImage.src = base64data;
+        /*try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
         }
+    });
 
-        // Crear un nuevo input para enviar la imagen rotada al servidor
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'rotated_images[]';
-        hiddenInput.value = base64data; // Base64 de la imagen rotada
-        currentInput.closest('.form-group').appendChild(hiddenInput);
-
-        // Cerrar el modal
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            }
+        }
         $('#cropperModal').modal('hide');
-    } catch (error) {
-        console.error('Error al guardar la imagen sin recortar:', error);
-    }
-});
+    });*/
+
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal').on('hidden.bs.modal', function () {
+        if (cropper) cropper.destroy();
+    });
+
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+
+        // Cargar valor guardado
+        /*const savedCount = localStorage.getItem('imageCount');
+        if (savedCount) {
+            imageCountSelect.value = savedCount;
+            generateImageFields(parseInt(savedCount));
+        }*/
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields(count);
+        });
+
+        function generateImageFields(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem('imageCount');
+        });
+    });
 
     /*Juntas-Resultados */
     function guardarEnSessionStorage() {

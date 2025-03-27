@@ -490,7 +490,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
-
     }
 
     public function FOR_02_PRO_INS_10_update(Request $request, $id)
@@ -694,7 +693,42 @@ class FOR_02_PRO_INS_10Controller extends Controller
         } 
 
         /* Fotos y Comentarios */
-        $existingFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+        // Obtener las imágenes existentes
+        $existingFotos = $request->input('existing_images', []);
+        $comments = $request->input('comments', []);
+        $imagenesGuardadas = [];
+
+        foreach ($existingFotos as $index => $ruta) {
+            // Verificar si se subió una nueva imagen para reemplazar la existente
+            if ($request->hasFile("replace_images.$index")) {
+                // Eliminar la imagen anterior si existe
+                if (Storage::exists(str_replace('storage/', 'public/', $ruta))) {
+                    Storage::delete(str_replace('storage/', 'public/', $ruta));
+                }
+
+                // Guardar la nueva imagen
+                $newImage = $request->file("replace_images.$index");
+                $path = $newImage->store('public/imagenes');
+
+                // Agregar la nueva imagen y el comentario actualizado
+                $imagenesGuardadas[] = [
+                    'ruta' => str_replace('public/', 'storage/', $path),
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            } else {
+                // Mantener la imagen existente y actualizar el comentario
+                $imagenesGuardadas[] = [
+                    'ruta' => $ruta,
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            }
+        }
+
+        // Guardar las imágenes actualizadas en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => json_encode($imagenesGuardadas),
+        ]);
+        /*$existingFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
         Log::info('Existing Fotos: ', ['existingFotos' => $existingFotos]);
 
         $imagenesGuardadas = [];
@@ -777,7 +811,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         // Guardar las imágenes actualizadas en la base de datos
         $Fotos_Reportes->update([
             'Fotos_Reportes' => json_encode($imagenesGuardadas),
-        ]);
+        ]);*/
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
