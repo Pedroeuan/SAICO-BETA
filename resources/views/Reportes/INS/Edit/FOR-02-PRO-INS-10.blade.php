@@ -847,14 +847,13 @@
                                                     <div class="col-sm-6 existing-image">
                                                         <div class="form-group">
                                                             <label>Imagen Subida {{ $index + 1 }}:</label>
-                                                            <img src="{{ asset($img['ruta']) }}" class="img-fluid img-thumbnail preview-image-{{ $index }}">
-                                                            
                                                             <!-- Input para seleccionar nueva imagen -->
                                                             <input type="file" class="form-control mt-2 replace-image" data-index="{{ $index }}" accept="image/*">
-                                                            
+                                                            <img src="{{ asset($img['ruta']) }}" class="img-fluid img-thumbnail preview-image-{{ $index }}">
                                                             <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario">{{ $img['comentario'] }}</textarea>
-                                                            <input type="hidden" name="existing_images[]" value="{{ $img['ruta'] }}">
                                                             <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                            <input type="hidden" name="existing_images[]" value="{{ $img['ruta'] }}">
+                                                            
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -961,7 +960,7 @@
                     // Inicializar Cropper.js
                     if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
                     cropper = new Cropper(cropperImage, {
-                        aspectRatio: 1, // Cambia según tus necesidades
+                        aspectRatio: 4 / 3, // Cambia según tus necesidades
                         viewMode: 1,
                         minContainerWidth: 760,
                         minContainerHeight: 600,
@@ -991,7 +990,7 @@
                 // Inicializar Cropper.js
                 if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
                 cropper = new Cropper(cropperImage, {
-                    aspectRatio: 1, // Cambia según tus necesidades
+                    aspectRatio: 4 / 3, // Cambia según tus necesidades
                     viewMode: 1,
                     minContainerWidth: 760,
                     minContainerHeight: 600,
@@ -1032,6 +1031,7 @@
                 <div class="form-group">
                     <label>Imagen por Subir ${newIndex}:</label>
                     <input type="file" class="form-control mt-2" name="new_images[]" accept="image/*">
+                    
                     <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario para la imagen ${newIndex}"></textarea>
                     <button type="button" class="btn btn-danger mt-2 remove-image">Eliminar</button>
                 </div>
