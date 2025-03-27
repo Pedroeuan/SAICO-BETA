@@ -449,29 +449,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         }
 
-        // Crear el JSON incluyendo el número de imágenes
-        /*$datosParaGuardar = [
-            'image_count' => $imageCount,
-            'imagenes_comentarios' => $imagenesGuardadas
-        ];
-        sigue la siguiente forma: 
-                {
-        "image_count": "2",
-        "imagenes_comentarios": [
-                {
-                    "ruta": "storage\/Reportes\/FOR_02_PRO_INS_10\/---\/---\/Fotos\/imagen_1742861345_0.png",
-                    "comentario": "---"
-                },
-                {
-                    "ruta": "storage\/Reportes\/FOR_02_PRO_INS_10\/---\/---\/Fotos\/imagen_1742861345_1.png",
-                    "comentario": "---"
-                }
-            ]
-        }
-        */
-
         // Convertir el array de fotos a JSON
-        //$Fotos = json_encode($datosParaGuardar, JSON_PRETTY_PRINT); 
         $Fotos = json_encode($imagenesGuardadas); 
 
         // Guardar en la base de datos
@@ -713,51 +691,92 @@ class FOR_02_PRO_INS_10Controller extends Controller
             $Firmas->update([
                 'Firmas' => $Firmas4
             ]);
-        }
+        } 
 
-         /*Fotos y Comentarios */
-        // Procesar las imágenes y los comentarios
+        /* Fotos y Comentarios */
+        $existingFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+        Log::info('Existing Fotos: ', ['existingFotos' => $existingFotos]);
 
-        // Obtener las rutas de las imágenes guardadas anteriormente
-        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+        $imagenesGuardadas = [];
 
-        // Procesar las nuevas imágenes y los comentarios
-        $fotos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
-            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
-        
-            if ($request->hasFile("image$i")) {
+        // Procesar imágenes existentes
+        foreach ($existingFotos as $index => $foto) {
+            Log::info('Processing existing image at index: ' . $index);
+
+            if (isset($request->images_base64[$index]) && $request->images_base64[$index]) {
+                Log::info('New base64 image found for index: ' . $index);
+
                 // Eliminar la imagen anterior si existe
-                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
-                    Storage::delete($previousFotos[$i - 1]['path']);
+                if (isset($foto['ruta']) && Storage::exists(str_replace('storage/', 'public/', $foto['ruta']))) {
+                    Storage::delete(str_replace('storage/', 'public/', $foto['ruta']));
                 }
-        
-                // Guardar la nueva imagen
-                $image = $request->file("image$i");
+
+                // Decodificar la nueva imagen base64
                 $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
                 $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/$Contrato/$No_Reporte/Fotos");
-        
-                $fotos[] = [
-                    'path' => $path,
-                    'comment' => $comment, // Guardar el comentario actualizado
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->images_base64[$index]));
+
+                // Crear un nombre único para la imagen
+                $imageName = 'imagen_' . time() . '_' . $index . '.png';
+
+                // Definir la ruta personalizada
+                $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+
+                // Guardar la imagen en la ruta personalizada
+                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                // Actualizar la ruta y el comentario
+                $imagenesGuardadas[] = [
+                    'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                    'comentario' => $request->comments[$index] ?? $foto['comentario'],
                 ];
             } else {
-                // Mantener la imagen anterior pero actualizar el comentario si cambió
-                if (isset($previousFotos[$i - 1])) {
-                    $fotos[] = [
-                        'path' => $previousFotos[$i - 1]['path'],
-                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                Log::info('No new image for index: ' . $index);
+
+                // Mantener la imagen anterior y actualizar el comentario si cambió
+                $imagenesGuardadas[] = [
+                    'ruta' => $foto['ruta'],
+                    'comentario' => $request->comments[$index] ?? $foto['comentario'],
+                ];
+            }
+        }
+
+        Log::info('Processed existing images: ', ['imagenesGuardadas' => $imagenesGuardadas]);
+
+        // Procesar nuevas imágenes
+        if ($request->has('new_images_base64')) {
+            foreach ($request->new_images_base64 as $index => $base64Image) {
+                if ($base64Image) {
+                    Log::info('Processing new image at index: ' . $index);
+
+                    // Decodificar Base64
+                    $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                    $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+
+                    // Crear un nombre único para la imagen
+                    $imageName = 'imagen_' . time() . '_' . $index . '.png';
+
+                    // Definir la ruta personalizada
+                    $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+
+                    // Guardar la imagen en la ruta personalizada
+                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                    // Agregar la nueva imagen y su comentario
+                    $imagenesGuardadas[] = [
+                        'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                        'comentario' => $request->new_comments[$index] ?? null,
                     ];
                 }
             }
         }
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($fotos);
-        // Actualiza los detalles generales como JSON en la base de datos
+
+        Log::info('Final Images to Save: ', ['imagenesGuardadas' => $imagenesGuardadas]);
+
+        // Guardar las imágenes actualizadas en la base de datos
         $Fotos_Reportes->update([
-            'Fotos_Reportes' => $Fotos
+            'Fotos_Reportes' => json_encode($imagenesGuardadas),
         ]);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'

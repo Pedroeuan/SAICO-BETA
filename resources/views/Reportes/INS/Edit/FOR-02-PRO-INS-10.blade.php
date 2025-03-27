@@ -74,8 +74,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                        <form id="FOR-02-PRO-INS-10" action="{{ route('Reportes_FOR_02_PRO_INS_10.update', ['id' => $id]) }} method="post" enctype="multipart/form-data">
-
+                        <form id="FOR-02-PRO-INS-10" action="{{ route('Reportes_FOR_02_PRO_INS_10.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -946,6 +945,67 @@
         });
     });
 
+    // Delegación de eventos para inputs de tipo "file" (incluyendo los creados dinámicamente)
+    document.getElementById('imageFieldsContainer').addEventListener('change', function (e) {
+        if (e.target && e.target.type === 'file') {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const cropperImage = document.getElementById('cropperImage');
+                    cropperImage.src = event.target.result;
+
+                    // Mostrar el modal
+                    $('#cropperModal').modal('show');
+
+                    // Inicializar Cropper.js
+                    if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
+                    cropper = new Cropper(cropperImage, {
+                        aspectRatio: 1, // Cambia según tus necesidades
+                        viewMode: 1,
+                        minContainerWidth: 760,
+                        minContainerHeight: 600,
+                        responsive: true,
+                    });
+
+                    // Guardar el input actual para referencia
+                    currentInput = e.target;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+    document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('replace-image') || e.target.classList.contains('image-input')) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const cropperImage = document.getElementById('cropperImage');
+                cropperImage.src = event.target.result;
+
+                // Mostrar el modal
+                $('#cropperModal').modal('show');
+
+                // Inicializar Cropper.js
+                if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1, // Cambia según tus necesidades
+                    viewMode: 1,
+                    minContainerWidth: 760,
+                    minContainerHeight: 600,
+                    responsive: true 
+                });
+
+                // Guardar el input actual para referencia
+                currentInput = e.target;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});
+
     document.addEventListener('DOMContentLoaded', function () {
     const imageCountSelect = document.getElementById('imageCount');
     const container = document.getElementById('imageFieldsContainer');
@@ -1018,179 +1078,162 @@
         $('#cropperModal').modal('hide');
     });
 
-    // Botón: Guardar sin recortar (manteniendo rotación)
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (!cropper) {
-            console.error('El objeto cropper no está inicializado.');
-            return;
-        }
+    // Botón: Recortar y Guardar
+document.getElementById('cropImageBtn').addEventListener('click', function () {
+    if (cropper && currentInput) {
+        // Obtener la imagen recortada como un blob
+        cropper.getCroppedCanvas().toBlob(function (blob) {
+            // Crear un objeto URL para mostrar la imagen recortada
+            const previewUrl = URL.createObjectURL(blob);
 
-        if (!currentInput) {
-            console.error('No se ha seleccionado ninguna imagen.');
-            return;
-        }
-
-        try {
-            // Obtener los datos de la imagen original (incluyendo rotación)
-            const imageData = cropper.getImageData();
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                canvas.width = imageData.naturalHeight;
-                canvas.height = imageData.naturalWidth;
+            // Mostrar la imagen recortada como vista previa
+            const previewImage = currentInput.closest('.form-group').querySelector('img');
+            if (previewImage) {
+                previewImage.src = previewUrl; // Actualizar la vista previa
             } else {
-                canvas.width = imageData.naturalWidth;
-                canvas.height = imageData.naturalHeight;
+                // Si no hay una imagen de vista previa, crearla
+                const newPreviewImage = document.createElement('img');
+                newPreviewImage.src = previewUrl;
+                newPreviewImage.classList.add('img-fluid', 'img-thumbnail', 'mt-2');
+                currentInput.closest('.form-group').appendChild(newPreviewImage);
             }
 
-            // Dibujar la imagen rotada en el lienzo
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate((imageData.rotate * Math.PI) / 180);
-            ctx.drawImage(
-                cropper.element, // Aquí usamos el elemento de la imagen directamente
-                -imageData.naturalWidth / 2,
-                -imageData.naturalHeight / 2,
-                imageData.naturalWidth,
-                imageData.naturalHeight
-            );
-
-            // Convertir el lienzo a base64
-            const base64data = canvas.toDataURL();
-            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-            previewDiv.innerHTML = `
-                <img src="${base64data}" class="img-fluid img-thumbnail" />
-                <span class="badge bg-success">¡Guardado!</span>
-            `;
-            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            // Crear un nuevo input oculto para enviar la imagen recortada al servidor
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'cropped_images[]';
+            hiddenInput.value = previewUrl; // Puedes usar un método para enviar el blob al servidor si es necesario
+            currentInput.closest('.form-group').appendChild(hiddenInput);
 
             // Cerrar el modal
             $('#cropperModal').modal('hide');
-        } catch (error) {
-            console.error('Error al guardar la imagen sin recortar:', error);
-        }
-    });
-    
-    // Botón: Recortar y guardar
-    document.getElementById('cropImageBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
-                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Recortado!</span>
-                `;
-                document.getElementById(`${currentInput.id}-base64`).value = base64data;
-            }
-        }
-        $('#cropperModal').modal('hide');
-    });
-
-    // Destruir Cropper al cerrar el modal
-    $('#cropperModal').on('hidden.bs.modal', function () {
-        if (cropper) cropper.destroy();
-    });
-
-    // Generar campos de imágenes
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageCountSelect = document.getElementById('imageCount');
-        const container = document.getElementById('imageFieldsContainer');
-        const cropperImage = document.getElementById('cropperImage');
-
-        // Cargar valor guardado
-        /*const savedCount = localStorage.getItem('imageCount');
-        if (savedCount) {
-            imageCountSelect.value = savedCount;
-            generateImageFields(parseInt(savedCount));
-        }*/
-
-        imageCountSelect.addEventListener('change', function () {
-            const count = parseInt(this.value);
-            localStorage.setItem('imageCount', count);
-            generateImageFields(count);
         });
-
-        function generateImageFields(count) {
-        const existingImages = container.querySelectorAll('.existing-image'); // Mantener imágenes ya guardadas
-        container.innerHTML = ''; // Limpia solo las nuevas imágenes
-
-        // Volver a agregar las imágenes existentes
-        existingImages.forEach(image => container.appendChild(image));
-
-        // Agregar nuevas imágenes sin borrar las existentes
-        for (let i = 1; i <= count; i++) {
-            const col = document.createElement('div');
-            col.classList.add('col-sm-6', 'new-image');
-
-            col.innerHTML = `
-                <div class="form-group">
-                    <label for="image${i}">Imagen por Subir ${i}:</label>
-                    <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
-                    <div class="image-preview mt-2" id="image${i}-preview"></div>
-                    <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
-                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                </div>
-            `;
-            container.appendChild(col);
-        }
+    } else {
+        console.error('Cropper o currentInput no están inicializados.');
     }
-        
-        /*function generateImageFields(count) {
-            container.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                const col = document.createElement('div');
-                col.classList.add('col-sm-6');
-                col.innerHTML = `
-                    <div class="form-group">
-                        <label for="image${i}">Imagen por Subir ${i}:</label>
-                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
-                        <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                    </div>
-                `;
-                container.appendChild(col);
-            }
+});
 
-            // Asignar eventos a los nuevos inputs
-            document.querySelectorAll('.replace-image').forEach(input => {
-            input.addEventListener('change', function (e) {
-                const file = e.target.files[0];
-                if (!file) return;
+    // Botón: Guardar Sin Recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            try {
+                // Obtener los datos de la imagen original (incluyendo rotación)
+                const imageData = cropper.getImageData();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
 
-                if (!file.type.startsWith('image/')) {
-                    alert('Por favor, sube solo imágenes.');
-                    return;
+                // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+                if (Math.abs(imageData.rotate) % 180 === 90) {
+                    canvas.width = imageData.naturalHeight;
+                    canvas.height = imageData.naturalWidth;
+                } else {
+                    canvas.width = imageData.naturalWidth;
+                    canvas.height = imageData.naturalHeight;
                 }
 
-                currentInput = e.target;
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    if (cropper) cropper.destroy();
-                    cropperImage.src = event.target.result;
-                    $('#cropperModal').modal('show');
-                    cropper = new Cropper(cropperImage, {
-                        aspectRatio: 4 / 3,
-                        viewMode: 1,
-                        autoCropArea: 1,
-                        minContainerWidth: 760,
-                        minContainerHeight: 600,
-                        responsive: true
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-        }*/
+                // Dibujar la imagen rotada en el lienzo
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate((imageData.rotate * Math.PI) / 180);
+                ctx.drawImage(
+                    cropper.element, // Usamos el elemento de la imagen directamente
+                    -imageData.naturalWidth / 2,
+                    -imageData.naturalHeight / 2,
+                    imageData.naturalWidth,
+                    imageData.naturalHeight
+                );
 
-        // Limpiar localStorage al enviar el formulario
-        document.querySelector("form").addEventListener("submit", function () {
-            localStorage.removeItem('imageCount');
-        });
+                // Convertir el lienzo a base64
+                const base64data = canvas.toDataURL('image/jpeg');
+
+                // Mostrar la imagen rotada como vista previa
+                const previewImage = currentInput.closest('.form-group').querySelector('img');
+                if (previewImage) {
+                    previewImage.src = base64data; // Actualizar la vista previa
+                } else {
+                    // Si no hay una imagen de vista previa, crearla
+                    const newPreviewImage = document.createElement('img');
+                    newPreviewImage.src = base64data;
+                    newPreviewImage.classList.add('img-fluid', 'img-thumbnail', 'mt-2');
+                    currentInput.closest('.form-group').appendChild(newPreviewImage);
+                }
+
+                // Crear un nuevo input oculto para enviar la imagen rotada al servidor
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'rotated_images[]';
+                hiddenInput.value = base64data; // Base64 de la imagen rotada
+                currentInput.closest('.form-group').appendChild(hiddenInput);
+
+                // Cerrar el modal
+                $('#cropperModal').modal('hide');
+            } catch (error) {
+                console.error('Error al guardar la imagen sin recortar:', error);
+            }
+        } else {
+            console.error('Cropper o currentInput no están inicializados.');
+        }
     });
+
+// Botón: Guardar sin recortar (manteniendo rotación)
+document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+    if (!cropper) {
+        console.error('El objeto cropper no está inicializado.');
+        return;
+    }
+
+    if (!currentInput) {
+        console.error('No se ha seleccionado ninguna imagen.');
+        return;
+    }
+
+    try {
+        // Obtener los datos de la imagen original (incluyendo rotación)
+        const imageData = cropper.getImageData();
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+        if (Math.abs(imageData.rotate) % 180 === 90) {
+            canvas.width = imageData.naturalHeight;
+            canvas.height = imageData.naturalWidth;
+        } else {
+            canvas.width = imageData.naturalWidth;
+            canvas.height = imageData.naturalHeight;
+        }
+
+        // Dibujar la imagen rotada en el lienzo
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((imageData.rotate * Math.PI) / 180);
+        ctx.drawImage(
+            cropper.element, // Usamos el elemento de la imagen directamente
+            -imageData.naturalWidth / 2,
+            -imageData.naturalHeight / 2,
+            imageData.naturalWidth,
+            imageData.naturalHeight
+        );
+
+        // Convertir el lienzo a base64
+        const base64data = canvas.toDataURL('image/jpeg');
+        
+        // Actualizar la vista previa de la imagen en el formulario
+        const previewImage = currentInput.closest('.form-group').querySelector('img');
+        if (previewImage) {
+            previewImage.src = base64data;
+        }
+
+        // Crear un nuevo input para enviar la imagen rotada al servidor
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'rotated_images[]';
+        hiddenInput.value = base64data; // Base64 de la imagen rotada
+        currentInput.closest('.form-group').appendChild(hiddenInput);
+
+        // Cerrar el modal
+        $('#cropperModal').modal('hide');
+    } catch (error) {
+        console.error('Error al guardar la imagen sin recortar:', error);
+    }
+});
 
     /*Juntas-Resultados */
     function guardarEnSessionStorage() {

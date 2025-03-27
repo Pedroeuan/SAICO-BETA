@@ -924,7 +924,7 @@
 
     // Botón: Guardar sin recortar (manteniendo rotación)
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (!cropper) {
+        /*if (!cropper) {
             console.error('El objeto cropper no está inicializado.');
             return;
         }
@@ -932,7 +932,7 @@
         if (!currentInput) {
             console.error('No se ha seleccionado ninguna imagen.');
             return;
-        }
+        }*/
 
         try {
             // Obtener los datos de la imagen original (incluyendo rotación)
