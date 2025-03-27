@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-01-PRO-INS-02')
+@section('title', 'FOR-01-PRO-INS-03')
 
 @section('css')
 <!--datatable -->
@@ -65,17 +65,16 @@
 <br>
 <br>
 <br>
-
-{{-- <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4> --}}
-<br>
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-01-PRO-INS-02" action="{{route('Reportes_FOR_01_PRO_INS_02.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-01-PRO-INS-03" action="{{ route('Reportes_FOR_01_PRO_INS_03.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+
                                 @csrf 
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS</strong></div>
+                                <h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -213,9 +212,9 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
-                                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '')}}">
-                                            @error('Criterio_Evaluacion')
+                                            <label class="col-form-label" for="inputSuccess">Código Aplicable</label>
+                                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Codigo_Aplicable', $Detalles_Generales['Codigo_Aplicable'] ?? '')}}">
+                                            @error('Codigo_Aplicable')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -243,16 +242,16 @@
                                     <div class="alert alert-info alert-dismissible">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                        <p>Puedes Seleccionar una particula, contrastante y un equipo del menu o escribir directamente</p>
+                                        <p>Puedes Seleccionar un penetrante, removedor y un reveleador del menu o escribir directamente</p>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">PARTICULAS</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">PENETRANTES</div>
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Particulas:</label>
+                                            <label class="col-form-label" for="inputSuccess">Penetrantes:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione una Particula</option> <!-- Opción por defecto -->
+                                            <option value="" selected disabled>Seleccione un Penetrante</option> <!-- Opción por defecto -->
                                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
@@ -268,52 +267,52 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputP" name="Datos_Equipo[MARCA_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.MARCA_PARTICULAS', $Datos_Equipo['MARCA_PARTICULAS'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputPS" name="Datos_Equipo[MARCA_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MARCA_PENETRANTES', $Datos_Equipo['MARCA_PENETRANTES'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputP" name="Datos_Equipo[MODELO_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.MODELO_PARTICULAS', $Datos_Equipo['MODELO_PARTICULAS'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputPS" name="Datos_Equipo[MODELO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MODELO_PENETRANTES', $Datos_Equipo['MODELO_PENETRANTES'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputP" name="Datos_Equipo[LOTE_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.LOTE_PARTICULAS', $Datos_Equipo['LOTE_PARTICULAS'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputPS" name="Datos_Equipo[LOTE_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.LOTE_PENETRANTES', $Datos_Equipo['LOTE_PENETRANTES'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">TIPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipoInputP" name="Datos_Equipo[TIPO_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.TIPO_PARTICULAS', $Datos_Equipo['TIPO_PARTICULAS'] ?? '') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">COLOR:</label>
-                                            <input type="text" class="form-control  inputForm" id="colorInputP" name="Datos_Equipo[COLOR_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.COLOR_PARTICULAS', $Datos_Equipo['COLOR_PARTICULAS'] ?? '') }}">
+                                            <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tiempoInputPS" name="Datos_Equipo[TIEMPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_PENETRANTES', $Datos_Equipo['TIEMPO_PENETRANTES'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputP" name="Datos_Equipo[APLICACION_PARTICULAS]" placeholder="" value="{{ old('Datos_Equipo.APLICACION_PARTICULAS', $Datos_Equipo['APLICACION_PARTICULAS'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="aplicacionInputPS" name="Datos_Equipo[APLICACION_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.APLICACION_PENETRANTES', $Datos_Equipo['APLICACION_PENETRANTES'] ?? '')}}">
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">CONTRASTANTE</div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputPS" name="Datos_Equipo[TIPO_GRUPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.TIPO_GRUPO_PENETRANTES', $Datos_Equipo['TIPO_GRUPO_PENETRANTES'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">REMOVEDOR</div>
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Contrastante:</label>
+                                            <label class="col-form-label" for="inputSuccess">Removedor:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un Contrastante</option> <!-- Opción por defecto -->
+                                            <option value="" selected disabled>Seleccione un Removedor</option> <!-- Opción por defecto -->
                                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
@@ -329,54 +328,53 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputC" name="Datos_Equipo[MARCA_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.MARCA_CONTRASTE', $Datos_Equipo['MARCA_CONTRASTE'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputR" name="Datos_Equipo[MARCA_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_REMOVEDOR', $Datos_Equipo['MARCA_REMOVEDOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputC" name="Datos_Equipo[MODELO_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.MODELO_CONTRASTE', $Datos_Equipo['MODELO_CONTRASTE'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputR" name="Datos_Equipo[MODELO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_REMOVEDOR', $Datos_Equipo['MODELO_REMOVEDOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputC" name="Datos_Equipo[LOTE_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.LOTE_CONTRASTE', $Datos_Equipo['LOTE_CONTRASTE'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputR" name="Datos_Equipo[LOTE_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.LOTE_REMOVEDOR', $Datos_Equipo['LOTE_REMOVEDOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">TIPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipoInputC" name="Datos_Equipo[TIPO_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.TIPO_CONTRASTE', $Datos_Equipo['TIPO_CONTRASTE'] ?? '') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">COLOR:</label>
-                                            <input type="text" class="form-control  inputForm" id="colorInputC" name="Datos_Equipo[COLOR_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.COLOR_CONTRASTE', $Datos_Equipo['COLOR_CONTRASTE'] ?? '') }}">
+                                            <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tiempoInputR" name="Datos_Equipo[TIEMPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_REMOVEDOR', $Datos_Equipo['TIEMPO_REMOVEDOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputC" name="Datos_Equipo[APLICACION_CONTRASTE]" placeholder="" value="{{ old('Datos_Equipo.APLICACION_CONTRASTE', $Datos_Equipo['APLICACION_CONTRASTE'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="aplicacionInputR" name="Datos_Equipo[APLICACION_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.APLICACION_REMOVEDOR', $Datos_Equipo['APLICACION_REMOVEDOR'] ?? '')}}">
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputR" name="Datos_Equipo[TIPO_GRUPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.TIPO_GRUPO_REMOVEDOR', $Datos_Equipo['TIPO_GRUPO_REMOVEDOR'] ?? '')}}">
+                                        </div>
+                                    </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">REVELEADOR</div>
 
-                                    <!-- Select para Equipos -->
+                                    <!-- Select para Reveleador -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                            <label class="col-form-label" for="inputSuccess">Reveleador:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
+                                            <option value="" selected disabled>Seleccione un Reveleador</option> <!-- Opción por defecto -->
                                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
@@ -392,35 +390,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputRR" name="Datos_Equipo[MARCA_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_REVELEADOR', $Datos_Equipo['MARCA_REVELEADOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputRR" name="Datos_Equipo[MODELO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_REVELEADOR', $Datos_Equipo['MODELO_REVELEADOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.N_S_EQUIPO', $Datos_Equipo['N_S_EQUIPO'] ?? '') }}">
+                                            <label class="col-form-label" for="inputSuccess">LOTE:</label>
+                                            <input type="text" class="form-control  inputForm" id="loteInputRR" name="Datos_Equipo[LOTE_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.LOTE_REVELEADOR', $Datos_Equipo['LOTE_REVELEADOR'] ?? '')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">CORRIENTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="corrienteInputE" name="Datos_Equipo[CORRIENTE_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.CORRIENTE_EQUIPO', $Datos_Equipo['CORRIENTE_EQUIPO'] ?? '') }}">
+                                            <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tiempoInputRR" name="Datos_Equipo[TIEMPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_REVELEADOR', $Datos_Equipo['TIEMPO_REVELEADOR'] ?? '')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">DISTANCIA ENTRE PATAS:</label>
-                                            <input type="text" class="form-control  inputForm" id="distanciaInputE" name="Datos_Equipo[DISTANCIA_PATAS_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.DISTANCIA_PATAS_EQUIPO', $Datos_Equipo['DISTANCIA_PATAS_EQUIPO'] ?? '') }}">
+                                            <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
+                                            <input type="text" class="form-control  inputForm" id="aplicacionInputRR" name="Datos_Equipo[APLICACION_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.APLICACION_REVELEADOR', $Datos_Equipo['APLICACION_REVELEADOR'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
+                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputRR" name="Datos_Equipo[TIPO_GRUPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.TIPO_GRUPO_REVELEADOR', $Datos_Equipo['TIPO_GRUPO_REVELEADOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -430,7 +435,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO DE LUZ:</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_LUZ]" placeholder="" value="{{ old('Datos_Equipo.TIPO_LUZ', $Datos_Equipo['TIPO_LUZ'] ?? '') }}">
+                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_LUZ]" placeholder="" value="{{old('Datos_Equipo.TIPO_LUZ', $Datos_Equipo['TIPO_LUZ'] ?? '')}}">
                                             </div>
                                         </div>
                                     </div>
@@ -439,7 +444,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">INTENCIDAD:</label>                                            
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[INTENCIDAD]" placeholder="" value="{{ old('Datos_Equipo.INTENCIDAD', $Datos_Equipo['INTENCIDAD'] ?? '') }}">
+                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[INTENCIDAD]" placeholder="" value="{{old('Datos_Equipo.INTENCIDAD', $Datos_Equipo['INTENCIDAD'] ?? '')}}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">Lx</span>
                                                 </div>
@@ -450,7 +455,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIÓN SUPERFICIAL:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[CONDICION_SUPERFICIAL]" placeholder="" value="{{ old('Datos_Equipo.CONDICION_SUPERFICIAL', $Datos_Equipo['CONDICION_SUPERFICIAL'] ?? '') }}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[CONDICION_SUPERFICIAL]" placeholder="" value="{{old('Datos_Equipo.CONDICION_SUPERFICIAL', $Datos_Equipo['CONDICION_SUPERFICIAL'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -458,7 +463,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TEMPERATURA DE PRUEBA:</label>                                            
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMPERATURA_PRUEBA]" placeholder="" value="{{ old('Datos_Equipo.TEMPERATURA_PRUEBA', $Datos_Equipo['TEMPERATURA_PRUEBA'] ?? '') }}">
+                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMPERATURA_PRUEBA]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_PRUEBA', $Datos_Equipo['TEMPERATURA_PRUEBA'] ?? '')}}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">°C</span>
                                                 </div>
@@ -466,8 +471,7 @@
                                         </div>
                                     </div>
 
-{{--                                     <pre>{{ print_r($Grupo_Juntas_Re, true) }}</pre>
- --}}
+{{--                                     <pre>{{ print_r($Grupo_Juntas_Re, true) }}</pre> --}}
 
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
@@ -518,15 +522,15 @@
                                                 @foreach($Grupo_Juntas_Re as $index => $junta)
                                                 <tr>
                                                         <td>{{ intval($index) + 1 }}</td>
-                                                        <td><input type="text" class="form-control" name="componente[]" value="{{ $junta['componente'] ?? ''}}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_indicacion[]" value="{{ $junta['no_indicacion'] ?? '' }}" placeholder="No. Aceptación" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] ?? '' }}" placeholder="No. Serie" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="largo[]" value="{{ $junta['largo'] ?? '' }}" placeholder="No. Colada" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="ancho[]" value="{{ $junta['ancho'] ?? '' }}" placeholder="tnominal" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] ?? '' }}" placeholder="Ø" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] ?? '' }}" placeholder="No.Ind." style="width: 50px;"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] ?? '' }}" placeholder="Tipo de Indicación"></td>
-                                                        <td><input type="text" class="form-control" name="longitud_inspeccionada[]" value="{{ $junta['longitud_inspeccionada'] ?? '' }}" placeholder="NR (%)" style="width: 60px;"></td>
+                                                        <td><input type="text" class="form-control" name="componente[]" value="{{ $junta['componente'] ?? ''}}" placeholder="Componente" style="width: 100px;"></td>
+                                                        <td><input type="text" class="form-control" name="no_indicacion[]" value="{{ $junta['no_indicacion'] ?? '' }}" placeholder="No. Indicación" style="width: 100px;"></td>
+                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] ?? '' }}" placeholder="Tipo de Indicación" style="width: 100px;"></td>
+                                                        <td><input type="text" class="form-control" name="largo[]" value="{{ $junta['largo'] ?? '' }}" placeholder="Largo" style="width: 100px;"></td>
+                                                        <td><input type="text" class="form-control" name="ancho[]" value="{{ $junta['ancho'] ?? '' }}" placeholder="Ancho" style="width: 100px;"></td>
+                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] ?? '' }}" placeholder="Ø" style="width: 70px;"></td>
+                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] ?? '' }}" placeholder="H.T." style="width: 120px;"></td>
+                                                        <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] ?? '' }}" placeholder="Evaluación"></td>
+                                                        <td><input type="text" class="form-control" name="longitud_inspeccionada[]" value="{{ $junta['longitud_inspeccionada'] ?? '' }}" placeholder="Longitud Inspeccionada" style="width: 110px;"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                 @endforeach
@@ -885,7 +889,7 @@
 
                                         <div class="container">
                                             <div class="float-right">
-                                                <button type="submit" class="btn btn-info bg-primary">Guardar</button>
+                                                <button type="submit" class="btn btn-info bg-primary">Actualizar</button>
                                             </div>
 
                                             <div class="float-left">
@@ -934,9 +938,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-
     /*Prevenir el Enter*/
-    document.getElementById('FOR-01-PRO-INS-02').addEventListener('keydown', function(event) {
+    document.getElementById('FOR-01-PRO-INS-03').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
@@ -961,10 +964,10 @@
                     <td><input type="text" class="form-control" name="componente[]" placeholder="No. Junta/Componente"></td>
                     <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo Indicación"></td>
-                    <td><input type="text" class="form-control" name="largo[]" placeholder="LARGO" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="ancho[]" placeholder="ANCHO" style="width: 85px;"></td>
+                    <td><input type="text" class="form-control" name="largo[]" placeholder="LARGO" style="width: 100px;"></td>
+                    <td><input type="text" class="form-control" name="ancho[]" placeholder="ANCHO" style="width: 100px;"></td>
                     <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 110px;"></td>
+                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 120px;"></td>
                     <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación" style="width: 100px;"></td>
                     <td><input type="text" class="form-control" name="longitud_inspeccionada[]" placeholder="L.I." style="width: 110px;"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>

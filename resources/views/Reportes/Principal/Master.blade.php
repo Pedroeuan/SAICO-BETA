@@ -49,8 +49,8 @@
 @endsection
 
 @section('content')
-@if($Nombre_Formato == 'FOR-01-PRO-INS-02') 
-    @include('Reportes.INS.Create.FOR-01-PRO-INS-02')
+@if($Nombre_Formato == 'FOR-02-PRO-INS-02') 
+    @include('Reportes.INS.Create.FOR-02-PRO-INS-02')
 @elseif($Nombre_Formato == 'FOR-01-PRO-INS-03') 
     @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
 @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
