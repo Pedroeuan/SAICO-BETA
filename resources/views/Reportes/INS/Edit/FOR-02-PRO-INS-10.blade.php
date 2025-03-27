@@ -843,7 +843,7 @@
                                         @if(!empty($Fotos_Comentarios))
                                             <div class="row">
                                                 @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-6" id="existing-image-{{ $index }}">
                                                         <div class="form-group">
                                                             <!-- Vista previa de la imagen existente -->
                                                             <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
@@ -857,11 +857,11 @@
                                                             <!-- Campo para el comentario -->
                                                             <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 
-                                                            <!-- Campo oculto para la imagen en base64 -->
-                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
                                                             <!-- Campo oculto para mantener la ruta de la imagen existente -->
                                                             <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                            <!-- Botón de eliminar -->
+                                                            <button type="button" class="btn btn-danger mt-2 delete-existing-image" data-index="{{ $index }}">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -957,6 +957,27 @@
             }
         });
     });
+
+    /*Botón eliminar para las imagenes que estan subidas. */
+    document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('delete-existing-image')) {
+        const index = e.target.getAttribute('data-index');
+        const imageContainer = document.getElementById(`existing-image-${index}`);
+
+        if (imageContainer) {
+            // Eliminar el contenedor de la imagen
+            imageContainer.remove();
+
+            // Agregar un campo oculto para indicar que la imagen debe ser eliminada
+            const form = document.querySelector('form');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `deleted_images[]`;
+            input.value = index; // Índice de la imagen a eliminar
+            form.appendChild(input);
+        }
+    }
+});
 
     /*Modal para las imagenes que ya estan subidos */
     document.addEventListener('change', function (e) {
@@ -1160,6 +1181,19 @@
         $('#cropperModal').modal('hide');
     });*/
 
+    /*Botón eliminar para las imagenes dinamicas*/
+    document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('delete-dynamic-image')) {
+        const id = e.target.getAttribute('data-id');
+        const imageContainer = document.getElementById(id);
+
+        if (imageContainer) {
+            // Eliminar el contenedor de la imagen
+            imageContainer.remove();
+        }
+    }
+});
+
     // Destruir Cropper al cerrar el modal
     $('#cropperModal').on('hidden.bs.modal', function () {
         if (cropper) cropper.destroy();
@@ -1185,10 +1219,13 @@
         });
 
         function generateImageFields(count) {
-            container.innerHTML = '';
+            const container = document.getElementById('imageFieldsContainer');
+            container.innerHTML = ''; // Limpiar el contenedor
+
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
+                col.id = `dynamic-image-${i}`; // Agregar el atributo id al contenedor principal
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
@@ -1196,6 +1233,7 @@
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <button type="button" class="btn btn-danger mt-2 delete-dynamic-image" data-id="dynamic-image-${i}">Eliminar</button>
                     </div>
                 `;
                 container.appendChild(col);
