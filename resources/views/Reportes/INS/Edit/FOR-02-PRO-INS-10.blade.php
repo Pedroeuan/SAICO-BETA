@@ -843,7 +843,7 @@
                                         @if(!empty($Fotos_Comentarios))
                                             <div class="row">
                                                 @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
                                                         <div class="form-group">
                                                             <!-- Vista previa de la imagen existente -->
                                                             <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
@@ -862,6 +862,12 @@
 
                                                             <!-- Campo oculto para mantener la ruta de la imagen existente -->
                                                             <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                            <!-- Botón de eliminación -->
+                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -955,6 +961,20 @@
                     }
                 });
             }
+        });
+    });
+
+    /*Botón eliminar para imagenes subidas */
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.remove-image').forEach(button => {
+            button.addEventListener('click', function () {
+                const index = this.getAttribute('data-index');
+                const fieldToRemove = document.getElementById(`image-container-${index}`);
+                if (fieldToRemove) {
+                    fieldToRemove.style.display = 'none'; // Oculta el elemento
+                    document.getElementById(`deleted_image_${index}`).value = index; // Marca como eliminado
+                }
+            });
         });
     });
 
@@ -1202,7 +1222,7 @@
                 `;
                 container.appendChild(col);
             }
-            
+
             // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
