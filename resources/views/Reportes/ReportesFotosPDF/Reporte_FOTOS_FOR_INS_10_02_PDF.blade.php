@@ -11,32 +11,66 @@
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
+
+                @if ($totalFotos <=4)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     height: auto; /* Permite crecer según el contenido */
                     text-align: center;
-                    font-family: 'arial', sans-serif;
                     /*background-color: rgb(226, 45, 45);*/
+                    font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: 30px;
+                    bottom: -30px;
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    font-family: 'arial', sans-serif;
                     /*background-color: rgb(7, 231, 18);*/
+                    font-family: 'arial', sans-serif;
                 }
 
                 body {
-                    margin: 6px, 0; /* Ajusta el margen de la página */
+                    margin: -30px, 0; /* Ajusta el margen de la página */
                     padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
                 }
+            @else
+                header {
+                    position: fixed;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin: 0;
+                    padding-top: 235px; /* Altura del header */
+                    padding-bottom: 95px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -384,21 +418,32 @@
 
                 </table>
 
-                
-                <table class="imagenes-reporte">
-                    <tr>
-                        @foreach($Fotos as $index => $foto)
-                            <td class="foto-container">
-                                <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                <p class="comment">{{ $foto['comment'] }}</p>
-                            </td>
-                            <div style="margin-bottom: 50px;"></div>
-                            @if(($index + 1) % 2 == 0)
-                                </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                            @endif
-                        @endforeach
-                    </tr>
-                </table>
+                @php
+                    $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                @endphp
+
+                @foreach($chunks as $fotosGrupo)
+                    <table class="imagenes-reporte">
+                        <tr>
+                            @foreach($fotosGrupo as $index => $foto)
+                                <td class="foto-container">
+                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                    <p class="comment">{{ $foto['comment'] }}</p>
+                                </td>
+                                <div style="margin-bottom: 50px;"></div>
+                                @if(($index + 1) % 2 == 0)
+                                    </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                @endif
+                            @endforeach
+                        </tr>
+                    </table>
+
+                    {{-- Salto de página cada 4 imágenes --}}
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
+                @endforeach
+
 
             </div>
 

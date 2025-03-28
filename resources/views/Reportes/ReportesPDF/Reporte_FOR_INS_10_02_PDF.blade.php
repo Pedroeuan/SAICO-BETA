@@ -37,7 +37,6 @@
                     padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
-                    font-family: 'arial', sans-serif;
                 }
             @else
                 header {
