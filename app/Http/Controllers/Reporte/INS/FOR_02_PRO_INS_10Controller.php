@@ -937,8 +937,9 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
             for ($i = 0; $i < min(4, count($fotos)); $i++) { // Solo obtener hasta 4 imágenes
                 $Fotos[] = [
-                    'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['path'])),
-                    'comment' => $fotos[$i]['comment'] ?? ''
+                    //'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['ruta'])),
+                    'path' => storage_path('app/public/' . str_replace('storage/', '', $fotos[$i]['ruta'])),
+                    'comment' => $fotos[$i]['ruta'] ?? ''
                 ];
             }
         }
