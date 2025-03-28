@@ -1189,6 +1189,7 @@
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
+                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
@@ -1196,10 +1197,22 @@
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
                 `;
                 container.appendChild(col);
             }
+            
+            // Agregar eventos de eliminación a los botones
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                    }
+                });
+            });
 
             // Asignar eventos a los nuevos inputs
             document.querySelectorAll('.image-input').forEach(input => {
