@@ -691,7 +691,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             ]);
         } 
 
-/* Fotos y Comentarios */
+        /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         //$Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -704,7 +704,25 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
+        $deletedImages = $request->input('deleted_images', []);
         $imagenesGuardadas = [];
+
+        Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
+
+        // Procesar eliminación de imágenes
+        foreach ($deletedImages as $index) {
+            if (isset($existingImages[$index])) {
+                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
+    
+                // Eliminar del almacenamiento
+                if (Storage::exists($rutaImagen)) {
+                    Storage::delete($rutaImagen);
+                    Log::info("Imagen eliminada: {$rutaImagen}");
+                } else {
+                    Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
+                }
+            }
+        }    
 
         Log::info('Obtener las imágenes existentes: ', ['existingImages' => $existingImages]);
 
@@ -753,27 +771,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 Log::info('gregar la nueva imagen y el comentario actualizado: ', ['imagenesGuardadas' => $imagenesGuardadas[$index]]);
             }
         }
-
-        // Procesar nuevas imágenes
-        /*if ($request->has('images_base64')) {
-            foreach ($imagesBase64 as $index => $base64Image) {
-                if (!empty($base64Image)) {
-                    // Decodificar Base64
-                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-                    $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                    $path = "{$rutaCarpeta}/{$imageName}";
-
-                    // Guardar la imagen en el almacenamiento
-                    Storage::put($path, $image);
-
-                    // Agregar la nueva imagen y su comentario
-                    $imagenesGuardadas[] = [
-                        'ruta' => str_replace('public/', 'storage/', $path),
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                }
-            }
-        }*/
 
         // Procesar nuevas imágenes
         if ($request->has('images_base64')) {
