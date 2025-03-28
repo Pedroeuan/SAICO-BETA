@@ -718,8 +718,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 $newImage = $request->file("replace_images.$index");
                 $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
                 $path = $newImage->storeAs($rutaCarpeta, $imageName);
-                Log::info('Guardar la nueva imagen: ', ['newImage' => $newImage]);
-                Log::info('nombre nueva imagen: ', ['imageName' => $imageName]);
 
                 // Agregar la nueva imagen y el comentario actualizado
                 $imagenesGuardadas[$index] = [

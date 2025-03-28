@@ -960,24 +960,24 @@
 
     /*Botón eliminar para las imagenes que estan subidas. */
     document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('delete-existing-image')) {
-        const index = e.target.getAttribute('data-index');
-        const imageContainer = document.getElementById(`existing-image-${index}`);
+        if (e.target && e.target.classList.contains('delete-existing-image')) {
+            const index = e.target.getAttribute('data-index');
+            const imageContainer = document.getElementById(`existing-image-${index}`);
 
-        if (imageContainer) {
-            // Eliminar el contenedor de la imagen
-            imageContainer.remove();
+            if (imageContainer) {
+                // Eliminar el contenedor de la imagen
+                imageContainer.remove();
 
-            // Agregar un campo oculto para indicar que la imagen debe ser eliminada
-            const form = document.querySelector('form');
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `deleted_images[]`;
-            input.value = index; // Índice de la imagen a eliminar
-            form.appendChild(input);
+                // Agregar un campo oculto para indicar que la imagen debe ser eliminada
+                const form = document.querySelector('form');
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = `deleted_images[]`;
+                input.value = index; // Índice de la imagen a eliminar
+                form.appendChild(input);
+            }
         }
-    }
-});
+    });
 
     /*Modal para las imagenes que ya estan subidos */
     document.addEventListener('change', function (e) {
