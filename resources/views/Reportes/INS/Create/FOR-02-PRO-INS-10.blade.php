@@ -480,25 +480,25 @@
 
                                                 <tr id="inputRow">
                                                     <th></th> <!-- Para ID vacío -->
-                                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="18"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="19"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 50px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 120px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 150px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                                 
@@ -801,12 +801,23 @@
                                         </div>
 
                                         <p>
-
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                                        
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -824,48 +835,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
                                             </div>
                                         </div>
 
@@ -927,139 +903,203 @@
         });
     });
 
-    $(document).ready(function () {
-    var rowCount = 0;
+    /* Imágenes */
+    let cropper;
+    let currentInput;
 
-    // Función para renumerar las filas
-    function renumerarFilas() {
-        $('#dynamicTable tbody tr').each(function (index) {
-            $(this).find('td:first').text(index + 1);
-        });
-        rowCount = $('#dynamicTable tbody tr').length;
-    }
-
-    // Cargar datos desde localStorage si existen
-    function cargarDesdeLocalStorage() {
-        const dataGuardada = localStorage.getItem('tablaMaterial');
-        if (dataGuardada) {
-            const filas = JSON.parse(dataGuardada);
-            filas.forEach(fila => {
-                agregarFilaDesdeDatos(fila);
-            });
-            renumerarFilas(); // Renumerar al cargar
-        }
-    }
-
-    // Guardar la tabla completa en localStorage
-    function guardarEnLocalStorage() {
-        const datos = [];
-        $('#dynamicTable tbody tr').each(function () {
-            const fila = {};
-            $(this).find('input').each(function () {
-                const name = $(this).attr('name');
-                fila[name] = $(this).val();
-            });
-            datos.push(fila);
-        });
-        localStorage.setItem('tablaMaterial', JSON.stringify(datos));
-    }
-
-    // Agrega una fila usando un objeto con valores
-    function agregarFilaDesdeDatos(data) {
-        rowCount++;
-        const fila = `<tr>
-            <td>${rowCount}</td>
-            <td><input type="text" class="form-control" name="elemento_tubo[]" value="${data.elemento_tubo || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_aceptacion[]" value="${data.no_aceptacion || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_serie[]" value="${data.no_serie || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="no_colada[]" value="${data.no_colada || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="tnominal[]" value="${data.tnominal || ''}" style="width: 100px;"></td>
-            <td><input type="text" class="form-control" name="diametro[]" value="${data.diametro || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="no_ind[]" value="${data.no_ind || ''}" style="width: 50px;"></td>
-            <td><input type="text" class="form-control" name="tipo_indicacion[]" value="${data.tipo_indicacion || ''}"></td>
-            <td><input type="text" class="form-control" name="nr[]" value="${data.nr || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="ni[]" value="${data.ni || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="ht[]" value="${data.ht || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="prof[]" value="${data.prof || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="la[]" value="${data.la || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="lc[]" value="${data.lc || ''}" style="width: 60px;"></td>
-            <td><input type="text" class="form-control" name="tmax[]" value="${data.tmax || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="tmin[]" value="${data.tmin || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="metros_lineales[]" value="${data.metros_lineales || ''}" style="width: 80px;"></td>
-            <td><input type="text" class="form-control" name="evaluacion[]" value="${data.evaluacion || ''}" style="width: 120px;"></td>
-            <td><input type="text" class="form-control" name="observaciones[]" value="${data.observaciones || ''}" style="width: 150px;"></td>
-            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"></i></button></td>
-        </tr>`;
-        $('#dynamicTable tbody').append(fila);
-    }
-
-    // Botón para agregar nuevas filas
-    $('#addBtn').click(function () {
-        const numRows = $('#numRows').val();
-        for (let i = 0; i < numRows; i++) {
-            agregarFilaDesdeDatos({});
-        }
-        renumerarFilas(); // Renumerar después de agregar
-        guardarEnLocalStorage();
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(-90);
     });
 
-    // Eliminar fila
-    $('#dynamicTable').on('click', '.btnEliminar', function () {
-        $(this).closest('tr').remove();
-        renumerarFilas(); // Renumerar después de eliminar
-        guardarEnLocalStorage();
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(90);
     });
 
-    // Rellenar vacíos
-    $('#preFillBtn').click(function () {
-        $('#dynamicTable tbody tr').each(function () {
-            $(this).find('input').each(function () {
-                if ($(this).val() === '') {
-                    $(this).val('----');
-                }
-            });
-        });
-        guardarEnLocalStorage();
+    // Botón: Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        $('#cropperModal').modal('hide');
     });
 
-    // Guardar automáticamente cada vez que se cambia algo
-    $('#dynamicTable').on('input', 'input', function () {
-        guardarEnLocalStorage();
-    });
-
-    // Validar antes de enviar
-    $('form').submit(function (e) {
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        /*if (!cropper) {
+            console.error('El objeto cropper no está inicializado.');
             return;
         }
 
-        // Desactivar botón submit
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        if (!currentInput) {
+            console.error('No se ha seleccionado ninguna imagen.');
+            return;
+        }*/
 
-        // Opcional: Limpiar el localStorage después de guardar
-        // localStorage.removeItem('tablaMaterial');
+        try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
+        }
     });
 
-    // Limpiar LocalStorage (opcional: botón)
-    $('#clearStorageBtn').click(function () {
-        localStorage.removeItem('tablaMaterial');
-        location.reload();
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            }
+        }
+        $('#cropperModal').modal('hide');
     });
 
-    // Cargar si existe algo
-    cargarDesdeLocalStorage();
-});
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal').on('hidden.bs.modal', function () {
+        if (cropper) cropper.destroy();
+    });
 
-    /*
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+
+        // Cargar valor guardado
+        /*const savedCount = localStorage.getItem('imageCount');
+        if (savedCount) {
+            imageCountSelect.value = savedCount;
+            generateImageFields(parseInt(savedCount));
+        }*/
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields(count);
+        });
+
+        function generateImageFields(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem('imageCount');
+        });
+    });
+
+    /*Juntas-Resultados */
+    function guardarEnSessionStorage() {
+    var datos = [];
+        $('#dynamicTable tbody tr').each(function() {
+            var fila = {};
+            $(this).find('input').each(function() {
+                fila[$(this).attr('name')] = $(this).val();
+            });
+            datos.push(fila);
+        });
+        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
+    }
+
+    function cargarDesdeSessionStorage() {
+        var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
+        if (datos) {
+            datos.forEach(function(filaData, index) {
+                var newRow = `<tr><td>${index + 1}</td>`;
+                for (var key in filaData) {
+                    newRow += `<td><input type="text" class="form-control" name="${key}" value="${filaData[key]}" /></td>`;
+                }
+                newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
+                $('#dynamicTable tbody').append(newRow);
+            });
+        }
+    }
+
     $(document).ready(function() {
+        cargarDesdeSessionStorage();
         var rowCount = 0;
 
         function updateRowNumbers() {
@@ -1098,11 +1138,17 @@
                 </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            setTimeout(guardarEnSessionStorage, 100);
+        });
+
+        $('#dynamicTable').on('input', 'input', function() {
+            guardarEnSessionStorage(); // Guardar cuando se edita algo
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            guardarEnSessionStorage(); // Guardar al eliminar
         });
 
         $('#preFillBtn').click(function() {
@@ -1126,6 +1172,9 @@
             });
             return;
         }
+
+        // Eliminar los datos de sessionStorage al guardar
+        sessionStorage.removeItem('tabla_dinamica');
          // Deshabilitar el botón de submit y cambiar el texto (opcional)
         let submitButton = $(this).find('button[type="submit"]');
         submitButton.prop('disabled', true).text('Guardando...');
@@ -1134,7 +1183,11 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-    });*/
+    window.addEventListener('beforeunload', function () {
+        guardarEnSessionStorage(); // Asegurar que se guarda antes de salir
+    });
+
+    });
 
     document.addEventListener("DOMContentLoaded", function () {
     const inputFields = document.querySelectorAll(".default-input");
@@ -1151,99 +1204,7 @@
                 });
             });
         });
-
     });
-
-    $(document).ready(function() {
-    var cropper;
-    var selectedInput;
-
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
-
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
-
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
@@ -1308,6 +1269,7 @@
         }
     });
 
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1327,11 +1289,6 @@
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            /*if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }*/
 
         });
 
@@ -1353,11 +1310,6 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                /*if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }*/
                 
             });
 
@@ -1381,10 +1333,6 @@
                 actualizarInputsbyp();
             });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            /*if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-            }*/
         });
 
     </script>

@@ -123,6 +123,7 @@ public function FOR_01_PRO_INS_02()
             $reportesDetalles_Generales[] = [
                 'Contrato' => $detalles['Contrato'],
                 'Proyecto' => $detalles['Proyecto'],
+                'Cliente' => $detalles['Cliente'],
                 'Fecha' => $detalles['Fecha'],
                 'No_Reporte' => $detalles['No_Reporte'],
                 'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
@@ -210,10 +211,7 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
-        // Iterar sobre el arreglo y obtener los comentarios
-        /*foreach ($Fotos_Comentarios as $foto) {
-            $comentarios[] = $foto['comment'];
-        }*/
+
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
         // Obtener el idSolicitud
@@ -227,13 +225,14 @@ public function FOR_01_PRO_INS_02()
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
-        // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         /*Obtener id de Prueba_Aplica */
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
@@ -254,7 +253,7 @@ public function FOR_01_PRO_INS_02()
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
 
     }
 
@@ -400,13 +399,14 @@ public function FOR_01_PRO_INS_02()
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
-        // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         // Verificar si el registro ya existe
         $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
@@ -438,7 +438,7 @@ public function FOR_01_PRO_INS_02()
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
     
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
     }
 
     public function indexINS2(Request $request)

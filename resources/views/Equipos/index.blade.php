@@ -37,7 +37,7 @@
                     <tr>
                         <th>Categoria</th>
                         <th>Nombre</th>
-                        <th>Num. Económico</th>
+                        <th>Num. Económico / ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
