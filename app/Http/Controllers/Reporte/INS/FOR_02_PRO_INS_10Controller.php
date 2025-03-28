@@ -691,7 +691,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             ]);
         } 
 
-        /* Fotos y Comentarios */
+/* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         //$Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -699,11 +699,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
         // Ruta base para guardar las imágenes
         $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
 
+        Log::info('***********************');
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $imagenesGuardadas = [];
+
+        Log::info('Obtener las imágenes existentes: ', ['existingImages' => $existingImages]);
 
         // Procesar imágenes existentes
         foreach ($existingImages as $index => $ruta) {
@@ -718,13 +721,15 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 $newImage = $request->file("replace_images.$index");
                 $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
                 $path = $newImage->storeAs($rutaCarpeta, $imageName);
+                Log::info('Guardar la nueva imagen: ', ['newImage' => $newImage]);
+                Log::info('nombre nueva imagen: ', ['imageName' => $imageName]);
 
                 // Agregar la nueva imagen y el comentario actualizado
                 $imagenesGuardadas[$index] = [
                     'ruta' => str_replace('public/', 'storage/', $path),
                     'comentario' => $comments[$index] ?? '',
                 ];
-                
+                Log::info('gregar la nueva imagen y el comentario actualizado: ', ['imagenesGuardadas' => $imagenesGuardadas[$index]]);
             } elseif (!empty($imagesBase64[$index])) {
                 // Si la imagen fue recortada y enviada en base64
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
@@ -745,9 +750,30 @@ class FOR_02_PRO_INS_10Controller extends Controller
                     'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
                 ];
-                
+                Log::info('gregar la nueva imagen y el comentario actualizado: ', ['imagenesGuardadas' => $imagenesGuardadas[$index]]);
             }
         }
+
+        // Procesar nuevas imágenes
+        /*if ($request->has('images_base64')) {
+            foreach ($imagesBase64 as $index => $base64Image) {
+                if (!empty($base64Image)) {
+                    // Decodificar Base64
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+                    $imageName = 'imagen_' . time() . '_' . $index . '.png';
+                    $path = "{$rutaCarpeta}/{$imageName}";
+
+                    // Guardar la imagen en el almacenamiento
+                    Storage::put($path, $image);
+
+                    // Agregar la nueva imagen y su comentario
+                    $imagenesGuardadas[] = [
+                        'ruta' => str_replace('public/', 'storage/', $path),
+                        'comentario' => $comments[$index] ?? '',
+                    ];
+                }
+            }
+        }*/
 
         // Procesar nuevas imágenes
         if ($request->has('images_base64')) {
