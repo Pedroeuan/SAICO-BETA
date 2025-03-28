@@ -694,6 +694,111 @@ class FOR_02_PRO_INS_10Controller extends Controller
         /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
+
+        // Ruta base para guardar las imágenes
+        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+
+        Log::info('***********************');
+        // Obtener las imágenes existentes
+        $existingImages = $request->input('existing_images', []);
+        $comments = $request->input('comments', []);
+        $imagesBase64 = $request->input('images_base64', []);
+        $deletedImages = $request->input('deleted_images', []);
+        $imagenesGuardadas = [];
+
+        Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
+
+        // **1️⃣ Eliminar imágenes marcadas para borrar**
+        foreach ($deletedImages as $index) {
+            if (isset($existingImages[$index])) {
+                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
+
+                // Eliminar del almacenamiento
+                if (Storage::exists($rutaImagen)) {
+                    Storage::delete($rutaImagen);
+                    Log::info("Imagen eliminada: {$rutaImagen}");
+                } else {
+                    Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
+                }
+
+                // Eliminar de `existingImages` para que no se guarde en la BD
+                unset($existingImages[$index]);
+            }
+        }
+
+        // **2️⃣ Procesar imágenes existentes**
+        foreach ($existingImages as $index => $ruta) {
+            if ($request->hasFile("replace_images.$index")) {
+                // **Reemplazo de imagen existente**
+                $newImage = $request->file("replace_images.$index");
+
+                // Eliminar imagen anterior si existe
+                $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
+                if (Storage::exists($rutaImagenPublic)) {
+                    Storage::delete($rutaImagenPublic);
+                }
+
+                // Guardar la nueva imagen
+                $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
+                $path = $newImage->storeAs($rutaCarpeta, $imageName);
+                Log::info('Nueva imagen guardada:', ['path' => $path]);
+
+                // Agregar la imagen y comentario
+                $imagenesGuardadas[] = [
+                    'ruta' => str_replace('public/', 'storage/', $path),
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            } elseif (!empty($imagesBase64[$index])) {
+                // **Procesar imágenes en Base64**
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
+                $imageName = 'imagen_' . time() . '_' . $index . '.png';
+                $path = "{$rutaCarpeta}/{$imageName}";
+
+                // Guardar la imagen
+                Storage::put($path, $image);
+                Log::info('Imagen Base64 guardada:', ['path' => $path]);
+
+                $imagenesGuardadas[] = [
+                    'ruta' => str_replace('public/', 'storage/', $path),
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            } else {
+                // **Mantener la imagen existente**
+                $imagenesGuardadas[] = [
+                    'ruta' => $ruta,
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            }
+        }
+
+        // **3️⃣ Procesar nuevas imágenes Base64**
+        foreach ($imagesBase64 as $index => $base64Image) {
+            if (!empty($base64Image)) {
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+                $imageName = 'imagen_' . time() . '_' . $index . '.png';
+                $path = "{$rutaCarpeta}/{$imageName}";
+
+                // Guardar la imagen en el almacenamiento
+                Storage::put($path, $image);
+
+                // Guardar la nueva imagen
+                $imagenesGuardadas[] = [
+                    'ruta' => str_replace('public/', 'storage/', $path),
+                    'comentario' => $comments[$index] ?? '',
+                ];
+            }
+        }
+
+        // **4️⃣ Guardar las imágenes actualizadas en la BD**
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => json_encode($imagenesGuardadas), // Se usa array reindexado
+        ]);
+
+        Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
+
+        // Obtener los valores necesarios para la ruta personalizada
+        /*$No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         //$Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
         // Ruta base para guardar las imágenes
@@ -795,7 +900,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         // Guardar las imágenes actualizadas en la base de datos
         $Fotos_Reportes->update([
             'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)),
-        ]);
+        ]);*/
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
