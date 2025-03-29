@@ -135,58 +135,53 @@
             border-collapse: collapse;
             width: 100%;
         }
-
-        /* Contenedor con borde grueso */
-        .foto-container {
-            border: 1px solid black; /* Borde grueso de 2px */
-            padding: 0; /* Sin padding en el contenedor */
-        }
-
-        /* Tabla con separación entre celdas y márgenes ajustados */
+        /* ************** */
         .imagenes-reporte {
-            border-collapse: separate; /* Permite separación entre celdas */
-            border-spacing: 15px; /* Espacio entre imágenes */
-            width: 100%; /* Ajustar al ancho disponible */
-            margin-left: -13; /* Asegura que la tabla se alinee al margen izquierdo */
-            margin-right: 0; /* Asegura que la tabla se alinee al margen derecho */
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 20px; /* Espacio entre celdas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
-        /* Estilo de las imágenes */
-        .imagenes-reporte img { 
-            width: 329px; /* Las imágenes ocupan todo el ancho disponible */
-            max-height: 180px; /* Máxima altura de la imagen */
-            overflow: hidden; /* Evita que la imagen sobresalga */
+        .foto-container {
+            width: 100px;  /* Fija el ancho de la celda */
+            height: 200px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
         }
-        
+
+        .foto-container img {
+            /*max-width: 100%; /* Evita que la imagen desborde */
+            /*max-height: 80%; /* Ajusta la imagen para dejar espacio al comentario */
+            object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            width: 310px;  /* Ajusta el ancho de la celda */
+            height: 200px; /* Ajusta la altura de la celda */
+            /*border: 1px solid black; */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /*padding: 5px; /* Agrega un poco de espacio interno */
+        }
+
         /* Estilo para los comentarios */
         .comment { 
-            font-size: 10px;
-            font-weight: bold;
-            margin-top: 5px;
-            text-align: center;
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 10px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            border-top: 1px solid black; /* Borde superior */
+            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+        
+        .empty-box {
+            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
         }
 
-        .cross-line {
-            width: 85%;
-            height: 0px; /* Ajusta según el tamaño de las imágenes */
-            position: relative;
-        }
-
-        .cross-line::before,
-        .cross-line::after {
-            content: "";
-            position: absolute;
-            top: -2px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -12px; /* Ajusta para alinear la línea */
-            width: 126%; /* Aumenta el ancho de la línea */
-            height: 100%;
-            border-top: 2px solid black;
-            transform: rotate(35deg); /* Ajusta el ángulo de la primera línea */
-        }
-
-        .cross-line::after {
-            transform: rotate(-35deg);
-        }
             </style>
         </head>
         <body>
@@ -432,13 +427,11 @@
 
             <div class="content">
                 <table class="datosgenerales">
-
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
-
                 </table>
-
+                <br>
                 @php
                     $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
                 @endphp
@@ -451,19 +444,17 @@
                                     <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
                                     <p class="comment">{{ $foto['comment'] }}</p>
                                 </td>
-                                <div style="margin-bottom: 50px;"></div>
+                                
                                 @if(($index + 1) % 2 == 0)
                                     </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
                                 @endif
                             @endforeach
 
-                            {{-- Rellenar los recuadros restantes con espacios en blanco --}}
+                            {{-- Rellenar los cuadros restantes con espacios vacíos con tamaño fijo --}}
                             @for($i = count($fotosGrupo); $i < 4; $i++)
-                                <td class="foto-container">
-                                <div class="cross-line"></div> <!-- Div que generará la línea cruzada --
-                                </td>
+                                <td class="foto-container empty-box"></td> <!-- Celda vacía con fondo gris -->
                                 @if(($i + 1) % 2 == 0)
-                                    </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                    </tr><tr> <!-- Mantiene la estructura -->
                                 @endif
                             @endfor
                         </tr>
@@ -474,7 +465,6 @@
                         <div style="page-break-after: always;"></div>
                     @endif
                 @endforeach
-
             </div>
 
         </body>
