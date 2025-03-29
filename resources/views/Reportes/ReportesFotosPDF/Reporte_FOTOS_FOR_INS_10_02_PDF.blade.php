@@ -160,14 +160,14 @@
         
         /* Estilo para los comentarios */
         .comment { 
-            font-size: 10px; 
-            font-weight: bold; 
-            margin-top: 5px; 
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 5px;
             text-align: center;
         }
 
         .cross-line {
-            width: 90%;
+            width: 85%;
             height: 0px; /* Ajusta según el tamaño de las imágenes */
             position: relative;
         }
@@ -176,16 +176,16 @@
         .cross-line::after {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: -2px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -12px; /* Ajusta para alinear la línea */
+            width: 126%; /* Aumenta el ancho de la línea */
             height: 100%;
             border-top: 2px solid black;
-            transform: rotate(45deg);
+            transform: rotate(35deg); /* Ajusta el ángulo de la primera línea */
         }
 
         .cross-line::after {
-            transform: rotate(-45deg);
+            transform: rotate(-35deg);
         }
             </style>
         </head>
