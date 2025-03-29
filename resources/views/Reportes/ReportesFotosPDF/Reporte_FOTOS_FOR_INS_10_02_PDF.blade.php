@@ -152,18 +152,14 @@
         }
 
         .foto-container img {
-            /*max-width: 100%; /* Evita que la imagen desborde */
-            /*max-height: 80%; /* Ajusta la imagen para dejar espacio al comentario */
             object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             width: 310px;  /* Ajusta el ancho de la celda */
             height: 200px; /* Ajusta la altura de la celda */
-            /*border: 1px solid black; */
             vertical-align: middle;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /*padding: 5px; /* Agrega un poco de espacio interno */
         }
 
         /* Estilo para los comentarios */
@@ -180,6 +176,28 @@
         
         .empty-box {
             background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+        }
+
+        .cross-line {
+            width: 85%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: -2px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -25px; /* Ajusta para alinear la línea */
+            width: 136%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(32deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-32deg);
         }
 
             </style>
@@ -450,9 +468,11 @@
                                 @endif
                             @endforeach
 
-                            {{-- Rellenar los cuadros restantes con espacios vacíos con tamaño fijo --}}
+                            {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas --}}
                             @for($i = count($fotosGrupo); $i < 4; $i++)
-                                <td class="foto-container empty-box"></td> <!-- Celda vacía con fondo gris -->
+                                <td class="foto-container empty-box">
+                                    <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                </td> <!-- Celda vacía con líneas cruzadas -->
                                 @if(($i + 1) % 2 == 0)
                                     </tr><tr> <!-- Mantiene la estructura -->
                                 @endif
