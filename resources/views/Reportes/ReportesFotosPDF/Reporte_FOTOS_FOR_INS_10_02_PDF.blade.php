@@ -188,7 +188,7 @@
         .cross-line::after {
             content: "";
             position: absolute;
-            top: -2px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            top: 76px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
             left: -25px; /* Ajusta para alinear la línea */
             width: 136%; /* Aumenta el ancho de la línea */
             height: 100%;
@@ -200,6 +200,10 @@
             transform: rotate(-32deg);
         }
 
+        .empty-comment {
+            margin-top: 155px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+        }
             </style>
         </head>
         <body>
@@ -468,11 +472,12 @@
                                 @endif
                             @endforeach
 
-                            {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas --}}
+                            {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
                             @for($i = count($fotosGrupo); $i < 4; $i++)
                                 <td class="foto-container empty-box">
                                     <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                </td> <!-- Celda vacía con líneas cruzadas -->
+                                    <p class="empty-comment"></p> <!-- Línea de comentario para los espacios vacíos -->
+                                </td> <!-- Celda vacía con líneas cruzadas y comentario -->
                                 @if(($i + 1) % 2 == 0)
                                     </tr><tr> <!-- Mantiene la estructura -->
                                 @endif
@@ -485,6 +490,7 @@
                         <div style="page-break-after: always;"></div>
                     @endif
                 @endforeach
+
             </div>
 
         </body>
