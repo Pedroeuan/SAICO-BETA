@@ -165,7 +165,28 @@
             margin-top: 5px; 
             text-align: center;
         }
-        
+
+        .cross-line {
+            width: 90%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(45deg);
+        }
+
+        .cross-line::after {
+            transform: rotate(-45deg);
+        }
             </style>
         </head>
         <body>
@@ -435,6 +456,16 @@
                                     </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
                                 @endif
                             @endforeach
+
+                            {{-- Rellenar los recuadros restantes con espacios en blanco --}}
+                            @for($i = count($fotosGrupo); $i < 4; $i++)
+                                <td class="foto-container">
+                                <div class="cross-line"></div> <!-- Div que generará la línea cruzada --
+                                </td>
+                                @if(($i + 1) % 2 == 0)
+                                    </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                @endif
+                            @endfor
                         </tr>
                     </table>
 
@@ -443,7 +474,6 @@
                         <div style="page-break-after: always;"></div>
                     @endif
                 @endforeach
-
 
             </div>
 
