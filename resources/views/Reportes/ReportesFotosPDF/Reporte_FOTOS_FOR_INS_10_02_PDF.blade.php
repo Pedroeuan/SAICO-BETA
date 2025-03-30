@@ -139,22 +139,25 @@
         .imagenes-reporte {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 20px; /* Espacio entre celdas */
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
             margin-bottom: 0;
             table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
         .foto-container {
-            width: 100px;  /* Fija el ancho de la celda */
-            height: 200px; /* Fija la altura de la celda */
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 310px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
             border: 1px solid black; 
             vertical-align: middle;
         }
 
         .foto-container img {
-            object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
             width: 310px;  /* Ajusta el ancho de la celda */
-            height: 200px; /* Ajusta la altura de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
             flex-direction: column;
@@ -165,13 +168,18 @@
         /* Estilo para los comentarios */
         .comment { 
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 10px; /* Espaciado entre el borde y el texto */
+            padding-top: 0px; /* Espaciado entre el borde y el texto */
             margin-top: 0px; /* Espacio entre la imagen y el comentario */
             text-align: center; /* Centrar el texto */
-            border-top: 1px solid black; /* Borde superior */
             /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
             max-width: 100%; /* Para que el texto no desborde */
             word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+        /* Estilo para los "comentarios" en blanco */
+        .empty-comment {
+            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 0px; /* Espaciado entre el borde y el texto */
         }
         
         .empty-box {
@@ -179,7 +187,7 @@
         }
 
         .cross-line {
-            width: 85%;
+            width: 74%;
             height: 0px; /* Ajusta según el tamaño de las imágenes */
             position: relative;
         }
@@ -188,21 +196,16 @@
         .cross-line::after {
             content: "";
             position: absolute;
-            top: 76px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -25px; /* Ajusta para alinear la línea */
-            width: 136%; /* Aumenta el ancho de la línea */
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -22px; /* Ajusta para alinear la línea */
+            width: 154%; /* Aumenta el ancho de la línea */
             height: 100%;
             border-top: 2px solid black;
-            transform: rotate(32deg); /* Ajusta el ángulo de la primera línea */
+            transform: rotate(28deg); /* Ajusta el ángulo de la primera línea */
         }
 
         .cross-line::after {
-            transform: rotate(-32deg);
-        }
-
-        .empty-comment {
-            margin-top: 155px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            transform: rotate(-28deg);
         }
             </style>
         </head>
@@ -476,7 +479,7 @@
                             @for($i = count($fotosGrupo); $i < 4; $i++)
                                 <td class="foto-container empty-box">
                                     <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                    <p class="empty-comment"></p> <!-- Línea de comentario para los espacios vacíos -->
+                                    <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
                                 </td> <!-- Celda vacía con líneas cruzadas y comentario -->
                                 @if(($i + 1) % 2 == 0)
                                     </tr><tr> <!-- Mantiene la estructura -->
