@@ -453,47 +453,48 @@
             <div class="content">
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="4">REGISTRO FOTOGRÁFICO</th></tr>
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+                    
+                    @php
+                        $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                    @endphp
+
+                    @foreach($chunks as $fotosGrupo)
+                        <table class="imagenes-reporte">
+                            <tr>
+                                @foreach($fotosGrupo as $index => $foto)
+                                    <td class="foto-container">
+                                        <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                        <p class="comment">{{ $foto['comment'] }}</p>
+                                    </td>
+                                    
+                                    @if(($index + 1) % 2 == 0)
+                                        </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                    @endif
+                                @endforeach
+
+                                {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                @for($i = count($fotosGrupo); $i < 4; $i++)
+                                    <td class="foto-container empty-box">
+                                        <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                        <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                    </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                    @if(($i + 1) % 2 == 0)
+                                        </tr><tr> <!-- Mantiene la estructura -->
+                                    @endif
+                                @endfor
+                            </tr>
+                        </table>
+
+                        {{-- Salto de página cada 4 imágenes --}}
+                        @if (!$loop->last)
+                            <div style="page-break-after: always;"></div>
+                        @endif
+                    @endforeach
                 </table>
-                <br>
-                @php
-                    $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
-                @endphp
-
-                @foreach($chunks as $fotosGrupo)
-                    <table class="imagenes-reporte">
-                        <tr>
-                            @foreach($fotosGrupo as $index => $foto)
-                                <td class="foto-container">
-                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                </td>
-                                
-                                @if(($index + 1) % 2 == 0)
-                                    </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                                @endif
-                            @endforeach
-
-                            {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
-                            @for($i = count($fotosGrupo); $i < 4; $i++)
-                                <td class="foto-container empty-box">
-                                    <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                    <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
-                                </td> <!-- Celda vacía con líneas cruzadas y comentario -->
-                                @if(($i + 1) % 2 == 0)
-                                    </tr><tr> <!-- Mantiene la estructura -->
-                                @endif
-                            @endfor
-                        </tr>
-                    </table>
-
-                    {{-- Salto de página cada 4 imágenes --}}
-                    @if (!$loop->last)
-                        <div style="page-break-after: always;"></div>
-                    @endif
-                @endforeach
-
             </div>
 
         </body>
