@@ -704,7 +704,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
-        $imagenesGuardadas = [];
 
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
@@ -726,6 +725,12 @@ class FOR_02_PRO_INS_10Controller extends Controller
             }
         }
 
+        // **Reiniciar el array antes de procesar imágenes**
+        $imagenesGuardadas = [];
+
+        // **Evitar duplicados en las rutas ya guardadas**
+        $rutasGuardadas = [];
+
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
             if ($request->hasFile("replace_images.$index")) {
@@ -741,13 +746,16 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 // Guardar la nueva imagen
                 $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
                 $path = $newImage->storeAs($rutaCarpeta, $imageName);
-                //Log::info('Nueva imagen guardada:', ['path' => $path]);
+                $rutaNueva = str_replace('public/', 'storage/', $path);
 
-                // Agregar la imagen y comentario
-                $imagenesGuardadas[] = [
-                    'ruta' => str_replace('public/', 'storage/', $path),
-                    'comentario' => $comments[$index] ?? '',
-                ];
+                // Verificar si ya existe en el array
+                if (!in_array($rutaNueva, $rutasGuardadas)) {
+                    $imagenesGuardadas[] = [
+                        'ruta' => $rutaNueva,
+                        'comentario' => $comments[$index] ?? '',
+                    ];
+                    $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
+                }
             } elseif (!empty($imagesBase64[$index])) {
                 // **Procesar imágenes en Base64**
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
@@ -756,18 +764,25 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
                 // Guardar la imagen
                 Storage::put($path, $image);
-                //Log::info('Imagen Base64 guardada:', ['path' => $path]);
+                $rutaNueva = str_replace('public/', 'storage/', $path);
 
-                $imagenesGuardadas[] = [
-                    'ruta' => str_replace('public/', 'storage/', $path),
-                    'comentario' => $comments[$index] ?? '',
-                ];
+                // Verificar si ya existe en el array
+                if (!in_array($rutaNueva, $rutasGuardadas)) {
+                    $imagenesGuardadas[] = [
+                        'ruta' => $rutaNueva,
+                        'comentario' => $comments[$index] ?? '',
+                    ];
+                    $rutasGuardadas[] = $rutaNueva;
+                }
             } else {
                 // **Mantener la imagen existente**
-                $imagenesGuardadas[] = [
-                    'ruta' => $ruta,
-                    'comentario' => $comments[$index] ?? '',
-                ];
+                if (!in_array($ruta, $rutasGuardadas)) {
+                    $imagenesGuardadas[] = [
+                        'ruta' => $ruta,
+                        'comentario' => $comments[$index] ?? '',
+                    ];
+                    $rutasGuardadas[] = $ruta;
+                }
             }
         }
 
@@ -780,18 +795,22 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
                 // Guardar la imagen en el almacenamiento
                 Storage::put($path, $image);
+                $rutaNueva = str_replace('public/', 'storage/', $path);
 
-                // Guardar la nueva imagen
-                $imagenesGuardadas[] = [
-                    'ruta' => str_replace('public/', 'storage/', $path),
-                    'comentario' => $comments[$index] ?? '',
-                ];
+                // Verificar si ya existe en el array
+                if (!in_array($rutaNueva, $rutasGuardadas)) {
+                    $imagenesGuardadas[] = [
+                        'ruta' => $rutaNueva,
+                        'comentario' => $comments[$index] ?? '',
+                    ];
+                    $rutasGuardadas[] = $rutaNueva;
+                }
             }
         }
 
         // **4️⃣ Guardar las imágenes actualizadas en la BD**
         $Fotos_Reportes->update([
-            'Fotos_Reportes' => json_encode($imagenesGuardadas), // Se usa array reindexado
+            'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
         ]);
 
         //Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
