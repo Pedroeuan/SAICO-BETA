@@ -201,11 +201,11 @@
             width: 154%; /* Aumenta el ancho de la línea */
             height: 100%;
             border-top: 2px solid black;
-            transform: rotate(28deg); /* Ajusta el ángulo de la primera línea */
+            transform: rotate(28.5deg); /* Ajusta el ángulo de la primera línea */
         }
 
         .cross-line::after {
-            transform: rotate(-28deg);
+            transform: rotate(-28.5deg);
         }
             </style>
         </head>
