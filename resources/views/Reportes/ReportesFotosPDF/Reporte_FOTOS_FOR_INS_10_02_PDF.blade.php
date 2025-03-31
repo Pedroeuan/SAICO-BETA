@@ -157,7 +157,7 @@
         .foto-container img {
             /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332px;  /* Ajusta el ancho de la celda */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
             height: 170px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
@@ -198,15 +198,15 @@
             content: "";
             position: absolute;
             top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -22px; /* Ajusta para alinear la línea */
-            width: 154%; /* Aumenta el ancho de la línea */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
             height: 100%;
             border-top: 2px solid black;
-            transform: rotate(28.5deg); /* Ajusta el ángulo de la primera línea */
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
         }
 
         .cross-line::after {
-            transform: rotate(-28.5deg);
+            transform: rotate(-27deg);
         }
             </style>
         </head>
