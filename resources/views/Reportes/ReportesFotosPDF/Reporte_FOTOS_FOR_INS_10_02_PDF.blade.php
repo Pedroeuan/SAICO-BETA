@@ -24,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: 30px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -53,7 +53,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
