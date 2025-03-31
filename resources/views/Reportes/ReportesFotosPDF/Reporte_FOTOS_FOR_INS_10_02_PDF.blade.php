@@ -137,7 +137,8 @@
         }
         /* ************** */
         .imagenes-reporte {
-            width: 100%;
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 106%;
             border-collapse: separate;
             /*border-spacing: 20px; /* Espacio entre celdas */
             border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
@@ -156,7 +157,7 @@
         .foto-container img {
             /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 312px;  /* Ajusta el ancho de la celda */
+            width: 332px;  /* Ajusta el ancho de la celda */
             height: 170px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
