@@ -525,7 +525,7 @@
                                                 </tr>
                                             </thead>
 
-                                            <tbody>
+                                            <tbody> @php dd($Grupo_Juntas_Re); @endphp
                                                 @foreach($Grupo_Juntas_Re as $index => $junta)
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>

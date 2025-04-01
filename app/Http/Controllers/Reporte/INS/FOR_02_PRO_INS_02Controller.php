@@ -263,6 +263,9 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+            'titulos' => 'nullable|array',  // Asegura que sea un array
+            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
             'componente' => 'nullable|array',
@@ -344,7 +347,15 @@ class FOR_02_PRO_INS_02Controller extends Controller
         // Guardar Resultados Juntas
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
         $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
-
+        
+        $Titulos_Juntas = [];
+        
+        if (!empty($validatedData['titulos'])) {
+            foreach ($validatedData['titulos'] as $titulo) {
+                $Titulos_Juntas[] = ['titulo' => $titulo];
+            }
+        }
+        
         $Resultados_Juntas = [];
         foreach ($validatedData['componente'] as $index => $componente) {
             $Resultados_Juntas[] = [
@@ -359,10 +370,16 @@ class FOR_02_PRO_INS_02Controller extends Controller
                 'longitud_inspeccionada' => $validatedData['longitud_inspeccionada'][$index],
             ];
         }
-        // Convertir el array de resultados juntas a JSON
-        $ResultadosJuntas = json_encode($Resultados_Juntas);
 
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+        // Convertir a JSON
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
+            'titulos' => $Titulos_Juntas,
+            'resultados' => $Resultados_Juntas
+        ]);
+        // Convertir el array de resultados juntas a JSON
+        //$ResultadosJuntas = json_encode($Resultados_Juntas);
+        //$Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+        
         $Grupo_Juntas_Detalles_Re->save();
     
         // Guardar Firmas
