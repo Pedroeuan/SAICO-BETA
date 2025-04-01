@@ -525,22 +525,37 @@
                                                 </tr>
                                             </thead>
 
-                                            <tbody> @php dd($Grupo_Juntas_Re); @endphp
-                                                @foreach($Grupo_Juntas_Re as $index => $junta)
+                                            <tbody> @php //dd($Grupo_Juntas_Re); @endphp
+                                            @foreach($Titulos_resultados as $index => $titulo)
+                                                <!-- Fila del título -->
+                                                <tr class="titulo-row">
+                                                    <td colspan="11">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <input type="text" class="form-control w-90" name="titulos[]" value="{{ $titulo['titulo'] }}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)o">
+                                                            <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Filas de resultados pertenecientes a este título -->
+                                                @foreach($Juntas_resultados as $key => $junta)
                                                     <tr>
-                                                        <td>{{ $index + 1 }}</td>
-                                                        <td><input type="text" class="form-control" name="componente[]" value="{{ $junta['componente'] }}" placeholder="componente" ></td>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td><input type="text" class="form-control" name="componente[]" value="{{ $junta['componente'] }}" placeholder="componente"></td>
                                                         <td><input type="text" class="form-control" name="no_indicacion[]" value="{{ $junta['no_indicacion'] }}" placeholder="no_indicacion"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="tipo_indicacion" ></td>
-                                                        <td><input type="text" class="form-control" name="largo[]" value="{{ $junta['largo'] }}" placeholder="largo" ></td>
-                                                        <td><input type="text" class="form-control" name="ancho[]" value="{{ $junta['ancho'] }}" placeholder="ancho" ></td>
-                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" ></td>
-                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="ht" ></td>
+                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="tipo_indicacion"></td>
+                                                        <td><input type="text" class="form-control" name="largo[]" value="{{ $junta['largo'] }}" placeholder="largo"></td>
+                                                        <td><input type="text" class="form-control" name="ancho[]" value="{{ $junta['ancho'] }}" placeholder="ancho"></td>
+                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø"></td>
+                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="ht"></td>
                                                         <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="evaluacion"></td>
-                                                        <td><input type="text" class="form-control" name="longitud_inspeccionada[]" value="{{ $junta['longitud_inspeccionada'] }}" placeholder="longitud_inspeccionada" ></td>
+                                                        <td><input type="text" class="form-control" name="longitud_inspeccionada[]" value="{{ $junta['longitud_inspeccionada'] }}" placeholder="longitud_inspeccionada"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                 @endforeach
+                                            @endforeach
                                             </tbody>
                                     </table>
 
@@ -556,6 +571,8 @@
                                         </div>
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -964,6 +981,28 @@
             });
             rowCount = $('#dynamicTable tbody tr').length;
         }
+
+        $('#addTituloBtn').click(function () {
+            // Crear una nueva fila de título con un botón de eliminar
+            var newTitleRow = `<tr class="titulo-row">
+                <td colspan="11">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+
+            // Insertar el título después de las filas existentes en el tbody
+            $('#dynamicTable tbody').append(newTitleRow);
+        });
+
+        // Evento para eliminar un título
+        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+            $(this).closest('tr').remove();
+        });
 
         $('#addBtn').click(function() {
             var numRows = $('#numRows').val();
