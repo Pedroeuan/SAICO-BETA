@@ -522,6 +522,8 @@
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
                                     <p>
@@ -1086,41 +1088,102 @@
 
     /*Juntas-Resultados */
     function guardarEnSessionStorage() {
-    var datos = [];
+        var datos = [];
+
         $('#dynamicTable tbody tr').each(function() {
-            var fila = {};
-            $(this).find('input').each(function() {
-                fila[$(this).attr('name')] = $(this).val();
-            });
-            datos.push(fila);
+            if ($(this).hasClass('titulo-row')) {
+                // Guardar la fila como título
+                datos.push({
+                    tipo: "titulo",
+                    titulo: $(this).find('input[name="titulos[]"]').val()
+                });
+            } else {
+                // Guardar la fila como datos
+                var fila = { tipo: "fila" };
+                $(this).find('input').each(function() {
+                    fila[$(this).attr('name')] = $(this).val();
+                });
+                datos.push(fila);
+            }
         });
+
         sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
     }
 
+
+
     function cargarDesdeSessionStorage() {
-        var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
-        if (datos) {
-            datos.forEach(function(filaData, index) {
-                var newRow = `<tr><td>${index + 1}</td>`;
-                for (var key in filaData) {
-                    newRow += `<td><input type="text" class="form-control" name="${key}" value="${filaData[key]}" /></td>`;
+        var datosGuardados = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
+
+        if (datosGuardados) {
+            datosGuardados.forEach(function(item) {
+                if (item.tipo === "titulo") {
+                    // Insertar un título en la tabla
+                    var newTitleRow = `<tr class="titulo-row">
+                        <td colspan="21">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text" class="form-control w-90" name="titulos[]" value="${item.titulo}">
+                                <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                    $('#dynamicTable tbody').append(newTitleRow);
+                } else if (item.tipo === "fila") {
+                    // Insertar una fila de datos en la tabla
+                    var newRow = `<tr><td></td>`; // El número de fila se actualiza después
+                    for (var key in item) {
+                        if (key !== "tipo") {
+                            newRow += `<td><input type="text" class="form-control" name="${key}" value="${item[key]}" /></td>`;
+                        }
+                    }
+                    newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
+                    $('#dynamicTable tbody').append(newRow);
                 }
-                newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
-                $('#dynamicTable tbody').append(newRow);
             });
+
+            // Actualizar numeración de filas
+            updateRowNumbers();
         }
     }
+
 
     $(document).ready(function() {
         cargarDesdeSessionStorage();
         var rowCount = 0;
 
         function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
+            var rowIndex = 0;
+            $('#dynamicTable tbody tr').each(function() {
+                if (!$(this).hasClass('titulo-row')) {
+                    rowIndex++;
+                    $(this).find('td:first').text(rowIndex);
+                }
             });
-            rowCount = $('#dynamicTable tbody tr').length;
         }
+
+        $('#addTituloBtn').click(function () {
+            // Crear una nueva fila de título con un botón de eliminar
+            var newTitleRow = `<tr class="titulo-row">
+                <td colspan="21">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+
+            // Insertar el título después de las filas existentes en el tbody
+            $('#dynamicTable tbody').append(newTitleRow);
+        });
+
+        // Evento para eliminar un título
+        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+            $(this).closest('tr').remove();
+        });
 
         $('#addBtn').click(function() {
             var numRows = $('#numRows').val();
