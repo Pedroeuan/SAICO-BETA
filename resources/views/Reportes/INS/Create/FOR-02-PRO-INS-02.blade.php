@@ -941,7 +941,7 @@
         $('#addTituloBtn').click(function () {
             // Crear una nueva fila de título con un botón de eliminar
             var newTitleRow = `<tr class="titulo-row">
-                <td colspan="10">
+                <td colspan="11">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">

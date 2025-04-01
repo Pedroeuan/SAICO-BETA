@@ -264,6 +264,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
+            /*Titulos Juntas */
             'titulos' => 'nullable|array',  // Asegura que sea un array
             'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
     
@@ -479,6 +480,10 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+            /*Titulos Juntas */
+            'titulos' => 'nullable|array',  // Asegura que sea un array
+            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
             'componente' => 'nullable|array',
@@ -564,6 +569,14 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
+        $Titulos_Juntas = [];
+        
+        if (!empty($validatedData['titulos'])) {
+            foreach ($validatedData['titulos'] as $titulo) {
+                $Titulos_Juntas[] = ['titulo' => $titulo];
+            }
+        }
+
         $Resultados_Juntas = [];
         foreach ($validatedData['componente'] as $index => $componente) {
             $Resultados_Juntas[] = [
@@ -578,12 +591,15 @@ class FOR_02_PRO_INS_02Controller extends Controller
                 'longitud_inspeccionada' => $validatedData['longitud_inspeccionada'][$index],
             ];
         }
-        // Convertir el array de resultados juntas a JSON
-        $ResultadosJuntas = json_encode($Resultados_Juntas);
+        // Convertir el array de resultados de titulo y juntas a JSON
+        $TituloyJuntas = json_encode([
+            'titulos' => $Titulos_Juntas,
+            'resultados' => $Resultados_Juntas
+        ]);
 
-        // Actualiza los detalles generales como JSON en la base de datos
+        // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => $ResultadosJuntas
+            'Juntas_Grupo_Re' => $TituloyJuntas // ✅ Se pasa el JSON directamente
         ]);
 
         /*Firmas */
