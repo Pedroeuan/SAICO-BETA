@@ -1088,6 +1088,36 @@
 
     /*Juntas-Resultados */
     function guardarEnSessionStorage() {
+    var datos = [];
+    var currentTitleIndex = -1;
+    var currentTitle = null;
+
+    $('#dynamicTable tbody tr').each(function() {
+        if ($(this).hasClass('titulo-row')) {
+            // Guardar un nuevo título y su estructura
+            currentTitleIndex++;
+            currentTitle = $(this).find('input[name="titulos[]"]').val();
+            
+            datos[currentTitleIndex] = {
+                tipo: "titulo",
+                titulo: currentTitle,
+                resultados: []
+            };
+        } else {
+            // Guardar la fila como datos dentro del título actual
+            if (currentTitleIndex >= 0) {
+                var fila = {};
+                $(this).find('input').each(function() {
+                    fila[$(this).attr('name')] = $(this).val();
+                });
+                datos[currentTitleIndex].resultados.push(fila);
+            }
+        }
+    });
+
+    sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
+}
+    /*function guardarEnSessionStorage() {
         var datos = [];
 
         $('#dynamicTable tbody tr').each(function() {
@@ -1108,7 +1138,7 @@
         });
 
         sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
-    }
+    }*/
 
     function updateRowNumbers() {
             var rowIndex = 0;
@@ -1121,7 +1151,45 @@
             //console.log("Ejecutando updateRowNumbers");
         }
 
-    function cargarDesdeSessionStorage() {
+        function cargarDesdeSessionStorage() {
+            var datosGuardados = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
+
+            if (datosGuardados) {
+                datosGuardados.forEach(function(item) {
+                    if (item.tipo === "titulo") {
+                        // Insertar un título en la tabla
+                        var newTitleRow = `<tr class="titulo-row">
+                            <td colspan="21">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.titulo}">
+                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitleRow);
+
+                        // Insertar las filas de datos asociadas a este título
+                        if (item.resultados && item.resultados.length > 0) {
+                            item.resultados.forEach(function(fila) {
+                                var newRow = `<tr><td></td>`;
+                                for (var key in fila) {
+                                    if (key !== "tipo") {
+                                        newRow += `<td><input type="text" class="form-control" name="${key}" value="${fila[key]}" /></td>`;
+                                    }
+                                }
+                                newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
+                                $('#dynamicTable tbody').append(newRow);
+                            });
+                        }
+                    }
+                });
+                
+                updateRowNumbers();
+            }
+        }
+    /*function cargarDesdeSessionStorage() {
         var datosGuardados = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
 
         if (datosGuardados) {
@@ -1151,12 +1219,10 @@
                     $('#dynamicTable tbody').append(newRow);
                 }
             });
-
             // Actualizar numeración de filas
             updateRowNumbers();
         }
-    }
-
+    }*/
 
     $(document).ready(function() {
         cargarDesdeSessionStorage();
@@ -1261,16 +1327,15 @@
 
     });
 
-    document.addEventListener("DOMContentLoaded", function () { 
-        const inputFields = document.querySelectorAll("#inputRow .default-input"); // Solo inputs del encabezado
+    document.addEventListener("DOMContentLoaded", function () {
+    const inputFields = document.querySelectorAll(".default-input");
 
-        // Evento para actualizar filas cuando se escriba en los inputs superiores
+    // Evento para actualizar filas cuando se escriba en los inputs superiores
         inputFields.forEach(input => {
             input.addEventListener("input", function () {
                 const column = input.getAttribute("data-column");
-
-                // Buscar solo filas dinámicas dentro del tbody
-                document.querySelectorAll("#dynamicTable tbody tr:not(#inputRow)").forEach(row => {
+                // Solo seleccionar filas que NO sean de título
+                document.querySelectorAll(`#dynamicTable tbody tr:not(.titulo-row)`).forEach(row => {
                     const cellInput = row.querySelectorAll("td input")[column - 1];
                     if (cellInput) {
                         cellInput.value = input.value;

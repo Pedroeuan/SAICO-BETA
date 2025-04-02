@@ -927,7 +927,6 @@
             });
         });
 
-
     $(document).ready(function() {
         var rowCount = 0;
 
