@@ -547,7 +547,7 @@
                                                             </tr>
                                                             @php $contador++; @endphp <!-- Incrementamos el contador global -->
                                                         @endforeach
-                                            @endforeach
+                                                    @endforeach
                                         @else
                                             <!-- Si NO hay títulos, simplemente mostramos las filas -->
                                             @foreach($Juntas_resultados as $junta)
@@ -574,7 +574,7 @@
                                                                 <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
                                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                             </tr>
-                                                @php $contador++; @endphp <!-- Incrementamos el contador global -->
+                                                        @php $contador++; @endphp <!-- Incrementamos el contador global -->
                                                     @endforeach
                                                 @endif
                                             </tbody>

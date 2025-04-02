@@ -691,19 +691,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                    $filasPorPagina = 15; // Define cuántas filas quieres por página
-                                    $totalMetros = 0; // Inicializa el acumulador de metros lineales
-                                    $contadorFilas = 0; // Contador para controlar las filas por página
-                                    $totalFilas = count($Grupo_Juntas_Detalles_Re); // Total de filas
-                                @endphp
+                                    @php
+                                        $filasPorPagina = 15; // Define cuántas filas quieres por página
+                                        $totalMetros = 0; // Inicializa el acumulador de metros lineales
+                                        $contadorFilas = 0; // Contador para controlar las filas por página
+                                        $totalFilas = count($Grupo_Juntas_Detalles_Re); // Total de filas
+                                    @endphp
 
                                     @foreach($Juntas_resultados as $index => $junta)
-                                    @php
-                                        $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
-                                        $contadorFilas++;
-                                        $esUltimaFila = ($index + 1) === $totalFilas; // Verifica si es la última fila de la tabla
-                                    @endphp
+                                        @php
+                                            $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
+                                            $contadorFilas++;
+                                            $esUltimaFila = ($index + 1) === $totalFilas; // Verifica si es la última fila de la tabla
+                                        @endphp
                                         <tr class="juntas">
                                             <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $index + 1 }}</td>
                                             <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['elemento_tubo'] }}</td>
@@ -727,22 +727,18 @@
                                             <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
                                         </tr>
 
-                                    @if ($contadorFilas % $filasPorPagina === 0)
-                                        <!-- Fila de total antes del salto de página -->
-                                        <tr style="page-break-after: always;" class="sinBordetd">
-                                            <td colspan="13" style="border-top: 2px solid black;"></td>
-                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                            <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
-                                        </tr>
-
-                                        @php
-                                            $totalMetros = 0; // Reinicia el acumulador para la siguiente página
-                                        @endphp
-
-
-                                    @endif
-                                    
-                                @endforeach
+                                        @if ($contadorFilas % $filasPorPagina === 0)
+                                            <!-- Fila de total antes del salto de página -->
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="13" style="border-top: 2px solid black;"></td>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                            @php
+                                                $totalMetros = 0; // Reinicia el acumulador para la siguiente página
+                                            @endphp
+                                        @endif
+                                    @endforeach
 
                                     <!-- Fila de total final si no se alcanzó el límite de filas por página -->
                                     @if ($contadorFilas % $filasPorPagina !== 0)
