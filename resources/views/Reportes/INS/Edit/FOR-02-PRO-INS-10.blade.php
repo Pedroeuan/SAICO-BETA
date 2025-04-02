@@ -504,79 +504,50 @@
                                             </thead>
 
                                             <tbody>
-                                                @php $contador = 1; @endphp <!-- Inicializamos el contador antes de los bucles -->
-                                                @if (!empty($Titulos_resultados) && count($Titulos_resultados) > 0)
-                                                    @foreach($Titulos_resultados as $index => $titulo)
-                                                        <!-- Fila del título -->
-                                                        <tr class="titulo-row">
-                                                            <td colspan="21">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <input type="text" class="form-control w-90" name="titulos[]" 
-                                                                        value="{{ $titulo['titulo'] }}" 
-                                                                        placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                        @foreach($Juntas_resultados as $index => $junta)
+                                                @php $contador = 1; @endphp
+                                                    @foreach($Grupo_Juntas_Re['titulos_juntas'] as $junta)
+                                                            <!-- Mostrar el título si existe -->
+                                                            @if(!empty($junta['titulo']))
+                                                                <tr class="titulo-row">
+                                                                    <td colspan="20">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <input type="text" class="form-control w-90" name="titulos[]" 
+                                                                                value="{{ $junta['titulo'] }}" 
+                                                                                placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                                                                            <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                                            </button></td>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @foreach($junta['resultados'] as $resultado)
                                                             <tr>
                                                                 <td>{{ $contador }}</td>
-                                                                <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $junta['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_serie[]" value="{{ $junta['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_colada[]" value="{{ $junta['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="tnominal[]" value="{{ $junta['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_ind[]" value="{{ $junta['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
-                                                                <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
-                                                                <td><input type="text" class="form-control" name="nr[]" value="{{ $junta['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="ni[]" value="{{ $junta['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="prof[]" value="{{ $junta['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="la[]" value="{{ $junta['la'] }}" placeholder="LA" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="lc[]" value="{{ $junta['lc'] }}" placeholder="LC" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="tmax[]" value="{{ $junta['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="tmin[]" value="{{ $junta['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $junta['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
-                                                                <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
+                                                                <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $resultado['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $resultado['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_serie[]" value="{{ $resultado['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_colada[]" value="{{ $resultado['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="tnominal[]" value="{{ $resultado['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="diametro[]" value="{{ $resultado['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_ind[]" value="{{ $resultado['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
+                                                                <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $resultado['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
+                                                                <td><input type="text" class="form-control" name="nr[]" value="{{ $resultado['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ni[]" value="{{ $resultado['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ht[]" value="{{ $resultado['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="prof[]" value="{{ $resultado['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="la[]" value="{{ $resultado['la'] }}" placeholder="LA" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="lc[]" value="{{ $resultado['lc'] }}" placeholder="LC" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmax[]" value="{{ $resultado['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmin[]" value="{{ $resultado['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $resultado['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $resultado['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
+                                                                <td><input type="text" class="form-control" name="observaciones[]" value="{{ $resultado['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
                                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                             </tr>
-                                                            @php $contador++; @endphp <!-- Incrementamos el contador global -->
+                                                            @php $contador++; @endphp
                                                         @endforeach
                                                     @endforeach
-                                        @else
-                                            <!-- Si NO hay títulos, simplemente mostramos las filas -->
-                                            @foreach($Grupo_Juntas_Re as $junta)
-                                                            <tr>
-                                                                <td>{{ $contador }}</td>
-                                                                <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $junta['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_serie[]" value="{{ $junta['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_colada[]" value="{{ $junta['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="tnominal[]" value="{{ $junta['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
-                                                                <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="no_ind[]" value="{{ $junta['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
-                                                                <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
-                                                                <td><input type="text" class="form-control" name="nr[]" value="{{ $junta['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="ni[]" value="{{ $junta['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="prof[]" value="{{ $junta['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="la[]" value="{{ $junta['la'] }}" placeholder="LA" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="lc[]" value="{{ $junta['lc'] }}" placeholder="LC" style="width: 60px;"></td>
-                                                                <td><input type="text" class="form-control" name="tmax[]" value="{{ $junta['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="tmin[]" value="{{ $junta['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $junta['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
-                                                                <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
-                                                                <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
-                                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                            </tr>
-                                                        @php $contador++; @endphp <!-- Incrementamos el contador global -->
-                                                    @endforeach
-                                                @endif
                                             </tbody>
                                     </table>
                                     </div>
