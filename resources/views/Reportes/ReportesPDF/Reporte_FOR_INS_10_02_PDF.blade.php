@@ -698,7 +698,7 @@
                                     $totalFilas = count($Grupo_Juntas_Detalles_Re); // Total de filas
                                 @endphp
 
-                                    @foreach($Grupo_Juntas_Detalles_Re as $index => $junta)
+                                    @foreach($Juntas_resultados as $index => $junta)
                                     @php
                                         $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
                                         $contadorFilas++;

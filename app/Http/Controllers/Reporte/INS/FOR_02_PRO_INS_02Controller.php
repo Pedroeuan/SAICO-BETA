@@ -344,7 +344,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
         $Reportes->Estatus = "CREADO";
         $Reportes->save();
-    
+        
         // Guardar Resultados Juntas
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
         $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;

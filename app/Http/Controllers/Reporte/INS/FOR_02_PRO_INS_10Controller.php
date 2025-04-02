@@ -260,6 +260,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
+            /*Titulos Juntas */
+            'titulos' => 'nullable|array',  // Asegura que sea un array
+            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'elemento_tubo' => 'nullable|array',
@@ -366,6 +370,15 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
+
+        $Titulos_Juntas = [];
+        
+        if (!empty($validatedData['titulos'])) {
+            foreach ($validatedData['titulos'] as $titulo) {
+                $Titulos_Juntas[] = ['titulo' => $titulo];
+            }
+        }
 
             /*Resultados Juntas*/
             // Guardar las filas dinámicas
@@ -394,11 +407,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 ];
             }
             // Convertir el array de resultados juntas a JSON
-            $ResultadosJuntas = json_encode($Resultados_Juntas);
+            //$ResultadosJuntas = json_encode($Resultados_Juntas);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
+                'titulos' => $Titulos_Juntas,
+                'resultados' => $Resultados_Juntas
+            ]);
 
-            $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
             //Guardar Datos_Equipo como JSON en la base de datos
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+            //$Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
             $Grupo_Juntas_Detalles_Re->save();
 
         /*Firmas */
@@ -423,6 +439,8 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
+        if($imageCount>1)
+        {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
         foreach ($request->images_base64 as $index => $base64Image) {
@@ -455,6 +473,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
+    }else{
+        $imagenesGuardadas = [];
+        $Fotos = json_encode($imagenesGuardadas);
+        $Fotos = json_encode($imagenesGuardadas); 
+        $Fotos_Reportes->idReportes = $idReportes;
+        $Fotos_Reportes->Fotos_Reportes = $Fotos;
+        $Fotos_Reportes->save();
+    }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
@@ -475,7 +501,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
             'Pieza' => $Pieza,
-            'ResultadosJuntas' => $ResultadosJuntas,
+            'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
@@ -534,6 +560,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
             'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+            /*Titulos Juntas */
+            'titulos' => 'nullable|array',  // Asegura que sea un array
+            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
@@ -630,6 +660,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
+        $Titulos_Juntas = [];
+        
+        if (!empty($validatedData['titulos'])) {
+            foreach ($validatedData['titulos'] as $titulo) {
+                $Titulos_Juntas[] = ['titulo' => $titulo];
+            }
+        }
+
         /*Resultados Juntas*/
         // Guardar las filas dinámicas
         $Resultados_Juntas = [];
@@ -657,12 +695,18 @@ class FOR_02_PRO_INS_10Controller extends Controller
             ];
         }
 
-        // Convertir el array de resultados juntas a JSON
-        $ResultadosJuntas = json_encode($Resultados_Juntas);
+        // Convertir el array de resultados de titulo y juntas a JSON
+        $TituloyJuntas = json_encode([
+            'titulos' => $Titulos_Juntas,
+            'resultados' => $Resultados_Juntas
+        ]);
 
-        // Actualiza los detalles generales como JSON en la base de datos
+        // Convertir el array de resultados juntas a JSON
+        //$ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => $ResultadosJuntas
+            'Juntas_Grupo_Re' => $TituloyJuntas // ✅ Se pasa el JSON directamente
         ]);
 
         /*Firmas */
@@ -837,6 +881,8 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $Juntas_resultados = $Grupo_Juntas_Detalles_Re['resultados'];
+        $Titulos_resultados = $Grupo_Juntas_Detalles_Re['titulos'];
         $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
@@ -864,6 +910,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
+            //Titulos resultados
+            'Titulos_resultados' => $Titulos_resultados,
+            //Juntas_resultados
+            'Juntas_resultados' => $Juntas_resultados,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
             //Total de Juntas

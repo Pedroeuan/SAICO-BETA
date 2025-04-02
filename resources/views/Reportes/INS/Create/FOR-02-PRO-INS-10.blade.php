@@ -1110,7 +1110,16 @@
         sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
     }
 
-
+    function updateRowNumbers() {
+            var rowIndex = 0;
+            $('#dynamicTable tbody tr').each(function() {
+                if (!$(this).hasClass('titulo-row')) {
+                    rowIndex++;
+                    $(this).find('td:first').text(rowIndex);
+                }
+            });
+            //console.log("Ejecutando updateRowNumbers");
+        }
 
     function cargarDesdeSessionStorage() {
         var datosGuardados = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
@@ -1152,16 +1161,6 @@
     $(document).ready(function() {
         cargarDesdeSessionStorage();
         var rowCount = 0;
-
-        function updateRowNumbers() {
-            var rowIndex = 0;
-            $('#dynamicTable tbody tr').each(function() {
-                if (!$(this).hasClass('titulo-row')) {
-                    rowIndex++;
-                    $(this).find('td:first').text(rowIndex);
-                }
-            });
-        }
 
         $('#addTituloBtn').click(function () {
             // Crear una nueva fila de título con un botón de eliminar
@@ -1214,6 +1213,7 @@
                 </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            updateRowNumbers(); // ← Usar esta función en lugar de incrementar rowCount manualmente
             setTimeout(guardarEnSessionStorage, 100);
         });
 
@@ -1248,7 +1248,7 @@
             });
             return;
         }
-
+        
         // Eliminar los datos de sessionStorage al guardar
         sessionStorage.removeItem('tabla_dinamica');
          // Deshabilitar el botón de submit y cambiar el texto (opcional)
@@ -1259,20 +1259,18 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-    window.addEventListener('beforeunload', function () {
-        guardarEnSessionStorage(); // Asegurar que se guarda antes de salir
     });
 
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
+    document.addEventListener("DOMContentLoaded", function () { 
+        const inputFields = document.querySelectorAll("#inputRow .default-input"); // Solo inputs del encabezado
 
         // Evento para actualizar filas cuando se escriba en los inputs superiores
         inputFields.forEach(input => {
             input.addEventListener("input", function () {
                 const column = input.getAttribute("data-column");
-                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
+
+                // Buscar solo filas dinámicas dentro del tbody
+                document.querySelectorAll("#dynamicTable tbody tr:not(#inputRow)").forEach(row => {
                     const cellInput = row.querySelectorAll("td input")[column - 1];
                     if (cellInput) {
                         cellInput.value = input.value;

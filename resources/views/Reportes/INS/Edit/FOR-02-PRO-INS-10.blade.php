@@ -504,31 +504,79 @@
                                             </thead>
 
                                             <tbody>
-                                                @foreach($Grupo_Juntas_Re as $index => $junta)
-                                                    <tr>
-                                                        <td>{{ $index + 1 }}</td>
-                                                        <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $junta['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_serie[]" value="{{ $junta['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_colada[]" value="{{ $junta['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="tnominal[]" value="{{ $junta['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_ind[]" value="{{ $junta['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
-                                                        <td><input type="text" class="form-control" name="nr[]" value="{{ $junta['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="ni[]" value="{{ $junta['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="prof[]" value="{{ $junta['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="la[]" value="{{ $junta['la'] }}" placeholder="LA" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="lc[]" value="{{ $junta['lc'] }}" placeholder="LC" style="width: 60px;"></td>
-                                                        <td><input type="text" class="form-control" name="tmax[]" value="{{ $junta['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="tmin[]" value="{{ $junta['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $junta['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
-                                                        <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                @endforeach
+                                                @php $contador = 1; @endphp <!-- Inicializamos el contador antes de los bucles -->
+                                                @if (!empty($Titulos_resultados) && count($Titulos_resultados) > 0)
+                                                    @foreach($Titulos_resultados as $index => $titulo)
+                                                        <!-- Fila del título -->
+                                                        <tr class="titulo-row">
+                                                            <td colspan="21">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <input type="text" class="form-control w-90" name="titulos[]" 
+                                                                        value="{{ $titulo['titulo'] }}" 
+                                                                        placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        @foreach($Juntas_resultados as $index => $junta)
+                                                            <tr>
+                                                                <td>{{ $contador }}</td>
+                                                                <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $junta['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_serie[]" value="{{ $junta['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_colada[]" value="{{ $junta['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="tnominal[]" value="{{ $junta['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_ind[]" value="{{ $junta['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
+                                                                <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
+                                                                <td><input type="text" class="form-control" name="nr[]" value="{{ $junta['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ni[]" value="{{ $junta['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="prof[]" value="{{ $junta['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="la[]" value="{{ $junta['la'] }}" placeholder="LA" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="lc[]" value="{{ $junta['lc'] }}" placeholder="LC" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmax[]" value="{{ $junta['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmin[]" value="{{ $junta['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $junta['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
+                                                                <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
+                                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                            </tr>
+                                                            @php $contador++; @endphp <!-- Incrementamos el contador global -->
+                                                        @endforeach
+                                            @endforeach
+                                        @else
+                                            <!-- Si NO hay títulos, simplemente mostramos las filas -->
+                                            @foreach($Juntas_resultados as $junta)
+                                                            <tr>
+                                                                <td>{{ $contador }}</td>
+                                                                <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $junta['no_aceptacion'] }}" placeholder="No. Aceptación" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_serie[]" value="{{ $junta['no_serie'] }}" placeholder="No. Serie" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_colada[]" value="{{ $junta['no_colada'] }}" placeholder="No. Colada" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="tnominal[]" value="{{ $junta['tnominal'] }}" placeholder="tnominal" style="width: 100px;"></td>
+                                                                <td><input type="text" class="form-control" name="diametro[]" value="{{ $junta['diametro'] }}" placeholder="Ø" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="no_ind[]" value="{{ $junta['no_ind'] }}" placeholder="No.Ind." style="width: 50px;"></td>
+                                                                <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $junta['tipo_indicacion'] }}" placeholder="Tipo de Indicación"></td>
+                                                                <td><input type="text" class="form-control" name="nr[]" value="{{ $junta['nr'] }}" placeholder="NR (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ni[]" value="{{ $junta['ni'] }}" placeholder="NI (%)" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="ht[]" value="{{ $junta['ht'] }}" placeholder="H.T." style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="prof[]" value="{{ $junta['prof'] }}" placeholder="Prof" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="la[]" value="{{ $junta['la'] }}" placeholder="LA" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="lc[]" value="{{ $junta['lc'] }}" placeholder="LC" style="width: 60px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmax[]" value="{{ $junta['tmax'] }}" placeholder="tmáx" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="tmin[]" value="{{ $junta['tmin'] }}" placeholder="tmin" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $junta['metros_lineales'] }}" placeholder="Metros Lineales" style="width: 80px;"></td>
+                                                                <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $junta['evaluacion'] }}" placeholder="Evaluación" style="width: 120px;"></td>
+                                                                <td><input type="text" class="form-control" name="observaciones[]" value="{{ $junta['observaciones'] }}" placeholder="Observaciones" style="width: 150px;"></td>
+                                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                            </tr>
+                                                @php $contador++; @endphp <!-- Incrementamos el contador global -->
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                     </table>
                                     </div>
@@ -544,6 +592,8 @@
                                         </div>
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -1201,42 +1251,37 @@
     });
 
     /*Juntas-Resultados */
-    function guardarEnSessionStorage() {
-    var datos = [];
-        $('#dynamicTable tbody tr').each(function() {
-            var fila = {};
-            $(this).find('input').each(function() {
-                fila[$(this).attr('name')] = $(this).val();
-            });
-            datos.push(fila);
-        });
-        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
-    }
-
-    function cargarDesdeSessionStorage() {
-            var datos = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
-            if (datos) {
-                datos.forEach(function(filaData, index) {
-                    var newRow = `<tr><td>${index + 1}</td>`;
-                    for (var key in filaData) {
-                        newRow += `<td><input type="text" class="form-control" name="${key}" value="${filaData[key]}" /></td>`;
-                    }
-                    newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
-                    $('#dynamicTable tbody').append(newRow);
-                });
-            }
-        }
-
     $(document).ready(function() {
-        //cargarDesdeSessionStorage();
-        var rowCount = 0;
+        var rowCount = $('#dynamicTable tbody tr:not(.titulo-row)').length; // Contar solo filas sin títulos
 
         function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
+            var counter = 1; // Iniciar el contador desde 1
+            $('#dynamicTable tbody tr').each(function () {
+                if (!$(this).hasClass('titulo-row')) { // Ignorar las filas de título
+                    $(this).find('td:first').text(counter);
+                    counter++;
+                }
             });
-            //rowCount = $('#dynamicTable tbody tr').length;
+            rowCount = counter - 1; // Actualizar el contador global
         }
+
+        $('#addTituloBtn').click(function () {
+            var newTitleRow = `<tr class="titulo-row">
+                <td colspan="21">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+            $('#dynamicTable tbody').append(newTitleRow);
+        });
+
+        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+            $(this).closest('tr').remove();
+        });
 
         $('#addBtn').click(function() {
             var numRows = $('#numRows').val();
@@ -1268,17 +1313,17 @@
                 $('#dynamicTable tbody').append(newRow);
             }
             updateRowNumbers();
-            setTimeout(guardarEnSessionStorage, 100);
+            //setTimeout(guardarEnSessionStorage, 100);
         });
 
-        $('#dynamicTable').on('input', 'input', function() {
+        /*$('#dynamicTable').on('input', 'input', function() {
             guardarEnSessionStorage(); // Guardar cuando se edita algo
-        });
+        });*/
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
-            guardarEnSessionStorage(); // Guardar al eliminar
+            //guardarEnSessionStorage(); // Guardar al eliminar
         });
 
         $('#preFillBtn').click(function() {
@@ -1312,10 +1357,6 @@
 
         // Opcional: Agregar un indicador de carga
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-    window.addEventListener('beforeunload', function () {
-        guardarEnSessionStorage(); // Asegurar que se guarda antes de salir
     });
 
     });

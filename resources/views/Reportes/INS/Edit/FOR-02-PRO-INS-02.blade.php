@@ -997,6 +997,7 @@
         });
     });
 
+    /*Juntas-Resultados */
     $(document).ready(function () {
         var rowCount = $('#dynamicTable tbody tr:not(.titulo-row)').length; // Contar solo filas sin títulos
 
@@ -1082,95 +1083,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
     });
-
-    /*$(document).ready(function() {
-        var rowCount = $('#dynamicTable tbody tr').length;
-
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addTituloBtn').click(function () {
-            // Crear una nueva fila de título con un botón de eliminar
-            var newTitleRow = `<tr class="titulo-row">
-                <td colspan="11">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>`;
-
-            // Insertar el título después de las filas existentes en el tbody
-            $('#dynamicTable tbody').append(newTitleRow);
-        });
-
-        // Evento para eliminar un título
-        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            $(this).closest('tr').remove();
-        });
-
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                                        <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="componente[]" placeholder="No. Junta/Componente"></td>
-                    <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo Indicación"></td>
-                    <td><input type="text" class="form-control" name="largo[]" placeholder="LARGO" ></td>
-                    <td><input type="text" class="form-control" name="ancho[]" placeholder="ANCHO" ></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" ></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="longitud_inspeccionada[]" placeholder="L.I."></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
-                $('#dynamicTable tbody').append(newRow);
-            }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-        });
-        
-        $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-        
-    });*/
 
     document.addEventListener("DOMContentLoaded", function () {
     const inputFields = document.querySelectorAll(".default-input");
