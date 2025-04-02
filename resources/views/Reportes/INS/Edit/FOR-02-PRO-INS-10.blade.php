@@ -550,7 +550,7 @@
                                                     @endforeach
                                         @else
                                             <!-- Si NO hay títulos, simplemente mostramos las filas -->
-                                            @foreach($Juntas_resultados as $junta)
+                                            @foreach($Grupo_Juntas_Re as $junta)
                                                             <tr>
                                                                 <td>{{ $contador }}</td>
                                                                 <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $junta['elemento_tubo'] }}" placeholder="Elemento / Tubo" style="width: 100px;"></td>

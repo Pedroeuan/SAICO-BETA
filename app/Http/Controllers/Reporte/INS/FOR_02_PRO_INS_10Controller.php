@@ -372,17 +372,16 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $Titulos_Juntas = [];
+        /*$Titulos_Juntas = [];
         
         if (!empty($validatedData['titulos'])) {
             foreach ($validatedData['titulos'] as $titulo) {
                 $Titulos_Juntas[] = ['titulo' => $titulo];
             }
         }
-
             /*Resultados Juntas*/
             // Guardar las filas dinámicas
-            $Resultados_Juntas = [];
+            /*$Resultados_Juntas = [];
             foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
                 $Resultados_Juntas[] = [
                     'elemento_tubo' => $elemento_tubo,
@@ -415,7 +414,52 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
             //Guardar Datos_Equipo como JSON en la base de datos
             //$Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_Re->save();*/
+
+            $Titulos_Juntas = [];
+            $Resultados_Juntas_Agrupados = [];
+
+            if (!empty($validatedData['titulos'])) {
+                foreach ($validatedData['titulos'] as $index => $titulo) {
+                    // Agrupar los resultados bajo cada título
+                    $grupoResultados = [];
+                    
+                    // Suponiendo que los resultados están organizados en grupos según el índice del título
+                    if (isset($validatedData['elemento_tubo'][$index])) {
+                        $grupoResultados[] = [
+                            'elemento_tubo' => $validatedData['elemento_tubo'][$index],
+                            'no_aceptacion' => $validatedData['no_aceptacion'][$index],
+                            'no_serie' => $validatedData['no_serie'][$index],
+                            'no_colada' => $validatedData['no_colada'][$index],
+                            'tnominal' => $validatedData['tnominal'][$index],
+                            'diametro' => $validatedData['diametro'][$index],
+                            'no_ind' => $validatedData['no_ind'][$index],
+                            'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                            'nr' => $validatedData['nr'][$index],
+                            'ni' => $validatedData['ni'][$index],
+                            'ht' => $validatedData['ht'][$index],
+                            'prof' => $validatedData['prof'][$index],
+                            'la' => $validatedData['la'][$index],
+                            'lc' => $validatedData['lc'][$index],
+                            'tmax' => $validatedData['tmax'][$index],
+                            'tmin' => $validatedData['tmin'][$index],
+                            'metros_lineales' => $validatedData['metros_lineales'][$index],
+                            'evaluacion' => $validatedData['evaluacion'][$index],
+                            'observaciones' => $validatedData['observaciones'][$index],
+                        ];
+                    }
+
+                    $Titulos_Juntas[] = ['titulo' => $titulo, 'resultados' => $grupoResultados];
+                }
+            }
+
+            // Guardar en la base de datos
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
+                'titulos_juntas' => $Titulos_Juntas
+            ]);
+
             $Grupo_Juntas_Detalles_Re->save();
+
 
         /*Firmas */
         // Guardar las firmas
