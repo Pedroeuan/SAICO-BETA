@@ -1087,73 +1087,15 @@
     });
 
     /*Juntas-Resultados */
-    function guardarEnSessionStorage() {
-        var datos = [];
-
-        $('#dynamicTable tbody tr').each(function() {
-            if ($(this).hasClass('titulo-row')) {
-                // Guardar la fila como título
-                datos.push({
-                    tipo: "titulo",
-                    titulo: $(this).find('input[name="titulos[]"]').val()
-                });
-            } else {
-                // Guardar la fila como datos
-                var fila = { tipo: "fila" };
-                $(this).find('input').each(function() {
-                    fila[$(this).attr('name')] = $(this).val();
-                });
-                datos.push(fila);
+    function updateRowNumbers() {
+        let count = 0;
+        $('#dynamicTable tbody tr').each(function () {
+            if (!$(this).hasClass('titulo-row')) {
+                count++;
+                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
             }
         });
-
-        sessionStorage.setItem('tabla_dinamica', JSON.stringify(datos));
-    }
-
-    function updateRowNumbers() {
-            var rowIndex = 0;
-            $('#dynamicTable tbody tr').each(function() {
-                if (!$(this).hasClass('titulo-row')) {
-                    rowIndex++;
-                    $(this).find('td:first').text(rowIndex);
-                }
-            });
-            //console.log("Ejecutando updateRowNumbers");
-        }
-
-    function cargarDesdeSessionStorage() {
-        var datosGuardados = JSON.parse(sessionStorage.getItem('tabla_dinamica'));
-
-        if (datosGuardados) {
-            datosGuardados.forEach(function(item) {
-                if (item.tipo === "titulo") {
-                    // Insertar un título en la tabla
-                    var newTitleRow = `<tr class="titulo-row">
-                        <td colspan="21">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input type="text" class="form-control w-90" name="titulos[]" value="${item.titulo}">
-                                <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>`;
-                    $('#dynamicTable tbody').append(newTitleRow);
-                } else if (item.tipo === "fila") {
-                    // Insertar una fila de datos en la tabla
-                    var newRow = `<tr><td></td>`; // El número de fila se actualiza después
-                    for (var key in item) {
-                        if (key !== "tipo") {
-                            newRow += `<td><input type="text" class="form-control" name="${key}" value="${item[key]}" /></td>`;
-                        }
-                    }
-                    newRow += `<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td></tr>`;
-                    $('#dynamicTable tbody').append(newRow);
-                }
-            });
-            // Actualizar numeración de filas
-            updateRowNumbers();
-        }
+        rowCountGlobal = count;
     }
 
     // Función para actualizar los títulos en el campo oculto
@@ -1169,8 +1111,6 @@
         }
 
     $(document).ready(function() {
-        cargarDesdeSessionStorage();
-
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
@@ -1181,12 +1121,12 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="21">
+                <td colspan="20">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
                             <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
+                        </button></td>
                     </div>
                 </td>
             </tr>
@@ -1198,16 +1138,28 @@
 
         // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            $(this).closest('tr').remove();
+            let tituloRow = $(this).closest('tr');
+            let tituloId = tituloRow.data('titulo');
+            
+            // Eliminar la fila del título
+            tituloRow.remove();
+            
+            // Eliminar todas las filas que tengan el mismo data-titulo
+            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+
+            updateRowNumbers(); // Si quieres actualizar el contador global
         });
 
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
             let newRow = `
                 <tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
@@ -1234,20 +1186,15 @@
                 </tr>
             `;
 
-            $('#dynamicTable tbody').append(newRow);
-                    }
-                    guardarEnSessionStorage(); // Guardar el nuevo estado
-                }
-            );
+                $('#dynamicTable tbody').append(newRow);
+            }
+        }
+    );
 
-        $('#dynamicTable').on('input', 'input', function() {
-            guardarEnSessionStorage(); // Guardar cuando se edita algo
-        });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
-            guardarEnSessionStorage(); // Guardar al eliminar
         });
 
         $('#preFillBtn').click(function() {
@@ -1272,8 +1219,6 @@
             return;
         }
         
-        // Eliminar los datos de sessionStorage al guardar
-        sessionStorage.removeItem('tabla_dinamica');
          // Deshabilitar el botón de submit y cambiar el texto (opcional)
         let submitButton = $(this).find('button[type="submit"]');
         submitButton.prop('disabled', true).text('Guardando...');
@@ -1282,18 +1227,19 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-    });
+});
 
     document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
+        const inputFields = document.querySelectorAll(".default-input");
 
-    // Evento para actualizar filas cuando se escriba en los inputs superiores
         inputFields.forEach(input => {
             input.addEventListener("input", function () {
-                const column = input.getAttribute("data-column");
-                // Solo seleccionar filas que NO sean de título
-                document.querySelectorAll(`#dynamicTable tbody tr:not(.titulo-row)`).forEach(row => {
-                    const cellInput = row.querySelectorAll("td input")[column - 1];
+                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
+                if (isNaN(column)) return; // Evitar errores si no es válido
+
+                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    const cellInputs = row.querySelectorAll("td input");
+                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
                     if (cellInput) {
                         cellInput.value = input.value;
                     }
@@ -1301,6 +1247,7 @@
             });
         });
     });
+
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
@@ -1324,7 +1271,6 @@
     });
 
         /*Selección de Firmas */
-
         document.addEventListener('DOMContentLoaded', function() {
         const numFirmasSelect = document.getElementById('numFirmas');
         const firmas2 = document.getElementById('firmas2');
