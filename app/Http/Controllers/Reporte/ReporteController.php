@@ -211,6 +211,7 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
+        //dd($Grupo_Juntas_Re);
 
         //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
 

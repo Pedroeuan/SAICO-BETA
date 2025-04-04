@@ -216,13 +216,13 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store(Request $request) 
+    public function FOR_02_PRO_INS_10_store1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
+    public function FOR_02_PRO_INS_10_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -378,94 +378,53 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $titulos = $request->input('titulos', []); // Obtener los títulos
-        $datosAgrupados = []; // Aquí almacenaremos las filas agrupadas por título
-    
-         // Iterar sobre los títulos
-        foreach ($titulos as $index => $titulo) {
-            Log::info('titulos: ', ['titulos' => $titulos]);
-            Log::info('index: ', ['index' => $index]);
-            Log::info('titulo: ', ['titulo' => $titulo]);
-            // Obtener las filas asociadas a este título
-            $resultados = [
-                'elemento_tubo' => $request->input("elemento_tubo.{$index}", []),
-                'no_aceptacion' => $request->input("no_aceptacion.{$index}", []),
-                'no_serie' => $request->input("no_serie.{$index}", []),
-                'no_colada' => $request->input("no_colada.{$index}", []),
-                'tnominal' => $request->input("tnominal.{$index}", []),
-                'diametro' => $request->input("diametro.{$index}", []),
-                'no_ind' => $request->input("no_ind.{$index}", []),
-                'tipo_indicacion' => $request->input("tipo_indicacion.{$index}", []),
-                'nr' => $request->input("nr.{$index}", []),
-                'ni' => $request->input("ni.{$index}", []),
-                'ht' => $request->input("ht.{$index}", []),
-                'prof' => $request->input("prof.{$index}", []),
-                'la' => $request->input("la.{$index}", []),
-                'lc' => $request->input("lc.{$index}", []),
-                'tmax' => $request->input("tmax.{$index}", []),
-                'tmin' => $request->input("tmin.{$index}", []),
-                'metros_lineales' => $request->input("metros_lineales.{$index}", []),
-                'evaluacion' => $request->input("evaluacion.{$index}", []),
-                'observaciones' => $request->input("observaciones.{$index}", []),
-            ];
-
-            Log::info('resultados: ', ['resultados' => $resultados]);
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
         
-            // Ahora los datos están agrupados en $datosAgrupados y listos para ser convertidos a JSON
-            // Agregar el título y sus filas al array de datos
+        // Iterar sobre los títulos
+        foreach ($titulos as $titulo) {
+            $tituloKey = "titulo_{$titulo}";
+        
+            // Contar cuántas filas hay para este título
+            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = []; // Aquí guardaremos las filas de este título
+        
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'prof' => $request->input("prof.$tituloKey.$i"),
+                    'la' => $request->input("la.$tituloKey.$i"),
+                    'lc' => $request->input("lc.$tituloKey.$i"),
+                    'tmax' => $request->input("tmax.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                ];
+            }
+        
+            // Agrupar este título con sus filas
             $datosAgrupados[] = [
-                'titulo' => $titulo,
+                'titulos_juntas' => $titulo,
                 'resultados' => $resultados
             ];
         }
-        // Crear el modelo y guardar el JSON
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados); // Guardar los datos JSON en el campo adecuado
-        $Grupo_Juntas_Detalles_Re->save(); // Guardar el registro en la base de datos
-    
-
-            /*$Titulos_Juntas = [];
-            $Resultados_Juntas_Agrupados = [];
-
-            if (!empty($validatedData['titulos'])) {
-                foreach ($validatedData['titulos'] as $index => $titulo) {
-                    // Agrupar los resultados bajo cada título
-                    $grupoResultados = [];
-                    
-                    // Suponiendo que los resultados están organizados en grupos según el índice del título
-                    if (isset($validatedData['elemento_tubo'][$index])) {
-                        $grupoResultados[] = [
-                            'elemento_tubo' => $validatedData['elemento_tubo'][$index],
-                            'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                            'no_serie' => $validatedData['no_serie'][$index],
-                            'no_colada' => $validatedData['no_colada'][$index],
-                            'tnominal' => $validatedData['tnominal'][$index],
-                            'diametro' => $validatedData['diametro'][$index],
-                            'no_ind' => $validatedData['no_ind'][$index],
-                            'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                            'nr' => $validatedData['nr'][$index],
-                            'ni' => $validatedData['ni'][$index],
-                            'ht' => $validatedData['ht'][$index],
-                            'prof' => $validatedData['prof'][$index],
-                            'la' => $validatedData['la'][$index],
-                            'lc' => $validatedData['lc'][$index],
-                            'tmax' => $validatedData['tmax'][$index],
-                            'tmin' => $validatedData['tmin'][$index],
-                            'metros_lineales' => $validatedData['metros_lineales'][$index],
-                            'evaluacion' => $validatedData['evaluacion'][$index],
-                            'observaciones' => $validatedData['observaciones'][$index],
-                        ];
-                    }
-
-                    $Titulos_Juntas[] = ['titulo' => $titulo, 'resultados' => $grupoResultados];
-                }
-            }
-
-            // Guardar en la base de datos
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
-                'titulos_juntas' => $Titulos_Juntas
-            ]);
-
-            $Grupo_Juntas_Detalles_Re->save();*/
+        
+        // Guardar en el modelo
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->save();
 
 
         /*Firmas */
