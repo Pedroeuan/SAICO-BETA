@@ -1166,14 +1166,14 @@
 
             // Asignar los títulos al campo oculto
             $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-}
+        }
 
     $(document).ready(function() {
         cargarDesdeSessionStorage();
-        //var rowCount = 0;
 
         let tituloCount = 0;
         let rowCount = 0;
+        let rowCountGlobal = 0;
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
@@ -1202,18 +1202,15 @@
         });
 
         $('#addBtn').click(function () {
-            /*if ($('.titulo-row').length === 0) {
-                alert("Debes agregar un título antes de agregar filas.");
-                return;
-            }*/
-
-            rowCount++; // Incrementar el contador de filas
-            //let lastTitle = $('.titulo-row').last().data('titulo'); // Obtener el último título agregado
+            let numFilas = parseInt($('#numRows').val());
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
             let newRow = `
                 <tr data-titulo="${lastTitle}">
-                    <td>${rowCount}</td>
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
                     <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
                     <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
@@ -1238,40 +1235,10 @@
             `;
 
             $('#dynamicTable tbody').append(newRow);
-        });
-
-        /*$('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="elemento_tubo[]" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. Aceptación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="No. Serie" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="No. Colada" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="tnominal" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="No.Ind." style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="nr[]" placeholder="NR (%)" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="ni[]" placeholder="NI (%)" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="prof[]" placeholder="Prof" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="LA" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="lc[]" placeholder="LC" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="tmax[]" placeholder="tmáx" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="tmin[]" placeholder="tmin" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="metros_lineales[]" placeholder="Metros Lineales" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación" style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="observaciones[]" placeholder="Observaciones" style="width: 150px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
-                $('#dynamicTable tbody').append(newRow);
-            }
-            updateRowNumbers(); // ← Usar esta función en lugar de incrementar rowCount manualmente
-            setTimeout(guardarEnSessionStorage, 100);
-        });*/
+                    }
+                    guardarEnSessionStorage(); // Guardar el nuevo estado
+                }
+            );
 
         $('#dynamicTable').on('input', 'input', function() {
             guardarEnSessionStorage(); // Guardar cuando se edita algo

@@ -414,7 +414,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             }
         
             $datosAgrupados[] = [
-                'titulos_juntas' => null, // o puedes usar "Sin título"
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
                 'resultados' => $resultados
             ];
         }
@@ -461,8 +461,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
         
-
-
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
