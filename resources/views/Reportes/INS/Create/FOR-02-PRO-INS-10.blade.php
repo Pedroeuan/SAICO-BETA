@@ -1202,42 +1202,43 @@
         });
 
         $('#addBtn').click(function () {
-    if ($('.titulo-row').length === 0) {
-        alert("Debes agregar un título antes de agregar filas.");
-        return;
-    }
+            /*if ($('.titulo-row').length === 0) {
+                alert("Debes agregar un título antes de agregar filas.");
+                return;
+            }*/
 
-    rowCount++; // Incrementar el contador de filas
-    let lastTitle = $('.titulo-row').last().data('titulo'); // Obtener el último título agregado
+            rowCount++; // Incrementar el contador de filas
+            //let lastTitle = $('.titulo-row').last().data('titulo'); // Obtener el último título agregado
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
-    let newRow = `
-        <tr data-titulo="${lastTitle}">
-            <td>${rowCount}</td>
-            <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-            <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
-            <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
-            <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
-            <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
-            <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
-            <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
-            <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-            <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
-            <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
-            <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
-            <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
-            <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
-            <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
-            <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
-            <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
-            <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
-            <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
-            <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-        </tr>
-    `;
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCount}</td>
+                    <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
+                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
+                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                </tr>
+            `;
 
-    $('#dynamicTable tbody').append(newRow);
-});
+            $('#dynamicTable tbody').append(newRow);
+        });
 
         /*$('#addBtn').click(function() {
             var numRows = $('#numRows').val();

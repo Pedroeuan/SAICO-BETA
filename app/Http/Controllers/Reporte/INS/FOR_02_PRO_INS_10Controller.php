@@ -381,15 +381,51 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
         
-        // Iterar sobre los títulos
-        foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_{$titulo}";
+        // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
         
-            // Contar cuántas filas hay para este título
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'prof' => $request->input("prof.$sinTituloKey.$i"),
+                    'la' => $request->input("la.$sinTituloKey.$i"),
+                    'lc' => $request->input("lc.$sinTituloKey.$i"),
+                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => null, // o puedes usar "Sin título"
+                'resultados' => $resultados
+            ];
+        }
+        
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            $tituloKey = "titulo_" . $titulo;
             $filas = $request->input("elemento_tubo.$tituloKey", []);
             $numFilas = count($filas);
         
-            $resultados = []; // Aquí guardaremos las filas de este título
+            $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
@@ -415,7 +451,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 ];
             }
         
-            // Agrupar este título con sus filas
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
                 'resultados' => $resultados
@@ -425,6 +460,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         // Guardar en el modelo
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
+        
 
 
         /*Firmas */
