@@ -1156,13 +1156,31 @@
         }
     }
 
+    // Función para actualizar los títulos en el campo oculto
+        function updateTitulos() {
+            var titulos = [];
+            // Recolectar todos los títulos en el array
+            $('.titulo-row input[type="text"]').each(function() {
+                titulos.push($(this).val());
+            });
+
+            // Asignar los títulos al campo oculto
+            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+}
+
     $(document).ready(function() {
         cargarDesdeSessionStorage();
-        var rowCount = 0;
+        //var rowCount = 0;
+
+        let tituloCount = 0;
+        let rowCount = 0;
 
         $('#addTituloBtn').click(function () {
-            // Crear una nueva fila de título con un botón de eliminar
-            var newTitleRow = `<tr class="titulo-row">
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
                 <td colspan="21">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
@@ -1171,10 +1189,11 @@
                         </button>
                     </div>
                 </td>
-            </tr>`;
+            </tr>
+        `;
 
-            // Insertar el título después de las filas existentes en el tbody
-            $('#dynamicTable tbody').append(newTitleRow);
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         // Evento para eliminar un título
@@ -1182,7 +1201,45 @@
             $(this).closest('tr').remove();
         });
 
-        $('#addBtn').click(function() {
+        $('#addBtn').click(function () {
+    if ($('.titulo-row').length === 0) {
+        alert("Debes agregar un título antes de agregar filas.");
+        return;
+    }
+
+    rowCount++; // Incrementar el contador de filas
+    let lastTitle = $('.titulo-row').last().data('titulo'); // Obtener el último título agregado
+
+    let newRow = `
+        <tr data-titulo="${lastTitle}">
+            <td>${rowCount}</td>
+            <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+            <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
+            <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
+            <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
+            <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
+            <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+            <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
+            <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+            <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+            <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+            <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+            <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
+            <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+            <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+            <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
+            <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+            <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
+            <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+            <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+        </tr>
+    `;
+
+    $('#dynamicTable tbody').append(newRow);
+});
+
+        /*$('#addBtn').click(function() {
             var numRows = $('#numRows').val();
             for (var i = 0; i < numRows; i++) {
                 rowCount++;
@@ -1213,7 +1270,7 @@
             }
             updateRowNumbers(); // ← Usar esta función en lugar de incrementar rowCount manualmente
             setTimeout(guardarEnSessionStorage, 100);
-        });
+        });*/
 
         $('#dynamicTable').on('input', 'input', function() {
             guardarEnSessionStorage(); // Guardar cuando se edita algo

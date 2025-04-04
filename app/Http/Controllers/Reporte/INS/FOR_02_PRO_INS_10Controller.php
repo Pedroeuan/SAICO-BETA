@@ -216,7 +216,13 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function FOR_02_PRO_INS_10_store(Request $request) 
+    {
+        // Verificar los datos recibidos antes de procesarlos
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+    }
+
+    public function FOR_02_PRO_INS_10_store1(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -261,8 +267,8 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
@@ -372,7 +378,52 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-            $Titulos_Juntas = [];
+        $titulos = $request->input('titulos', []); // Obtener los títulos
+        $datosAgrupados = []; // Aquí almacenaremos las filas agrupadas por título
+    
+         // Iterar sobre los títulos
+        foreach ($titulos as $index => $titulo) {
+            Log::info('titulos: ', ['titulos' => $titulos]);
+            Log::info('index: ', ['index' => $index]);
+            Log::info('titulo: ', ['titulo' => $titulo]);
+            // Obtener las filas asociadas a este título
+            $resultados = [
+                'elemento_tubo' => $request->input("elemento_tubo.{$index}", []),
+                'no_aceptacion' => $request->input("no_aceptacion.{$index}", []),
+                'no_serie' => $request->input("no_serie.{$index}", []),
+                'no_colada' => $request->input("no_colada.{$index}", []),
+                'tnominal' => $request->input("tnominal.{$index}", []),
+                'diametro' => $request->input("diametro.{$index}", []),
+                'no_ind' => $request->input("no_ind.{$index}", []),
+                'tipo_indicacion' => $request->input("tipo_indicacion.{$index}", []),
+                'nr' => $request->input("nr.{$index}", []),
+                'ni' => $request->input("ni.{$index}", []),
+                'ht' => $request->input("ht.{$index}", []),
+                'prof' => $request->input("prof.{$index}", []),
+                'la' => $request->input("la.{$index}", []),
+                'lc' => $request->input("lc.{$index}", []),
+                'tmax' => $request->input("tmax.{$index}", []),
+                'tmin' => $request->input("tmin.{$index}", []),
+                'metros_lineales' => $request->input("metros_lineales.{$index}", []),
+                'evaluacion' => $request->input("evaluacion.{$index}", []),
+                'observaciones' => $request->input("observaciones.{$index}", []),
+            ];
+
+            Log::info('resultados: ', ['resultados' => $resultados]);
+        
+            // Ahora los datos están agrupados en $datosAgrupados y listos para ser convertidos a JSON
+            // Agregar el título y sus filas al array de datos
+            $datosAgrupados[] = [
+                'titulo' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+        // Crear el modelo y guardar el JSON
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados); // Guardar los datos JSON en el campo adecuado
+        $Grupo_Juntas_Detalles_Re->save(); // Guardar el registro en la base de datos
+    
+
+            /*$Titulos_Juntas = [];
             $Resultados_Juntas_Agrupados = [];
 
             if (!empty($validatedData['titulos'])) {
@@ -414,7 +465,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 'titulos_juntas' => $Titulos_Juntas
             ]);
 
-            $Grupo_Juntas_Detalles_Re->save();
+            $Grupo_Juntas_Detalles_Re->save();*/
 
 
         /*Firmas */
