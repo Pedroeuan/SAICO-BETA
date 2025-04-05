@@ -1115,6 +1115,66 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
+        // Restaurar datos desde sessionStorage al cargar la página
+        function restoreData() {
+            const savedData = sessionStorage.getItem('dynamicTableData');
+            if (savedData) {
+                const tableData = JSON.parse(savedData);
+
+                tableData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        // Restaurar título
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="20">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        // Restaurar fila normal
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${$('#dynamicTable tbody tr').length + 1} <input type="hidden" value="${$('#dynamicTable tbody tr').length + 1}"></td>
+                            ${item.inputs.map(input => `<td><input type="text" class="form-control" value="${input}" placeholder="..."></td>`).join('')}
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+            }
+        }
+
+    // Guardar datos en sessionStorage
+    function saveData() {
+        const tableData = [];
+
+        // Recorrer todas las filas de la tabla (incluyendo títulos y filas normales)
+        $('#dynamicTable tbody tr').each(function () {
+            const isTitulo = $(this).hasClass('titulo-row');
+            const tituloId = $(this).data('titulo') || null;
+
+            if (isTitulo) {
+                // Guardar título
+                const tituloText = $(this).find('input[type="text"]').val();
+                tableData.push({ type: 'titulo', id: tituloId, text: tituloText });
+            } else {
+                // Guardar fila normal
+                const inputs = $(this).find('input[type="text"]').map(function () {
+                    return $(this).val();
+                }).get();
+                tableData.push({ type: 'fila', titulo: tituloId, inputs });
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
+    }
+
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1134,6 +1194,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
+        saveData();
         });
 
         // Evento para eliminar un título
@@ -1148,6 +1209,7 @@
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
             updateRowNumbers(); // Si quieres actualizar el contador global
+            saveData();
         });
 
         $('#addBtn').click(function () {
@@ -1188,6 +1250,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            saveData();
         }
     );
 
@@ -1195,6 +1258,7 @@
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            saveData();
         });
 
         $('#preFillBtn').click(function() {
@@ -1205,6 +1269,7 @@
                     }
                 });
             });
+            saveData();
         });
         
         $('form').submit(function(e) {
@@ -1227,6 +1292,8 @@
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
+        // Restaurar datos al cargar la página
+        restoreData();
 });
 
     document.addEventListener("DOMContentLoaded", function () {
