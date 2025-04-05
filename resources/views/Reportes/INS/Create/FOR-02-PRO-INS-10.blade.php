@@ -1115,15 +1115,17 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        // Restaurar datos desde sessionStorage al cargar la página
         function restoreData() {
             const savedData = sessionStorage.getItem('dynamicTableData');
             if (savedData) {
                 const tableData = JSON.parse(savedData);
-
+                
+                // Restaurar contadores
+                tituloCount = tableData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                
                 tableData.forEach((item) => {
                     if (item.type === 'titulo') {
-                        // Restaurar título
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
                             <td colspan="20">
@@ -1137,38 +1139,66 @@
                         </tr>`;
                         $('#dynamicTable tbody').append(newTitle);
                     } else if (item.type === 'fila') {
-                        // Restaurar fila normal
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
-                            <td>${$('#dynamicTable tbody tr').length + 1} <input type="hidden" value="${$('#dynamicTable tbody tr').length + 1}"></td>
-                            ${item.inputs.map(input => `<td><input type="text" class="form-control" value="${input}" placeholder="..."></td>`).join('')}
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Aceptación"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Serie"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Colada"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[4]}" placeholder="tnominal"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[10]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Prof"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmáx"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Metros Lineales"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });
+                updateRowNumbers();
+                updateTitulos();
             }
         }
 
     // Guardar datos en sessionStorage
     function saveData() {
         const tableData = [];
+        let rowNumber = 1;
 
-        // Recorrer todas las filas de la tabla (incluyendo títulos y filas normales)
         $('#dynamicTable tbody tr').each(function () {
             const isTitulo = $(this).hasClass('titulo-row');
-            const tituloId = $(this).data('titulo') || null;
+            const tituloId = $(this).data('titulo') || 'sin_titulo';
 
             if (isTitulo) {
-                // Guardar título
                 const tituloText = $(this).find('input[type="text"]').val();
-                tableData.push({ type: 'titulo', id: tituloId, text: tituloText });
+                tableData.push({ 
+                    type: 'titulo', 
+                    id: tituloId, 
+                    text: tituloText 
+                });
             } else {
-                // Guardar fila normal
                 const inputs = $(this).find('input[type="text"]').map(function () {
                     return $(this).val();
                 }).get();
-                tableData.push({ type: 'fila', titulo: tituloId, inputs });
+                
+                tableData.push({ 
+                    type: 'fila', 
+                    titulo: tituloId, 
+                    inputs: inputs,
+                    rowNumber: rowNumber
+                });
+                rowNumber++;
             }
         });
 
@@ -1273,28 +1303,30 @@
         });
         
         $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-        
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+                });
+                return;
+            }
 
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        });
+
+            // Restaurar datos al cargar la página
+            restoreData();
     });
-
-        // Restaurar datos al cargar la página
-        restoreData();
-});
 
     document.addEventListener("DOMContentLoaded", function () {
         const inputFields = document.querySelectorAll(".default-input");
