@@ -63,7 +63,7 @@
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="$reporte->idReportes"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -127,7 +127,7 @@ let table = new DataTable('#tablaJs', {
 });
 
 
-    $(document).on("click", ".btnEliminarPrueba", function() {
+    $(document).on("click", ".btnEliminarReportes", function() {
         var idReporte = $(this).attr("idReporte");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
@@ -140,7 +140,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Eliminar/Prueba/Tabla/' + idReporte,
+                    url: '/Eliminar/Reportes/Tabla/' + idReporte,
 
                     type: 'DELETE',
                     data: {

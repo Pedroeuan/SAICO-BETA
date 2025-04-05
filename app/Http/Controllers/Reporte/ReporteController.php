@@ -482,6 +482,26 @@ public function FOR_01_PRO_INS_02()
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function estroyReportes($id)
+    {
+
+        $OC = OC::find($id);
+        // Eliminar los detalles de la OC
+        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
+        foreach ($detallesOC as $detalle) {
+            $detalle->delete();  // Eliminar cada detalle individualmente
+        }
+        $OC->delete();
+
+        //
+        $Lineal_Ideal  = Lineal_Ideal::find($id);
+        $Lineal_Ideal->delete();
+
+        //redirect()->route('inventario');
+    }
 
     /**
      * Display the specified resource.
@@ -507,11 +527,5 @@ public function FOR_01_PRO_INS_02()
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(reporte $reporte)
-    {
-        //
-    }
+
 }

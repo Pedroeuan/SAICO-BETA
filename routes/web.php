@@ -120,6 +120,8 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
+        /*Ruta del botón del eliminar del index de indexINS2 */
+        Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_10*/
         Route::post('/Reportes_FOR_02_PRO_INS_10/store', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_PRO_INS_10_store'])->name('Reportes_FOR_02_PRO_INS_10.store');
         /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_10*/
@@ -339,7 +341,6 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
     Route::get('/Reporte/FOR-INS-18/01/PDF', [PDFReportesController::class, 'FOR_INS_18_01'])->name('Reporte_FOR_INS_18_01.PDF');
 
     /*A DEFINIR EL ACCESO */
-
     Route::get('/Reporte/FORMATO/01', [PDFReportesController::class, 'FORMATO_01'])->name('Reporte_FOR_PINS_03_01.PDF');
     Route::get('/Reporte/FORMATO/02', [PDFReportesController::class, 'FORMATO_02'])->name('Reporte_FOR_PINS_04_01.PDF');
 
