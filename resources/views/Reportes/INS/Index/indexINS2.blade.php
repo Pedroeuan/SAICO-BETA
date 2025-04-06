@@ -63,7 +63,7 @@
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btnEliminarReporte" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -127,48 +127,47 @@ let table = new DataTable('#tablaJs', {
 });
 
 
-    $(document).on("click", ".btnEliminarReportes", function() {
-        var idReporte = $(this).attr("idReporte");
-        Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
-            text: "¡Se Eliminara el Reporte¡",
-            icon: 'error',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: "Sí",
-            denyButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Eliminar/Reportes/Tabla/' + idReporte,
-
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: "Eliminado!",
-                                text: response.message,
-                                icon: "success",
-                                didClose: function() {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Swal.fire("Error!", response.message, "error");
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el Reporte.", "error");
+$(document).on("click", ".btnEliminarReportes", function() {
+    var idReporte = $(this).attr("idReporte");
+    Swal.fire({
+        title: "¿Seguro de eliminar este elemento?",
+        text: "¡Se eliminará el reporte!",
+        icon: 'error',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Eliminar/Reporte/Tabla/' + idReporte,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Eliminado!",
+                            text: response.message,
+                            icon: "success"
+                        }).then(() => {
+                            // Recargar la página después de cerrar la alerta
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire("Error!", response.message, "error");
                     }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Cancelado", "", "error");
-            }
-        });
+                },
+                error: function() {
+                    Swal.fire("Error!", "No se pudo eliminar el reporte.", "error");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
     });
+});
 </script>
 
 @endsection

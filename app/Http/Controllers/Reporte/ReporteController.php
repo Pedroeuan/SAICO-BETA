@@ -485,22 +485,45 @@ public function FOR_01_PRO_INS_02()
     /**
      * Remove the specified resource from storage.
      */
-    public function estroyReportes($id)
+    public function destroyReportes($id)
     {
-
-        $OC = OC::find($id);
-        // Eliminar los detalles de la OC
-        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
-        foreach ($detallesOC as $detalle) {
-            $detalle->delete();  // Eliminar cada detalle individualmente
+        //Primero Eliminar el registro de la tabla 'lineal_ideal'
+        $Lineal_Ideal  = Lineal_Ideal::where('idReportes', $id)->first();
+        if ($Lineal_Ideal) {
+            $Lineal_Ideal->delete();
         }
-        $OC->delete();
 
-        //
-        $Lineal_Ideal  = Lineal_Ideal::find($id);
-        $Lineal_Ideal->delete();
+        //Segundo Eliminar el registro de la tabla 'Firma_Reporte'
+        $Firma_Reporte  = Firma_Reporte::where('idReportes', $id)->first();
+        if ($Firma_Reporte) {
+            $Firma_Reporte->delete();
+        }
 
-        //redirect()->route('inventario');
+        //Tercero Eliminar el registro de la tabla 'Fotos_Reporte'
+        $Fotos_Reporte  = Fotos_Reporte::where('idReportes', $id)->first();
+        if ($Fotos_Reporte) {
+            $Fotos_Reporte->delete();
+        }
+
+        //Cuarto Eliminar el registro de la tabla 'Grupo_Juntas_Detalles_Re'
+        $Grupo_Juntas_Detalles_Re  = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        if ($Grupo_Juntas_Detalles_Re) {
+            $Grupo_Juntas_Detalles_Re->delete();
+        }
+
+        //Cuarto y ultimo Eliminar el registro de la tabla 'reporte'
+        $reporte  = reporte::where('idReportes', $id)->first();
+        if ($reporte) {
+            $reporte->delete();
+        }
+
+        
+        // ✅ Retornar respuesta JSON para el AJAX
+        return response()->json([
+            'success' => true,
+            'message' => 'Reporte eliminado correctamente.'
+        ]);
+
     }
 
     /**
