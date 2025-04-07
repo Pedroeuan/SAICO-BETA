@@ -1348,7 +1348,6 @@
                     }
                 });
             });
- 
         });
         
         $('form').submit(function(e) {
@@ -1373,6 +1372,25 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputFields = document.querySelectorAll(".default-input");
+
+        inputFields.forEach(input => {
+            input.addEventListener("input", function () {
+                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
+                if (isNaN(column)) return; // Evitar errores si no es válido
+
+                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    const cellInputs = row.querySelectorAll("td input");
+                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
+                    if (cellInput) {
+                        cellInput.value = input.value;
+                    }
+                });
+            });
+        });
     });
 
 

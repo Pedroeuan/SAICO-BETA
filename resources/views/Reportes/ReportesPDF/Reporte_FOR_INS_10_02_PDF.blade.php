@@ -702,6 +702,7 @@
                                         @php
                                             $titulo = $grupo['titulos_juntas'];
                                             $tituloKey = $titulo != 'SIN TITULO' ? $titulo : 'sin_titulo';
+                                            
                                         @endphp
 
                                         @if ($titulo !== 'SIN TITULO')
@@ -743,9 +744,32 @@
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['evaluacion'] }}</td>
                                                 <td style="border-right: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
                                             </tr>
+
+                                            @if ($contadorFilas % $filasPorPagina === 0)
+                                                <!-- Fila de total antes del salto de página -->
+                                                <tr style="page-break-after: always;" class="sinBordetd">
+                                                    <td colspan="13" style="border-top: 2px solid black;"></td>
+                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                                </tr>
+
+                                                @php
+                                                    $totalMetros = 0; // Reinicia el acumulador para la siguiente página
+                                                @endphp
+
+                                            @endif
                                             @php $contador++; @endphp
                                         @endforeach
                                     @endforeach
+
+                                    <!-- Fila de total final si no se alcanzó el límite de filas por página -->
+                                    @if ($contadorFilas % $filasPorPagina !== 0)
+                                        <tr style="page-break-after: always;" class="sinBordetd">
+                                            <td colspan="12"></td>
+                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                        </tr>
+                                    @endif
                                 </tbody>
                     </table>
                 </div>
