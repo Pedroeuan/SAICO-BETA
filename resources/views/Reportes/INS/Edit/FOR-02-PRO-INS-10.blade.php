@@ -442,12 +442,12 @@
                                     <div style="margin-bottom: 5px;"></div>
 
                                     <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
+                                    <div class="alert alert-warning alert-dismissible">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
                                         </div>
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                                 <tr>
                                                     <th colspan="7">DATOS DEL MATERIAL</th>
@@ -504,40 +504,51 @@
                                             </thead>
 
                                             <tbody>
-                                            @php $contador = 1; @endphp
-                                                @foreach ($Grupo_Juntas_Re as $grupo)
+                                            @php
+                                                $contador = 1;
+                                            @endphp
+
+                                            @foreach ($Grupo_Juntas_Re as $grupo)
+                                            @php
+                                                $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                            @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <td colspan="20">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)" value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                                </button></td>
-                                                        </div>
-                                                    </td>
+                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                        <td colspan="20">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 @endif
+
                                                 @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr>
-                                                        <td>{{ $contador }}</td>
-                                                        <td><input type="text" class="form-control" name="elemento_tubo[]" value="{{ $resultado['elemento_tubo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_aceptacion[]" value="{{ $resultado['no_aceptacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_serie[]" value="{{ $resultado['no_serie'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_colada[]" value="{{ $resultado['no_colada'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tnominal[]" value="{{ $resultado['tnominal'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[]" value="{{ $resultado['diametro'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_ind[]" value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[]" value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="nr[]" value="{{ $resultado['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="ni[]" value="{{ $resultado['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="ht[]" value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="prof[]" value="{{ $resultado['prof'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="la[]" value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="lc[]" value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tmax[]" value="{{ $resultado['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tmin[]" value="{{ $resultado['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="metros_lineales[]" value="{{ $resultado['metros_lineales'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[]" value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="observaciones[]" value="{{ $resultado['observaciones'] }}"></td>
+                                                    <tr data-titulo="{{ $tituloKey }}">
+                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td><input type="text" class="form-control" name="elemento_tubo[titulo_{{ $tituloKey }}][]" value="{{ $resultado['elemento_tubo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="no_aceptacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_aceptacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="no_serie[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_serie'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="no_colada[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_colada'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="tnominal[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tnominal'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="diametro[titulo_{{ $tituloKey }}][]" value="{{ $resultado['diametro'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="no_ind[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_ind'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="tipo_indicacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="nr[titulo_{{ $tituloKey }}][]" value="{{ $resultado['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="ni[titulo_{{ $tituloKey }}][]" value="{{ $resultado['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="ht[titulo_{{ $tituloKey }}][]" value="{{ $resultado['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="prof[titulo_{{ $tituloKey }}][]" value="{{ $resultado['prof'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="la[titulo_{{ $tituloKey }}][]" value="{{ $resultado['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="lc[titulo_{{ $tituloKey }}][]" value="{{ $resultado['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="tmax[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="tmin[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="metros_lineales[titulo_{{ $tituloKey }}][]" value="{{ $resultado['metros_lineales'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="evaluacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name="observaciones[titulo_{{ $tituloKey }}][]" value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp

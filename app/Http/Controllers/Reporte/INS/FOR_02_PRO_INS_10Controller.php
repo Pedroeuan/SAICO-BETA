@@ -561,6 +561,13 @@ class FOR_02_PRO_INS_10Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
+    
+    public function FOR_02_PRO_INS_10_update1(Request $request) 
+    {
+        // Verificar los datos recibidos antes de procesarlos
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+    }
+
     public function FOR_02_PRO_INS_10_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
