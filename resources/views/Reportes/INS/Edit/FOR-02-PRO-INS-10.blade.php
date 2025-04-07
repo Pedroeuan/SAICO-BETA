@@ -530,25 +530,25 @@
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr data-titulo="{{ $tituloKey }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name="elemento_tubo[titulo_{{ $tituloKey }}][]" value="{{ $resultado['elemento_tubo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_aceptacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_aceptacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_serie[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_serie'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_colada[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_colada'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tnominal[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tnominal'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[titulo_{{ $tituloKey }}][]" value="{{ $resultado['diametro'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_ind[titulo_{{ $tituloKey }}][]" value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="nr[titulo_{{ $tituloKey }}][]" value="{{ $resultado['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="ni[titulo_{{ $tituloKey }}][]" value="{{ $resultado['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="ht[titulo_{{ $tituloKey }}][]" value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="prof[titulo_{{ $tituloKey }}][]" value="{{ $resultado['prof'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="la[titulo_{{ $tituloKey }}][]" value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="lc[titulo_{{ $tituloKey }}][]" value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tmax[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="tmin[titulo_{{ $tituloKey }}][]" value="{{ $resultado['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="metros_lineales[titulo_{{ $tituloKey }}][]" value="{{ $resultado['metros_lineales'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[titulo_{{ $tituloKey }}][]" value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name="observaciones[titulo_{{ $tituloKey }}][]" value="{{ $resultado['observaciones'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='elemento_tubo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['elemento_tubo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_aceptacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['no_aceptacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_serie[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['no_serie'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_colada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['no_colada'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tnominal[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['tnominal'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['diametro'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nr[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ni[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='prof[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['prof'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='la[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='lc[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmax[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmin[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='metros_lineales[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['metros_lineales'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='observaciones[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_ @endif{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp
