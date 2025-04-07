@@ -216,12 +216,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -559,13 +553,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
-    }
-
-    
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
     public function FOR_02_PRO_INS_10_update(Request $request, $id)
@@ -968,8 +955,9 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-        $Juntas_resultados = $Grupo_Juntas_Detalles_Re['resultados'];
-        $Titulos_resultados = $Grupo_Juntas_Detalles_Re['titulos'];
+        //dd($Grupo_Juntas_Detalles_Re);
+        //$Juntas_resultados = $Grupo_Juntas_Detalles_Re['resultados'];
+        //$Titulos_resultados = $Grupo_Juntas_Detalles_Re['titulos'];
         $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
@@ -998,9 +986,9 @@ class FOR_02_PRO_INS_10Controller extends Controller
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
             //Titulos resultados
-            'Titulos_resultados' => $Titulos_resultados,
+            //'Titulos_resultados' => $Titulos_resultados,
             //Juntas_resultados
-            'Juntas_resultados' => $Juntas_resultados,
+            //'Juntas_resultados' => $Juntas_resultados,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
             //Total de Juntas

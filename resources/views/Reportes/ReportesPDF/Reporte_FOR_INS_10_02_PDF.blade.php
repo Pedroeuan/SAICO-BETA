@@ -692,85 +692,60 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $contador = 1; // Inicializamos el contador
-                                        $filasPorPagina = 15; // Define cuántas filas quieres por página
-                                        $totalMetros = 0; // Inicializa el acumulador de metros lineales
-                                        $contadorFilas = 0; // Contador para controlar las filas por página
-                                        $totalFilas = count($Juntas_resultados); // Total de filas
-                                        //dd($totalFilas);
+                                        $contador = 1;
+                                        $filasPorPagina = 15;
+                                        $contadorFilas = 0;
+                                        $totalMetros = 0;
                                     @endphp
 
-                                    @if (!empty($Titulos_resultados) && count($Titulos_resultados) > 0)
-                                        @foreach($Titulos_resultados as $tituloIndex => $titulo)
+                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                                        @php
+                                            $titulo = $grupo['titulos_juntas'];
+                                            $tituloKey = $titulo != 'SIN TITULO' ? $titulo : 'sin_titulo';
+                                        @endphp
+
+                                        @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
                                                 <td colspan="20">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                    {{ $titulo['titulo'] }}
+                                                        {{ $titulo }}
                                                     </div>
                                                 </td>
                                             </tr>
+                                        @endif
 
-                                            <!-- Iteramos las juntas correspondientes -->
-                                            @foreach($Juntas_resultados as $index => $junta)
-                                                @php
-                                                    $totalMetros += floatval($junta['metros_lineales']); // Suma los metros lineales
-                                                    $contadorFilas++;
-                                                    $esUltimaFila = ($index + 1) === $totalFilas; // Verifica si es la última fila de la tabla
-                                                @endphp
-                                                <tr class="juntas">
-                                                    <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $contador }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['elemento_tubo'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_aceptacion'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_serie'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_colada'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tnominal'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['diametro'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_ind'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tipo_indicacion'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['nr'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ni'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ht'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['prof'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['la'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['lc'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmax'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmin'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['metros_lineales'] }}</td>
-                                                    <td style=" @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['evaluacion'] }}</td>
-                                                    <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
-                                                </tr>
-                                                @php $contador++; @endphp
-                                            @endforeach
-                                        @endforeach
-                                    @else
-                                        <!-- Si no hay títulos, mostramos solo las juntas -->
-                                        @foreach($Juntas_resultados as $index => $junta)
-                                            <tr>
-                                                <td>{{ $contador }}</td>
-                                                <td>{{ $junta['elemento_tubo'] }}</td>
-                                                <td>{{ $junta['no_aceptacion'] }}</td>
-                                                <td>{{ $junta['no_serie'] }}</td>
-                                                <td>{{ $junta['no_colada'] }}</td>
-                                                <td>{{ $junta['tnominal'] }}</td>
-                                                <td>{{ $junta['diametro'] }}</td>
-                                                <td>{{ $junta['no_ind'] }}</td>
-                                                <td>{{ $junta['tipo_indicacion'] }}</td>
-                                                <td>{{ $junta['nr'] }}</td>
-                                                <td>{{ $junta['ni'] }}</td>
-                                                <td>{{ $junta['ht'] }}</td>
-                                                <td>{{ $junta['prof'] }}</td>
-                                                <td>{{ $junta['la'] }}</td>
-                                                <td>{{ $junta['lc'] }}</td>
-                                                <td>{{ $junta['tmax'] }}</td>
-                                                <td>{{ $junta['tmin'] }}</td>
-                                                <td>{{ $junta['metros_lineales'] }}</td>
-                                                <td>{{ $junta['evaluacion'] }}</td>
-                                                <td>{{ $junta['observaciones'] }}</td>
+                                        @foreach ($grupo['resultados'] as $junta)
+                                            @php
+                                                $contadorFilas++;
+                                                $totalMetros += floatval($junta['metros_lineales']);
+                                                $esUltimaFila = $loop->last;
+                                            @endphp
+                                            <tr class="juntas">
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $contador }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['elemento_tubo'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_aceptacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_serie'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_colada'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tnominal'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['diametro'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['no_ind'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tipo_indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['nr'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ni'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['ht'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['prof'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['la'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['lc'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmax'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['tmin'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['metros_lineales'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['evaluacion'] }}</td>
+                                                <td style="border-right: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0 || $esUltimaFila) border-bottom: 2px solid black; @endif">{{ $junta['observaciones'] }}</td>
                                             </tr>
                                             @php $contador++; @endphp
                                         @endforeach
-                                    @endif
+                                    @endforeach
                                 </tbody>
                     </table>
                 </div>
