@@ -704,91 +704,90 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $Titulos_Juntas = [];
-        $Resultados_Juntas_Agrupados = [];
-
-            if (!empty($validatedData['titulos'])) {
-                foreach ($validatedData['titulos'] as $index => $titulo) {
-                    // Agrupar los resultados bajo cada título
-                    $grupoResultados = [];
-                    
-                    // Suponiendo que los resultados están organizados en grupos según el índice del título
-                    if (isset($validatedData['elemento_tubo'][$index])) {
-                        $grupoResultados[] = [
-                            'elemento_tubo' => $validatedData['elemento_tubo'][$index],
-                            'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                            'no_serie' => $validatedData['no_serie'][$index],
-                            'no_colada' => $validatedData['no_colada'][$index],
-                            'tnominal' => $validatedData['tnominal'][$index],
-                            'diametro' => $validatedData['diametro'][$index],
-                            'no_ind' => $validatedData['no_ind'][$index],
-                            'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                            'nr' => $validatedData['nr'][$index],
-                            'ni' => $validatedData['ni'][$index],
-                            'ht' => $validatedData['ht'][$index],
-                            'prof' => $validatedData['prof'][$index],
-                            'la' => $validatedData['la'][$index],
-                            'lc' => $validatedData['lc'][$index],
-                            'tmax' => $validatedData['tmax'][$index],
-                            'tmin' => $validatedData['tmin'][$index],
-                            'metros_lineales' => $validatedData['metros_lineales'][$index],
-                            'evaluacion' => $validatedData['evaluacion'][$index],
-                            'observaciones' => $validatedData['observaciones'][$index],
-                        ];
-                    }
-
-                    $Titulos_Juntas[] = [
-                        'titulo' => $titulo, 
-                        'resultados' => $grupoResultados
-                    ];
-                }
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
+        
+        // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
+        
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'prof' => $request->input("prof.$sinTituloKey.$i"),
+                    'la' => $request->input("la.$sinTituloKey.$i"),
+                    'lc' => $request->input("lc.$sinTituloKey.$i"),
+                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                ];
             }
-            
-            // Actualizar el campo en la base de datos
-            $Grupo_Juntas_Detalles_Re->update([
-                'titulos_juntas' => json_encode($Titulos_Juntas, JSON_UNESCAPED_UNICODE) // Guardar como JSON
-            ]);
-
-        /*Resultados Juntas*/
-        // Guardar las filas dinámicas
-        /*$Resultados_Juntas = [];
-        foreach ($validatedData['elemento_tubo'] as $index => $elemento_tubo) {
-            $Resultados_Juntas[] = [
-                'elemento_tubo' => $elemento_tubo,
-                'no_aceptacion' => $validatedData['no_aceptacion'][$index],
-                'no_serie' => $validatedData['no_serie'][$index],
-                'no_colada' => $validatedData['no_colada'][$index],
-                'tnominal' => $validatedData['tnominal'][$index],
-                'diametro' => $validatedData['diametro'][$index],
-                'no_ind' => $validatedData['no_ind'][$index],
-                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                'nr' => $validatedData['nr'][$index],
-                'ni' => $validatedData['ni'][$index],
-                'ht' => $validatedData['ht'][$index],
-                'prof' => $validatedData['prof'][$index],
-                'la' => $validatedData['la'][$index],
-                'lc' => $validatedData['lc'][$index],
-                'tmax' => $validatedData['tmax'][$index],
-                'tmin' => $validatedData['tmin'][$index],
-                'metros_lineales' => $validatedData['metros_lineales'][$index],
-                'evaluacion' => $validatedData['evaluacion'][$index],
-                'observaciones' => $validatedData['observaciones'][$index],
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
+                'resultados' => $resultados
             ];
         }
-
-        // Convertir el array de resultados de titulo y juntas a JSON
-        $TituloyJuntas = json_encode([
-            'titulos' => $Titulos_Juntas,
-            'resultados' => $Resultados_Juntas
-        ]);
-
-        // Convertir el array de resultados juntas a JSON
-        //$ResultadosJuntas = json_encode($Resultados_Juntas);
-
+        
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            $tituloKey = "titulo_" . $titulo;
+            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'prof' => $request->input("prof.$tituloKey.$i"),
+                    'la' => $request->input("la.$tituloKey.$i"),
+                    'lc' => $request->input("lc.$tituloKey.$i"),
+                    'tmax' => $request->input("tmax.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+        
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => $TituloyJuntas // ✅ Se pasa el JSON directamente
-        ]);*/
+            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
+        ]);
+
 
         /*Firmas */
         // Guardar las firmas

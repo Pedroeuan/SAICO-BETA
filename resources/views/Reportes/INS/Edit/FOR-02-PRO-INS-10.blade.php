@@ -506,15 +506,16 @@
                                             <tbody>
                                             @php $contador = 1; @endphp
                                                 @foreach ($Grupo_Juntas_Re as $grupo)
+                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <td colspan="20">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            {{--<td colspan="20">{{ $grupo['titulos_juntas'] }}</td>--}}
                                                             <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)" value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
                                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                                 </button></td>
                                                         </div>
                                                     </td>
+                                                @endif
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr>
                                                         <td>{{ $contador }}</td>
@@ -1216,79 +1217,116 @@
     });
 
     /*Juntas-Resultados */
-    $(document).ready(function() {
-        var rowCount = $('#dynamicTable tbody tr:not(.titulo-row)').length; // Contar solo filas sin títulos
+    function updateRowNumbers() {
+        let count = 0;
+        $('#dynamicTable tbody tr').each(function () {
+            if (!$(this).hasClass('titulo-row')) {
+                count++;
+                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+            }
+        });
+        rowCountGlobal = count;
+    }
 
-        function updateRowNumbers() {
-            var counter = 1; // Iniciar el contador desde 1
-            $('#dynamicTable tbody tr').each(function () {
-                if (!$(this).hasClass('titulo-row')) { // Ignorar las filas de título
-                    $(this).find('td:first').text(counter);
-                    counter++;
-                }
+    // Función para actualizar los títulos en el campo oculto
+        function updateTitulos() {
+            var titulos = [];
+            // Recolectar todos los títulos en el array
+            $('.titulo-row input[type="text"]').each(function() {
+                titulos.push($(this).val());
             });
-            rowCount = counter - 1; // Actualizar el contador global
+
+            // Asignar los títulos al campo oculto
+            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
         }
 
+    $(document).ready(function() {
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
+
         $('#addTituloBtn').click(function () {
-            var newTitleRow = `<tr class="titulo-row">
-                <td colspan="21">
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="20">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
                             <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
+                        </button></td>
                     </div>
                 </td>
-            </tr>`;
-            $('#dynamicTable tbody').append(newTitleRow);
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
         });
 
+        // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            $(this).closest('tr').remove();
+            let tituloRow = $(this).closest('tr');
+            let tituloId = tituloRow.data('titulo');
+            
+            // Eliminar la fila del título
+            tituloRow.remove();
+            
+            // Eliminar todas las filas que tengan el mismo data-titulo
+            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+
+            updateRowNumbers(); // Si quieres actualizar el contador global
         });
 
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                //rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="elemento_tubo[]" placeholder="Elemento / Tubo" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. Aceptación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="No. Serie" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="No. Colada" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="tnominal" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="No.Ind." style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="nr[]" placeholder="NR (%)" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="ni[]" placeholder="NI (%)" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="prof[]" placeholder="Prof" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="LA" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="lc[]" placeholder="LC" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="tmax[]" placeholder="tmáx" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="tmin[]" placeholder="tmin" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="metros_lineales[]" placeholder="Metros Lineales" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación" style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="observaciones[]" placeholder="Observaciones" style="width: 150px;"></td>
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
+                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
+                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
+                </tr>
+            `;
+
                 $('#dynamicTable tbody').append(newRow);
             }
-            updateRowNumbers();
-            //setTimeout(guardarEnSessionStorage, 100);
-        });
+            //updateRowNumbers();
+        }
+    );
 
-        /*$('#dynamicTable').on('input', 'input', function() {
-            guardarEnSessionStorage(); // Guardar cuando se edita algo
-        });*/
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
-            //guardarEnSessionStorage(); // Guardar al eliminar
+
         });
 
         $('#preFillBtn').click(function() {
@@ -1299,73 +1337,35 @@
                     }
                 });
             });
+ 
         });
         
         $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-
-        // Eliminar los datos de sessionStorage al guardar
-        sessionStorage.removeItem('tabla_dinamica');
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        updateRowNumbers();
-
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
-
-        // Evento para actualizar filas cuando se escriba en los inputs superiores
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = input.getAttribute("data-column");
-                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
-                    const cellInput = row.querySelectorAll("td input")[column - 1];
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-            });
+                return;
+            }
+
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
+
     });
 
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
 
         /*Selección de Firmas */
-
         document.addEventListener('DOMContentLoaded', function() {
         const numFirmasSelect = document.getElementById('numFirmas');
         const firmas2 = document.getElementById('firmas2');
