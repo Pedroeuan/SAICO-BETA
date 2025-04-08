@@ -696,6 +696,7 @@
                                         $contador = 1;
                                         $filasPorPagina = 15;
                                         $contadorFilas = 0;
+                                        $contadorFilasPagina = 0;
                                         $totalMetros = 0;
                                     @endphp
 
@@ -704,12 +705,13 @@
                                             $titulo = $grupo['titulos_juntas'];
                                             $juntasDelGrupo = count($grupo['resultados']);
                                             $tituloKey = $titulo != 'SIN TITULO' ? $titulo : 'sin_titulo';
+                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
 
                                             // Contador local por grupo
-                                            $contadorGrupo = 0;
+                                            //$contadorGrupo = 0;
 
                                             // Si el título se muestra, contar +1
-                                            if ($titulo !== 'SIN TITULO') {
+                                            /*if ($titulo !== 'SIN TITULO') {
                                                 $contadorGrupo++; // cuenta fila de título
                                             }
 
@@ -717,9 +719,22 @@
                                             $contadorGrupo += $juntasDelGrupo;
 
                                             // Sumar al global
-                                            $contadorGlobal += $contadorGrupo;
-                                                                                
+                                            $contadorGlobal += $contadorGrupo;*/
+
                                         @endphp
+
+                                        @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina)
+                                            <!-- Salto de página porque no cabe el grupo completo -->
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="13" style="border-top: 2px solid black;"></td>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                            @php
+                                                $contadorFilasPagina = 0;
+                                                $totalMetros = 0;
+                                            @endphp
+                                        @endif
 
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
@@ -730,11 +745,14 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @php $contadorFilasPagina++; @endphp {{-- <<< Añadir esto --}}
                                         @endif
 
                                         @foreach ($grupo['resultados'] as $junta)
                                             @php
                                                 $contadorFilas++;
+                                                $contadorGlobal++;
+                                                $contadorFilasPagina++; // <<< Añadir esto aquí también
                                                 $totalMetros += floatval($junta['metros_lineales']);
                                                 $esUltimaFila = $loop->last;
                                             @endphp
@@ -778,7 +796,16 @@
                                         @endforeach
                                     @endforeach
 
-                                    @php dump($contadorGlobal); //dump($contadorFilas); dump($filasPorPagina); @endphp
+                                    <!-- Total al final si no se llenó la última página -->
+                                        @if ($contadorFilasPagina > 0)
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="13" style="border-top: 2px solid black;"></td>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                        @endif
+
+                                    @php //dump($contadorGlobal); //dump($contadorFilas); dump($filasPorPagina); @endphp
 
                                     <!-- Fila de total final si no se alcanzó el límite de filas por página -->
                                     @if ($contadorFilas % $filasPorPagina !== 0)
