@@ -968,11 +968,22 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-        //dd($Grupo_Juntas_Detalles_Re);
-        //$Juntas_resultados = $Grupo_Juntas_Detalles_Re['resultados'];
-        //$Titulos_resultados = $Grupo_Juntas_Detalles_Re['titulos'];
-        $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+
+        $totalTitulos = 0;
+        $totalFilas = 0;
+
+        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
+            if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                $totalFilas += count($grupo['resultados']);
+            }
+
+            if (isset($grupo['titulos_juntas']) && strtoupper(trim($grupo['titulos_juntas'])) !== 'SIN TITULO') {
+                $totalTitulos++;
+            }
+        }
+
+        $totalTitulosYFilas = $totalTitulos + $totalFilas;
+
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
@@ -998,14 +1009,12 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
-            //Titulos resultados
-            //'Titulos_resultados' => $Titulos_resultados,
-            //Juntas_resultados
-            //'Juntas_resultados' => $Juntas_resultados,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
             //Total de Juntas
-            'TotalJuntas' => $TotalJuntas,
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
             'Fotos' => $Fotos,
             //Total de Fotos

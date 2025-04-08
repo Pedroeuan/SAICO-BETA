@@ -11,7 +11,7 @@
                     2.1cm /* inferior */
                     2.4cm; /* izquierdo */
                 }
-                @if ($TotalJuntas <=15)
+                @if ($totalTitulosYFilas <=15)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -723,19 +723,6 @@
 
                                         @endphp
 
-                                        @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina)
-                                            <!-- Salto de página porque no cabe el grupo completo -->
-                                            <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="13" style="border-top: 2px solid black;"></td>
-                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
-                                            </tr>
-                                            @php
-                                                $contadorFilasPagina = 0;
-                                                $totalMetros = 0;
-                                            @endphp
-                                        @endif
-
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
@@ -783,7 +770,7 @@
                                                 <!-- Fila de total antes del salto de página -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
                                                     <td colspan="13" style="border-top: 2px solid black;"></td>
-                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada1:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
 
@@ -800,7 +787,7 @@
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
                                                 <td colspan="13" style="border-top: 2px solid black;"></td>
-                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada2:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
                                         @endif
@@ -811,9 +798,22 @@
                                     @if ($contadorFilas % $filasPorPagina !== 0)
                                         <tr style="page-break-after: always;" class="sinBordetd">
                                             <td colspan="12"></td>
-                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                            <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada3:</strong></th>
                                             <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                         </tr>
+                                    @endif
+
+                                    @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina)
+                                            <!-- Salto de página porque no cabe el grupo completo -->
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="13" style="border-top: 2px solid black;"></td>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada4:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                            @php
+                                                $contadorFilasPagina = 0;
+                                                $totalMetros = 0;
+                                            @endphp
                                     @endif
 
                                     {{-- Mostrar total acumulado de filas 
