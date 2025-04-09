@@ -707,7 +707,7 @@
                                             $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
                                             //dump($filasDelGrupo);
                                             $Ultimagrupo = $loop->last;
-                                            dump($Ultimagrupo);
+                                            //dump($Ultimagrupo);
                                         @endphp
 
                                         @if ($titulo !== 'SIN TITULO')
