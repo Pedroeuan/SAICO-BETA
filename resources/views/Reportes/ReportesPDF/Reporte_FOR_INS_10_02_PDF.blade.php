@@ -704,8 +704,10 @@
                                         @php
                                             $titulo = $grupo['titulos_juntas'];
                                             $juntasDelGrupo = count($grupo['resultados']);
-                                            $tituloKey = $titulo != 'SIN TITULO' ? $titulo : 'sin_titulo';
                                             $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
+                                            //dump($filasDelGrupo);
+                                            $Ultimagrupo = $loop->last;
+                                            dump($Ultimagrupo);
                                         @endphp
 
                                         @if ($titulo !== 'SIN TITULO')
@@ -717,7 +719,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            @php $contadorFilasPagina++; @endphp
+                                            @php $contadorFilasPagina++; //dump($contadorFilasPagina); @endphp
                                         @endif
 
                                         @foreach ($grupo['resultados'] as $junta)
@@ -766,6 +768,11 @@
                                                 @endif
                                             @php $contador++; @endphp
                                         @endforeach
+                                        @php 
+                                        //$contadorFilasPagina
+                                        //$filasDelGrupo; // Suma cada titulo y juntas(Filas)
+                                        //dump($filasDelGrupo); //Suma solo titulo y juntas(Filas)
+                                        @endphp
 
                                         @if($titulo != 'SIN TITULO')
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina)
