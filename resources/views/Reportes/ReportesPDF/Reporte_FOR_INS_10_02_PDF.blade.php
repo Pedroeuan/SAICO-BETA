@@ -729,6 +729,8 @@
                                                 $contadorFilasPagina++;
                                                 $totalMetros += floatval($junta['metros_lineales']);
                                                 $esUltimaFila = $loop->last;
+                                                $esUltimaFilaPagina = $contadorFilas % $filasPorPagina === 0;
+                                                //dump($esUltimaFilaPagina);
                                             @endphp
                                             <tr class="juntas">
                                                 <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $contador }}</td>
@@ -775,8 +777,8 @@
                                         @endphp
 
                                         @if($titulo != 'SIN TITULO' || $titulo == 'SIN TITULO')
-                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina)
-                                                <!-- Salto de página porque no cabe el grupo completo -->
+                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina) //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
+                                            <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
                                                     <td colspan="12" style="border-top: 2px solid black;"></td>
                                                     <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
