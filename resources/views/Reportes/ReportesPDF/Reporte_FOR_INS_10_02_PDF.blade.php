@@ -692,7 +692,6 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $contadorGlobal = 0; // Acumulador global de filas
                                         $contador = 1;
                                         $filasPorPagina = 15;
                                         $contadorFilas = 0;
@@ -705,9 +704,6 @@
                                             $titulo = $grupo['titulos_juntas'];
                                             $juntasDelGrupo = count($grupo['resultados']);
                                             $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
-                                            //dump($filasDelGrupo);
-                                            $Ultimagrupo = $loop->last;
-                                            //dump($Ultimagrupo);
                                         @endphp
 
                                         @if ($titulo !== 'SIN TITULO')
@@ -719,18 +715,15 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            @php $contadorFilasPagina++; //dump($contadorFilasPagina); @endphp
+                                            @php $contadorFilasPagina++; @endphp
                                         @endif
 
                                         @foreach ($grupo['resultados'] as $junta)
                                             @php
                                                 $contadorFilas++;
-                                                $contadorGlobal++;
                                                 $contadorFilasPagina++;
                                                 $totalMetros += floatval($junta['metros_lineales']);
                                                 $esUltimaFila = $loop->last;
-                                                $esUltimaFilaPagina = $contadorFilas % $filasPorPagina === 0;
-                                                //dump($esUltimaFilaPagina);
                                             @endphp
                                             <tr class="juntas">
                                                 <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $contador }}</td>
@@ -770,11 +763,6 @@
                                                 @endif
                                             @php $contador++; @endphp
                                         @endforeach
-                                        @php 
-                                        //$contadorFilasPagina
-                                        //$filasDelGrupo; // Suma cada titulo y juntas(Filas)
-                                        //dump($filasDelGrupo); //Suma solo titulo y juntas(Filas)
-                                        @endphp
 
                                         @if($titulo != 'SIN TITULO' || $titulo == 'SIN TITULO')
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina) //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
