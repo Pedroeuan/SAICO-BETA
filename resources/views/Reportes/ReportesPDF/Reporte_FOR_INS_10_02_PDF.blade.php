@@ -764,7 +764,6 @@
                                             @php $contador++; @endphp
                                         @endforeach
 
-                                        @if($titulo != 'SIN TITULO' || $titulo == 'SIN TITULO')
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina) //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
@@ -777,7 +776,7 @@
                                                     $totalMetros = 0;
                                                 @endphp
                                             @endif
-                                        @endif
+
                                     @endforeach
                                     
                                     @if($titulo == 'SIN TITULO')
