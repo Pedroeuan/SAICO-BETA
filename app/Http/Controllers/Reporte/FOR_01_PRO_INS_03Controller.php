@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
-class PRO_INS_03ReporteController extends Controller
+class FOR_01_PRO_INS_03Controller extends Controller
 {
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()

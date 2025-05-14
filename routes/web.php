@@ -143,6 +143,21 @@ use App\Http\Controllers\Reporte\FOR_02_PRO_INS_02Controller;
 
         Route::post('/Reportes_FOR_01_PRO_INS_05/store', [ReporteController::class, 'FOR_01_PRO_INS_05_store'])->name('Reportes_FOR_01_PRO_INS_05.store');
 
+        Route::post('/Reportes_FOR_01_PRO_INS_05/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_05_update'])->name('Reportes_FOR_01_PRO_INS_05.update');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_06/store', [ReporteController::class, 'FOR_01_PRO_INS_06_store'])->name('Reportes_FOR_01_PRO_INS_06.store');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_06/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_06_update'])->name('Reportes_FOR_01_PRO_INS_06.update');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_07/store', [ReporteController::class, 'FOR_01_PRO_INS_07_store'])->name('Reportes_FOR_01_PRO_INS_07.store');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_07/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_07_update'])->name('Reportes_FOR_01_PRO_INS_07.update');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_08/store', [ReporteController::class, 'FOR_01_PRO_INS_08_store'])->name('Reportes_FOR_01_PRO_INS_08.store');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_08/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_08_update'])->name('Reportes_FOR_01_PRO_INS_08.update');
+
+        Route::post('/Reportes_FOR_01_PRO_INS_09/store', [ReporteController::class, 'FOR_01_PRO_INS_09_store'])->name('Reportes_FOR_01_PRO_INS_09.store');
         });
     });
 

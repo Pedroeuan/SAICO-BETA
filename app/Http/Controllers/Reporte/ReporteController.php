@@ -1841,6 +1841,1811 @@ class ReporteController extends Controller
         ]);
     }
 
+    public function FOR_01_PRO_INS_05_update(Request $request, $id)
+    {
+        $Estatus = "ACTUALIZADO";
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.ANGULO1_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA1_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.TAMAÑO1_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.ANGULO2_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA2_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.TAMAÑO2_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.ANGULO3_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA3_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.TAMAÑO3_TRANSDUCTORES' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.CORRIENTE1_BLOQUES' => 'nullable|string|max:255',
+            'Datos_Equipo.DISTANCIA1_BLOQUES' => 'nullable|string|max:255',
+            'Datos_Equipo.CORRIENTE2_BLOQUES' => 'nullable|string|max:255',
+            'Datos_Equipo.DISTANCIA2_BLOQUES' => 'nullable|string|max:255',
+
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.NIVEL_ESCANEO' => 'nullable|string|max:255',
+            'Datos_Equipo.SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.NIVEL_CALIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+    
+            /* Resultados Juntas */
+            'soldadura' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'forma' => 'nullable|array',
+            'transfer' => 'nullable|array',
+            'longitud' => 'nullable|array',
+            'ancho' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+        'numFirmas' => 'required|integer|in:2,3,4',
+
+             /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Reporte->update([
+            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+        ]);
+
+            $Resultados_Juntas = [];
+                foreach($validatedData['soldadura'] as $index => $soldadura) {
+                        $Resultados_Juntas[] = [
+                                'soldadura' => $soldadura,
+                                'evaluacion' => $validatedData['evaluacion'][$index],
+                                'forma' => $validatedData['forma'][$index],
+                                'transfer' => $validatedData['transfer'][$index],
+                                'longitud' => $validatedData['longitud'][$index],
+                                'ancho' => $validatedData['ancho'][$index],
+                                'observaciones' => $validatedData['observaciones'][$index],
+                        ];
+                }
+
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => $ResultadosJuntas
+        ]);
+    
+        // Guardar Firmas
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
+            $Firmas->update([
+                'Firmas' => $Firmas3
+            ]);
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
+            $Firmas->update([
+                'Firmas' => $Firmas4
+            ]);
+        }
+    
+        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
+            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
+        
+            if ($request->hasFile("image$i")) {
+                // Eliminar la imagen anterior si existe
+                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
+                    Storage::delete($previousFotos[$i - 1]['path']);
+                }
+        
+                // Guardar la nueva imagen
+                $image = $request->file("image$i");
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                $path = $image->store("public/Reportes/FOR_01_PRO_INS_02/$Contrato/$No_Reporte/Fotos");
+        
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment, // Guardar el comentario actualizado
+                ];
+            } else {
+                // Mantener la imagen anterior pero actualizar el comentario si cambió
+                if (isset($previousFotos[$i - 1])) {
+                    $fotos[] = [
+                        'path' => $previousFotos[$i - 1]['path'],
+                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                    ];
+                }
+            }
+        }
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($fotos);
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => $Fotos
+        ]);
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
+
+    }
+
+    public function FOR_01_PRO_INS_06_store(Request $request)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+    
+            /* Resultados Juntas */
+            'elemento' => 'nullable|array',
+            '0nom' => 'nullable|array',
+            '0ext' => 'nullable|array',
+            'nivel' => 'nullable|array',
+            '12_00' => 'nullable|array',
+            '01_00' => 'nullable|array',
+            '01_30' => 'nullable|array',
+            '02_00' => 'nullable|array',
+            '03_00' => 'nullable|array',
+            '04_00' => 'nullable|array',
+            '04_30' => 'nullable|array',
+            '05_00' => 'nullable|array',
+            '06_00' => 'nullable|array',
+            '07_00' => 'nullable|array',
+            '07_30' => 'nullable|array',
+            '08_00' => 'nullable|array',
+            '09_00' => 'nullable|array',
+            '10_00' => 'nullable|array',
+            '10_30' => 'nullable|array',
+            '11_00' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tprom' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+            'numFirmas' => 'nullable|integer|in:2,3,4',
+
+            /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+    
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reportes = new reporte();
+        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica');
+        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
+        $Reportes->Estatus = "CREADO";
+        $Reportes->save();
+    
+        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
+                $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
+
+                $Resultados_Juntas = [];
+                foreach($validatedData['elemento'] as $index => $elemento) {
+                        $Resultados_Juntas[] = [
+                                'elemento' => $elemento,
+                                '0nom' => $validatedData['0nom'][$index],
+                                '0ext' => $validatedData['0ext'][$index],
+                                'nivel' => $validatedData['nivel'][$index],
+                                '12_00' => $validatedData['12_00'][$index],
+                                '01_00' => $validatedData['01_00'][$index],
+
+                                '01_30' => $validatedData['01_30'][$index],
+                                '02_00' => $validatedData['02_00'][$index],
+                                '03_00' => $validatedData['03_00'][$index],
+                                '04_00' => $validatedData['04_00'][$index],
+                                '04_30' => $validatedData['04_30'][$index],
+
+                                '05_00' => $validatedData['05_00'][$index],
+                                '06_00' => $validatedData['06_00'][$index],
+                                '07_00' => $validatedData['07_00'][$index],
+                                '07_30' => $validatedData['07_30'][$index],
+                                '08_00' => $validatedData['08_00'][$index],
+
+                                '09_00' => $validatedData['09_00'][$index],
+                                '10_00' => $validatedData['10_00'][$index],
+                                '10_30' => $validatedData['10_30'][$index],
+                                '11_00' => $validatedData['11_00'][$index],
+                                'tmin' => $validatedData['tmin'][$index],
+
+                                'tmax' => $validatedData['tmax'][$index],
+                                'tprom' => $validatedData['tprom'][$index],
+                                'observaciones' => $validatedData['observaciones'][$index],
+                        ];
+                }
+                // Convertir el array de resultados juntas a JSON
+                $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+                $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+                $Grupo_Juntas_Detalles_Re->save();
+    
+        // Guardar Firmas
+        $Firmas_Reportes = new Firma_Reporte();
+        $Firmas_Reportes->idReportes = $Reportes->idReportes;
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+        } elseif ($numFirmas == 3) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
+        } else {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
+        }
+        $Firmas_Reportes->save();
+    
+        // Guardar Fotos
+        $Fotos_Reportes = new Fotos_Reporte();
+        $Fotos_Reportes->idReportes = $Reportes->idReportes;
+    
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                $image = $request->file("image$i");
+                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/{$validatedData['Detalles_Generales']['Contrato']}/{$validatedData['Detalles_Generales']['No_Reporte']}/Fotos");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $request->input("comment$i"),
+                ];
+            }
+        }
+    
+        $Fotos_Reportes->Fotos_Reportes = json_encode($fotos);
+        $Fotos_Reportes->save();
+    
+        // Redireccionar
+        return redirect()->route('indexINS2', [
+            'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
+            'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
+        ]);
+    }
+
+    public function FOR_01_PRO_INS_06_update(Request $request, $id)
+    {
+        $Estatus = "ACTUALIZADO";
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+
+    
+            /* Resultados Juntas */
+            'elemento' => 'nullable|array',
+            '0nom' => 'nullable|array',
+            '0ext' => 'nullable|array',
+            'nivel' => 'nullable|array',
+            '12_00' => 'nullable|array',
+            '01_00' => 'nullable|array',
+            '01_30' => 'nullable|array',
+            '02_00' => 'nullable|array',
+            '03_00' => 'nullable|array',
+            '04_00' => 'nullable|array',
+            '04_30' => 'nullable|array',
+            '05_00' => 'nullable|array',
+            '06_00' => 'nullable|array',
+            '07_00' => 'nullable|array',
+            '07_30' => 'nullable|array',
+            '08_00' => 'nullable|array',
+            '09_00' => 'nullable|array',
+            '10_00' => 'nullable|array',
+            '10_30' => 'nullable|array',
+            '11_00' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tprom' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+        'numFirmas' => 'required|integer|in:2,3,4',
+
+             /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Reporte->update([
+            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+        ]);
+
+            $Resultados_Juntas = [];
+                foreach($validatedData['elemento'] as $index => $elemento) {
+                        $Resultados_Juntas[] = [
+                                'elemento' => $elemento,
+                                '0nom' => $validatedData['0nom'][$index],
+                                '0ext' => $validatedData['0ext'][$index],
+                                'nivel' => $validatedData['nivel'][$index],
+                                '12_00' => $validatedData['12_00'][$index],
+                                '01_00' => $validatedData['01_00'][$index],
+
+                                '01_30' => $validatedData['01_30'][$index],
+                                '02_00' => $validatedData['02_00'][$index],
+                                '03_00' => $validatedData['03_00'][$index],
+                                '04_00' => $validatedData['04_00'][$index],
+                                '04_30' => $validatedData['04_30'][$index],
+
+                                '05_00' => $validatedData['05_00'][$index],
+                                '06_00' => $validatedData['06_00'][$index],
+                                '07_00' => $validatedData['07_00'][$index],
+                                '07_30' => $validatedData['07_30'][$index],
+                                '08_00' => $validatedData['08_00'][$index],
+
+                                '09_00' => $validatedData['09_00'][$index],
+                                '10_00' => $validatedData['10_00'][$index],
+                                '10_30' => $validatedData['10_30'][$index],
+                                '11_00' => $validatedData['11_00'][$index],
+                                'tmin' => $validatedData['tmin'][$index],
+
+                                'tmax' => $validatedData['tmax'][$index],
+                                'tprom' => $validatedData['tprom'][$index],
+                                'observaciones' => $validatedData['observaciones'][$index],
+                        ];
+                }
+
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => $ResultadosJuntas
+        ]);
+    
+        // Guardar Firmas
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
+            $Firmas->update([
+                'Firmas' => $Firmas3
+            ]);
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
+            $Firmas->update([
+                'Firmas' => $Firmas4
+            ]);
+        }
+    
+        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
+            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
+        
+            if ($request->hasFile("image$i")) {
+                // Eliminar la imagen anterior si existe
+                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
+                    Storage::delete($previousFotos[$i - 1]['path']);
+                }
+        
+                // Guardar la nueva imagen
+                $image = $request->file("image$i");
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                $path = $image->store("public/Reportes/FOR_01_PRO_INS_02/$Contrato/$No_Reporte/Fotos");
+        
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment, // Guardar el comentario actualizado
+                ];
+            } else {
+                // Mantener la imagen anterior pero actualizar el comentario si cambió
+                if (isset($previousFotos[$i - 1])) {
+                    $fotos[] = [
+                        'path' => $previousFotos[$i - 1]['path'],
+                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                    ];
+                }
+            }
+        }
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($fotos);
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => $Fotos
+        ]);
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
+
+    }
+
+    public function FOR_01_PRO_INS_07_store(Request $request)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+    
+            /* Resultados Juntas */
+            'no_indicacion' => 'nullable|array',
+            'angulo' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'distancia_frente_zapata' => 'nullable|array',
+            'sa' => 'nullable|array',
+            'da' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
+    
+            'numFirmas' => 'nullable|integer|in:2,3,4',
+
+            /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+    
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reportes = new reporte();
+        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica');
+        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
+        $Reportes->Estatus = "CREADO";
+        $Reportes->save();
+    
+        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
+                $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
+
+                $Resultados_Juntas = [];
+                foreach($validatedData['no_indicacion'] as $index => $no_indicacion) {
+                        $Resultados_Juntas[] = [
+                                'no_indicacion' => $no_indicacion,
+                                'angulo' => $validatedData['angulo'][$index],
+                                'nr' => $validatedData['nr'][$index],
+                                'ni' => $validatedData['ni'][$index],
+                                'la' => $validatedData['la'][$index],
+                                'lc' => $validatedData['lc'][$index],
+                                'distancia_frente_zapata' => $validatedData['distancia_frente_zapata'][$index],
+
+                                'sa' => $validatedData['sa'][$index],
+                                'da' => $validatedData['da'][$index],
+                                'ht' => $validatedData['ht'][$index],
+                                'evaluacion' => $validatedData['evaluacion'][$index],
+                                'fotos' => $validatedData['fotos'][$index],
+                        ];
+                }
+                // Convertir el array de resultados juntas a JSON
+                $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+                $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+                $Grupo_Juntas_Detalles_Re->save();
+    
+        // Guardar Firmas
+        $Firmas_Reportes = new Firma_Reporte();
+        $Firmas_Reportes->idReportes = $Reportes->idReportes;
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+        } elseif ($numFirmas == 3) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
+        } else {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
+        }
+        $Firmas_Reportes->save();
+    
+        // Guardar Fotos
+        $Fotos_Reportes = new Fotos_Reporte();
+        $Fotos_Reportes->idReportes = $Reportes->idReportes;
+    
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                $image = $request->file("image$i");
+                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/{$validatedData['Detalles_Generales']['Contrato']}/{$validatedData['Detalles_Generales']['No_Reporte']}/Fotos");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $request->input("comment$i"),
+                ];
+            }
+        }
+    
+        $Fotos_Reportes->Fotos_Reportes = json_encode($fotos);
+        $Fotos_Reportes->save();
+    
+        // Redireccionar
+        return redirect()->route('indexINS2', [
+            'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
+            'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
+        ]);
+    }
+
+    public function FOR_01_PRO_INS_07_update(Request $request, $id)
+    {
+        $Estatus = "ACTUALIZADO";
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_SENSIBILIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_DISTANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+
+    
+            /* Resultados Juntas */
+            'no_indicacion' => 'nullable|array',
+            'angulo' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'distancia_frente_zapata' => 'nullable|array',
+            'sa' => 'nullable|array',
+            'da' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
+    
+        'numFirmas' => 'required|integer|in:2,3,4',
+
+             /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Reporte->update([
+            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+        ]);
+
+        $Resultados_Juntas = [];
+        foreach($validatedData['no_indicacion'] as $index => $no_indicacion) {
+                $Resultados_Juntas[] = [
+                        'no_indicacion' => $no_indicacion,
+                        'angulo' => $validatedData['angulo'][$index],
+                        'nr' => $validatedData['nr'][$index],
+                        'ni' => $validatedData['ni'][$index],
+                        'la' => $validatedData['la'][$index],
+                        'lc' => $validatedData['lc'][$index],
+                        'distancia_frente_zapata' => $validatedData['distancia_frente_zapata'][$index],
+
+                        'sa' => $validatedData['sa'][$index],
+                        'da' => $validatedData['da'][$index],
+                        'ht' => $validatedData['ht'][$index],
+                        'evaluacion' => $validatedData['evaluacion'][$index],
+                        'fotos' => $validatedData['fotos'][$index],
+                ];
+        }
+
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => $ResultadosJuntas
+        ]);
+    
+        // Guardar Firmas
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
+            $Firmas->update([
+                'Firmas' => $Firmas3
+            ]);
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
+            $Firmas->update([
+                'Firmas' => $Firmas4
+            ]);
+        }
+    
+        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
+            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
+        
+            if ($request->hasFile("image$i")) {
+                // Eliminar la imagen anterior si existe
+                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
+                    Storage::delete($previousFotos[$i - 1]['path']);
+                }
+        
+                // Guardar la nueva imagen
+                $image = $request->file("image$i");
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                $path = $image->store("public/Reportes/FOR_01_PRO_INS_02/$Contrato/$No_Reporte/Fotos");
+        
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment, // Guardar el comentario actualizado
+                ];
+            } else {
+                // Mantener la imagen anterior pero actualizar el comentario si cambió
+                if (isset($previousFotos[$i - 1])) {
+                    $fotos[] = [
+                        'path' => $previousFotos[$i - 1]['path'],
+                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                    ];
+                }
+            }
+        }
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($fotos);
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => $Fotos
+        ]);
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
+
+    }
+
+    public function FOR_01_PRO_INS_08_store(Request $request)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+    
+            /* Resultados Juntas */
+            'no_junta' => 'nullable|array',
+            'lado_a' => 'nullable|array',
+            'lado_b' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_indicacion' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'Ang' => 'nullable|array',
+            'Gdb' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'x' => 'nullable|array',
+            'y' => 'nullable|array',
+            'horario_tecnico' => 'nullable|array',
+            'no_pierna' => 'nullable|array',
+            's' => 'nullable|array',
+            'l' => 'nullable|array',
+            'd' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+            'numFirmas' => 'nullable|integer|in:2,3,4',
+
+            /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+    
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reportes = new reporte();
+        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica');
+        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
+        $Reportes->Estatus = "CREADO";
+        $Reportes->save();
+    
+        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
+                $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
+
+                $Resultados_Juntas = [];
+                foreach($validatedData['no_junta'] as $index => $no_junta) {
+                        $Resultados_Juntas[] = [
+                                'no_junta' => $no_junta,
+                                'lado_a' => $validatedData['lado_a'][$index],
+                                'lado_b' => $validatedData['lado_b'][$index],
+                                'diametro' => $validatedData['diametro'][$index],
+                                'no_indicacion' => $validatedData['no_indicacion'][$index],
+                                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                                'Ang' => $validatedData['Ang'][$index],
+                                'Gdb' => $validatedData['Gdb'][$index],
+                                'nr' => $validatedData['nr'][$index],
+                                'ni' => $validatedData['ni'][$index],
+                                'x' => $validatedData['x'][$index],
+                                'y' => $validatedData['y'][$index],
+                                'horario_tecnico' => $validatedData['horario_tecnico'][$index],
+                                'no_pierna' => $validatedData['no_pierna'][$index],
+                                's' => $validatedData['s'][$index],
+                                'l' => $validatedData['l'][$index],
+                                'd' => $validatedData['d'][$index],
+                                'tmin' => $validatedData['tmin'][$index],
+                                'evaluacion' => $validatedData['evaluacion'][$index],
+                                'fotos' => $validatedData['fotos'][$index],
+                                'observaciones' => $validatedData['obseraciones'][$index],
+                        ];
+                }
+                // Convertir el array de resultados juntas a JSON
+                $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+                $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+                $Grupo_Juntas_Detalles_Re->save();
+    
+        // Guardar Firmas
+        $Firmas_Reportes = new Firma_Reporte();
+        $Firmas_Reportes->idReportes = $Reportes->idReportes;
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+        } elseif ($numFirmas == 3) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
+        } else {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
+        }
+        $Firmas_Reportes->save();
+    
+        // Guardar Fotos
+        $Fotos_Reportes = new Fotos_Reporte();
+        $Fotos_Reportes->idReportes = $Reportes->idReportes;
+    
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                $image = $request->file("image$i");
+                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/{$validatedData['Detalles_Generales']['Contrato']}/{$validatedData['Detalles_Generales']['No_Reporte']}/Fotos");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $request->input("comment$i"),
+                ];
+            }
+        }
+    
+        $Fotos_Reportes->Fotos_Reportes = json_encode($fotos);
+        $Fotos_Reportes->save();
+    
+        // Redireccionar
+        return redirect()->route('indexINS2', [
+            'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
+            'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
+        ]);
+    }
+
+    public function FOR_01_PRO_INS_08_update(Request $request, $id)
+    {
+        $Estatus = "ACTUALIZADO";
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_MAXIMA_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+
+    
+            /* Resultados Juntas */
+            'no_junta' => 'nullable|array',
+            'lado_a' => 'nullable|array',
+            'lado_b' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_indicacion' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'Ang' => 'nullable|array',
+            'Gdb' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'x' => 'nullable|array',
+            'y' => 'nullable|array',
+            'horario_tecnico' => 'nullable|array',
+            'no_pierna' => 'nullable|array',
+            's' => 'nullable|array',
+            'l' => 'nullable|array',
+            'd' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+        'numFirmas' => 'required|integer|in:2,3,4',
+
+             /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Reporte->update([
+            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+        ]);
+
+        $Resultados_Juntas = [];
+        foreach($validatedData['no_junta'] as $index => $no_junta) {
+                $Resultados_Juntas[] = [
+                    'no_junta' => $no_junta,
+                    'lado_a' => $validatedData['lado_a'][$index],
+                    'lado_b' => $validatedData['lado_b'][$index],
+                    'diametro' => $validatedData['diametro'][$index],
+                    'no_indicacion' => $validatedData['no_indicacion'][$index],
+                    'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
+                    'Ang' => $validatedData['Ang'][$index],
+                    'Gdb' => $validatedData['Gdb'][$index],
+                    'nr' => $validatedData['nr'][$index],
+                    'ni' => $validatedData['ni'][$index],
+                    'x' => $validatedData['x'][$index],
+                    'y' => $validatedData['y'][$index],
+                    'horario_tecnico' => $validatedData['horario_tecnico'][$index],
+                    'no_pierna' => $validatedData['no_pierna'][$index],
+                    's' => $validatedData['s'][$index],
+                    'l' => $validatedData['l'][$index],
+                    'd' => $validatedData['d'][$index],
+                    'tmin' => $validatedData['tmin'][$index],
+                    'evaluacion' => $validatedData['evaluacion'][$index],
+                    'fotos' => $validatedData['fotos'][$index],
+                    'observaciones' => $validatedData['observaciones'][$index],
+                ];
+        }
+
+        // Convertir el array de resultados juntas a JSON
+        $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => $ResultadosJuntas
+        ]);
+    
+        // Guardar Firmas
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
+        }
+        else if ($numFirmas == 3) {
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
+            $Firmas->update([
+                'Firmas' => $Firmas3
+            ]);
+        }
+        else{
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
+            $Firmas->update([
+                'Firmas' => $Firmas4
+            ]);
+        }
+    
+        $previousFotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $comment = $request->input("comment$i", ""); // Obtener el comentario incluso si la imagen no cambia
+            Log::info("Comentario recibido para imagen $i: ", ['comment' => $comment]);
+        
+            if ($request->hasFile("image$i")) {
+                // Eliminar la imagen anterior si existe
+                if (isset($previousFotos[$i - 1]['path']) && Storage::exists($previousFotos[$i - 1]['path'])) {
+                    Storage::delete($previousFotos[$i - 1]['path']);
+                }
+        
+                // Guardar la nueva imagen
+                $image = $request->file("image$i");
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+                $path = $image->store("public/Reportes/FOR_01_PRO_INS_02/$Contrato/$No_Reporte/Fotos");
+        
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $comment, // Guardar el comentario actualizado
+                ];
+            } else {
+                // Mantener la imagen anterior pero actualizar el comentario si cambió
+                if (isset($previousFotos[$i - 1])) {
+                    $fotos[] = [
+                        'path' => $previousFotos[$i - 1]['path'],
+                        'comment' => $comment ?: $previousFotos[$i - 1]['comment'], // Si el nuevo comentario está vacío, mantener el anterior
+                    ];
+                }
+            }
+        }
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($fotos);
+        // Actualiza los detalles generales como JSON en la base de datos
+        $Fotos_Reportes->update([
+            'Fotos_Reportes' => $Fotos
+        ]);
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
+
+    }
+
+    public function FOR_01_PRO_INS_09_store(Request $request)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            /* Detalles Generales */
+            'Detalles_Generales' => 'required|array',
+            'Detalles_Generales.Fecha' => 'nullable|date',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+    
+            /* Datos del Equipo */
+            'Datos_Equipo' => 'required|array',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+
+            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.RETARDO' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+    
+            /* Resultados Juntas */
+            'no_indicacion' => 'nullable|array',
+            'angulo_inspeccion' => 'nullable|array',
+            'pierna' => 'nullable|array',
+            'nivel_referencia' => 'nullable|array',
+            'nivel_indicacion' => 'nullable|array',
+            'distancia_angular' => 'nullable|array',
+            'profundidad' => 'nullable|array',
+            'longitud' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'x' => 'nullable|array',
+            'y' => 'nullable|array',
+            'observaciones' => 'nullable|array',
+    
+            'numFirmas' => 'nullable|integer|in:2,3,4',
+
+            /*2 FIRMAS */
+            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+
+            /*3 FIRMAS */
+            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+
+            /*4 FIRMAS */
+            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+    
+        ]);
+    
+        // Guardar Detalles Generales
+        $Reportes = new reporte();
+        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica');
+        $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
+        $Reportes->Estatus = "CREADO";
+        $Reportes->save();
+    
+        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
+                $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
+
+                $Resultados_Juntas = [];
+                foreach($validatedData['no_indicacion'] as $index => $no_indicacion) {
+                        $Resultados_Juntas[] = [
+                                'no_indicacion' => $no_indicacion,
+                                'angulo_inspeccion' => $validatedData['angulo_inspeccion'][$index],
+                                'pierna' => $validatedData['pierna'][$index],
+                                'nivel_referencia' => $validatedData['nivel_referencia'][$index],
+                                'nivel_indicacion' => $validatedData['nivel_indicacion'][$index],
+                                'distancia_angular' => $validatedData['distancia_angular'][$index],
+                                'profundidad' => $validatedData['profundidad'][$index],
+                                'longitud' => $validatedData['longitud'][$index],
+                                'evaluacion' => $validatedData['evaluacion'][$index],
+                                'x' => $validatedData['x'][$index],
+                                'y' => $validatedData['y'][$index],
+                                'observaciones' => $validatedData['observaciones'][$index],
+                        ];
+                }
+                // Convertir el array de resultados juntas a JSON
+                $ResultadosJuntas = json_encode($Resultados_Juntas);
+
+                $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
+                $Grupo_Juntas_Detalles_Re->save();
+    
+        // Guardar Firmas
+        $Firmas_Reportes = new Firma_Reporte();
+        $Firmas_Reportes->idReportes = $Reportes->idReportes;
+        $numFirmas = $request->input('numFirmas');
+    
+        if ($numFirmas == 2) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+        } elseif ($numFirmas == 3) {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
+        } else {
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
+        }
+        $Firmas_Reportes->save();
+    
+        // Guardar Fotos
+        $Fotos_Reportes = new Fotos_Reporte();
+        $Fotos_Reportes->idReportes = $Reportes->idReportes;
+    
+        $fotos = [];
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image$i")) {
+                $image = $request->file("image$i");
+                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/{$validatedData['Detalles_Generales']['Contrato']}/{$validatedData['Detalles_Generales']['No_Reporte']}/Fotos");
+                $fotos[] = [
+                    'path' => $path,
+                    'comment' => $request->input("comment$i"),
+                ];
+            }
+        }
+    
+        $Fotos_Reportes->Fotos_Reportes = json_encode($fotos);
+        $Fotos_Reportes->save();
+    
+        // Redireccionar
+        return redirect()->route('indexINS2', [
+            'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
+            'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
