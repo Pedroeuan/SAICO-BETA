@@ -65,17 +65,16 @@
 <br>
 <br>
 <br>
-
-{{-- <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4> --}}
-<br>
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
-                                @csrf 
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES</strong></div>
+                            <form id="FOR-02-PRO-INS-04" action="{{route('Reportes_FOR_02_PRO_INS_04.store')}}" method="post" enctype="multipart/form-data">
+                                
+                                @csrf
+                                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -223,7 +222,13 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
                                         </div>
                                     </div>
 
@@ -302,28 +307,28 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputT" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputT" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputT" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="freccInputT" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -394,7 +399,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO DE JUNTA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_JUNTA]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
                                         </div>
                                     </div>
 
@@ -408,21 +413,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">DIAMETRO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">RECHAZO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <label class="col-form-label" for="inputSuccess">RETARDO:</label>
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RETARDO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ESPESOR:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
                                         </div>
                                     </div>
 
@@ -432,22 +437,6 @@
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
                                     <div style="margin-bottom: 2px;"></div>
-
-                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                        <div>
-                                            <label for="numRows">Número de Filas:</label>
-                                            <select id="numRows" class="form-select">
-                                                @for ($i = 1; $i <= 500; $i++)
-                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
-
-                                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
-
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
-                                    </div>
 
                                     <div class="table-responsive">
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
@@ -470,6 +459,21 @@
                                                 <th>H.T.</th>
                                                 <th>Prof</th>
                                             </tr>
+
+                                            <tr id="inputRow">
+                                                <th></th> <!-- Para ID vacío -->
+                                                <th><input type="text" class="form-control default-input" data-column="1"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
+                                                <th></th> <!-- Para botón de eliminar -->
+                                            </tr>
                                         </thead>
 
                                             <tbody>
@@ -479,6 +483,22 @@
                                     </div>
 
                                     <p>
+
+                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                        <div>
+                                            <label for="numRows">Número de Filas:</label>
+                                            <select id="numRows" class="form-select">
+                                                @for ($i = 1; $i <= 500; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
+                                    </div>
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -492,10 +512,56 @@
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
                                                     <option value="4">4 Firmas</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <!-- 2 DOS FIRMAS-->
+                                        <div id="firmas2" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                                                        
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
                                         </div>
 
                                         <!-- 3 TRES FIRMAS-->
@@ -559,6 +625,11 @@
                                         <!-- 4 CUATRO FIRMAS-->
                                         <div id="firmas4" class="col-12" style="display: none;">
                                             <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <div class="alert alert-warning alert-dismissible">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                                    <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                                </div>
                                                 <thead>
                                                     <tr>
 
@@ -626,8 +697,35 @@
 
                                         <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+                                        
+                                        <p>
+
                                         <!--IMAGENES CON COMENTARIOS-->
 
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- Campos para subir imágenes y comentarios -->
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -703,10 +801,14 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script>
 
+<!-- Biblioteca para recorte de imagenes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<script>
     /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
+    document.getElementById('FOR-02-PRO-INS-04').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
@@ -728,16 +830,16 @@
                 rowCount++;
                 var newRow = `<tr>
                     <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="Clasificación"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="X" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="Y" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="H.T." style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="Prof" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tamaño"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Amplitud"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Comentarios"></td>                   
+                    <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="clasificacion[]" placeholder="Clasificación"></td>
+                    <td><input type="text" class="form-control" name="x[]" placeholder="X" style="width: 60px;"></td>
+                    <td><input type="text" class="form-control" name="y[]" placeholder="Y" style="width: 60px;"></td>
+                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 60px;"></td>
+                    <td><input type="text" class="form-control" name="prof[]" placeholder="Prof" style="width: 60px;"></td>
+                    <td><input type="text" class="form-control" name="tamaño[]" placeholder="Tamaño"></td>
+                    <td><input type="text" class="form-control" name="amplitud[]" placeholder="Amplitud"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="comentarios[]" placeholder="Comentarios"></td>                   
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>`;
                 $('#dynamicTable tbody').append(newRow);
@@ -759,35 +861,135 @@
             });
         });
 
-        // Mostrar vista previa de las imágenes seleccionadas
-        function readURL(input, previewId) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $(previewId).html('<img src="' + e.target.result + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
+        $('form').submit(function(e) {
+        // Validar que la tabla no esté vacía
+        if ($('#dynamicTable tbody tr').length === 0) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+            });
+            return;
         }
+         // Deshabilitar el botón de submit y cambiar el texto (opcional)
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
 
-        $('#image1').change(function() {
-            readURL(this, '#image1-preview');
-        });
-
-        $('#image2').change(function() {
-            readURL(this, '#image2-preview');
-        });
-
-        $('#image3').change(function() {
-            readURL(this, '#image3-preview');
-        });
-
-        $('#image4').change(function() {
-            readURL(this, '#image4-preview');
-        });
-
+        // Opcional: Agregar un indicador de carga
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+    });
 
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const inputFields = document.querySelectorAll(".default-input");
+
+        // Evento para actualizar filas cuando se escriba en los inputs superiores
+        inputFields.forEach(input => {
+            input.addEventListener("input", function () {
+                const column = input.getAttribute("data-column");
+                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
+                    const cellInput = row.querySelectorAll("td input")[column - 1];
+                    if (cellInput) {
+                        cellInput.value = input.value;
+                    }
+                });
+            });
+        });
+
+    });
+
+    $(document).ready(function() {
+    var cropper;
+    var selectedInput;
+
+    // Función para leer la imagen seleccionada y mostrarla en el modal
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#cropperImage').attr('src', e.target.result);
+                $('#cropperModal').modal('show');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
+    $('input[type="file"]').change(function() {
+        selectedInput = this;
+        readURL(this);
+    });
+
+    // Inicializar el Cropper cuando se muestre el modal
+    $('#cropperModal').on('shown.bs.modal', function() {
+        var image = document.getElementById('cropperImage');
+        cropper = new Cropper(image, {
+            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
+            viewMode: 2,
+            autoCropArea: 1
+        });
+    }).on('hidden.bs.modal', function() {
+        // Asegurarse de que el Cropper se destruye al cerrar el modal
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+    });
+
+    // Acción para recortar la imagen y guardarla
+    $('#cropImageBtn').click(function() {
+        var canvas = cropper.getCroppedCanvas({
+            width: 300, // Ajusta el tamaño de la imagen recortada
+            height: 300
+        });
+
+        canvas.toBlob(function(blob) {
+            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
+            var dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            selectedInput.files = dataTransfer.files;
+
+            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
+            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
+
+            $('#cropperModal').modal('hide');
+        }, 'image/jpeg');
+    });
+
+    // Acción para guardar la imagen sin recortarla
+    $('#saveWithoutCropBtn').click(function() {
+        var file = selectedInput.files[0];
+
+        var dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        selectedInput.files = dataTransfer.files;
+
+        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
+        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
+
+        $('#cropperModal').modal('hide');
+    });
+
+    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
+    $('#cropperModal').on('hidden.bs.modal', function() {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+    });
+
+    // Hacer que el botón de cancelar cierre el modal
+    $('#cancelBtn').click(function() {
+        $('#cropperModal').modal('hide');
+    });
+
+    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
+    $('.close').click(function() {
+        $('#cropperModal').modal('hide');
+    });
+});
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
@@ -814,24 +1016,37 @@
 
         document.addEventListener('DOMContentLoaded', function() {
         const numFirmasSelect = document.getElementById('numFirmas');
+        const firmas2 = document.getElementById('firmas2');
         const firmas3 = document.getElementById('firmas3');
         const firmas4 = document.getElementById('firmas4');
 
         numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '3') {
+            if (this.value == '2') {
+                firmas2.style.display = 'block';
+                firmas3.style.display = 'none';
+                firmas4.style.display = 'none';
+            } else if (this.value == '3') {
+                firmas2.style.display = 'none';
                 firmas3.style.display = 'block';
                 firmas4.style.display = 'none';
             } else if (this.value == '4') {
+                firmas2.style.display = 'none';
                 firmas3.style.display = 'none';
                 firmas4.style.display = 'block';
             }
         });
 
         // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '3') {
+        if (numFirmasSelect.value == '2') {
+            firmas2.style.display = 'block';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
+        } else if (numFirmasSelect.value == '3') {
+            firmas2.style.display = 'none';
             firmas3.style.display = 'block';
             firmas4.style.display = 'none';
         } else if (numFirmasSelect.value == '4') {
+            firmas2.style.display = 'none';
             firmas3.style.display = 'none';
             firmas4.style.display = 'block';
         }
