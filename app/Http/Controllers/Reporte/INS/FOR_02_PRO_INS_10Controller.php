@@ -363,7 +363,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
 
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos

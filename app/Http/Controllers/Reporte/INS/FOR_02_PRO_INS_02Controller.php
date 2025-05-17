@@ -219,6 +219,13 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     public function FOR_02_PRO_INS_02_store(Request $request)
     {
+        // Verificar los datos recibidos antes de procesarlos
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+    }
+
+    public function FOR_02_PRO_INS_02(Request $request)
+    {
+        $Estatus = "CREADO";
         // Validar los datos del formulario
         $validatedData = $request->validate([
             /* Detalles Generales */
@@ -265,12 +272,12 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
             'componente' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
+            'no_ind' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
             'largo' => 'nullable|array',
             'ancho' => 'nullable|array',
@@ -336,58 +343,93 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
     
         ]);
-    
-        // Guardar Detalles Generales
-        $Reportes = new reporte();
-        $Reportes->idPrueba_Aplica = $request->input('idPrueba_Aplica');
+
+        /*Detalles Generales y Datos del Equipo */
+        $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
+        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
+        $Firmas_Reportes = new Firma_Reporte();  // Modelo de la tabla donde guardas los datos
+        $Fotos_Reportes = new Fotos_Reporte();  // Modelo de la tabla donde guardas los datos
+        $idPrueba_Aplica = $request->input('idPrueba_Aplica');
+
+        $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+        // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
+        // Guardar Datos_Equipo como JSON en la base de datos
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
-        $Reportes->Estatus = "CREADO";
+
+        $Reportes->Estatus = $Estatus; // Asignar el estatus
+
+        // Guardar el registro en la base de datos   
         $Reportes->save();
         
-        // Guardar Resultados Juntas
-        $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
-        $Grupo_Juntas_Detalles_Re->idReportes = $Reportes->idReportes;
+        // Obtener el idReportes del registro recién creado
+        $idReportes = $Reportes->idReportes;
+        $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
+
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
+
+         // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
         
-        $Titulos_Juntas = [];
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
         
-        if (!empty($validatedData['titulos'])) {
-            foreach ($validatedData['titulos'] as $titulo) {
-                $Titulos_Juntas[] = ['titulo' => $titulo];
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'componente' => $request->input("componente.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'largo' => $request->input("largo.$sinTituloKey.$i"),
+                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$sinTituloKey.$i"),
+                ];
             }
-        }
         
-        $Resultados_Juntas = [];
-        foreach ($validatedData['componente'] as $index => $componente) {
-            $Resultados_Juntas[] = [
-                'componente' => $componente,
-                'no_indicacion' => $validatedData['no_indicacion'][$index],
-                'tipo_indicacion' => $validatedData['tipo_indicacion'][$index],
-                'largo' => $validatedData['largo'][$index],
-                'ancho' => $validatedData['ancho'][$index],
-                'diametro' => $validatedData['diametro'][$index],
-                'ht' => $validatedData['ht'][$index],
-                'evaluacion' => $validatedData['evaluacion'][$index],
-                'longitud_inspeccionada' => $validatedData['longitud_inspeccionada'][$index],
+            $datosAgrupados[] = [
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
+                'resultados' => $resultados
             ];
         }
-
-        // Convertir a JSON
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
-            'titulos' => $Titulos_Juntas,
-            'resultados' => $Resultados_Juntas
-        ]);
-        // Convertir el array de resultados juntas a JSON
-        //$ResultadosJuntas = json_encode($Resultados_Juntas);
-        //$Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $ResultadosJuntas;
         
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            $tituloKey = "titulo_" . $titulo;
+            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'componente' => $request->input("componente.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'largo' => $request->input("largo.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$tituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+        
+        // Guardar en el modelo
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
-    
-        // Guardar Firmas
-        $Firmas_Reportes = new Firma_Reporte();
-        $Firmas_Reportes->idReportes = $Reportes->idReportes;
 
-         /*Firmas */
+        /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
@@ -403,10 +445,91 @@ class FOR_02_PRO_INS_02Controller extends Controller
             $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
         }
+
+        $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
+
+        /* Fotos y Comentarios */
+        $imageCount = $request->input('imageCount'); // Número de imágenes
+        if($imageCount>1)
+        {
+        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+
+        foreach ($request->images_base64 as $index => $base64Image) {
+            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+            // Decodificar Base64
+            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+            
+            // Crear un nombre único para la imagen
+            $imageName = 'imagen_' . time() . '_' . $index . '.png';
+
+            // Definir la ruta personalizada
+            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+            
+            // Guardar la imagen en la ruta personalizada
+            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+            // Guardar la ruta en el array con su comentario correspondiente
+            $imagenesGuardadas[] = [
+                'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+            ];
+        }
+
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($imagenesGuardadas); 
+
+        // Guardar en la base de datos
+        $Fotos_Reportes->idReportes = $idReportes;
+        $Fotos_Reportes->Fotos_Reportes = $Fotos;
+        $Fotos_Reportes->save();
+    }else{
+        $imagenesGuardadas = [];
+        $Fotos = json_encode($imagenesGuardadas);
+        $Fotos = json_encode($imagenesGuardadas); 
+        $Fotos_Reportes->idReportes = $idReportes;
+        $Fotos_Reportes->Fotos_Reportes = $Fotos;
+        $Fotos_Reportes->save();
+    }
+
+        $Cliente = $validatedData['Detalles_Generales']['Cliente'];
+        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+        $Material = $validatedData['Detalles_Generales']['Material'];
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
+        $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
+        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+
+        $datosParaCrearOS_OC = [
+            'idPrueba_Aplica' => $idPrueba_Aplica,
+            'Cliente' => $Cliente,
+            'Lugar' => $Lugar,
+            'Contrato' => $Contrato,
+            'Proyecto' => $Proyecto,
+            'Material' => $Material,
+            'Isometrico_Plano' => $Isometrico_Plano,
+            'Pieza' => $Pieza,
+            'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
+            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
+            'idSolicitud' => $idSolicitud,
+            'idReportes' => $idReportes,
+            
+        ];
+
+        $this->OS_OC($datosParaCrearOS_OC);
+
+        // Obtener el valor de 'Detalles_Generales.Contrato'
+        $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
+        
+
+        return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     
         // Guardar Fotos
-        $Fotos_Reportes = new Fotos_Reporte();
+        /*$Fotos_Reportes = new Fotos_Reporte();
         $Fotos_Reportes->idReportes = $Reportes->idReportes;
     
         $fotos = [];
@@ -428,7 +551,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         return redirect()->route('indexINS2', [
             'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
             'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
-        ]);
+        ]);*/
     }
 
     public function FOR_02_PRO_INS_02_update(Request $request, $id)
@@ -482,12 +605,12 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
             'componente' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
+            'no_ind' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
             'largo' => 'nullable|array',
             'ancho' => 'nullable|array',
