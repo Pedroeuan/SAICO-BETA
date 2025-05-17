@@ -802,12 +802,23 @@
                                         </div>
 
                                         <p>
-
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                                        
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -825,48 +836,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
                                             </div>
                                         </div>
 
@@ -927,62 +903,370 @@
             });
         });
 
-    $(document).ready(function() {
-        var rowCount = 0;
+    /* Imágenes */
+    let cropper;
+    let currentInput;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(-90);
+    });
+
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(90);
+    });
+
+    // Botón: Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        $('#cropperModal').modal('hide');
+    });
+
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+
+        try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
+        }
+    });
+
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            }
+        }
+        $('#cropperModal').modal('hide');
+    });
+
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal').on('hidden.bs.modal', function () {
+        if (cropper) cropper.destroy();
+    });
+
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields(count);
+        });
+
+        function generateImageFields(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+            
+            // Agregar eventos de eliminación a los botones
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                    }
+                });
             });
-            rowCount = $('#dynamicTable tbody tr').length;
+
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
         }
 
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem('imageCount');
+        });
+    });
+
+     /*Juntas-Resultados */
+    function updateRowNumbers() {
+        let count = 0;
+        $('#dynamicTable tbody tr').each(function () {
+            if (!$(this).hasClass('titulo-row')) {
+                count++;
+                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+            }
+        });
+        rowCountGlobal = count;
+    }
+
+    // Función para actualizar los títulos en el campo oculto
+        function updateTitulos() {
+            var titulos = [];
+            // Recolectar todos los títulos en el array
+            $('.titulo-row input[type="text"]').each(function() {
+                titulos.push($(this).val());
+            });
+
+            // Asignar los títulos al campo oculto
+            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        }
+
+    $(document).ready(function() {
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
+
+        function restoreData() {
+            const savedData = sessionStorage.getItem('dynamicTableData');
+            if (savedData) {
+                const tableData = JSON.parse(savedData);
+                
+                // Restaurar contadores
+                tituloCount = tableData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                
+                tableData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="20">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Aceptación"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Serie"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Colada"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[4]}" placeholder="tnominal"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[10]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Prof"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmáx"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Metros Lineales"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+                updateRowNumbers();
+                updateTitulos();
+            }
+        }
+
+    // Guardar datos en sessionStorage
+    function saveData() {
+        const tableData = [];
+        let rowNumber = 1;
+
+        $('#dynamicTable tbody tr').each(function () {
+            const isTitulo = $(this).hasClass('titulo-row');
+            const tituloId = $(this).data('titulo') || 'sin_titulo';
+
+            if (isTitulo) {
+                const tituloText = $(this).find('input[type="text"]').val();
+                tableData.push({ 
+                    type: 'titulo', 
+                    id: tituloId, 
+                    text: tituloText 
+                });
+            } else {
+                const inputs = $(this).find('input[type="text"]').map(function () {
+                    return $(this).val();
+                }).get();
+                
+                tableData.push({ 
+                    type: 'fila', 
+                    titulo: tituloId, 
+                    inputs: inputs,
+                    rowNumber: rowNumber
+                });
+                rowNumber++;
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
+    }
+
         $('#addTituloBtn').click(function () {
-            // Crear una nueva fila de título con un botón de eliminar
-            var newTitleRow = `<tr class="titulo-row">
-                <td colspan="11">
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="20">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
                             <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
+                        </button></td>
                     </div>
                 </td>
-            </tr>`;
+            </tr>
+        `;
 
-            // Insertar el título después de las filas existentes en el tbody
-            $('#dynamicTable tbody').append(newTitleRow);
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData();
         });
 
         // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            $(this).closest('tr').remove();
+            let tituloRow = $(this).closest('tr');
+            let tituloId = tituloRow.data('titulo');
+            
+            // Eliminar la fila del título
+            tituloRow.remove();
+            
+            // Eliminar todas las filas que tengan el mismo data-titulo
+            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+
+            updateRowNumbers(); // Si quieres actualizar el contador global
+            saveData();
         });
 
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="componente[]" placeholder="No. Junta/Componente"></td>
-                    <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo Indicación"></td>
-                    <td><input type="text" class="form-control" name="largo[]" placeholder="LARGO" ></td>
-                    <td><input type="text" class="form-control" name="ancho[]" placeholder="ANCHO" ></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" ></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="longitud_inspeccionada[]" placeholder="L.I."></td>
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. Junta/Componente"></td>
+                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo Indicacion"></td>
+
+                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="LARGO"></td>
+                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="ANCHO"></td>
+
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="longitud_inspeccionada[${lastTitle}][]" placeholder="L.I."></td>
+
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
+                </tr>
+            `;
+
                 $('#dynamicTable tbody').append(newRow);
             }
-        });
+            saveData();
+        }
+    );
+
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            saveData();
         });
 
         $('#preFillBtn').click(function() {
@@ -993,137 +1277,53 @@
                     }
                 });
             });
+            saveData();
+        });
+        
+        $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+                });
+                return;
+            }
+
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-        $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
+            // Restaurar datos al cargar la página
+            restoreData();
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
+        const inputFields = document.querySelectorAll(".default-input");
 
-        // Evento para actualizar filas cuando se escriba en los inputs superiores
         inputFields.forEach(input => {
             input.addEventListener("input", function () {
-                const column = input.getAttribute("data-column");
-                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
-                    const cellInput = row.querySelectorAll("td input")[column - 1];
+                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
+                if (isNaN(column)) return; // Evitar errores si no es válido
+
+                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    const cellInputs = row.querySelectorAll("td input");
+                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
                     if (cellInput) {
                         cellInput.value = input.value;
                     }
                 });
             });
         });
-
     });
-
-    $(document).ready(function() {
-    var cropper;
-    var selectedInput;
-
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
-
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
-
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});
 
     // Pre-Rellenado del formulario
     document.addEventListener("DOMContentLoaded", function () {

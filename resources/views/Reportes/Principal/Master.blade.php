@@ -84,7 +84,7 @@
         @include('Reportes.INS.Create.FOR-03-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-16') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-16')
-        
+    @endif
 @stop
 
 

@@ -501,7 +501,6 @@
                                                     <th><input type="text" class="form-control default-input" data-column="19" style="width: 150px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
-                                                
                                             </thead>
 
                                             <tbody>
@@ -926,15 +925,6 @@
 
     // Botón: Guardar sin recortar (manteniendo rotación)
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        /*if (!cropper) {
-            console.error('El objeto cropper no está inicializado.');
-            return;
-        }
-
-        if (!currentInput) {
-            console.error('No se ha seleccionado ninguna imagen.');
-            return;
-        }*/
 
         try {
             // Obtener los datos de la imagen original (incluyendo rotación)
@@ -1005,13 +995,6 @@
         const imageCountSelect = document.getElementById('imageCount');
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
-
-        // Cargar valor guardado
-        /*const savedCount = localStorage.getItem('imageCount');
-        if (savedCount) {
-            imageCountSelect.value = savedCount;
-            generateImageFields(parseInt(savedCount));
-        }*/
 
         imageCountSelect.addEventListener('change', function () {
             const count = parseInt(this.value);

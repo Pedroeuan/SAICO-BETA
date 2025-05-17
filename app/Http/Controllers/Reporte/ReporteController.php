@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ReporteController extends Controller
 {
-public function FOR_01_PRO_INS_02()
+    public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
     }
@@ -108,6 +108,7 @@ public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
     }
+    
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
