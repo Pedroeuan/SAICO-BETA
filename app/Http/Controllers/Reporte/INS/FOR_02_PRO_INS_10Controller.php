@@ -67,9 +67,13 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Lineal_Ideal = new Lineal_Ideal;
 
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
+        Log::info('***********************');
+        Log::info('BusquedaCliente: ', ['BusquedaCliente' => $BusquedaCliente]);
 
         if ($BusquedaCliente) {
             $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            //Log::info('***********************');
+            Log::info('idCliente: ', ['idCliente' => $idCliente]);
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
