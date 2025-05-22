@@ -217,13 +217,73 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_02_store(Request $request)
+    public function FOR_02_PRO_INS_02_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
+
+         // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
+        
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'componente' => $request->input("componente.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'largo' => $request->input("largo.$sinTituloKey.$i"),
+                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$sinTituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
+                'resultados' => $resultados
+            ];
+        }
+        
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            $tituloKey = "titulo_" . $titulo;
+            $filas = $request->input("componente.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'componente' => $request->input("componente.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'largo' => $request->input("largo.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$tituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+
+        dd($datosAgrupados);
+
     }
 
-    public function FOR_02_PRO_INS_02(Request $request)
+    public function FOR_02_PRO_INS_02_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los datos del formulario
@@ -371,7 +431,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
          // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -400,7 +460,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
             $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("componente.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -528,30 +588,6 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     
-        // Guardar Fotos
-        /*$Fotos_Reportes = new Fotos_Reporte();
-        $Fotos_Reportes->idReportes = $Reportes->idReportes;
-    
-        $fotos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            if ($request->hasFile("image$i")) {
-                $image = $request->file("image$i");
-                $path = $image->store("public/Reportes/FOR_02_PRO_INS_10/{$validatedData['Detalles_Generales']['Contrato']}/{$validatedData['Detalles_Generales']['No_Reporte']}/Fotos");
-                $fotos[] = [
-                    'path' => $path,
-                    'comment' => $request->input("comment$i"),
-                ];
-            }
-        }
-    
-        $Fotos_Reportes->Fotos_Reportes = json_encode($fotos);
-        $Fotos_Reportes->save();
-    
-        // Redireccionar
-        return redirect()->route('indexINS2', [
-            'contratoSeleccionado' => $validatedData['Detalles_Generales']['Contrato'],
-            'Proyecto' => $validatedData['Detalles_Generales']['Proyecto'],
-        ]);*/
     }
 
     public function FOR_02_PRO_INS_02_update(Request $request, $id)
