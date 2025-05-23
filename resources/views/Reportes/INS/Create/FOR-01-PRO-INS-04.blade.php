@@ -6,6 +6,7 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <style>
         table {
@@ -66,8 +67,8 @@
 <br>
 <br>
                 <section class="content w-100">
-                    <div class="card w-100">
-                        <div class="card-body row w-100">
+                    <div class="card w-100 p-3">
+                        <div class="card-body w-100">
                             <form id="FOR-01-PRO-INS-04" action="{{route('Reportes_FOR_01_PRO_INS_04.store')}}" method="post" enctype="multipart/form-data">
                                 
                                 @csrf
@@ -76,7 +77,7 @@
                                 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 
                                 <div class="row">
-                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
+                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Pre-rellenar Formulario "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
@@ -447,28 +448,29 @@
                                         </div>
                                         <thead>
                                             <tr>
-                                                <th rowspan="3">No. de Junta</th>
-                                                <th rowspan="3">No. Indicación</th>
-                                                <th rowspan="3">Ángulo de Inspección</th>
-                                                <th rowspan="3">Desde la Cara</th>
-                                                <th rowspan="3">Pierna</th>
-                                                <th colspan="4">Decibeles</th>
-                                                <th colspan="5">Discontinuidad</th>
-                                                <th rowspan="3">Clase de la Discontinuidad</th>
-                                                <th rowspan="3">Evaluación</th>
-                                                <th rowspan="3">Observaciones</th>
+                                                <th rowspan="3" class="align-middle">No.</th>
+                                                <th rowspan="3" class="align-middle">No. de Junta</th>
+                                                <th rowspan="3" class="align-middle">No. Indicación</th>
+                                                <th rowspan="3" class="align-middle">Ángulo de Inspección</th>
+                                                <th rowspan="3" class="align-middle">Desde la Cara</th>
+                                                <th rowspan="3" class="align-middle">Pierna</th>
+                                                <th colspan="4" class="align-middle">Decibeles</th>
+                                                <th colspan="5" class="align-middle">Discontinuidad</th>
+                                                <th rowspan="3" class="align-middle">Clase de la Discontinuidad</th>
+                                                <th rowspan="3" class="align-middle">Evaluación</th>
+                                                <th rowspan="3" class="align-middle">Observaciones</th>
 
-                                                <th rowspan="3">Eliminar</th>
+                                                <th rowspan="3" class="align-middle">Eliminar</th>
                                             </tr>
                                             <tr>
-                                                <th>Nivel de Indicación</th>
-                                                <th>Nivel de Referencia</th>
-                                                <th>Factor de Atenuación</th>
-                                                <th>Relación Indicación</th>
-                                                <th rowspan="2">Longitud</th>
-                                                <th rowspan="2">Distancia Angular</th>
-                                                <th rowspan="2">Profundidad desde A</th>
-                                                <th colspan="2">Posición</th>
+                                                <th class="align-middle">Nivel de Indicación</th>
+                                                <th class="align-middle">Nivel de Referencia</th>
+                                                <th class="align-middle">Factor de Atenuación</th>
+                                                <th class="align-middle">Relación Indicación</th>
+                                                <th rowspan="2" class="align-middle">Longitud</th>
+                                                <th rowspan="2" class="align-middle">Distancia Angular</th>
+                                                <th rowspan="2" class="align-middle">Profundidad desde A</th>
+                                                <th colspan="2" class="align-middle">Posición</th>
                                             </tr>
 
                                             <tr>
@@ -494,10 +496,11 @@
                                                 <th><input type="text" class="form-control default-input" data-column="10"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="11"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="15"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="16"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="17"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -509,7 +512,7 @@
                                     </div>
 
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center w-100 m-3">
                                         <div>
                                             <label for="numRows">Número de Filas:</label>
                                             <select id="numRows" class="form-select">
@@ -521,7 +524,9 @@
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
 
                                     <p>
@@ -723,6 +728,19 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                         <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -740,47 +758,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
                                             </div>
                                         </div>
 
@@ -822,343 +806,161 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/includes.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-    /*Prevenir el Enter*/
-    document.getElementById('FOR-01-PRO-INS-04').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
 
     $(document).ready(function() {
-        var rowCount = 0;
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
+        function restoreData() {
+            const savedData = sessionStorage.getItem('dynamicTableData');
+            if (savedData) {
+                const tableData = JSON.parse(savedData);
+                
+                // Restaurar contadores
+                tituloCount = tableData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                
+                tableData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="18">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="ang_inspeccion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Angulo de Inspección"></td>
+                            <td><input type="text" class="form-control" name="dsd_cara[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Cara"></td>
+                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Pierna"></td>
+                            <td><input type="text" class="form-control" name="nvl_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="a"></td>
+                            <td><input type="text" class="form-control" name="nvl_referencia[${item.titulo}][]" value="${item.inputs[6]}" placeholder="b"></td>
+                            <td><input type="text" class="form-control" name="ftr_atenuacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="c"></td>
+                            <td><input type="text" class="form-control" name="rlcn_indicacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="long[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="dis_angualar[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="produndidad[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Profundidad A"></td>
+                            <td><input type="text" class="form-control" name="pos_x[${item.titulo}][]" value="${item.inputs[12]}" placeholder="x"></td>
+                            <td><input type="text" class="form-control" name="pos_y[${item.titulo}][]" value="${item.inputs[13]}" placeholder="y"></td>
+                            <td><input type="text" class="form-control" name="class_discontinuidad[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Discontinuidad"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[15]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+                updateRowNumbers();
+                updateTitulos();
+            }
         }
 
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="angulo_inspeccion[]" placeholder="Angulo de Inspección"></td>
-                    <td><input type="text" class="form-control" name="desde_cara[]" placeholder="CARA"></td>
-                    <td><input type="text" class="form-control" name="pierna[]" placeholder="PIERNA"></td>
-                    <td><input type="text" class="form-control" name="decibel_a[]" placeholder="A"></td>
-                    <td><input type="text" class="form-control" name="decibel_b[]" placeholder="B"></td>
-                    <td><input type="text" class="form-control" name="decibel_c[]" placeholder="C"></td>
-                    <td><input type="text" class="form-control" name="decibel_d[]" placeholder="D"></td>
-                    <td><input type="text" class="form-control" name="longitud[]" placeholder="Longitud"></td>
-                    <td><input type="text" class="form-control" name="distancia_angular[]" placeholder="Distancia Angular"></td>
-                    <td><input type="text" class="form-control" name="profundidad_a[]" placeholder="Profundidad A"></td>
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
 
-                    <td><input type="text" class="form-control" name="posicion_x[]" placeholder="X" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="posicion_y[]" placeholder="Y" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="discontinuidad[]" placeholder="Discontinuidad"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="observaciones[]" placeholder="Observaciones"></td>
-                    
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="18">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData();
+        });
+
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
+            let newRow = 
+
+            `<tr data-titulo="${lastTitle}">
+                            <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="ang_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
+                            <td><input type="text" class="form-control" name="dsd_cara[${lastTitle}][]" placeholder="Cara"></td>
+                            <td><input type="text" class="form-control" name="pierna[${lastTitle}][]" placeholder="Pierna"></td>
+                            <td><input type="text" class="form-control" name="nvl_indicacion[${lastTitle}][]" placeholder="a"></td>
+                            <td><input type="text" class="form-control" name="nvl_referencia[${lastTitle}][]" placeholder="b"></td>
+                            <td><input type="text" class="form-control" name="ftr_atenuacion[${lastTitle}][]" placeholder="c"></td>
+                            <td><input type="text" class="form-control" name="rlcn_indicacion[${lastTitle}][]" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="long[${lastTitle}][]" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="dis_angualar[${lastTitle}][]" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="produndidad[${lastTitle}][]" placeholder="Profundidad A"></td>
+                            <td><input type="text" class="form-control" name="pos_x[${lastTitle}][]" placeholder="x"></td>
+                            <td><input type="text" class="form-control" name="pos_y[${lastTitle}][]" placeholder="y"></td>
+                            <td><input type="text" class="form-control" name="class_discontinuidad[${lastTitle}][]" placeholder="Discontinuidad"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                        </tr>`;
+
                 $('#dynamicTable tbody').append(newRow);
             }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-        });
+            saveData();
+        }
+    );
 
         $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
-
-        // Evento para actualizar filas cuando se escriba en los inputs superiores
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = input.getAttribute("data-column");
-                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
-                    const cellInput = row.querySelectorAll("td input")[column - 1];
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-            });
-        });
-
-    });
-
-    $(document).ready(function() {
-    var cropper;
-    var selectedInput;
-
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
-
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
-
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});
-
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
-
-        /*Selección de Firmas */
-
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas2 = document.getElementById('firmas2');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '2') {
-                firmas2.style.display = 'block';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'none';
-            } else if (this.value == '3') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
-            }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '2') {
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '3') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
-    });
-
-    /* $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
+                return;
             }
 
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
+            // Restaurar datos al cargar la página
+            restoreData();
+    });
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
-                
-            });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-            }
-        }); */
-
-    </script>
+</script>
 @endsection

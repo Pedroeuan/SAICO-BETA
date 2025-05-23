@@ -50,14 +50,10 @@
 
 @section('content')
 
-    @if($Nombre_Formato == 'FOR-02-PRO-INS-02') 
-        @include('Reportes.INS.Create.FOR-02-PRO-INS-02')
-    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-03') 
+    @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-04')
-    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-04') 
-        @include('Reportes.INS.Create.FOR-02-PRO-INS-04')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-05') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-05')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-06') 
@@ -70,21 +66,28 @@
         @include('Reportes.INS.Create.FOR-01-PRO-INS-09')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-10') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-10')
-    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-10') 
-        @include('Reportes.INS.Create.FOR-02-PRO-INS-10')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-12') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-12')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-13') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-13')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-15')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-16') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-16')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-17') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-17')
+    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-02') 
+        @include('Reportes.INS.Create.FOR-02-PRO-INS-02')
+    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-10') 
+        @include('Reportes.INS.Create.FOR-02-PRO-INS-10')
+    @elseif($Nombre_Formato == 'FOR-02-PRO-INS-04') 
+        @include('Reportes.INS.Create.FOR-02-PRO-INS-04')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-02-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-03-PRO-INS-15')
-    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-16') 
-        @include('Reportes.INS.Create.FOR-01-PRO-INS-16')
     @endif
+
 @stop
 
 
