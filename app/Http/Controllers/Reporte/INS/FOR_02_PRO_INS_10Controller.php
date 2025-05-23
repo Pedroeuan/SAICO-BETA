@@ -70,6 +70,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         if ($BusquedaCliente) {
             $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -363,7 +364,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
 
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -450,7 +450,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
                     'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
-        
+            
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
                 'resultados' => $resultados

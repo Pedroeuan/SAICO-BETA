@@ -620,7 +620,7 @@
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-12">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="2">2 Firmas</option>
@@ -903,6 +903,13 @@
             }
         });
     });
+    
+    $('#dynamicTable').on('keydown', 'input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+
 
     /* Imágenes */
     let cropper;
