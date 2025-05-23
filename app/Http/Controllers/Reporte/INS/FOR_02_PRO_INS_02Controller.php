@@ -890,7 +890,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
     public function FOR_INS_02_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
-        /*$Reporte = reporte::where('idReportes', $id)->first();
+        $Reporte = reporte::where('idReportes', $id)->first();
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
         $Firmas_Reportes = Firma_Reporte::where('idReportes', $id)->first();
         $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
@@ -901,77 +901,109 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-        $TotalJuntas = count($Grupo_Juntas_Detalles_Re);
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
+
+        $totalTitulos = 0;
+        $totalFilas = 0;
+
+        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
+            if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                $totalFilas += count($grupo['resultados']);
+            }
+
+            if (isset($grupo['titulos_juntas']) && strtoupper(trim($grupo['titulos_juntas'])) !== 'SIN TITULO') {
+                $totalTitulos++;
+            }
+        }
+
+        $totalTitulosYFilas = $totalTitulos + $totalFilas;
+
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
-        $numFirmas = $Firmas_Reportes['numFirmas'];*/
+        $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-
         // Obtener las fotos con su comentario
-        /*if ($Fotos_Reportes) {
+        if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+            $totalFotos = count($fotos); // Contar el total de imágenes
             $Fotos = [];
         
-            for ($i = 0; $i < min(4, count($fotos)); $i++) { // Solo obtener hasta 4 imágenes
+            foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
-                    'path' => public_path('storage/' . str_replace('public/', '', $fotos[$i]['path'])),
-                    'comment' => $fotos[$i]['comment'] ?? ''
+                    'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
+                    'comment' => $foto['comentario'] ?? ''
                 ];
             }
-        }*/
+        }
 
         $data = [
             'title' => 'Reporte_FOR-INS-02/02.PDF',
             'Logo' => $Logo,
-            /*//Detalles_Generales
+            //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
             //Total de Juntas
-            'TotalJuntas' => $TotalJuntas,
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
             'Fotos' => $Fotos,
+            //Total de Fotos
+            'totalFotos' => $totalFotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
-            'Firmas_Reportes' => $Firmas_Reportes,*/
+            'Firmas_Reportes' => $Firmas_Reportes,
         ];
 
-        // Cargar la vista con los datos
-        $pdf = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait'); //Define la orientación del papel. Puede ser 'portrait' (vertical) o 'landscape' (horizontal).
-        //$pdf = PDF::loadView('ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper([0, 0, 760, 780]); // Ancho x Alto en milímetros
+        // Generar el PDF principal en orientación vertical
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait');
 
-        // Renderizar el PDF antes de obtener el canvas
-        $dompdf = $pdf->getDomPDF();
-        // Configurar márgenes personalizados (en milímetros)
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true); // Opcional, mejora compatibilidad
-        $options->set('defaultPaperMargins', [20, 10, 20, 10]);  // [arriba, derecha, abajo, izquierda]
-        $dompdf->setOptions($options);
-        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+        // Generar el PDF adicional en orientación vertical
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_02_02_PDF', $data)->setPaper('letter', 'portrait');
 
-        $canvas = $dompdf->getCanvas();
-        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-            
-            // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('arial', 'normal');
-            $size = 8;
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        $pdf2Content = $pdf2->output();
 
-            // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 483; // Ajusta esta posición X según sea necesario
-            $y = 37;  // Ajusta esta posición Y según sea necesario
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
-            // Evitar problemas con valores no válidos para coordenadas
-            if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
-                $canvas->text($x, $y, $text, $font, $size);
-            }
-        });
+        $tempPdf2 = new Fpdi();
+        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
 
-        return $pdf->stream('Reporte_FOR_INS_02_02.PDF');
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1 + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(179, -181);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }
+
+        return response($combinedPdf->Output('Reporte_FOR_INS_02_02.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
     }
 
     /**
