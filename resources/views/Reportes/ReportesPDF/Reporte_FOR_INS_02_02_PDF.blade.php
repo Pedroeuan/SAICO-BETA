@@ -246,104 +246,105 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>   
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
+
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="7">DATOS DE LA INSPECCIÓN</th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 2px;"></div>
-
                 <table class="datosinspeccion">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="7">DATOS DE LA INSPECCIÓN</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
+
                         <tbody>
                             <tr class="celdaGris">
                                 <th style="width: 60px;">ITEM</th>
-                                <th style="width: 100px;">MARCA</th>
-                                <th style="width: 100px;">MODELO</th>
-                                <th style="width: 100px;">LOTE</th>
-                                <th style="width: 100px;">TIPO</th>
-                                <th style="width: 100px;">COLOR</th>
-                                <th style="width: 100px;">APLICACIÓN</th>
+                                <th style="width: 80px;">MARCA</th>
+                                <th style="width: 80px;">MODELO</th>
+                                <th style="width: 80px;">LOTE</th>
+                                <th style="width: 80px;">TIPO</th>
+                                <th style="width: 80px;">COLOR</th>
+                                <th style="width: 80px;">APLICACIÓN</th>
                             </tr>
                             <tr>
                                 <th class="celdaGris">PARTICULAS:</th>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
+                                <td>{{ $Datos_Equipo['MARCA_PARTICULAS'] }}</td>
+                                <td>{{ $Datos_Equipo['MODELO_PARTICULAS'] }}</td>
+                                <td>{{ $Datos_Equipo['LOTE_PARTICULAS'] }}</td>
+                                <td>{{ $Datos_Equipo['TIPO_PARTICULAS'] }}</td>
+                                <td>{{ $Datos_Equipo['COLOR_PARTICULAS'] }}</td>
+                                <td>{{ $Datos_Equipo['APLICACION_PARTICULAS'] }}</td>
                             </tr>
                             <tr>
                                 <th class="celdaGris">CONTRASTANTE:</th>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td>12</td>
+                                <td>{{ $Datos_Equipo['MARCA_CONTRASTE'] }}</td>
+                                <td>{{ $Datos_Equipo['MODELO_CONTRASTE'] }}</td>
+                                <td>{{ $Datos_Equipo['LOTE_CONTRASTE'] }}</td>
+                                <td>{{ $Datos_Equipo['TIPO_CONTRASTE'] }}</td>
+                                <td>{{ $Datos_Equipo['COLOR_CONTRASTE'] }}</td>
+                                <td>{{ $Datos_Equipo['APLICACION_CONTRASTE'] }}</td>
                             </tr>
                         </tbody>
                 </table>
@@ -353,7 +354,7 @@
                 <table class="datosinspeccion">
                     <tbody>
                         <tr class="celdaGris">
-                            <th style="width: 20%;">EQUIPO</th>
+                            <th style="width: 30%;">EQUIPO</th>
                             <th style="width: 20%;">MARCA</th>
                             <th style="width: 20%;">MODELO</th>
                             <th style="width: 20%;">N/S</th>
@@ -363,11 +364,11 @@
                         </tr>
                         <tr>
                             <td>YUGO ELECTROMÁGNETICO:</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['CORRIENTE_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['DISTANCIA_PATAS_EQUIPO'] }}</td>
                         </tr>
                     </tbody>
                 </table>

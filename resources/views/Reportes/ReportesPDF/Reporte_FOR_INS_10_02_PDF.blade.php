@@ -752,7 +752,7 @@
                                                     <!-- Fila de total antes del salto de página -->
                                                     <tr style="page-break-after: always;" class="sinBordetd">
                                                         <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada1:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
 
@@ -764,11 +764,11 @@
                                             @php $contador++; @endphp
                                         @endforeach
 
-                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina) //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
+                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
                                                     <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada2:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
                                                 @php
@@ -784,7 +784,7 @@
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
                                                 <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada3:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
                                         @endif
