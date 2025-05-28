@@ -227,7 +227,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 9px;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -752,7 +752,7 @@
                                                     <!-- Fila de total antes del salto de página -->
                                                     <tr style="page-break-after: always;" class="sinBordetd">
                                                         <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada1:</strong></th>
+                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
 
@@ -768,7 +768,7 @@
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
                                                     <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada2:</strong></th>
+                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
                                                 @php
@@ -779,12 +779,12 @@
 
                                     @endforeach
                                     
-                                    @if($titulo == 'SIN TITULO')
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>15)
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
                                                 <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada3:</strong></th>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
                                         @endif
