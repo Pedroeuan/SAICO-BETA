@@ -76,7 +76,7 @@
                                 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
                                 
                                 <div class="row">
-                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Pre-rellenar Formulario "---"</button>
+                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
