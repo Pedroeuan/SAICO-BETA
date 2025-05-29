@@ -227,7 +227,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 9px;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -764,7 +764,7 @@
                                             @php $contador++; @endphp
                                         @endforeach
 
-                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina) //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
+                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
                                                     <td colspan="12" style="border-top: 2px solid black;"></td>
@@ -779,7 +779,7 @@
 
                                     @endforeach
                                     
-                                    @if($titulo == 'SIN TITULO')
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>15)
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">

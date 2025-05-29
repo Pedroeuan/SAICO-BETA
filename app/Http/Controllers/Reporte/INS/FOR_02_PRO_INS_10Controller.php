@@ -217,13 +217,13 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
+    public function FOR_02_PRO_INS_10_store(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function FOR_02_PRO_INS_10_store1(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales

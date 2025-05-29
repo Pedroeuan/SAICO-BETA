@@ -225,9 +225,9 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>3</th>
                         </tr>
                         <tr>
                             <th>Página</th>
