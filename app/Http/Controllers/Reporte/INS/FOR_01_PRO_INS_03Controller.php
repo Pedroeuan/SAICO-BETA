@@ -245,25 +245,33 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
-            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_PENETRANTES' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REMOVEDOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REVELEADOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.TIPO_LUZ' => 'nullable|string|max:255',
+            'Datos_Equipo.INTENCIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
