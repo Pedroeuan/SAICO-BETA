@@ -213,7 +213,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Código Aplicable</label>
-                                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Codigo_Aplicable')}}">
                                             @error('Codigo_Aplicable')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -250,16 +250,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Penetrantes:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-control inputForm" name="Consumible1" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione un Penetrante</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -267,42 +267,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputPS" name="Datos_Equipo[MARCA_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC1" name="Datos_Equipo[MARCA_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputPS" name="Datos_Equipo[MODELO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC1" name="Datos_Equipo[MODELO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputPS" name="Datos_Equipo[LOTE_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC1" name="Datos_Equipo[LOTE_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tiempoInputPS" name="Datos_Equipo[TIEMPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIEMPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputPS" name="Datos_Equipo[APLICACION_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[APLICACION_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputPS" name="Datos_Equipo[TIPO_GRUPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_GRUPO_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -311,16 +311,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Removedor:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-control inputForm" name="Consumible2" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Removedor</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -328,42 +328,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputR" name="Datos_Equipo[MARCA_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC2" name="Datos_Equipo[MARCA_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputR" name="Datos_Equipo[MODELO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC2" name="Datos_Equipo[MODELO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputR" name="Datos_Equipo[LOTE_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC2" name="Datos_Equipo[LOTE_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tiempoInputR" name="Datos_Equipo[TIEMPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIEMPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputR" name="Datos_Equipo[APLICACION_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[APLICACION_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputR" name="Datos_Equipo[TIPO_GRUPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_GRUPO_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -373,16 +373,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Reveleador:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-control inputForm" name="Consumible3" id="consumiblesSelect3">
                                             <option value="" selected disabled>Seleccione un Reveleador</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -390,42 +390,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputRR" name="Datos_Equipo[MARCA_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC3" name="Datos_Equipo[MARCA_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputRR" name="Datos_Equipo[MODELO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC3" name="Datos_Equipo[MODELO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputRR" name="Datos_Equipo[LOTE_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC3" name="Datos_Equipo[LOTE_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIEMPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tiempoInputRR" name="Datos_Equipo[TIEMPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIEMPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputRR" name="Datos_Equipo[APLICACION_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[APLICACION_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO/GRUPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipogrupoInputRR" name="Datos_Equipo[TIPO_GRUPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_GRUPO_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -1113,15 +1113,15 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta_componente[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta / Componente"></td>
+                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta / Componente"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Indicación"></td>
                             <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
                             <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Largo"></td>
                             <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="Ø[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
                             <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[6]}" placeholder="H.T."></td>
                             <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="lon_inspeccionada[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud Inspeccionada"></td>
+                            <td><input type="text" class="form-control" name="long_inspeccionada[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud Inspeccionada"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -1215,18 +1215,16 @@
 
             let newRow = `
                 <tr data-titulo="${lastTitle}">
-                    
-
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="no_junta_componente[${lastTitle}][]" placeholder="No. de Junta / Componente"></td>
+                    <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. de Junta / Componente"></td>
                     <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
                     <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
                     <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
-                    <td><input type="text" class="form-control" name="Ø[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="lon_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
+                    <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                 </tr>
             `;
@@ -1360,84 +1358,66 @@
         }
     });
 
-    /* $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }
-
-        });
-
+        /*Selects */
         $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
+            function actualizarInputsC1() {
+                var selectedOption = $('#consumiblesSelect1').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+                var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
+                $('#marcaInputC1').val(marca);
+                $('#modeloInputC1').val(modelo);
+                $('#loteInputC1').val(lote);
             }
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
+                $('#consumiblesSelect1').on('change', function() {
+                    actualizarInputsC1();
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
-                
             });
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+            $(document).ready(function() {
+            function actualizarInputsC2() {
+                var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+                var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
+                $('#marcaInputC2').val(marca);
+                $('#modeloInputC2').val(modelo);
+                $('#loteInputC2').val(lote);
             }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect2').on('change', function() {
+                    actualizarInputsC2();
+                });
             });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
+            $(document).ready(function() {
+            function actualizarInputsC3() {
+                var selectedOption = $('#consumiblesSelect3').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var lote = selectedOption.data('lote') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputC3').val(marca);
+                $('#modeloInputC3').val(modelo);
+                $('#loteInputC3').val(lote);
             }
-        });
- */
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect3').on('change', function() {
+                    actualizarInputsC3();
+                });
+            });
+
     </script>
 @endsection

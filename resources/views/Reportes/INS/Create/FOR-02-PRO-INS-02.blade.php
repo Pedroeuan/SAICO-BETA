@@ -1369,8 +1369,9 @@
         }
     });
 
+    /*Selects */
     $(document).ready(function() {
-            function actualizarInputsA() {
+            function actualizarInputsC1() {
                 var selectedOption = $('#consumiblesSelect1').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
@@ -1385,12 +1386,12 @@
             }
                 // Evento cuando se cambia la selección en el select
                 $('#consumiblesSelect1').on('change', function() {
-                    actualizarInputsA();
+                    actualizarInputsC1();
                 });
             });
 
             $(document).ready(function() {
-            function actualizarInputsA() {
+            function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
@@ -1405,7 +1406,7 @@
             }
                 // Evento cuando se cambia la selección en el select
                 $('#consumiblesSelect2').on('change', function() {
-                    actualizarInputsA();
+                    actualizarInputsC2();
                 });
             });
 
