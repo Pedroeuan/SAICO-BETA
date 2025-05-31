@@ -1022,7 +1022,7 @@
         }
     });
 
- /* Imágenes Al seleccionar numero de imagenes a subir*/
+    /* Imágenes Al seleccionar numero de imagenes a subir*/
     let cropper;
     let currentInput;
 
