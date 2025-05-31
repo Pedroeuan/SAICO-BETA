@@ -65,16 +65,15 @@
 <br>
 <br>
 <br>
+<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+<h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
+<h4 align="center">{{ $formatoNombrePersonalizado }}</h4>
+<br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body  w-100">
                             <form id="FOR-01-PRO-INS-03" action="{{route('Reportes_FOR_01_PRO_INS_03.store')}}" method="post" enctype="multipart/form-data">
-                                
                                 @csrf 
-                                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
-                                
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -800,7 +799,7 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
@@ -886,10 +885,21 @@
 
 <script>
     /*Prevenir el Enter*/
-    document.getElementById('FOR-01-PRO-INS-03').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    }
+                });
             }
+        });
+    });
+        $('#dynamicTable').on('keydown', 'input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 
  /* Imágenes */

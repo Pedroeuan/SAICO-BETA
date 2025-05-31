@@ -902,6 +902,11 @@
                 }
             });
         });
+        $('#dynamicTable').on('keydown', 'input', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
 
     /* Imágenes */
     let cropper;

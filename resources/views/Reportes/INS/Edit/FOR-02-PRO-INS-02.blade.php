@@ -76,7 +76,6 @@
 <br>
 <br>
 <br>
-
 <h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
 <h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
 <h4 align="center">{{ $formatoNombrePersonalizado }}</h4> 
@@ -527,46 +526,46 @@
 
                                             <tbody>
 
-                                            @php
-                                                $contador = 1;
-                                            @endphp
+                                                @php
+                                                    $contador = 1;
+                                                @endphp
 
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="20">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                                                @foreach ($Grupo_Juntas_Re as $grupo)
+                                                @php
+                                                    $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                @endphp
+                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
+                                                        <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                            <td colspan="20">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='componente[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['componente'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='largo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['largo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ancho[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ancho'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='longitud_inspeccionada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['longitud_inspeccionada'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                    @php $contador++; @endphp
+                                                    @foreach ($grupo['resultados'] as $resultado)
+                                                        <tr data-titulo="{{ $tituloKey }}">
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name='componente[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['componente'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='largo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['largo'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ancho[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ancho'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='longitud_inspeccionada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['longitud_inspeccionada'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                        </tr>
+                                                        @php $contador++; @endphp
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
                                             </tbody>
                                     </table>
 
@@ -970,15 +969,20 @@
 
         /*Prevenir el Enter*/
         document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-        if (element.tagName !== 'TEXTAREA') {
-            element.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    }
-                });
-            }
+        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+            if (element.tagName !== 'TEXTAREA') {
+                element.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        }
+                    });
+                }
+            });
         });
+            $('#dynamicTable').on('keydown', 'input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 
      /*Botón eliminar para imagenes subidas */
