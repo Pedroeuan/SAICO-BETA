@@ -530,7 +530,7 @@
                                                 @endphp
                                                     @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                         <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                            <td colspan="20">
+                                                            <td colspan="10">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                     <td>
@@ -1213,7 +1213,7 @@
         });
     });
 
-/*Juntas-Resultados */
+ /*Juntas-Resultados */
     function updateRowNumbers() {
         let count = 0;
         $('#dynamicTable tbody tr').each(function () {
@@ -1242,86 +1242,6 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
-            if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
-                // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
-                
-                tableData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="10">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `
-                        <tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta / Componente"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[6]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="long_inspeccionada[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud Inspeccionada"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
-    // Guardar datos en sessionStorage
-    function saveData() {
-        const tableData = [];
-        let rowNumber = 1;
-
-        $('#dynamicTable tbody tr').each(function () {
-            const isTitulo = $(this).hasClass('titulo-row');
-            const tituloId = $(this).data('titulo') || 'sin_titulo';
-
-            if (isTitulo) {
-                const tituloText = $(this).find('input[type="text"]').val();
-                tableData.push({ 
-                    type: 'titulo', 
-                    id: tituloId, 
-                    text: tituloText 
-                });
-            } else {
-                const inputs = $(this).find('input[type="text"]').map(function () {
-                    return $(this).val();
-                }).get();
-                
-                tableData.push({ 
-                    type: 'fila', 
-                    titulo: tituloId, 
-                    inputs: inputs,
-                    rowNumber: rowNumber
-                });
-                rowNumber++;
-            }
-    });
-
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
-    }
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1332,7 +1252,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1341,7 +1261,6 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
         });
 
         // Evento para eliminar un título
@@ -1356,7 +1275,6 @@
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
             updateRowNumbers(); // Si quieres actualizar el contador global
-            saveData();
         });
 
         $('#addBtn').click(function () {
@@ -1381,13 +1299,13 @@
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>
             `;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            //updateRowNumbers();
         }
     );
 
@@ -1395,7 +1313,7 @@
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
-            saveData();
+
         });
 
         $('#preFillBtn').click(function() {
@@ -1406,7 +1324,6 @@
                     }
                 });
             });
-            saveData();
         });
         
         $('form').submit(function(e) {
@@ -1423,7 +1340,7 @@
 
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
@@ -1431,8 +1348,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -1454,26 +1369,6 @@
         });
     });
 
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
 
         // Selección de Firmas
     document.addEventListener('DOMContentLoaded', function() {
