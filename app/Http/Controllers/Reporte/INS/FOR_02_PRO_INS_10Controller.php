@@ -421,7 +421,8 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = $titulo;
             $filas = $request->input("elemento_tubo.$tituloKey", []);
             $numFilas = count($filas);
         
