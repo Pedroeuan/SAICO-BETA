@@ -113,8 +113,8 @@
                 <th>No.ECO</th>
                 <th>Marca</th>
                 <th>Ultima calibración</th>
-                <th>Cantidad</th>
-                <th>Unidad</th>
+                <th style="width: 10%;">Cantidad</th>
+                <th style="width: 16%;">Unidad</th>
                 <th>Acciones</th>
             </tr>
         </thead>

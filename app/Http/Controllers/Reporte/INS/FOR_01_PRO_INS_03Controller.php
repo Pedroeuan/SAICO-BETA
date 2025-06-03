@@ -216,7 +216,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
+    public function FOR_01_PRO_INS_03_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
@@ -242,28 +242,36 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
-            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_PENETRANTES' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REMOVEDOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REVELEADOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.TIPO_LUZ' => 'nullable|string|max:255',
+            'Datos_Equipo.INTENCIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
@@ -271,26 +279,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
+            'componente' => 'nullable|array',
+            'no_indicacion' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
+            'largo' => 'nullable|array',
+            'ancho' => 'nullable|array',
+            'diametro' => 'nullable|array',
             'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
             'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
+            'long_inspeccionada' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:2,3,4',
@@ -383,7 +380,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -391,25 +388,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'componente' => $request->input("componente.$sinTituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'largo' => $request->input("largo.$sinTituloKey.$i"),
+                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
                     'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
                 ];
             }
         
@@ -422,32 +409,22 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
             $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("componente.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    'componente' => $request->input("componente.$TituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$TituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$TituloKey.$i"),
+                    'largo' => $request->input("largo.$TituloKey.$i"),
+                    'ancho' => $request->input("ancho.$TituloKey.$i"),
+                    'diametro' => $request->input("diametro.$TituloKey.$i"),
+                    'ht' => $request->input("ht.$TituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$TituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$TituloKey.$i"),
                 ];
             }
         
@@ -534,7 +511,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Codigo_Aplicable'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -561,12 +538,11 @@ class FOR_01_PRO_INS_03Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
+    public function FOR_01_PRO_INS_03_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
-
 
     public function FOR_01_PRO_INS_03_update(Request $request, $id)
     {
@@ -588,60 +564,57 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
-            /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.MARCA_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_PENETRANTES' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_PENETRANTES' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REMOVEDOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REMOVEDOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.LOTE_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.APLICACION_REVELEADOR' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_GRUPO_REVELEADOR' => 'nullable|string|max:255',
+
+            'Datos_Equipo.TIPO_LUZ' => 'nullable|string|max:255',
+            'Datos_Equipo.INTENCIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
+            'componente' => 'nullable|array',
+            'no_indicacion' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'largo' => 'nullable|array',
+            'ancho' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'long_inspeccionada' => 'nullable|array',
 
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:2,3,4',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
@@ -716,7 +689,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -724,25 +697,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'componente' => $request->input("componente.$sinTituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'largo' => $request->input("largo.$sinTituloKey.$i"),
+                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
                     'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
                 ];
             }
         
@@ -755,32 +718,22 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
             $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("componente.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    'componente' => $request->input("componente.$TituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$TituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$TituloKey.$i"),
+                    'largo' => $request->input("largo.$TituloKey.$i"),
+                    'ancho' => $request->input("ancho.$TituloKey.$i"),
+                    'diametro' => $request->input("diametro.$TituloKey.$i"),
+                    'ht' => $request->input("ht.$TituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$TituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$TituloKey.$i"),
                 ];
             }
         
@@ -954,7 +907,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
     }
 
 
-    public function FOR_INS_10_02($id)
+    public function FOR_INS_03_01($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();

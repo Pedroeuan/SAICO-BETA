@@ -348,11 +348,10 @@
                                                     <td class="">{{ $general->Marca ?? 'N/A' }}</td>
                                                     <td class="">{{ $general->Modelo ?? 'N/A' }}</td>
                                                 </tr>
-
+                                @endif
                                     @php
                                         $contador++; // Incrementa el contador
                                     @endphp
-                                @endif
                         @endforeach
 
                         @for($i = $contador; $i <= $minFilas; $i++)

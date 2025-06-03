@@ -249,12 +249,14 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.TIPO_PARTICULAS' => 'nullable|string|max:255',
             'Datos_Equipo.COLOR_PARTICULAS' => 'nullable|string|max:255',
             'Datos_Equipo.APLICACION_PARTICULAS' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_CONTRASTE' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_CONTRASTE' => 'nullable|string|max:255',
             'Datos_Equipo.LOTE_CONTRASTE' => 'nullable|string|max:255',
             'Datos_Equipo.TIPO_CONTRASTE' => 'nullable|string|max:255',
             'Datos_Equipo.COLOR_CONTRASTE' => 'nullable|string|max:255',
             'Datos_Equipo.APLICACION_CONTRASTE' => 'nullable|string|max:255',
+            
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',

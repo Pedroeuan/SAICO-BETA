@@ -1238,6 +1238,11 @@
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
+               // Si hay títulos pero lastTitle no empieza con "titulo_", corregirlo
+            /*if ($('.titulo-row').length > 0 && !lastTitle.startsWith('titulo_')) {
+                lastTitle = 'titulo_' + lastTitle.split('_').pop();
+            }
+            */
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable

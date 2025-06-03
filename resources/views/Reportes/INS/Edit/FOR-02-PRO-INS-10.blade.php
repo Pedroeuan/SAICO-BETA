@@ -66,7 +66,6 @@
 <br>
 <br>
 <br>
-
 <h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
 <h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
 <h4 align="center">{{ $formatoNombrePersonalizado }}</h4>
@@ -980,15 +979,20 @@
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-        if (element.tagName !== 'TEXTAREA') {
-            element.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    }
-                });
-            }
+        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+            if (element.tagName !== 'TEXTAREA') {
+                element.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        }
+                    });
+                }
+            });
         });
+        $('#dynamicTable').on('keydown', 'input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 
     /*Botón eliminar para imagenes subidas */
@@ -1295,7 +1299,8 @@
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? 'titulo_' + $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
