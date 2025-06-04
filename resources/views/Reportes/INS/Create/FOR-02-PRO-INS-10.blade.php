@@ -1232,17 +1232,47 @@
             saveData();
         });
 
+        // ...existing code...
+            $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
+
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
+
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
+
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
+            saveData();
+        });
+        // ...existing code...
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            console.log('Último título:', lastTitle);
 
-               // Si hay títulos pero lastTitle no empieza con "titulo_", corregirlo
-            /*if ($('.titulo-row').length > 0 && !lastTitle.startsWith('titulo_')) {
-                lastTitle = 'titulo_' + lastTitle.split('_').pop();
-            }
-            */
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
