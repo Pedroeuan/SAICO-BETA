@@ -1161,38 +1161,37 @@
             }
         }
 
-    // Guardar datos en sessionStorage
+    /*Guarda en sesionstorage */
     function saveData() {
-        const tableData = [];
-        let rowNumber = 1;
-
+        const data = [];
+        
         $('#dynamicTable tbody tr').each(function () {
-            const isTitulo = $(this).hasClass('titulo-row');
-            const tituloId = $(this).data('titulo') || 'sin_titulo';
-
+            const tr = $(this);
+            const isTitulo = tr.hasClass('titulo-row');
+            const tituloId = tr.attr('data-titulo');
+            
             if (isTitulo) {
-                const tituloText = $(this).find('input[type="text"]').val();
-                tableData.push({ 
-                    type: 'titulo', 
-                    id: tituloId, 
-                    text: tituloText 
+                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+                data.push({
+                    type: 'titulo',
+                    id: tituloId,
+                    text: tituloText
                 });
             } else {
-                const inputs = $(this).find('input[type="text"]').map(function () {
+                const inputs = tr.find('input').map(function () {
                     return $(this).val();
                 }).get();
-                
-                tableData.push({ 
-                    type: 'fila', 
-                    titulo: tituloId, 
-                    inputs: inputs,
-                    rowNumber: rowNumber
+
+                data.push({
+                    type: 'fila',
+                    titulo: tituloId,
+                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
+                    inputs: inputs
                 });
-                rowNumber++;
             }
         });
 
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
     }
 
         $('#addTituloBtn').click(function () {
@@ -1232,8 +1231,8 @@
             saveData();
         });
 
-        // ...existing code...
-            $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
             const input = $(this);
             const text = input.val().trim();
             const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
@@ -1264,14 +1263,12 @@
             updateTitulos();
             saveData();
         });
-        // ...existing code...
 
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            console.log('Último título:', lastTitle);
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas

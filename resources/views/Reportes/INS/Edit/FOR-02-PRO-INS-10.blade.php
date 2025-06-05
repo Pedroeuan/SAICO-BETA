@@ -509,7 +509,8 @@
 
                                             @foreach ($Grupo_Juntas_Re as $grupo)
                                             @php
-                                                $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
@@ -527,27 +528,50 @@
                                                 @endif
 
                                                 @foreach ($grupo['resultados'] as $resultado)
+                                                    <!-- <tr data-titulo="{{ $tituloKey }}">
+                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td><input type="text" class="form-control" name='elemento_tubo[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['elemento_tubo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_aceptacion[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_aceptacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_serie[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_serie'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_colada[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_colada'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tnominal[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tnominal'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nr[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ni[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='prof[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['prof'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='la[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='lc[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmax[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmin[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='metros_lineales[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['metros_lineales'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='observaciones[@if($grupo["titulos_juntas"] != "SIN TITULO"){{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['observaciones'] }}"></td>
+                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                    </tr>-->
                                                     <tr data-titulo="{{ $tituloKey }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='elemento_tubo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['elemento_tubo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_aceptacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_aceptacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_serie[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_serie'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_colada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_colada'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tnominal[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tnominal'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nr[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ni[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='prof[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['prof'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='la[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='lc[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmax[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmin[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='metros_lineales[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['metros_lineales'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['observaciones'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='elemento_tubo[{{ $tituloKey }}][]' value="{{ $resultado['elemento_tubo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_aceptacion[{{ $tituloKey }}][]' value="{{ $resultado['no_aceptacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_serie[{{ $tituloKey }}][]' value="{{ $resultado['no_serie'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_colada[{{ $tituloKey }}][]' value="{{ $resultado['no_colada'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tnominal[{{ $tituloKey }}][]' value="{{ $resultado['tnominal'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='diametro[{{ $tituloKey }}][]' value="{{ $resultado['diametro'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_ind[{{ $tituloKey }}][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tipo_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nr[{{ $tituloKey }}][]' value="{{ $resultado['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ni[{{ $tituloKey }}][]' value="{{ $resultado['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='prof[{{ $tituloKey }}][]' value="{{ $resultado['prof'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='la[{{ $tituloKey }}][]' value="{{ $resultado['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='lc[{{ $tituloKey }}][]' value="{{ $resultado['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmax[{{ $tituloKey }}][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmin[{{ $tituloKey }}][]' value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='metros_lineales[{{ $tituloKey }}][]' value="{{ $resultado['metros_lineales'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp
@@ -1260,6 +1284,38 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
+    function saveData() {
+        const data = [];
+        
+        $('#dynamicTable tbody tr').each(function () {
+            const tr = $(this);
+            const isTitulo = tr.hasClass('titulo-row');
+            const tituloId = tr.attr('data-titulo');
+            
+            if (isTitulo) {
+                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+                data.push({
+                    type: 'titulo',
+                    id: tituloId,
+                    text: tituloText
+                });
+            } else {
+                const inputs = tr.find('input').map(function () {
+                    return $(this).val();
+                }).get();
+
+                data.push({
+                    type: 'fila',
+                    titulo: tituloId,
+                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
+                    inputs: inputs
+                });
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
+    }
+
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1295,12 +1351,46 @@
             updateRowNumbers(); // Si quieres actualizar el contador global
         });
 
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
+
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
+
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
+
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) 
+                        {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        //name = name.replace(new RegExp(`\\[${oldTitulo}\\]`, 'g'), `[${safeTitulo}]`);
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
+            saveData();
+        });
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            let lastTitle = $('.titulo-row').length > 0 ? 'titulo_' + $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
