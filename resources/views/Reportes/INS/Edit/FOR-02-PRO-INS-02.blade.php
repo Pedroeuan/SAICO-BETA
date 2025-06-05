@@ -532,11 +532,12 @@
 
                                                 @foreach ($Grupo_Juntas_Re as $grupo)
                                                 @php
-                                                    $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                    $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                    $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                                 @endphp
                                                     @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                         <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                            <td colspan="20">
+                                                            <td colspan="10">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                     <td>
@@ -552,15 +553,15 @@
                                                     @foreach ($grupo['resultados'] as $resultado)
                                                         <tr data-titulo="{{ $tituloKey }}">
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                            <td><input type="text" class="form-control" name='componente[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['componente'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='largo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['largo'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='ancho[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ancho'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='longitud_inspeccionada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['longitud_inspeccionada'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='componente[{{ $tituloKey }}][]' value="{{ $resultado['componente'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='no_ind[{{ $tituloKey }}][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tipo_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='largo[{{ $tituloKey }}][]' value="{{ $resultado['largo'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='diametro[{{ $tituloKey }}][]' value="{{ $resultado['diametro'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='longitud_inspeccionada[{{ $tituloKey }}][]' value="{{ $resultado['longitud_inspeccionada'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                         </tr>
                                                         @php $contador++; @endphp
@@ -1250,6 +1251,38 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
+        function saveData() {
+        const data = [];
+        
+        $('#dynamicTable tbody tr').each(function () {
+            const tr = $(this);
+            const isTitulo = tr.hasClass('titulo-row');
+            const tituloId = tr.attr('data-titulo');
+            
+            if (isTitulo) {
+                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+                data.push({
+                    type: 'titulo',
+                    id: tituloId,
+                    text: tituloText
+                });
+            } else {
+                const inputs = tr.find('input').map(function () {
+                    return $(this).val();
+                }).get();
+
+                data.push({
+                    type: 'fila',
+                    titulo: tituloId,
+                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
+                    inputs: inputs
+                });
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
+    }
+
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1283,6 +1316,41 @@
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
             updateRowNumbers(); // Si quieres actualizar el contador global
+        });
+
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
+
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
+
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
+
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) 
+                        {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        //name = name.replace(new RegExp(`\\[${oldTitulo}\\]`, 'g'), `[${safeTitulo}]`);
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
+            saveData();
         });
 
         $('#addBtn').click(function () {
