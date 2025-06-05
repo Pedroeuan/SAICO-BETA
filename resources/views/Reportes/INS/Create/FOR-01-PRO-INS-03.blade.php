@@ -65,9 +65,10 @@
 <br>
 <br>
 <br>
-<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
-<h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
-<h4 align="center">{{ $formatoNombrePersonalizado }}</h4>
+
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
@@ -1142,38 +1143,37 @@
             }
         }
 
-    // Guardar datos en sessionStorage
+/*Guarda en sesionstorage */
     function saveData() {
-        const tableData = [];
-        let rowNumber = 1;
-
+        const data = [];
+        
         $('#dynamicTable tbody tr').each(function () {
-            const isTitulo = $(this).hasClass('titulo-row');
-            const tituloId = $(this).data('titulo') || 'sin_titulo';
-
+            const tr = $(this);
+            const isTitulo = tr.hasClass('titulo-row');
+            const tituloId = tr.attr('data-titulo');
+            
             if (isTitulo) {
-                const tituloText = $(this).find('input[type="text"]').val();
-                tableData.push({ 
-                    type: 'titulo', 
-                    id: tituloId, 
-                    text: tituloText 
+                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+                data.push({
+                    type: 'titulo',
+                    id: tituloId,
+                    text: tituloText
                 });
             } else {
-                const inputs = $(this).find('input[type="text"]').map(function () {
+                const inputs = tr.find('input').map(function () {
                     return $(this).val();
                 }).get();
-                
-                tableData.push({ 
-                    type: 'fila', 
-                    titulo: tituloId, 
-                    inputs: inputs,
-                    rowNumber: rowNumber
-                });
-                rowNumber++;
-            }
-    });
 
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
+                data.push({
+                    type: 'fila',
+                    titulo: tituloId,
+                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
+                    inputs: inputs
+                });
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
     }
 
         $('#addTituloBtn').click(function () {
@@ -1210,6 +1210,39 @@
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
             updateRowNumbers(); // Si quieres actualizar el contador global
+            saveData();
+        });
+
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
+
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
+
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
+
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
             saveData();
         });
 

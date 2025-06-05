@@ -408,7 +408,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("componente.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -416,15 +417,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'componente' => $request->input("componente.$TituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$TituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$TituloKey.$i"),
-                    'largo' => $request->input("largo.$TituloKey.$i"),
-                    'ancho' => $request->input("ancho.$TituloKey.$i"),
-                    'diametro' => $request->input("diametro.$TituloKey.$i"),
-                    'ht' => $request->input("ht.$TituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$TituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$TituloKey.$i"),
+                    'componente' => $request->input("componente.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'largo' => $request->input("largo.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$tituloKey.$i"),
                 ];
             }
         
@@ -717,7 +718,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("componente.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -725,15 +727,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'componente' => $request->input("componente.$TituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$TituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$TituloKey.$i"),
-                    'largo' => $request->input("largo.$TituloKey.$i"),
-                    'ancho' => $request->input("ancho.$TituloKey.$i"),
-                    'diametro' => $request->input("diametro.$TituloKey.$i"),
-                    'ht' => $request->input("ht.$TituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$TituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$TituloKey.$i"),
+                    'componente' => $request->input("componente.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'largo' => $request->input("largo.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$tituloKey.$i"),
                 ];
             }
         
