@@ -318,7 +318,6 @@
                             <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
-
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>

@@ -473,7 +473,11 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        if($Nombre_Formato == "FOR-01-PRO-INS-03")
+        {
+            return redirect()->route('Reporte_FOR_INS_03_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
         {
             return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
         }
