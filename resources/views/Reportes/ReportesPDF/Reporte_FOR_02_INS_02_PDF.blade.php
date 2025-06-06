@@ -4,45 +4,6 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-02/01</title>
             <style>
-                /*@page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
-                /*}
-                header {
-                    position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
-                    /*left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    /*border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: fixed;
-                    bottom: 100px; /* Ajustar para que quede dentro del margen inferior */
-                    /*left: 0;
-                    right: 0;
-                    height: 80px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    /*border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 255px; /* Ajusta según el tamaño de tu encabezado */
-                    /*font-family: 'arial', sans-serif;
-                }
-                .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
-                    /*margin-bottom: 200px; /* Evita superposición con el footer */
-                /*}
-
-                .table-container {
-                    margin: 100px 0;
-                }
-                */
                 @page {
                     margin: 
                     /*3.0cm /* superior */
