@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-10/02</title>
+            <title>FORMATO FOR-01-INS-03</title>
             <style>
                 @page {
                     margin: 
@@ -218,16 +218,16 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-10/02</th>
+                            <th style="width: 80%;">FOR-INS-03/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>3</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -291,7 +291,7 @@
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Codigo_Aplicable'] }}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -1153,7 +1153,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
     }
 
 
-    public function FOR_INS_10_02($id)
+    public function FOR_02_INS_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -1202,7 +1202,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-02-INS-10.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1225,10 +1225,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1268,7 +1268,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_02_INS_10.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

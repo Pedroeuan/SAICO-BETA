@@ -307,8 +307,8 @@
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                            <th style="width: 160px;">CÓDIGO APLICABLE:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Codigo_Aplicable'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -341,7 +341,7 @@
                                 <td>{{ $Datos_Equipo['LOTE_PENETRANTES'] }}</td>
                                 <td>{{ $Datos_Equipo['TIEMPO_PENETRANTES'] }}</td>
                                 <td>{{ $Datos_Equipo['APLICACION_PENETRANTES'] }}</td>
-                                <td>{{ $Datos_Equipo['TIPO_PENETRANTES'] }}</td>
+                                <td>{{ $Datos_Equipo['TIPO_GRUPO_PENETRANTES'] }}</td>
                             </tr>
                             <tr>
                                 <th class="celdaGris">REMOVEDOR:</th>
@@ -350,7 +350,7 @@
                                 <td>{{ $Datos_Equipo['LOTE_REMOVEDOR'] }}</td>
                                 <td>{{ $Datos_Equipo['TIEMPO_REMOVEDOR'] }}</td>
                                 <td>{{ $Datos_Equipo['APLICACION_REMOVEDOR'] }}</td>
-                                <td>{{ $Datos_Equipo['TIPO_REMOVEDOR'] }}</td>
+                                <td>{{ $Datos_Equipo['TIPO_GRUPO_REMOVEDOR'] }}</td>
                             </tr>
                             <tr>
                                 <th class="celdaGris">REVELEADOR:</th>
@@ -359,7 +359,7 @@
                                 <td>{{ $Datos_Equipo['LOTE_REVELEADOR'] }}</td>
                                 <td>{{ $Datos_Equipo['TIEMPO_REVELEADOR'] }}</td>
                                 <td>{{ $Datos_Equipo['APLICACION_REVELEADOR'] }}</td>
-                                <td>{{ $Datos_Equipo['TIPO_REVELEADOR'] }}</td>
+                                <td>{{ $Datos_Equipo['TIPO_GRUPO_REVELEADOR'] }}</td>
                             </tr>
 
                         </tbody>
