@@ -105,10 +105,10 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 10px;
-            background-color: #2F75B5;
+            font-size: 8px;
+            background-color: #305496;
             color: #ffffff;
-            outline: 2px double #000000; /* Contorno externo */
+            outline: 1px double #000000; /* Contorno externo */
         }
 
         .border {
