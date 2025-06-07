@@ -194,10 +194,10 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 600%;">FORMATO</th>
-                            <th style="width: 80%;">Código:</th>
+                            <th style="width: 400%;">FORMATO</th>
+                            <th style="width: 70%;">Código:</th>
                             <th style="width: 100%;">FOR-INS-03/01</th>
-                            <th rowspan="3" style="width: 100%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: 7%;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: 6%;"></th>
                         </tr>
                     </thead>
 
