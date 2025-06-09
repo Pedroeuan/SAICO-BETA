@@ -776,10 +776,9 @@
                                                     $totalMetros = 0;
                                                 @endphp
                                             @endif
-
                                     @endforeach
                                     
-                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>15)
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>15 || $titulo != 'SIN TITULO')
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
@@ -789,7 +788,6 @@
                                             </tr>
                                         @endif
                                     @endif
-
                                 </tbody>
                     </table>
                 </div>

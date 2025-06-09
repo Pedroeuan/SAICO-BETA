@@ -660,7 +660,7 @@
 
                                     @endforeach
                                     
-                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>20)
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>20 || $titulo != 'SIN TITULO')
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
