@@ -818,8 +818,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-
-
+    /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -857,16 +856,16 @@
                             <td><input type="text" class="form-control" name="ang_inspeccion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Angulo de Inspección"></td>
                             <td><input type="text" class="form-control" name="dsd_cara[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Cara"></td>
                             <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Pierna"></td>
-                            <td><input type="text" class="form-control" name="nvl_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="a"></td>
-                            <td><input type="text" class="form-control" name="nvl_referencia[${item.titulo}][]" value="${item.inputs[6]}" placeholder="b"></td>
-                            <td><input type="text" class="form-control" name="ftr_atenuacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="c"></td>
-                            <td><input type="text" class="form-control" name="rlcn_indicacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="d"></td>
-                            <td><input type="text" class="form-control" name="long[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="dis_angualar[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Distancia Angular"></td>
-                            <td><input type="text" class="form-control" name="produndidad[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Profundidad A"></td>
+                            <td><input type="text" class="form-control" name="decibel_a[${item.titulo}][]" value="${item.inputs[5]}" placeholder="a"></td>
+                            <td><input type="text" class="form-control" name="decibel_b[${item.titulo}][]" value="${item.inputs[6]}" placeholder="b"></td>
+                            <td><input type="text" class="form-control" name="decibel_c[${item.titulo}][]" value="${item.inputs[7]}" placeholder="c"></td>
+                            <td><input type="text" class="form-control" name="decibel_d[${item.titulo}][]" value="${item.inputs[8]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="dis_angular[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="profundidad_a[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Profundidad A"></td>
                             <td><input type="text" class="form-control" name="pos_x[${item.titulo}][]" value="${item.inputs[12]}" placeholder="x"></td>
                             <td><input type="text" class="form-control" name="pos_y[${item.titulo}][]" value="${item.inputs[13]}" placeholder="y"></td>
-                            <td><input type="text" class="form-control" name="class_discontinuidad[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Discontinuidad"></td>
+                            <td><input type="text" class="form-control" name="discontinuidad[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Discontinuidad"></td>
                             <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[15]}" placeholder="Evaluación"></td>
                             <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
@@ -901,8 +900,6 @@
         saveData();
         });
 
-
-
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
@@ -921,16 +918,16 @@
                             <td><input type="text" class="form-control" name="ang_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
                             <td><input type="text" class="form-control" name="dsd_cara[${lastTitle}][]" placeholder="Cara"></td>
                             <td><input type="text" class="form-control" name="pierna[${lastTitle}][]" placeholder="Pierna"></td>
-                            <td><input type="text" class="form-control" name="nvl_indicacion[${lastTitle}][]" placeholder="a"></td>
-                            <td><input type="text" class="form-control" name="nvl_referencia[${lastTitle}][]" placeholder="b"></td>
-                            <td><input type="text" class="form-control" name="ftr_atenuacion[${lastTitle}][]" placeholder="c"></td>
-                            <td><input type="text" class="form-control" name="rlcn_indicacion[${lastTitle}][]" placeholder="d"></td>
-                            <td><input type="text" class="form-control" name="long[${lastTitle}][]" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="dis_angualar[${lastTitle}][]" placeholder="Distancia Angular"></td>
-                            <td><input type="text" class="form-control" name="produndidad[${lastTitle}][]" placeholder="Profundidad A"></td>
+                            <td><input type="text" class="form-control" name="decibel_a[${lastTitle}][]" placeholder="a"></td>
+                            <td><input type="text" class="form-control" name="decibel_b[${lastTitle}][]" placeholder="b"></td>
+                            <td><input type="text" class="form-control" name="decibel_c[${lastTitle}][]" placeholder="c"></td>
+                            <td><input type="text" class="form-control" name="decibel_d[${lastTitle}][]" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="longitud[${lastTitle}][]" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="dis_angular[${lastTitle}][]" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="profundidad_a[${lastTitle}][]" placeholder="Profundidad A"></td>
                             <td><input type="text" class="form-control" name="pos_x[${lastTitle}][]" placeholder="x"></td>
                             <td><input type="text" class="form-control" name="pos_y[${lastTitle}][]" placeholder="y"></td>
-                            <td><input type="text" class="form-control" name="class_discontinuidad[${lastTitle}][]" placeholder="Discontinuidad"></td>
+                            <td><input type="text" class="form-control" name="discontinuidad[${lastTitle}][]" placeholder="Discontinuidad"></td>
                             <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                             <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
@@ -988,7 +985,6 @@
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-
         });
 
         $(document).ready(function() {
