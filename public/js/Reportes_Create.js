@@ -1,149 +1,22 @@
 
- 
+    /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-            if (element.tagName !== 'TEXTAREA') {
-                element.addEventListener('keydown', function (event) {
+    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+        if (element.tagName !== 'TEXTAREA') {
+            element.addEventListener('keydown', function (event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
                     }
                 });
-            }});
+            }
+        });
     });
-
+    
     $('#dynamicTable').on('keydown', 'input', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
         }
     });
-
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto
-        function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
-
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
-
-
-
-         // Guardar datos en sessionStorage
-    function saveData() {
-        const tableData = [];
-        let rowNumber = 1;
-
-        $('#dynamicTable tbody tr').each(function () {
-            const isTitulo = $(this).hasClass('titulo-row');
-            const tituloId = $(this).data('titulo') || 'sin_titulo';
-
-            if (isTitulo) {
-                const tituloText = $(this).find('input[type="text"]').val();
-                tableData.push({ 
-                    type: 'titulo', 
-                    id: tituloId, 
-                    text: tituloText 
-                });
-            } else {
-                const inputs = $(this).find('input[type="text"]').map(function () {
-                    return $(this).val();
-                }).get();
-                
-                tableData.push({ 
-                    type: 'fila', 
-                    titulo: tituloId, 
-                    inputs: inputs,
-                    rowNumber: rowNumber
-                });
-                rowNumber++;
-            }
-        });
-
-            sessionStorage.setItem('dynamicTableData', JSON.stringify(tableData));
-    }
-
-    // Evento para eliminar un título
-        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            let tituloRow = $(this).closest('tr');
-            let tituloId = tituloRow.data('titulo');
-            
-            // Eliminar la fila del título
-            tituloRow.remove();
-            
-            console.log("se ejecuta el evento ");
-
-            // Eliminar todas las filas que tengan el mismo data-titulo
-            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-            updateRowNumbers(); // Si quieres actualizar el contador global
-            saveData();
-        });
-
-
-        
-
-
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-            saveData();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-            saveData();
-        });
-
-        
-
-
-        /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-            // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-        titulos.push($(this).val());
-        });
-            // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
-
-
-
 
     /* Imágenes */
     let cropper;
@@ -310,7 +183,141 @@
         });
     });
 
-document.addEventListener("DOMContentLoaded", function () {
+    /*Juntas-Resultados */
+    function updateRowNumbers() {
+        let count = 0;
+        $('#dynamicTable tbody tr').each(function () {
+            if (!$(this).hasClass('titulo-row')) {
+                count++;
+                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+            }
+        });
+        rowCountGlobal = count;
+    }
+
+    // Función para actualizar los títulos en el campo oculto
+        function updateTitulos() {
+            var titulos = [];
+            // Recolectar todos los títulos en el array
+            $('.titulo-row input[type="text"]').each(function() {
+                titulos.push($(this).val());
+            });
+
+            // Asignar los títulos al campo oculto
+            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        }
+
+    /*Guarda en sesionstorage */
+    function saveData() {
+        const data = [];
+        
+        $('#dynamicTable tbody tr').each(function () {
+            const tr = $(this);
+            const isTitulo = tr.hasClass('titulo-row');
+            const tituloId = tr.attr('data-titulo');
+            
+            if (isTitulo) {
+                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+                data.push({
+                    type: 'titulo',
+                    id: tituloId,
+                    text: tituloText
+                });
+            } else {
+                const inputs = tr.find('input').map(function () {
+                    return $(this).val();
+                }).get();
+
+                data.push({
+                    type: 'fila',
+                    titulo: tituloId,
+                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
+                    inputs: inputs
+                });
+            }
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
+    }
+
+        // Evento para eliminar un título
+        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+            let tituloRow = $(this).closest('tr');
+            let tituloId = tituloRow.data('titulo');
+            
+            // Eliminar la fila del título
+            tituloRow.remove();
+            
+            // Eliminar todas las filas que tengan el mismo data-titulo
+            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+
+            updateRowNumbers(); // Si quieres actualizar el contador global
+            saveData();
+        });
+
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
+
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
+
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
+
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
+            saveData();
+        });
+
+        $('#dynamicTable').on('click', '.btnEliminar', function() {
+            $(this).closest('tr').remove();
+            updateRowNumbers();
+            saveData();
+        });
+
+        $('#preFillBtn').click(function() {
+            $('#dynamicTable tbody tr').each(function() {
+                $(this).find('input').each(function() {
+                    if ($(this).val() === '') {
+                        $(this).val('----');
+                    }
+                });
+            });
+            saveData();
+        });
+
+    // Función para actualizar los títulos en el campo oculto
+    function updateTitulos() {
+        var titulos = [];
+            // Recolectar todos los títulos en el array
+        $('.titulo-row input[type="text"]').each(function() {
+        titulos.push($(this).val());
+        });
+            // Asignar los títulos al campo oculto
+        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+    }
+
+    /*llenado de campos vacios*/
+    document.addEventListener("DOMContentLoaded", function () {
         const inputFields = document.querySelectorAll(".default-input");
 
         inputFields.forEach(input => {
@@ -329,51 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
-
-
-    /*Selección de Firmas */
-
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas2 = document.getElementById('firmas2');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '2') {
-                firmas2.style.display = 'block';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'none';
-            } else if (this.value == '3') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
-            }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '2') {
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '3') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
-    });
-
-
-        /*Pre-Rellenado del formulario */
+    /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("preFormBtn").addEventListener("click", function () {
             // Seleccionar todos los inputs y textareas del formulario
@@ -394,68 +357,43 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    /*Selects */
-    $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
+    /*Selección de Firmas */
+        document.addEventListener('DOMContentLoaded', function() {
+        const numFirmasSelect = document.getElementById('numFirmas');
+        const firmas2 = document.getElementById('firmas2');
+        const firmas3 = document.getElementById('firmas3');
+        const firmas4 = document.getElementById('firmas4');
 
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
+        numFirmasSelect.addEventListener('change', function() {
+            if (this.value == '2') {
+                firmas2.style.display = 'block';
+                firmas3.style.display = 'none';
+                firmas4.style.display = 'none';
+            }
+            else if (this.value == '3') {
+                firmas2.style.display = 'none';
+                firmas3.style.display = 'block';
+                firmas4.style.display = 'none';
+            } else if (this.value == '4') {
+                firmas2.style.display = 'none';
+                firmas3.style.display = 'none';
+                firmas4.style.display = 'block';
+            }
+        });
 
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
+        // Inicializar la visibilidad de las secciones de firmas
+        if (numFirmasSelect.value == '2') {
+            firmas2.style.display = 'block';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
         }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-        });
-
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-            });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-        });
+        else if (numFirmasSelect.value == '3') {
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'block';
+            firmas4.style.display = 'none';
+        } else if (numFirmasSelect.value == '4') {
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'block';
+        }
+    });

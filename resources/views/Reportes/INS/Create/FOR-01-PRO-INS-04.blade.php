@@ -66,18 +66,18 @@
 <br>
 <br>
 <br>
+
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body w-100">
                             <form id="FOR-01-PRO-INS-04" action="{{route('Reportes_FOR_01_PRO_INS_04.store')}}" method="post" enctype="multipart/form-data">
-                                
                                 @csrf
-                                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
-
                                 <div class="row">
-                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Pre-rellenar Formulario "---"</button>
+                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
@@ -253,14 +253,14 @@
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
                                                             data-modelo="{{ $equipo->Modelo }}"
                                                             data-ns="{{ $equipo->Serie }}">
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -288,19 +288,20 @@
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">TRANSDUCTOR</div>
 
+                                    <!-- Select para Accesorios -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Transductor:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un Transductor</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
+                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <option value="" selected disabled>Seleccione un Accesorio</option>
+                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                            data-marca="{{ $accesorios->Marca }}"
+                                                            data-modelo="{{ $accesorios->Modelo }}"
+                                                            data-ns="{{ $accesorios->Serie }}">
+                                                        {{ $accesorios->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -308,21 +309,21 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputT" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputT" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputT" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="">
                                         </div>
                                     </div>
 
@@ -341,14 +342,14 @@
                                             <label class="col-form-label" for="inputSuccess">Block y Probeta:</label>
                                             <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                                             <option value="" selected disabled>Seleccione un Block o Probeta</option>
-                                                {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
                                                             data-marca="{{ $blockyprobeta->Marca }}"
                                                             data-modelo="{{ $blockyprobeta->Modelo }}"
                                                             data-ns="{{ $blockyprobeta->Serie }}">
                                                         {{ $blockyprobeta->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -484,11 +485,11 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="6"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="7"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="8"></th>
@@ -500,7 +501,7 @@
                                                 <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="15"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="17"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="17" style="width: 120px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -728,7 +729,7 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
@@ -806,7 +807,10 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<!--
 <script src="{{ asset('js/includes.js') }}"></script>
+-->
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -814,6 +818,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
+
 
     $(document).ready(function() {
         let tituloCount = 0;
@@ -896,6 +901,8 @@
         saveData();
         });
 
+
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
@@ -906,9 +913,8 @@
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = 
-
-            `<tr data-titulo="${lastTitle}">
+            let newRow = `
+                        <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                             <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
@@ -962,5 +968,69 @@
             restoreData();
     });
 
+    /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+        });
+
+        $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            });
+
+        $(document).ready(function() {
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+        });
 </script>
 @endsection
