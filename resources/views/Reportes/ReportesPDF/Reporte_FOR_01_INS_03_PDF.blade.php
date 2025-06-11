@@ -557,28 +557,28 @@
                     <table class="datosresultados">
 
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="20">RESULTADOS</th></tr>
+                            <tr><th colspan="10">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+                            <thead><tr class="sinBordeth"><th colspan="10"></th></tr></thead> <!-- Fila vacia -->
 
                             <thead>
                                 <tr class="celdaGris">
-                                    <th rowspan= "2" style="width: 20%;">No.</th>
-                                    <th rowspan= "2">No. De Junta / Componente</th>
+                                    <th rowspan= "2">No.</th>
+                                    <th rowspan= "2" style="width: 10%;">No. De Junta / Componente</th>
                                     <th rowspan= "2">No. Indicación</th>
                                     <th rowspan= "2">Tipo de Indicación</th>
-                                    <th colspan="3">Dim. De Indicación</th>
+                                    <th colspan= "3">Dim. De Indicación</th>
 
-                                    <th style="width: 80%;">Localización</th>
-                                    <th rowspan= "2" style="width: 100%;">Evaluación</th>
-                                    <th rowspan= "2" style="width: 150%;">Longitud Inspeccionada</th>
+                                    <th>Localización</th>
+                                    <th rowspan= "2">Evaluación</th>
+                                    <th rowspan= "2">Longitud Inspeccionada</th>
                                 </tr>
                                 <tr class="celdaGris">
-                                    <th style="width: 50%;">Largo</th>
-                                    <th style="width: 80%;">Ancho</th>
-                                    <th style="width: 80%;">Ø</th>
-                                    <th style="width: 50%;">H.T.</th>
+                                    <th>Largo</th>
+                                    <th>Ancho</th>
+                                    <th>Ø</th>
+                                    <th>H.T.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -600,7 +600,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="20" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="10" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>

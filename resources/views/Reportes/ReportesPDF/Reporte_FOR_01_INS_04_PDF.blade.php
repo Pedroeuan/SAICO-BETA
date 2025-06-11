@@ -322,7 +322,7 @@
                             <td class="lineaInferior">1</td><td style="text-align: left; width: 2%;"> dB </td>
                             <th style="width: 100px;">TIPO DE JUNTA:</th>
                             <td class="lineaInferior">2</td>
-                            <th rowspan="3" style="width: 100px;"><img class="FOR_INS_04_01" src="{{ $FOR_INS_04_01 }}" alt="FOR_INS_04_01" style="width: 80px; height: auto;"></th>
+                            <th rowspan="3" style="width: 100px;"><img class="FOR_01_INS_04" src="{{ $FOR_01_INS_04 }}" alt="FOR_01_INS_04" style="width: 80px; height: auto;"></th>
                         </tr>
                         <tr class="">
                             <th>RECHAZO:</th>
