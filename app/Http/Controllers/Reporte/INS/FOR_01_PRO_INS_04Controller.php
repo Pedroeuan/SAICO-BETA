@@ -246,7 +246,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
@@ -580,7 +580,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FRECC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
@@ -1033,7 +1033,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
             $combinedPdf->AddPage('p');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -181);
+            $combinedPdf->SetXY(137, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 

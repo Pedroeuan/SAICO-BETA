@@ -329,8 +329,8 @@
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" id="freccInputT" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" id="freccInputT" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="">
                                         </div>
                                     </div>
 

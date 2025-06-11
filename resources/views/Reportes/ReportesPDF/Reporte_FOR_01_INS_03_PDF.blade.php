@@ -75,6 +75,7 @@
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
                 @endif
+                
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
