@@ -504,8 +504,7 @@
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
-
-<tbody>
+                                        <tbody>
                                             @php
                                                 $contador = 1;
                                             @endphp
@@ -960,7 +959,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            //saveData();
         }
     );
 

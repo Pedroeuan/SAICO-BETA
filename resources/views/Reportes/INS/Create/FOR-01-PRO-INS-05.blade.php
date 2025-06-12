@@ -810,7 +810,7 @@
 
 <script>
 
-     $(document).ready(function() {
+    $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;

@@ -468,14 +468,14 @@ class FOR_02_PRO_INS_04Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos";  /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos";  /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_02_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -583,22 +583,15 @@ class FOR_02_PRO_INS_04Controller extends Controller
             /* FILAS DINÁMICAS */
             'no_junta' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
-            'ang_inspeccion' => 'nullable|array',
-            'dsd_cara' => 'nullable|array',
-            'pierna' => 'nullable|array',
-            'decibel_a' => 'nullable|array',
-            'decibel_b' => 'nullable|array',
-            'decibel_c' => 'nullable|array',
-            'decibel_d' => 'nullable|array',
-            'longitud' => 'nullable|array',
-            'dis_angular' => 'nullable|array',
-            'profundidad_a' => 'nullable|array',
-            'pos_x' => 'nullable|array',
-            'pos_y' => 'nullable|array',
-            'discontinuidad' => 'nullable|array',
+            'clasificacion' => 'nullable|array',
+            'ubi_x' => 'nullable|array',
+            'ubi_y' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'prof' => 'nullable|array',
+            'tamanio' => 'nullable|array',
+            'amplitud' => 'nullable|array',
             'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
-
+            'comentarios' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:2,3,4',
@@ -688,22 +681,15 @@ class FOR_02_PRO_INS_04Controller extends Controller
                 $resultados[] = [
                     'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'ang_inspeccion' => $request->input("ang_inspeccion.$sinTituloKey.$i"),
-                    'dsd_cara' => $request->input("dsd_cara.$sinTituloKey.$i"),
-                    'pierna' => $request->input("pierna.$sinTituloKey.$i"),
-                    'decibel_a' => $request->input("decibel_a.$sinTituloKey.$i"),
-                    'decibel_b' => $request->input("decibel_b.$sinTituloKey.$i"),
-                    'decibel_c' => $request->input("decibel_c.$sinTituloKey.$i"),
-                    'decibel_d' => $request->input("decibel_d.$sinTituloKey.$i"),
-                    'longitud' => $request->input("longitud.$sinTituloKey.$i"),
-                    'dis_angular' => $request->input("dis_angular.$sinTituloKey.$i"),
-                    'profundidad_a' => $request->input("profundidad_a.$sinTituloKey.$i"),
-                    'pos_x' => $request->input("pos_x.$sinTituloKey.$i"),
-                    'pos_y' => $request->input("pos_y.$sinTituloKey.$i"),
-                    'discontinuidad' => $request->input("discontinuidad.$sinTituloKey.$i"),
+                    'clasificacion' => $request->input("clasificacion.$sinTituloKey.$i"),
+                    'ubi_x' => $request->input("ubi_x.$sinTituloKey.$i"),
+                    'ubi_y' => $request->input("ubi_y.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'prof' => $request->input("prof.$sinTituloKey.$i"),
+                    'tamanio' => $request->input("tamanio.$sinTituloKey.$i"),
+                    'amplitud' => $request->input("amplitud.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-
+                    'comentarios' => $request->input("comentarios.$sinTituloKey.$i"),
                 ];
             }
         
@@ -726,21 +712,15 @@ class FOR_02_PRO_INS_04Controller extends Controller
                 $resultados[] = [
                     'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'ang_inspeccion' => $request->input("ang_inspeccion.$tituloKey.$i"),
-                    'dsd_cara' => $request->input("dsd_cara.$tituloKey.$i"),
-                    'pierna' => $request->input("pierna.$tituloKey.$i"),
-                    'decibel_a' => $request->input("decibel_a.$tituloKey.$i"),
-                    'decibel_b' => $request->input("decibel_b.$tituloKey.$i"),
-                    'decibel_c' => $request->input("decibel_c.$tituloKey.$i"),
-                    'decibel_d' => $request->input("decibel_d.$tituloKey.$i"),
-                    'longitud' => $request->input("longitud.$tituloKey.$i"),
-                    'dis_angular' => $request->input("dis_angular.$tituloKey.$i"),
-                    'profundidad_a' => $request->input("profundidad_a.$tituloKey.$i"),
-                    'pos_x' => $request->input("pos_x.$tituloKey.$i"),
-                    'pos_y' => $request->input("pos_y.$tituloKey.$i"),
-                    'discontinuidad' => $request->input("discontinuidad.$tituloKey.$i"),
+                    'clasificacion' => $request->input("clasificacion.$tituloKey.$i"),
+                    'ubi_x' => $request->input("ubi_x.$tituloKey.$i"),
+                    'ubi_y' => $request->input("ubi_y.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'prof' => $request->input("prof.$tituloKey.$i"),
+                    'tamanio' => $request->input("tamanio.$tituloKey.$i"),
+                    'amplitud' => $request->input("amplitud.$tituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    'comentarios' => $request->input("comentarios.$tituloKey.$i"),
                 ];
             }
         
@@ -788,7 +768,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
