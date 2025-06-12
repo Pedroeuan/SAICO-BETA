@@ -215,7 +215,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         }
     }
 
-    public function FOR_01_PRO_INS_04_store(Request $request)
+    public function FOR_02_PRO_INS_04_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -531,7 +531,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_PRO_INS_04_update(Request $request, $id)
+    public function FOR_02_PRO_INS_04_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -914,7 +914,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
     }
 
 
-    public function FOR_01_INS_04($id)
+    public function FOR_02_INS_04($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();

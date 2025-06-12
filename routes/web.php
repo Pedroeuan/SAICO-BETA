@@ -48,6 +48,7 @@ Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_17Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_18Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_19Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
+use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 
 

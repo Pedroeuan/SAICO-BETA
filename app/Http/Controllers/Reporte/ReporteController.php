@@ -485,6 +485,10 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
+        }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
             return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
