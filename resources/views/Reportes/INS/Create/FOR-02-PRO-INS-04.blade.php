@@ -65,16 +65,16 @@
 <br>
 <br>
 <br>
+
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body w-100">
                             <form id="FOR-02-PRO-INS-04" action="{{route('Reportes_FOR_02_PRO_INS_04.store')}}" method="post" enctype="multipart/form-data">
-                                
                                 @csrf
-                                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
-
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Formulario "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -252,14 +252,14 @@
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                             <select class="form-control inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
                                                             data-modelo="{{ $equipo->Modelo }}"
                                                             data-ns="{{ $equipo->Serie }}">
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -287,19 +287,20 @@
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">TRANSDUCTOR</div>
 
+                                    <!-- Select para Accesorios -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Transductor:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un Transductor</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
+                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <option value="" selected disabled>Seleccione un Accesorio</option>
+                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                            data-marca="{{ $accesorios->Marca }}"
+                                                            data-modelo="{{ $accesorios->Modelo }}"
+                                                            data-ns="{{ $accesorios->Serie }}">
+                                                        {{ $accesorios->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -307,28 +308,28 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputT" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputT" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputT" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" id="freccInputT" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="freccInputA" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -340,14 +341,14 @@
                                             <label class="col-form-label" for="inputSuccess">Block y Probeta:</label>
                                             <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                                             <option value="" selected disabled>Seleccione un Block o Probeta</option>
-                                                {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
                                                             data-marca="{{ $blockyprobeta->Marca }}"
                                                             data-modelo="{{ $blockyprobeta->Modelo }}"
                                                             data-ns="{{ $blockyprobeta->Serie }}">
                                                         {{ $blockyprobeta->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -442,7 +443,7 @@
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                             <tr>
-                                                 <th rowspan="2">No.</th>
+                                                <th rowspan="2">No.</th>
                                                 <th rowspan="2">No. de Junta</th>
                                                 <th rowspan="2">No. Indicación</th>
                                                 <th rowspan="2">Clasificación</th>
@@ -629,11 +630,6 @@
                                         <!-- 4 CUATRO FIRMAS-->
                                         <div id="firmas4" class="col-12" style="display: none;">
                                             <table class="table table-bordered table-striped dt-responsive tablas">
-                                                <div class="alert alert-warning alert-dismissible">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                                    <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                                                </div>
                                                 <thead>
                                                     <tr>
 
@@ -784,7 +780,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/includes.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -792,7 +788,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-
+    /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -845,7 +841,6 @@
             }
         }
 
-       
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -878,9 +873,8 @@
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = 
-
-            `<tr data-titulo="${lastTitle}">
+            let newRow = `
+                        <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                             <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
@@ -902,7 +896,6 @@
         }
     );
         
-       
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -929,5 +922,68 @@
         restoreData();
     });
 
+    /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+        });
+
+        $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            });
+
+        $(document).ready(function() {
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+        });
 </script>
 @endsection
