@@ -440,6 +440,11 @@
 
                                     <div class="table-responsive">
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                                        <div class="alert alert-warning alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                        </div>
                                         <thead>
                                             <tr>
                                                 <th rowspan="2">No.</th>
@@ -478,49 +483,49 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php
-                                                $contador = 1;
-                                            @endphp
+                                                @php
+                                                    $contador = 1;
+                                                @endphp
 
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="12">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                                                @foreach ($Grupo_Juntas_Re as $grupo)
+                                                @php
+                                                    $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                    $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
+                                                @endphp
+                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
+                                                        <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                            <td colspan="12">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
                                                 @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_junta[{{ $tituloKey }}][]' value="{{ $resultado['no_junta'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='clasificacion[{{ $tituloKey }}][]' value="{{ $resultado['clasificacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ubi_x[{{ $tituloKey }}][]' value="{{ $resultado['ubi_x'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ubi_y[{{ $tituloKey }}][]' value="{{ $resultado['ubi_y'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='prof[{{ $tituloKey }}][]' value="{{ $resultado['prof'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tamanio[{{ $tituloKey }}][]' value="{{ $resultado['tamanio'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='amplitud[{{ $tituloKey }}][]' value="{{ $resultado['amplitud'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='comentarios[{{ $tituloKey }}][]' value="{{ $resultado['comentarios'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                    @php $contador++; @endphp
+                                                        <tr data-titulo="{{ $tituloKey }}">
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name='no_junta[{{ $tituloKey }}][]' value="{{ $resultado['no_junta'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='no_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='clasificacion[{{ $tituloKey }}][]' value="{{ $resultado['clasificacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ubi_x[{{ $tituloKey }}][]' value="{{ $resultado['ubi_x'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ubi_y[{{ $tituloKey }}][]' value="{{ $resultado['ubi_y'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='prof[{{ $tituloKey }}][]' value="{{ $resultado['prof'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tamanio[{{ $tituloKey }}][]' value="{{ $resultado['tamanio'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='amplitud[{{ $tituloKey }}][]' value="{{ $resultado['amplitud'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='comentarios[{{ $tituloKey }}][]' value="{{ $resultado['comentarios'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                        </tr>
+                                                        @php $contador++; @endphp
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
                                         </tbody>
                                     </table>
                                     </div>
@@ -828,7 +833,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-    /*Juntas-Resultados */
+     /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -840,20 +845,19 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="12">
+                <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-            `;
+        `;
 
-            $('#dynamicTable tbody').append(newTitle);
-            updateTitulos(); // Actualizar lista de títulos
-            //saveData();
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addBtn').click(function () {
@@ -882,11 +886,11 @@
                             <td><input type="text" class="form-control" name="comentarios[${lastTitle}][]" placeholder="Comentarios"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>
-                        `;
+                    `;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData();
+            //updateRowNumbers();
         }
     );
         
@@ -912,8 +916,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-        //restoreData();
     });
 
     /*Selects */
