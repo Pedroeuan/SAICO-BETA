@@ -266,21 +266,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO', $Datos_Equipo['N_S_EQUIPO'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -307,28 +307,28 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR', $Datos_Equipo['MARCA_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR', $Datos_Equipo['MODELO_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR', $Datos_Equipo['N_S_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" id="freccInputA" name="Datos_Equipo[FRECC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" id="freccInputA" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR', $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -355,28 +355,28 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK', $Datos_Equipo['MARCA_BLOCK'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK', $Datos_Equipo['MODELO_BLOCK'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK', $Datos_Equipo['N_S_BLOCK'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE (MARCA Y TIPO):</div>
                                     <div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE', $Datos_Equipo['ACOPLANTE'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -388,7 +388,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">GANANCIA:</label>                                            
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{ old('Datos_Equipo.GANANCIA') }}">
+                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{ old('Datos_Equipo.GANANCIA', $Datos_Equipo['GANANCIA'] ?? '') }}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">dB</span>
                                                 </div>
@@ -399,35 +399,35 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO DE JUNTA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_JUNTA]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_JUNTA]" placeholder="" value="{{old('Datos_Equipo.TIPO_JUNTA', $Datos_Equipo['TIPO_JUNTA'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">RECHAZO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO', $Datos_Equipo['RECHAZO'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">DIAMETRO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO', $Datos_Equipo['DIAMETRO'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">RETARDO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RETARDO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RETARDO]" placeholder="" value="{{old('Datos_Equipo.RETARDO', $Datos_Equipo['RETARDO'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ESPESOR:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.ESPESOR', $Datos_Equipo['ESPESOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -757,6 +757,42 @@
                                             </select>
                                         </div>
 
+                                        @if(!empty($Fotos_Comentarios))
+                                            <div class="row">
+                                                @foreach($Fotos_Comentarios as $index => $foto)
+                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                        <div class="form-group">
+                                                            <!-- Vista previa de la imagen existente -->
+                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                            <div class="image-preview mt-2">
+                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                            </div>
+
+                                                            <!-- Campo para seleccionar una nueva imagen -->
+                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+
+                                                            <!-- Campo oculto para la imagen en base64 -->
+                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                            <!-- Botón de eliminación -->
+                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
+
                                         <div id="imageFieldsContainer" class="row">
                                             <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
@@ -789,7 +825,7 @@
 
                                         <div class="container">
                                             <div class="float-right">
-                                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                                <button type="submit" class="btn btn-info bg-primary">Guardar</button>
                                             </div>
 
                                             <div class="float-left">

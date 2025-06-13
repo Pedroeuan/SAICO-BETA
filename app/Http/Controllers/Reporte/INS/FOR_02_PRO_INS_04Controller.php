@@ -928,7 +928,6 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-        $FOR_01_INS_04 = public_path('images/FOR-01-INS-04.png');
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
@@ -946,7 +945,6 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $data = [
             'title' => 'Reporte_FOR-01-INS-04.PDF',
             'Logo' => $Logo,
-            'FOR_01_INS_04' => $FOR_01_INS_04,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
@@ -968,10 +966,10 @@ class FOR_02_PRO_INS_04Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_04_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_04_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_04_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_04_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();

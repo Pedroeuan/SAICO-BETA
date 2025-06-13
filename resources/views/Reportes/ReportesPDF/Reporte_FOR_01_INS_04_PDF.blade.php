@@ -327,7 +327,7 @@
                             <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
                             <th class="celdaGris">SERIE:</th>
                             <td style="width: 60px;">{{ $Datos_Equipo['N_S_TRANSDUCTOR'] }}</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
+                            <th class="celdaGris" style="width: 50px;">FREC:</th>
                             <td style="width: 50px;">{{ $Datos_Equipo['FREC_TRANSDUCTOR'] }}</td>
                             <th class="celdaGris">SERIE:</th>
                             <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>
@@ -384,7 +384,7 @@
                     </table>
 
                     <br>
-                                                
+                    
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -542,10 +542,10 @@
                     <table class="datosresultados">
                     
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="20">RESULTADOS</th></tr>
+                            <tr><th colspan="17">RESULTADOS</th></tr>
                         </thead>
 
-                        <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+                        <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr class="celdaGris">
@@ -589,7 +589,7 @@
                             </tr>
                         </thead>
 
-<tbody>
+                                <tbody>
                                     @php
                                         $contador = 1;
                                         $filasPorPagina = 15;
@@ -608,7 +608,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="20" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="17" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>
