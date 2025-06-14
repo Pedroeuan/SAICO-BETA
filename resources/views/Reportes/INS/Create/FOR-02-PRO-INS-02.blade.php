@@ -549,13 +549,6 @@
                                     </div>
                                     </div>
                                     <p>
-                                    
-                                    {{-- <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">LONGITUD TOTAL INSPECCIONADA:</div>
-                                    <div>
-                                        <div class="form-group">
-                                        <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
-                                        </div>
-                                    </div> --}}
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">SIMBOLOGÍA</div>
 
