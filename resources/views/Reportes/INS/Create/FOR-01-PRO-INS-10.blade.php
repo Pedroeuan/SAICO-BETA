@@ -75,7 +75,7 @@
                     <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
                     
                     <div class="row">
-                    <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Pre-rellenar Formulario "---"</button>
+                    <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                     <div style="margin-bottom: 2px;"></div>
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
@@ -102,7 +102,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.No_Reporte')}}">
+                                <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
                                 @error('Cliente')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror

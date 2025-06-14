@@ -65,18 +65,18 @@
 <br>
 <br>
 <br>
+
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body w-100">
                             <form id="FOR-01-PRO-INS-06" action="{{route('Reportes_FOR_01_PRO_INS_06.store')}}" method="post" enctype="multipart/form-data">
-                                
                                 @csrf
-                                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
-
                                 <div class="row">
-                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Pre-rellenar Formulario "---"</button>
+                                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
@@ -103,7 +103,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.No_Reporte')}}">
+                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
                                             @error('Cliente')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -827,6 +827,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -834,7 +835,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-
+    /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -994,9 +995,6 @@
             // Restaurar datos al cargar la página
         restoreData();
     });
-
-
-
 
 </script>
 @endsection

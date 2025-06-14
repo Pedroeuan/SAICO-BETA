@@ -602,11 +602,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th>Realizó</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th>Vo.Bo.</th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
 
                                                     </tr>
 
