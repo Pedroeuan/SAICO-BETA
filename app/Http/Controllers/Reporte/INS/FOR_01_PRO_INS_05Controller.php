@@ -219,7 +219,13 @@ class FOR_01_PRO_INS_05Controller extends Controller
     public function FOR_01_PRO_INS_05_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+        //dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+
+        //dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+        Log::info('*********************************************************');
+        Log::info('*********************************************************');
+        Log::info('*********************************************************');
+        Log::info('request completo:', $request->all());
     }
 
     public function FOR_01_PRO_INS_05_store(Request $request)
@@ -422,14 +428,14 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'dibujo' => $request->input("dibujo.tituloKey.$i"),
-                    'soldadura' => $request->input("soldadura.tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.tituloKey.$i"),
-                    'forma' => $request->input("forma.tituloKey.$i"),
-                    'transfer' => $request->input("transfer.tituloKey.$i"),
-                    'longitud' => $request->input("longitud.tituloKey.$i"),
-                    'ancho' => $request->input("ancho.tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.tituloKey.$i"),
+                    'dibujo' => $request->input("dibujo.$tituloKey.$i"),
+                    'soldadura' => $request->input("soldadura.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'forma' => $request->input("forma.$tituloKey.$i"),
+                    'transfer' => $request->input("transfer.$tituloKey.$i"),
+                    'longitud' => $request->input("longitud.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -738,14 +744,14 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'dibujo' => $request->input("dibujo.tituloKey.$i"),
-                    'soldadura' => $request->input("soldadura.tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.tituloKey.$i"),
-                    'forma' => $request->input("forma.tituloKey.$i"),
-                    'transfer' => $request->input("transfer.tituloKey.$i"),
-                    'longitud' => $request->input("longitud.tituloKey.$i"),
-                    'ancho' => $request->input("ancho.tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.tituloKey.$i"),
+                    'dibujo' => $request->input("dibujo.$tituloKey.$i"),
+                    'soldadura' => $request->input("soldadura.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'forma' => $request->input("forma.$tituloKey.$i"),
+                    'transfer' => $request->input("transfer.$tituloKey.$i"),
+                    'longitud' => $request->input("longitud.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -991,10 +997,10 @@ class FOR_01_PRO_INS_05Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_05_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_05_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1015,10 +1021,10 @@ class FOR_01_PRO_INS_05Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -181);
+            $combinedPdf->SetXY(137, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 

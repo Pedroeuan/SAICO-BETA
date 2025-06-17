@@ -321,7 +321,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TAMAÑO:</label>
-                            <input type="text" class="form-control  inputForm" id="tamaño1InputT" name="Datos_Equipo[TAMAÑO1_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMAÑO1_TRANSDUCTORES')}}">
+                            <input type="text" class="form-control  inputForm" id="tamaño1InputT" name="Datos_Equipo[TAMANO1_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMANO1_TRANSDUCTORES')}}">
                         </div>
                     </div>
 
@@ -342,7 +342,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TAMAÑO:</label>
-                            <input type="text" class="form-control  inputForm" id="tamaño2InputT" name="Datos_Equipo[TAMAÑO2_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMAÑO2_TRANSDUCTORES')}}">
+                            <input type="text" class="form-control  inputForm" id="tamaño2InputT" name="Datos_Equipo[TAMANO2_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMANO2_TRANSDUCTORES')}}">
                         </div>
                     </div>
 
@@ -363,7 +363,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TAMAÑO:</label>
-                            <input type="text" class="form-control  inputForm" id="tamaño3InputT" name="Datos_Equipo[TAMAÑO3_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMAÑO3_TRANSDUCTORES')}}">
+                            <input type="text" class="form-control  inputForm" id="tamaño3InputT" name="Datos_Equipo[TAMANO3_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.TAMANO3_TRANSDUCTORES')}}">
                         </div>
                     </div>
                     
