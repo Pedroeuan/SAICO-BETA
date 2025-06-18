@@ -453,7 +453,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @for($i = 0; $i < 54; $i++)
+                            @for($i = 0; $i < 14; $i++)
                             <tr>
                                 <td>----</td>
                                 <td>----</td>
