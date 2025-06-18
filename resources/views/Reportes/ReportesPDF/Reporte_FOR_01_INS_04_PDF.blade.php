@@ -533,7 +533,7 @@
                                     <th></th>
                                 </tr>
                             @endif
-                        </thead>                            
+                        </thead>
                     </table>
             </footer>
 

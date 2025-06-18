@@ -225,7 +225,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
+                            <th rowspan="2" style="font-size: 9pt;">Informe de Inspección con Ultrasonido de  Acuerdo con API RP 2X</th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>
