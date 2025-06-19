@@ -513,7 +513,7 @@
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
-                                     <th class="align-middle" rowspan="2">No.</th>
+                                    <th class="align-middle" rowspan="2">No.</th>
                                     <th class="align-middle" colspan="2">DATOS DE LA INSPECCIÓN</th>
                                     <th class="align-middle" colspan="5">DATOS DE LA INDICACIÓN</th>
                                     <th class="align-middle" colspan="2">ÁREA INSPECCIONADA</th>
@@ -525,7 +525,7 @@
                                 </tr>
 
                                 <tr>
-                                   
+
                                     <th class="align-middle">Junta / Elemento</th>
                                     <th class="align-middle">Zona de Barrido</th>
                                     <th class="align-middle">No. Indicación</th>
@@ -683,11 +683,11 @@
                                 <table class="table table-bordered table-striped dt-responsive tablas">
                                     <thead>
                                         <tr>
-                                            <th>Realizó</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                             <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                             <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                         </tr>
                                         
                                         <tr>
@@ -737,13 +737,13 @@
                                     <thead>
                                         <tr>
 
-                                            <th>Realizó</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                             <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                             <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                             <td style="width: 30px;"></td>
-                                            <th>Vo.Bo.</th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
 
                                         </tr>
 

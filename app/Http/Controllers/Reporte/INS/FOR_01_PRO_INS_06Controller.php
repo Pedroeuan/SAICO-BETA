@@ -242,27 +242,30 @@ class FOR_01_PRO_INS_06Controller extends Controller
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo' => 'required|array',
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_MX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP_MX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.COND_SUPERL' => 'nullable|string|max:255',
             'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
@@ -272,24 +275,29 @@ class FOR_01_PRO_INS_06Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
+            'elemento' => 'nullable|array',
+            '0nom' => 'nullable|array',
+            '0ext' => 'nullable|array',
+            'nivel' => 'nullable|array',
+            '12_00' => 'nullable|array',
+            '01_00' => 'nullable|array',
+            '01_30' => 'nullable|array',
+            '02_00' => 'nullable|array',
+            '03_00' => 'nullable|array',
+            '04_00' => 'nullable|array',
+            '04_30' => 'nullable|array',
+            '05_00' => 'nullable|array',
+            '06_00' => 'nullable|array',
+            '07_00' => 'nullable|array',
+            '07_30' => 'nullable|array',
+            '08_00' => 'nullable|array',
+            '09_00' => 'nullable|array',
+            '10_00' => 'nullable|array',
+            '10_30' => 'nullable|array',
+            '11_00' => 'nullable|array',
             'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tprom' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
@@ -383,7 +391,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("elemento.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -391,14 +399,15 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'elemento' => $request->input("elemento.$sinTituloKey.$i"),
+                    '0nom' => $request->input("0nom.$sinTituloKey.$i"),
+                    '0ext' => $request->input("0ext.$sinTituloKey.$i"),
+                    'nivel' => $request->input("nivel.$sinTituloKey.$i"),
+                    '12_00' => $request->input("12_00.$sinTituloKey.$i"),
+                    '01_00' => $request->input("01_00.$sinTituloKey.$i"),
+                    '01_30' => $request->input("01_30.$sinTituloKey.$i"),
+                    '02_00' => $request->input("02_00.$sinTituloKey.$i"),
+                    
                     'nr' => $request->input("nr.$sinTituloKey.$i"),
                     'ni' => $request->input("ni.$sinTituloKey.$i"),
                     'ht' => $request->input("ht.$sinTituloKey.$i"),
@@ -421,7 +430,8 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("elemento_tubo.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -588,27 +598,30 @@ class FOR_01_PRO_INS_06Controller extends Controller
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Codigo_Aplicable' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo' => 'required|array',
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.FRECUENCIA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONGITUD' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_MX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP_MX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.COND_SUPERL' => 'nullable|string|max:255',
             'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
