@@ -168,7 +168,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_06*/
         Route::post('/Reportes_FOR_01_PRO_INS_06/update/{id}', [FOR_01_PRO_INS_06Controller::class, 'FOR_01_PRO_INS_06_update'])->name('Reportes_FOR_01_PRO_INS_06.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_06*/
-        Route::get('/Reporte/FOR-INS-01/06/PDF/{id}', [FOR_01_PRO_INS_06Controller::class, 'FOR_INS_01_06'])->name('Reporte_FOR_INS_01_06.PDF');
+        Route::get('/Reporte/FOR-01-INS-06/PDF/{id}', [FOR_01_PRO_INS_06Controller::class, 'FOR_01_INS_06'])->name('Reporte_FOR_01_INS_06.PDF');
         
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_07*/
         Route::post('/Reportes_FOR_01_PRO_INS_07/store', [FOR_01_PRO_INS_07Controller::class, 'FOR_01_PRO_INS_07_store'])->name('Reportes_FOR_01_PRO_INS_07.store');
@@ -529,12 +529,12 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
     Route::get('/reporte/create', [PDFReportesController::class, 'Reportecreate'])->name('reporte.create');*/
 
     /*A DEFINIR EL ACCESO-VISTAS PARA LOS FORMULARIOS DE LOS FORMATOS DE INS*/
-    Route::get('/Reporte/FOR_01_PRO_INS_02', [ReporteController::class, 'FOR_01_PRO_INS_02'])->name('Reporte.FOR_01_PRO_INS_02');
-    Route::get('/Reporte/FOR_01_PRO_INS_03', [ReporteController::class, 'FOR_01_PRO_INS_03'])->name('Reporte.FOR_01_PRO_INS_03');
-    Route::get('/Reporte/FOR_01_PRO_INS_04', [ReporteController::class, 'FOR_01_PRO_INS_04'])->name('Reporte.FOR_01_PRO_INS_04');
+    //Route::get('/Reporte/FOR_01_PRO_INS_02', [ReporteController::class, 'FOR_01_PRO_INS_02'])->name('Reporte.FOR_01_PRO_INS_02');
+    //Route::get('/Reporte/FOR_01_PRO_INS_03', [ReporteController::class, 'FOR_01_PRO_INS_03'])->name('Reporte.FOR_01_PRO_INS_03');
+    //Route::get('/Reporte/FOR_01_PRO_INS_04', [ReporteController::class, 'FOR_01_PRO_INS_04'])->name('Reporte.FOR_01_PRO_INS_04');
     //Route::get('/Reporte/FOR_02_PRO_INS_04', [ReporteController::class, 'FOR_02_PRO_INS_04'])->name('Reporte.FOR_02_PRO_INS_04');
-    Route::get('/Reporte/FOR_01_PRO_INS_05', [ReporteController::class, 'FOR_01_PRO_INS_05'])->name('Reporte.FOR_01_PRO_INS_05');
-    Route::get('/Reporte/FOR_01_PRO_INS_06', [ReporteController::class, 'FOR_01_PRO_INS_06'])->name('Reporte.FOR_01_PRO_INS_06');
+    //Route::get('/Reporte/FOR_01_PRO_INS_05', [ReporteController::class, 'FOR_01_PRO_INS_05'])->name('Reporte.FOR_01_PRO_INS_05');
+    //Route::get('/Reporte/FOR_01_PRO_INS_06', [ReporteController::class, 'FOR_01_PRO_INS_06'])->name('Reporte.FOR_01_PRO_INS_06');
     Route::get('/Reporte/FOR_01_PRO_INS_07', [ReporteController::class, 'FOR_01_PRO_INS_07'])->name('Reporte.FOR_01_PRO_INS_07');
     Route::get('/Reporte/FOR_01_PRO_INS_08', [ReporteController::class, 'FOR_01_PRO_INS_08'])->name('Reporte.FOR_01_PRO_INS_08');
     Route::get('/Reporte/FOR_01_PRO_INS_09', [ReporteController::class, 'FOR_01_PRO_INS_09'])->name('Reporte.FOR_01_PRO_INS_09');
@@ -548,7 +548,6 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
     Route::get('/Reporte/FOR_01_PRO_INS_19', [ReporteController::class, 'FOR_01_PRO_INS_19'])->name('Reporte.FOR_01_PRO_INS_19');
     Route::get('/Reporte/FOR_02_PRO_INS_15', [ReporteController::class, 'FOR_02_PRO_INS_15'])->name('Reporte.FOR_02_PRO_INS_15');
     Route::get('/Reporte/FOR_03_PRO_INS_15', [ReporteController::class, 'FOR_03_PRO_INS_15'])->name('Reporte.FOR_03_PRO_INS_15');
-
 
     Route::get('/Reporte/FOR_01_PRO_INS_18', [ReporteController::class, 'FOR_01_PRO_INS_18'])->name('Reporte.FOR_01_PRO_INS_18');
 
