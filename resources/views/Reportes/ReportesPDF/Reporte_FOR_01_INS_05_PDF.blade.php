@@ -504,7 +504,7 @@
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
                                     <th></th>
                                 </tr>
-
+                                                                    
                                 <tr>
                                     <th></th>
                                     <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>

@@ -395,7 +395,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 676px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                            <td class="lineaInferior" style="width: 606.5px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 

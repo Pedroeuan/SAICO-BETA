@@ -328,7 +328,7 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                            <input type="text" class="form-control  inputForm" id="frecuenciaInputA" name="Datos_Equipo[FRECUENCIA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR', $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="frecuenciaInputA" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR', $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -435,7 +435,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIÓN SUPERFICIAL:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[COND_SUPERL]" placeholder="" value="{{old('Datos_Equipo.COND_SUPERL', $Datos_Equipo['COND_SUPERL'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[COND_SUPER]" placeholder="" value="{{old('Datos_Equipo.COND_SUPER', $Datos_Equipo['COND_SUPER'] ?? '')}}">
                                         </div>
                                     </div>
 
