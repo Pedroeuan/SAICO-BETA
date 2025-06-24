@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ReporteController extends Controller
 {
-public function FOR_01_PRO_INS_02()
+    public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
     }
@@ -108,6 +108,7 @@ public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
     }
+    
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -211,6 +212,12 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
+        //dd($Grupo_Juntas_Re);
+
+        //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
+
+        //$Juntas_resultados = $Grupo_Juntas_Re['resultados'];
+        //$Titulos_resultados = $Grupo_Juntas_Re['titulos'];
 
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
@@ -466,16 +473,79 @@ public function FOR_01_PRO_INS_02()
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        if($Nombre_Formato == "FOR-01-PRO-INS-03")
         {
-            return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_01_INS_03.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_04.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-05")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_05.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-06")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_06.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
-            return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyReportes($id)
+    {
+        //Primero Eliminar el registro de la tabla 'lineal_ideal'
+        $Lineal_Ideal  = Lineal_Ideal::where('idReportes', $id)->first();
+        if ($Lineal_Ideal) {
+            $Lineal_Ideal->delete();
+        }
+
+        //Segundo Eliminar el registro de la tabla 'Firma_Reporte'
+        $Firma_Reporte  = Firma_Reporte::where('idReportes', $id)->first();
+        if ($Firma_Reporte) {
+            $Firma_Reporte->delete();
+        }
+
+        //Tercero Eliminar el registro de la tabla 'Fotos_Reporte'
+        $Fotos_Reporte  = Fotos_Reporte::where('idReportes', $id)->first();
+        if ($Fotos_Reporte) {
+            $Fotos_Reporte->delete();
+        }
+
+        //Cuarto Eliminar el registro de la tabla 'Grupo_Juntas_Detalles_Re'
+        $Grupo_Juntas_Detalles_Re  = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        if ($Grupo_Juntas_Detalles_Re) {
+            $Grupo_Juntas_Detalles_Re->delete();
+        }
+
+        //Cuarto y ultimo Eliminar el registro de la tabla 'reporte'
+        $reporte  = reporte::where('idReportes', $id)->first();
+        if ($reporte) {
+            $reporte->delete();
+        }
+
+        
+        // ✅ Retornar respuesta JSON para el AJAX
+        return response()->json([
+            'success' => true,
+            'message' => 'Reporte eliminado correctamente.'
+        ]);
+
+    }
 
     /**
      * Display the specified resource.
@@ -501,11 +571,5 @@ public function FOR_01_PRO_INS_02()
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(reporte $reporte)
-    {
-        //
-    }
+
 }
