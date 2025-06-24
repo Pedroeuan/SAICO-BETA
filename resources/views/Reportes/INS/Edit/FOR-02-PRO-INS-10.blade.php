@@ -509,7 +509,8 @@
 
                                             @foreach ($Grupo_Juntas_Re as $grupo)
                                             @php
-                                                $tituloKey = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
@@ -529,25 +530,25 @@
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr data-titulo="{{ $tituloKey }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='elemento_tubo[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['elemento_tubo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_aceptacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_aceptacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_serie[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_serie'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_colada[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_colada'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tnominal[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tnominal'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='diametro[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['diametro'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_ind[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tipo_indicacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nr[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ni[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='prof[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['prof'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='la[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='lc[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmax[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmin[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='metros_lineales[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['metros_lineales'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[@if($grupo["titulos_juntas"] != "SIN TITULO")titulo_{{ $tituloKey }}@else{{ $tituloKey }}@endif][]' value="{{ $resultado['observaciones'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='elemento_tubo[{{ $tituloKey }}][]' value="{{ $resultado['elemento_tubo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_aceptacion[{{ $tituloKey }}][]' value="{{ $resultado['no_aceptacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_serie[{{ $tituloKey }}][]' value="{{ $resultado['no_serie'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_colada[{{ $tituloKey }}][]' value="{{ $resultado['no_colada'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tnominal[{{ $tituloKey }}][]' value="{{ $resultado['tnominal'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='diametro[{{ $tituloKey }}][]' value="{{ $resultado['diametro'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_ind[{{ $tituloKey }}][]' value="{{ $resultado['no_ind'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tipo_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nr[{{ $tituloKey }}][]' value="{{ $resultado['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ni[{{ $tituloKey }}][]' value="{{ $resultado['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='prof[{{ $tituloKey }}][]' value="{{ $resultado['prof'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='la[{{ $tituloKey }}][]' value="{{ $resultado['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='lc[{{ $tituloKey }}][]' value="{{ $resultado['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmax[{{ $tituloKey }}][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmin[{{ $tituloKey }}][]' value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='metros_lineales[{{ $tituloKey }}][]' value="{{ $resultado['metros_lineales'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp
@@ -820,7 +821,7 @@
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
-                                                                                        
+                                                    
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
@@ -970,291 +971,14 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
-
-    /*Prevenir el Enter*/
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-            if (element.tagName !== 'TEXTAREA') {
-                element.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        }
-                    });
-                }
-            });
-        });
-        $('#dynamicTable').on('keydown', 'input', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    });
-
-    /*Botón eliminar para imagenes subidas */
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.remove-image').forEach(button => {
-            button.addEventListener('click', function () {
-                const index = this.getAttribute('data-index');
-                const fieldToRemove = document.getElementById(`image-container-${index}`);
-                if (fieldToRemove) {
-                    fieldToRemove.style.display = 'none'; // Oculta el elemento
-                    document.getElementById(`deleted_image_${index}`).value = index; // Marca como eliminado
-                }
-            });
-        });
-    });
-
-    /*Modal para las imagenes que ya estan subidos */
-    document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('image-input')) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    // Mostrar la imagen seleccionada en el modal
-                    const cropperImage = document.getElementById('cropperImage');
-                    cropperImage.src = event.target.result;
-
-                    // Mostrar el modal automáticamente
-                    $('#cropperModal').modal('show');
-
-                    // Inicializar Cropper.js
-                    if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
-                    cropper = new Cropper(cropperImage, {
-                        aspectRatio: 1, // Cambia según tus necesidades
-                        viewMode: 1,
-                        minContainerWidth: 760,
-                        minContainerHeight: 600,
-                        responsive: true,
-                    });
-                    // Guardar el input actual para referencia
-                    currentInput = e.target;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    /* Imágenes Al seleccionar numero de imagenes a subir*/
-    let cropper;
-    let currentInput;
-
-    // Botón: Rotar -90° (Antihorario)
-    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(-90);
-    });
-
-    // Botón: Rotar +90° (Horario)
-    document.getElementById('rotateRightBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(90);
-    });
-
-    // Botón: Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function () {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Botón: Recortar y Guardar
-    document.getElementById('cropImageBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Recortado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    base64Input.value = base64data;
-                }
-            }
-            $('#cropperModal').modal('hide');
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Botón: Guardar Sin Recortar
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            try {
-                // Obtener los datos de la imagen original (incluyendo rotación)
-                const imageData = cropper.getImageData();
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                    canvas.width = imageData.naturalHeight;
-                    canvas.height = imageData.naturalWidth;
-                } else {
-                    canvas.width = imageData.naturalWidth;
-                    canvas.height = imageData.naturalHeight;
-                }
-
-                // Dibujar la imagen rotada en el lienzo
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate((imageData.rotate * Math.PI) / 180);
-                ctx.drawImage(
-                    cropper.element, // Aquí usamos el elemento de la imagen directamente
-                    -imageData.naturalWidth / 2,
-                    -imageData.naturalHeight / 2,
-                    imageData.naturalWidth,
-                    imageData.naturalHeight
-                );
-
-                // Convertir el lienzo a base64
-                const base64data = canvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Guardado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    base64Input.value = base64data;
-                }
-
-                // Cerrar el modal
-                $('#cropperModal').modal('hide');
-            } catch (error) {
-                console.error('Error al guardar la imagen sin recortar:', error);
-            }
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Destruir Cropper al cerrar el modal
-    $('#cropperModal').on('hidden.bs.modal', function () {
-        if (cropper) cropper.destroy();
-    });
-
-    // Generar campos de imágenes
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageCountSelect = document.getElementById('imageCount');
-        const container = document.getElementById('imageFieldsContainer');
-        const cropperImage = document.getElementById('cropperImage');
-
-        // Cargar valor guardado
-        /*const savedCount = localStorage.getItem('imageCount');
-        if (savedCount) {
-            imageCountSelect.value = savedCount;
-            generateImageFields(parseInt(savedCount));
-        }*/
-
-        imageCountSelect.addEventListener('change', function () {
-            const count = parseInt(this.value);
-            //localStorage.setItem('imageCount', count);
-            generateImageFields(count);
-        });
-
-        function generateImageFields(count) {
-            container.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                const col = document.createElement('div');
-                col.classList.add('col-sm-6');
-                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
-                col.innerHTML = `
-                    <div class="form-group">
-                        <label for="image${i}">Imagen por Subir ${i}:</label>
-                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
-                        <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
-                    </div>
-                `;
-                container.appendChild(col);
-            }
-
-            // Agregar eventos de eliminación a los botones
-            document.querySelectorAll('.remove-image').forEach(button => {
-                button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                    }
-                });
-            });
-
-            // Asignar eventos a los nuevos inputs
-            document.querySelectorAll('.image-input').forEach(input => {
-                input.addEventListener('change', function (e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    if (!file.type.startsWith('image/')) {
-                        alert('Por favor, sube solo imágenes.');
-                        return;
-                    }
-
-                    currentInput = e.target;
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        if (cropper) cropper.destroy();
-                        cropperImage.src = event.target.result;
-                        $('#cropperModal').modal('show');
-                        cropper = new Cropper(cropperImage, {
-                            aspectRatio: 4 / 3,
-                            viewMode: 1,
-                            autoCropArea: 1,
-                            minContainerWidth: 760,
-                            minContainerHeight: 600,
-                            responsive: true
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-        }
-
-        // Limpiar localStorage al enviar el formulario
-        document.querySelector("form").addEventListener("submit", function () {
-            localStorage.removeItem('imageCount');
-        });
-    });
-
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto
-        function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
-
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
-
+/*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -1281,26 +1005,11 @@
         updateTitulos(); // Actualizar lista de títulos
         });
 
-        // Evento para eliminar un título
-        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            let tituloRow = $(this).closest('tr');
-            let tituloId = tituloRow.data('titulo');
-            
-            // Eliminar la fila del título
-            tituloRow.remove();
-            
-            // Eliminar todas las filas que tengan el mismo data-titulo
-            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-            updateRowNumbers(); // Si quieres actualizar el contador global
-        });
-
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            let lastTitle = $('.titulo-row').length > 0 ? 'titulo_' + $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
@@ -1338,23 +1047,6 @@
         }
     );
 
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-        });
-        
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -1376,68 +1068,6 @@
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputFields = document.querySelectorAll(".default-input");
-
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
-                if (isNaN(column)) return; // Evitar errores si no es válido
-
-                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
-                    const cellInputs = row.querySelectorAll("td input");
-                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
-                });
-            });
-        });
-    });
-
-
-        /*Selección de Firmas */
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas2 = document.getElementById('firmas2');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '2') {
-                firmas2.style.display = 'block';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'none';
-            }
-            else if (this.value == '3') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
-            }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '2') {
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (numFirmasSelect.value == '3') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
     });
 
     /*Selects */

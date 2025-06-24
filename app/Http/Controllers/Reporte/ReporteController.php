@@ -473,13 +473,33 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        if($Nombre_Formato == "FOR-01-PRO-INS-03")
         {
-            return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_01_INS_03.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_04.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-05")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_05.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-06")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_06.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
-            return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
         }
     }
 
