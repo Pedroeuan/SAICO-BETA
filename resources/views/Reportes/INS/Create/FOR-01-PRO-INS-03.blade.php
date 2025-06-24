@@ -1124,15 +1124,15 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta / Componente"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[6]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="long_inspeccionada[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud Inspeccionada"></td>
+                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta / Componente"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="long_inspeccionada[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud Inspeccionada"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);

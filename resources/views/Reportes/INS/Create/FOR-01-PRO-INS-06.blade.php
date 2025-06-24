@@ -865,30 +865,30 @@
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[0]}" placeholder="Descripción del Elemento"></td>
-                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="12:00"></td>
-                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="01:00"></td>
-                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="01:30"></td>
-                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="02:00"></td>
-                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="03:00"></td>
-                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[09]}" placeholder="04:00"></td>
-                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="04:30"></td>
-                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="05:00"></td>
-                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="06:00"></td>
-                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="07:00"></td>
-                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="07:30"></td>
-                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="08:00"></td>
-                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="09:00"></td>
-                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="10:00"></td>
-                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="10:30"></td>
-                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="11:00"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="Tmin"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="Tmax"></td>
-                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tprom"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="Descripción del Elemento"></td>
+                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="12:00"></td>
+                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="01:00"></td>
+                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:30"></td>
+                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="02:00"></td>
+                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="03:00"></td>
+                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="04:00"></td>
+                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:30"></td>
+                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="05:00"></td>
+                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="06:00"></td>
+                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="07:00"></td>
+                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:30"></td>
+                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="08:00"></td>
+                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="09:00"></td>
+                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="10:00"></td>
+                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:30"></td>
+                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="11:00"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="Tmin"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmax"></td>
+                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tprom"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
 

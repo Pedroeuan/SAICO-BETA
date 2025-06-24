@@ -866,14 +866,14 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Dibujo"></td>
-                            <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Soldadura"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="forma[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Forma"></td>
-                            <td><input type="text" class="form-control" name="transfer[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Transfer"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Dibujo"></td>
+                            <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Soldadura"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="forma[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Forma"></td>
+                            <td><input type="text" class="form-control" name="transfer[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Transfer"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
