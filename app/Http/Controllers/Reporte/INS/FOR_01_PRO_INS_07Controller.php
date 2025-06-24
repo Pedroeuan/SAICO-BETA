@@ -216,13 +216,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-    public function FOR_01_PRO_INS_03_store(Request $request)
+    public function FOR_01_PRO_INS_07_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -561,14 +555,8 @@ class FOR_01_PRO_INS_07Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
 
-
-    public function FOR_01_PRO_INS_03_update(Request $request, $id)
+    public function FOR_01_PRO_INS_07_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -596,20 +584,33 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
             'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA2' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_BLOCK_SEN' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_SEN' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_SEN' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_BLOCK_DIS' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_BLOCK_DIS' => 'nullable|string|max:255',
+            'Datos_Equipo.N_S_BLOCK_DIS' => 'nullable|string|max:255',
+
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMPERATURA' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
@@ -618,25 +619,18 @@ class FOR_01_PRO_INS_07Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
+            'no_indicacion' => 'nullable|array',
+            'angulo' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'dist_zapata' => 'nullable|array',
+            'sa' => 'nullable|array',
+            'da' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:2,3,4',
