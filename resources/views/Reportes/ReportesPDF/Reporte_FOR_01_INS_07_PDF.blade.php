@@ -5,43 +5,71 @@
             <title>FORMATO FOR-INS-07/01</title>
             <style>
                 @page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
+                    margin: 
+                    3.0cm /* superior */
+                    2.1cm /* derecho */
+                    2.1cm /* inferior */
+                    2.4cm; /* izquierdo */
                 }
+                @if ($totalTitulosYFilas <=15)
                 header {
-                    position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
+                    width: 100%;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    height: auto; /* Permite crecer según el contenido */
                     text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: fixed;
-                    bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 312px; /* Ajusta según el tamaño de tu encabezado */
+                    /*background-color: rgb(226, 45, 45);*/
                     font-family: 'arial', sans-serif;
                 }
-                .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 100px; /* Evita superposición con el footer */
+
+                footer {
+                    position: fixed;
+                    bottom: -30px;
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18);*/
+                    font-family: 'arial', sans-serif;
                 }
 
-                .table-container {
-                    margin: 100px 0;
+                body {
+                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(45, 78, 226);*/
                 }
+            @else
+                header {
+                    position: fixed;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin: 0;
+                    padding-top: 235px; /* Altura del header */
+                    padding-bottom: 95px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+                @endif
 
                 .datosgenerales{
                     border: 0px !important;
