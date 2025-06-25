@@ -522,7 +522,7 @@
                                             </tr>
                                         </thead>
 
-<tbody>
+                                        <tbody>
                                             @php
                                                 $contador = 1;
                                             @endphp

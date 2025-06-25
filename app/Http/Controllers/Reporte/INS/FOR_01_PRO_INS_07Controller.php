@@ -610,8 +610,8 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
@@ -707,7 +707,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("junta_ele.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -741,7 +741,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("junta_ele.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -934,7 +934,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
     }
 
 
-    public function FOR_INS_10_02($id)
+    public function FOR_01_INS_07($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -983,7 +983,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-01-INS-07.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1006,10 +1006,10 @@ class FOR_01_PRO_INS_07Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_07_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_07_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1030,8 +1030,8 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
@@ -1049,7 +1049,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01-INS_07.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
