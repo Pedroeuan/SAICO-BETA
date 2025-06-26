@@ -346,14 +346,52 @@
             inputs.forEach(function (input) {
                 if (input.value.trim() === "") { 
                     input.value = "---"; // Asignar "---" si está vacío
-                    //localStorage.setItem('FOR-01-PRO-INS-03_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-03_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-04_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-05_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-06_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-07_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-08_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-09_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-10_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-12_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-13_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-15_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-16_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-17_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-18_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-19_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-02_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-04_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-10_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-15_' + input.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-03-PRO-INS-15_' + input.name, "---"); // Guardar en localStorage
                 }
             });
 
             textareas.forEach(function (textarea) {
                 if (textarea.value.trim() === "") { 
                     textarea.value = "---"; // Asignar "---" si está vacío
-                    //localStorage.setItem('FOR-01-PRO-INS-03_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-03_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-04_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-05_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-06_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-07_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-08_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-09_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-10_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-12_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-13_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-15_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-16_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-17_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-18_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-01-PRO-INS-19_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-02_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-04_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-10_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-02-PRO-INS-15_' + textarea.name, "---"); // Guardar en localStorage
+                    localStorage.setItem('FOR-03-PRO-INS-15_' + textarea.name, "---"); // Guardar en localStorage
                 }
             });
         });
