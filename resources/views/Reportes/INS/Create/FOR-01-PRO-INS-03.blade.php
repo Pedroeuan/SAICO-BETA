@@ -1462,5 +1462,32 @@
                 });
             });
 
+    /*FOR-01-PRO-INS-03*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-03');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                localStorage.setItem('FOR-01-PRO-INS-03_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-03_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-03_' + el.name);
+            });
+        });
+    });
     </script>
 @endsection

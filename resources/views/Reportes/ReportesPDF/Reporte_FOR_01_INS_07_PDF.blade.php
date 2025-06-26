@@ -7,9 +7,9 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    2.1cm /* derecho */
+                    1.2cm /* derecho */
                     2.1cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    2.2cm; /* izquierdo */
                 }
                 @if ($totalTitulosYFilas <=15)
                 header {
@@ -206,8 +206,8 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-07/01</th>
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 90%;">FOR-INS-07/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -225,76 +225,75 @@
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
         
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
                 <table class="datosinspeccion">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
@@ -592,7 +591,7 @@
                         </thead>
 
                             <tbody>
-                                @for($i = 0; $i < 54; $i++)
+                                @for($i = 0; $i < 14; $i++)
                                 <tr>
                                     <td>----</td>
                                     <td>----</td>

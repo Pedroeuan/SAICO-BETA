@@ -346,12 +346,14 @@
             inputs.forEach(function (input) {
                 if (input.value.trim() === "") { 
                     input.value = "---"; // Asignar "---" si está vacío
+                    //localStorage.setItem('FOR-01-PRO-INS-03_' + input.name, "---"); // Guardar en localStorage
                 }
             });
 
             textareas.forEach(function (textarea) {
                 if (textarea.value.trim() === "") { 
                     textarea.value = "---"; // Asignar "---" si está vacío
+                    //localStorage.setItem('FOR-01-PRO-INS-03_' + textarea.name, "---"); // Guardar en localStorage
                 }
             });
         });
