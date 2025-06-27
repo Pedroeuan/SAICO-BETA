@@ -81,8 +81,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                                            {{--<input type="date" class="form-control inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]" placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}"> --}}
-                                            <input type="date" class="form-control inputForm @error('Detalles_Generales.Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]" placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Detalles_Generales.Fecha') }}">
+                                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
                                             @error('Fecha')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -874,12 +873,7 @@
 
 <script>
 
-
-    
-
-
-
-     $(document).ready(function() {
+    $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
@@ -934,11 +928,6 @@
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                             
                         </tr>`;
-
-                        
-
-
-
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });

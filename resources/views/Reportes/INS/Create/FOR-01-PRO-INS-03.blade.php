@@ -1006,6 +1006,9 @@
             
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            /*Object.keys(localStorage).forEach(function(key) {
+                if (key.startsWith('FOR-01-PRO-INS-08_')) localStorage.removeItem(key);
+            });*/
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
