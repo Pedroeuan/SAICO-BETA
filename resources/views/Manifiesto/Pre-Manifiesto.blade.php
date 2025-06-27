@@ -262,15 +262,35 @@
         onText: 'Sí',
         offText: 'No'
     });
-</script>
 
-<script>
 /*Prevenir el Enter*/
 document.getElementById('manifiestoForm').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
+
+    // Guardar datos en localStorage al escribir
+document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
+    input.addEventListener('input', function() {
+        localStorage.setItem('manifiestoForm_' + input.name, input.value);
+    });
+});
+// Restaurar datos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
+        let value = localStorage.getItem('manifiestoForm_' + input.name);
+        if (value !== null && input.type !== 'file') {
+            input.value = value;
+        }
+    });
+});
+// Limpiar localStorage al enviar el formulario
+document.getElementById('manifiestoForm').addEventListener('submit', function() {
+    document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
+        localStorage.removeItem('manifiestoForm_' + input.name);
+    });
+});
 </script>
 
 @endsection

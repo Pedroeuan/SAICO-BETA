@@ -5,43 +5,71 @@
             <title>FORMATO FOR-INS-07/01</title>
             <style>
                 @page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
+                    margin: 
+                    3.0cm /* superior */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
+                @if ($totalTitulosYFilas <=15)
                 header {
-                    position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
+                    width: 100%;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    height: auto; /* Permite crecer según el contenido */
                     text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: fixed;
-                    bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 312px; /* Ajusta según el tamaño de tu encabezado */
+                    /*background-color: rgb(226, 45, 45);*/
                     font-family: 'arial', sans-serif;
                 }
-                .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 100px; /* Evita superposición con el footer */
+
+                footer {
+                    position: fixed;
+                    bottom: -30px;
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18);*/
+                    font-family: 'arial', sans-serif;
                 }
 
-                .table-container {
-                    margin: 100px 0;
+                body {
+                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(45, 78, 226);*/
                 }
+            @else
+                header {
+                    position: fixed;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin: 0;
+                    padding-top: 235px; /* Altura del header */
+                    padding-bottom: 95px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -178,8 +206,8 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-07/01</th>
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 90%;">FOR-INS-07/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -197,76 +225,75 @@
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
         
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
                 <table class="datosinspeccion">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="7">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
@@ -275,27 +302,27 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <td>2</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['ACOPLANTE'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
-                            <td>9</td>
+                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}<</td>
+                            <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
                             <th class="celdaGris">SERIE:</th>
                             
-                            <td style="width: 12%;">10</td>
+                            <td style="width: 12%;">{{ $Datos_Equipo['N_S_SONDA1'] }}</td>
                             <th class="celdaGris">FRECC:</th>
-                            <td>10.1</td>
+                            <td>{{ $Datos_Equipo['FREC_SONDA1'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -312,29 +339,29 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_DIS'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td style="width: 15%;">2.1</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_SEN'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_DIS'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5.1</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_SEN'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_SONDA2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_DIS'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>9</td>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_SEN'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>9.1</td>
+                            <td>{{ $Datos_Equipo['N_S_SONDA2'] }}</td>
                             <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">10</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA2'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -346,9 +373,9 @@
                     <tbody>
                         <tr>
                             <th style="width: 15%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td>
                             <th style="width: 15%;">TIPO DE JUNTA:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TIPO_JUNTA'] }}</td>
                         </tr>
 
                         <tr>
@@ -564,7 +591,7 @@
                         </thead>
 
                             <tbody>
-                                @for($i = 0; $i < 54; $i++)
+                                @for($i = 0; $i < 14; $i++)
                                 <tr>
                                     <td>----</td>
                                     <td>----</td>

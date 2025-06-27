@@ -323,28 +323,28 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA1" name="Datos_Equipo[MARCA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA1" name="Datos_Equipo[MARCA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA1')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA1" name="Datos_Equipo[MODELO_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA1" name="Datos_Equipo[MODELO_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA1')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA1" name="Datos_Equipo[N_S_SONDA1]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA1" name="Datos_Equipo[N_S_SONDA1]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA1')}}">
                                         </div>
                                     </div>
                                     
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FREC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA1]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA1]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA1')}}">
                                         </div>
                                     </div>
 
@@ -371,28 +371,28 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA2')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA2')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_SONDA2]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_SONDA2]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA2')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FREC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA2]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA2]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA2')}}">
                                         </div>
                                     </div>
 
@@ -419,21 +419,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp1" name="Datos_Equipo[MARCA_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp1" name="Datos_Equipo[MARCA_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_SEN')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp1" name="Datos_Equipo[MODELO_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp1" name="Datos_Equipo[MODELO_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_SEN')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputbyp1" name="Datos_Equipo[N_S_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp1" name="Datos_Equipo[N_S_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_SEN')}}">
                                         </div>
                                     </div>
 
@@ -460,21 +460,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp2" name="Datos_Equipo[MARCA_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp2" name="Datos_Equipo[MARCA_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_DIS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp2" name="Datos_Equipo[MODELO_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp2" name="Datos_Equipo[MODELO_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_DIS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputbyp2" name="Datos_Equipo[N_S_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp2" name="Datos_Equipo[N_S_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_DIS')}}">
                                         </div>
                                     </div>
 
@@ -483,14 +483,14 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">GANANCIA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{old('Datos_Equipo.GANANCIA')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO DE JUNTA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_JUNTA]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_JUNTA]" placeholder="" value="{{old('Datos_Equipo.TIPO_JUNTA')}}">
                                         </div>
                                     </div>
 
@@ -504,21 +504,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">DIAMETRO:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TEMPERATURA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMPERATURA]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMPERATURA]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ESPESOR:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.ESPESOR')}}">
                                         </div>
                                     </div>
                                     
@@ -558,18 +558,18 @@
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
                                                 <th><input type="text" class="form-control default-input" data-column="1" style="width: 150px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 120px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 80px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -902,7 +902,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="13">
+                            <td colspan="14">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -916,18 +916,19 @@
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Indicación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="angulo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Ang (°)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[2]}" placeholder="NR (%)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[3]}" placeholder="NI (%)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[4]}" placeholder="LA (in)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[5]}" placeholder="LC (in)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="distancia_frente_zapata[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Distancia a Zapata" style="width: 160px;"></td>
-                            <td><input type="text" class="form-control" name="sa[${item.titulo}][]" value="${item.inputs[7]}" placeholder="SA (in)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="da[${item.titulo}][]" value="${item.inputs[8]}" placeholder="DA (prof.)" style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[9]}" placeholder="HT" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Evaluación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Fotos" style="width: 80px;"></td>
+                            <td><input type="text" class="form-control" name="junta_ele[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Junta/Elemento"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. de Indicación"></td>
+                            <td><input type="text" class="form-control" name="angulo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Ang (°)"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[4]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[5]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[6]}" placeholder="LA (in)"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[7]}" placeholder="LC (in)"></td>
+                            <td><input type="text" class="form-control" name="distancia_frente_zapata[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Distancia a Zapata"></td>
+                            <td><input type="text" class="form-control" name="sa[${item.titulo}][]" value="${item.inputs[9]}" placeholder="SA (in)"></td>
+                            <td><input type="text" class="form-control" name="da[${item.titulo}][]" value="${item.inputs[10]}" placeholder="DA (prof.)"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="HT"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Fotos"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;   
 
@@ -945,7 +946,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="13">
+                <td colspan="14">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -974,18 +975,19 @@
             let newRow = 
                 `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. de Indicación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="angulo[${lastTitle}][]" placeholder="Ang (°)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA (in)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC (in)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="dist_zapata[${lastTitle}][]" placeholder="Distancia a Zapata" style="width: 160px;"></td>
-                    <td><input type="text" class="form-control" name="sa[${lastTitle}][]" placeholder="SA (in)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="da[${lastTitle}][]" placeholder="DA (prof.)" style="width: 95px;"></td>
-                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="HT" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos" style="width: 80px;"></td>
+                    <td><input type="text" class="form-control" name="junta_ele[${lastTitle}][]" placeholder="Junta / Elemento"></td>
+                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. de Indicación"></td>
+                    <td><input type="text" class="form-control" name="angulo[${lastTitle}][]" placeholder="Ang (°)"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA (in)"></td>
+                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC (in)"></td>
+                    <td><input type="text" class="form-control" name="dist_zapata[${lastTitle}][]" placeholder="Distancia a Zapata"></td>
+                    <td><input type="text" class="form-control" name="sa[${lastTitle}][]" placeholder="SA (in)"></td>
+                    <td><input type="text" class="form-control" name="da[${lastTitle}][]" placeholder="DA (prof.)"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="HT"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                     </tr>`;        
 

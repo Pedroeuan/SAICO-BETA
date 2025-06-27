@@ -345,6 +345,28 @@ $(document).ready(function() {
     table.draw();
 });
 
+// Guardar datos en localStorage al escribir
+document.querySelectorAll('#devolverForm input, #devolverForm textarea, #devolverForm select').forEach(function(input) {
+    input.addEventListener('input', function() {
+        localStorage.setItem('devolverForm_' + input.name, input.value);
+    });
+});
+// Restaurar datos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#devolverForm input, #devolverForm textarea, #devolverForm select').forEach(function(input) {
+        let value = localStorage.getItem('devolverForm_' + input.name);
+        if (value !== null && input.type !== 'file') {
+            input.value = value;
+        }
+    });
+});
+// Limpiar localStorage al enviar el formulario
+document.getElementById('devolverForm').addEventListener('submit', function() {
+    document.querySelectorAll('#devolverForm input, #devolverForm textarea, #devolverForm select').forEach(function(input) {
+        localStorage.removeItem('devolverForm_' + input.name);
+    });
+});
+
 </script>
 
 @endsection

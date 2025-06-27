@@ -851,23 +851,23 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Junta"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="ang_inspeccion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Angulo de Inspección"></td>
-                            <td><input type="text" class="form-control" name="dsd_cara[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Cara"></td>
-                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Pierna"></td>
-                            <td><input type="text" class="form-control" name="decibel_a[${item.titulo}][]" value="${item.inputs[5]}" placeholder="a"></td>
-                            <td><input type="text" class="form-control" name="decibel_b[${item.titulo}][]" value="${item.inputs[6]}" placeholder="b"></td>
-                            <td><input type="text" class="form-control" name="decibel_c[${item.titulo}][]" value="${item.inputs[7]}" placeholder="c"></td>
-                            <td><input type="text" class="form-control" name="decibel_d[${item.titulo}][]" value="${item.inputs[8]}" placeholder="d"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="dis_angular[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Distancia Angular"></td>
-                            <td><input type="text" class="form-control" name="profundidad_a[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Profundidad A"></td>
-                            <td><input type="text" class="form-control" name="pos_x[${item.titulo}][]" value="${item.inputs[12]}" placeholder="x"></td>
-                            <td><input type="text" class="form-control" name="pos_y[${item.titulo}][]" value="${item.inputs[13]}" placeholder="y"></td>
-                            <td><input type="text" class="form-control" name="discontinuidad[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Discontinuidad"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[15]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="ang_inspeccion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Angulo de Inspección"></td>
+                            <td><input type="text" class="form-control" name="dsd_cara[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Cara"></td>
+                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Pierna"></td>
+                            <td><input type="text" class="form-control" name="decibel_a[${item.titulo}][]" value="${item.inputs[6]}" placeholder="a"></td>
+                            <td><input type="text" class="form-control" name="decibel_b[${item.titulo}][]" value="${item.inputs[7]}" placeholder="b"></td>
+                            <td><input type="text" class="form-control" name="decibel_c[${item.titulo}][]" value="${item.inputs[8]}" placeholder="c"></td>
+                            <td><input type="text" class="form-control" name="decibel_d[${item.titulo}][]" value="${item.inputs[9]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="dis_angular[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="profundidad_a[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Profundidad A"></td>
+                            <td><input type="text" class="form-control" name="pos_x[${item.titulo}][]" value="${item.inputs[13]}" placeholder="x"></td>
+                            <td><input type="text" class="form-control" name="pos_y[${item.titulo}][]" value="${item.inputs[14]}" placeholder="y"></td>
+                            <td><input type="text" class="form-control" name="discontinuidad[${item.titulo}][]" value="${item.inputs[15]}" placeholder="Discontinuidad"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);

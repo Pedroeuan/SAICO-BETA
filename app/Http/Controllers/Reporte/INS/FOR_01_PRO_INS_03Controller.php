@@ -957,7 +957,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-03/01.PDF',
+            'title' => 'Reporte_FOR-01-INS-03.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,

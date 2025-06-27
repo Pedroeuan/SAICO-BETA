@@ -338,24 +338,61 @@
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
+    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
 
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
+    formularios.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (!form) return; // Saltar si no existe
 
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
+        const inputs = form.querySelectorAll(".inputForm");
+        const textareas = form.querySelectorAll("textarea");
+
+        // Restaurar valores desde localStorage
+        inputs.forEach(input => {
+            const stored = localStorage.getItem(`${formId}_${input.name}`);
+            if (stored !== null) input.value = stored;
+
+            input.addEventListener("input", () => {
+                localStorage.setItem(`${formId}_${input.name}`, input.value);
             });
         });
+
+        textareas.forEach(textarea => {
+            const stored = localStorage.getItem(`${formId}_${textarea.name}`);
+            if (stored !== null) textarea.value = stored;
+
+            textarea.addEventListener("input", () => {
+                localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+            });
+        });
+
+        // Botón rellenar campos vacíos
+        const rellenarBtn = form.querySelector("#preFormBtn");
+        if (rellenarBtn) {
+            rellenarBtn.addEventListener("click", function () {
+                inputs.forEach(input => {
+                    if (input.value.trim() === "") {
+                        input.value = "---";
+                        localStorage.setItem(`${formId}_${input.name}`, input.value);
+                    }
+                });
+                textareas.forEach(textarea => {
+                    if (textarea.value.trim() === "") {
+                        textarea.value = "---";
+                        localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                    }
+                });
+            });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener("submit", function () {
+            inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
+            textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
+        });
     });
+});
+
 
     /*Selección de Firmas */
         document.addEventListener('DOMContentLoaded', function() {

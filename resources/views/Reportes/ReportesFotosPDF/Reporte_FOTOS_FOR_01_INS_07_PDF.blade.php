@@ -2,21 +2,17 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-05/01</title>
+            <title>FORMATO FOR-01-INS-03</title>
             <style>
                 @page {
                     margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
                     3.0cm /* superior */
                     1.2cm /* derecho */
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalTitulosYFilas <=20)
+                @if ($totalFotos <=4)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -28,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: 30px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -57,7 +53,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -81,28 +77,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                }
-                    
-                .simbologia {
-                    border-collapse: collapse;  /*separate No colapsar bordes */
-                    border-spacing: 0px;        /* Espacio entre celdas */
-                    width: 100%;
-                    text-align: center;
                     font-size: 8px;
-                }
-
-                .simbologia td, .simbologia th {
-                    border: .6px solid black; 
-                }
-                .celdaAmarillo{
-                    background-color: #FFF2CC;
                 }
 
                 .tablaheader {
@@ -110,7 +93,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -127,48 +110,16 @@
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
-            
-        .datosinspeccion{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
+
+        .border {
+            border: 1px solid black; 
         }
 
-        .datosinspeccion td, .datosinspeccion th {
-            border: .6px solid black; 
-        }
-
-        .datosinspeccionsinborde{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-        }
-
-        .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
-        }
-
-        .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
-        }
-        .celdaGris{
-            background-color: #DBDBDB;
-        }
-        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -176,7 +127,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -184,7 +134,79 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
+        }
+        /* ************** */
+        .imagenes-reporte {
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 106%;
+            border-collapse: separate;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
+        }
+
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para los comentarios */
+        .comment { 
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+        /* Estilo para los "comentarios" en blanco */
+        .empty-comment {
+            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 0px; /* Espaciado entre el borde y el texto */
+        }
+        
+        .empty-box {
+            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+        }
+
+        .cross-line {
+            width: 74%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
         }
             </style>
         </head>
@@ -196,16 +218,16 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-05/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 80%;">FOR-INS-07/01</th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> Informe de Inspección con Ultrasonido de  Acuerdo con API RP 2X </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>3</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -213,9 +235,9 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
-        
+
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
@@ -273,114 +295,10 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosinspeccion">
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="7">DATOS DEL EQUIPO</th></tr>
-                    </thead>  
-
-                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
-
-                    <tbody>
-                            <tr class="celdaGris">
-                                <th class="celdaGris" rowspan="2">EQUIPO:</th>
-                                <th style="width: 100px;">MARCA</th>
-                                <th style="width: 100px;">MODELO</th>
-                                <th style="width: 100px;">SERIE</th>
-                                <th class="celdaGris" rowspan="2">ACOPLANTE:</th>
-                                <th style="width: 100px;">MARCA</th>
-                                <th style="width: 100px;">TIPO</th>
-                            </tr>
-                            <tr>
-                                <td>{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
-                                <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
-                                <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
-                                <td>{{ $Datos_Equipo['AC_MARCA'] }}</td>
-                                <td>{{ $Datos_Equipo['AC_TIPO'] }}</td>
-                            </tr>
-                                <tr class="celdaGris">
-                                <th class="celdaGris" rowspan="4">TRANSDUCTORES:</th>
-                                <th style="width: 20%;">ÁNGULO</th>
-                                <th style="width: 20%;">FRECUENCIA</th>
-                                <th style="width: 20%;">TAMAÑO</th>
-                                <th class="celdaGris" rowspan="3">BLOQUES:</th>
-                                <th style="width: 20%;">CORRIENTE</th>
-                                <th style="width: 20%;">DISTANCIA ENTRE PATAS</th>
-                            </tr>
-                            <tr>
-                                <td>{{ $Datos_Equipo['ANGULO1_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['FRECUENCIA1_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['TAMANO1_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['BLOQUES1_MARCA'] }}</td>
-                                <td>{{ $Datos_Equipo['BLOQUES1_TIPO'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $Datos_Equipo['ANGULO2_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['FRECUENCIA2_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['TAMANO2_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['BLOQUES2_MARCA'] }}</td>
-                                <td>{{ $Datos_Equipo['BLOQUES2_TIPO'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $Datos_Equipo['ANGULO3_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['FRECUENCIA3_TRANSDUCTORES'] }}</td>
-                                <td>{{ $Datos_Equipo['TAMANO3_TRANSDUCTORES'] }}</td>
-                                <th class="celdaGris" colspan="2">LONGITUD DEL CABLE:</th>
-                                <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
-                            </tr>
-                        </tbody>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="7">DATOS DE LA INSPECCIÓN</th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                        <tr>
-                            <th style="width: 15%;">NIVEL DE ESCANEO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['NIVEL_ESCANEO'] }}</td>
-                            <th style="width: 15%;">SENSIBILIDAD (Db):</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['SENSIBILIDAD'] }}</td>
-                            <th style="width: 15%;">NIVEL DE CALIDAD:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['NIVEL_CALIDAD'] }}</td>
-                        </tr>
-
-                        <tr>
-                            <th style="width: 15%;">CONDICIÓN SUPERFICIAL:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['CONDICION_SUPERFICIAL'] }}</td>
-                            <th style="width: 15%;">TEMPERATURA:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['TEMPERATURA'] }}</td>
-                            <th style="width: 15%;"></th>
-                            <td></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
+                <div style="margin-bottom: 6px;"></div>
             </header>
-
+            
             <footer>
-            <div style="margin-bottom: 5px;"></div>
-                    <table>                               
-                        <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 606.5px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
-                        </tr>                      
-                    </table>
-
-                    <br>
-                                                
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -534,118 +452,52 @@
             </footer>
 
             <div class="content">
-                
-                    <table class="datosresultados">
-                    
-                        <thead class="encabezadoAzul">
-                            <tr><th colspan="8">RESULTADOS</th></tr>
-                        </thead>
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
 
-                        <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                        @endphp
 
-                        <thead>
-                                <tr class="celdaGris">
-                                    <th style="width: 14%;">DIBUJO</th>
-                                    <th>SOLDADURA</th>
-                                    <th>EVALUACIÓN</th>
-                                    <th>FORMA</th>
-                                    <th>TRANSFER</th>
-
-                                    <th>LONGITUD</th>
-                                    <th>ANCHO</th>
-                                    <th style="width: 14%;">OBSERVACIONES</th>
-                                </tr>
-                            </thead>
-                                <tbody>
-                                    @php
-                                        $contador = 1;
-                                        $filasPorPagina = 15;
-                                        $contadorFilas = 0;
-                                        $contadorFilasPagina = 0;
-                                        $totalMetros = 0;
-                                    @endphp
-
-                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
-                                        @php
-                                            $titulo = $grupo['titulos_juntas'];
-                                            $juntasDelGrupo = count($grupo['resultados']);
-                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
-                                        @endphp
-
-                                        @if ($titulo !== 'SIN TITULO')
-                                            <!-- Fila del título -->
-                                            <tr class="titulo-row">
-                                                <td colspan="8" style="border-left: 2px solid black; border-right: 2px solid black;">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        {{ $titulo }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @php $contadorFilasPagina++; @endphp
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
                                         @endif
-
-                                        @foreach ($grupo['resultados'] as $junta)
-                                            @php
-                                                $contadorFilas++;
-                                                $contadorFilasPagina++;
-                                                $totalMetros += floatval($junta['observaciones']);
-                                                $esUltimaFila = $loop->last;
-                                            @endphp
-                                            <tr class="juntas">
-                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['dibujo'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['soldadura'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['evaluacion'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['forma'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['transfer'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['longitud'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ancho'] }}</td>
-                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['observaciones'] }}</td>
-                                            </tr>
-
-                                                @if ($contadorFilas % $filasPorPagina === 0)
-                                                    <!-- Fila de total antes del salto de página -->
-                                                    <tr style="page-break-after: always;" class="sinBordetd">
-                                                        <td colspan="5" style="border-top: 2px solid black;"></td>
-                                                        <th colspan="2" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                                        <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
-                                                    </tr>
-
-                                                    @php
-                                                        $totalMetros = 0; // Reinicia el acumulador para la siguiente página
-                                                    @endphp
-
-                                                @endif
-                                            @php $contador++; @endphp
-                                        @endforeach
-
-                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
-                                            <!-- Salto de página porque no cabe el grupo completo -->
-                                                <tr style="page-break-after: always;" class="sinBordetd">
-                                                    <td colspan="5" style="border-top: 2px solid black;"></td>
-                                                    <th colspan="2" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                                    <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
-                                                </tr>
-                                                @php
-                                                    $contadorFilasPagina = 0;
-                                                    $totalMetros = 0;
-                                                @endphp
-                                            @endif
-
                                     @endforeach
-                                    
-                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>20 || $titulo != 'SIN TITULO')
-                                    <!-- Total al final si no se llenó la última página -->
-                                        @if ($contadorFilasPagina > 0)
-                                            <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="5" style="border-top: 2px solid black;"></td>
-                                                <th colspan="2" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
-                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
-                                            </tr>
-                                        @endif
-                                    @endif
 
-                                </tbody>
-                    </table>
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
         </body>
     </html>

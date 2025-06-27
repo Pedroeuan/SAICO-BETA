@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-06/01</title>
             <style>
-@page {
+                @page {
                     margin: 
                     3.0cm /* superior */
                     2.1cm /* derecho */

@@ -178,6 +178,28 @@ $(document).ready(function() {
             }
     });
 
+    // Guardar datos en localStorage al escribir
+    document.querySelectorAll('#Prueba_Norma_Codigo input, #Prueba_Norma_Codigo textarea, #Prueba_Norma_Codigo select').forEach(function(input) {
+        input.addEventListener('input', function() {
+            localStorage.setItem('Prueba_Norma_Codigo_' + input.name, input.value);
+        });
+    });
+    // Restaurar datos al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#Prueba_Norma_Codigo input, #Prueba_Norma_Codigo textarea, #Prueba_Norma_Codigo select').forEach(function(input) {
+            let value = localStorage.getItem('Prueba_Norma_Codigo_' + input.name);
+            if (value !== null && input.type !== 'file') {
+                input.value = value;
+            }
+        });
+    });
+    // Limpiar localStorage al enviar el formulario
+    document.getElementById('Prueba_Norma_Codigo').addEventListener('submit', function() {
+        document.querySelectorAll('#Prueba_Norma_Codigo input, #Prueba_Norma_Codigo textarea, #Prueba_Norma_Codigo select').forEach(function(input) {
+            localStorage.removeItem('Prueba_Norma_Codigo_' + input.name);
+        });
+    });
+
     </script>
 @endsection
 
