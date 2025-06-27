@@ -528,7 +528,7 @@
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="10">
+                                                        <td colspan="22">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
@@ -565,6 +565,7 @@
                                                         <td><input type="text" class="form-control" name="evaluacion[{{$tituloKey}}][]" value="{{$resultado['evaluacion']}}" style="width: 70px;"></td>
                                                         <td><input type="text" class="form-control" name="fotos[{{$tituloKey}}][]" value="{{$resultado['fotos']}}" style="width: 95px;"></td>
                                                         <td><input type="text" class="form-control" name="observaciones[{{$tituloKey}}][]" value="{{$resultado['observaciones']}}" style="width: 130px;"></td>
+                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
 
                                                     @php $contador++; @endphp
@@ -922,15 +923,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-
 <script>
-
-
-    
-
-
-
-     $(document).ready(function() {
+/*Juntas-Resultados */
+$(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;

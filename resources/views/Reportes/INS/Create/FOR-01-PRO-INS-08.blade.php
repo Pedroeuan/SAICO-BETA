@@ -870,9 +870,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-
 <script>
-
+/*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -971,27 +970,27 @@
             let newRow = 
                 `<tr data-titulo="${lastTitle}">
                         <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No." style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
+                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A"></td>
+                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B"></td>
+                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)"></td>
+                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)"></td>
+                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X"></td>
+                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y"></td>
+                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico"></td>
+                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna"></td>
+                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S"></td>
+                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L"></td>
+                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D"></td>
+                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No."></td>
+                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         
                     </tr>`;
@@ -1013,7 +1012,6 @@
                 });
                 return;
             }
-
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
@@ -1068,7 +1066,7 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-     
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1087,11 +1085,7 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-
     });
-
-
-
     
 </script>
 @endsection
