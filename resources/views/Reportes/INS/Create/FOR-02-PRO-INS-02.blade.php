@@ -261,7 +261,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">PARTICULAS:</label>
-                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect1">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione una Particula</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -322,7 +322,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">CONTRASTANTE:</label>
-                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect2">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Contrastante</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -385,7 +385,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">EQUIPOS:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"

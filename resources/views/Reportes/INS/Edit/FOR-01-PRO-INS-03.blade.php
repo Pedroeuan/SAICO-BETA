@@ -249,7 +249,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Penetrantes:</label>
-                                            <select class="form-control inputForm" name="Consumible1" id="consumiblesSelect1">
+                                            <select class="form-select inputForm" name="Consumible1" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione un Penetrante</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -310,7 +310,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Removedor:</label>
-                                            <select class="form-control inputForm" name="Consumible2" id="consumiblesSelect2">
+                                            <select class="form-select inputForm" name="Consumible2" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Removedor</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -372,7 +372,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Reveleador:</label>
-                                            <select class="form-control inputForm" name="Consumible3" id="consumiblesSelect3">
+                                            <select class="form-select inputForm" name="Consumible3" id="consumiblesSelect3">
                                             <option value="" selected disabled>Seleccione un Reveleador</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"

@@ -90,15 +90,6 @@
                                     </div>
 
                                     <div class="col-sm-4">
-    <div class="form-group">
-        <label class="col-form-label" for="inputSuccess">No. Reporte old</label>
-        <input type="text" class="form-control inputForm @error('Detalles_Generales.No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]" placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte')}}">
-        @error('Detalles_Generales.No_Reporte') {{-- <-- CHANGE THIS LINE --}}
-            <div class="invalid-feedback"><span>{{ $message }}</span></div>
-        @enderror
-    </div>
-</div>
-                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No. Reporte</label>
                                             <input type="text" class="form-control  inputForm @error('No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]"  placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte')}}">
@@ -298,7 +289,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Transductores:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
