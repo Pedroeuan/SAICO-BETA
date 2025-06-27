@@ -289,10 +289,10 @@
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                        <tr><th colspan="7">DATOS Y AJUSTES DEL EQUIPO </th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
 
                     <tbody>
                         <tr class="celdaGris">
@@ -302,27 +302,27 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <td>2</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['ACOPLANTE'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
-                            <td>9</td>
+                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}<</td>
+                            <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
                             <th class="celdaGris">SERIE:</th>
                             
-                            <td style="width: 12%;">10</td>
+                            <td style="width: 12%;">{{ $Datos_Equipo['N_S_SONDA1'] }}</td>
                             <th class="celdaGris">FRECC:</th>
-                            <td>10.1</td>
+                            <td>{{ $Datos_Equipo['FREC_SONDA1'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -339,29 +339,29 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 15%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_DIS'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td style="width: 15%;">2.1</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_SEN'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">2.1</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_DIS'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5.1</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_SEN'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">6</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_SONDA2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_DIS'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>9</td>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_SEN'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>9.1</td>
+                            <td>{{ $Datos_Equipo['N_S_SONDA2'] }}</td>
                             <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">10</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA2'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -373,9 +373,9 @@
                     <tbody>
                         <tr>
                             <th style="width: 15%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td>
                             <th style="width: 15%;">TIPO DE JUNTA:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TIPO_JUNTA'] }}</td>
                         </tr>
 
                         <tr>
