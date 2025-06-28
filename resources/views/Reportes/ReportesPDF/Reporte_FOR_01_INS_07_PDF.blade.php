@@ -609,7 +609,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="13" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>
@@ -626,8 +626,7 @@
                                                 $esUltimaFila = $loop->last;
                                             @endphp
                                             <tr class="juntas">
-                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $contador }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['junta_ele'] }}</td>
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['junta_ele'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_indicacion'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['angulo'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['nr'] }}</td>
@@ -645,7 +644,7 @@
                                                 @if ($contadorFilas % $filasPorPagina === 0)
                                                     <!-- Fila de total antes del salto de página -->
                                                     <tr style="page-break-after: always;" class="sinBordetd">
-                                                        <td colspan="6" style="border-top: 2px solid black;"></td>
+                                                        <td colspan="9" style="border-top: 2px solid black;"></td>
                                                         <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
@@ -661,7 +660,7 @@
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
-                                                    <td colspan="6" style="border-top: 2px solid black;"></td>
+                                                    <td colspan="9" style="border-top: 2px solid black;"></td>
                                                     <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
@@ -677,7 +676,7 @@
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="6" style="border-top: 2px solid black;"></td>
+                                                <td colspan="9" style="border-top: 2px solid black;"></td>
                                                 <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
