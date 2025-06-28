@@ -400,7 +400,7 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -672,7 +672,7 @@
                                         @endif
                                     @endif
 
-                                </tbody>
+                            </tbody>
                     </table>
             </div>
         </body>
