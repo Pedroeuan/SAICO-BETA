@@ -500,7 +500,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>1)
+        if($imageCount>=1)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
