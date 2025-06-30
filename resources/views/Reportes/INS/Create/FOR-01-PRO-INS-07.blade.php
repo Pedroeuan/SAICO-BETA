@@ -251,7 +251,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -306,7 +306,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect1">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect1">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -354,7 +354,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect2">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect2">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -402,7 +402,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block de Sensibilidad:</label>
-                                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect1">
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect1">
                                             <option value="" selected disabled>Seleccione un Block de Sensibilidad</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -443,7 +443,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block de Distancia:</label>
-                                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect2">
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect2">
                                             <option value="" selected disabled>Seleccione un Block de Distancia</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"

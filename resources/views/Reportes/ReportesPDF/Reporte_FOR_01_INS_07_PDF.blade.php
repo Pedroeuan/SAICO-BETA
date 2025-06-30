@@ -380,16 +380,16 @@
 
                         <tr>
                             <th style="width: 15%;">RECHAZO:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] }}</td>
                             <th style="width: 15%;">DIAMETRO:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['DIAMETRO'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">TEMPERATURA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TEMPERATURA'] }}</td>
                             <th style="width: 15%;">ESPESOR:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['ESPESOR'] }}</td>
                         </tr>
 
                     </tbody>
@@ -410,7 +410,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 916px;"></td>                            
+                            <td class="lineaInferior" style="width: 606.5px;"></td>                            
                         </tr>                      
                     </table>
 
@@ -484,7 +484,7 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
-                                                                    
+
                                 <tr>
                                     <th></th>
                                     <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
@@ -539,7 +539,7 @@
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
                                     <th></th>
                                 </tr>
-                                                                    
+
                                 <tr>
                                     <th></th>
                                     <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
@@ -590,38 +590,98 @@
                             </tr>
                         </thead>
 
-                            <tbody>
-                                @for($i = 0; $i < 14; $i++)
-                                <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                </tr>
-                                @endfor
-                                <tr class="sinBordeth">
-                                    <td colspan="10" rowspan="2">
-                                        <b>NPIR</b>= No Presenta Indicaciones Relevantes, 
-                                        <b>SC</b>= Soldadura Circunferencial, 
-                                        <b>SA</b>= Distancia Angular, 
-                                        <b>HT</b>= Horario tecncio, 
-                                        <b>SL</b>= Soldadura Longitudinal,
-                                        <b>LA</b>= Largo Axial, 
-                                        <b>LC</b>= Largo circunferencial, 
-                                        <b>DA</b>= Profundidad
-                                    </td>
-                                    <td colspan="2"><strong>TOTAL DE PUNTOS:</strong></td>
-                                    <td><strong>0 m</strong></td>
-                                </tr>
+                                <tbody>
+                                    @php
+                                        $contador = 1;
+                                        $filasPorPagina = 15;
+                                        $contadorFilas = 0;
+                                        $contadorFilasPagina = 0;
+                                        $totalMetros = 0;
+                                    @endphp
+
+                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                                        @php
+                                            $titulo = $grupo['titulos_juntas'];
+                                            $juntasDelGrupo = count($grupo['resultados']);
+                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
+                                        @endphp
+
+                                        @if ($titulo !== 'SIN TITULO')
+                                            <!-- Fila del título -->
+                                            <tr class="titulo-row">
+                                                <td colspan="13" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ $titulo }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @php $contadorFilasPagina++; @endphp
+                                        @endif
+
+                                        @foreach ($grupo['resultados'] as $junta)
+                                            @php
+                                                $contadorFilas++;
+                                                $contadorFilasPagina++;
+                                                $totalMetros += floatval($junta['fotos']);
+                                                $esUltimaFila = $loop->last;
+                                            @endphp
+                                            <tr class="juntas">
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['junta_ele'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['angulo'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['nr'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ni'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['la'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['lc'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['dist_zapata'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['sa'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['da'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ht'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['evaluacion'] }}</td>
+                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['fotos'] }}</td>
+                                            </tr>
+
+                                                @if ($contadorFilas % $filasPorPagina === 0)
+                                                    <!-- Fila de total antes del salto de página -->
+                                                    <tr style="page-break-after: always;" class="sinBordetd">
+                                                        <td colspan="9" style="border-top: 2px solid black;"></td>
+                                                        <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                        <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                                    </tr>
+
+                                                    @php
+                                                        $totalMetros = 0; // Reinicia el acumulador para la siguiente página
+                                                    @endphp
+
+                                                @endif
+                                            @php $contador++; @endphp
+                                        @endforeach
+
+                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
+                                            <!-- Salto de página porque no cabe el grupo completo -->
+                                                <tr style="page-break-after: always;" class="sinBordetd">
+                                                    <td colspan="9" style="border-top: 2px solid black;"></td>
+                                                    <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                                </tr>
+                                                @php
+                                                    $contadorFilasPagina = 0;
+                                                    $totalMetros = 0;
+                                                @endphp
+                                            @endif
+
+                                    @endforeach
+                                    
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>20 || $titulo != 'SIN TITULO')
+                                    <!-- Total al final si no se llenó la última página -->
+                                        @if ($contadorFilasPagina > 0)
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="9" style="border-top: 2px solid black;"></td>
+                                                <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                        @endif
+                                    @endif
 
                             </tbody>
                     </table>

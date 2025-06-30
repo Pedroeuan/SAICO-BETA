@@ -243,7 +243,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                 <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                     {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                         <option value="{{ $equipo->idGeneral_EyC }}"
@@ -283,7 +283,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Transductor:</label>
-                                <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                 <option value="" selected disabled>Seleccione un Transductor</option> <!-- Opción por defecto -->
                                     {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                         <option value="{{ $equipo->idGeneral_EyC }}"
@@ -331,7 +331,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Referencia:</label>
-                                <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                                 <option value="" selected disabled>Seleccione un Block de Referencia</option>
                                     {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                         <option value="{{ $blockyprobeta->idGeneral_EyC }}"

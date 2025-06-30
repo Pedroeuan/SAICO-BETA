@@ -81,23 +81,13 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                                            {{--<input type="date" class="form-control inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]" placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}"> --}}
-                                            <input type="date" class="form-control inputForm @error('Detalles_Generales.Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]" placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Detalles_Generales.Fecha') }}">
+                                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
                                             @error('Fecha')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-    <div class="form-group">
-        <label class="col-form-label" for="inputSuccess">No. Reporte old</label>
-        <input type="text" class="form-control inputForm @error('Detalles_Generales.No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]" placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte')}}">
-        @error('Detalles_Generales.No_Reporte') {{-- <-- CHANGE THIS LINE --}}
-            <div class="invalid-feedback"><span>{{ $message }}</span></div>
-        @enderror
-    </div>
-</div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No. Reporte</label>
@@ -298,7 +288,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Transductores:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -880,15 +870,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-
 <script>
-
-
-    
-
-
-
-     $(document).ready(function() {
+/*Juntas-Resultados */
+    $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
@@ -917,37 +901,32 @@
                         </tr>`;
                         $('#dynamicTable tbody').append(newTitle);
                     } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="lado_a[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Lado A" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="lado_b[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Lado B" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ø" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="Ang[${item.titulo}][]" value="${item.inputs[7]}" placeholder="A (°)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="Gdb[${item.titulo}][]" value="${item.inputs[8]}" placeholder="G (dB)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)" style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[11]}" placeholder="X" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Y" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="horario_tecnico[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Horario Técnico" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_pierna[${item.titulo}][]" value="${item.inputs[14]}" placeholder="No. de Pierna" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="s[${item.titulo}][]" value="${item.inputs[15]}" placeholder="S" style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="l[${item.titulo}][]" value="${item.inputs[16]}" placeholder="L" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[17]}" placeholder="D" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[18]}" placeholder="tmin" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Evaluación" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No." style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones" style="width: 130px;"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="lado_a[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Lado A"></td>
+                            <td><input type="text" class="form-control" name="lado_b[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Lado B"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="Ang[${item.titulo}][]" value="${item.inputs[7]}" placeholder="A (°)"></td>
+                            <td><input type="text" class="form-control" name="Gdb[${item.titulo}][]" value="${item.inputs[8]}" placeholder="G (dB)"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[11]}" placeholder="X"></td>
+                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Y"></td>
+                            <td><input type="text" class="form-control" name="horario_tecnico[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Horario Técnico"></td>
+                            <td><input type="text" class="form-control" name="no_pierna[${item.titulo}][]" value="${item.inputs[14]}" placeholder="No. de Pierna"></td>
+                            <td><input type="text" class="form-control" name="s[${item.titulo}][]" value="${item.inputs[15]}" placeholder="S"></td>
+                            <td><input type="text" class="form-control" name="l[${item.titulo}][]" value="${item.inputs[16]}" placeholder="L"></td>
+                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[17]}" placeholder="D"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[18]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No."></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                            
                         </tr>`;
-
-                        
-
-
-
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });
@@ -991,27 +970,27 @@
             let newRow = 
                 `<tr data-titulo="${lastTitle}">
                         <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No." style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
+                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A"></td>
+                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B"></td>
+                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)"></td>
+                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)"></td>
+                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X"></td>
+                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y"></td>
+                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico"></td>
+                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna"></td>
+                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S"></td>
+                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L"></td>
+                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D"></td>
+                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No."></td>
+                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         
                     </tr>`;
@@ -1033,7 +1012,6 @@
                 });
                 return;
             }
-
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
@@ -1088,7 +1066,7 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-     
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1107,11 +1085,7 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-
     });
-
-
-
     
 </script>
 @endsection

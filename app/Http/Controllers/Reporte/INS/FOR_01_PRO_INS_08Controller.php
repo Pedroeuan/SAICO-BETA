@@ -288,8 +288,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'fotos' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
-            
-
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:2,3,4',
 
@@ -430,27 +428,27 @@ class FOR_01_PRO_INS_08Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
-                    'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
-                    'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'Ang' => $request->input("Ang.$sinTituloKey.$i"),
-                    'Gdb' => $request->input("Gdb.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'x' => $request->input("x.$sinTituloKey.$i"),
-                    'y' => $request->input("y.$sinTituloKey.$i"),
-                    'horario_tecnico' => $request->input("horario_tecnico.$sinTituloKey.$i"),
-                    'no_pierna' => $request->input("no_pierna.$sinTituloKey.$i"),
-                    's' => $request->input("s.$sinTituloKey.$i"),
-                    'l' => $request->input("l.$sinTituloKey.$i"),
-                    'd' => $request->input("d.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'fotos' => $request->input("fotos.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
+                    'lado_a' => $request->input("lado_a.$tituloKey.$i"),
+                    'lado_b' => $request->input("lado_b.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'Ang' => $request->input("Ang.$tituloKey.$i"),
+                    'Gdb' => $request->input("Gdb.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'x' => $request->input("x.$tituloKey.$i"),
+                    'y' => $request->input("y.$tituloKey.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$tituloKey.$i"),
+                    'no_pierna' => $request->input("no_pierna.$tituloKey.$i"),
+                    's' => $request->input("s.$tituloKey.$i"),
+                    'l' => $request->input("l.$tituloKey.$i"),
+                    'd' => $request->input("d.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'fotos' => $request->input("fotos.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
         
