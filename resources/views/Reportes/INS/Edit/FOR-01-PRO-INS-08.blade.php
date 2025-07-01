@@ -533,8 +533,8 @@
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                         <i class="bi bi-trash"  aria-hidden="true"></i>
                                                                     </button>
                                                                 </td>
                                                             </div>
@@ -566,7 +566,7 @@
                                                         <td><input type="text" class="form-control" name="evaluacion[{{$tituloKey}}][]" value="{{$resultado['evaluacion']}}" style="width: 70px;"></td>
                                                         <td><input type="text" class="form-control" name="fotos[{{$tituloKey}}][]" value="{{$resultado['fotos']}}" style="width: 95px;"></td>
                                                         <td><input type="text" class="form-control" name="observaciones[{{$tituloKey}}][]" value="{{$resultado['observaciones']}}" style="width: 130px;"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                        <td><button type="button" class="btn btn-danger btnEliminar"> <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                                                     </tr>
 
                                                     @php $contador++; @endphp
@@ -686,7 +686,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
+                                                <textarea class="form-control  is-waning" id="textAreaObs" name="Datos_Equipo[OBS]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Datos_Equipo.OBS', $Datos_Equipo['OBS'] ?? '')}}</textarea>
                                             </div>
                                         </div>
 
