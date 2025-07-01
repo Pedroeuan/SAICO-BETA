@@ -261,13 +261,13 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Datos_Equipo.TEMP_MAX_OP' => 'nullable|string|max:255',
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.OBS' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -611,6 +611,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Datos_Equipo.TEMP_MAX_OP' => 'nullable|string|max:255',
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.OBS' => 'nullable|string|max:255',
             /*'Datos_Equipo.Observaciones' => 'nullable|string|max:255',*/
 
 
