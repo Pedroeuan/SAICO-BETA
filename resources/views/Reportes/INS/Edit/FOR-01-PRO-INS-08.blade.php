@@ -876,6 +876,7 @@
                                             </table>
                                         </div>
 
+
                                         <p>
 
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
@@ -997,7 +998,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 
 <!-- Biblioteca para recorte de imagenes -->
