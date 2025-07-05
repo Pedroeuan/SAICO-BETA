@@ -614,10 +614,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
             /*'Datos_Equipo.Observaciones' => 'nullable|string|max:255',*/
 
-
-            
-
-
             /*Titulos Juntas */
             'titulos' => 'nullable|array',  // Asegura que sea un array
             'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido

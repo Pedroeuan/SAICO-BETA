@@ -344,21 +344,22 @@
                         </div>
 
                         <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE REFERENCIA</div>
-
-                        <!-- Select para Block y Probeta -->
+@php/* dd($idsGeneral_EyCs_BlockyProbeta);*/ @endphp
+                       <!-- Select para Block y Probeta -->
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Referencia:</label>
                                 <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                                <option value="" selected disabled>Seleccione un Block de Referencia</option>
+                                <option value="0" selected disabled>Seleccione un Block de Referencia</option>
                                     @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                         <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                            data-modelo="{{ $blockyprobeta->Modelo }}"
-                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                data-marca="{{ $blockyprobeta->Marca }}"
+                                                data-modelo="{{ $blockyprobeta->Modelo }}"
+                                                data-ns="{{ $blockyprobeta->Serie }}">
                                             {{ $blockyprobeta->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
+                                  <!--<option value="">op</option>-->
                                 </select>
                             </div>
                         </div>
