@@ -395,10 +395,13 @@
 
     /*Selección de Firmas */
         document.addEventListener('DOMContentLoaded', function() {
+        //const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
         const numFirmasSelect = document.getElementById('numFirmas');
         const firmas2 = document.getElementById('firmas2');
         const firmas3 = document.getElementById('firmas3');
         const firmas4 = document.getElementById('firmas4');
+
+        //numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2';
 
         numFirmasSelect.addEventListener('change', function() {
             if (this.value == '2') {
