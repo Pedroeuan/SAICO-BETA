@@ -110,6 +110,9 @@
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
 
+        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
+        selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
+
         imageCountSelect.addEventListener('change', function () {
             const count = parseInt(this.value);
             //localStorage.setItem('imageCount', count);
@@ -127,7 +130,7 @@
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
@@ -357,14 +360,51 @@
             });
         });
 
-        textareas.forEach(textarea => {
+       /* textareas.forEach(textarea => {
             const stored = localStorage.getItem(`${formId}_${textarea.name}`);
             if (stored !== null) textarea.value = stored;
 
             textarea.addEventListener("input", () => {
                 localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
             });
+        });*/ //este es funcional 
+
+
+
+
+        textareas.forEach(textarea => {
+            // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
+            if (textarea.name === "comments[]" && textarea.id) {
+                // Guardar usando id como clave
+                const stored = localStorage.getItem(`${formId}_${textarea.id}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
+                });
+            } else {
+                // Para otros textareas (que no son comentarios), usar name
+                const stored = localStorage.getItem(`${formId}_${textarea.name}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                });
+            }
         });
+
+
+
+       /* selects.forEach(select => {
+            const stored = localStorage.getItem(`${formId}_${select.name}`);
+            console.log(''+stored);
+
+            if (stored !== null) select.value = stored;
+
+            select.addEventListener("change", () => {
+                localStorage.setItem(`${formId}_${select.name}`, select.value);
+            });
+        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");

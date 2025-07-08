@@ -800,6 +800,9 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+
+                                        
+
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -808,6 +811,15 @@
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
                                                 @endfor
                                             </select>
+                                        </div>
+
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
                                         </div>
 
                                         <div id="imageFieldsContainer" class="row">
@@ -1036,13 +1048,21 @@
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
             }
-                // Evento cuando se cambia la selección en el select
-                $('#consumiblesSelect1').on('change', function() {
-                    actualizarInputsC1();
-                });
+
+
+            // Evento cuando se cambia la selección en el select
+            $('#consumiblesSelect1').on('change', function() {
+                actualizarInputsC1();
             });
 
-            $(document).ready(function() {
+            const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+            selectedOptionLocal != null ?  ($('#consumiblesSelect1').val(selectedOptionLocal),actualizarInputsC1()):"";
+
+            // Cuando se cambia la selección
+            $('#consumiblesSelect1').on('change', function() {
+                actualizarInputsC1();
+            });
+            
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
@@ -1056,13 +1076,15 @@
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
             }
-                // Evento cuando se cambia la selección en el select
-                $('#consumiblesSelect2').on('change', function() {
-                    actualizarInputsC2();
-                });
-            });
 
-            $(document).ready(function() {
+            const selectedOptionLocal2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
+            selectedOptionLocal2 != null ?  ($('#consumiblesSelect2').val(selectedOptionLocal2),actualizarInputsC2()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#consumiblesSelect2').on('change', function() {
+                actualizarInputsC2();
+            });
+            
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
 
@@ -1076,11 +1098,15 @@
                 $('#modeloInputC3').val(modelo);
                 $('#loteInputC3').val(lote);
             }
-                // Evento cuando se cambia la selección en el select
-                $('#consumiblesSelect3').on('change', function() {
-                    actualizarInputsC3();
-                });
+
+            const selectedOptionLocal3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible3');
+            selectedOptionLocal3 != null ?  ($('#consumiblesSelect3').val(selectedOptionLocal3),actualizarInputsC3()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#consumiblesSelect3').on('change', function() {
+                actualizarInputsC3();
             });
+        });
 
     /*FOR-01-PRO-INS-03*/
     document.addEventListener('DOMContentLoaded', function () {
