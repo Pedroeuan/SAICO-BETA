@@ -182,7 +182,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_08*/
         Route::post('/Reportes_FOR_01_PRO_INS_08/update/{id}', [FOR_01_PRO_INS_08Controller::class, 'FOR_01_PRO_INS_08_update'])->name('Reportes_FOR_01_PRO_INS_08.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_08*/
-        Route::get('/Reporte/FOR-INS-01/08/PDF/{id}', [FOR_01_PRO_INS_08Controller::class, 'FOR_INS_01_08'])->name('Reporte_FOR_INS_01_08.PDF');
+        Route::get('/Reporte/FOR-01-INS-08/PDF/{id}', [FOR_01_PRO_INS_08Controller::class, 'FOR_01_INS_08'])->name('Reporte_FOR_01_INS_08.PDF');
         
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_09*/
         Route::post('/Reportes_FOR_01_PRO_INS_09/store', [FOR_01_PRO_INS_09Controller::class, 'FOR_01_PRO_INS_09_store'])->name('Reportes_FOR_01_PRO_INS_09.store');
@@ -536,7 +536,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
     //Route::get('/Reporte/FOR_01_PRO_INS_05', [ReporteController::class, 'FOR_01_PRO_INS_05'])->name('Reporte.FOR_01_PRO_INS_05');
     //Route::get('/Reporte/FOR_01_PRO_INS_06', [ReporteController::class, 'FOR_01_PRO_INS_06'])->name('Reporte.FOR_01_PRO_INS_06');
     //Route::get('/Reporte/FOR_01_PRO_INS_07', [ReporteController::class, 'FOR_01_PRO_INS_07'])->name('Reporte.FOR_01_PRO_INS_07');
-    Route::get('/Reporte/FOR_01_PRO_INS_08', [ReporteController::class, 'FOR_01_PRO_INS_08'])->name('Reporte.FOR_01_PRO_INS_08');
+    //Route::get('/Reporte/FOR_01_PRO_INS_08', [ReporteController::class, 'FOR_01_PRO_INS_08'])->name('Reporte.FOR_01_PRO_INS_08');
     Route::get('/Reporte/FOR_01_PRO_INS_09', [ReporteController::class, 'FOR_01_PRO_INS_09'])->name('Reporte.FOR_01_PRO_INS_09');
     Route::get('/Reporte/FOR_01_PRO_INS_10', [ReporteController::class, 'FOR_01_PRO_INS_10'])->name('Reporte.FOR_01_PRO_INS_10');
     Route::get('/Reporte/FOR_01_PRO_INS_12', [ReporteController::class, 'FOR_01_PRO_INS_12'])->name('Reporte.FOR_01_PRO_INS_12');
