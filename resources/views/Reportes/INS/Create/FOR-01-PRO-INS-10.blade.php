@@ -122,7 +122,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}">
+                                <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                 @error('Proyecto')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -132,7 +132,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                                <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                                 @error('Orden_Trabajo')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -172,7 +172,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
+                                <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Isometrico_Plano]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Isometrico_Plano')}}</textarea>
                                 @error('Isometrico_Plano')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -449,6 +449,11 @@
 
                         <div class="table-responsive">
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
                             <thead>
                                 <tr>
                                     <th class="align-middle">ID</th>
@@ -476,26 +481,26 @@
                                 </tr>
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="19"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="20"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 75px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 50px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 50px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 50px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 50px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 90px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="20" style="width: 130px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -878,7 +883,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/includes.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -887,8 +892,7 @@
 
 
 <script>
-
-        $(document).ready(function() {
+    $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
@@ -919,27 +923,27 @@
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Nivel" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Ønom" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Øext" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[6]}" placeholder="G (dB)" style="width: 75px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[7]}" placeholder="NR (%)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NI (%)" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[9]}" placeholder="DNR" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Horario Técnico" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[11]}" placeholder="S.C." style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmin" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[15]}" placeholder="d" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[16]}" placeholder="ta" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Perdida de Material (%)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Fotos No." style="width: 90px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones" style="width: 130px;"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[6]}" placeholder="G (dB)"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[7]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[9]}" placeholder="DNR"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Horario Técnico"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[11]}" placeholder="S.C."></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[15]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[16]}" placeholder="ta"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Perdida de Material (%)"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Fotos No."></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                             
                         </tr>`;
 
@@ -988,27 +992,27 @@
             let newRow = 
                 `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Elemento" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="Nivel" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="Ønom" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="Øext" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="G (dB)" style="width: 75px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="NR (%)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="NI (%)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="DNR" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Horario Técnico" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="S.C." style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA" style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="LC" style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="tmin" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="d" style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="ta" style="width: 50px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Perdida de Material (%)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Fotos No." style="width: 90px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Elemento"></td>
+                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="Nivel"></td>
+                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="Ønom"></td>
+                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="Øext"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="G (dB)"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="DNR"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Horario Técnico"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="S.C."></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="LC"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="d"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="ta"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Perdida de Material (%)"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Fotos No."></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                     
                 </tr>`;
 
