@@ -250,20 +250,28 @@ class FOR_01_PRO_INS_10Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
             'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+
+            'Datos_Equipo.PRES_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_MAX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP_MAX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.COND_SUPER' => 'nullable|string|max:255',
+            'Datos_Equipo.EST_PINT' => 'nullable|string|max:255',
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */

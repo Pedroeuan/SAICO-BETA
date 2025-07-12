@@ -300,28 +300,28 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
                             </div>
                         </div>
                         
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
                             </div>
                         </div>
 
@@ -376,7 +376,7 @@
                         <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">LONGITUD DE CABLE:</div>
                         <div>
                             <div class="form-group">
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[LONGITUD_CABLE]" placeholder="" value="{{old('Datos_Equipo.LONGITUD_CABLE')}}">
                             </div>
                         </div>
 
@@ -387,14 +387,14 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">GANANCIA:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{old('Datos_Equipo.GANANCIA')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">RANGO:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RANGO]" placeholder="" value="{{old('Datos_Equipo.RANGO')}}">
                             </div>
                         </div>
 
@@ -408,35 +408,35 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">PRESIÓN DE OPERACIÓN:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[PRES_OPE]" placeholder="" value="{{old('Datos_Equipo.PRES_OPE')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">PRESIÓN MÁXIMA DE OPERACIÓN:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[PRES_MAX_OPE]" placeholder="" value="{{old('Datos_Equipo.PRES_MAX_OPE')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-5">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">TEMPERATURA MÁXIMA DE OPERACIÓN:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMP_MAX_OPE]" placeholder="" value="{{old('Datos_Equipo.TEMP_MAX_OPE')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">CONDICIÓN SUPERFICIAL:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[COND_SUPER]" placeholder="" value="{{old('Datos_Equipo.COND_SUPER')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">ESTADO DE LA PINTURA:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[EST_PINT]" placeholder="" value="{{old('Datos_Equipo.EST_PINT')}}">
                             </div>
                         </div>
                         
@@ -925,26 +925,27 @@
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[6]}" placeholder="G (dB)"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[7]}" placeholder="NR (%)"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NI (%)"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[9]}" placeholder="DNR"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Horario Técnico"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[11]}" placeholder="S.C."></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmin"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[15]}" placeholder="d"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[16]}" placeholder="ta"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Perdida de Material (%)"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Fotos No."></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[0]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[7]}" placeholder="G (dB)"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[10]}" placeholder="DNR"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Horario Técnico"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[12]}" placeholder="S.C."></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[16]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[17]}" placeholder="ta"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Perdida de Material (%)"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Fotos No."></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                             
                         </tr>`;
@@ -994,6 +995,7 @@
             let newRow = 
                 `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
                     <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Elemento"></td>
                     <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="Nivel"></td>
                     <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="Ønom"></td>
