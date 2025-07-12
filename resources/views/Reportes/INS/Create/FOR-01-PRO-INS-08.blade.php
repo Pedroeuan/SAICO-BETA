@@ -491,27 +491,27 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" ></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="18"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="19"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="20"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="21"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="19" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="20" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="21" style="width: 100px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>

@@ -419,7 +419,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">PRESIÓN MÁXIMA DE OPERACIÓN:</label>
-                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[PRES_MAX_OPE]" placeholder="" value="{{old('Datos_Equipo.PRES_MAX_OPE', $Datos_Equipo['PRES_MAX_OPE'] ?? '')}}">
+                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[PRES_MAX_OPE]" placeholder="" value="{{old('Datos_Equipo.PRES_MAX_OP', $Datos_Equipo['PRES_MAX_OPE'] ?? '')}}">
                                         </div>
                                     </div>
 

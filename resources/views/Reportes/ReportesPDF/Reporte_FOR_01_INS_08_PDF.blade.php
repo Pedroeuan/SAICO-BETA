@@ -3,7 +3,7 @@
         <head>
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-08/01</title>
-            <style>
+           <style>
                 @page {
                     margin: 
                     3.0cm /* superior */
@@ -11,7 +11,7 @@
                     2.1cm /* inferior */
                     2.4cm; /* izquierdo */
                 }
-            @if ($totalTitulosYFilas <=15)
+                @if ($totalTitulosYFilas <=15)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -64,7 +64,7 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 235px; /* Altura del header */
+                    padding-top: 285px; /* Altura del header */
                     padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
@@ -75,13 +75,14 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 6px;
                 }
                     
                 .simbologia {
@@ -89,7 +90,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 5px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -116,10 +117,14 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
+            font-size: 7px;
             background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
+        }
+
+        .border {
+            border: 1px solid black; 
         }
             
         .datosinspeccion{
@@ -127,34 +132,46 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 6px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
         }
+        
 
         .datosinspeccionsinborde{
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
+            font-size: 6px;
         }
 
         .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
+            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 10px;
+            /*border : 1px solid black;*/
         }
 
         .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
+            border: .1px solid black; /* Borde grueso de 2px */
         }
         .celdaGris{
             background-color: #DBDBDB;
+            font-size: 6px;
+        }
+
+        .celdaGrisResultados{
+            background-color: #DBDBDB;
+            font-size: 9px;
+        }
+
+        .juntas{
+            font-size: 9px;
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -162,7 +179,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -170,7 +186,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -178,7 +193,6 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
         }
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
@@ -232,9 +246,10 @@
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
-
-                                        <tbody>
+                    <thead>
+                        <tr class="sinBordeth"><th colspan="4"></th></tr>
+                    </thead> <!-- Fila vacia -->
+                    <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
@@ -295,6 +310,7 @@
                     <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
                 
                     <tbody>
+                        <tr><th style="border:none;"></th> </tr>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
                             <th colspan="4">TRANSDUCTOR</th>
@@ -310,6 +326,15 @@
                             <td style="width: 100px;">{{ $Datos_Equipo['MARCA_BLOCK'] }}</td>
                             <td class="" style="width: 100px;">{{ $Datos_Equipo['ACOPLANTE'] }}</td>
                         </tr>
+                         <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_TR'] }}</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK'] }}</td>
+                            <th class="celdaGris" style="width: 100px;">LONGITUD DEL CABLE</th>
+                        </tr>
                         <tr>
                              <th class="celdaGris">N.S:</th>
                             <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
@@ -321,17 +346,7 @@
                             <td>{{ $Datos_Equipo['NS_BLOCK'] }}</td>
                             <td>{{ $Datos_Equipo['LONG_CABLE'] }}</td>
                         </tr>
-                        <tr>
-                            <th class="celdaGris">N.S.:</th>
-                            <td>8</td>
-                            <th class="celdaGris">N.S.:</th>
-                            <td style="width: 60px;">9</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">10</td>
-                            <th class="celdaGris">N.S.:</th>
-                            <td>11</td>
-                            <td>14</td>
-                        </tr>
+                        
 
                     </tbody>
                 </table>
@@ -350,27 +365,27 @@
                     <tbody>
                         <tr>
                             <th style="width: 15%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td>
                             <th style="width: 15%;">RANGO:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RANGO'] }}</td>
                             <th style="width: 15%;">RECHAZO:</th>
-                            <td class="lineaInferior">3</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">PRESION DE OPERACIÓN:</th>
-                            <td class="lineaInferior">4</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['PRESION_OPERACION'] }}</td>
                             <th style="width: 15%;">PRESIÓN MÁXIMA DE OPERACIÓN:</th>
-                            <td class="lineaInferior">5</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['PRES_MAX_OPE'] }}</td>
                             <th style="width: 20%;">TEMPERATURA MAX. DE OPERACION:</th>
-                            <td class="lineaInferior">6</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TEMP_MAX_OP'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">CONDICION SUPERFICIAL:</th>
-                            <td class="lineaInferior" colspan="2">7</td>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['CONDICION_SUPERFICIAL'] }}</td>
                             <th style="width: 15%;">ESTADO DE PINTURA:</th>
-                            <td class="lineaInferior" colspan="2">8</td>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['ESTADO_PINTURA'] }}</td>
                         </tr>
 
                     </tbody>
@@ -379,7 +394,7 @@
                 <div style="margin-bottom: 4px;"></div>
             </header>
 
-            <footer>
+            <footer style="display:;">
                 <div style="margin-bottom: 5px;"></div>
                 
                     <table style="margin: auto; border: 0px solid black;">
@@ -683,12 +698,14 @@
                     <table class="datosresultados">
 
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="20">RESULTADOS</th></tr>
+                            <tr><th colspan="22">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
-
-                                <thead>
+                            <thead><tr class="sinBordeth"><th colspan="20">
+                                </th></tr>
+                            </thead> <!-- Fila vacia -->
+                            <thead>
+                            <tr><th style="border:none;"></th></tr>
                             <tr class="celdaGris">
                                 <th style="width: 30px;" rowspan="2">ID</th>
                                 <th style="width: 40px;" rowspan="2">No. De Junta</th>
@@ -754,11 +771,12 @@
                                                 $totalMetros += floatval($junta['observaciones']);
                                                 $esUltimaFila = $loop->last;
                                             @endphp
-                                            <tr class="juntas">
+                                            <tr class="juntas" class="lineaInferior">
                                                 <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $contador }}</td>
-                                               <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_junta'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_junta'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['lado_a'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['lado_b'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['diametro'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_indicacion'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['tipo_indicacion'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Ang'] }}</td>
@@ -773,15 +791,16 @@
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['l'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['d'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['tmin'] }}</td>
-                                                
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['evaluacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['fotos'] }}</td>
                                                 <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['observaciones'] }}</td> 
                                             </tr>
 
                                                 @if ($contadorFilas % $filasPorPagina === 0)
                                                     <!-- Fila de total antes del salto de página -->
-                                                    <tr style="page-break-after: always;" class="sinBordetd">
+                                                    <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
                                                         <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                        <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong style="font-size: 6px !important;">Longitud inspeccionada1:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
 
@@ -795,9 +814,9 @@
 
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
-                                                <tr style="page-break-after: always;" class="sinBordetd">
+                                                <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
                                                     <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong style="font-size: 6px !important;">Longitud inspeccionada2:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
                                                 @php
@@ -810,9 +829,9 @@
                                     @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>15 || $titulo != 'SIN TITULO')
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
-                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                            <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
                                                 <td colspan="12" style="border-top: 2px solid black;"></td>
-                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong font-size: 6px !important;>Longitud inspeccionada3:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
                                         @endif
