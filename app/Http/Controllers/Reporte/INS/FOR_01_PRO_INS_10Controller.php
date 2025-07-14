@@ -281,7 +281,6 @@ class FOR_01_PRO_INS_10Controller extends Controller
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'ID' => 'nullable|array',
-            'elemento_tubo' => 'nullable|array',
             'no_aceptacion' => 'nullable|array',
             'no_serie' => 'nullable|array',
             'no_colada' => 'nullable|array',

@@ -108,7 +108,7 @@
                 <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Persona que Entrega</label>
-                                <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" readonly>
+                                <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" required>
                                     @error('Entrega_Nombre')
                                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                                     @enderror
