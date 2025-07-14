@@ -1089,6 +1089,10 @@
                 actualizarInputsE();
             });
 
+            const selectedOptionLocalEqui = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+            selectedOptionLocalEqui != null ?  ($('#equiposSelect').val(selectedOptionLocalEqui),actualizarInputsE()):"";
+
+           
 
 
             function actualizarInputsA() {
@@ -1109,6 +1113,10 @@
                     actualizarInputsA();
                 });
 
+                const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+                selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1127,6 +1135,38 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
+            const selectedOptionLocalBlock = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+                selectedOptionLocalBlock != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalBlock),actualizarInputsbyp()):"";
+
+    });
+
+    /*FOR-01-PRO-INS-03*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-08');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                localStorage.setItem('FOR-01-PRO-INS-08_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-08_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-08_' + el.name);
+            });
+        });
     });
     
 </script>
