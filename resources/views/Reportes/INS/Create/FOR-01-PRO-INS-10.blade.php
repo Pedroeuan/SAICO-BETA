@@ -243,17 +243,17 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                                <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                    {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                        <option value="{{ $equipo->idGeneral_EyC }}"
-                                                data-marca="{{ $equipo->Marca }}"
-                                                data-modelo="{{ $equipo->Modelo }}"
-                                                data-ns="{{ $equipo->Serie }}">
-                                            {{ $equipo->Nombre_E_P_BP }}
-                                        </option>
-                                    @endforeach --}}
-                                </select>
+                                    <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                        <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                            @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                <option value="{{ $equipo->idGeneral_EyC }}"
+                                                        data-marca="{{ $equipo->Marca }}"
+                                                        data-modelo="{{ $equipo->Modelo }}"
+                                                        data-ns="{{ $equipo->Serie }}">
+                                                    {{ $equipo->Nombre_E_P_BP }}
+                                                </option>
+                                        @endforeach
+                                    </select>
                             </div>
                         </div>
 
@@ -283,17 +283,17 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Transductor:</label>
-                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                                <option value="" selected disabled>Seleccione un Transductor</option> <!-- Opción por defecto -->
-                                    {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                        <option value="{{ $equipo->idGeneral_EyC }}"
-                                                data-marca="{{ $equipo->Marca }}"
-                                                data-modelo="{{ $equipo->Modelo }}"
-                                                data-ns="{{ $equipo->Serie }}">
-                                            {{ $equipo->Nombre_E_P_BP }}
-                                        </option>
-                                    @endforeach --}}
-                                </select>
+                                    <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
+                                        <option value="" selected disabled>Seleccione un Accesorio</option>
+                                            @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                                <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                        data-marca="{{ $accesorios->Marca }}"
+                                                        data-modelo="{{ $accesorios->Modelo }}"
+                                                        data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                                </option>
+                                            @endforeach
+                                    </select>
                             </div>
                         </div>
 
@@ -331,17 +331,17 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Referencia:</label>
-                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                                <option value="" selected disabled>Seleccione un Block de Referencia</option>
-                                    {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                        <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                data-marca="{{ $blockyprobeta->Marca }}"
-                                                data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                data-ns="{{ $blockyprobeta->Serie }}">
-                                            {{ $blockyprobeta->Nombre_E_P_BP }}
-                                        </option>
-                                    @endforeach --}}
-                                </select>
+                                    <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                        <option value="" selected disabled>Seleccione un Block o Probeta</option>
+                                            @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                <option value="{{ $blockyprobeta->idGeneral_EyC }}"
+                                                            data-marca="{{ $blockyprobeta->Marca }}"
+                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
+                                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
+                                                </option>
+                                            @endforeach
+                                    </select>
                             </div>
                         </div>
 
