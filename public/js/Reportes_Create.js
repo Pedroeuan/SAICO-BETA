@@ -199,19 +199,19 @@
     }
 
     // Función para actualizar los títulos en el campo oculto
-        function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
+    function updateTitulos() {
+        var titulos = [];
+        // Recolectar todos los títulos en el array
+        $('.titulo-row input[type="text"]').each(function() {
+            titulos.push($(this).val());
+        });
 
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
+        // Asignar los títulos al campo oculto
+        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+    }
 
     /*Guarda en sesionstorage */
-    function saveData() {
+    /*function saveData() {
         const data = [];
         
         $('#dynamicTable tbody tr').each(function () {
@@ -241,72 +241,118 @@
         });
 
         sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
-    }
+    }*/
 
-        // Evento para eliminar un título
-        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            let tituloRow = $(this).closest('tr');
-            let tituloId = tituloRow.data('titulo');
-            
-            // Eliminar la fila del título
-            tituloRow.remove();
-            
-            // Eliminar todas las filas que tengan el mismo data-titulo
-            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
-            updateRowNumbers(); // Si quieres actualizar el contador global
-            saveData();
-        });
 
-        /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-            const input = $(this);
-            const text = input.val().trim();
-            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-            const tr = input.closest('tr');
-            const oldTitulo = tr.attr('data-titulo');
-
-            // Cambia el data-titulo del título
-            tr.attr('data-titulo', safeTitulo);
-
-            // Cambia el data-titulo de las filas asociadas a este título
-            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-                $(this).attr('data-titulo', safeTitulo);
-
-                // Actualiza solo el valor entre corchetes en los names
-                $(this).find('input').each(function () {
-                    let name = $(this).attr('name');
-                    if (name) {
-                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
-                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                        });
-                        $(this).attr('name', name);
-                    }
-                });
+    function saveData(formKey) {
+    const data = [];
+    console.log('Saving data for form:', formKey);
+    
+    $('#dynamicTable tbody tr').each(function () {
+        const tr = $(this);
+        const isTitulo = tr.hasClass('titulo-row');
+        const tituloId = tr.attr('data-titulo');
+        
+        if (isTitulo) {
+            const tituloText = tr.find('input[name="titulos[]"]').val().trim();
+            data.push({
+                type: 'titulo',
+                id: tituloId,
+                text: tituloText
             });
+        } else {
+            const inputs = tr.find('input').map(function () {
+                return $(this).val();
+            }).get();
 
-            updateTitulos();
-            saveData();
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-            saveData();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
+            data.push({
+                type: 'fila',
+                titulo: tituloId,
+                rowNumber: tr.index() + 1,
+                inputs: inputs
             });
-            saveData();
+        }
+    });
+
+    // Usa la clave dinámica
+    sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
+}
+
+
+
+
+
+    // Escuchar en tiempo real y guarda en el momento que se cambia un input
+    $('#dynamicTable').on('input', 'input', function () {
+        //console.log('Input changed, saving data...');
+        saveData(document.querySelectorAll("form")[1].id);
+    });
+
+    // Evento para eliminar un título
+    $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+        let tituloRow = $(this).closest('tr');
+        let tituloId = tituloRow.data('titulo');
+        
+        // Eliminar la fila del título
+        tituloRow.remove();
+        
+        // Eliminar todas las filas que tengan el mismo data-titulo
+        $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+
+        updateRowNumbers(); // Si quieres actualizar el contador global
+        saveData(document.querySelectorAll("form")[1].id);
+    });
+
+    /*Cambia el data-titulo y guarda en sesionstorage */
+    $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+        const input = $(this);
+        const text = input.val().trim();
+        const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+
+        const tr = input.closest('tr');
+        const oldTitulo = tr.attr('data-titulo');
+
+        // Cambia el data-titulo del título
+        tr.attr('data-titulo', safeTitulo);
+
+        // Cambia el data-titulo de las filas asociadas a este título
+        $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+            $(this).attr('data-titulo', safeTitulo);
+
+            // Actualiza solo el valor entre corchetes en los names
+            $(this).find('input').each(function () {
+                let name = $(this).attr('name');
+                if (name) {
+                    // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                    name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
+                        return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                    });
+                    $(this).attr('name', name);
+                }
+            });
         });
+
+        updateTitulos();
+        saveData(document.querySelectorAll("form")[1].id);
+    });
+
+    $('#dynamicTable').on('click', '.btnEliminar', function() {
+        $(this).closest('tr').remove();
+        updateRowNumbers();
+        saveData(document.querySelectorAll("form")[1].id);
+    });
+
+    $('#preFillBtn').click(function() {
+        $('#dynamicTable tbody tr').each(function() {
+            $(this).find('input').each(function() {
+                if ($(this).val() === '') {
+                    $(this).val('----');
+                }
+            });
+        });
+        saveData(document.querySelectorAll("form")[1].id);
+    });
 
     // Función para actualizar los títulos en el campo oculto
     function updateTitulos() {
@@ -435,51 +481,51 @@
 
 
     /*Selección de Firmas */
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas2 = document.getElementById('firmas2');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
+    document.addEventListener('DOMContentLoaded', function() {
+    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
+    const numFirmasSelect = document.getElementById('numFirmas');
+    const firmas2 = document.getElementById('firmas2');
+    const firmas3 = document.getElementById('firmas3');
+    const firmas4 = document.getElementById('firmas4');
 
 
-        //numFirmasSelect.value = numFirmasLocal;
+    //numFirmasSelect.value = numFirmasLocal;
 
-        numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2'; // Valor por defecto si no hay en localStorage
-        
+    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2'; // Valor por defecto si no hay en localStorage
+    
 
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '2') {
-                firmas2.style.display = 'block';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'none';
-            }
-            else if (this.value == '3') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
-            }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '2') {
+    numFirmasSelect.addEventListener('change', function() {
+        if (this.value == '2') {
             firmas2.style.display = 'block';
             firmas3.style.display = 'none';
             firmas4.style.display = 'none';
         }
-        else if (numFirmasSelect.value == '3') {
+        else if (this.value == '3') {
             firmas2.style.display = 'none';
             firmas3.style.display = 'block';
             firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
+        } else if (this.value == '4') {
             firmas2.style.display = 'none';
             firmas3.style.display = 'none';
             firmas4.style.display = 'block';
         }
+    });
+
+    // Inicializar la visibilidad de las secciones de firmas
+    if (numFirmasSelect.value == '2') {
+        firmas2.style.display = 'block';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'none';
+    }
+    else if (numFirmasSelect.value == '3') {
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'block';
+        firmas4.style.display = 'none';
+    } else if (numFirmasSelect.value == '4') {
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'block';
+    }
     });
 
 
