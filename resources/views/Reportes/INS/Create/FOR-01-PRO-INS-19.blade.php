@@ -222,10 +222,15 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
                         </div>
                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
+                        </div>
+                    </div>
 
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL SISTEMA DE INSPECCIÓN</div>
 
