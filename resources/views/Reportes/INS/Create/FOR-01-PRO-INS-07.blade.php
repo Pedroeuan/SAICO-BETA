@@ -538,21 +538,21 @@
                                         </div>
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Junta / Elemento</th>
-                                                <th>No. Indicación</th>
-                                                <th>Ang (°)</th>
-                                                <th>NR (%)</th>
-                                                <th>NI (%)</th>
-                                                <th>LA (in)</th>
-                                                <th>LC (in)</th>
-                                                <th>PA Distancia Frente a la Zapata</th>
-                                                <th>SA (in)</th>
-                                                <th>DA (prof.)</th>
-                                                <th>HT</th>
-                                                <th>Evaluación</th>
-                                                <th>Fotos</th>
-                                                <th>Eliminar</th>
+                                                <th  class="text-center align-middle">#</th>
+                                                <th  class="text-center align-middle">Junta / Elemento</th>
+                                                <th  class="text-center align-middle">No. Indicación</th>
+                                                <th  class="text-center align-middle">Ang (°)</th>
+                                                <th  class="text-center align-middle">NR (%)</th>
+                                                <th  class="text-center align-middle">NI (%)</th>
+                                                <th  class="text-center align-middle">LA (in)</th>
+                                                <th  class="text-center align-middle">LC (in)</th>
+                                                <th  class="text-center align-middle">PA Distancia Frente a la Zapata</th>
+                                                <th  class="text-center align-middle">SA (in)</th>
+                                                <th  class="text-center align-middle">DA (prof.)</th>
+                                                <th  class="text-center align-middle">HT</th>
+                                                <th  class="text-center align-middle">Evaluación</th>
+                                                <th  class="text-center align-middle">Fotos</th>
+                                                <th  class="text-center align-middle">Eliminar</th>
                                             </tr>
 
                                             <tr id="inputRow">
@@ -890,15 +890,15 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
+                
                 
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -959,7 +959,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -993,7 +993,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1039,94 +1039,100 @@
             $('#nsInputE').val(ns);
         }
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
+        // Evento cuando se cambia la selección en el select
+        $('#equiposSelect').on('change', function() {
+            actualizarInputsE();
+        });
+    
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA1').val(marca);
+            $('#modeloInputA1').val(modelo);
+            $('#nsInputA1').val(ns);
+        }
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect1').on('change', function() {
+            actualizarInputsA();
         });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
-                    actualizarInputsA();
-                });
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+        selectedOptionLocalA != null ?  ($('#equiposSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
                 
-            });
+           
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA2').val(marca);
+            $('#modeloInputA2').val(modelo);
+            $('#nsInputA2').val(ns);
+        }
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect2').on('change', function() {
+            actualizarInputsA();
+        });
 
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA2').val(marca);
-                $('#modeloInputA2').val(modelo);
-                $('#nsInputA2').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA();
-                });
+        //const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+        //selectedOptionLocal != null ?  ($('#consumiblesSelect1').val(selectedOptionLocal),actualizarInputsC1()):"";
                 
-            });
+        
+        function actualizarInputsbyp() {
+            var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp1').val(marca);
+            $('#modeloInputbyp1').val(modelo);
+            $('#nsInputbyp1').val(ns);
+        }
 
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp1').val(marca);
-                $('#modeloInputbyp1').val(modelo);
-                $('#nsInputbyp1').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect1').on('change', function() {
-                actualizarInputsbyp();
-            });
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect1').on('change', function() {
+            actualizarInputsbyp();
         });
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
+        //const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+        //selectedOptionLocal != null ?  ($('#consumiblesSelect1').val(selectedOptionLocal),actualizarInputsC1()):"";
+        
+        function actualizarInputsbyp() {
+            var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp2').val(marca);
-                $('#modeloInputbyp2').val(modelo);
-                $('#nsInputbyp2').val(ns);
-            }
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp2').val(marca);
+            $('#modeloInputbyp2').val(modelo);
+            $('#nsInputbyp2').val(ns);
+        }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect2').on('change', function() {
-                actualizarInputsbyp();
-            });
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect2').on('change', function() {
+            actualizarInputsbyp();
         });
+        //const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+        //selectedOptionLocal != null ?  ($('#consumiblesSelect1').val(selectedOptionLocal),actualizarInputsC1()):"";
+    });
 </script>
 @endsection

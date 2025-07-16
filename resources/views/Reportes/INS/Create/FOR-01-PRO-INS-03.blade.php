@@ -237,9 +237,9 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE LA INSPECCIÓN</div>
 
-                                    <div style="margin-bottom: 2px;"></div>
+                                    <!--div style="margin-x: 2px;"></!--div-->
 
-                                    <div class="alert alert-info alert-dismissible">
+                                    <div class="alert alert-info alert-dismissible my-3">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un penetrante, removedor y un reveleador del menu o escribir directamente</p>
@@ -429,7 +429,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="alert alert-secondary" role="alert"></div>
+                                    <div class="alert alert-secondary d-none" role="alert"></div>
+
+                                    <div class="col-sm-12">
+                                        <hr style="border: none; height: 3px; background-color: black;">
+                                    </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -487,35 +491,35 @@
                                         </div>
                                         <thead>
                                                 <tr>
-                                                    <th rowspan="2">No.</th>
-                                                    <th rowspan="2">No. de Junta / Componente</th>
-                                                    <th rowspan="2">No. Indicación</th>
-                                                    <th rowspan="2">Tipo de Indicación</th>
-                                                    <th colspan="3">DIM. DE INDICACIÓN</th>
-                                                    <th colspan="1">LOCALIZACIÓN</th>
-                                                    <th rowspan="2">Evaluación</th>
-                                                    <th rowspan="2">Longitud Inspeccionada</th>
-                                                    <th rowspan="2">Eliminar</th>
+                                                    <th rowspan="2" class="text-center align-middle">No.</th>
+                                                    <th rowspan="2" class="text-center align-middle">No. de Junta / Componente</th>
+                                                    <th rowspan="2" class="text-center align-middle">No. Indicación</th>
+                                                    <th rowspan="2" class="text-center align-middle">Tipo de Indicación</th>
+                                                    <th colspan="3" class="text-center align-middle">DIM. DE INDICACIÓN</th>
+                                                    <th colspan="1" class="text-center align-middle">LOCALIZACIÓN</th>
+                                                    <th rowspan="2" class="text-center align-middle">Evaluación</th>
+                                                    <th rowspan="2" class="text-center align-middle">Longitud Inspeccionada</th>
+                                                    <th rowspan="2" class="text-center align-middle">Eliminar</th>
                                                 </tr>
 
                                                 <tr>
-                                                    <th>LARGO</th>
-                                                    <th>ANCHO</th>
-                                                    <th>Ø</th>
-                                                    <th>H.T.</th>
+                                                    <th class="text-center align-middle">LARGO</th>
+                                                    <th class="text-center align-middle">ANCHO</th>
+                                                    <th class="text-center align-middle">Ø</th>
+                                                    <th class="text-center align-middle">H.T.</th>
                                                 </tr>
 
                                                 <tr id="inputRow">
                                                     <th></th> <!-- Para ID vacío -->
-                                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="1" style="width:150px; "></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="2" style="width:120px"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 140px"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 120px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 120px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 120px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
@@ -612,7 +616,7 @@
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-15 my-2">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="2">2 Firmas</option>
@@ -822,9 +826,12 @@
                                             </p>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
                                         </div>
+                                        
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -928,7 +935,7 @@
                     } else if (item.type === 'fila') {
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td class="text-center align-middle">${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                             <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta / Componente"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Indicación"></td>
                             <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación"></td>
@@ -982,7 +989,7 @@
 
             let newRow = `
                 <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td class="text-center align-middle">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. de Junta / Componente"></td>
                     <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>

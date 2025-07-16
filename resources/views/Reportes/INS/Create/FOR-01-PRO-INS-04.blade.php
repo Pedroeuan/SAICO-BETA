@@ -382,7 +382,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="alert alert-secondary" role="alert"></div>
+                                    <div class="col-sm-12">
+                                         <hr style="border: none; height: 3px; background-color: black;">
+                                    </div>
 
                                     
 
@@ -438,15 +440,17 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
-
-                                    <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
+                                    <div class="my-1">
+                                        <div class="alert alert-warning alert-dismissible ">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
                                         </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                                        
                                         <thead>
                                             <tr>
                                                 <th rowspan="3" class="align-middle">No.</th>
@@ -485,22 +489,22 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;""></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="16"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 90px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 50px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 50px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="15" style="width: 130px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="17" style="width: 120px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
@@ -542,7 +546,7 @@
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
-                                            <div class="form-group">
+                                            <div class="form-group mt-2">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
@@ -731,7 +735,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -922,7 +926,7 @@
             let newRow = `
                         <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No. de Junta"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
                             <td><input type="text" class="form-control" name="ang_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
                             <td><input type="text" class="form-control" name="dsd_cara[${lastTitle}][]" placeholder="Cara"></td>
@@ -1076,7 +1080,7 @@
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-03_' + el.name);
+                localStorage.removeItem('FOR-01-PRO-INS-04_' + el.name);
                 //localStorage.clear();
             });
         });

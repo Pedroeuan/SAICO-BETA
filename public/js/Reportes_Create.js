@@ -145,7 +145,15 @@
                     const fieldToRemove = document.getElementById(`image-container-${index}`);
                     if (fieldToRemove) {
                         fieldToRemove.remove();
+                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
+                        document.getElementById('msgImgNoSave').classList.remove('d-none');
+                        // Actualizar el localStorage
+                        localStorage.setItem(document.querySelectorAll("form")[1].id+'_imageCount', imageCountSelect.value);
+                    } else {
+                        alert('No se pudo encontrar el campo de imagen para eliminar.');
                     }
+                        
+                    
                 });
             });
 

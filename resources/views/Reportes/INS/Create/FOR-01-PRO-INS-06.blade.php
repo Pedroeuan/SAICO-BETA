@@ -235,7 +235,7 @@
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
+                                    <div class="mb-2 d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
 
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -454,43 +454,43 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
-
-                                    <div class="table-responsive">
+                                    
+                                    <div class="alert alert-warning alert-dismissible mt-2">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                    </div>
+                                    <div class="table-responsive mt-2">
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                                        </div>
-                                        <thead>
+                                        
+                                        <thead class="">
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Descripción del Elemento</th>
-                                                <th>Ønom</th>
-                                                <th>Øext</th>
-                                                <th>Nivel</th>
-                                                <th>12:00</th>
-                                                <th>01:00</th>
-                                                <th>01:30</th>
-                                                <th>02:00</th>
-                                                <th>03:00</th>
-                                                <th>04:00</th>
-                                                <th>04:30</th>
-                                                <th>05:00</th>
-                                                <th>06:00</th>
-                                                <th>07:00</th>
-                                                <th>07:30</th>
-                                                <th>08:00</th>
-                                                <th>09:00</th>
-                                                <th>10:30</th>
-                                                <th>10:30</th>
-                                                <th>11:00</th>
-                                                <th>Tmin</th>
-                                                <th>Tmax</th>
-                                                <th>Tprom</th>
-                                                <th>Observaciones</th>
-                                                <th>Eliminar</th>
+                                                <th class="align-middle">ID</th>
+                                                <th class="align-middle">Descripción del Elemento</th>
+                                                <th class="align-middle">Ønom</th>
+                                                <th class="align-middle">Øext</th>
+                                                <th class="align-middle">Nivel</th>
+                                                <th class="align-middle">12:00</th>
+                                                <th class="align-middle">01:00</th>
+                                                <th class="align-middle">01:30</th>
+                                                <th class="align-middle">02:00</th>
+                                                <th class="align-middle">03:00</th>
+                                                <th class="align-middle">04:00</th>
+                                                <th class="align-middle">04:30</th>
+                                                <th class="align-middle">05:00</th>
+                                                <th class="align-middle">06:00</th>
+                                                <th class="align-middle">07:00</th>
+                                                <th class="align-middle">07:30</th>
+                                                <th class="align-middle">08:00</th>
+                                                <th class="align-middle">09:00</th>
+                                                <th class="align-middle">10:30</th>
+                                                <th class="align-middle">10:30</th>
+                                                <th class="align-middle">11:00</th>
+                                                <th class="align-middle">Tmin</th>
+                                                <th class="align-middle">Tmax</th>
+                                                <th class="align-middle">Tprom</th>
+                                                <th class="align-middle">Observaciones</th>
+                                                <th class="align-middle">Eliminar</th>
                                             </tr>
 
                                             <tr id="inputRow">
@@ -557,7 +557,7 @@
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="mb-2 d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -748,7 +748,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -756,10 +756,21 @@
                                             </select>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
                                         </div>
-
+                                        
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
+                                        </div>
+                                        
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -840,14 +851,14 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
+                //const tableData = JSON.parse(savedData);
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -920,7 +931,7 @@
 
             $('#dynamicTable tbody').append(newTitle);
             updateTitulos(); // Actualizar lista de títulos
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -964,7 +975,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1011,53 +1022,90 @@
             $('#nsInputE').val(ns);
         }
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#equiposSelect').on('change', function() {
+            actualizarInputsE();
+        });
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA').val(marca);
+            $('#modeloInputA').val(modelo);
+            $('#nsInputA').val(ns);
+        }
+
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect').on('change', function() {
+            actualizarInputsA();
+        });
+            
+        function actualizarInputsbyp() {
+            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp').val(marca);
+            $('#modeloInputbyp').val(modelo);
+            $('#nsInputbyp').val(ns);
+        }
+
+        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+        selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect').on('change', function() {
+            actualizarInputsbyp();
+        });
+    });
+
+
+
+        /*FOR-01-PRO-INS-06*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-06');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-06_' + el.name, el.value);
             });
         });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-06_' + el.name);
+                if (value !== null) el.value = value;
             }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-            });
+        });
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-06_' + el.name);
+                //localStorage.clear();
             });
         });
+    });
 
 </script>
 @endsection
