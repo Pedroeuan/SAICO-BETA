@@ -326,8 +326,8 @@
                         
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">FRECC:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
+                                <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR')}}">
                             </div>
                         </div>
 
