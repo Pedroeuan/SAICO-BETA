@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-01-INS-05</title>
+            <title>FORMATO FOR-01-INS-06</title>
             <style>
                 @page {
                     margin: 

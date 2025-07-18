@@ -216,14 +216,14 @@
     
                 <div style="margin-bottom: 4px;"></div>
         
-                                <table class="datosgenerales">
+                <table class="datosgenerales">
+
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
                     <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
-                    <tbody>
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>

@@ -112,13 +112,31 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </!div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -235,7 +253,7 @@
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
+                                    <div class="mb-2 d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
 
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -250,7 +268,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -291,7 +309,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -339,7 +357,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block y Probeta:</label>
-                                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                                             <option value="" selected disabled>Seleccione un Block o Probeta</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -454,49 +472,50 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
-
-                                    <div class="table-responsive">
+                                    
+                                    <div class="alert alert-warning alert-dismissible mt-2">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                    </div>
+                                    <div class="table-responsive mt-2">
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                                        </div>
-                                        <thead>
+                                        
+                                        <thead class="">
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Descripción del Elemento</th>
-                                                <th>Ønom</th>
-                                                <th>Øext</th>
-                                                <th>Nivel</th>
-                                                <th>12:00</th>
-                                                <th>01:00</th>
-                                                <th>01:30</th>
-                                                <th>02:00</th>
-                                                <th>03:00</th>
-                                                <th>04:00</th>
-                                                <th>04:30</th>
-                                                <th>05:00</th>
-                                                <th>06:00</th>
-                                                <th>07:00</th>
-                                                <th>07:30</th>
-                                                <th>08:00</th>
-                                                <th>09:00</th>
-                                                <th>10:30</th>
-                                                <th>10:30</th>
-                                                <th>11:00</th>
-                                                <th>Tmin</th>
-                                                <th>Tmax</th>
-                                                <th>Tprom</th>
-                                                <th>Observaciones</th>
-                                                <th>Eliminar</th>
+                                                <th class="align-middle">#</th>
+                                                <th class="align-middle">ID</th>
+                                                <th class="align-middle">Descripción del Elemento</th>
+                                                <th class="align-middle">Ønom</th>
+                                                <th class="align-middle">Øext</th>
+                                                <th class="align-middle">Nivel</th>
+                                                <th class="align-middle">12:00</th>
+                                                <th class="align-middle">01:00</th>
+                                                <th class="align-middle">01:30</th>
+                                                <th class="align-middle">02:00</th>
+                                                <th class="align-middle">03:00</th>
+                                                <th class="align-middle">04:00</th>
+                                                <th class="align-middle">04:30</th>
+                                                <th class="align-middle">05:00</th>
+                                                <th class="align-middle">06:00</th>
+                                                <th class="align-middle">07:00</th>
+                                                <th class="align-middle">07:30</th>
+                                                <th class="align-middle">08:00</th>
+                                                <th class="align-middle">09:00</th>
+                                                <th class="align-middle">10:00</th>
+                                                <th class="align-middle">10:30</th>
+                                                <th class="align-middle">11:00</th>
+                                                <th class="align-middle">Tmin</th>
+                                                <th class="align-middle">Tmax</th>
+                                                <th class="align-middle">Tprom</th>
+                                                <th class="align-middle">Observaciones</th>
+                                                <th class="align-middle">Eliminar</th>
                                             </tr>
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 130px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 130px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
@@ -518,7 +537,8 @@
                                                 <th><input type="text" class="form-control default-input" data-column="21" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="22" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="23" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 150px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="25" style="width: 150px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -557,7 +577,7 @@
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="mb-2 d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -748,7 +768,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -756,10 +776,21 @@
                                             </select>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
                                         </div>
-
+                                        
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
+                                        </div>
+                                        
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -840,14 +871,14 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
+                //const tableData = JSON.parse(savedData);
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -865,30 +896,31 @@
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[0]}" placeholder="Descripción del Elemento"></td>
-                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="12:00"></td>
-                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="01:00"></td>
-                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="01:30"></td>
-                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="02:00"></td>
-                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="03:00"></td>
-                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[09]}" placeholder="04:00"></td>
-                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="04:30"></td>
-                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="05:00"></td>
-                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="06:00"></td>
-                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="07:00"></td>
-                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="07:30"></td>
-                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="08:00"></td>
-                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="09:00"></td>
-                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="10:00"></td>
-                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="10:30"></td>
-                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="11:00"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="Tmin"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="Tmax"></td>
-                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tprom"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Descripción del Elemento"></td>
+                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="12:00"></td>
+                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:00"></td>
+                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="01:30"></td>
+                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="02:00"></td>
+                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="03:00"></td>
+                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:00"></td>
+                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="04:30"></td>
+                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="05:00"></td>
+                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="06:00"></td>
+                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:00"></td>
+                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="07:30"></td>
+                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="08:00"></td>
+                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="09:00"></td>
+                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:00"></td>
+                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="10:30"></td>
+                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="11:00"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmin"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tmax"></td>
+                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Tprom"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[25]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
 
@@ -920,7 +952,7 @@
 
             $('#dynamicTable tbody').append(newTitle);
             updateTitulos(); // Actualizar lista de títulos
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -934,7 +966,8 @@
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
                     <td><input type="text" class="form-control" name="Ønom[${lastTitle}][]" placeholder="Ønom"></td>
                     <td><input type="text" class="form-control" name="Øext[${lastTitle}][]" placeholder="Øext"></td>
@@ -964,7 +997,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1011,53 +1044,91 @@
             $('#nsInputE').val(ns);
         }
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#equiposSelect').on('change', function() {
+            actualizarInputsE();
+        });
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA').val(marca);
+            $('#modeloInputA').val(modelo);
+            $('#nsInputA').val(ns);
+        }
+
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect').on('change', function() {
+            actualizarInputsA();
+        });
+            
+        function actualizarInputsbyp() {
+            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp').val(marca);
+            $('#modeloInputbyp').val(modelo);
+            $('#nsInputbyp').val(ns);
+        }
+
+        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+        selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect').on('change', function() {
+            actualizarInputsbyp();
+        });
+    });
+
+
+
+        /*FOR-01-PRO-INS-06*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-06');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-06_' + el.name, el.value);
             });
         });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-06_' + el.name);
+                if (value !== null) el.value = value;
             }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-06_' + el.name);
                 
             });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
+            localStorage.clear();
         });
+    });
 
 </script>
 @endsection

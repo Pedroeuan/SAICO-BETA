@@ -220,11 +220,17 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
+                            </div>
+                        </div>
 
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
@@ -243,7 +249,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -282,7 +288,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -321,7 +327,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione block de calibración</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -360,7 +366,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione cable</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -895,7 +901,7 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[0]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
+                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_serie[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)" style="width: 80px;"></td>
                                         <td><input type="text" class="form-control" name="no_colada[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)" style="width: 80px;"></td>

@@ -254,7 +254,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -295,7 +295,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -343,7 +343,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block y Probeta:</label>
-                                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                                             <option value="" selected disabled>Seleccione un Block o Probeta</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -635,37 +635,30 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-
                                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
                                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-
                                                     </tr>
 
                                                     <tr>
-
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                                         <td></td>
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
-
                                                     </tr>
 
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                                     </tr>
                                                                                         
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                                     </tr>
 
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
@@ -924,25 +917,25 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Elemento / Tubo"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Aceptación"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Serie"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Colada"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[4]}" placeholder="tnominal"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="No.Ind."></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NR (%)"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NI (%)"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[10]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Prof"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[12]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[14]}" placeholder="tmáx"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmin"></td>
-                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[16]}" placeholder="Metros Lineales"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Aceptación"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Serie"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Colada"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[5]}" placeholder="tnominal"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[7]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Prof"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmáx"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[16]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Metros Lineales"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);

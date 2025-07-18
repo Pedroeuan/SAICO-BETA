@@ -216,12 +216,6 @@ class FOR_01_PRO_INS_02Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
     public function FOR_01_PRO_INS_03_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -483,7 +477,7 @@ class FOR_01_PRO_INS_02Controller extends Controller
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>1)
+        if($imageCount>=1)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
@@ -560,13 +554,6 @@ class FOR_01_PRO_INS_02Controller extends Controller
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
-
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
 
     public function FOR_01_PRO_INS_03_update(Request $request, $id)
     {
@@ -1003,7 +990,7 @@ class FOR_01_PRO_INS_02Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,

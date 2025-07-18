@@ -216,13 +216,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function FOR_01_PRO_INS_12_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -483,7 +477,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>1)
+        if($imageCount>=1)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
@@ -561,14 +555,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-
-    public function FOR_02_PRO_INS_10_update(Request $request, $id)
+    public function FOR_01_PRO_INS_12_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -954,7 +941,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
     }
 
 
-    public function FOR_INS_10_02($id)
+    public function FOR_01_INS_12($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();

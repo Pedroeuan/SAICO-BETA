@@ -221,11 +221,17 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
+                            </div>
+                        </div>
 
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
@@ -245,7 +251,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -300,7 +306,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Block de Referecia:</label>
-                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                             <option value="" selected disabled>Seleccione un Block de Referencia</option>
                                 {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -340,7 +346,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #1:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -394,7 +400,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #2:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -448,7 +454,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #3:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -502,7 +508,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #4:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -556,7 +562,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #1:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -610,7 +616,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #2:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -664,7 +670,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #3:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -718,7 +724,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #4:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -772,7 +778,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                             <option value="" selected disabled>Seleccione un Encoder</option>
                                 {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -819,7 +825,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                            <select class="form-control inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
                             <option value="" selected disabled>Seleccione un Encoder</option>
                                 {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -1343,7 +1349,7 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[0]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
+                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_serie[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)" style="width: 80px;"></td>
                                         <td><input type="text" class="form-control" name="no_colada[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)" style="width: 80px;"></td>

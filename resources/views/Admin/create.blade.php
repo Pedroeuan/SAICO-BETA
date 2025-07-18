@@ -136,6 +136,28 @@ document.getElementById('UsuarioForm').addEventListener('keydown', function(even
             event.preventDefault();
         }
     });
+
+    // Guardar datos en localStorage al escribir
+document.querySelectorAll('#UsuarioForm input, #UsuarioForm textarea, #UsuarioForm select').forEach(function(input) {
+    input.addEventListener('input', function() {
+        localStorage.setItem('UsuarioForm_' + input.name, input.value);
+    });
+});
+// Restaurar datos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#UsuarioForm input, #UsuarioForm textarea, #UsuarioForm select').forEach(function(input) {
+        let value = localStorage.getItem('UsuarioForm_' + input.name);
+        if (value !== null && input.type !== 'file') {
+            input.value = value;
+        }
+    });
+});
+// Limpiar localStorage al enviar el formulario
+document.getElementById('UsuarioForm').addEventListener('submit', function() {
+    document.querySelectorAll('#UsuarioForm input, #UsuarioForm textarea, #UsuarioForm select').forEach(function(input) {
+        localStorage.removeItem('UsuarioForm_' + input.name);
+    });
+});
 </script>
 @endsection
 

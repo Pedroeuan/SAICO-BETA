@@ -200,11 +200,17 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
+                            </div>
+                        </div>
 
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
@@ -224,7 +230,7 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"

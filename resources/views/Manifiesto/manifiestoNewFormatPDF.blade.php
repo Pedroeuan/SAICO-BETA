@@ -452,7 +452,7 @@
                                         
                                     <tr class="celdaAzul">
                                         <td class="letraNegra">Nombre</td>
-                                        <td>{{ $nombre }}</td>
+                                        <td>{{ $Manifiesto->Entrega }}</td>
                                     </tr>
                                     <tr class="celdaAzul">
                                         <td class="letraNegra">Firma</td>

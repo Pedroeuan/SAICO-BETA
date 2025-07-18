@@ -222,10 +222,15 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" {{-- value="{{ $idPrueba_Aplica }}" --}} readonly>
+                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
                         </div>
                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
+                        </div>
+                    </div>
 
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL SISTEMA DE INSPECCIÓN</div>
 
@@ -241,7 +246,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -280,7 +285,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -319,7 +324,7 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Block de verificación</option> <!-- Opción por defecto -->
                                 {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -781,7 +786,7 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[0]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
+                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="lado[${item.titulo}]" value="${item.inputs[2]}" placeholder="Lado" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}]" value="${item.inputs[3]}" placeholder="No. de indicación"></td>
                                         <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}]" value="${item.inputs[4]}" placeholder="Tipo Indicación"></td>

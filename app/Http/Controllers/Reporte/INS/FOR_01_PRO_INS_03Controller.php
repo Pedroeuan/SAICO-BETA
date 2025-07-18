@@ -461,7 +461,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>1)
+        if($imageCount>=1)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
@@ -957,7 +957,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-03/01.PDF',
+            'title' => 'Reporte_FOR-01-INS-03.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,

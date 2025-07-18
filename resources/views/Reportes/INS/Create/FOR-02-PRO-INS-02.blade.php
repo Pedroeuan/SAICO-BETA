@@ -261,7 +261,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">PARTICULAS:</label>
-                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect1">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione una Particula</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -322,7 +322,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">CONTRASTANTE:</label>
-                                            <select class="form-control inputForm" name="consumibles" id="consumiblesSelect2">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Contrastante</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
                                                     <option value="{{ $Consumibles->idGeneral_EyC }}"
@@ -385,7 +385,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">EQUIPOS:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
@@ -916,15 +916,15 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. Junta/Componente"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No.Ind."></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="LARGO"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[4]}" placeholder="ANCHO"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Ø"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[6]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="longitud_inspeccionada[${item.titulo}][]" value="${item.inputs[8]}" placeholder="L.I."></td>
+                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Junta/Componente"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[4]}" placeholder="LARGO"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[5]}" placeholder="ANCHO"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="longitud_inspeccionada[${item.titulo}][]" value="${item.inputs[9]}" placeholder="L.I."></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
