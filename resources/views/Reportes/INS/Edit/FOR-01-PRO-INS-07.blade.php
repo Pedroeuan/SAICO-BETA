@@ -651,17 +651,17 @@
                                             </div>
                                         </div>
 
-                                    <!-- Select para elegir el número de firmas -->
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                                <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
-                                                <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
-                                                <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
-                                            </select>
+                                        <!-- Select para elegir el número de firmas -->
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">Número de Firmas:</div>
+                                        <div class="col-sm-15">
+                                            <div class="form-group">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
                                         <!-- 2 DOS FIRMAS-->
                                         <div id="firmas2" class="col-12">
@@ -972,57 +972,6 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
-            if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
-                // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
-                
-                tableData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="14">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow =
-                        `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="junta_ele[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Junta/Elemento"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. de Indicación"></td>
-                            <td><input type="text" class="form-control" name="angulo[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Ang (°)"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[4]}" placeholder="NR (%)"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[5]}" placeholder="NI (%)"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[6]}" placeholder="LA (in)"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[7]}" placeholder="LC (in)"></td>
-                            <td><input type="text" class="form-control" name="distancia_frente_zapata[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Distancia a Zapata"></td>
-                            <td><input type="text" class="form-control" name="sa[${item.titulo}][]" value="${item.inputs[9]}" placeholder="SA (in)"></td>
-                            <td><input type="text" class="form-control" name="da[${item.titulo}][]" value="${item.inputs[10]}" placeholder="DA (prof.)"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="HT"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Fotos"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        </tr>`;   
-
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1076,7 +1025,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            //saveData();
         }
     );
 
@@ -1102,8 +1051,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
     /*Selects */
@@ -1126,9 +1073,7 @@
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-        });
-
-        $(document).ready(function() {
+        
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect1').find('option:selected');
 
@@ -1147,9 +1092,7 @@
                     actualizarInputsA();
                 });
                 
-            });
-
-        $(document).ready(function() {
+           
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
@@ -1168,9 +1111,7 @@
                     actualizarInputsA();
                 });
                 
-            });
-
-        $(document).ready(function() {
+           
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
 
@@ -1189,9 +1130,7 @@
             $('#blockyprobetaSelect1').on('change', function() {
                 actualizarInputsbyp();
             });
-        });
-
-        $(document).ready(function() {
+       
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
 
