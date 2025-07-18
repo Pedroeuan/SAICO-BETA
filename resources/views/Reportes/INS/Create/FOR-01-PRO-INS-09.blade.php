@@ -449,6 +449,11 @@
 
                         <div class="table-responsive">
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
                             <thead>
                                 <tr>
                                     <th class="vertical" rowspan="2">No. de Junta</th>
