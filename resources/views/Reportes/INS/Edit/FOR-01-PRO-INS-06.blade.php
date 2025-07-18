@@ -464,6 +464,7 @@
                                         </div>
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>ID</th>
                                                 <th>Descripción del Elemento</th>
                                                 <th>Ønom</th>
@@ -494,8 +495,8 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 130px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 130px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
@@ -517,7 +518,8 @@
                                                 <th><input type="text" class="form-control default-input" data-column="21" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="22" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="23" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 150px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="25" style="width: 150px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -550,6 +552,7 @@
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr data-titulo="{{ $tituloKey }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
                                                         <td><input type="text" class="form-control" name='elemento[{{ $tituloKey }}][]' value="{{ $resultado['elemento'] }}"></td>
                                                         <td><input type="text" class="form-control" name='Ønom[{{ $tituloKey }}][]' value="{{ $resultado['Ønom'] }}"></td>
                                                         <td><input type="text" class="form-control" name='Øext[{{ $tituloKey }}][]' value="{{ $resultado['Øext'] }}"></td>
@@ -572,6 +575,7 @@
                                                         <td><input type="text" class="form-control" name='11_00[{{ $tituloKey }}][]' value="{{ $resultado['11_00'] }}"></td>
                                                         <td><input type="text" class="form-control" name='tmin[{{ $tituloKey }}][]' value="{{ $resultado['tmin'] }}"></td>
                                                         <td><input type="text" class="form-control" name='tmax[{{ $tituloKey }}][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tprom[{{ $tituloKey }}][]' value="{{ $resultado['tprom'] }}"></td>
                                                         <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
@@ -962,6 +966,7 @@
 
             let newRow = `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
                     <td><input type="text" class="form-control" name="Ønom[${lastTitle}][]" placeholder="Ønom"></td>
                     <td><input type="text" class="form-control" name="Øext[${lastTitle}][]" placeholder="Øext"></td>
