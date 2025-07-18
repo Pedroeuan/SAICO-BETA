@@ -18,10 +18,12 @@ class manifiesto extends Model
         'Trabajo',
         'Puesto',
         'Responsable',
+        'Entrega',
         'Observaciones',
         'ScanPDF',
         'SATBMPRO',
     ];
+    
     protected $table = 'Manifiestos';
     protected $primaryKey = 'idManifiestos';
     public $timestamps = false; 
