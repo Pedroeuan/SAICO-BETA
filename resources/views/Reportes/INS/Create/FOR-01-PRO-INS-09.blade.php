@@ -835,26 +835,21 @@
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[0]}" placeholder="No. de Indicación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="angulo_inspeccion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Angulo de Inspección" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Pierna" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Nivel de Referencia" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="nivel_indicacion[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Nivel Indicación" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="distancia_angular[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Distancia Angular" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="profundidad[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Profundidad" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Longitud" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Evaluación" style="width: 55px;"></td>
-                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[9]}" placeholder="X" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Y" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Observaciones" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Indicación" style="width: 100px;"></td>
+                            <td><input type="text" class="form-control" name="angulo_inspeccion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Angulo de Inspección" style="width: 100px;"></td>
+                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Pierna" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Nivel de Referencia" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="nivel_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Nivel Indicación" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="distancia_angular[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Distancia Angular" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="profundidad[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Profundidad" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud" style="width: 50px;"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Evaluación" style="width: 55px;"></td>
+                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[10]}" placeholder="X" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Y" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Observaciones" style="width: 60px;"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        
                         </tr>`;
-
                         
-
-
-
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });

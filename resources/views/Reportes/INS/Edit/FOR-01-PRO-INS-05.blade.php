@@ -902,7 +902,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -915,50 +915,6 @@
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
-
-        function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
-            if (savedData) {
-                const tableData = JSON.parse(savedData);
-                // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
-                
-                tableData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="9">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `
-                        <tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[0]}" placeholder="Dibujo"></td>
-                            <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Soldadura"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="forma[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Forma"></td>
-                            <td><input type="text" class="form-control" name="transfer[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Transfer"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
 
         $('#addTituloBtn').click(function () {
             tituloCount++;

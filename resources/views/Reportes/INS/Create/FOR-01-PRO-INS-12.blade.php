@@ -307,21 +307,21 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_SONDA]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_SONDA]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_SONDA]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA')}}">
                             </div>
                         </div>
 
@@ -925,18 +925,18 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[0]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Zona de Barrido" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="LA" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LC" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="H.T." style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="Largo" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Ancho" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Evaluación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Fotos" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Observaciones Técnico" style="width: 130px;"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido" style="width: 100px;"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="No. Indicación" style="width: 80px;"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LA" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="LC" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="H.T." style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Largo" style="width: 70px;"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Ancho" style="width: 70px;"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación" style="width: 100px;"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos" style="width: 70px;"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico" style="width: 130px;"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);

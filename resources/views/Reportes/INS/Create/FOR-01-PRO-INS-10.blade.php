@@ -931,27 +931,27 @@
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[0]}" placeholder="ID"></td>
-                            <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento"></td>
-                            <td><input type="text" class="form-control" name="Nivel[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="nom[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="ext[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[5]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tipo_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="G[${item.titulo}][]" value="${item.inputs[7]}" placeholder="G (dB)"></td>
-                            <td><input type="text" class="form-control" name="NR[${item.titulo}][]" value="${item.inputs[8]}" placeholder="NR (%)"></td>
-                            <td><input type="text" class="form-control" name="NI[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NI (%)"></td>
-                            <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[10]}" placeholder="DNR"></td>
-                            <td><input type="text" class="form-control" name="Hora_Tec[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Horario Técnico"></td>
-                            <td><input type="text" class="form-control" name="sc[${item.titulo}][]" value="${item.inputs[12]}" placeholder="S.C."></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmin"></td>
-                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[16]}" placeholder="d"></td>
-                            <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[17]}" placeholder="ta"></td>
-                            <td><input type="text" class="form-control" name="Perd_Mate[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Perdida de Material (%)"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Fotos No."></td>
-                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Elemento"></td>
+                            <td><input type="text" class="form-control" name="Nivel[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="nom[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="ext[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[6]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tipo_ind[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="G[${item.titulo}][]" value="${item.inputs[8]}" placeholder="G (dB)"></td>
+                            <td><input type="text" class="form-control" name="NR[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="NI[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[11]}" placeholder="DNR"></td>
+                            <td><input type="text" class="form-control" name="Hora_Tec[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Horario Técnico"></td>
+                            <td><input type="text" class="form-control" name="sc[${item.titulo}][]" value="${item.inputs[13]}" placeholder="S.C."></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[15]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[16]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[17]}" placeholder="d"></td>
+                            <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[18]}" placeholder="ta"></td>
+                            <td><input type="text" class="form-control" name="Perd_Mate[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Perdida de Material (%)"></td>
+                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No."></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                             
                         </tr>`;

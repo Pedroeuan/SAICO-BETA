@@ -270,7 +270,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            //'ID' => 'required|array',
+            'ID' => 'required|array',
             'elemento' => 'nullable|array',
             'Ønom' => 'nullable|array',
             'Øext' => 'nullable|array',
@@ -387,7 +387,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -395,7 +395,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    //'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'elemento' => $request->input("elemento.$sinTituloKey.$i"),
                     'Ønom' => $request->input("Ønom.$sinTituloKey.$i"),
                     'Øext' => $request->input("Øext.$sinTituloKey.$i"),
@@ -433,14 +433,14 @@ class FOR_01_PRO_INS_06Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    //'ID' => $request->input("ID.$tituloKey.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
                     'elemento' => $request->input("elemento.$tituloKey.$i"),
                     'Ønom' => $request->input("Ønom.$tituloKey.$i"),
                     'Øext' => $request->input("Øext.$tituloKey.$i"),
@@ -632,7 +632,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            //'ID' => 'required|array',
+            'ID' => 'required|array',
             'elemento' => 'nullable|array',
             'Ønom' => 'nullable|array',
             'Øext' => 'nullable|array',
@@ -736,7 +736,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -744,7 +744,7 @@ class FOR_01_PRO_INS_06Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    //'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'elemento' => $request->input("elemento.$sinTituloKey.$i"),
                     'Ønom' => $request->input("Ønom.$sinTituloKey.$i"),
                     'Øext' => $request->input("Øext.$sinTituloKey.$i"),
@@ -782,14 +782,14 @@ class FOR_01_PRO_INS_06Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    //'ID' => $request->input("ID.$tituloKey.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
                     'elemento' => $request->input("elemento.$tituloKey.$i"),
                     'Ønom' => $request->input("Ønom.$tituloKey.$i"),
                     'Øext' => $request->input("Øext.$tituloKey.$i"),

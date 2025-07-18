@@ -483,6 +483,7 @@
                                         
                                         <thead class="">
                                             <tr>
+                                                <th class="align-middle">#</th>
                                                 <th class="align-middle">ID</th>
                                                 <th class="align-middle">Descripción del Elemento</th>
                                                 <th class="align-middle">Ønom</th>
@@ -513,8 +514,8 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 130px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 130px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
@@ -536,7 +537,8 @@
                                                 <th><input type="text" class="form-control default-input" data-column="21" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="22" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="23" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 150px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="24" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="25" style="width: 150px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -880,7 +882,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="25">
+                            <td colspan="26">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo ">
@@ -894,30 +896,31 @@
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="Descripción del Elemento"></td>
-                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="12:00"></td>
-                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="01:00"></td>
-                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:30"></td>
-                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="02:00"></td>
-                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="03:00"></td>
-                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="04:00"></td>
-                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:30"></td>
-                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="05:00"></td>
-                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="06:00"></td>
-                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="07:00"></td>
-                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:30"></td>
-                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="08:00"></td>
-                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="09:00"></td>
-                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="10:00"></td>
-                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:30"></td>
-                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="11:00"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="Tmin"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmax"></td>
-                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tprom"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Descripción del Elemento"></td>
+                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
+                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Øext"></td>
+                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="12:00"></td>
+                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:00"></td>
+                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="01:30"></td>
+                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="02:00"></td>
+                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="03:00"></td>
+                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:00"></td>
+                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="04:30"></td>
+                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="05:00"></td>
+                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="06:00"></td>
+                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:00"></td>
+                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="07:30"></td>
+                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="08:00"></td>
+                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="09:00"></td>
+                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:00"></td>
+                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="10:30"></td>
+                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="11:00"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmin"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tmax"></td>
+                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Tprom"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[25]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
 
@@ -936,7 +939,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="25">
+                <td colspan="26">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -963,7 +966,8 @@
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
                     <td><input type="text" class="form-control" name="Ønom[${lastTitle}][]" placeholder="Ønom"></td>
                     <td><input type="text" class="form-control" name="Øext[${lastTitle}][]" placeholder="Øext"></td>
