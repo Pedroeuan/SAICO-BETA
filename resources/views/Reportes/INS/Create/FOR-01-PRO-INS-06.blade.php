@@ -112,13 +112,31 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </!div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -483,7 +501,7 @@
                                                 <th class="align-middle">07:30</th>
                                                 <th class="align-middle">08:00</th>
                                                 <th class="align-middle">09:00</th>
-                                                <th class="align-middle">10:30</th>
+                                                <th class="align-middle">10:00</th>
                                                 <th class="align-middle">10:30</th>
                                                 <th class="align-middle">11:00</th>
                                                 <th class="align-middle">Tmin</th>
@@ -862,7 +880,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="26">
+                            <td colspan="25">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo ">
@@ -918,7 +936,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="26">
+                <td colspan="25">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -1102,8 +1120,9 @@
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
                 localStorage.removeItem('FOR-01-PRO-INS-06_' + el.name);
-                //localStorage.clear();
+                
             });
+            localStorage.clear();
         });
     });
 

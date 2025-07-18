@@ -113,13 +113,31 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -240,13 +258,13 @@
 
                                     <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="alert alert-info alert-dismissible">
+                                    <div class="alert alert-info alert-dismissible mt-2">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un equipo, transductor y un accesorio o block del menu o escribir directamente</p>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 my-2 bg-secondary text-white rounded">EQUIPO</div>
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
@@ -438,7 +456,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                                     
                                     <div class="my-1">
                                         <div class="alert alert-warning alert-dismissible ">
@@ -751,9 +769,11 @@
                                                 y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
                                             </p>
                                         </div>
-
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->

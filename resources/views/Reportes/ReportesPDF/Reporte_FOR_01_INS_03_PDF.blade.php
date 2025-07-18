@@ -332,13 +332,13 @@
                     <tbody>
                         <tr>
                             <th style="width: 10%;">TIPO DE LUZ:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{$Datos_Equipo['TIPO_LUZ']}}</td>
                             <th style="width: 10%;">INTENCIDAD:</th>
-                            <td class="lineaInferior">2</td> <th style="text-align: left; width: 5%;"> Lx </th>
+                            <td class="lineaInferior">{{$Datos_Equipo['INTENCIDAD']}}</td> <th style="text-align: left; width: 5%;"> Lx </th>
                             <th style="width: 10%;">CONDICIÓN SUPERFICIAL:</th>
-                            <td class="lineaInferior">3</td>
+                            <td class="lineaInferior">{{$Datos_Equipo['CONDICION_SUPERFICIAL']}}</td>
                             <th style="width: 10%;">TEMPERATURA DE PRUEBA:</th>
-                            <td class="lineaInferior">4</td> <th style="text-align: left; width: 5%;"> °C </th>
+                            <td class="lineaInferior">{{$Datos_Equipo['TEMPERATURA_PRUEBA']}}</td> <th style="text-align: left; width: 5%;"> °C </th>
                         </tr>
                     </tbody>
                 </table>

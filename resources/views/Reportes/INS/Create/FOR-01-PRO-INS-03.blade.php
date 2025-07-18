@@ -112,13 +112,32 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+                                    
+
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -235,11 +254,11 @@
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE LA INSPECCIÓN</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">DATOS DE LA INSPECCIÓN</div>
 
                                     <!--div style="margin-x: 2px;"></!--div-->
 
-                                    <div class="alert alert-info alert-dismissible my-3">
+                                    <div class="alert alert-info alert-dismissible mb-2">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un penetrante, removedor y un reveleador del menu o escribir directamente</p>
@@ -431,7 +450,7 @@
 
                                     <div class="alert alert-secondary d-none" role="alert"></div>
 
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12"> 
                                         <hr style="border: none; height: 3px; background-color: black;">
                                     </div>
 
@@ -809,7 +828,7 @@
 
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-control form-select" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>

@@ -414,15 +414,6 @@
             });
         });
 
-       /* textareas.forEach(textarea => {
-            const stored = localStorage.getItem(`${formId}_${textarea.name}`);
-            if (stored !== null) textarea.value = stored;
-
-            textarea.addEventListener("input", () => {
-                localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
-            });
-        });*/ //este es funcional 
-
 
 
 
@@ -479,10 +470,35 @@
             });
         }
 
+
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+
+            const stored = localStorage.getItem(key);
+            if (stored !== null) {
+                checkbox.checked = stored === "true";
+            }
+
+            checkbox.addEventListener("change", () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        }) : null;
+
+
         // Limpiar localStorage al enviar el formulario
         form.addEventListener("submit", function () {
             inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
             textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
+            
+            checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+                const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+                localStorage.removeItem(key);
+            }) : null;
+
+
+
         });
     });
 });
