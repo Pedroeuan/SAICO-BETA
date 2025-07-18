@@ -113,13 +113,31 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -240,13 +258,13 @@
 
                                     <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="alert alert-info alert-dismissible">
+                                    <div class="alert alert-info alert-dismissible mt-2">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un equipo, transductor y un accesorio o block del menu o escribir directamente</p>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 my-2 bg-secondary text-white rounded">EQUIPO</div>
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
@@ -382,7 +400,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="alert alert-secondary" role="alert"></div>
+                                    <div class="col-sm-12">
+                                         <hr style="border: none; height: 3px; background-color: black;">
+                                    </div>
 
                                     
 
@@ -436,17 +456,19 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
-
-                                    <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
+                                    <div class="my-1">
+                                        <div class="alert alert-warning alert-dismissible ">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
                                         </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                                        
                                         <thead>
                                             <tr>
                                                 <th rowspan="3" class="align-middle">No.</th>
@@ -485,22 +507,22 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 80px;""></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="16"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 90px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 50px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 50px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="15" style="width: 130px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
                                                 <th><input type="text" class="form-control default-input" data-column="17" style="width: 120px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
@@ -542,7 +564,7 @@
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
-                                            <div class="form-group">
+                                            <div class="form-group mt-2">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
@@ -731,7 +753,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -739,8 +761,19 @@
                                             </select>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->
@@ -825,15 +858,15 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
+                
                 
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -913,7 +946,7 @@
             let newRow = `
                         <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No. de Junta"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
                             <td><input type="text" class="form-control" name="ang_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
                             <td><input type="text" class="form-control" name="dsd_cara[${lastTitle}][]" placeholder="Cara"></td>
@@ -935,7 +968,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -985,9 +1018,10 @@
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-        });
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
-        $(document).ready(function() {
+
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 
@@ -1001,14 +1035,15 @@
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
             }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-                
+            // Evento cuando se cambia la selección en el select
+            $('#accesoriosSelect').on('change', function() {
+                actualizarInputsA();
             });
 
-        $(document).ready(function() {
+            const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+            selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+                
+    
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1027,6 +1062,51 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
+            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
         });
+
+
+
+        /*FOR-01-PRO-INS-04*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-04');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-03_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-04_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-04_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-04_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
+
+
+
 </script>
 @endsection

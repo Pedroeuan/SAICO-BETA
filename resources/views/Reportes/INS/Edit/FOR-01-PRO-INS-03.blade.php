@@ -238,13 +238,13 @@
 
                                     <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="alert alert-info alert-dismissible">
+                                    <div class="alert alert-info alert-dismissible mt-2">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un penetrante, removedor y un reveleador del menu o escribir directamente</p>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">PENETRANTES</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 my-2 bg-secondary text-white rounded">PENETRANTES</div>
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
@@ -473,7 +473,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                                     
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -588,7 +588,7 @@
 
                                     <p>
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">SIMBOLOGÍA</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">SIMBOLOGÍA</div>
 
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -650,7 +650,7 @@
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -852,46 +852,54 @@
                                             </select>
                                         </div>
 
-                                        @if(!empty($Fotos_Comentarios))
-                                            <div class="row">
-                                                @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
-                                                        <div class="form-group">
-                                                            <!-- Vista previa de la imagen existente -->
-                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
-                                                            <div class="image-preview mt-2">
-                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                        <div class="w-100">
+
+                                            @if(!empty($Fotos_Comentarios))
+                                                <div class="row">
+                                                    @foreach($Fotos_Comentarios as $index => $foto)
+                                                        <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                            <div class="form-group">
+                                                                <!-- Vista previa de la imagen existente -->
+                                                                <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                                <div class="image-preview mt-2">
+                                                                    <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                                </div>
+
+                                                                <!-- Campo para seleccionar una nueva imagen -->
+                                                                <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+
+                                                                <!-- Campo para el comentario -->
+                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+
+                                                                <!-- Campo oculto para la imagen en base64 -->
+                                                                <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                                <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                                <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                                <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                                <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                                <!-- Botón de eliminación -->
+                                                                <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
                                                             </div>
-
-                                                            <!-- Campo para seleccionar una nueva imagen -->
-                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-
-                                                            <!-- Campo para el comentario -->
-                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                            <!-- Campo oculto para la imagen en base64 -->
-                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
-                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
-                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
-
-                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
-                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
-
-                                                            <!-- Botón de eliminación -->
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
                                                         </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <p>No hay imágenes disponibles.</p>
-                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <p>No hay imágenes disponibles.</p>
+                                            @endif
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
+                                        
 
+
+                                        <!--div-- class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -- 
+                                            </div>
+                                        </div-->
+                                        
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">

@@ -113,7 +113,15 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            
+                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+
+                                            
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -236,11 +244,11 @@
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS Y AJUSTES DEL EQUIPO</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">DATOS Y AJUSTES DEL EQUIPO</div>
 
                                     <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="alert alert-info alert-dismissible">
+                                    <div class="alert alert-info alert-dismissible mb-2">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                                         <p>Puedes Seleccionar un equipo, acoplante, sondas y los block's del menu o escribir directamente</p>
@@ -354,7 +362,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect2">
+                                            <select class="form-select inputForm" name="accesorios2" id="accesoriosSelect2">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -443,7 +451,7 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block de Distancia:</label>
-                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect2">
+                                            <select class="form-select inputForm" name="blockyprobeta2" id="blockyprobetaSelect2">
                                             <option value="" selected disabled>Seleccione un Block de Distancia</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -478,7 +486,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="alert alert-secondary" role="alert"></div>
+                                    <div class="col-sm-12">
+                                        <hr style="border: none; height: 3px; background-color: black;">
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -525,7 +535,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                                     
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -538,21 +548,21 @@
                                         </div>
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Junta / Elemento</th>
-                                                <th>No. Indicación</th>
-                                                <th>Ang (°)</th>
-                                                <th>NR (%)</th>
-                                                <th>NI (%)</th>
-                                                <th>LA (in)</th>
-                                                <th>LC (in)</th>
-                                                <th>PA Distancia Frente a la Zapata</th>
-                                                <th>SA (in)</th>
-                                                <th>DA (prof.)</th>
-                                                <th>HT</th>
-                                                <th>Evaluación</th>
-                                                <th>Fotos</th>
-                                                <th>Eliminar</th>
+                                                <th  class="text-center align-middle">#</th>
+                                                <th  class="text-center align-middle">Junta / Elemento</th>
+                                                <th  class="text-center align-middle">No. Indicación</th>
+                                                <th  class="text-center align-middle">Ang (°)</th>
+                                                <th  class="text-center align-middle">NR (%)</th>
+                                                <th  class="text-center align-middle">NI (%)</th>
+                                                <th  class="text-center align-middle">LA (in)</th>
+                                                <th  class="text-center align-middle">LC (in)</th>
+                                                <th  class="text-center align-middle">PA Distancia Frente a la Zapata</th>
+                                                <th  class="text-center align-middle">SA (in)</th>
+                                                <th  class="text-center align-middle">DA (prof.)</th>
+                                                <th  class="text-center align-middle">HT</th>
+                                                <th  class="text-center align-middle">Evaluación</th>
+                                                <th  class="text-center align-middle">Fotos</th>
+                                                <th  class="text-center align-middle">Eliminar</th>
                                             </tr>
 
                                             <tr id="inputRow">
@@ -608,7 +618,7 @@
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -799,7 +809,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-control form-select" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -807,9 +817,21 @@
                                             </select>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
                                         </div>
+
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div> 
+                                        </div>
+                                        
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -890,15 +912,15 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
+                
                 
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -959,7 +981,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -993,7 +1015,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1039,94 +1061,140 @@
             $('#nsInputE').val(ns);
         }
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
+        // Evento cuando se cambia la selección en el select
+        $('#equiposSelect').on('change', function() {
+            actualizarInputsE();
+        });
+    
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA1').val(marca);
+            $('#modeloInputA1').val(modelo);
+            $('#nsInputA1').val(ns);
+        }
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect1').on('change', function() {
+            actualizarInputsA();
         });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
-                    actualizarInputsA();
-                });
+        const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+        selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA()):"";
                 
-            });
+           
+        function actualizarInputsA2() {
+            var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA2').val(marca);
+            $('#modeloInputA2').val(modelo);
+            $('#nsInputA2').val(ns);
+        }
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect2').on('change', function() {
+            actualizarInputsA2();
+        });
 
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA2').val(marca);
-                $('#modeloInputA2').val(modelo);
-                $('#nsInputA2').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA();
-                });
+        const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios2');
+        selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
                 
-            });
+        
+        function actualizarInputsbyp() {
+            var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp1').val(marca);
+            $('#modeloInputbyp1').val(modelo);
+            $('#nsInputbyp1').val(ns);
+        }
 
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp1').val(marca);
-                $('#modeloInputbyp1').val(modelo);
-                $('#nsInputbyp1').val(ns);
-            }
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect1').on('change', function() {
+            actualizarInputsbyp();
+        });
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect1').on('change', function() {
-                actualizarInputsbyp();
+        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+        selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect1').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+        
+        function actualizarInputsbyp2() {
+            var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputbyp2').val(marca);
+            $('#modeloInputbyp2').val(modelo);
+            $('#nsInputbyp2').val(ns);
+        }
+
+        // Evento cuando se cambia la selección en el select
+        $('#blockyprobetaSelect2').on('change', function() {
+            actualizarInputsbyp2();
+        });
+
+        const selectedOptionLocalbyp2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta2');
+        selectedOptionLocalbyp2 != null ?  ($('#blockyprobetaSelect2').val(selectedOptionLocalbyp2),actualizarInputsbyp2()):"";
+    });
+
+
+
+    //*FOR-01-PRO-INS-07*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-07');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-03_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-07_' + el.name, el.value);
             });
         });
 
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp2').val(marca);
-                $('#modeloInputbyp2').val(modelo);
-                $('#nsInputbyp2').val(ns);
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-07_' + el.name);
+                if (value !== null) el.value = value;
             }
+        });
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect2').on('change', function() {
-                actualizarInputsbyp();
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-07_' + el.name);
+                //localStorage.clear();
             });
         });
+    });
+
 </script>
 @endsection

@@ -239,7 +239,7 @@
 
                     <div style="margin-bottom: 2px;"></div>
 
-                    <div class="alert alert-info alert-dismissible">
+                    <div class="alert alert-info alert-dismissible mt-2">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <h5><i class="icon fas fa-info"></i> Importante</h5>
                         <p>Puedes Seleccionar un equipo, transductores y un acoplante del menu o escribir directamente</p>
@@ -486,7 +486,7 @@
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                     
                     <div style="margin-bottom: 2px;"></div>
 
@@ -597,7 +597,7 @@
                         </div>
 
                         <!-- Select para elegir el número de firmas -->
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">Número de Firmas:</div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">

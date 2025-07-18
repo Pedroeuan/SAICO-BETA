@@ -491,27 +491,27 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" ></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="18"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="19"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="20"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="21"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="19" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="20" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="21" style="width: 100px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
@@ -920,15 +920,13 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -996,7 +994,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -1039,7 +1037,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1089,6 +1087,8 @@
                 actualizarInputsE();
             });
 
+            const selectedOptionLocalEqui = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+            selectedOptionLocalEqui != null ?  ($('#equiposSelect').val(selectedOptionLocalEqui),actualizarInputsE()):"";
 
 
             function actualizarInputsA() {
@@ -1109,6 +1109,10 @@
                     actualizarInputsA();
                 });
 
+                const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+                selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1127,6 +1131,39 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
+            const selectedOptionLocalBlock = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+                selectedOptionLocalBlock != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalBlock),actualizarInputsbyp()):"";
+
+    });
+
+    /*FOR-01-PRO-INS-08*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-08');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-08_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-08_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-08_' + el.name);
+            });
+        });
     });
     
 </script>
