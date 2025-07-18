@@ -786,7 +786,7 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[0]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
+                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="lado[${item.titulo}]" value="${item.inputs[2]}" placeholder="Lado" style="width: 100px;"></td>
                                         <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}]" value="${item.inputs[3]}" placeholder="No. de indicación"></td>
                                         <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}]" value="${item.inputs[4]}" placeholder="Tipo Indicación"></td>

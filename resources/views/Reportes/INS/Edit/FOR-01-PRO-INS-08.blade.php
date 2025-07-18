@@ -1013,69 +1013,6 @@ $(document).ready(function() {
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
-            if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
-                // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
-                
-                tableData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="22">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="lado_a[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Lado A" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="lado_b[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Lado B" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Ø" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="Ang[${item.titulo}][]" value="${item.inputs[7]}" placeholder="A (°)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="Gdb[${item.titulo}][]" value="${item.inputs[8]}" placeholder="G (dB)" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)" style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[11]}" placeholder="X" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Y" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="horario_tecnico[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Horario Técnico" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_pierna[${item.titulo}][]" value="${item.inputs[14]}" placeholder="No. de Pierna" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="s[${item.titulo}][]" value="${item.inputs[15]}" placeholder="S" style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="l[${item.titulo}][]" value="${item.inputs[16]}" placeholder="L" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[17]}" placeholder="D" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[18]}" placeholder="tmin" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Evaluación" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No." style="width: 95px;"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones" style="width: 130px;"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                            
-                        </tr>`;
-
-                        
-
-
-
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
