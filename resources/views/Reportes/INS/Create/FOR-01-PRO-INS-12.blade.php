@@ -371,16 +371,16 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                <select class="form-select inputForm" name="equipos2" id="accesoriosSelect2">
                                 <option value="" selected disabled>Seleccione un Encoder</option>
-                                    {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                        <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                data-marca="{{ $blockyprobeta->Marca }}"
-                                                data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                data-ns="{{ $blockyprobeta->Serie }}">
-                                            {{ $blockyprobeta->Nombre_E_P_BP }}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -388,21 +388,21 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER1')}}">
+                                <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER1')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER1')}}">
+                                <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER1')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER1')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER1')}}">
                             </div>
                         </div>
 
@@ -411,16 +411,16 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                <select class="form-select inputForm" name="equipos2" id="accesoriosSelect3">
                                 <option value="" selected disabled>Seleccione un Encoder</option>
-                                    {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                        <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                data-marca="{{ $blockyprobeta->Marca }}"
-                                                data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                data-ns="{{ $blockyprobeta->Serie }}">
-                                            {{ $blockyprobeta->Nombre_E_P_BP }}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -428,21 +428,21 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER2')}}">
+                                <input type="text" class="form-control  inputForm" id="marcaInputA3" name="Datos_Equipo[MARCA_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER2')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER2')}}">
+                                <input type="text" class="form-control  inputForm" id="modeloInputA3" name="Datos_Equipo[MODELO_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER2')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER2')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[N_S_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER2')}}">
                             </div>
                         </div>
 
@@ -513,12 +513,11 @@
                         
                         <div style="margin-bottom: 2px;"></div>
 
-
                         <div class="table-responsive">
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
-                                    <th class="align-middle" rowspan="2">No.</th>
+                                    <th class="align-middle" rowspan="2">#</th>
                                     <th class="align-middle" colspan="2">DATOS DE LA INSPECCIÓN</th>
                                     <th class="align-middle" colspan="5">DATOS DE LA INDICACIÓN</th>
                                     <th class="align-middle" colspan="2">ÁREA INSPECCIONADA</th>
@@ -542,18 +541,18 @@
                                 </tr>
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 130px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -887,7 +886,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/includes.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -925,18 +924,18 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LA" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="LC" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="H.T." style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Largo" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Ancho" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico" style="width: 130px;"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
+                            <td><input type="text" class="form-control" name="ZBarrido[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tip_ind[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="largo[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="Eval[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -980,19 +979,19 @@ $(document).ready(function() {
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = `<tr data-titulo="${lastTitle}">
-                            <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}}][]" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}}][]" placeholder="Zona de Barrido" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${lastTitle}}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${lastTitle}}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${lastTitle}}][]" placeholder="LA" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${lastTitle}}][]" placeholder="LC" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}}][]" placeholder="H.T." style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="la[${lastTitle}}][]" placeholder="Largo" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${lastTitle}}][]" placeholder="Ancho" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}}][]" placeholder="Evaluación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="la[${lastTitle}}][]" placeholder="Fotos" style="width: 70px;"></td>
-                            <td><input type="text" class="form-control" name="diametro[${lastTitle}}][]" placeholder="Observaciones Técnico" style="width: 130px;"></td>
+                            <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
+                            <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}}][]" placeholder="Zona de Barrido"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}}][]" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}}][]" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${lastTitle}}][]" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${lastTitle}}][]" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="ht[${lastTitle}}][]" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="largo[${lastTitle}}][]" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${lastTitle}}][]" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="Eval[${lastTitle}}][]" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${lastTitle}}][]" placeholder="Fotos"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${lastTitle}}][]" placeholder="Observaciones Técnico"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
 
@@ -1027,6 +1026,112 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
+    /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+        });
+
+        $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            });
+            
+        $(document).ready(function() {
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+        });
+
+        $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA2').val(marca);
+                $('#modeloInputA2').val(modelo);
+                $('#nsInputA2').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect2').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            });
+
+        $(document).ready(function() {
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect3').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA3').val(marca);
+                $('#modeloInputA3').val(modelo);
+                $('#nsInputA3').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect3').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            });
 
 </script>
 @endsection
