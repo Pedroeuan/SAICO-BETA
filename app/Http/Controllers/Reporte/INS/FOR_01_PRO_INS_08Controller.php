@@ -587,7 +587,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
-
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -612,15 +611,12 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
-            /*'Datos_Equipo.Observaciones' => 'nullable|string|max:255',*/
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -643,11 +639,10 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'fotos' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
-
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:2,3,4',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
@@ -751,6 +746,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
                     'fotos' => $request->input("fotos.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    
                 ];
             }
         
@@ -1079,7 +1075,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_INS_01_08.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

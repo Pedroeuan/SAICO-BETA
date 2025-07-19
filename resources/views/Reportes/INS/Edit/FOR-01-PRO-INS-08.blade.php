@@ -1032,7 +1032,6 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
         });
 
         $('#addBtn').click(function () {
@@ -1070,12 +1069,10 @@ $(document).ready(function() {
                         <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No." style="width: 95px;"></td>
                         <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        
                     </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
         }
     );
 
@@ -1100,12 +1097,9 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
-        /*Selects */
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1125,8 +1119,6 @@ $(document).ready(function() {
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-
-
 
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
