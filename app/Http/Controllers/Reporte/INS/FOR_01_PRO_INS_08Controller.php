@@ -567,6 +567,8 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
     public function FOR_01_PRO_INS_08_update(Request $request, $id)
     {
+
+       
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -695,7 +697,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
-        ]);
+        ]); //dd($validatedData);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -714,18 +716,17 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
+
+        // Procesar filas sin título si las manejas
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
-        
+
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
-        
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
                     'diametro' => $request->input("diametro.$sinTituloKey.$i"),
@@ -746,57 +747,53 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
                     'fotos' => $request->input("fotos.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-                    
                 ];
             }
-        
             $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
+                'titulos_juntas' => 'SIN TITULO',
+                'resultados' => $resultados,
             ];
         }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("no_junta.$tituloKey", []);
+
+        // Procesar grupos con título, usando índice numérico
+        foreach ($titulos as $indice => $titulo) {
+            $filas = $request->input("no_junta.$indice", []);
             $numFilas = count($filas);
-        
+
             $resultados = [];
-        
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
-                    'lado_a' => $request->input("lado_a.$tituloKey.$i"),
-                    'lado_b' => $request->input("lado_b.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'Ang' => $request->input("Ang.$tituloKey.$i"),
-                    'Gdb' => $request->input("Gdb.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'x' => $request->input("x.$tituloKey.$i"),
-                    'y' => $request->input("y.$tituloKey.$i"),
-                    'horario_tecnico' => $request->input("horario_tecnico.$tituloKey.$i"),
-                    'no_pierna' => $request->input("no_pierna.$tituloKey.$i"),
-                    's' => $request->input("s.$tituloKey.$i"),
-                    'l' => $request->input("l.$tituloKey.$i"),
-                    'd' => $request->input("d.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'fotos' => $request->input("fotos.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$indice.$i"),
+                    'lado_a' => $request->input("lado_a.$indice.$i"),
+                    'lado_b' => $request->input("lado_b.$indice.$i"),
+                    'diametro' => $request->input("diametro.$indice.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$indice.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$indice.$i"),
+                    'Ang' => $request->input("Ang.$indice.$i"),
+                    'Gdb' => $request->input("Gdb.$indice.$i"),
+                    'nr' => $request->input("nr.$indice.$i"),
+                    'ni' => $request->input("ni.$indice.$i"),
+                    'x' => $request->input("x.$indice.$i"),
+                    'y' => $request->input("y.$indice.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$indice.$i"),
+                    'no_pierna' => $request->input("no_pierna.$indice.$i"),
+                    's' => $request->input("s.$indice.$i"),
+                    'l' => $request->input("l.$indice.$i"),
+                    'd' => $request->input("d.$indice.$i"),
+                    'tmin' => $request->input("tmin.$indice.$i"),
+                    'evaluacion' => $request->input("evaluacion.$indice.$i"),
+                    'fotos' => $request->input("fotos.$indice.$i"),
+                    'observaciones' => $request->input("observaciones.$indice.$i"),
                 ];
             }
-        
+
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
             ];
         }
-        
-        // Actualizar el campo en la base de datos
+
+        // Guardar en BD
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
         ]);
