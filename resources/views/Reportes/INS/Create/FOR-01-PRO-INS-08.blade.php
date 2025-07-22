@@ -233,7 +233,7 @@
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">DATOS DEL EQUIPO</div>
 
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -446,7 +446,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
                                     
                                     <div style="margin-bottom: 2px;"></div>
 
@@ -836,10 +836,21 @@
                                             </select>
                                         </div>
 
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                         <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
                                         </div>
 
+                                        <div>
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
+                                        </div>    
+                                            
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -1138,11 +1149,10 @@
     });
 
     /*FOR-01-PRO-INS-08*/
-    document.addEventListener('DOMContentLoaded', function () {
+     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-08');
         if (!form) return;
 
-        // Guardar en localStorage al escribir
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
@@ -1162,7 +1172,9 @@
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
                 localStorage.removeItem('FOR-01-PRO-INS-08_' + el.name);
+                
             });
+        localStorage.clear();
         });
     });
     

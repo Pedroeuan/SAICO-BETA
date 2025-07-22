@@ -516,63 +516,63 @@
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
-
+                                        @php
+                                            $contador = 1;
+                                            $tituloIndex = 0;
+                                        @endphp
                                         <tbody>
+                                        @foreach ($Grupo_Juntas_Re as $grupo)
                                             @php
-                                                $contador = 1;
+                                                $tituloKey = $tituloIndex;
                                             @endphp
 
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="22">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                         <i class="bi bi-trash"  aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
+                                            <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
+                                                <td colspan="22">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <input type="text" class="form-control w-90" name="titulos[]" value="{{ $grupo['titulos_juntas'] }}">
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                                            </button>
                                                         </td>
-                                                    </tr>
-                                                @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_junta[{{$tituloKey}}][]" value="{{ $resultado['no_junta'] }}" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="lado_a[{{$tituloKey}}][]" value="{{$resultado['lado_a']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="lado_b[{{$tituloKey}}][]" value="{{$resultado['lado_b']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[{{$tituloKey}}][]" value="{{$resultado['diametro']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_indicacion[{{$tituloKey}}][]" value="{{$resultado['no_indicacion']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[{{$tituloKey}}][]" value="{{$resultado['tipo_indicacion']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="Ang[{{$tituloKey}}][]" value="{{$resultado['Ang']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="Gdb[{{$tituloKey}}][]" value="{{$resultado['Gdb']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="nr[{{$tituloKey}}][]" value="{{$resultado['nr']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="ni[{{$tituloKey}}][]" value="{{$resultado['ni']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="x[{{$tituloKey}}][]" value="{{$resultado['x']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="y[{{$tituloKey}}][]" value="{{$resultado['y']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="horario_tecnico[{{$tituloKey}}][]" value="{{$resultado['horario_tecnico']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_pierna[{{$tituloKey}}][]" value="{{$resultado['no_pierna']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="s[{{$tituloKey}}][]" value="{{$resultado['s']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="l[{{$tituloKey}}][]" value="{{$resultado['l']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="d[{{$tituloKey}}][]" value="{{$resultado['d']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="tmin[{{$tituloKey}}][]" value="{{$resultado['tmin']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[{{$tituloKey}}][]" value="{{$resultado['evaluacion']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="fotos[{{$tituloKey}}][]" value="{{$resultado['fotos']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="observaciones[{{$tituloKey}}][]" value="{{$resultado['observaciones']}}" style="width: 130px;"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"> <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                                                    </tr>
 
-                                                    @php $contador++; @endphp
-                                                @endforeach
+                                            @foreach ($grupo['resultados'] as $resultado)
+                                                <tr data-titulo="{{ $tituloKey }}">
+                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                    <td><input type="text" class="form-control" name="no_junta[{{ $tituloKey }}][]" value="{{ $resultado['no_junta'] }}" style="width: 100px;"></td>
+                                                    <td><input type="text" class="form-control" name="lado_a[{{ $tituloKey }}][]" value="{{ $resultado['lado_a'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="lado_b[{{ $tituloKey }}][]" value="{{ $resultado['lado_b'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="diametro[{{ $tituloKey }}][]" value="{{ $resultado['diametro'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="no_indicacion[{{ $tituloKey }}][]" value="{{ $resultado['no_indicacion'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="tipo_indicacion[{{ $tituloKey }}][]" value="{{ $resultado['tipo_indicacion'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="Ang[{{ $tituloKey }}][]" value="{{ $resultado['Ang'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="Gdb[{{ $tituloKey }}][]" value="{{ $resultado['Gdb'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="nr[{{ $tituloKey }}][]" value="{{ $resultado['nr'] }}" style="width: 95px;"></td>
+                                                    <td><input type="text" class="form-control" name="ni[{{ $tituloKey }}][]" value="{{ $resultado['ni'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="x[{{ $tituloKey }}][]" value="{{ $resultado['x'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="y[{{ $tituloKey }}][]" value="{{ $resultado['y'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="horario_tecnico[{{ $tituloKey }}][]" value="{{ $resultado['horario_tecnico'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="no_pierna[{{ $tituloKey }}][]" value="{{ $resultado['no_pierna'] }}" style="width: 80px;"></td>
+                                                    <td><input type="text" class="form-control" name="s[{{ $tituloKey }}][]" value="{{ $resultado['s'] }}" style="width: 95px;"></td>
+                                                    <td><input type="text" class="form-control" name="l[{{ $tituloKey }}][]" value="{{ $resultado['l'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="d[{{ $tituloKey }}][]" value="{{ $resultado['d'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="tmin[{{ $tituloKey }}][]" value="{{ $resultado['tmin'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="evaluacion[{{ $tituloKey }}][]" value="{{ $resultado['evaluacion'] }}" style="width: 70px;"></td>
+                                                    <td><input type="text" class="form-control" name="fotos[{{ $tituloKey }}][]" value="{{ $resultado['fotos'] }}" style="width: 95px;"></td>
+                                                    <td><input type="text" class="form-control" name="observaciones[{{ $tituloKey }}][]" value="{{ $resultado['observaciones'] }}" style="width: 130px;"></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                                @php $contador++; @endphp
                                             @endforeach
+
+                                            @php $tituloIndex++; @endphp
+                                        @endforeach
                                         </tbody>
+
                                     </table>
                                     </div>
 
@@ -975,6 +975,7 @@
                         </div>
                     </div>
                 </section>
+                <div id="tituloCountContainer" data-titulo-count="{{ $tituloIndex ?? 0 }}" style="display:none"></div>
 @stop
 
 
@@ -1008,76 +1009,82 @@
 
 <script>
 /*Juntas-Resultados */
-$(document).ready(function() {
-        let tituloCount = 0;
+        $(document).ready(function() {
         let rowCount = 0;
-        let rowCountGlobal = 0;
+        let tituloCount = parseInt(document.getElementById('tituloCountContainer').getAttribute('data-titulo-count')) || 0;
+
+        //let tituloCount = {{ $tituloIndex ?? 0 }}; // inicia en la cantidad que ya tienes
+        let rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
-            rowCount = 0; // Reiniciar el contador de filas para este título
+            rowCount = 0;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${tituloCount}">
                 <td colspan="22">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título...">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="bi bi-trash" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-        `;
+            `;
 
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        saveData();
+            $('#dynamicTable tbody').append(newTitle);
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let numFilas = parseInt($('#numRows').val()) || 1;
+            let lastTitleIndex = $('.titulo-row').length - 1;
+            if (lastTitleIndex < 0) lastTitleIndex = 0;
 
             for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+                rowCountGlobal++;
+                rowCount++;
 
-            let newRow = 
-                `<tr data-titulo="${lastTitle}">
-                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No." style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        
-                    </tr>`;
+                let newRow = `
+                <tr data-titulo="${lastTitleIndex}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="no_junta[${lastTitleIndex}][]" placeholder="No. de Junta"></td>
+                    <td><input type="text" class="form-control" name="lado_a[${lastTitleIndex}][]" placeholder="Lado A"></td>
+                    <td><input type="text" class="form-control" name="lado_b[${lastTitleIndex}][]" placeholder="Lado B"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitleIndex}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitleIndex}][]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitleIndex}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="Ang[${lastTitleIndex}][]" placeholder="A (°)"></td>
+                    <td><input type="text" class="form-control" name="Gdb[${lastTitleIndex}][]" placeholder="G (dB)"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitleIndex}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitleIndex}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="x[${lastTitleIndex}][]" placeholder="X"></td>
+                    <td><input type="text" class="form-control" name="y[${lastTitleIndex}][]" placeholder="Y"></td>
+                    <td><input type="text" class="form-control" name="horario_tecnico[${lastTitleIndex}][]" placeholder="Horario Técnico"></td>
+                    <td><input type="text" class="form-control" name="no_pierna[${lastTitleIndex}][]" placeholder="No. de Pierna"></td>
+                    <td><input type="text" class="form-control" name="s[${lastTitleIndex}][]" placeholder="S"></td>
+                    <td><input type="text" class="form-control" name="l[${lastTitleIndex}][]" placeholder="L"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitleIndex}][]" placeholder="D"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitleIndex}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitleIndex}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="fotos[${lastTitleIndex}][]" placeholder="Fotos No."></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitleIndex}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                </tr>
+                `;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
-        }
-    );
+        });
+
+
+
+
+
+
+
+
 
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
@@ -1100,12 +1107,9 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
-        /*Selects */
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1125,8 +1129,6 @@ $(document).ready(function() {
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-
-
 
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');

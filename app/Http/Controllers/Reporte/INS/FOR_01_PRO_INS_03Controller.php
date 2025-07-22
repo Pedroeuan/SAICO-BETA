@@ -695,7 +695,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
-        
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
                     'componente' => $request->input("componente.$sinTituloKey.$i"),
@@ -717,25 +716,27 @@ class FOR_01_PRO_INS_03Controller extends Controller
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
+        foreach ($titulos as $indice => $titulo) {
             //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("componente.$tituloKey", []);
+            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            //$filas = $request->input("componente.$tituloKey", []);
+            //$numFilas = count($filas);
+
+            $filas = $request->input("no_junta.$indice", []);
             $numFilas = count($filas);
         
             $resultados = [];
-        
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'componente' => $request->input("componente.$tituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'largo' => $request->input("largo.$tituloKey.$i"),
-                    'ancho' => $request->input("ancho.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$tituloKey.$i"),
+                    'componente' => $request->input("componente.$indice.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$indice.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$indice.$i"),
+                    'largo' => $request->input("largo.$indice.$i"),
+                    'ancho' => $request->input("ancho.$indice.$i"),
+                    'diametro' => $request->input("diametro.$indice.$i"),
+                    'ht' => $request->input("ht.$indice.$i"),
+                    'evaluacion' => $request->input("evaluacion.$indice.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$indice.$i"),
                 ];
             }
         

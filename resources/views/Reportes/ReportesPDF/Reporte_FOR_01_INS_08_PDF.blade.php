@@ -755,7 +755,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="20" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="22" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>
@@ -799,7 +799,7 @@
                                                 @if ($contadorFilas % $filasPorPagina === 0)
                                                     <!-- Fila de total antes del salto de página -->
                                                     <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
-                                                        <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                        <td colspan="16" style="border-top: 2px solid black;"></td>
                                                         <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong style="font-size: 6px !important;">Longitud inspeccionada1:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
@@ -815,7 +815,7 @@
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
-                                                    <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                    <td colspan="16" style="border-top: 2px solid black;"></td>
                                                     <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong style="font-size: 6px !important;">Longitud inspeccionada2:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
@@ -830,7 +830,7 @@
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always; font-size: 6px !important;" class="sinBordetd">
-                                                <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                <td colspan="16" style="border-top: 2px solid black;"></td>
                                                 <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong font-size: 6px !important;>Longitud inspeccionada3:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>
