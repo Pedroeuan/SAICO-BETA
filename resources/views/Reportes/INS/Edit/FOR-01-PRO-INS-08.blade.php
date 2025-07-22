@@ -539,21 +539,6 @@
                                                 </td>
                                             </tr>
 
-                                            @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                    <td colspan="10">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                            <td>
-                                                                <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                                </button>
-                                                            </td>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
-
 
                                             @foreach ($grupo['resultados'] as $resultado)
                                                 <tr data-titulo="{{ $tituloKey }}">
@@ -1025,10 +1010,7 @@
 <script>
 /*Juntas-Resultados */
         $(document).ready(function() {
-            // let tituloCount = 0;
         let rowCount = 0;
-        //let rowCountGlobal = 0;
-
         let tituloCount = parseInt(document.getElementById('tituloCountContainer').getAttribute('data-titulo-count')) || 0;
 
         //let tituloCount = {{ $tituloIndex ?? 0 }}; // inicia en la cantidad que ya tienes
@@ -1055,8 +1037,8 @@
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val()) || 1;
 
+            let numFilas = parseInt($('#numRows').val()) || 1;
             let lastTitleIndex = $('.titulo-row').length - 1;
             if (lastTitleIndex < 0) lastTitleIndex = 0;
 
