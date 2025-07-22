@@ -516,12 +516,10 @@
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
-
                                         @php
                                             $contador = 1;
                                             $tituloIndex = 0;
                                         @endphp
-
                                         <tbody>
                                         @foreach ($Grupo_Juntas_Re as $grupo)
                                             @php
@@ -540,6 +538,22 @@
                                                     </div>
                                                 </td>
                                             </tr>
+
+                                            @if ($grupo['titulos_juntas'] != 'SIN TITULO')
+                                                <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                    <td colspan="10">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                                </button>
+                                                            </td>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
 
                                             @foreach ($grupo['resultados'] as $resultado)
                                                 <tr data-titulo="{{ $tituloKey }}">

@@ -567,8 +567,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
     public function FOR_01_PRO_INS_08_update(Request $request, $id)
     {
-
-       
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
