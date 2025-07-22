@@ -515,7 +515,8 @@
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                    <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
                                                         <td colspan="21">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
@@ -1012,7 +1013,8 @@
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
