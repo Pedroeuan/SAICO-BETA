@@ -450,6 +450,7 @@
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                                 <tr>
+                                                    <th rowspan="2">#</th>
                                                     <th colspan="7">DATOS DEL MATERIAL</th>
                                                     <th colspan="8">DATOS DE LA INDICACIÓN</th>
                                                     <th colspan="4">RESULTADOS DE LA INSPECCIÓN</th>
@@ -485,20 +486,21 @@
                                                     <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 50px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 50px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="10" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="12" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="13" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="14" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 60px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="16" style="width: 80px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="17" style="width: 80px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 120px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 150px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 80px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 120px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="20" style="width: 150px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
@@ -903,7 +905,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="20">
+                            <td colspan="21">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
@@ -917,6 +919,7 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
                             <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento / Tubo"></td>
                             <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Aceptación"></td>
                             <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Serie"></td>
@@ -952,7 +955,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="20">
+                <td colspan="21">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
@@ -980,7 +983,8 @@
 
             let newRow = `
                 <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
                     <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
                     <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>

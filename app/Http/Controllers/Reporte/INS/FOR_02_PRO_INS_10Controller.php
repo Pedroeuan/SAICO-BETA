@@ -220,7 +220,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
     public function FOR_02_PRO_INS_10_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
-        //dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
         Log::info('*********************************************************');
         Log::info('*********************************************************');
         Log::info('*********************************************************');
@@ -371,6 +371,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'ID' => 'nullable|array',
             'elemento_tubo' => 'nullable|array',
             'no_aceptacion' => 'nullable|array',
             'no_serie' => 'nullable|array',
@@ -480,7 +481,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $datosAgrupados = [];
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -488,6 +489,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
                     'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
                     'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
@@ -521,13 +523,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
             //$tituloKey = "titulo_" . $titulo;
             //$tituloKey = strtolower($titulo);
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
+                    'ID' => $request->input("ID.$tituloKey.$i"),
                     'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
                     'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
                     'no_serie' => $request->input("no_serie.$tituloKey.$i"),
@@ -664,7 +667,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
     public function FOR_02_PRO_INS_10_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
-        //dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
         Log::info('*********************************************************');
         Log::info('*********************************************************');
         Log::info('*********************************************************');
@@ -816,6 +819,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'ID' => 'required|array',
             'elemento_tubo' => 'required|array',
             'no_aceptacion' => 'required|array',
             'no_serie' => 'required|array',
@@ -914,7 +918,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -922,6 +926,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
                     'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
                     'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
@@ -954,13 +959,14 @@ class FOR_02_PRO_INS_10Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
+                    'ID' => $request->input("ID.$tituloKey.$i"),
                     'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
                     'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
                     'no_serie' => $request->input("no_serie.$tituloKey.$i"),
