@@ -991,7 +991,7 @@
         });
 
             // Restaurar datos al cargar la página
-        restoreData();
+        //restoreData();
     });
 
     $(document).ready(function() {
