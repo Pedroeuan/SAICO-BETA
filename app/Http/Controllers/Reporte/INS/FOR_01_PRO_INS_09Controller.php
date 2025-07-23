@@ -222,7 +222,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_03_store(Request $request)
+    public function FOR_01_PRO_INS_09_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -250,13 +250,16 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_TR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TR' => 'nullable|string|max:255',
             'Datos_Equipo.NS_TR' => 'nullable|string|max:255',
             'Datos_Equipo.FREC_TR' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
+
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
@@ -272,6 +275,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'no_junta' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'angulo_inspeccion' => 'nullable|array',
             'pierna' => 'nullable|array',
@@ -389,6 +393,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
                     'angulo_inspeccion' => $request->input("angulo_inspeccion.$sinTituloKey.$i"),
                     'pierna' => $request->input("pierna.$sinTituloKey.$i"),
                     'nivel_referencia' => $request->input("nivel_referencia.$sinTituloKey.$i"),
+                    'nivel_indicacion' => $request->input("nivel_indicacion.$sinTituloKey.$i"),
                     'distancia_angular' => $request->input("distancia_angular.$sinTituloKey.$i"),
                     'profundidad' => $request->input("profundidad.$sinTituloKey.$i"),
                     'longitud' => $request->input("longitud.$sinTituloKey.$i"),
@@ -407,7 +412,8 @@ class FOR_01_PRO_INS_09Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -420,6 +426,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
                     'angulo_inspeccion' => $request->input("angulo_inspeccion.$tituloKey.$i"),
                     'pierna' => $request->input("pierna.$tituloKey.$i"),
                     'nivel_referencia' => $request->input("nivel_referencia.$tituloKey.$i"),
+                    'nivel_indicacion' => $request->input("nivel_indicacion.$tituloKey.$i"),
                     'distancia_angular' => $request->input("distancia_angular.$tituloKey.$i"),
                     'profundidad' => $request->input("profundidad.$tituloKey.$i"),
                     'longitud' => $request->input("longitud.$tituloKey.$i"),
@@ -568,13 +575,16 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_TR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TR' => 'nullable|string|max:255',
             'Datos_Equipo.NS_TR' => 'nullable|string|max:255',
             'Datos_Equipo.FREC_TR' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
+
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
@@ -585,7 +595,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
             
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
+            /*'titulos' => 'nullable|array',  // Asegura que sea un array
             'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
@@ -682,7 +692,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -695,6 +705,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
                     'angulo_inspeccion' => $request->input("angulo_inspeccion.$sinTituloKey.$i"),
                     'pierna' => $request->input("pierna.$sinTituloKey.$i"),
                     'nivel_referencia' => $request->input("nivel_referencia.$sinTituloKey.$i"),
+                    'nivel_indicacion' => $request->input("nivel_indicacion.$sinTituloKey.$i"),
                     'distancia_angular' => $request->input("distancia_angular.$sinTituloKey.$i"),
                     'profundidad' => $request->input("profundidad.$sinTituloKey.$i"),
                     'longitud' => $request->input("longitud.$sinTituloKey.$i"),
@@ -713,8 +724,9 @@ class FOR_01_PRO_INS_09Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -726,6 +738,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
                     'angulo_inspeccion' => $request->input("angulo_inspeccion.$tituloKey.$i"),
                     'pierna' => $request->input("pierna.$tituloKey.$i"),
                     'nivel_referencia' => $request->input("nivel_referencia.$tituloKey.$i"),
+                    'nivel_indicacion' => $request->input("nivel_indicacion.$tituloKey.$i"),
                     'distancia_angular' => $request->input("distancia_angular.$tituloKey.$i"),
                     'profundidad' => $request->input("profundidad.$tituloKey.$i"),
                     'longitud' => $request->input("longitud.$tituloKey.$i"),
@@ -906,7 +919,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
     }
 
 
-    public function FOR_INS_10_02($id)
+    public function FOR_01_INS_09($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();

@@ -762,7 +762,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
