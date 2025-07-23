@@ -896,7 +896,8 @@
                     } else if (item.type === 'fila') {
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            
+                            <td class="text-center align-middle">${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></class=>
                             <td><input type="text" class="form-control" name="No[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No."></td>
                             <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Dibujo"></td>
                             <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Soldadura"></td>
