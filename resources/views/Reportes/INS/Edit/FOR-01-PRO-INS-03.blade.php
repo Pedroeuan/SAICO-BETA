@@ -518,31 +518,27 @@
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
-
+                                            @php
+                                                $contador = 1;
+                                                $tituloIndex = 0;
+                                            @endphp
                                             <tbody>
-                                                @php
-                                                    $contador = 1;
-                                                @endphp
-
                                                 @foreach ($Grupo_Juntas_Re as $grupo)
-                                                @php
-                                                    $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                    $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                                @endphp
-                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                        <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                            <td colspan="10">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endif
+                                                    @php
+                                                        $tituloKey = $tituloIndex;
+                                                    @endphp
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
+                                                        <td colspan="10">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <input type="text" class="form-control w-90" name="titulos[]" value="{{ $grupo['titulos_juntas'] }}">
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                        <i class="bi bi-trash" aria-hidden="true"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
 
                                                     @foreach ($grupo['resultados'] as $resultado)
                                                         <tr data-titulo="{{ $tituloKey }}">
@@ -941,6 +937,7 @@
                         </div>
                     </div>
                 </section>
+                <div id="tituloCountContainer" data-titulo-count="{{ $tituloIndex ?? 0 }}" style="display:none"></div>
 @stop
 
 
@@ -974,62 +971,60 @@
 <script>
  /*Juntas-Resultados */
     $(document).ready(function() {
-        let tituloCount = 0;
         let rowCount = 0;
-        let rowCountGlobal = 0;
+        let tituloCount = parseInt(document.getElementById('tituloCountContainer').getAttribute('data-titulo-count')) || 0
+        let rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${tituloCount}">
                 <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="bi bi-trash" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-        `;
+            `;
 
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
+            $('#dynamicTable tbody').append(newTitle);
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let numFilas = parseInt($('#numRows').val()) || 1;
+            let lastTitleIndex = $('.titulo-row').length - 1;
+            if (lastTitleIndex < 0) lastTitleIndex = 0;
+
 
             for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+                rowCountGlobal++;
+                rowCount++;
 
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. de Junta / Componente"></td>
-                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
-                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
-                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>
-            `;
+                let newRow = `
+                    <tr data-titulo="${lastTitleIndex}">
+                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                        <td><input type="text" class="form-control" name="componente[${lastTitleIndex}][]" placeholder="No. de Junta / Componente"></td>
+                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitleIndex}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitleIndex}][]" placeholder="Tipo de Indicación"></td>
+                        <td><input type="text" class="form-control" name="largo[${lastTitleIndex}][]" placeholder="Largo"></td>
+                        <td><input type="text" class="form-control" name="ancho[${lastTitleIndex}][]" placeholder="Ancho"></td>
+                        <td><input type="text" class="form-control" name="diametro[${lastTitleIndex}][]" placeholder="Ø"></td>
+                        <td><input type="text" class="form-control" name="ht[${lastTitleIndex}][]" placeholder="H.T."></td>
+                        <td><input type="text" class="form-control" name="evaluacion[${lastTitleIndex}][]" placeholder="Evaluación"></td>
+                        <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitleIndex}][]" placeholder="Longitud Inspeccionada"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                    </tr>`;
 
-                $('#dynamicTable tbody').append(newRow);
-            }
-            //updateRowNumbers();
-        }
-    );
+                    $('#dynamicTable tbody').append(newRow);
+                }
+        });
         
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
@@ -1052,7 +1047,6 @@
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
     });
     
     /*Selects */
