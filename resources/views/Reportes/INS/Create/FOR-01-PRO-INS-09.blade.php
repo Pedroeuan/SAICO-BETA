@@ -112,7 +112,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                 <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
+                                <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
                                 @error('Cliente')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -131,6 +131,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Proyecto</label>
                                 <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                 @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -141,7 +142,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                               <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
+                                <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                                 @error('Orden_Trabajo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -299,14 +300,14 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Transductores:</label>
                                     <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
-                                        <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        <option value="" selected disabled>Seleccione un Accesorio</option> <!-- Opción por defecto -->
                                             @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                 <option value="{{ $accesorios->idGeneral_EyC }}"
                                                         data-marca="{{ $accesorios->Marca }}"
                                                         data-modelo="{{ $accesorios->Modelo }}"
                                                         data-ns="{{ $accesorios->Serie }}">
                                                     {{ $accesorios->Nombre_E_P_BP }}
-                                        </option>
+                                                </option>
                                             @endforeach
                                     </select>
                             </div>
@@ -341,23 +342,20 @@
                         </div>
 
                         <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE REFERENCIA</div>
-@php/* dd($idsGeneral_EyCs_BlockyProbeta);*/ @endphp
-                       <!-- Select para Block y Probeta -->
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Referencia:</label>
-                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                                <option value="0" selected disabled>Seleccione un Block de Referencia</option>
-                                    @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                        <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                data-marca="{{ $blockyprobeta->Marca }}"
-                                                data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                data-ns="{{ $blockyprobeta->Serie }}">
-                                            {{ $blockyprobeta->Nombre_E_P_BP }}
-                                        </option>
-                                    @endforeach
-                                  <!--<option value="">op</option>-->
-                                </select>
+                                    <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                        <option value="" selected disabled>Seleccione un Block o Probeta</option>
+                                            @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                <option value="{{ $blockyprobeta->idGeneral_EyC }}"
+                                                            data-marca="{{ $blockyprobeta->Marca }}"
+                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
+                                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
+                                                </option>
+                                            @endforeach
+                                    </select>
                             </div>
                         </div>
 
@@ -456,6 +454,7 @@
                             </div>
                             <thead>
                                 <tr>
+                                    <th class="vertical" rowspan="2">#</th>
                                     <th class="vertical" rowspan="2">No. de Junta</th>
                                     <th class="vertical" rowspan="2">No. de Indicación</th>
                                     <th class="vertical" rowspan="2">Angulo de Inspección</th>
@@ -478,18 +477,19 @@
 
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="2"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="3"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="4"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="5"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="6"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="7"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="8"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="9"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="10"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="11"></th>
-                                    <th><input type="text" class="form-control default-input" style="100px" data-column="12"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -822,7 +822,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="13">
+                            <td colspan="14">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -835,18 +835,19 @@
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Indicación" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="angulo_inspeccion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Angulo de Inspección" style="width: 100px;"></td>
-                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Pierna" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Nivel de Referencia" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="nivel_indicacion[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Nivel Indicación" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="distancia_angular[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Distancia Angular" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="profundidad[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Profundidad" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Longitud" style="width: 50px;"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Evaluación" style="width: 55px;"></td>
-                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[10]}" placeholder="X" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[11]}" placeholder="Y" style="width: 60px;"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Observaciones" style="width: 60px;"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta"></td>
+                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. de Indicación"></td>
+                            <td><input type="text" class="form-control" name="angulo_inspeccion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Angulo de Inspección"></td>
+                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Pierna"></td>
+                            <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Nivel de Referencia"></td>
+                            <td><input type="text" class="form-control" name="nivel_indicacion[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Nivel Indicación"></td>
+                            <td><input type="text" class="form-control" name="distancia_angular[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Distancia Angular"></td>
+                            <td><input type="text" class="form-control" name="profundidad[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Profundidad"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[11]}" placeholder="X"></td>
+                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Y"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         
@@ -864,7 +865,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="13">
+                <td colspan="14">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -892,21 +893,21 @@
 
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
-                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. de Indicación" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="angulo_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="pierna[${lastTitle}][]" placeholder="Pierna" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="nivel_referencia[${lastTitle}][]" placeholder="Nivel de Referencia" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="nivel_indicacion[${lastTitle}][]" placeholder="Nivel Indicación" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="distancia_angular[${lastTitle}][]" placeholder="Distancia Angular" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="profundidad[${lastTitle}][]" placeholder="Profundidad" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="longitud[${lastTitle}][]" placeholder="Longitud" style="width: 50px;"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 55px;"></td>
-                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X" style="width: 60px;"></td>
-                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y" style="width: 60px;"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 60px;"></td>
+                        <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta" value="${rowCountGlobal}"></td>
+                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. de Indicación"></td>
+                        <td><input type="text" class="form-control" name="angulo_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
+                        <td><input type="text" class="form-control" name="pierna[${lastTitle}][]" placeholder="Pierna"></td>
+                        <td><input type="text" class="form-control" name="nivel_referencia[${lastTitle}][]" placeholder="Nivel de Referencia"></td>
+                        <td><input type="text" class="form-control" name="nivel_indicacion[${lastTitle}][]" placeholder="Nivel Indicación"></td>
+                        <td><input type="text" class="form-control" name="distancia_angular[${lastTitle}][]" placeholder="Distancia Angular"></td>
+                        <td><input type="text" class="form-control" name="profundidad[${lastTitle}][]" placeholder="Profundidad"></td>
+                        <td><input type="text" class="form-control" name="longitud[${lastTitle}][]" placeholder="Longitud"></td>
+                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X"></td>
+                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y"></td>
+                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                    
                 </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
@@ -986,26 +987,25 @@
             actualizarInputsA();
         });
 
-        function actualizarInputsbyp() {
-            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
 
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputbyp').val(marca);
-            $('#modeloInputbyp').val(modelo);
-            $('#nsInputbyp').val(ns);
-        }
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
 
-        // Evento cuando se cambia la selección en el select
-        $('#blockyprobetaSelect').on('change', function() {
-            actualizarInputsbyp();
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
         });
-    });
-
 
 
 </script>
