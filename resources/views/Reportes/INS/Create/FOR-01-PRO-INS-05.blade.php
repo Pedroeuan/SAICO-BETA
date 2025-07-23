@@ -519,6 +519,7 @@
                         
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>No.</th>
                                 <th>Dibujo</th>
                                 <th>Soldadura</th>
@@ -541,6 +542,7 @@
                                 <th><input type="text" class="form-control default-input" data-column="6"></th>
                                 <th><input type="text" class="form-control default-input" data-column="7"></th>
                                 <th><input type="text" class="form-control default-input" data-column="8"></th>
+                                <th><input type="text" class="form-control default-input" data-column="9"></th>
                                 <th></th> <!-- Para botón de eliminar -->
                             </tr>
                         </thead>
@@ -881,7 +883,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="9">
+                            <td colspan="10">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -895,14 +897,15 @@
                         let newRow = `
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Dibujo"></td>
-                            <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Soldadura"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="forma[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Forma"></td>
-                            <td><input type="text" class="form-control" name="transfer[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Transfer"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="No[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No."></td>
+                            <td><input type="text" class="form-control" name="dibujo[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Dibujo"></td>
+                            <td><input type="text" class="form-control" name="soldadura[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Soldadura"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="forma[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Forma"></td>
+                            <td><input type="text" class="form-control" name="transfer[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Transfer"></td>
+                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Longitud"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -919,7 +922,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="9">
+                <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -949,6 +952,7 @@
 
             `<tr data-titulo="${lastTitle}">
                 <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                <td><input type="text" class="form-control" name="No[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No"></td>
                 <td><input type="text" class="form-control" name="dibujo[${lastTitle}][]" placeholder="Dibujo"></td>
                 <td><input type="text" class="form-control" name="soldadura[${lastTitle}][]" placeholder="Soldadura"></td>
                 <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluacion"></td>

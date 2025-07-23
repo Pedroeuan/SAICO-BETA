@@ -535,12 +535,12 @@
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
                                                         <td colspan="9">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
                                                                         <i class="fa fa-times" aria-hidden="true"></i>
                                                                     </button>
                                                                 </td>
@@ -552,6 +552,7 @@
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr data-titulo="{{ $tituloKey }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td><input type="text" class="form-control" name='No[{{ $tituloKey }}][]' value="{{ $resultado['No'] }}"></td>
                                                         <td><input type="text" class="form-control" name='dibujo[{{ $tituloKey }}][]' value="{{ $resultado['dibujo'] }}"></td>
                                                         <td><input type="text" class="form-control" name='soldadura[{{ $tituloKey }}][]' value="{{ $resultado['soldadura'] }}"></td>
                                                         <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
@@ -935,14 +936,14 @@
 
             $('#dynamicTable tbody').append(newTitle);
             updateTitulos(); // Actualizar lista de títulos
-            saveData();
+         
         });
 
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
@@ -951,7 +952,8 @@
             let newRow = 
 
             `<tr data-titulo="${lastTitle}">
-                <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+            
+                <td><input type="text" class="form-control" name="No[${lastTitle}][]" value="${rowCountGlobal}" placeholder="Dibujo"></td>
                 <td><input type="text" class="form-control" name="dibujo[${lastTitle}][]" placeholder="Dibujo"></td>
                 <td><input type="text" class="form-control" name="soldadura[${lastTitle}][]" placeholder="Soldadura"></td>
                 <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluacion"></td>
@@ -964,7 +966,7 @@
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+           // saveData();
         }
     );
 
@@ -991,7 +993,7 @@
         });
 
             // Restaurar datos al cargar la página
-        restoreData();
+        //restoreData();
     });
 
     $(document).ready(function() {
