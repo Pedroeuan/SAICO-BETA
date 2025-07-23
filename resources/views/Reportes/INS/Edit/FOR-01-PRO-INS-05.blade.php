@@ -499,6 +499,7 @@
                         </div>
                         <thead>
                             <tr>
+                                <th style="width:40px ">#</th>
                                 <th>No.</th>
                                 <th>Dibujo</th>
                                 <th>Soldadura</th>
@@ -521,51 +522,55 @@
                                 <th><input type="text" class="form-control default-input" data-column="6"></th>
                                 <th><input type="text" class="form-control default-input" data-column="7"></th>
                                 <th><input type="text" class="form-control default-input" data-column="8"></th>
+                                <th><input type="text" class="form-control default-input" data-column="9"></th>
                                 <th></th> <!-- Para botón de eliminar -->
                             </tr>
                         </thead>
-                                        <tbody>
-                                            @php
-                                                $contador = 1;
-                                            @endphp
+                            @php
+                                $contador = 1;
+                            @endphp
+                        <tbody>
+                            @foreach ($Grupo_Juntas_Re as $grupo)
+                                                    @php
+                                                        $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
+                                                        $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
+                                                    @endphp
 
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="9">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
+                                                        <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
+                                                        <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
+                                                            <td colspan="10">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                            
+                                                                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                @endif
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='dibujo[{{ $tituloKey }}][]' value="{{ $resultado['dibujo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='soldadura[{{ $tituloKey }}][]' value="{{ $resultado['soldadura'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='forma[{{ $tituloKey }}][]' value="{{ $resultado['forma'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='transfer[{{ $tituloKey }}][]' value="{{ $resultado['transfer'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='longitud[{{ $tituloKey }}][]' value="{{ $resultado['longitud'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                    @php $contador++; @endphp
-                                                @endforeach
-                                            @endforeach
-                                        </tbody>
+                                @foreach ($grupo['resultados'] as $resultado)
+                                    <tr data-titulo="{{ $tituloKey }}">
+                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                        <td><input type="text" class="form-control" name='No[{{ $tituloKey }}][]' value="{{ $resultado['No'] }}"></td>
+                                        <td><input type="text" class="form-control" name='dibujo[{{ $tituloKey }}][]' value="{{ $resultado['dibujo'] }}"></td>
+                                        <td><input type="text" class="form-control" name='soldadura[{{ $tituloKey }}][]' value="{{ $resultado['soldadura'] }}"></td>
+                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                        <td><input type="text" class="form-control" name='forma[{{ $tituloKey }}][]' value="{{ $resultado['forma'] }}"></td>
+                                        <td><input type="text" class="form-control" name='transfer[{{ $tituloKey }}][]' value="{{ $resultado['transfer'] }}"></td>
+                                        <td><input type="text" class="form-control" name='longitud[{{ $tituloKey }}][]' value="{{ $resultado['longitud'] }}"></td>
+                                        <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
+                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                    </tr>
+                                    @php $contador++; @endphp
+                                @endforeach
+                            @endforeach
+                        </tbody>
                     </table>
                     </div>
 
@@ -917,32 +922,31 @@
         let rowCountGlobal = 0;
 
         $('#addTituloBtn').click(function () {
-            tituloCount++;
+           tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="9">
+                <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-            `;
+        `;
 
-            $('#dynamicTable tbody').append(newTitle);
-            updateTitulos(); // Actualizar lista de títulos
-            saveData();
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
@@ -951,7 +955,8 @@
             let newRow = 
 
             `<tr data-titulo="${lastTitle}">
-                <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                <td class="text-center align-middle">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                <td><input type="text" class="form-control" name="No[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No"></td>
                 <td><input type="text" class="form-control" name="dibujo[${lastTitle}][]" placeholder="Dibujo"></td>
                 <td><input type="text" class="form-control" name="soldadura[${lastTitle}][]" placeholder="Soldadura"></td>
                 <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluacion"></td>
@@ -964,7 +969,7 @@
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+           // saveData();
         }
     );
 

@@ -292,6 +292,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'No' => 'nullable|array',
             'dibujo' => 'nullable|array',
             'soldadura' => 'nullable|array',
             'evaluacion' => 'nullable|array',
@@ -392,7 +393,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("dibujo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("No.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -400,6 +401,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$sinTituloKey.$i"),
                     'dibujo' => $request->input("dibujo.$sinTituloKey.$i"),
                     'soldadura' => $request->input("soldadura.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
@@ -421,13 +423,14 @@ class FOR_01_PRO_INS_05Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("dibujo.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$tituloKey.$i"),
                     'dibujo' => $request->input("dibujo.$tituloKey.$i"),
                     'soldadura' => $request->input("soldadura.$tituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
@@ -621,6 +624,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'No'=> 'nullable|array',
             'dibujo' => 'nullable|array',
             'soldadura' => 'nullable|array',
             'evaluacion' => 'nullable|array',
@@ -708,7 +712,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("dibujo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("No.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -716,6 +720,7 @@ class FOR_01_PRO_INS_05Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$sinTituloKey.$i"),
                     'dibujo' => $request->input("dibujo.$sinTituloKey.$i"),
                     'soldadura' => $request->input("soldadura.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
@@ -737,13 +742,14 @@ class FOR_01_PRO_INS_05Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("dibujo.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$tituloKey.$i"),
                     'dibujo' => $request->input("dibujo.$tituloKey.$i"),
                     'soldadura' => $request->input("soldadura.$tituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
