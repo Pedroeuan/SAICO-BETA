@@ -336,15 +336,13 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
 
                 <table class="encabezadoAzul">
                     <tr>
                         <th colspan="9">AJUSTE DEL EQUIPO</th>
                     </tr>
                 </table>
-
-                <div style="margin-bottom: 5px;"></div>
 
                 <table class="datosinspeccionsinborde">
                     <tbody>
