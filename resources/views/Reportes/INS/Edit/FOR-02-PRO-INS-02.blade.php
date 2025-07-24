@@ -999,8 +999,7 @@
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas

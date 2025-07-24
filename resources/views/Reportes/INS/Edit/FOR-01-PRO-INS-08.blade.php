@@ -1077,15 +1077,7 @@
                 $('#dynamicTable tbody').append(newRow);
             }
         });
-
-
-
-
-
-
-
-
-
+        
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -1147,7 +1139,7 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-     
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 

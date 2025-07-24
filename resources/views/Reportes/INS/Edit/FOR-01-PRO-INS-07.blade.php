@@ -584,7 +584,7 @@
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
                                                         <td colspan="14">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">

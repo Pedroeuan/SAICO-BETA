@@ -213,7 +213,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                                <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " vvalue="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                                <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
                                 @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -890,56 +890,6 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
-            if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
-                // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
-                
-                tableData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="14">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. de Junta"></td>
-                            <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. de Indicación"></td>
-                            <td><input type="text" class="form-control" name="angulo_inspeccion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Angulo de Inspección"></td>
-                            <td><input type="text" class="form-control" name="pierna[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Pierna"></td>
-                            <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Nivel de Referencia"></td>
-                            <td><input type="text" class="form-control" name="nivel_indicacion[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Nivel Indicación"></td>
-                            <td><input type="text" class="form-control" name="distancia_angular[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Distancia Angular"></td>
-                            <td><input type="text" class="form-control" name="profundidad[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Profundidad"></td>
-                            <td><input type="text" class="form-control" name="longitud[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Longitud"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="x[${item.titulo}][]" value="${item.inputs[11]}" placeholder="X"></td>
-                            <td><input type="text" class="form-control" name="y[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Y"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        </tr>`;
-                        
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -967,6 +917,7 @@
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas

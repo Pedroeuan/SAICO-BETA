@@ -586,6 +586,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
             'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
