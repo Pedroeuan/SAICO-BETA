@@ -2,21 +2,17 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-09/01</title>
+            <title>FORMATO FOR-01-INS-09</title>
             <style>
                 @page {
                     margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
                     3.0cm /* superior */
                     1.2cm /* derecho */
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalTitulosYFilas <=20)
+                @if ($totalFotos <=4)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -28,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: 30px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -57,7 +53,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -81,28 +77,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                }
-                    
-                .simbologia {
-                    border-collapse: collapse;  /*separate No colapsar bordes */
-                    border-spacing: 0px;        /* Espacio entre celdas */
-                    width: 100%;
-                    text-align: center;
                     font-size: 8px;
-                }
-
-                .simbologia td, .simbologia th {
-                    border: .6px solid black; 
-                }
-                .celdaAmarillo{
-                    background-color: #FFF2CC;
                 }
 
                 .tablaheader {
@@ -110,7 +93,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -127,48 +110,16 @@
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
-            
-        .datosinspeccion{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
+
+        .border {
+            border: 1px solid black; 
         }
 
-        .datosinspeccion td, .datosinspeccion th {
-            border: .6px solid black; 
-        }
-
-        .datosinspeccionsinborde{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-        }
-
-        .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
-        }
-
-        .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
-        }
-        .celdaGris{
-            background-color: #DBDBDB;
-        }
-        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -176,7 +127,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -184,23 +134,79 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
         }
-        .rotar-texto-dividido {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: normal;
+        /* ************** */
+        .imagenes-reporte {
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 106%;
+            border-collapse: separate;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
-        .rotar-texto-sin-dividir {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-            max-width: 20px; /* Ajusta al ancho máximo deseado */
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para los comentarios */
+        .comment { 
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+        /* Estilo para los "comentarios" en blanco */
+        .empty-comment {
+            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 0px; /* Espaciado entre el borde y el texto */
+        }
+        
+        .empty-box {
+            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+        }
+
+        .cross-line {
+            width: 74%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
         }
             </style>
         </head>
@@ -213,15 +219,15 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-09/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104 </th>
+                            <th rowspan="2" style="font-size: 8pt;"> INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104 </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>3</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -229,16 +235,17 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 5px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
+
+                <div style="margin-bottom: 4px;"></div>
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -288,109 +295,10 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosinspeccion">
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
-                    </thead>  
-
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
-
-                    <tbody>
-                        <tr class="celdaGris">
-                            <th colspan="2">EQUIPO</th>
-                            <th colspan="4">TRANSDUCTOR</th>
-                            <th colspan="2">BLOCK DE REFERENCIA</th>
-                            <th>ACOPLANTE</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td colspan="3">{{ $Datos_Equipo['MARCA_TR'] }}</td>
-                            <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_BLOCK'] }}</td>
-                            <th class="celdaGris" style="width: 100px;">MARCA Y TIPO</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td colspan="3">{{ $Datos_Equipo['MODELO_TR'] }}</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>{{ $Datos_Equipo['MODELO_BLOCK'] }}</td>
-                            <td rowspan="2">{{ $Datos_Equipo['ACOPLANTE'] }}</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
-                            <th class="celdaGris">SERIE:</th>
-                            <td style="width: 60px;">{{ $Datos_Equipo['NS_TR'] }}</td>
-                            <th class="celdaGris" style="width: 50px;">FRECC:</th>
-                            <td style="width: 50px;">{{ $Datos_Equipo['FREC_TR'] }}</td>
-                            <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['NS_BLOCK'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">AJUSTE DEL EQUIPO</th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                        <tr class="">
-                            <th style="width: 100px;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td><td style="text-align: left; width: 2%;"> dB </td>
-                            <th style="width: 100px;">TIPO DE JUNTA:</th>
-                            <td class="lineaInferior">2</td>
-                            <th rowspan="3" style="width: 100px;"><img class="" src="{{ $FOR_01_INS_09 }}" alt="FOR_01_INS_09" style="width: 80px; height: auto;"></th>
-                        </tr>
-                        <tr class="">
-                            <th>RECHAZO:</th>
-                            <td class="lineaInferior">1</td><td></td>
-                            <th>DIAMETRO:</th>
-                            <td class="lineaInferior">2</td>
-                        </tr>
-                        <tr class="">
-                            <th>RETARDO:</th>
-                            <td class="lineaInferior">1</td><td></td>
-                            <th>ESPESOR:</th>
-                            <td class="lineaInferior">2</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
+                <div style="margin-bottom: 6px;"></div>
             </header>
-
+            
             <footer>
-                    <br>
-
-                    <table>                               
-                        <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 606.5px;"></td>                            
-                        </tr>                      
-                    </table>
-
-                    <br>
-                                                
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -544,64 +452,52 @@
             </footer>
 
             <div class="content">
-                <div style="margin-bottom: 0px;"></div>
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
 
-                    <table class="datosresultados">
-                        <thead>
-                            <tr class="celdaGris">
-                                <th rowspan= "2" style="height: 80px; width: 40px;"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-dividido"><span>Ángulo de inspección</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-sin-dividir"><span>Pierna</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-dividido"><span>Nivel de referencia</span></th>
-                                <th rowspan="2" style="width: 40px;"><span class="rotar-texto-dividido">Nivel de Indicación</span></th>
-                                <th rowspan="2" style="width: 40px;"><span class="rotar-texto-sin-dividir">Distancia Angular</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-sin-dividir">Profundidad</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-sin-dividir">Longitud</span></th>
-                                <th rowspan= "2" style="width: 40px;"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
-                                <th colspan= "2"><span class="">Distancia</span></th>
-                                <th rowspan= "2" style="width: 70px;">Observaciones</th>
-                            </tr>
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                        @endphp
 
-                            <tr class="celdaGris">
-                                <th style="width: 30px;">X</th>
-                                <th style="width: 30px;">Y</th>
-                            </tr>
-                        </thead>
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
 
-                            <tbody>
-                            @for($i = 0; $i < 14; $i++)
-                            <tr>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                                <td>----</td>
-                            </tr>
-                            @endfor
-                            <tr class="sinBordetd">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <th colspan="4"><strong>Longitud total inspeccionada:</strong></th>
-                                <th>0 m</th>
-                            </tr>
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
 
-                            </tbody>
-                    </table>
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
         </body>
     </html>

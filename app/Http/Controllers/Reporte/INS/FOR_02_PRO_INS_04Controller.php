@@ -1009,7 +1009,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01_INS_04.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_02_INS_04.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
