@@ -279,6 +279,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'No' => 'nullable|array',
             'componente' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
@@ -380,7 +381,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("No.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -388,6 +389,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$sinTituloKey.$i"),
                     'componente' => $request->input("componente.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
@@ -410,13 +412,14 @@ class FOR_01_PRO_INS_03Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("componente.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$tituloKey.$i"),
                     'componente' => $request->input("componente.$tituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
@@ -602,6 +605,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'No'=> 'nullable|array',
             'componente' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
@@ -690,13 +694,14 @@ class FOR_01_PRO_INS_03Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("No.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'No' => $request->input("No.$sinTituloKey.$i"),
                     'componente' => $request->input("componente.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
@@ -716,27 +721,25 @@ class FOR_01_PRO_INS_03Controller extends Controller
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $indice => $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            //$filas = $request->input("componente.$tituloKey", []);
-            //$numFilas = count($filas);
-
-            $filas = $request->input("no_junta.$indice", []);
+         foreach ($titulos as $titulo) {
+            
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'componente' => $request->input("componente.$indice.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$indice.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$indice.$i"),
-                    'largo' => $request->input("largo.$indice.$i"),
-                    'ancho' => $request->input("ancho.$indice.$i"),
-                    'diametro' => $request->input("diametro.$indice.$i"),
-                    'ht' => $request->input("ht.$indice.$i"),
-                    'evaluacion' => $request->input("evaluacion.$indice.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$indice.$i"),
+                    'No' => $request->input("No.$tituloKey.$i"),
+                    'componente' => $request->input("componente.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'largo' => $request->input("largo.$tituloKey.$i"),
+                    'ancho' => $request->input("ancho.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'long_inspeccionada' => $request->input("long_inspeccionada.$tituloKey.$i"),
                 ];
             }
         

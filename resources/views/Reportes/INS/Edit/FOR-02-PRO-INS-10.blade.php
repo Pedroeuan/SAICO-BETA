@@ -521,7 +521,7 @@
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
                                                                         <i class="fa fa-times" aria-hidden="true"></i>
                                                                     </button>
                                                                 </td>
@@ -997,7 +997,7 @@
                 <td colspan="21">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
@@ -1044,8 +1044,7 @@
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>
-            `;
+                </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
