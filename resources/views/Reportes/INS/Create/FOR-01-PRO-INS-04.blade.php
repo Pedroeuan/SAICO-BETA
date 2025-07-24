@@ -471,7 +471,7 @@
                                         
                                         <thead>
                                             <tr>
-                                                <th rowspan="3" class="align-middle">No.</th>
+                                                <th rowspan="3" class="align-middle">#</th>
                                                 <th rowspan="3" class="align-middle">No. de Junta</th>
                                                 <th rowspan="3" class="align-middle">No. Indicación</th>
                                                 <th rowspan="3" class="align-middle">Ángulo de Inspección</th>

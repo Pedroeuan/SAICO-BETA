@@ -448,7 +448,7 @@
                                         </div>
                                         <thead>
                                             <tr>
-                                                <th rowspan="3" class="align-middle">No.</th>
+                                                <th rowspan="3" class="align-middle">#</th>
                                                 <th rowspan="3" class="align-middle">No. de Junta</th>
                                                 <th rowspan="3" class="align-middle">No. Indicación</th>
                                                 <th rowspan="3" class="align-middle">Ángulo de Inspección</th>
@@ -531,9 +531,10 @@
                                                     </tr>
                                                 @endif
 
+
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                     <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td class="align-middle">{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                         <td><input type="text" class="form-control" name='no_junta[{{ $tituloKey }}][]' value="{{ $resultado['no_junta'] }}"></td>
                                                         <td><input type="text" class="form-control" name='no_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
                                                         <td><input type="text" class="form-control" name='ang_inspeccion[{{ $tituloKey }}][]' value="{{ $resultado['ang_inspeccion'] }}"></td>
@@ -938,7 +939,7 @@
 
             let newRow = `
                         <tr data-titulo="${lastTitle}">
-                            <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                            <td class="align-middle">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                             <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
                             <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
                             <td><input type="text" class="form-control" name="ang_inspeccion[${lastTitle}][]" placeholder="Angulo de Inspección"></td>
