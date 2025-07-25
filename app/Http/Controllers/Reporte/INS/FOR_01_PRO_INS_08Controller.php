@@ -268,6 +268,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'ID' => 'nullable|array',
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -381,7 +382,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -389,6 +390,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'ID'=> $request->input("ID.$sinTituloKey.$i"),
                     'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
@@ -423,14 +425,15 @@ class FOR_01_PRO_INS_08Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
+                    'ID'=> $request->input("ID.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$tituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$tituloKey.$i"),
                     'diametro' => $request->input("diametro.$tituloKey.$i"),
@@ -617,6 +620,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'ID' => 'nullable|array',
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -717,13 +721,14 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
         // Procesar filas sin título si las manejas
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
 
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
@@ -755,33 +760,36 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
         // Procesar grupos con título, usando índice numérico
         foreach ($titulos as $indice => $titulo) {
-            $filas = $request->input("no_junta.$indice", []);
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
 
             $resultados = [];
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$indice.$i"),
-                    'lado_a' => $request->input("lado_a.$indice.$i"),
-                    'lado_b' => $request->input("lado_b.$indice.$i"),
-                    'diametro' => $request->input("diametro.$indice.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$indice.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$indice.$i"),
-                    'Ang' => $request->input("Ang.$indice.$i"),
-                    'Gdb' => $request->input("Gdb.$indice.$i"),
-                    'nr' => $request->input("nr.$indice.$i"),
-                    'ni' => $request->input("ni.$indice.$i"),
-                    'x' => $request->input("x.$indice.$i"),
-                    'y' => $request->input("y.$indice.$i"),
-                    'horario_tecnico' => $request->input("horario_tecnico.$indice.$i"),
-                    'no_pierna' => $request->input("no_pierna.$indice.$i"),
-                    's' => $request->input("s.$indice.$i"),
-                    'l' => $request->input("l.$indice.$i"),
-                    'd' => $request->input("d.$indice.$i"),
-                    'tmin' => $request->input("tmin.$indice.$i"),
-                    'evaluacion' => $request->input("evaluacion.$indice.$i"),
-                    'fotos' => $request->input("fotos.$indice.$i"),
-                    'observaciones' => $request->input("observaciones.$indice.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
+                    'lado_a' => $request->input("lado_a.$tituloKey.$i"),
+                    'lado_b' => $request->input("lado_b.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'Ang' => $request->input("Ang.$tituloKey.$i"),
+                    'Gdb' => $request->input("Gdb.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'x' => $request->input("x.$tituloKey.$i"),
+                    'y' => $request->input("y.$tituloKey.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$tituloKey.$i"),
+                    'no_pierna' => $request->input("no_pierna.$tituloKey.$i"),
+                    's' => $request->input("s.$tituloKey.$i"),
+                    'l' => $request->input("l.$tituloKey.$i"),
+                    'd' => $request->input("d.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'fotos' => $request->input("fotos.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
 

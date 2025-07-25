@@ -39,7 +39,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class FOR_01_PRO_INS_09Controller extends Controller
+class FOR_01_PRO_INS_08Controller extends Controller
 {
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -216,13 +216,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-    public function FOR_01_PRO_INS_09_store(Request $request)
+    public function FOR_01_PRO_INS_08_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -250,23 +244,23 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
-
             'Datos_Equipo.MARCA_TR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TR' => 'nullable|string|max:255',
             'Datos_Equipo.NS_TR' => 'nullable|string|max:255',
             'Datos_Equipo.FREC_TR' => 'nullable|string|max:255',
-
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
-
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONG_CABLE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
-            'Datos_Equipo.RETARDO' => 'nullable|string|max:255',
-            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_MAX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP_MAX_OP' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
@@ -274,25 +268,32 @@ class FOR_01_PRO_INS_09Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
             'no_junta' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
-            'angulo_inspeccion' => 'nullable|array',
-            'pierna' => 'nullable|array',
-            'nivel_referencia' => 'nullable|array',
-            'nivel_indicacion' => 'nullable|array',
-            'distancia_angular' => 'nullable|array',
-            'profundidad' => 'nullable|array',
-            'longitud' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
+            'lado_a' => 'nullable|array',
+            'lado_b' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_indicacion' => 'nullable|array', 
+            'tipo_indicacion' => 'nullable|array',
+            'Ang' => 'nullable|array',
+            'Gdb' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
             'x' => 'nullable|array',
             'y' => 'nullable|array',
+            'horario_tecnico' => 'nullable|array',
+            'no_pierna' => 'nullable|array',
+            's' => 'nullable|array',
+            'l' => 'nullable|array',
+            'd' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:2,3,4',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
@@ -388,18 +389,26 @@ class FOR_01_PRO_INS_09Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                    'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
+                    'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
+                    'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'angulo_inspeccion' => $request->input("angulo_inspeccion.$sinTituloKey.$i"),
-                    'pierna' => $request->input("pierna.$sinTituloKey.$i"),
-                    'nivel_referencia' => $request->input("nivel_referencia.$sinTituloKey.$i"),
-                    'nivel_indicacion' => $request->input("nivel_indicacion.$sinTituloKey.$i"),
-                    'distancia_angular' => $request->input("distancia_angular.$sinTituloKey.$i"),
-                    'profundidad' => $request->input("profundidad.$sinTituloKey.$i"),
-                    'longitud' => $request->input("longitud.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'Ang' => $request->input("Ang.$sinTituloKey.$i"),
+                    'Gdb' => $request->input("Gdb.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
                     'x' => $request->input("x.$sinTituloKey.$i"),
                     'y' => $request->input("y.$sinTituloKey.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$sinTituloKey.$i"),
+                    'no_pierna' => $request->input("no_pierna.$sinTituloKey.$i"),
+                    's' => $request->input("s.$sinTituloKey.$i"),
+                    'l' => $request->input("l.$sinTituloKey.$i"),
+                    'd' => $request->input("d.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'fotos' => $request->input("fotos.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
@@ -421,18 +430,26 @@ class FOR_01_PRO_INS_09Controller extends Controller
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
+                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
+                    'lado_a' => $request->input("lado_a.$tituloKey.$i"),
+                    'lado_b' => $request->input("lado_b.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'angulo_inspeccion' => $request->input("angulo_inspeccion.$tituloKey.$i"),
-                    'pierna' => $request->input("pierna.$tituloKey.$i"),
-                    'nivel_referencia' => $request->input("nivel_referencia.$tituloKey.$i"),
-                    'nivel_indicacion' => $request->input("nivel_indicacion.$tituloKey.$i"),
-                    'distancia_angular' => $request->input("distancia_angular.$tituloKey.$i"),
-                    'profundidad' => $request->input("profundidad.$tituloKey.$i"),
-                    'longitud' => $request->input("longitud.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'Ang' => $request->input("Ang.$tituloKey.$i"),
+                    'Gdb' => $request->input("Gdb.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
                     'x' => $request->input("x.$tituloKey.$i"),
                     'y' => $request->input("y.$tituloKey.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$tituloKey.$i"),
+                    'no_pierna' => $request->input("no_pierna.$tituloKey.$i"),
+                    's' => $request->input("s.$tituloKey.$i"),
+                    'l' => $request->input("l.$tituloKey.$i"),
+                    'd' => $request->input("d.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'fotos' => $request->input("fotos.$tituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
@@ -484,14 +501,14 @@ class FOR_01_PRO_INS_09Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_09/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_08/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_09/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_01_PRO_INS_08/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -547,7 +564,8 @@ class FOR_01_PRO_INS_09Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_PRO_INS_09_update(Request $request, $id)
+
+    public function FOR_01_PRO_INS_08_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -575,50 +593,56 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
-
             'Datos_Equipo.MARCA_TR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TR' => 'nullable|string|max:255',
             'Datos_Equipo.NS_TR' => 'nullable|string|max:255',
             'Datos_Equipo.FREC_TR' => 'nullable|string|max:255',
-
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
-
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            
+            'Datos_Equipo.LONG_CABLE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
-            'Datos_Equipo.RETARDO' => 'nullable|string|max:255',
-            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
+            'Datos_Equipo.PRESION_OPERACION' => 'nullable|string|max:255',
+            'Datos_Equipo.PRES_MAX_OPE' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP_MAX_OP' => 'nullable|string|max:255',
+            'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
-            
+
             /*Titulos Juntas */
-            /*'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
             'no_junta' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
-            'angulo_inspeccion' => 'nullable|array',
-            'pierna' => 'nullable|array',
-            'nivel_referencia' => 'nullable|array',
-            'nivel_indicacion' => 'nullable|array',
-            'distancia_angular' => 'nullable|array',
-            'profundidad' => 'nullable|array',
-            'longitud' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
+            'lado_a' => 'nullable|array',
+            'lado_b' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_indicacion' => 'nullable|array', 
+            'tipo_indicacion' => 'nullable|array',
+            'Ang' => 'nullable|array',
+            'Gdb' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
             'x' => 'nullable|array',
             'y' => 'nullable|array',
+            'horario_tecnico' => 'nullable|array',
+            'no_pierna' => 'nullable|array',
+            's' => 'nullable|array',
+            'l' => 'nullable|array',
+            'd' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'fotos' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:2,3,4',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
@@ -671,7 +695,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
-        ]);
+        ]); //dd($validatedData);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -690,72 +714,84 @@ class FOR_01_PRO_INS_09Controller extends Controller
 
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
+
+        // Procesar filas sin título si las manejas
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
-        
+
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
-        
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
                     'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                    'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
+                    'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'angulo_inspeccion' => $request->input("angulo_inspeccion.$sinTituloKey.$i"),
-                    'pierna' => $request->input("pierna.$sinTituloKey.$i"),
-                    'nivel_referencia' => $request->input("nivel_referencia.$sinTituloKey.$i"),
-                    'nivel_indicacion' => $request->input("nivel_indicacion.$sinTituloKey.$i"),
-                    'distancia_angular' => $request->input("distancia_angular.$sinTituloKey.$i"),
-                    'profundidad' => $request->input("profundidad.$sinTituloKey.$i"),
-                    'longitud' => $request->input("longitud.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'Ang' => $request->input("Ang.$sinTituloKey.$i"),
+                    'Gdb' => $request->input("Gdb.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
                     'x' => $request->input("x.$sinTituloKey.$i"),
                     'y' => $request->input("y.$sinTituloKey.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$sinTituloKey.$i"),
+                    'no_pierna' => $request->input("no_pierna.$sinTituloKey.$i"),
+                    's' => $request->input("s.$sinTituloKey.$i"),
+                    'l' => $request->input("l.$sinTituloKey.$i"),
+                    'd' => $request->input("d.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'fotos' => $request->input("fotos.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
-        
             $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
+                'titulos_juntas' => 'SIN TITULO',
+                'resultados' => $resultados,
             ];
         }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("no_junta.$tituloKey", []);
+
+        // Procesar grupos con título, usando índice numérico
+        foreach ($titulos as $indice => $titulo) {
+            $filas = $request->input("no_junta.$indice", []);
             $numFilas = count($filas);
-        
+
             $resultados = [];
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'angulo_inspeccion' => $request->input("angulo_inspeccion.$tituloKey.$i"),
-                    'pierna' => $request->input("pierna.$tituloKey.$i"),
-                    'nivel_referencia' => $request->input("nivel_referencia.$tituloKey.$i"),
-                    'nivel_indicacion' => $request->input("nivel_indicacion.$tituloKey.$i"),
-                    'distancia_angular' => $request->input("distancia_angular.$tituloKey.$i"),
-                    'profundidad' => $request->input("profundidad.$tituloKey.$i"),
-                    'longitud' => $request->input("longitud.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'x' => $request->input("x.$tituloKey.$i"),
-                    'y' => $request->input("y.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$indice.$i"),
+                    'lado_a' => $request->input("lado_a.$indice.$i"),
+                    'lado_b' => $request->input("lado_b.$indice.$i"),
+                    'diametro' => $request->input("diametro.$indice.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$indice.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$indice.$i"),
+                    'Ang' => $request->input("Ang.$indice.$i"),
+                    'Gdb' => $request->input("Gdb.$indice.$i"),
+                    'nr' => $request->input("nr.$indice.$i"),
+                    'ni' => $request->input("ni.$indice.$i"),
+                    'x' => $request->input("x.$indice.$i"),
+                    'y' => $request->input("y.$indice.$i"),
+                    'horario_tecnico' => $request->input("horario_tecnico.$indice.$i"),
+                    'no_pierna' => $request->input("no_pierna.$indice.$i"),
+                    's' => $request->input("s.$indice.$i"),
+                    'l' => $request->input("l.$indice.$i"),
+                    'd' => $request->input("d.$indice.$i"),
+                    'tmin' => $request->input("tmin.$indice.$i"),
+                    'evaluacion' => $request->input("evaluacion.$indice.$i"),
+                    'fotos' => $request->input("fotos.$indice.$i"),
+                    'observaciones' => $request->input("observaciones.$indice.$i"),
                 ];
             }
-        
+
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
             ];
         }
-        
-        // Actualizar el campo en la base de datos
+
+        // Guardar en BD
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
         ]);
@@ -793,7 +829,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_09/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_08/{$Contrato}/{$No_Reporte}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -919,7 +955,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
     }
 
 
-    public function FOR_01_INS_09($id)
+    public function FOR_01_INS_08($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -953,7 +989,6 @@ class FOR_01_PRO_INS_09Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-        $FOR_01_INS_09 = public_path('images/FOR-01-INS-09.png');
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
@@ -969,9 +1004,8 @@ class FOR_01_PRO_INS_09Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-01-INS-09.PDF',
+            'title' => 'Reporte_FOR-01-INS-08.PDF',
             'Logo' => $Logo,
-            'FOR_01_INS_09' => $FOR_01_INS_09,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
@@ -993,10 +1027,10 @@ class FOR_01_PRO_INS_09Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_09_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_08_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_09_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_08_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1017,10 +1051,10 @@ class FOR_01_PRO_INS_09Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -266);
+            $combinedPdf->SetXY(179, -180);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1036,7 +1070,7 @@ class FOR_01_PRO_INS_09Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01_INS_09.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_INS_01_08.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
