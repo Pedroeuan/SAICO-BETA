@@ -736,7 +736,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("elemento_tubo.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -758,7 +758,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
                     'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
-        
+
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
                 'resultados' => $resultados

@@ -514,7 +514,7 @@
                                                 $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
-                                               
+
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
                                                     <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
