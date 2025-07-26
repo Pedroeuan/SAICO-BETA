@@ -1006,8 +1006,6 @@
         });
 
         $('#addBtn').click(function () {
-
-
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
