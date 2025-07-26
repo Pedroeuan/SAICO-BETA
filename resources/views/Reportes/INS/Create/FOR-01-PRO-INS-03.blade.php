@@ -1047,10 +1047,6 @@
             }
             
             // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            /*Object.keys(localStorage).forEach(function(key) {
-                if (key.startsWith('FOR-01-PRO-INS-08_')) localStorage.removeItem(key);
-            });*/
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
@@ -1085,8 +1081,8 @@
                 actualizarInputsC1();
             });
 
-            const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
-            selectedOptionLocal != null ?  ($('#consumiblesSelect1').val(selectedOptionLocal),actualizarInputsC1()):"";
+            const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+            selectedOptionLocalCons1 != null ?  ($('#consumiblesSelect1').val(selectedOptionLocalCons1),actualizarInputsC1()):"";
 
             // Cuando se cambia la selección
             $('#consumiblesSelect1').on('change', function() {
@@ -1107,8 +1103,8 @@
                 $('#loteInputC2').val(lote);
             }
 
-            const selectedOptionLocal2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
-            selectedOptionLocal2 != null ?  ($('#consumiblesSelect2').val(selectedOptionLocal2),actualizarInputsC2()):"";
+            const selectedOptionLocalCons2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
+            selectedOptionLocalCons2 != null ?  ($('#consumiblesSelect2').val(selectedOptionLocalCons2),actualizarInputsC2()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#consumiblesSelect2').on('change', function() {
@@ -1129,8 +1125,8 @@
                 $('#loteInputC3').val(lote);
             }
 
-            const selectedOptionLocal3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible3');
-            selectedOptionLocal3 != null ?  ($('#consumiblesSelect3').val(selectedOptionLocal3),actualizarInputsC3()):"";
+            const selectedOptionLocalCons3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible3');
+            selectedOptionLocalCons3 != null ?  ($('#consumiblesSelect3').val(selectedOptionLocalCons3),actualizarInputsC3()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#consumiblesSelect3').on('change', function() {

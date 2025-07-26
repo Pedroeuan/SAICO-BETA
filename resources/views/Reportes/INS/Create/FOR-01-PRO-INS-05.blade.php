@@ -1019,9 +1019,8 @@
             selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
         });
-
-
-        /*FOR-01-PRO-INS-04*/
+        
+    /*FOR-01-PRO-INS-04*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-05');
         if (!form) return;

@@ -250,7 +250,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Equipos:</label>
-                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                <select class="form-select inputForm" name="equiposSelect" id="equiposSelect">
                                 <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                     @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                         <option value="{{ $equipo->idGeneral_EyC }}"
@@ -290,7 +290,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Sonda:</label>
-                                <select class="form-select inputForm" name="equipos" id="accesoriosSelect">
+                                <select class="form-select inputForm" name="accesoriosSelect" id="accesoriosSelect">
                                 <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -331,7 +331,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Calibración:</label>
-                                <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                                <select class="form-select inputForm" name="blockyprobetaSelect" id="blockyprobetaSelect">
                                 <option value="" selected disabled>Seleccione un Block de Calibración</option>
                                     @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                         <option value="{{ $blockyprobeta->idGeneral_EyC }}"
@@ -371,7 +371,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                                <select class="form-select inputForm" name="equipos2" id="accesoriosSelect2">
+                                <select class="form-select inputForm" name="accesoriosSelect2" id="accesoriosSelect2">
                                 <option value="" selected disabled>Seleccione un Encoder</option>
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -411,7 +411,7 @@
                         <div class="col-sm-50 d-flex justify-content-center">
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                                <select class="form-select inputForm" name="equipos2" id="accesoriosSelect3">
+                                <select class="form-select inputForm" name="accesoriosSelect3" id="accesoriosSelect3">
                                 <option value="" selected disabled>Seleccione un Encoder</option>
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -901,15 +901,14 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -967,7 +966,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -999,7 +998,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1044,14 +1043,15 @@
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
+        
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-        });
 
-        $(document).ready(function() {
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 
@@ -1065,14 +1065,15 @@
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
             }
+
+            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
+            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA1),actualizarInputsA()):"";
+            
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-                
-            });
-            
-        $(document).ready(function() {
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1087,14 +1088,15 @@
                 $('#nsInputbyp').val(ns);
             }
 
+            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
+            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-        });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
+            function actualizarInputsA2() {
                 var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
@@ -1107,15 +1109,17 @@
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
             }
+
+            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
+            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA();
+                    actualizarInputsA2();
                 });
                 
-            });
 
-        $(document).ready(function() {
-            function actualizarInputsA() {
+            function actualizarInputsA3() {
                 var selectedOption = $('#accesoriosSelect3').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
@@ -1128,12 +1132,50 @@
                 $('#modeloInputA3').val(modelo);
                 $('#nsInputA3').val(ns);
             }
+            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
+            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
+
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect3').on('change', function() {
-                    actualizarInputsA();
+                    actualizarInputsA3();
                 });
                 
             });
 
+    /*FOR-01-PRO-INS-12*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-12');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-12_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-12_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 </script>
 @endsection

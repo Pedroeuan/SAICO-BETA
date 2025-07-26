@@ -1153,7 +1153,7 @@
     });
 
     /*FOR-01-PRO-INS-08*/
-     document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-08');
         if (!form) return;
 

@@ -1097,8 +1097,6 @@
         });
     });
 
-
-
         /*FOR-01-PRO-INS-06*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-06');
