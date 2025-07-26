@@ -66,6 +66,8 @@
         @include('Reportes.INS.Edit.FOR-01-PRO-INS-09')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-10')
         @include('Reportes.INS.Edit.FOR-01-PRO-INS-10')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-12')
+        @include('Reportes.INS.Edit.FOR-01-PRO-INS-12')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-02') 
         @include('Reportes.INS.Edit.FOR-02-PRO-INS-02')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-04') 
