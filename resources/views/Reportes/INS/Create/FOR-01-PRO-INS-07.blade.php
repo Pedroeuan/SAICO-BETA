@@ -928,7 +928,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -951,7 +951,7 @@
                             <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="HT"></td>
                             <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Evaluación"></td>
                             <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Fotos"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;   
 
                         $('#dynamicTable tbody').append(newRow);
@@ -972,7 +972,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1010,7 +1010,7 @@
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="HT"></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     </tr>`;        
 
                 $('#dynamicTable tbody').append(newRow);

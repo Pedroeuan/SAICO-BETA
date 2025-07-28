@@ -921,7 +921,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -951,7 +951,7 @@
                             <td><input type="text" class="form-control" name="Perd_Mate[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Perdida de Material (%)"></td>
                             <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No."></td>
                             <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
@@ -971,7 +971,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1017,7 +1017,7 @@
                     <td><input type="text" class="form-control" name="Perd_Mate[${lastTitle}][]" placeholder="Perdida de Material (%)"></td>
                     <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No."></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     
                 </tr>`;
 

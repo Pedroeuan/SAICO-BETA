@@ -750,7 +750,7 @@ $(document).ready(function() {
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -761,7 +761,7 @@ $(document).ready(function() {
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}">
                                         </td><td><input type="text" class="form-control" name="nombre_Equipo[${item.titulo}]" value="${item.inputs[0]}" placeholder="Nombre del equipo"></td>
                                         <td><input type="text" class="form-control" name="status[${item.titulo}]" value="${item.inputs[1]}" placeholder="Estado"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
 
 
@@ -783,7 +783,7 @@ $(document).ready(function() {
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -811,7 +811,7 @@ $(document).ready(function() {
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
                     </td><td><input type="text" class="form-control" name="nombre_Equipo[${lastTitle}][]" placeholder="Nombre del equipo"></td>
                     <td><input type="text" class="form-control" name="status[${lastTitle}][]" placeholder="Estado"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     
                     </tr>`;
 

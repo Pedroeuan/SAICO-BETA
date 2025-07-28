@@ -920,7 +920,7 @@
                             <td><input type="text" class="form-control" name="amplitud[${lastTitle}][]" placeholder="Amplitud"></td>
                             <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                             <td><input type="text" class="form-control" name="comentarios[${lastTitle}][]" placeholder="Comentarios"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>
                     `;
 

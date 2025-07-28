@@ -532,7 +532,7 @@
                                                         <input type="text" class="form-control w-90" name="titulos[]" value="{{ $grupo['titulos_juntas'] }}">
                                                         <td>
                                                             <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
                                                             </button>
                                                         </td>
                                                     </div>
@@ -564,7 +564,7 @@
                                                     <td><input type="text" class="form-control" name="evaluacion[{{ $tituloKey }}][]" value="{{ $resultado['evaluacion'] }}" style="width: 70px;"></td>
                                                     <td><input type="text" class="form-control" name="fotos[{{ $tituloKey }}][]" value="{{ $resultado['fotos'] }}" style="width: 95px;"></td>
                                                     <td><input type="text" class="form-control" name="observaciones[{{ $tituloKey }}][]" value="{{ $resultado['observaciones'] }}" style="width: 130px;"></td>
-                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
                                                 @php $contador++; @endphp
                                             @endforeach
@@ -1026,7 +1026,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título...">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash" aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1070,7 +1070,7 @@
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitleIndex}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="fotos[${lastTitleIndex}][]" placeholder="Fotos No."></td>
                     <td><input type="text" class="form-control" name="observaciones[${lastTitleIndex}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>
                 `;
 

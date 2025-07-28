@@ -1341,7 +1341,7 @@ $(document).ready(function() {
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -1364,7 +1364,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)" style="width: 70px;"></td>
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación" style="width: 70px;"></td>
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos" style="width: 70px;"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
@@ -1384,7 +1384,7 @@ $(document).ready(function() {
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1423,7 +1423,7 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)" style="width: 70px;"></td>
                     <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
                     <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Fotos" style="width: 70px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
