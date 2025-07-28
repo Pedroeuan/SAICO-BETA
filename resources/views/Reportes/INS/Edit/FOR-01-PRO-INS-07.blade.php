@@ -584,7 +584,7 @@
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
                                                         <td colspan="14">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
@@ -651,17 +651,17 @@
                                             </div>
                                         </div>
 
-                                    <!-- Select para elegir el número de firmas -->
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                                <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
-                                                <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
-                                                <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
-                                            </select>
+                                        <!-- Select para elegir el número de firmas -->
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">Número de Firmas:</div>
+                                        <div class="col-sm-15">
+                                            <div class="form-group">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
                                         <!-- 2 DOS FIRMAS-->
                                         <div id="firmas2" class="col-12">
@@ -1025,7 +1025,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            //saveData();
         }
     );
 
@@ -1051,8 +1051,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
     /*Selects */
@@ -1075,9 +1073,7 @@
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
-        });
-
-        $(document).ready(function() {
+        
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect1').find('option:selected');
 
@@ -1096,9 +1092,7 @@
                     actualizarInputsA();
                 });
                 
-            });
-
-        $(document).ready(function() {
+           
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
@@ -1117,9 +1111,7 @@
                     actualizarInputsA();
                 });
                 
-            });
-
-        $(document).ready(function() {
+           
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
 
@@ -1138,9 +1130,7 @@
             $('#blockyprobetaSelect1').on('change', function() {
                 actualizarInputsbyp();
             });
-        });
-
-        $(document).ready(function() {
+       
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
 

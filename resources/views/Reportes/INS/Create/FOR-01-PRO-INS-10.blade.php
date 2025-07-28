@@ -906,15 +906,14 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -953,11 +952,7 @@
                             <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[20]}" placeholder="Fotos No."></td>
                             <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[21]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                            
                         </tr>`;
-
-
-
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });
@@ -985,7 +980,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -1028,7 +1023,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1074,6 +1069,9 @@
             $('#nsInputE').val(ns);
         }
 
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
@@ -1094,6 +1092,10 @@
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
             }
+
+            const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios');
+            selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
@@ -1116,10 +1118,49 @@
                 $('#nsInputbyp').val(ns);
             }
 
+            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
+            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
         });
+
+            /*FOR-01-PRO-INS-10*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-10');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-10_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-10_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-10_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-10_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 </script>
 @endsection

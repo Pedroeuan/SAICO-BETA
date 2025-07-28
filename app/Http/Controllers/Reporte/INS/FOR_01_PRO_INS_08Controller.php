@@ -268,6 +268,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'ID' => 'nullable|array',
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -381,7 +382,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -389,6 +390,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
+                    'ID'=> $request->input("ID.$sinTituloKey.$i"),
                     'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
@@ -423,14 +425,15 @@ class FOR_01_PRO_INS_08Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
+                    'ID'=> $request->input("ID.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$tituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$tituloKey.$i"),
                     'diametro' => $request->input("diametro.$tituloKey.$i"),
@@ -587,7 +590,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
-
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -612,15 +614,13 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string|max:255',
             'Datos_Equipo.ESTADO_PINTURA' => 'nullable|string|max:255',
             'Datos_Equipo.OBS' => 'nullable|string|max:255',
-            /*'Datos_Equipo.Observaciones' => 'nullable|string|max:255',*/
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-
+            'ID' => 'nullable|array',
             'no_junta' => 'nullable|array',
             'lado_a' => 'nullable|array',
             'lado_b' => 'nullable|array',
@@ -643,11 +643,10 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'fotos' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
-
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:2,3,4',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
@@ -700,7 +699,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
-        ]);
+        ]); //dd($validatedData);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -719,18 +718,18 @@ class FOR_01_PRO_INS_08Controller extends Controller
 
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
+
+        // Procesar filas sin título si las manejas
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
-        
+
         if ($numFilasSinTitulo > 0) {
             $resultados = [];
-        
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$sinTituloKey.$i"),
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$sinTituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$sinTituloKey.$i"),
                     'diametro' => $request->input("diametro.$sinTituloKey.$i"),
@@ -753,24 +752,24 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
-        
             $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
+                'titulos_juntas' => 'SIN TITULO',
+                'resultados' => $resultados,
             ];
         }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
+
+        // Procesar grupos con título, usando índice numérico
+        foreach ($titulos as $indice => $titulo) {
+            //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
-        
+
             $resultados = [];
-        
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'no_junta'=> $request->input("no_junta.$tituloKey.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'lado_a' => $request->input("lado_a.$tituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$tituloKey.$i"),
                     'diametro' => $request->input("diametro.$tituloKey.$i"),
@@ -793,14 +792,14 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
-        
+
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
             ];
         }
-        
-        // Actualizar el campo en la base de datos
+
+        // Guardar en BD
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
         ]);
@@ -1079,7 +1078,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_INS_01_08.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

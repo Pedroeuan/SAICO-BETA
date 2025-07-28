@@ -493,7 +493,7 @@
                                                     $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                                 @endphp
                                                     @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                        <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
+                                                        <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
                                                             <td colspan="12">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
@@ -881,7 +881,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="10">
+                <td colspan="12">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">

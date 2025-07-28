@@ -276,6 +276,35 @@
             $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
         }
 
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
+                inputTitulo.addEventListener('input', function() {
+                    const row = inputTitulo.closest('tr');
+                    const oldTituloKey = row.getAttribute('data-titulo')?.replace('titulo_', '');
+
+                    // Generar nuevo tituloKey con guiones bajos
+                    const nuevoTituloRaw = inputTitulo.value.trim() || 'sin_titulo';
+                    const nuevoTituloKey = nuevoTituloRaw.replace(/\s+/g, '_');
+                    const nuevoDataTitulo = `titulo_${nuevoTituloKey}`;
+
+                    // Actualizar el data-titulo del row del título
+                    row.setAttribute('data-titulo', nuevoDataTitulo);
+
+                    // Actualizar todos los <tr> que tenían el antiguo data-titulo relacionado
+                    document.querySelectorAll(`tr[data-titulo="${oldTituloKey}"]`).forEach(function(rowResultado) {
+                        rowResultado.setAttribute('data-titulo', nuevoTituloKey);
+
+                        // También puedes actualizar los name de los inputs si lo necesitas:
+                        rowResultado.querySelectorAll('input').forEach(function(input) {
+                            input.name = input.name.replace(oldTituloKey, nuevoTituloKey);
+                        });
+                    });
+                });
+            });
+        });
+
+
     /*Guarda en sesionstorage */
     function saveData() {
         const data = [];

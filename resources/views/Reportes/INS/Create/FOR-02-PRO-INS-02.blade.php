@@ -890,15 +890,14 @@
         let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -954,7 +953,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -985,7 +984,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
         
@@ -1030,6 +1029,10 @@
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
             }
+
+            const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+            selectedOptionLocalCons1 != null ?  ($('#consumiblesSelect1').val(selectedOptionLocalCons1),actualizarInputsC1()):"";
+
                 // Evento cuando se cambia la selección en el select
                 $('#consumiblesSelect1').on('change', function() {
                     actualizarInputsC1();
@@ -1050,6 +1053,10 @@
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
             }
+
+            const selectedOptionLocalCons2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
+            selectedOptionLocalCons2 != null ?  ($('#consumiblesSelect2').val(selectedOptionLocalCons2),actualizarInputsC2()):"";
+
                 // Evento cuando se cambia la selección en el select
                 $('#consumiblesSelect2').on('change', function() {
                     actualizarInputsC2();
@@ -1071,6 +1078,9 @@
             $('#nsInputE').val(ns);
         }
 
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
@@ -1078,5 +1088,40 @@
 
         });
 
+    /*FOR-02-PRO-INS-02*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-02-PRO-INS-02');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-02-PRO-INS-02_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-02-PRO-INS-02_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-02-PRO-INS-02_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-02-PRO-INS-02_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 </script>
 @endsection

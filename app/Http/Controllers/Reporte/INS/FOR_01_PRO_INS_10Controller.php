@@ -762,7 +762,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -1078,7 +1078,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_01_10.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01_INS_10.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

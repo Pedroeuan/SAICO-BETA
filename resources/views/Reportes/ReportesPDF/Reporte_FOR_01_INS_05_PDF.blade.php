@@ -538,13 +538,14 @@
                     <table class="datosresultados">
                     
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="8">RESULTADOS</th></tr>
+                            <tr><th colspan="9">RESULTADOS</th></tr>
                         </thead>
 
                         <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                                 <tr class="celdaGris">
+                                    <th style="width: 10%;">No.</th>
                                     <th style="width: 14%;">DIBUJO</th>
                                     <th>SOLDADURA</th>
                                     <th>EVALUACIÓN</th>
@@ -575,7 +576,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="8" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="9" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>
@@ -592,7 +593,8 @@
                                                 $esUltimaFila = $loop->last;
                                             @endphp
                                             <tr class="juntas">
-                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['dibujo'] }}</td>
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['No'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['dibujo'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['soldadura'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['evaluacion'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['forma'] }}</td>

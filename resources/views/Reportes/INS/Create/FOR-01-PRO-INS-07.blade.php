@@ -1090,7 +1090,7 @@
         const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
         selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA()):"";
                 
-           
+
         function actualizarInputsA2() {
             var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
@@ -1157,8 +1157,6 @@
         const selectedOptionLocalbyp2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta2');
         selectedOptionLocalbyp2 != null ?  ($('#blockyprobetaSelect2').val(selectedOptionLocalbyp2),actualizarInputsbyp2()):"";
     });
-
-
 
     //*FOR-01-PRO-INS-07*/
     document.addEventListener('DOMContentLoaded', function () {

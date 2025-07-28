@@ -460,6 +460,7 @@
                                         </div>
                                         <thead>
                                             <tr>
+                                                <th rowspan="2">#</th>
                                                 <th rowspan="2">ID</th>
                                                 <th rowspan="2">No. de Junta</th>
                                                 <th colspan="2">Elemento de Referencia</th>
@@ -492,49 +493,48 @@
 
                                             <tr id="inputRow">
                                                 <th></th> <!-- Para ID vacío -->
-                                                <th><input type="text" class="form-control default-input" data-column="1" ></th>
-                                                <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="14"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="15"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="16"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="17"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="18"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="19"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="20"></th>
-                                                <th><input type="text" class="form-control default-input" data-column="21"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="3" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="5" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="7" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="10" style="width: 95px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="12" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="13" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="14" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="15" style="width: 80px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="16" style="width: 95px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="17" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="18" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="19" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="20" style="width: 70px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="21" style="width: 95px;"></th>
+                                                <th><input type="text" class="form-control default-input" data-column="22" style="width: 130px;"></th>
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
-
-                                        <tbody>
                                             @php
                                                 $contador = 1;
                                             @endphp
-
+                                        <tbody>
                                             @foreach ($Grupo_Juntas_Re as $grupo)
                                             @php
                                                 $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
                                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
                                             @endphp
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">
-                                                        <td colspan="22">
+                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
+                                                        <td colspan="23">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                         <i class="bi bi-trash"  aria-hidden="true"></i>
+                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
                                                                     </button>
                                                                 </td>
                                                             </div>
@@ -542,37 +542,38 @@
                                                     </tr>
                                                 @endif
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name="no_junta[{{$tituloKey}}][]" value="{{ $resultado['no_junta'] }}" style="width: 100px;"></td>
-                                                        <td><input type="text" class="form-control" name="lado_a[{{$tituloKey}}][]" value="{{$resultado['lado_a']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="lado_b[{{$tituloKey}}][]" value="{{$resultado['lado_b']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="diametro[{{$tituloKey}}][]" value="{{$resultado['diametro']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_indicacion[{{$tituloKey}}][]" value="{{$resultado['no_indicacion']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="tipo_indicacion[{{$tituloKey}}][]" value="{{$resultado['tipo_indicacion']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="Ang[{{$tituloKey}}][]" value="{{$resultado['Ang']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="Gdb[{{$tituloKey}}][]" value="{{$resultado['Gdb']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="nr[{{$tituloKey}}][]" value="{{$resultado['nr']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="ni[{{$tituloKey}}][]" value="{{$resultado['ni']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="x[{{$tituloKey}}][]" value="{{$resultado['x']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="y[{{$tituloKey}}][]" value="{{$resultado['y']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="horario_tecnico[{{$tituloKey}}][]" value="{{$resultado['horario_tecnico']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="no_pierna[{{$tituloKey}}][]" value="{{$resultado['no_pierna']}}" style="width: 80px;"></td>
-                                                        <td><input type="text" class="form-control" name="s[{{$tituloKey}}][]" value="{{$resultado['s']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="l[{{$tituloKey}}][]" value="{{$resultado['l']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="d[{{$tituloKey}}][]" value="{{$resultado['d']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="tmin[{{$tituloKey}}][]" value="{{$resultado['tmin']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="evaluacion[{{$tituloKey}}][]" value="{{$resultado['evaluacion']}}" style="width: 70px;"></td>
-                                                        <td><input type="text" class="form-control" name="fotos[{{$tituloKey}}][]" value="{{$resultado['fotos']}}" style="width: 95px;"></td>
-                                                        <td><input type="text" class="form-control" name="observaciones[{{$tituloKey}}][]" value="{{$resultado['observaciones']}}" style="width: 130px;"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"> <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                                                    </tr>
-
-                                                    @php $contador++; @endphp
-                                                @endforeach
+                                            @foreach ($grupo['resultados'] as $resultado)
+                                                <tr data-titulo="{{ $tituloKey }}">
+                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                    <td><input type="text" class="form-control" name="ID[{{ $tituloKey }}][]" value="{{ $resultado['ID'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="no_junta[{{ $tituloKey }}][]" value="{{ $resultado['no_junta'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="lado_a[{{ $tituloKey }}][]" value="{{ $resultado['lado_a'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="lado_b[{{ $tituloKey }}][]" value="{{ $resultado['lado_b'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="diametro[{{ $tituloKey }}][]" value="{{ $resultado['diametro'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="no_indicacion[{{ $tituloKey }}][]" value="{{ $resultado['no_indicacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="tipo_indicacion[{{ $tituloKey }}][]" value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="Ang[{{ $tituloKey }}][]" value="{{ $resultado['Ang'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="Gdb[{{ $tituloKey }}][]" value="{{ $resultado['Gdb'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="nr[{{ $tituloKey }}][]" value="{{ $resultado['nr'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="ni[{{ $tituloKey }}][]" value="{{ $resultado['ni'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="x[{{ $tituloKey }}][]" value="{{ $resultado['x'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="y[{{ $tituloKey }}][]" value="{{ $resultado['y'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="horario_tecnico[{{ $tituloKey }}][]" value="{{ $resultado['horario_tecnico'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="no_pierna[{{ $tituloKey }}][]" value="{{ $resultado['no_pierna'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="s[{{ $tituloKey }}][]" value="{{ $resultado['s'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="l[{{ $tituloKey }}][]" value="{{ $resultado['l'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="d[{{ $tituloKey }}][]" value="{{ $resultado['d'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="tmin[{{ $tituloKey }}][]" value="{{ $resultado['tmin'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="evaluacion[{{ $tituloKey }}][]" value="{{ $resultado['evaluacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="fotos[{{ $tituloKey }}][]" value="{{ $resultado['fotos'] }}"></td>
+                                                    <td><input type="text" class="form-control" name="observaciones[{{ $tituloKey }}][]" value="{{ $resultado['observaciones'] }}"></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                                @php $contador++; @endphp
                                             @endforeach
+                                        @endforeach
                                         </tbody>
+
                                     </table>
                                     </div>
 
@@ -975,6 +976,7 @@
                         </div>
                     </div>
                 </section>
+                <div id="tituloCountContainer" data-titulo-count="{{ $tituloIndex ?? 0 }}" style="display:none"></div>
 @stop
 
 
@@ -1007,32 +1009,30 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-/*Juntas-Resultados */
-$(document).ready(function() {
+    /*Juntas-Resultados */
+        $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
         let rowCountGlobal = 0;
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
-            rowCount = 0; // Reiniciar el contador de filas para este título
+            rowCount = 0;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="22">
+            <tr class="titulo-row" data-titulo="${tituloCount}">
+                <td colspan="23">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título...">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="bi bi-trash" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-        `;
+            `;
 
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        saveData();
+            $('#dynamicTable tbody').append(newTitle);
         });
 
         $('#addBtn').click(function () {
@@ -1045,39 +1045,38 @@ $(document).ready(function() {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = 
-                `<tr data-titulo="${lastTitle}">
-                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna" style="width: 80px;"></td>
-                        <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S" style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
-                        <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No." style="width: 95px;"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" style="width: 130px;"></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                        
-                    </tr>`;
+                let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="No. de Junta"></td>
+                    <td><input type="text" class="form-control" name="lado_a[${lastTitle}][]" placeholder="Lado A"></td>
+                    <td><input type="text" class="form-control" name="lado_b[${lastTitle}][]" placeholder="Lado B"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="Ang[${lastTitle}][]" placeholder="A (°)"></td>
+                    <td><input type="text" class="form-control" name="Gdb[${lastTitle}][]" placeholder="G (dB)"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="x[${lastTitle}][]" placeholder="X"></td>
+                    <td><input type="text" class="form-control" name="y[${lastTitle}][]" placeholder="Y"></td>
+                    <td><input type="text" class="form-control" name="horario_tecnico[${lastTitle}][]" placeholder="Horario Técnico"></td>
+                    <td><input type="text" class="form-control" name="no_pierna[${lastTitle}][]" placeholder="No. de Pierna"></td>
+                    <td><input type="text" class="form-control" name="s[${lastTitle}][]" placeholder="S"></td>
+                    <td><input type="text" class="form-control" name="l[${lastTitle}][]" placeholder="L"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="D"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos No."></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash" aria-hidden="true"></i></button></td>
+                </tr>
+                `;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
-        }
-    );
+        });
 
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
@@ -1100,12 +1099,9 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
-        /*Selects */
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1126,8 +1122,6 @@ $(document).ready(function() {
                 actualizarInputsE();
             });
 
-
-
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 
@@ -1145,7 +1139,7 @@ $(document).ready(function() {
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-     
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1164,11 +1158,7 @@ $(document).ready(function() {
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-
     });
 
-
-
-    
 </script>
 @endsection

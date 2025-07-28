@@ -1324,7 +1324,8 @@ $(document).ready(function() {
     let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
                 const tableData = JSON.parse(savedData);
                 
@@ -1364,10 +1365,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación" style="width: 70px;"></td>
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos" style="width: 70px;"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                                        
                                     </tr>`;
-
-
                         $('#dynamicTable tbody').append(newRow);
                     }
                 });
@@ -1395,7 +1393,7 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -1409,8 +1407,7 @@ $(document).ready(function() {
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = 
-
-                        `<tr data-titulo="${lastTitle}">
+                    `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
                     </td><td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" style="width: 100px;"></td>
                     <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 100px;"></td>
@@ -1427,12 +1424,11 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
                     <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Fotos" style="width: 70px;"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
-                    
                     </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
+            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 

@@ -471,7 +471,7 @@
                                         
                                         <thead>
                                             <tr>
-                                                <th rowspan="3" class="align-middle">No.</th>
+                                                <th rowspan="3" class="align-middle">#</th>
                                                 <th rowspan="3" class="align-middle">No. de Junta</th>
                                                 <th rowspan="3" class="align-middle">No. Indicación</th>
                                                 <th rowspan="3" class="align-middle">Ángulo de Inspección</th>
@@ -860,8 +860,6 @@
         function restoreData() {
             const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                
-                
                 // Restaurar contadores
                 tituloCount = savedData.filter(item => item.type === 'titulo').length;
                 rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
@@ -1068,8 +1066,6 @@
 
         });
 
-
-
         /*FOR-01-PRO-INS-04*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-04');
@@ -1105,8 +1101,6 @@
             });
         });
     });
-
-
 
 </script>
 @endsection
