@@ -891,7 +891,6 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
     /*Juntas-Resultados */
@@ -956,8 +955,8 @@
                 <td colspan="13">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -979,7 +978,8 @@
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = `<tr data-titulo="${lastTitle}">
+            let newRow = `
+                        <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
                             <td><input type="text" class="form-control" name="no_junta[${lastTitle}}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
                             <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}}][]" placeholder="Zona de Barrido"></td>

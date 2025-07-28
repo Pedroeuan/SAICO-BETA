@@ -216,13 +216,13 @@ class FOR_01_PRO_INS_12Controller extends Controller
 
     }
 
-        public function FOR_01_PRO_INS_12_store1(Request $request)
+        public function FOR_01_PRO_INS_12_store(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_12_store(Request $request)
+    public function FOR_01_PRO_INS_12_store1(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales

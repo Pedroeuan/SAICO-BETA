@@ -287,10 +287,6 @@
     sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
 }
 
-
-
-
-
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {
         //console.log('Input changed, saving data...');
@@ -415,8 +411,6 @@
         });
 
 
-
-
         textareas.forEach(textarea => {
             // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
             if (textarea.name === "comments[]" && textarea.id) {
@@ -438,9 +432,7 @@
             }
         });
 
-
-
-       /* selects.forEach(select => {
+        /* selects.forEach(select => {
             const stored = localStorage.getItem(`${formId}_${select.name}`);
             console.log(''+stored);
 
@@ -470,7 +462,6 @@
             });
         }
 
-
         const checkboxes = form.querySelectorAll('input[type="checkbox"]');
 
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
@@ -486,7 +477,6 @@
             });
         }) : null;
 
-
         // Limpiar localStorage al enviar el formulario
         form.addEventListener("submit", function () {
             inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
@@ -496,8 +486,6 @@
                 const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
                 localStorage.removeItem(key);
             }) : null;
-
-
 
         });
     });
