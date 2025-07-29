@@ -893,7 +893,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
-     /*Juntas-Resultados */
+    /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -915,29 +915,28 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newTitle);
                     } else if (item.type === 'fila') {
-                        let newRow = `
-                        <tr data-titulo="${item.titulo}">
+                        let newRow = `<tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
-                            <td><input type="text" class="form-control" name="ZBarrido[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Zona de Barrido"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tip_ind[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[4]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[5]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[6]}" placeholder="H.T"></td>
-                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="Eval[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}][]" value="${item.inputs[10]}" placeholder="Fotos"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
+                            <td><input type="text" class="form-control" name="ZBarrido[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tip_ind[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="largo[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="Eval[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
@@ -957,7 +956,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -980,29 +979,29 @@
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
-                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
-                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T"></td>
-                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="LArgo"></td>
-                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
-                    <td><input type="text" class="form-control" name="Eval[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
-                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                </tr>`;
+                        <tr data-titulo="${lastTitle}">
+                            <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
+                            <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="Eval[${lastTitle}][]" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones Técnico"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                        </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
             saveData(document.querySelectorAll("form")[1].id);
         }
     );
-        
+
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -1027,7 +1026,7 @@
 
             // Restaurar datos al cargar la página
             restoreData();
-    });
+});
 
     /*Selects */
     $(document).ready(function() {
@@ -1145,7 +1144,7 @@
 
     /*FOR-01-PRO-INS-12*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-02-PRO-INS-10');
+        const form = document.getElementById('FOR-01-PRO-INS-12');
         if (!form) return;
 
         // Guardar en localStorage al escribir
@@ -1178,6 +1177,5 @@
             });
         });
     });
-
 </script>
 @endsection
