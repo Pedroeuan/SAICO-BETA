@@ -152,7 +152,6 @@
                     } else {
                         alert('No se pudo encontrar el campo de imagen para eliminar.');
                     }
-                        
                     
                 });
             });
