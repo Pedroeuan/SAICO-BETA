@@ -788,8 +788,6 @@
                                             </select>
                                         </div>
 
-                                       
-
                                         <div class="w-100">
                                             @if(!empty($Fotos_Comentarios))
                                                 <div class="row">
