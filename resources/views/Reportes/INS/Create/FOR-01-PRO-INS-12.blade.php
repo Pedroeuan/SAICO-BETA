@@ -922,7 +922,8 @@
                         </tr>`;
                         $('#dynamicTable tbody').append(newTitle);
                     } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                             <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
                             <td><input type="text" class="form-control" name="ZBarrido[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido"></td>
