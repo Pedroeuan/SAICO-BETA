@@ -1019,7 +1019,6 @@
             const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
             selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
-
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 

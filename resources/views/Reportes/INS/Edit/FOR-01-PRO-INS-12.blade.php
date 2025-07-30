@@ -865,7 +865,7 @@
 
                             <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
 
-                                        <p>
+                            <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
@@ -996,53 +996,6 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            //const savedData = sessionStorage.getItem('dynamicTableData');
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
-                // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
-                
-                savedData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="13">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="fa fa-times"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${item.titulo}}][]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
-                            <td><input type="text" class="form-control" name="ZBarrido[${item.titulo}}][]" value="${item.inputs[2]}" placeholder="Zona de Barrido"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}}][]" value="${item.inputs[3]}" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tip_ind[${item.titulo}}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}}][]" value="${item.inputs[5]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}}][]" value="${item.inputs[6]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="largo[${item.titulo}}][]" value="${item.inputs[8]}" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${item.titulo}}][]" value="${item.inputs[9]}" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="Eval[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="fotos[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos"></td>
-                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1062,7 +1015,6 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#addBtn').click(function () {
@@ -1091,10 +1043,8 @@
                             <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones Técnico"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;
-
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData(document.querySelectorAll("form")[1].id);
         }
     );
 
@@ -1119,12 +1069,9 @@
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
+    });
 
-            // Restaurar datos al cargar la página
-            restoreData();
-});
-
-    /*Selects */
+        /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1237,41 +1184,5 @@
                 });
                 
             });
-
-    /*FOR-01-PRO-INS-12*/
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-01-PRO-INS-12');
-        if (!form) return;
-
-        // Guardar en localStorage al escribir
-        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-          //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
-            //});
-        //});
-
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
-            });
-        });
-
-        // Restaurar al cargar la página (solo si el campo está vacío)
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            if (!el.value) {
-                const value = localStorage.getItem('FOR-01-PRO-INS-12_' + el.name);
-                if (value !== null) el.value = value;
-            }
-        });
-
-        // Limpiar localStorage al enviar el formulario
-        form.addEventListener('submit', function () {
-            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-12_' + el.name);
-                //localStorage.clear();
-            });
-        });
-    });
 </script>
 @endsection

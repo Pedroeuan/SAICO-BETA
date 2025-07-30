@@ -1078,9 +1078,7 @@
                 $('#consumiblesSelect1').on('change', function() {
                     actualizarInputsC1();
                 });
-            });
 
-            $(document).ready(function() {
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
@@ -1098,9 +1096,7 @@
                 $('#consumiblesSelect2').on('change', function() {
                     actualizarInputsC2();
                 });
-            });
 
-            $(document).ready(function() {
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
 

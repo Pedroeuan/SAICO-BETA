@@ -994,12 +994,6 @@
             actualizarInputsE();
         });
 
-
-        const selectedOptionLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
-        selectedOptionLocal != null ?  ($('#equiposSelect').val(selectedOptionLocal),actualizarInputsE()):"";
-
-
-
         function actualizarInputsA() {
             var selectedOption = $('#accesoriosSelect').find('option:selected');
 
@@ -1037,8 +1031,7 @@
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
         });
-
-
 </script>
 @endsection

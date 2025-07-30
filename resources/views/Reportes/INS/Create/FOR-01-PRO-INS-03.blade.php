@@ -1075,7 +1075,6 @@
                 $('#loteInputC1').val(lote);
             }
 
-
             // Evento cuando se cambia la selección en el select
             $('#consumiblesSelect1').on('change', function() {
                 actualizarInputsC1();
@@ -1132,6 +1131,7 @@
             $('#consumiblesSelect3').on('change', function() {
                 actualizarInputsC3();
             });
+
         });
 
     /*FOR-01-PRO-INS-03*/

@@ -966,7 +966,6 @@
         selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
 
-
         function actualizarInputsA() {
             var selectedOption = $('#accesoriosSelect').find('option:selected');
 

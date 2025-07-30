@@ -1120,7 +1120,6 @@
             });
         });
 
-        $(document).ready(function() {
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 
@@ -1138,10 +1137,7 @@
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-                
-            });
 
-        $(document).ready(function() {
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 

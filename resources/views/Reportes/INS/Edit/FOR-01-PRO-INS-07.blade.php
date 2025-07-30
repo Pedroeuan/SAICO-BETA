@@ -1092,7 +1092,6 @@
                     actualizarInputsA();
                 });
                 
-           
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect2').find('option:selected');
 
@@ -1111,7 +1110,7 @@
                     actualizarInputsA();
                 });
                 
-           
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
 
@@ -1130,7 +1129,7 @@
             $('#blockyprobetaSelect1').on('change', function() {
                 actualizarInputsbyp();
             });
-       
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
 

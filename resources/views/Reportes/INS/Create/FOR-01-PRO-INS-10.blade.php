@@ -1053,7 +1053,7 @@
             restoreData();
     });
 
-        /*Selects */
+    /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
@@ -1127,7 +1127,7 @@
             });
         });
 
-            /*FOR-01-PRO-INS-10*/
+    /*FOR-01-PRO-INS-10*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-10');
         if (!form) return;
