@@ -196,14 +196,14 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_10*/
         Route::post('/Reportes_FOR_01_PRO_INS_10/update/{id}', [FOR_01_PRO_INS_10Controller::class, 'FOR_01_PRO_INS_10_update'])->name('Reportes_FOR_01_PRO_INS_10.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_10*/
-        Route::get('/Reporte/FOR-INS-01/10/PDF/{id}', [FOR_01_PRO_INS_10Controller::class, 'FOR_01_INS_10'])->name('Reporte_FOR_01_INS_10.PDF');
+        Route::get('/Reporte/FOR-01-INS-10/PDF/{id}', [FOR_01_PRO_INS_10Controller::class, 'FOR_01_INS_10'])->name('Reporte_FOR_01_INS_10.PDF');
         
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_12*/
         Route::post('/Reportes_FOR_01_PRO_INS_12/store', [FOR_01_PRO_INS_12Controller::class, 'FOR_01_PRO_INS_12_store'])->name('Reportes_FOR_01_PRO_INS_12.store');
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_12*/
         Route::post('/Reportes_FOR_01_PRO_INS_12/update/{id}', [FOR_01_PRO_INS_12Controller::class, 'FOR_01_PRO_INS_12_update'])->name('Reportes_FOR_01_PRO_INS_12.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_12*/
-        Route::get('/Reporte/FOR-INS-01/12/PDF/{id}', [FOR_01_PRO_INS_12Controller::class, 'FOR_01_INS_12'])->name('Reporte_FOR_01_INS_12.PDF');
+        Route::get('/Reporte/FOR-01-INS-12/PDF/{id}', [FOR_01_PRO_INS_12Controller::class, 'FOR_01_INS_12'])->name('Reporte_FOR_01_INS_12.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_13*/
         Route::post('/Reportes_FOR_01_PRO_INS_13/store', [FOR_01_PRO_INS_13Controller::class, 'FOR_01_PRO_INS_13_store'])->name('Reportes_FOR_01_PRO_INS_13.store');
