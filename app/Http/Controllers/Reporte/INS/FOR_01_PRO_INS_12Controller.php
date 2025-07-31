@@ -249,23 +249,23 @@ class FOR_01_PRO_INS_12Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_SONDA' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
 
             'Datos_Equipo.SOFTWARE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA_HOR' => 'nullable|string|max:255',
@@ -579,23 +579,23 @@ class FOR_01_PRO_INS_12Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_SONDA' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
 
             'Datos_Equipo.SOFTWARE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA_HOR' => 'nullable|string|max:255',

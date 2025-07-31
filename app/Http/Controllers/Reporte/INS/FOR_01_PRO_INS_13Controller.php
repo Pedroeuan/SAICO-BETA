@@ -249,14 +249,17 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
+
             'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANSDUCTOR' => 'nullable|string|max:255',
+
             'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
+            
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
             'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',

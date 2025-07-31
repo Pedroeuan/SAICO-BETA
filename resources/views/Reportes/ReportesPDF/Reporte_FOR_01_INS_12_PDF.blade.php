@@ -316,9 +316,9 @@
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['N_S_SONDA'] }}</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -350,11 +350,11 @@
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['N_S_BLOCK'] }}</td>
+                            <td>{{ $Datos_Equipo['NS_BLOCK'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['N_S_ENCODER1'] }}</td>
+                            <td>{{ $Datos_Equipo['NS_ENCODER1'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>{{ $Datos_Equipo['N_S_ENCODER2'] }}</td>
+                            <td>{{ $Datos_Equipo['NS_ENCODER2'] }}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -281,7 +281,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                             </div>
                         </div>
 
@@ -321,7 +321,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_SONDA]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA')}}">
                             </div>
                         </div>
 
@@ -362,7 +362,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK')}}">
                             </div>
                         </div>
 
@@ -402,7 +402,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER1')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER1')}}">
                             </div>
                         </div>
 
@@ -442,7 +442,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[N_S_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER2')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[NS_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER2')}}">
                             </div>
                         </div>
 
