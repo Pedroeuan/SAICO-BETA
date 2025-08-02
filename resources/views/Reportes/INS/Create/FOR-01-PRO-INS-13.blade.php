@@ -295,7 +295,7 @@
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">LONGITUD DE CABLE:</div>
                     <div>
                         <div class="form-group">
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[LONG_CAB]" placeholder="" value="{{old('Datos_Equipo.LONG_CAB')}}">
                         </div>
                     </div>
 
@@ -309,8 +309,7 @@
                             <option value="" selected disabled>Seleccione un Block de Referencia</option>
                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                            data-modelo="{{ $blockyprobeta->Modelo }}"
+                                            data-nombre="{{ $blockyprobeta->Nombre_E_P_BP }}"
                                             data-ns="{{ $blockyprobeta->Serie }}">
                                         {{ $blockyprobeta->Nombre_E_P_BP }}
                                     </option>
@@ -319,24 +318,17 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">PENDIENTE:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <label class="col-form-label" for="inputSuccess">NOMBRE:</label>
+                            <input type="text" class="form-control  inputForm" id="nombreInputbyp" name="Datos_Equipo[NOMB_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NOMB_BLOCK')}}">
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">PENDIENTE:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">PENDIENTE:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <label class="col-form-label" for="inputSuccess">N.S:</label>
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK')}}">
                         </div>
                     </div>
 
@@ -345,16 +337,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #1:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelect1" id="accesoriosSelect1">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -362,35 +354,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA1" name="Datos_Equipo[MARCA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA1" name="Datos_Equipo[MODELO_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA1" name="Datos_Equipo[NS_SONDA1]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_SONDA1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA1]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA1')}}">
                         </div>
                     </div>
 
@@ -399,16 +391,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #2:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelect2" id="accesoriosSelect2">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -416,53 +408,54 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_SONDA2]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_SONDA2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA2]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA2')}}">
                         </div>
                     </div>
+
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">SONDA #3</div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #3:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelect3" id="accesoriosSelect3">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -470,35 +463,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA3" name="Datos_Equipo[MARCA_SONDA3]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA3" name="Datos_Equipo[MODELO_SONDA3]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[NS_SONDA3]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_SONDA3]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_SONDA3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA3]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA3')}}">
                         </div>
                     </div>
 
@@ -507,16 +500,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Sonda #4:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelect4" id="accesoriosSelect4">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -524,35 +517,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA4" name="Datos_Equipo[MARCA_SONDA4]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA4" name="Datos_Equipo[MODELO_SONDA4]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA4" name="Datos_Equipo[NS_SONDA4]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_SONDA4]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_SONDA4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA4]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA4')}}">
                         </div>
                     </div>
 
@@ -561,16 +554,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #1:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                            <select class="form-select inputForm" name="accesoriosSelect5" id="accesoriosSelect5">
+                            <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -578,35 +571,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA5" name="Datos_Equipo[MARCA_TRANS1]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANS1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA5" name="Datos_Equipo[MODELO_TRANS1]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANS1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA5" name="Datos_Equipo[NS_TRANS1]" placeholder="" value="{{old('Datos_Equipo.NS_TRANS1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_TRANS1]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_TRANS1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANS1]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANS1')}}">
                         </div>
                     </div>
 
@@ -615,16 +608,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #2:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                            <select class="form-select inputForm" name="accesoriosSelect6" id="accesoriosSelect6">
+                            <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -632,35 +625,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA6" name="Datos_Equipo[MARCA_TRANS2]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANS2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA6" name="Datos_Equipo[MODELO_TRANS2]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANS2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA6" name="Datos_Equipo[NS_TRANS2]" placeholder="" value="{{old('Datos_Equipo.NS_TRANS2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_TRANS2]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_TRANS2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANS2]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANS2')}}">
                         </div>
                     </div>
 
@@ -669,16 +662,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #3:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                            <select class="form-select inputForm" name="accesoriosSelect7" id="accesoriosSelect7">
+                            <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -686,35 +679,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA7" name="Datos_Equipo[MARCA_TRANS3]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANS3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA7" name="Datos_Equipo[MODELO_TRANS3]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANS3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA7" name="Datos_Equipo[NS_TRANS3]" placeholder="" value="{{old('Datos_Equipo.NS_TRANS3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_TRANS3]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_TRANS3')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANS3]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANS3')}}">
                         </div>
                     </div>
 
@@ -723,16 +716,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Transductor de TOFD #4:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Tansductor</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                            <select class="form-select inputForm" name="accesoriosSelect8" id="accesoriosSelect8">
+                            <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                        <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                data-marca="{{ $accesorios->Marca }}"
+                                                data-modelo="{{ $accesorios->Modelo }}"
+                                                data-ns="{{ $accesorios->Serie }}">
+                                            {{ $accesorios->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -740,35 +733,35 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA8" name="Datos_Equipo[MARCA_TRANS4]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANS4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA8" name="Datos_Equipo[MODELO_TRANS4]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANS4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA8" name="Datos_Equipo[NS_TRANS4]" placeholder="" value="{{old('Datos_Equipo.NS_TRANS4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ZAPATA:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ZAPATA_TRANS4]" placeholder="" value="{{old('Datos_Equipo.ZAPATA_TRANS4')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANS4]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANS4')}}">
                         </div>
                     </div>
 
@@ -777,16 +770,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                            <option value="" selected disabled>Seleccione un Encoder</option>
-                                {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                            data-modelo="{{ $blockyprobeta->Modelo }}"
-                                            data-ns="{{ $blockyprobeta->Serie }}">
-                                        {{ $blockyprobeta->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                <select class="form-select inputForm" name="equiposSelect2" id="equiposSelect2">
+                                <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                        <option value="{{ $equipo->idGeneral_EyC }}"
+                                                data-marca="{{ $equipo->Marca }}"
+                                                data-modelo="{{ $equipo->Modelo }}"
+                                                data-ns="{{ $equipo->Serie }}">
+                                            {{ $equipo->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -794,28 +787,28 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputE3" name="Datos_Equipo[MARCA_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputE3" name="Datos_Equipo[MODELO_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE3" name="Datos_Equipo[NS_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">RESOLUCIÓN DE ESCANEO:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RES_SCAN1]" placeholder="" value="{{old('Datos_Equipo.RES_SCAN1')}}">
                         </div>
                     </div>
 
@@ -824,16 +817,16 @@
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
                             <label class="col-form-label" for="inputSuccess">Encoder:</label>
-                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                            <option value="" selected disabled>Seleccione un Encoder</option>
-                                {{-- @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                            data-modelo="{{ $blockyprobeta->Modelo }}"
-                                            data-ns="{{ $blockyprobeta->Serie }}">
-                                        {{ $blockyprobeta->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach --}}
+                                <select class="form-select inputForm" name="equiposSelect3" id="equiposSelect3">
+                                <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                    @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                        <option value="{{ $equipo->idGeneral_EyC }}"
+                                                data-marca="{{ $equipo->Marca }}"
+                                                data-modelo="{{ $equipo->Modelo }}"
+                                                data-ns="{{ $equipo->Serie }}">
+                                            {{ $equipo->Nombre_E_P_BP }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -841,28 +834,28 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputE2" name="Datos_Equipo[MARCA_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputE2" name="Datos_Equipo[MODELO_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE2" name="Datos_Equipo[NS_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">RESOLUCIÓN DE ESCANEO:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RES_SCAN2]" placeholder="" value="{{old('Datos_Equipo.RES_SCAN2')}}">
                         </div>
                     </div>
 
@@ -871,56 +864,56 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ANGULO DE INICIO:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[ANG_INI]" placeholder="" value="{{old('Datos_Equipo.ANG_INI')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ANGULO FINAL:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[ANG_FIN]" placeholder="" value="{{old('Datos_Equipo.ANG_FIN')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">VELOCIDAD:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[VELOCIDAD]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FILTRO:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[FILTRO]" placeholder="" value="{{old('Datos_Equipo.FILTRO')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">CÓDIGO DE EVALUACIÓN:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[COD_EVA]" placeholder="" value="{{old('Datos_Equipo.COD_EVA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TIPO DE BARRIDO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[TIP_BARR]" placeholder="" value="{{old('Datos_Equipo.TIP_BARR')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">AREA DE ESCANEO:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[AREA_SCAN]" placeholder="" value="{{old('Datos_Equipo.AREA_SCAN')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">PROCEDIMIENTO:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[PROCEDIMIENTO]" placeholder="" value="{{old('Datos_Equipo.PROCEDIMIENTO')}}">
                         </div>
                     </div>
 
@@ -929,14 +922,14 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">GANANCIA:</label>
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{old('Datos_Equipo.GANANCIA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TIPO DE JUNTA:</label>
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIP_JUNTA]" placeholder="" value="{{old('Datos_Equipo.TIP_JUNTA')}}">
                         </div>
                     </div>
 
@@ -950,21 +943,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO:</label>
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[DIAMETRO]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TEMPERATURA:</label>
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TEMP]" placeholder="" value="{{old('Datos_Equipo.TEMP')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ESPESOR:</label>
-                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.ESPESOR')}}">
                         </div>
                     </div>
                     
@@ -981,7 +974,7 @@
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">No.</th>
+                                    <th rowspan="2">#</th>
                                     <th rowspan="2">Junta / Elemento</th>
                                     <th rowspan="2">Tipo de Indicación</th>
 
@@ -1005,20 +998,20 @@
                                 </tr>
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 70px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -1310,7 +1303,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/includes.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1326,8 +1319,6 @@ $(document).ready(function() {
             //const savedData = sessionStorage.getItem('dynamicTableData');
             const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
                 tituloCount = tableData.filter(item => item.type === 'titulo').length;
                 rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
@@ -1349,21 +1340,21 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="no_serie[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)" style="width: 80px;"></td>
-                                        <td><input type="text" class="form-control" name="no_colada[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)" style="width: 80px;"></td>
-                                        <td><input type="text" class="form-control" name="tnominal[${item.titulo}]" value="${item.inputs[5]}" placeholder="ALTURA (PLG)" style="width: 60px;"></td>
-                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[6]}" placeholder="X" style="width: 60px;"></td>
-                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[7]}" placeholder="Y" style="width: 60px;"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[8]}" placeholder="DA (PROF)" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[9]}" placeholder="PA" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[10]}" placeholder="SA" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[11]}" placeholder="Tmin" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos" style="width: 70px;"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
+                                        <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
+                                        <td><input type="text" class="form-control" name="no_serie[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="no_colada[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="tnominal[${item.titulo}]" value="${item.inputs[5]}" placeholder="ALTURA (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[6]}" placeholder="X"></td>
+                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[7]}" placeholder="Y"></td>
+                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[8]}" placeholder="DA (PROF)"></td>
+                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[9]}" placeholder="PA"></td>
+                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[10]}" placeholder="SA"></td>
+                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[11]}" placeholder="Tmin"></td>
+                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)"></td>
+                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
+                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
@@ -1408,20 +1399,20 @@ $(document).ready(function() {
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Tipo de Indicación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="L (PLG)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="A (PLG)" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="ALTURA (PLG)" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="X" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Y" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="DA (PROF)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="PA" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="SA" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Tmin" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Fotos" style="width: 70px;"></td>
+                    </td><td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento"></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="L (PLG)"></td>
+                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="A (PLG)"></td>
+                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="ALTURA (PLG)"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="X"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Y"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="DA (PROF)"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="PA"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="SA"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Fotos"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     </tr>`;
 
@@ -1484,13 +1475,11 @@ $(document).ready(function() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
+                var nombre = selectedOption.data('nombre') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
+                $('#nombreInputbyp').val(nombre);
                 $('#nsInputbyp').val(ns);
             }
 
@@ -1502,6 +1491,181 @@ $(document).ready(function() {
                 actualizarInputsbyp();
             });
 
+            function actualizarInputsA1() {
+                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA1').val(marca);
+                $('#modeloInputA1').val(modelo);
+                $('#nsInputA1').val(ns);
+            }
+
+            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
+            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA1()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect1').on('change', function() {
+                    actualizarInputsA1();
+                });
+
+            function actualizarInputsA2() {
+                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA2').val(marca);
+                $('#modeloInputA2').val(modelo);
+                $('#nsInputA2').val(ns);
+            }
+
+            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
+            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect2').on('change', function() {
+                    actualizarInputsA2();
+                });
+
+            function actualizarInputsA3() {
+                var selectedOption = $('#accesoriosSelect3').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA3').val(marca);
+                $('#modeloInputA3').val(modelo);
+                $('#nsInputA3').val(ns);
+            }
+
+            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
+            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect3').on('change', function() {
+                    actualizarInputsA3();
+                });
+
+            function actualizarInputsA4() {
+                var selectedOption = $('#accesoriosSelect4').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA4').val(marca);
+                $('#modeloInputA4').val(modelo);
+                $('#nsInputA4').val(ns);
+            }
+
+            const selectedOptionLocalA4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios4');
+            selectedOptionLocalA4 != null ?  ($('#accesoriosSelect4').val(selectedOptionLocalA4),actualizarInputsA4()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect4').on('change', function() {
+                    actualizarInputsA4();
+                });
+
+            function actualizarInputsA5() {
+                var selectedOption = $('#accesoriosSelect5').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA5').val(marca);
+                $('#modeloInputA5').val(modelo);
+                $('#nsInputA5').val(ns);
+            }
+
+            const selectedOptionLocalA5 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios5');
+            selectedOptionLocalA5 != null ?  ($('#accesoriosSelect5').val(selectedOptionLocalA5),actualizarInputsA5()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect5').on('change', function() {
+                    actualizarInputsA5();
+                });
+
+            function actualizarInputsA6() {
+                var selectedOption = $('#accesoriosSelect6').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA6').val(marca);
+                $('#modeloInputA6').val(modelo);
+                $('#nsInputA6').val(ns);
+            }
+
+            const selectedOptionLocalA6 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios6');
+            selectedOptionLocalA6 != null ?  ($('#accesoriosSelect6').val(selectedOptionLocalA6),actualizarInputsA6()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect6').on('change', function() {
+                    actualizarInputsA6();
+                });
+
+            function actualizarInputsA7() {
+                var selectedOption = $('#accesoriosSelect7').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA7').val(marca);
+                $('#modeloInputA7').val(modelo);
+                $('#nsInputA7').val(ns);
+            }
+
+            const selectedOptionLocalA7 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios7');
+            selectedOptionLocalA7 != null ?  ($('#accesoriosSelect7').val(selectedOptionLocalA7),actualizarInputsA7()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect7').on('change', function() {
+                    actualizarInputsA7();
+                });
+
+            function actualizarInputsA8() {
+                var selectedOption = $('#accesoriosSelect8').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA8').val(marca);
+                $('#modeloInputA8').val(modelo);
+                $('#nsInputA8').val(ns);
+            }
+
+            const selectedOptionLocalA8 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios8');
+            selectedOptionLocalA8 != null ?  ($('#accesoriosSelect8').val(selectedOptionLocalA8),actualizarInputsA8()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect8').on('change', function() {
+                    actualizarInputsA8();
+                });
     });
 
     /*FOR-01-PRO-INS-13*/
