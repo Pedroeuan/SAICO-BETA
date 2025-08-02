@@ -250,23 +250,86 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
-
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANSDUCTOR' => 'nullable|string|max:255',
-
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
-            
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONG_CAB' => 'nullable|string|max:255',
+
+            'Datos_Equipo.NOMB_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA2' => 'nullable|string|max:255',
+            
+            'Datos_Equipo.MARCA_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA3' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA4' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS2' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS3' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS4' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.RES_SCAN1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.RES_SCAN2' => 'nullable|string|max:255',
+
+            'Datos_Equipo.ANG_INI' => 'nullable|string|max:255',
+            'Datos_Equipo.ANG_FIN' => 'nullable|string|max:255',
+            'Datos_Equipo.VELOCIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.FILTRO' => 'nullable|string|max:255',
+            'Datos_Equipo.COD_EVA' => 'nullable|string|max:255',
+            'Datos_Equipo.TIP_BARR' => 'nullable|string|max:255',
+            'Datos_Equipo.AREA_SCAN' => 'nullable|string|max:255',
+            'Datos_Equipo.PROCEDIMIENTO' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.TIP_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+
+
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
