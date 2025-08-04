@@ -216,13 +216,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function FOR_01_PRO_INS_13_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -329,7 +323,6 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.TEMP' => 'nullable|string|max:255',
             'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
 
-
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
@@ -338,24 +331,20 @@ class FOR_01_PRO_INS_13Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
+            'no_junta' => 'nullable|array',
+            'Tip_Ind' => 'nullable|array',
+            'L_PGL' => 'nullable|array',
+            'A_PGL' => 'nullable|array',
+            'AL_PGL' => 'nullable|array',
+            'X' => 'nullable|array',
+            'Y' => 'nullable|array',
+            'DA_PROF' => 'nullable|array',
+            'PA' => 'nullable|array',
+            'SA' => 'nullable|array',
+            'TMIN' => 'nullable|array',
+            'SCAN' => 'nullable|array',
+            'EVAL' => 'nullable|array',
+            'FOTOS' => 'nullable|array',
             'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
@@ -627,14 +616,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-
-    public function FOR_02_PRO_INS_10_update(Request $request, $id)
+    public function FOR_01_PRO_INS_13_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales

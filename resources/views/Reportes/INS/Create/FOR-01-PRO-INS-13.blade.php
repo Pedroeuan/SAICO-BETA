@@ -787,21 +787,21 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE3" name="Datos_Equipo[MARCA_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER1')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputE2" name="Datos_Equipo[MARCA_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE3" name="Datos_Equipo[MODELO_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER1')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputE2" name="Datos_Equipo[MODELO_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER1')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE3" name="Datos_Equipo[NS_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER1')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE2" name="Datos_Equipo[NS_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER1')}}">
                         </div>
                     </div>
 
@@ -834,21 +834,21 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE2" name="Datos_Equipo[MARCA_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER2')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputE3" name="Datos_Equipo[MARCA_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MARCA_ENCODER2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE2" name="Datos_Equipo[MODELO_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER2')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputE3" name="Datos_Equipo[MODELO_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.MODELO_ENCODER2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE2" name="Datos_Equipo[NS_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER2')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE3" name="Datos_Equipo[NS_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER2')}}">
                         </div>
                     </div>
 
@@ -960,17 +960,20 @@
                             <input type="text" class="form-control  inputForm" name="Datos_Equipo[ESPESOR]" placeholder="" value="{{old('Datos_Equipo.ESPESOR')}}">
                         </div>
                     </div>
-                    
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
-                    <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                    
-                    <div style="margin-bottom: 2px;"></div>
+                        <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                        <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    
+                        <div style="margin-bottom: 5px;"></div>
 
-                    <div class="table-responsive pt-2">
+                        <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
@@ -1041,6 +1044,8 @@
                     </div>
 
                     <p>
+
+
 
                     <div class="col-sm-12">
                         <div class="form-group">
@@ -1303,7 +1308,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1341,19 +1346,19 @@ $(document).ready(function() {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                                         <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
-                                        <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
-                                        <td><input type="text" class="form-control" name="no_serie[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="no_colada[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="tnominal[${item.titulo}]" value="${item.inputs[5]}" placeholder="ALTURA (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[6]}" placeholder="X"></td>
-                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[7]}" placeholder="Y"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[8]}" placeholder="DA (PROF)"></td>
-                                        <td><input type="text" class="form-control" name="diametro[${item.titulo}]" value="${item.inputs[9]}" placeholder="PA"></td>
-                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[10]}" placeholder="SA"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[11]}" placeholder="Tmin"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
-                                        <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
+                                        <td><input type="text" class="form-control" name="Tip_Ind[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
+                                        <td><input type="text" class="form-control" name="L_PGL[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="A_PGL[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="AL_PGL[${item.titulo}]" value="${item.inputs[5]}" placeholder="ALTURA (PLG)"></td>
+                                        <td><input type="text" class="form-control" name="X[${item.titulo}]" value="${item.inputs[6]}" placeholder="X"></td>
+                                        <td><input type="text" class="form-control" name="Y[${item.titulo}]" value="${item.inputs[7]}" placeholder="Y"></td>
+                                        <td><input type="text" class="form-control" name="DA_PROF[${item.titulo}]" value="${item.inputs[8]}" placeholder="DA (PROF)"></td>
+                                        <td><input type="text" class="form-control" name="PA[${item.titulo}]" value="${item.inputs[9]}" placeholder="PA"></td>
+                                        <td><input type="text" class="form-control" name="SA[${item.titulo}]" value="${item.inputs[10]}" placeholder="SA"></td>
+                                        <td><input type="text" class="form-control" name="TMIN[${item.titulo}]" value="${item.inputs[11]}" placeholder="Tmin"></td>
+                                        <td><input type="text" class="form-control" name="SCAN[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)"></td>
+                                        <td><input type="text" class="form-control" name="EVAL[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
+                                        <td><input type="text" class="form-control" name="FOTOS[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -1400,19 +1405,19 @@ $(document).ready(function() {
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
                     </td><td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="L (PLG)"></td>
-                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="A (PLG)"></td>
-                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="ALTURA (PLG)"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="X"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="Y"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="DA (PROF)"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="PA"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="SA"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Tmin"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="Fotos"></td>
+                    <td><input type="text" class="form-control" name="Tip_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="L_PGL[${lastTitle}][]" placeholder="L (PLG)"></td>
+                    <td><input type="text" class="form-control" name="A_PGL[${lastTitle}][]" placeholder="A (PLG)"></td>
+                    <td><input type="text" class="form-control" name="AL_PGL[${lastTitle}][]" placeholder="ALTURA (PLG)"></td>
+                    <td><input type="text" class="form-control" name="X[${lastTitle}][]" placeholder="X"></td>
+                    <td><input type="text" class="form-control" name="Y[${lastTitle}][]" placeholder="Y"></td>
+                    <td><input type="text" class="form-control" name="DA_PROF[${lastTitle}][]" placeholder="DA (PROF)"></td>
+                    <td><input type="text" class="form-control" name="PA[${lastTitle}][]" placeholder="PA"></td>
+                    <td><input type="text" class="form-control" name="SA[${lastTitle}][]" placeholder="SA"></td>
+                    <td><input type="text" class="form-control" name="TMIN[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="SCAN[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
+                    <td><input type="text" class="form-control" name="EVAL[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="FOTOS[${lastTitle}][]" placeholder="Fotos"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     </tr>`;
 
@@ -1666,6 +1671,50 @@ $(document).ready(function() {
                 $('#accesoriosSelect8').on('change', function() {
                     actualizarInputsA8();
                 });
+
+        function actualizarInputsE2() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+        
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos2');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE2()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE2();
+            });
+
+            function actualizarInputsE3() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+        
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos3');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE3()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
     });
 
     /*FOR-01-PRO-INS-13*/

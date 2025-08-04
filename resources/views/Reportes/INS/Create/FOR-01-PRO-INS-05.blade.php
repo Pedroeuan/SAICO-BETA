@@ -501,22 +501,20 @@
                         </div>
                     </div>
 
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
-                    <!--***************************************** INICIO RESULTADOS *****************************************-->
+                        <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                        <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                    
-                    <div style="margin-bottom: 2px;"></div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    
+                        <div style="margin-bottom: 5px;"></div>
 
-                    <div class="alert alert-warning alert-dismissible mt-2">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                    </div>
-
-                    <div class="table-responsive mt-2">
-                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                        
+                        <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                        <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                         <thead>
                             <tr>
                                 <th>#</th>
