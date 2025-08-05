@@ -980,7 +980,6 @@
                                     <th rowspan="2">#</th>
                                     <th rowspan="2">Junta / Elemento</th>
                                     <th rowspan="2">Tipo de Indicación</th>
-
                                     <th rowspan="2">L (PLG)</th>
                                     <th rowspan="2">A (PLG)</th>
                                     <th rowspan="2">ALTURA (PLG)</th>
@@ -994,7 +993,6 @@
                                     <th rowspan="2">Fotos</th>
                                     <th rowspan="2">Eliminar</th>
                                 </tr>
-
                                 <tr>
                                     <th>X</th>
                                     <th>Y</th>
@@ -1045,7 +1043,14 @@
 
                     <p>
 
-
+                    <div class="alert alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> Información</h5>
+                        <p> <b>SIR</b>= Sin indicaciones Relevantes <b>L</b>= Indicacion Lineal <b>R</b>= Indicacion Redondeada <b>A</b>= Aceptado 
+                            <b>R</b>= Rechazado <b>FP</b>= Falta de Penetracion <b>FF</b>= Falta de Fusion <b>P</b>= Poros <b>PA</b>= Poros Agrupados
+                            <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
+                        </p>
+                    </div>
 
                     <div class="col-sm-12">
                         <div class="form-group">

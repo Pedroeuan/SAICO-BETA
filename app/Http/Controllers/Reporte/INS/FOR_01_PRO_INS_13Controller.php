@@ -345,7 +345,6 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'SCAN' => 'nullable|array',
             'EVAL' => 'nullable|array',
             'FOTOS' => 'nullable|array',
-            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:2,3,4',
@@ -438,7 +437,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -446,24 +445,20 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                    'Tip_Ind' => $request->input("Tip_Ind.$sinTituloKey.$i"),
+                    'L_PGL' => $request->input("L_PGL.$sinTituloKey.$i"),
+                    'A_PGL' => $request->input("A_PGL.$sinTituloKey.$i"),
+                    'AL_PGL' => $request->input("AL_PGL.$sinTituloKey.$i"),
+                    'X' => $request->input("X.$sinTituloKey.$i"),
+                    'Y' => $request->input("Y.$sinTituloKey.$i"),
+                    'DA_PROF' => $request->input("DA_PROF.$sinTituloKey.$i"),
+                    'PA' => $request->input("PA.$sinTituloKey.$i"),
+                    'SA' => $request->input("SA.$sinTituloKey.$i"),
+                    'TMIN' => $request->input("TMIN.$sinTituloKey.$i"),
+                    'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
+                    'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
+                    'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
@@ -476,32 +471,29 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
+                    'Tip_Ind' => $request->input("Tip_Ind.$tituloKey.$i"),
+                    'L_PGL' => $request->input("L_PGL.$tituloKey.$i"),
+                    'A_PGL' => $request->input("A_PGL.$tituloKey.$i"),
+                    'AL_PGL' => $request->input("AL_PGL.$tituloKey.$i"),
+                    'X' => $request->input("X.$tituloKey.$i"),
+                    'Y' => $request->input("Y.$tituloKey.$i"),
+                    'DA_PROF' => $request->input("DA_PROF.$tituloKey.$i"),
+                    'PA' => $request->input("PA.$tituloKey.$i"),
+                    'SA' => $request->input("SA.$tituloKey.$i"),
+                    'TMIN' => $request->input("TMIN.$tituloKey.$i"),
+                    'SCAN' => $request->input("SCAN.$tituloKey.$i"),
+                    'EVAL' => $request->input("EVAL.$tituloKey.$i"),
+                    'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
@@ -553,14 +545,14 @@ class FOR_01_PRO_INS_13Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/Fotos";
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -621,7 +613,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-            /*DETALLES GENERALES */
+                        /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
             'Detalles_Generales.No_Reporte' => 'required|string|max:255',
@@ -643,48 +635,108 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.LONG_CAB' => 'nullable|string|max:255',
+
+            'Datos_Equipo.NOMB_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA2' => 'nullable|string|max:255',
+            
+            'Datos_Equipo.MARCA_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA3' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_SONDA4' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS2' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS3' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string|max:255',
+            'Datos_Equipo.FREC_TRANS4' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.RES_SCAN1' => 'nullable|string|max:255',
+
+            'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.RES_SCAN2' => 'nullable|string|max:255',
+
+            'Datos_Equipo.ANG_INI' => 'nullable|string|max:255',
+            'Datos_Equipo.ANG_FIN' => 'nullable|string|max:255',
+            'Datos_Equipo.VELOCIDAD' => 'nullable|string|max:255',
+            'Datos_Equipo.FILTRO' => 'nullable|string|max:255',
+            'Datos_Equipo.COD_EVA' => 'nullable|string|max:255',
+            'Datos_Equipo.TIP_BARR' => 'nullable|string|max:255',
+            'Datos_Equipo.AREA_SCAN' => 'nullable|string|max:255',
+            'Datos_Equipo.PROCEDIMIENTO' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
+            'Datos_Equipo.TIP_JUNTA' => 'nullable|string|max:255',
             'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
+            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
+            'Datos_Equipo.TEMP' => 'nullable|string|max:255',
+            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
+
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
+            'no_junta' => 'nullable|array',
+            'Tip_Ind' => 'nullable|array',
+            'L_PGL' => 'nullable|array',
+            'A_PGL' => 'nullable|array',
+            'AL_PGL' => 'nullable|array',
+            'X' => 'nullable|array',
+            'Y' => 'nullable|array',
+            'DA_PROF' => 'nullable|array',
+            'PA' => 'nullable|array',
+            'SA' => 'nullable|array',
+            'TMIN' => 'nullable|array',
+            'SCAN' => 'nullable|array',
+            'EVAL' => 'nullable|array',
+            'FOTOS' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:2,3,4',
@@ -764,7 +816,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -772,24 +824,20 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                    'Tip_Ind' => $request->input("Tip_Ind.$sinTituloKey.$i"),
+                    'L_PGL' => $request->input("L_PGL.$sinTituloKey.$i"),
+                    'A_PGL' => $request->input("A_PGL.$sinTituloKey.$i"),
+                    'AL_PGL' => $request->input("AL_PGL.$sinTituloKey.$i"),
+                    'X' => $request->input("X.$sinTituloKey.$i"),
+                    'Y' => $request->input("Y.$sinTituloKey.$i"),
+                    'DA_PROF' => $request->input("DA_PROF.$sinTituloKey.$i"),
+                    'PA' => $request->input("PA.$sinTituloKey.$i"),
+                    'SA' => $request->input("SA.$sinTituloKey.$i"),
+                    'TMIN' => $request->input("TMIN.$sinTituloKey.$i"),
+                    'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
+                    'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
+                    'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
@@ -802,32 +850,29 @@ class FOR_01_PRO_INS_13Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $titulo) {
-            $tituloKey = "titulo_" . $titulo;
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
+                    'Tip_Ind' => $request->input("Tip_Ind.$tituloKey.$i"),
+                    'L_PGL' => $request->input("L_PGL.$tituloKey.$i"),
+                    'A_PGL' => $request->input("A_PGL.$tituloKey.$i"),
+                    'AL_PGL' => $request->input("AL_PGL.$tituloKey.$i"),
+                    'X' => $request->input("X.$tituloKey.$i"),
+                    'Y' => $request->input("Y.$tituloKey.$i"),
+                    'DA_PROF' => $request->input("DA_PROF.$tituloKey.$i"),
+                    'PA' => $request->input("PA.$tituloKey.$i"),
+                    'SA' => $request->input("SA.$tituloKey.$i"),
+                    'TMIN' => $request->input("TMIN.$tituloKey.$i"),
+                    'SCAN' => $request->input("SCAN.$tituloKey.$i"),
+                    'EVAL' => $request->input("EVAL.$tituloKey.$i"),
+                    'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
                     'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
@@ -876,7 +921,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);

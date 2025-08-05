@@ -808,7 +808,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_07/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
