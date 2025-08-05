@@ -526,10 +526,10 @@
                                 <th></th> <!-- Para botón de eliminar -->
                             </tr>
                         </thead>
+                        <tbody>
                             @php
                                 $contador = 1;
                             @endphp
-                        <tbody>
                             @foreach ($Grupo_Juntas_Re as $grupo)
                                                     @php
                                                         $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
