@@ -214,9 +214,9 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
-            
+
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
