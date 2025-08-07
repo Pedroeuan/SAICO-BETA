@@ -308,31 +308,30 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 10%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <td>2</td>
-                            <td rowspan="2">3</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['ACOPLANTE'] }}</td>
+                            <td rowspan="2">{{ $Datos_Equipo['NOMB_BLOCK'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">4</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
-                            <td>6</td>
+                            <td>{{ $Datos_Equipo['MODELO_SONDA1'] }}</td>
                             <th class="celdaGris">ZAPATA:</th>
-                            <td>7</td>
+                            <td>{{ $Datos_Equipo['ZAPATA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>S/N:</td>
+                            <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['LONG_CAB'] }}</td>
+                            <td style="text-align: left;">S/N: {{ $Datos_Equipo['NS_BLOCK'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            
-                            <td style="width: 10%;">10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['NS_SONDA1'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_SONDA1'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -349,39 +348,39 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">1</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_SONDA2'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">2</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_SONDA3'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">3</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA4'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">4</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 8%;">5</td>
+                            <td style="width: 8%;">{{ $Datos_Equipo['MODELO_SONDA2'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 8%;">{{ $Datos_Equipo['ZAPATA_SONDA2'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">6</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">7</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_SONDA3'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_SONDA3'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">8</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">9</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_SONDA4'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_SONDA4'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA2'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_SONDA2'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>12</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">13</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA3'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA3'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>14</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">15</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA4'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA4'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -395,39 +394,39 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">1</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_TRANS1'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">2</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_TRANS2'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">3</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_TRANS3'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">4</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 8%;">5</td>
+                            <td style="width: 8%;">{{ $Datos_Equipo['MODELO_TRANS1'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 8%;">{{ $Datos_Equipo['ZAPATA_TRANS1'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">6</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">7</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_TRANS2'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_TRANS2'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">8</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">9</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_TRANS3'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_TRANS2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS1'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_TRANS1'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>12</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">13</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS2'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_TRANS2'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>14</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">15</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS3'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_TRANS3'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -439,40 +438,40 @@
                         <tr>
                             <th colspan="4" class="celdaGris">TRANSDUCTOR DE TOFD #4</th>
                             <th rowspan="2" class="celdaGris">MODELO DE ENCODER 1:</th>
-                            <td rowspan="2">1</td>
+                            <td rowspan="2">{{ $Datos_Equipo['MODELO_ENCODER1'] }}</td>
                             <th>MARCA</th>
-                            <td>2</td>
+                            <td>{{ $Datos_Equipo['MARCA_ENCODER1'] }}</td>
                             <th rowspan="2" class="celdaGris">RESOLUCION DE ESCANEO:</th>
-                            <td rowspan="2">3</td>
+                            <td rowspan="2">{{ $Datos_Equipo['RES_SCAN1'] }}</td>
                         </tr>
 
                         <tr>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">4</td>
-                            <th style="width: 8%;">SERIE:</th>
-                            <td>5</td>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_TRANS4'] }}</td>
+                            <th>SERIE:</th>
+                            <td>{{ $Datos_Equipo['NS_TRANS4'] }}</td>
                         </tr>
 
                         <tr>
                         <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">6</td>
-                            <th>ZAPATA:</th>
-                            <td style="width: 8%;">7</td>
-                            <th style="width: 14%;" rowspan="2" >MODELO DE ENCODER 2:</th>
-                            <th rowspan="2">8</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_TRANS4'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td>{{ $Datos_Equipo['ZAPATA_TRANS4'] }}</td>
+                            <th style="width: 16%;" rowspan="2" class="celdaGris">MODELO DE ENCODER 2:</th>
+                            <th rowspan="2">{{ $Datos_Equipo['MODELO_ENCODER2'] }}</th>
                             <th>MARCA:</th>
-                            <td>9</td>
-                            <th rowspan="2">RESOLUCION DE ESCANEO:</th>
-                            <td rowspan="2">10</td>
+                            <td>{{ $Datos_Equipo['MARCA_ENCODER2'] }}</td>
+                            <th rowspan="2" class="celdaGris">RESOLUCION DE ESCANEO:</th>
+                            <td rowspan="2">{{ $Datos_Equipo['RES_SCAN2'] }}</td>
                         </tr>
 
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>11</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>12</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS4'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_TRANS4'] }}</td>
                             <th>SERIE:</th>
-                            <td>13</td>
+                            <td>{{ $Datos_Equipo['NS_ENCODER2'] }}</td>
                         </tr>
 
                     </tbody>
@@ -733,7 +732,7 @@
                             </tr>                               
                         </thead>
                             <tbody>
-                                @for($i = 0; $i < 54; $i++)
+                                @for($i = 0; $i < 14; $i++)
                                 <tr>
                                     <td>----</td>
                                     <td>----</td>
