@@ -252,6 +252,7 @@ class ManifiestoController extends Controller
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
                         $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->Entrega = $request->input('Entrega_Nombre');
                         $Manifiesto->ScanPDF = 'ESPERA DE DATO';
                         $Manifiesto->SATBMPRO = 'ESPERA DE DATO';
                         $Manifiesto->save();

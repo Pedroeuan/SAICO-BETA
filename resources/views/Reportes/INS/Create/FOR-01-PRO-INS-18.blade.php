@@ -401,7 +401,7 @@
                         </div>
                     </div>
 
-                     <div class="">
+                    <div class="">
                         <hr class="">
                     </div>
 
@@ -426,7 +426,7 @@
                         </div>
                     </div>
 
-                     <div class="col-sm-4">
+                    <div class="col-sm-4">
                         <label class="col-form-label" for="inputSuccess">TEMP. REFLEJADA:</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
@@ -504,7 +504,7 @@
                                 </tr>
 
                                 <tr>
-                                   
+
                                     <th class="align-middle">Junta / Elemento</th>
                                     <th class="align-middle">Zona de Barrido</th>
                                     <th class="align-middle">No. Indicación</th>

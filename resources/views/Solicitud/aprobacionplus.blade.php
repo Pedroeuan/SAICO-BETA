@@ -236,6 +236,13 @@
                                             <input type="hidden" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Responsable }}" readonly>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Responsable</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Entrega_Nombre" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Entrega }}" readonly>
+                                        </div>
+                                    </div>
                                     
                                     <!--Campo Oculto para pasar el id de Solicitud -->
                                     <!--<label class="col-form-label" for="inputSuccess">idSolicitud</label>-->
