@@ -33,7 +33,7 @@
     <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
                 <tr>
-                    <th>Mensaje</th>
+                    <th>Mensaje 123</th>
                 </tr>
             </thead>
             <tbody>
