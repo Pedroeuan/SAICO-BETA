@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Notificacion;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
