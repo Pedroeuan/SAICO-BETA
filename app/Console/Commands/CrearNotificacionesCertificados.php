@@ -22,7 +22,7 @@ class CrearNotificacionesCertificados extends Command
         parent::__construct();
     }
 
-    public function handle()
+    /*public function handle()
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -53,6 +53,7 @@ class CrearNotificacionesCertificados extends Command
             // Obtener el registro de general_eyc relacionado con el certificado
             $generalEyc = $certificado->generalEyc;
             $No_economico = $generalEyc->No_economico;
+            $Nombre_C = $generalEyc->Nombre_E_P_BP;
 
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
@@ -86,19 +87,19 @@ class CrearNotificacionesCertificados extends Command
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Equipo: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Certificado CADUCADO";
-                        $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Consumibles: ".$Nombre_C.", El No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'BLOCK Y PROBETA')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                 } 
                 else 
@@ -107,18 +108,18 @@ class CrearNotificacionesCertificados extends Command
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Equipo: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         $mensajeCorto = "Cert. Prox. a CADUCAR en $diasRestantes días";
-                        $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está próximo a CADUCAR en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Consumibles: ".$Nombre_C.", El No. certificado: " . $certificado->No_certificado . " está próximo a CADUCAR en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     if ($tipo === 'BLOCK Y PROBETA') 
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     
                 }
@@ -141,13 +142,83 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
                     }
-                    $this->info('Notificaciones creadas exitosamente.');
+                    //$this->info('Notificaciones creadas exitosamente.');
                     Log::info('Notificaciones creadas exitosamente.');
                 }
             }
         }
 
-        $this->info('Notificaciones creadas exitosamente.');
+        //$this->info('Notificaciones creadas exitosamente.');
         Log::info('Notificaciones creadas exitosamente.');
+    }*/
+
+    public function handle()
+    {
+        $diasAviso = [40, 35, 30, 25, 15, 10, 7, 5, 0];
+        $fechasAviso = collect($diasAviso)->map(fn($dias) => Carbon::now()->addDays($dias)->toDateString())->toArray();
+
+        $certificados = Certificados::with('generaleyc')
+            ->where(function($query) use ($fechasAviso) {
+                $query->whereIn('Prox_fecha_calibracion', $fechasAviso)
+                    ->orWhereIn('Fecha_calibracion', $fechasAviso);
+            })
+            ->get();
+
+        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        $fechaActual = Carbon::now();
+
+        foreach ($certificados as $certificado) {
+            $generalEyc = $certificado->generalEyc;
+            if (!$generalEyc) continue;
+
+            $tipo = $generalEyc->Tipo;
+            $No_economico = $generalEyc->No_economico;
+            $Nombre_C = $generalEyc->Nombre_E_P_BP;
+
+            $fechaCalibracion = match($tipo) {
+                'EQUIPOS' => $certificado->Prox_fecha_calibracion,
+                'CONSUMIBLES', 'BLOCK Y PROBETA' => $certificado->Fecha_calibracion,
+                default => null
+            };
+
+            if (!$fechaCalibracion) continue;
+
+            $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
+            //$diasRestantes = Carbon::now()->diffInDays($fechaCalibracion, false);
+            $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
+
+
+            if ($diasRestantes <= 0) {
+                // Mensajes para vencidos
+                [$mensajeCorto, $mensajeLargo] = match($tipo) {
+                    'EQUIPOS' => ["Calibración VENCIDA", "El Equipo: $Nombre_C, la calibración del No. económico: $No_economico está VENCIDA (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                    'CONSUMIBLES' => ["Certificado CADUCADO", "El Consumible: $Nombre_C, el No. certificado: {$certificado->No_certificado} está CADUCADO (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                    'BLOCK Y PROBETA' => ["Calibración VENCIDA", "El Block y Probeta: $Nombre_C, la calibración del No. económico: $No_economico está VENCIDA (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                };
+            } else {
+                // Mensajes para próximos a vencer
+                [$mensajeCorto, $mensajeLargo] = match($tipo) {
+                    'EQUIPOS' => ["Calib. Prox. a VENCER en $diasRestantes días", "El Equipo: $Nombre_C, la calibración del No. económico: $No_economico está próximo a vencer en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                    'CONSUMIBLES' => ["Cert. Prox. a CADUCAR en $diasRestantes días", "El Consumible: $Nombre_C, el No. certificado: {$certificado->No_certificado} está próximo a caducar en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                    'BLOCK Y PROBETA' => ["Calib. Prox. a VENCER en $diasRestantes días", "El Block y Probeta: $Nombre_C, la calibración del No. económico: $No_economico está próximo a vencer en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
+                };
+            }
+
+            foreach ($usuarios as $usuario) {
+                $existe = Notificacion::where('users_id', $usuario->id)
+                    ->where('Mensaje_Corto', $mensajeCorto)
+                    ->where('Mensaje_Largo', $mensajeLargo)
+                    ->first();
+
+                if (!$existe) {
+                    Notificacion::create([
+                        'users_id' => $usuario->id,
+                        'Mensaje_Corto' => $mensajeCorto,
+                        'Mensaje_Largo' => $mensajeLargo
+                    ]);
+                }
+            }
+        }
     }
+
 }
