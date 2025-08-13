@@ -2,15 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Admin\Usuario;
-use App\Models\EquiposyConsumibles\certificados;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\NotificacionesEyC;
 use App\Models\Notificacion\Notificacion;
+use App\Models\EquiposyConsumibles\certificados;
+use App\Notifications\NotificacionCertificadoMailable;
 
 class CrearNotificacionesCertificados extends Command
 {
@@ -216,6 +217,8 @@ class CrearNotificacionesCertificados extends Command
                         'Mensaje_Corto' => $mensajeCorto,
                         'Mensaje_Largo' => $mensajeLargo
                     ]);
+                    // 📧 Enviar correo
+                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo));
                 }
             }
         }
