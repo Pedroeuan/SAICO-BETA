@@ -13,13 +13,15 @@ class NotificacionCertificadoMailable extends Notification
 
     public $mensajeCorto;
     public $mensajeLargo;
+    public $url;
     /**
      * Create a new notification instance.
      */
-    public function __construct($mensajeCorto, $mensajeLargo)
+    public function __construct($mensajeCorto, $mensajeLargo, $url)
     {
         $this->mensajeCorto = $mensajeCorto;
         $this->mensajeLargo = $mensajeLargo;
+        $this->url = $url;
     }
     /**
      * Get the notification's delivery channels.
@@ -37,19 +39,13 @@ class NotificacionCertificadoMailable extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    /*->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');*/
-                    /*+++++ */
-                    /*->subject($this->mensajeCorto)
-                    ->line($this->mensajeLargo)
-                    ->line('Este es un aviso automático. No responder a este correo.');*/
                     ->subject($this->mensajeCorto)
                     ->view('emails.vencimiento', [
                         'usuario'      => $notifiable,
                         'mensajeCorto' => $this->mensajeCorto,
                         'mensajeLargo' => $this->mensajeLargo,
-                        'logoPath'     => public_path('images/saico3.png')
+                        'logoPath'     => public_path('images/saico3.png'),
+                        'url'          => $this->url,
                     ]);
     }
 

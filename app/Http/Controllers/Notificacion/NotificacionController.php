@@ -66,12 +66,15 @@ class NotificacionController extends Controller
 
         // Obtener todos los usuarios con los roles especificados
         $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        //$usuarios = User::whereIn('rol', ['Equipos'])->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
             $generalEyc = $certificado->generalEyc;
             $No_economico = $generalEyc->No_economico;
+            $Nombre_C = $generalEyc->Nombre_E_P_BP;
+            $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
 
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
@@ -91,12 +94,8 @@ class NotificacionController extends Controller
                 $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
 
                 // Determinar los días restantes para la calibración
-                $diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
-
-                // Asegúrate de que $diasRestantes es un entero
-                $diasRestantes = (int) $diasRestantes;
-                Log::info('***********************');
-                Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
+                //$diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
+                $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
 
                 // Crear los mensajes corto y largo
                 if ($diasRestantes === 0) 
@@ -105,19 +104,19 @@ class NotificacionController extends Controller
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Equipo: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Certificado CADUCADO";
-                        $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Consumibles: ".$Nombre_C.", El No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'BLOCK Y PROBETA')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " la Calibración esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                 } 
                 else 
@@ -126,18 +125,18 @@ class NotificacionController extends Controller
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Equipo: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         $mensajeCorto = "Cert. Prox. a CADUCAR en $diasRestantes días";
-                        $mensajeLargo = "El No. certificado: " . $certificado->No_certificado . " está próximo a CADUCAR en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Consumibles: ".$Nombre_C.", El No. certificado: " . $certificado->No_certificado . " está próximo a CADUCAR en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     if ($tipo === 'BLOCK Y PROBETA') 
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
-                        $mensajeLargo = "La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                     }
                     
                 }
@@ -158,8 +157,12 @@ class NotificacionController extends Controller
                         $notificacion->users_id = $usuario->id; // Asociar la notificación al usuario correspondiente
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
+                        $notificacion->url = $url;
                         $notificacion->save();
                     }
+
+                    // 📧 Enviar correo
+                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo));
                 }
             }
         }
@@ -172,16 +175,16 @@ class NotificacionController extends Controller
         
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
-                                       //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                        //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
                                         ->orderBy('created_at', 'desc')
-                                       ->get(['idNotificaciones', 'Mensaje_Corto']); // Asegúrate de tener el 'id' también
+                                        ->get(['idNotificaciones', 'Mensaje_Corto', 'url']); // Asegúrate de tener el 'id' también
     
         // Formatear las notificaciones para AdminLTE
         $formattedNotifications = $notificaciones->map(function ($notificacion) {
             return [
                 'id' => $notificacion->idNotificaciones,
                 'message' => $notificacion->Mensaje_Corto,
-                'url' => '#', // Aquí puedes poner la URL real de la notificación o alguna acción relevante
+                'url' => $notificacion->url ?? '#', // usa la URL de la tabla, fallback si es null
             ];
         });
     

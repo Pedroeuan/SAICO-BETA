@@ -8,7 +8,11 @@
     <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #003b80; margin: 0 auto;">
         <tr style="background-color: #003b80; color: #ffffff;">
             <td style="padding: 15px; text-align: center;">
-                <img src="{{ $message->embed($logoPath) }}" alt="SAICO" style="height: 50px;">
+                <img src="{{ $message->embed($logoPath) }}" 
+                    alt="SAICO" 
+                    width="120" 
+                    height="50" 
+                    style="display: block; margin: 0 auto;">
             </td>
         </tr>
         <tr>
@@ -20,6 +24,14 @@
                 <p><strong>Fecha de vencimiento:</strong> {{ $fechaCalibracion }}</p>
                 @endif
                 <p>Por favor revisa esta información a la brevedad.</p>
+                @if(isset($url))
+                    <p style="text-align: center; margin: 20px 0;">
+                        <a href="{{ $url }}" 
+                        style="background-color: #003b80; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                        Ver Detalles
+                        </a>
+                    </p>
+                @endif
                 <p style="font-size: 12px; color: #888;">Este es un aviso automático. No responder a este correo.</p>
             </td>
         </tr>

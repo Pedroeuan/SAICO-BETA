@@ -56,6 +56,7 @@ class CrearNotificacionesCertificados extends Command
             $generalEyc = $certificado->generalEyc;
             $No_economico = $generalEyc->No_economico;
             $Nombre_C = $generalEyc->Nombre_E_P_BP;
+            $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
 
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
@@ -77,11 +78,6 @@ class CrearNotificacionesCertificados extends Command
                 // Determinar los días restantes para la calibración
                 //$diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
                 $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
-
-                // Asegúrate de que $diasRestantes es un entero
-                //$diasRestantes = (int) $diasRestantes;
-                //Log::info('***********************');
-                //Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
 
                 // Crear los mensajes corto y largo
                 if ($diasRestantes === 0) 
@@ -143,91 +139,14 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->users_id = $usuario->id; // Asociar la notificación al usuario correspondiente
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
+                        $notificacion->url = $url;
                         $notificacion->save();
                     }
 
                     // 📧 Enviar correo
-                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo));
-                }
-            }
-        }
-
-        //$this->info('Notificaciones creadas exitosamente.');
-        //Log::info('Notificaciones creadas exitosamente.');
-    }
-
-    /*public function handle()
-    {
-        $diasAviso = [40, 35, 30, 25, 15, 10, 7, 5, 0];
-        $fechasAviso = collect($diasAviso)->map(fn($dias) => Carbon::now()->addDays($dias)->toDateString())->toArray();
-
-        $certificados = Certificados::with('generaleyc')
-            ->where(function($query) use ($fechasAviso) {
-                $query->whereIn('Prox_fecha_calibracion', $fechasAviso)
-                    ->orWhereIn('Fecha_calibracion', $fechasAviso);
-            })
-            ->get();
-
-        //$usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
-        $usuarios = User::whereIn('rol', ['Equipos'])->get();
-        $fechaActual = Carbon::now();
-
-        foreach ($certificados as $certificado) {
-            $generalEyc = $certificado->generalEyc;
-            if (!$generalEyc) continue;
-
-            $tipo = $generalEyc->Tipo;
-            $No_economico = $generalEyc->No_economico;
-            $Nombre_C = $generalEyc->Nombre_E_P_BP;
-
-            $fechaCalibracion = match($tipo) {
-                'EQUIPOS' => $certificado->Prox_fecha_calibracion,
-                'CONSUMIBLES', 'BLOCK Y PROBETA' => $certificado->Fecha_calibracion,
-                default => null
-            };
-
-            if (!$fechaCalibracion) continue;
-
-            $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
-            //$diasRestantes = Carbon::now()->diffInDays($fechaCalibracion, false);
-            $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
-
-
-            if ($diasRestantes <= 0) {
-                // Mensajes para vencidos
-                [$mensajeCorto, $mensajeLargo] = match($tipo) {
-                    'EQUIPOS' => ["Calibración VENCIDA", "El Equipo: $Nombre_C, la calibración del No. económico: $No_economico está VENCIDA (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                    'CONSUMIBLES' => ["Certificado CADUCADO", "El Consumible: $Nombre_C, el No. certificado: {$certificado->No_certificado} está CADUCADO (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                    'BLOCK Y PROBETA' => ["Calibración VENCIDA", "El Block y Probeta: $Nombre_C, la calibración del No. económico: $No_economico está VENCIDA (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                };
-            } else {
-                // Mensajes para próximos a vencer
-                [$mensajeCorto, $mensajeLargo] = match($tipo) {
-                    'EQUIPOS' => ["Calib. Prox. a VENCER en $diasRestantes días", "El Equipo: $Nombre_C, la calibración del No. económico: $No_economico está próximo a vencer en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                    'CONSUMIBLES' => ["Cert. Prox. a CADUCAR en $diasRestantes días", "El Consumible: $Nombre_C, el No. certificado: {$certificado->No_certificado} está próximo a caducar en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                    'BLOCK Y PROBETA' => ["Calib. Prox. a VENCER en $diasRestantes días", "El Block y Probeta: $Nombre_C, la calibración del No. económico: $No_economico está próximo a vencer en $diasRestantes días (Fecha de vencimiento: $fechaCalibracionFormateada)"],
-                };
-            }
-
-            foreach ($usuarios as $usuario) {
-                $existe = Notificacion::where('users_id', $usuario->id)
-                    ->where('Mensaje_Corto', $mensajeCorto)
-                    ->where('Mensaje_Largo', $mensajeLargo)
-                    ->first();
-
-                if (!$existe) {
-                    Notificacion::create([
-                        'users_id' => $usuario->id,
-                        'Mensaje_Corto' => $mensajeCorto,
-                        'Mensaje_Largo' => $mensajeLargo
-                    ]);
-                    // 📧 Enviar correo
-                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo));
+                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo,$url));
                 }
             }
         }
     }
-
-    */
-
 }
