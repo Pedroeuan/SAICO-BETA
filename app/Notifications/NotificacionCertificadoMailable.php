@@ -49,6 +49,7 @@ class NotificacionCertificadoMailable extends Notification
                         'usuario'      => $notifiable,
                         'mensajeCorto' => $this->mensajeCorto,
                         'mensajeLargo' => $this->mensajeLargo,
+                        'logoPath'     => public_path('images/saico3.png')
                     ]);
     }
 

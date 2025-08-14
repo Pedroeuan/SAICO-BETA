@@ -5,15 +5,15 @@
     <title>{{ $mensajeCorto }}</title>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
-        <tr style="background-color: #2c3e50; color: #ffffff;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #003b80; margin: 0 auto;">
+        <tr style="background-color: #003b80; color: #ffffff;">
             <td style="padding: 15px; text-align: center;">
-                <img src="{{ asset('images/saico.png') }}" alt="SAICO" style="height: 50px;">
+                <img src="{{ $message->embed($logoPath) }}" alt="SAICO" style="height: 50px;">
             </td>
         </tr>
         <tr>
             <td style="padding: 20px;">
-                <h2 style="color: #2c3e50;">Hola {{ $usuario->name }} 👋</h2>
+                <h2 style="color: #003b80;">Hola {{ $usuario->name }} 👋</h2>
                 <p>{{ $mensajeLargo }}</p>
                 <p><strong>Asunto:</strong> {{ $mensajeCorto }}</p>
                 @if(isset($fechaCalibracion))
@@ -25,7 +25,10 @@
         </tr>
         <tr style="background-color: #f1f1f1; color: #555;">
             <td style="padding: 10px; text-align: center; font-size: 12px;">
-                SAICO - ASESORIA E INSPECCIÓN EN CONSTRUCCIÓN COSTA FUERA
+                <span style="color: #003b80;">S</span><span style="color: #E01A22;">AICO</span> - 
+                <span style="color: #E01A22;">A</span>SESORIA E 
+                <span style="color: #E01A22;">I</span>NSPECCIÓN EN CONSTRUCCIÓN 
+                <span style="color: #E01A22;">CO</span>STA FUERA
             </td>
         </tr>
     </table>
