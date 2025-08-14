@@ -198,7 +198,7 @@
                             <th style="width: 400%;">FORMATO</th>
                             <th style="width: 70%;">Código:</th>
                             <th style="width: 100%;">FOR-INS-03/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 

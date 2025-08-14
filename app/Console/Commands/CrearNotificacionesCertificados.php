@@ -23,7 +23,7 @@ class CrearNotificacionesCertificados extends Command
         parent::__construct();
     }
 
-    /*public function handle()
+    public function handle()
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -48,6 +48,7 @@ class CrearNotificacionesCertificados extends Command
 
         // Obtener todos los usuarios con los roles especificados
         $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        //$usuarios = User::whereIn('rol', ['Equipos'])->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
@@ -74,12 +75,13 @@ class CrearNotificacionesCertificados extends Command
                 $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
 
                 // Determinar los días restantes para la calibración
-                $diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
+                //$diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
+                $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
 
                 // Asegúrate de que $diasRestantes es un entero
-                $diasRestantes = (int) $diasRestantes;
-                Log::info('***********************');
-                Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
+                //$diasRestantes = (int) $diasRestantes;
+                //Log::info('***********************');
+                //Log::info('diasRestantes: ', ['diasRestantes' => $diasRestantes]);
 
                 // Crear los mensajes corto y largo
                 if ($diasRestantes === 0) 
@@ -143,17 +145,18 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->save();
                     }
-                    //$this->info('Notificaciones creadas exitosamente.');
-                    Log::info('Notificaciones creadas exitosamente.');
+
+                    // 📧 Enviar correo
+                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargo));
                 }
             }
         }
 
         //$this->info('Notificaciones creadas exitosamente.');
-        Log::info('Notificaciones creadas exitosamente.');
-    }*/
+        //Log::info('Notificaciones creadas exitosamente.');
+    }
 
-    public function handle()
+    /*public function handle()
     {
         $diasAviso = [40, 35, 30, 25, 15, 10, 7, 5, 0];
         $fechasAviso = collect($diasAviso)->map(fn($dias) => Carbon::now()->addDays($dias)->toDateString())->toArray();
@@ -165,7 +168,8 @@ class CrearNotificacionesCertificados extends Command
             })
             ->get();
 
-        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        //$usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        $usuarios = User::whereIn('rol', ['Equipos'])->get();
         $fechaActual = Carbon::now();
 
         foreach ($certificados as $certificado) {
@@ -223,5 +227,7 @@ class CrearNotificacionesCertificados extends Command
             }
         }
     }
+
+    */
 
 }

@@ -40,9 +40,16 @@ class NotificacionCertificadoMailable extends Notification
                     /*->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');*/
-                ->subject($this->mensajeCorto)
-                ->line($this->mensajeLargo)
-                ->line('Este es un aviso automático. No responder a este correo.');
+                    /*+++++ */
+                    /*->subject($this->mensajeCorto)
+                    ->line($this->mensajeLargo)
+                    ->line('Este es un aviso automático. No responder a este correo.');*/
+                    ->subject($this->mensajeCorto)
+                    ->view('emails.vencimiento', [
+                        'usuario'      => $notifiable,
+                        'mensajeCorto' => $this->mensajeCorto,
+                        'mensajeLargo' => $this->mensajeLargo,
+                    ]);
     }
 
     /**
