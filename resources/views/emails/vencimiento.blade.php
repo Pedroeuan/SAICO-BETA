@@ -10,7 +10,7 @@
             <td style="padding: 15px; text-align: center;">
                 <img src="{{ $message->embed($logoPath) }}" 
                     alt="SAICO" 
-                    width="120" 
+                    width="150" 
                     height="50" 
                     style="display: block; margin: 0 auto;">
             </td>
@@ -18,8 +18,8 @@
         <tr>
             <td style="padding: 20px;">
                 <h2 style="color: #003b80;">Hola {{ $usuario->name }} 👋</h2>
+                <p><strong>Asunto:</strong> <p style="color: #E01A22;">{{ $mensajeCorto }}</p>
                 <p>{{ $mensajeLargo }}</p>
-                <p><strong>Asunto:</strong> {{ $mensajeCorto }}</p>
                 @if(isset($fechaCalibracion))
                 <p><strong>Fecha de vencimiento:</strong> {{ $fechaCalibracion }}</p>
                 @endif
