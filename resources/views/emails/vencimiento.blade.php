@@ -18,10 +18,10 @@
         <tr>
             <td style="padding: 20px;">
                 <h2 style="color: #003b80;">Hola {{ $usuario->name }} 👋</h2>
-                <p><strong>Asunto:</strong> <p style="color: #E01A22;">{{ $mensajeCorto }}</p>
-                <p>{{ $mensajeLargo }}</p>
+                <p><strong>Asunto: </strong><span style="color: #E01A22;">{{ $mensajeCorto }}</span></p>
+                <p>{!! $mensajeLargo !!}</p>
                 @if(isset($fechaCalibracion))
-                <p><strong>Fecha de vencimiento:</strong> {{ $fechaCalibracion }}</p>
+                <p><strong>Fecha de vencimiento:</strong><span style="color: #E01A22;"> {{ $fechaCalibracion }}</span></p>
                 @endif
                 <p>Por favor revisa esta información a la brevedad.</p>
                 @if(isset($url))
