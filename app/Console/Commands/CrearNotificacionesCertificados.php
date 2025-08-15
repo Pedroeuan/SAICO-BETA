@@ -80,27 +80,27 @@ class CrearNotificacionesCertificados extends Command
                 $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
 
                 // Crear los mensajes corto y largo
-                if ($diasRestantes === 0) 
+                if ($diasRestantes == 0) 
                 {
                     if ($tipo === 'EQUIPOS') 
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "La Calibración del Equipo: ".$Nombre_C.", Con No. economico: " . $No_economico . "esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "La Calibración del Equipo: ".$Nombre_C.", Con No. economico: " . $No_economico . " esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                         $mensajeLargoemail = "La Calibración del Equipo: ".$Nombre_C.", <br>Con No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'>VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . "</span>)";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Certificado CADUCADO";
-                        $mensajeLargo = "El Certificado del Consumible: ".$Nombre_C.", Con el No. certificado: " . $certificado->No_certificado . "está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Certificado del Consumible: ".$Nombre_C.", Con el No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                         $mensajeLargoemail = "El Certificado del Consumible: ".$Nombre_C.", <br>Con el No. certificado: " . $certificado->No_certificado . "<br>está <span style='color: #E01A22;'>CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . "</span>)";
                     }
                     elseif ($tipo === 'BLOCK Y PROBETA')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
-                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . "esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                         $mensajeLargoemail = "El Block y Probeta: ".$Nombre_C.", <br>La Calibración del No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'> VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . "</span>)";
                     }
                 } 
