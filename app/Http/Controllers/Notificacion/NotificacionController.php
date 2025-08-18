@@ -105,21 +105,21 @@ class NotificacionController extends Controller
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
                         $mensajeLargo = "La Calibración del Equipo: ".$Nombre_C.", Con No. economico: " . $No_economico . " esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
-                        $mensajeLargoemail = "La Calibración del Equipo: ".$Nombre_C.", <br>Con No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'>VENCIDA</span><br> (Fecha de vencimiento: <span style='color: #E01A22;'" . $fechaCalibracionFormateada . "</span>)";
+                        $mensajeLargoemail = "La Calibración del Equipo: ".$Nombre_C.", <br>Con No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'>VENCIDA</span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>" . $fechaCalibracionFormateada . "</span>)";
                     }
                     elseif ($tipo === 'CONSUMIBLES')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Certificado CADUCADO";
                         $mensajeLargo = "El Certificado del Consumible: ".$Nombre_C.", Con el No. certificado: " . $certificado->No_certificado . " está CADUCADO (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
-                        $mensajeLargoemail = "El Certificado del Consumible: ".$Nombre_C.", <br>Con el No. certificado: " . $certificado->No_certificado . "<br>está <span style='color: #E01A22;'>CADUCADO</span><br> (Fecha de vencimiento: <span style='color: #E01A22;'" . $fechaCalibracionFormateada . "</span>)";
+                        $mensajeLargoemail = "El Certificado del Consumible: ".$Nombre_C.", <br>Con el No. certificado: " . $certificado->No_certificado . "<br>está <span style='color: #E01A22;'>CADUCADO </span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>" . $fechaCalibracionFormateada . "</span>)";
                     }
                     elseif ($tipo === 'BLOCK Y PROBETA')
                     {
                         // Mensaje especial para certificados vencidos
                         $mensajeCorto = "Calibración VENCIDA";
                         $mensajeLargo = "El Block y Probeta: ".$Nombre_C.", La Calibración del No. economico: " . $No_economico . " esta VENCIDA (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
-                        $mensajeLargoemail = "El Block y Probeta: ".$Nombre_C.", <br>La Calibración del No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'> VENCIDA</span><br> (Fecha de vencimiento: <span style='color: #E01A22;'" . $fechaCalibracionFormateada . "</span>)";
+                        $mensajeLargoemail = "El Block y Probeta: ".$Nombre_C.", <br>La Calibración del No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'> VENCIDA </span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>" . $fechaCalibracionFormateada . "</span>)";
                     }
                 } 
                 else 
@@ -135,14 +135,14 @@ class NotificacionController extends Controller
                     {
                         $mensajeCorto = "Cert. Prox. a CADUCAR en $diasRestantes días";
                         $mensajeLargo = "El Certificado del Consumible: ".$Nombre_C.", Con No. certificado: " . $certificado->No_certificado . " está próximo a CADUCAR en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
-                        $mensajeLargoemail = "El Certificado del Consumible: ".$Nombre_C.", <br>Con No. certificado: " . $certificado->No_certificado . " <br>está próximo a <span style='color: #E01A22;'> CADUCAR en $diasRestantes días</span> <br>(Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargoemail = "El Certificado del Consumible: ".$Nombre_C.", <br>Con No. certificado: " . $certificado->No_certificado . " <br>está próximo a <span style='color: #E01A22;'> CADUCAR en $diasRestantes días</span> <br>(Fecha de vencimiento: " . $fechaCalibracionFormateada . "</span>)";
                     }
                     if ($tipo === 'BLOCK Y PROBETA') 
                     {
                         // Mensaje para certificados próximos a vencer
                         $mensajeCorto = "Calib. Prox. a VENCER en $diasRestantes días";
                         $mensajeLargo = "La calibración del Block y Probeta: ".$Nombre_C.", Con el No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantes días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
-                        $mensajeLargoemail = "La calibración del Block y Probeta: ".$Nombre_C.", <br>Con el No. economico: " . $No_economico . " <br>está próximo a <span style='color: #E01A22;'> VENCER en $diasRestantes días</span> <br>(Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
+                        $mensajeLargoemail = "La calibración del Block y Probeta: ".$Nombre_C.", <br>Con el No. economico: " . $No_economico . " <br>está próximo a <span style='color: #E01A22;'> VENCER en $diasRestantes días</span> <br>(Fecha de vencimiento: " . $fechaCalibracionFormateada . "</span>)";
                     }
                     
                 }
