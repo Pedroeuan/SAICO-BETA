@@ -39,7 +39,8 @@
                     <div class="col-7">
 
                         <div class="form-group">
-                            <label for="NombreUsuario">Nombre de Usuario</label>
+                            <label for="NombreUsuario">Nombre de Cliente</label>
+                            
                             <input type="text" class="form-control @error('NombreUsuario') is-invalid @enderror" placeholder="Nombre del usuario" id="NombreUsuario" name="NombreUsuario" value="{{ old('NombreUsuario') }}">
                             @error('NombreUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
