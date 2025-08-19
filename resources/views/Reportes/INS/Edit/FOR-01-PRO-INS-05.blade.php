@@ -526,10 +526,10 @@
                                 <th></th> <!-- Para botón de eliminar -->
                             </tr>
                         </thead>
+                        <tbody>
                             @php
                                 $contador = 1;
                             @endphp
-                        <tbody>
                             @foreach ($Grupo_Juntas_Re as $grupo)
                                                     @php
                                                         $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
@@ -545,7 +545,7 @@
                                                                     <td>
                                                                         <button type="button" class="btn btn-danger btnEliminarTitulo">
                                                                                 
-                                                                                <i class="bi bi-trash"  aria-hidden="true"></i>
+                                                                                <i class="fa fa-times"  aria-hidden="true"></i>
                                                                         </button>
                                                                     </td>
                                                                 </div>
@@ -565,7 +565,7 @@
                                         <td><input type="text" class="form-control" name='longitud[{{ $tituloKey }}][]' value="{{ $resultado['longitud'] }}"></td>
                                         <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
                                         <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>
                                     @php $contador++; @endphp
                                 @endforeach
@@ -931,7 +931,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -966,7 +966,7 @@
                 <td><input type="text" class="form-control" name="longitud[${lastTitle}][]" placeholder="Longitud"></td>
                 <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
                 <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }

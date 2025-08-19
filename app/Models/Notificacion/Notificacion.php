@@ -13,6 +13,7 @@ class Notificacion extends Model
         'users_id',
         'Mensaje_Corto',
         'Mensaje_Largo',
+        'url',
         'created_at',
         'updated_at',
     ];

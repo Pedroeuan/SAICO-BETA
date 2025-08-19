@@ -539,7 +539,7 @@
                                                                     <td>
                                                                         <button type="button" class="btn btn-danger btnEliminarTitulo">
                                                                             
-                                                                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                                                                            <i class="fa fa-times"  aria-hidden="true"></i>
                                                                         </button>
                                                                     </td>
                                                                 </div>
@@ -560,7 +560,7 @@
                                                             <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
                                                             <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
                                                             <td><input type="text" class="form-control" name='long_inspeccionada[{{ $tituloKey }}][]' value="{{ $resultado['long_inspeccionada'] }}"></td>
-                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>
                                                         @php $contador++; @endphp
                                                     @endforeach
@@ -994,7 +994,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash" aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1029,7 +1029,7 @@
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
@@ -1078,9 +1078,7 @@
                 $('#consumiblesSelect1').on('change', function() {
                     actualizarInputsC1();
                 });
-            });
 
-            $(document).ready(function() {
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
@@ -1098,9 +1096,7 @@
                 $('#consumiblesSelect2').on('change', function() {
                     actualizarInputsC2();
                 });
-            });
 
-            $(document).ready(function() {
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
 

@@ -216,13 +216,13 @@ class FOR_01_PRO_INS_12Controller extends Controller
 
     }
 
-        public function FOR_01_PRO_INS_12_store(Request $request)
+        public function FOR_01_PRO_INS_12_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_12_store1(Request $request)
+    public function FOR_01_PRO_INS_12_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -249,23 +249,23 @@ class FOR_01_PRO_INS_12Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_SONDA' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
 
             'Datos_Equipo.SOFTWARE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA_HOR' => 'nullable|string|max:255',
@@ -579,23 +579,23 @@ class FOR_01_PRO_INS_12Controller extends Controller
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_SONDA' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_SONDA' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER1' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_ENCODER2' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
 
             'Datos_Equipo.SOFTWARE' => 'nullable|string|max:255',
             'Datos_Equipo.GANANCIA_HOR' => 'nullable|string|max:255',
@@ -978,7 +978,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-01-INS-12.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1001,10 +1001,10 @@ class FOR_01_PRO_INS_12Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_12_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_INS_10_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_12_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1025,10 +1025,10 @@ class FOR_01_PRO_INS_12Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -181);
+            $combinedPdf->SetXY(137.5, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1044,7 +1044,7 @@ class FOR_01_PRO_INS_12Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_10_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01_INS_12.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

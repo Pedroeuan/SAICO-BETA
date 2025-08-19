@@ -19,6 +19,16 @@
     overflow-y: auto;
     }
 
+    .notificacion-link {
+        text-decoration: none; /* quita el subrayado */
+        color: inherit;        /* toma el color del td */
+        cursor: pointer;       /* opcional, indica que es clicable */
+    }
+
+    .notificacion-link:hover {
+        color: #0d17a0ff;        /* opcional: cambia de color al pasar el mouse */
+        text-decoration: underline; /* opcional: solo subraya al hacer hover */
+    }
 </style>
 @endsection
 
@@ -28,7 +38,11 @@
 <br>
 <div class="container">
     @if($notificaciones->isEmpty())
-        <p>No hay notificaciones para este rol.</p>
+    <div class="text-center my-4">
+        <i class="fas fa-bell-slash fa-3x text-muted"></i>
+        <p class="mt-2 text-muted">No hay notificaciones para este rol.</p>
+        <button onclick="location.reload()" class="btn btn-primary btn-sm">Actualizar</button>
+    </div>
     @else
     <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead>
@@ -38,9 +52,9 @@
             </thead>
             <tbody>
                 @foreach ($notificaciones as $notificacion)
-                    <tr>
-                        <td>{{ $notificacion->Mensaje_Largo }}</td>
-                    </tr>
+                <tr onclick="window.open('{{ $notificacion->url }}', '_blank')" class="notificacion-link">
+                    <td>{{ $notificacion->Mensaje_Largo }}</td>
+                </tr>
                 @endforeach
             </tbody>
         </table>

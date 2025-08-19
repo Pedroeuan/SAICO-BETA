@@ -281,7 +281,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                             </div>
                         </div>
 
@@ -321,7 +321,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_SONDA]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA')}}">
                             </div>
                         </div>
 
@@ -362,7 +362,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[N_S_BLOCK]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK')}}">
                             </div>
                         </div>
 
@@ -402,7 +402,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER1')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_ENCODER1]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER1')}}">
                             </div>
                         </div>
 
@@ -442,7 +442,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[N_S_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.N_S_ENCODER2')}}">
+                                <input type="text" class="form-control  inputForm" id="nsInputA3" name="Datos_Equipo[NS_ENCODER2]" placeholder="" value="{{old('Datos_Equipo.NS_ENCODER2')}}">
                             </div>
                         </div>
 
@@ -510,10 +510,15 @@
                         <!--***************************************** INICIO RESULTADOS *****************************************-->
 
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                        
-                        <div style="margin-bottom: 2px;"></div>
+                                    
+                        <div style="margin-bottom: 5px;"></div>
 
                         <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
@@ -914,8 +919,8 @@
                             <td colspan="13">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -936,7 +941,7 @@
                             <td><input type="text" class="form-control" name="Eval[${item.titulo}}][]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
                             <td><input type="text" class="form-control" name="fotos[${item.titulo}}][]" value="${item.inputs[11]}" placeholder="Fotos"></td>
                             <td><input type="text" class="form-control" name="Observaciones[${item.titulo}}][]" value="${item.inputs[12]}" placeholder="Observaciones Técnico"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
                     }
@@ -956,7 +961,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -981,19 +986,19 @@
             let newRow = `
                         <tr data-titulo="${lastTitle}">
                             <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
-                            <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}}][]" placeholder="Zona de Barrido"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}}][]" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}}][]" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="la[${lastTitle}}][]" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${lastTitle}}][]" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="ht[${lastTitle}}][]" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="largo[${lastTitle}}][]" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${lastTitle}}][]" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="Eval[${lastTitle}}][]" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="fotos[${lastTitle}}][]" placeholder="Fotos"></td>
-                            <td><input type="text" class="form-control" name="Observaciones[${lastTitle}}][]" placeholder="Observaciones Técnico"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
+                            <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
+                            <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
+                            <td><input type="text" class="form-control" name="Eval[${lastTitle}][]" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones Técnico"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                         </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);

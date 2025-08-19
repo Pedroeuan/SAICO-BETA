@@ -5,43 +5,76 @@
             <title>FORMATO FOR-INS-13/01</title>
             <style>
                 @page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
-                }
-                header {
-                    position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
-                    left: 0;
-                    right: 0;
-                    height: 100px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: fixed;
-                    bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
-                    left: 0;
-                    right: 0;
-                    height: 160px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 460px; /* Ajusta según el tamaño de tu encabezado */
-                    font-family: 'arial', sans-serif;
-                }
-                .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 175px; /* Evita superposición con el footer */
+                    margin: 
+                    /*3.0cm /* superior */
+                    /*2.1cm /* derecho */
+                    /*2.1cm /* inferior */
+                    /*2.4cm; /* izquierdo */
+                    3.0cm /* superior */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
 
-                .table-container {
-                    margin: 100px 0;
+                @if ($totalTitulosYFilas <=20)
+                header {
+                    width: 100%;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    height: auto; /* Permite crecer según el contenido */
+                    text-align: center;
+                    /*background-color: rgb(226, 45, 45);*/
+                    font-family: 'arial', sans-serif;
                 }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px;
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18);*/
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    margin: -30px, 0; /* Ajusta el margen de la página */
+                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color: rgb(45, 78, 226);*/
+                }
+            @else
+                header {
+                    position: fixed;
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin: 0;
+                    padding-top: 235px; /* Altura del header */
+                    padding-bottom: 95px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -196,77 +229,76 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 5px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
+
+                <div style="margin-bottom: 4px;"></div>
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>   
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
-                        <tr>
+<tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
                 <table class="datosinspeccion">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="8">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                    </thead>  
+
+                <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
@@ -276,31 +308,30 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 10%;">MARCA:</th>
-                            <td style="width: 15%;">1</td>
-                            <td>2</td>
-                            <td rowspan="2">3</td>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['ACOPLANTE'] }}</td>
+                            <td rowspan="2">{{ $Datos_Equipo['NOMB_BLOCK'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">4</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">LONGITUD DEL CABLE</th>
                             <th class="celdaGris">MODELO:</th>
-                            <td>6</td>
+                            <td>{{ $Datos_Equipo['MODELO_SONDA1'] }}</td>
                             <th class="celdaGris">ZAPATA:</th>
-                            <td>7</td>
+                            <td>{{ $Datos_Equipo['ZAPATA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>S/N:</td>
+                            <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
+                            <td>{{ $Datos_Equipo['LONG_CAB'] }}</td>
+                            <td style="text-align: left;">S/N: {{ $Datos_Equipo['NS_BLOCK'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            
-                            <td style="width: 10%;">10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['NS_SONDA1'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_SONDA1'] }}</td>
                             
                         </tr>
                     </tbody>
@@ -317,39 +348,39 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">1</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_SONDA2'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">2</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_SONDA3'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">3</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA4'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">4</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 8%;">5</td>
+                            <td style="width: 8%;">{{ $Datos_Equipo['MODELO_SONDA2'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 8%;">{{ $Datos_Equipo['ZAPATA_SONDA2'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">6</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">7</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_SONDA3'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_SONDA3'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">8</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">9</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_SONDA4'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_SONDA4'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA2'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_SONDA2'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>12</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">13</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA3'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA3'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>14</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">15</td>
+                            <td>{{ $Datos_Equipo['NS_SONDA4'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_SONDA4'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -363,39 +394,39 @@
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">1</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_TRANS1'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">2</td>
+                            <td colspan="3" style="width: 15%;">{{ $Datos_Equipo['MARCA_TRANS2'] }}</td>
                             <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">3</td>
+                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_TRANS3'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">4</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 8%;">5</td>
+                            <td style="width: 8%;">{{ $Datos_Equipo['MODELO_TRANS1'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 8%;">{{ $Datos_Equipo['ZAPATA_TRANS1'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">6</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">7</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_TRANS2'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_TRANS2'] }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td style="width: 10%;">8</td>
-                            <th class="celdaGris">ZAPATAC:</th>
-                            <td style="width: 10%;">9</td>
+                            <td style="width: 10%;">{{ $Datos_Equipo['MODELO_TRANS3'] }}</td>
+                            <th class="celdaGris">ZAPATA:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['ZAPATA_TRANS2'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>10</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>11</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS1'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_TRANS1'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>12</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">13</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS2'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_TRANS2'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            <td>14</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td style="width: 10%;">15</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS3'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td style="width: 10%;">{{ $Datos_Equipo['FREC_TRANS3'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -407,40 +438,40 @@
                         <tr>
                             <th colspan="4" class="celdaGris">TRANSDUCTOR DE TOFD #4</th>
                             <th rowspan="2" class="celdaGris">MODELO DE ENCODER 1:</th>
-                            <td rowspan="2">1</td>
+                            <td rowspan="2">{{ $Datos_Equipo['MODELO_ENCODER1'] }}</td>
                             <th>MARCA</th>
-                            <td>2</td>
+                            <td>{{ $Datos_Equipo['MARCA_ENCODER1'] }}</td>
                             <th rowspan="2" class="celdaGris">RESOLUCION DE ESCANEO:</th>
-                            <td rowspan="2">3</td>
+                            <td rowspan="2">{{ $Datos_Equipo['RES_SCAN1'] }}</td>
                         </tr>
 
                         <tr>
-                            <th class="celdaGris" style="width: 8%;">MARCA:</th>
-                            <td colspan="3" style="width: 15%;">4</td>
-                            <th style="width: 8%;">SERIE:</th>
-                            <td>5</td>
+                            <th class="celdaGris" style="width: 6.5%;">MARCA:</th>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_TRANS4'] }}</td>
+                            <th>SERIE:</th>
+                            <td>{{ $Datos_Equipo['NS_TRANS4'] }}</td>
                         </tr>
 
                         <tr>
                         <th class="celdaGris">MODELO:</th>
-                            <td style="width: 8%;">6</td>
-                            <th>ZAPATA:</th>
-                            <td style="width: 8%;">7</td>
-                            <th style="width: 14%;" rowspan="2" >MODELO DE ENCODER 2:</th>
-                            <th rowspan="2">8</th>
+                            <td >{{ $Datos_Equipo['MODELO_TRANS4'] }}</td>
+                            <th class="celdaGris" style="width: 7%;">ZAPATA:</th>
+                            <td>{{ $Datos_Equipo['ZAPATA_TRANS4'] }}</td>
+                            <th style="width: 16%;" rowspan="2" class="celdaGris">MODELO DE ENCODER 2:</th>
+                            <th rowspan="2">{{ $Datos_Equipo['MODELO_ENCODER2'] }}</th>
                             <th>MARCA:</th>
-                            <td>9</td>
-                            <th rowspan="2">RESOLUCION DE ESCANEO:</th>
-                            <td rowspan="2">10</td>
+                            <td>{{ $Datos_Equipo['MARCA_ENCODER2'] }}</td>
+                            <th rowspan="2" class="celdaGris">RESOLUCION DE ESCANEO:</th>
+                            <td rowspan="2">{{ $Datos_Equipo['RES_SCAN2'] }}</td>
                         </tr>
 
                         <tr>
                             <th class="celdaGris">SERIE:</th>
-                            <td>11</td>
-                            <th class="celdaGris">FRECC:</th>
-                            <td>12</td>
+                            <td>{{ $Datos_Equipo['NS_TRANS4'] }}</td>
+                            <th class="celdaGris">FREC:</th>
+                            <td>{{ $Datos_Equipo['FREC_TRANS4'] }}</td>
                             <th>SERIE:</th>
-                            <td>13</td>
+                            <td>{{ $Datos_Equipo['NS_ENCODER2'] }}</td>
                         </tr>
 
                     </tbody>
@@ -452,24 +483,24 @@
                     <tbody>
                         <tr>
                             <th style="width: 14%;" class="celdaGris">ANGULO DE INICIO:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['ANG_INI'] }}</td>
                             <th style="width: 12%;" class="celdaGris">ANGULO FINAL:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['ANG_FIN'] }}</td>
                             <th style="width: 8%;" class="celdaGris">VELOCIDAD:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['VELOCIDAD'] }}</td>
                             <th style="width: 8%;" class="celdaGris">FILTRO:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['FILTRO'] }}</td>
                             <th style="width: 8%;" class="celdaGris">CODIGO DE EVALUACION:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['COD_EVA'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 14%;" class="celdaGris">TIPO DE BARRIDO:</th>
-                            <td colspan="2"></td>
+                            <td colspan="2">6{{ $Datos_Equipo['TIP_BARR'] }}</td>
                             <th style="width: 14%;" class="celdaGris">AREA DE ESCANEO:</th>
-                            <td></td>
+                            <td>{{ $Datos_Equipo['AREA_SCAN'] }}</td>
                             <th colspan="2" style="width: 14%;" class="celdaGris">PROCEDIMIENTO:</th>
-                            <td colspan="3"></td>
+                            <td colspan="3">{{ $Datos_Equipo['PROCEDIMIENTO'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -480,23 +511,23 @@
                     <tbody>
                         <tr>
                             <th style="width: 15%;">GANANCIA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] }}</td>
                             <th style="width: 15%;">TIPO DE JUNTA:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TIP_JUNTA'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">RECHAZO:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] }}</td>
                             <th style="width: 15%;">DIAMETRO:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['DIAMETRO'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">TEMPERATURA:</th>
-                            <td class="lineaInferior">1</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TEMP'] }}</td>
                             <th style="width: 15%;">ESPESOR:</th>
-                            <td class="lineaInferior">2</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['ESPESOR'] }}</td>
                         </tr>
 
                     </tbody>
@@ -565,13 +596,13 @@
                             @elseif( $numFirmas == 3)
                             <!-- 3 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                 </tr>
 
                                 <tr>
@@ -612,26 +643,26 @@
                             @else
                             <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 10px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <th></th>
                                 </tr>
 
@@ -700,43 +731,101 @@
                                 <td style="width: 30px;">Y</td>
                             </tr>                               
                         </thead>
-                            <tbody>
-                                @for($i = 0; $i < 54; $i++)
-                                <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                </tr>
-                                @endfor
-                                <tr class="sinBordeth">
-                                    <td colspan="10" rowspan="2">
-                                    <b>SIR</b>= Sin indicaciones Relevantes 
-                                    <b>L</b>= Indicacion Lineal 
-                                    <b>R</b>= Indicacion Redondeada 
-                                    <b>A</b>= Aceptado 
-                                    <b>R</b>= Rechazado 
-                                    <b>FP</b>= Falta de Penetracion 
-                                    <b>FF</b>= Falta de Fusion 
-                                    <b>P</b>= Poros 
-                                    <b>PA</b>= Poros Agrupados
-                                    <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
-                                    </td>
-                                    <td colspan="2"><strong>TOTAL DE PUNTOS:</strong></td>
-                                    <td colspan="2"><strong>0 m</strong></td>
-                                </tr>
+                                <tbody>
+                                    @php
+                                        $contador = 1;
+                                        $filasPorPagina = 15;
+                                        $contadorFilas = 0;
+                                        $contadorFilasPagina = 0;
+                                        $totalMetros = 0;
+                                    @endphp
 
-                            </tbody>
+                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                                        @php
+                                            $titulo = $grupo['titulos_juntas'];
+                                            $juntasDelGrupo = count($grupo['resultados']);
+                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
+                                        @endphp
+
+                                        @if ($titulo !== 'SIN TITULO')
+                                            <!-- Fila del título -->
+                                            <tr class="titulo-row">
+                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ $titulo }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @php $contadorFilasPagina++; @endphp
+                                        @endif
+
+                                        @foreach ($grupo['resultados'] as $junta)
+                                            @php
+                                                $contadorFilas++;
+                                                $contadorFilasPagina++;
+                                                $totalMetros += floatval($junta['observaciones']);
+                                                $esUltimaFila = $loop->last;
+                                            @endphp
+                                            <tr class="juntas">
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['no_junta'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Tip_Ind'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['L_PGL'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['A_PGL'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['AL_PGL'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['X'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Y'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['DA_PROF'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['PA'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['SA'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['TMIN'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['SCAN'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['EVAL'] }}</td>
+                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['FOTOS'] }}</td>
+                                            </tr>
+
+                                                @if ($contadorFilas % $filasPorPagina === 0)
+                                                    <!-- Fila de total antes del salto de página -->
+                                                    <tr style="page-break-after: always;" class="sinBordetd">
+                                                        <td colspan="5" style="border-top: 2px solid black;"></td>
+                                                        <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                        <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                                    </tr>
+
+                                                    @php
+                                                        $totalMetros = 0; // Reinicia el acumulador para la siguiente página
+                                                    @endphp
+
+                                                @endif
+                                            @php $contador++; @endphp
+                                        @endforeach
+
+                                            @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
+                                            <!-- Salto de página porque no cabe el grupo completo -->
+                                                <tr style="page-break-after: always;" class="sinBordetd">
+                                                    <td colspan="5" style="border-top: 2px solid black;"></td>
+                                                    <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                    <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                                </tr>
+                                                @php
+                                                    $contadorFilasPagina = 0;
+                                                    $totalMetros = 0;
+                                                @endphp
+                                            @endif
+
+                                    @endforeach
+                                    
+                                    @if($titulo == 'SIN TITULO' && $totalTitulosYFilas <>20 || $titulo != 'SIN TITULO')
+                                    <!-- Total al final si no se llenó la última página -->
+                                        @if ($contadorFilasPagina > 0)
+                                            <tr style="page-break-after: always;" class="sinBordetd">
+                                                <td colspan="5" style="border-top: 2px solid black;"></td>
+                                                <th colspan="3" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
+                                                <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
+                                            </tr>
+                                        @endif
+                                    @endif
+
+                                </tbody>
                     </table>
             </div>
         </body>

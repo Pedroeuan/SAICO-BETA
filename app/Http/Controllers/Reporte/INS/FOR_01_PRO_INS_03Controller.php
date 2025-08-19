@@ -721,7 +721,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         }
         
         // 2. Procesar los títulos existentes
-         foreach ($titulos as $titulo) {
+        foreach ($titulos as $titulo) {
             
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $filas = $request->input("No.$tituloKey", []);

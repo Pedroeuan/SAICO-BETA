@@ -401,7 +401,7 @@
                         </div>
                     </div>
 
-                     <div class="">
+                    <div class="">
                         <hr class="">
                     </div>
 
@@ -426,7 +426,7 @@
                         </div>
                     </div>
 
-                     <div class="col-sm-4">
+                    <div class="col-sm-4">
                         <label class="col-form-label" for="inputSuccess">TEMP. REFLEJADA:</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
@@ -475,20 +475,24 @@
                             </span>
                         </div>
                     </div>
-                   
-                    
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
-                    <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
-                    
-                    <div style="margin-bottom: 2px;"></div>
+                            <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                            <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                   <div class="table-responsive">
-                        <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    
+                            <div style="margin-bottom: 5px;"></div>
+
+                            <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                            <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
-                                     <th class="align-middle" rowspan="2">No.</th>
+                                    <th class="align-middle" rowspan="2">No.</th>
                                     <th class="align-middle" colspan="2">DATOS DE LA INSPECCIÓN</th>
                                     <th class="align-middle" colspan="6">DATOS DE LA INDICACIÓN</th>
                                     <th class="align-middle" colspan="2">ÁREA INSPECCIONADA</th>
@@ -500,7 +504,7 @@
                                 </tr>
 
                                 <tr>
-                                   
+
                                     <th class="align-middle">Junta / Elemento</th>
                                     <th class="align-middle">Zona de Barrido</th>
                                     <th class="align-middle">No. Indicación</th>
@@ -892,7 +896,7 @@ $(document).ready(function() {
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="bi bi-trash"  aria-hidden="true"></i>
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
                                     </button></td>
                                 </div>
                             </td>
@@ -915,7 +919,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)" style="width: 70px;"></td>
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación" style="width: 70px;"></td>
                                         <td><input type="text" class="form-control" name="la[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos" style="width: 70px;"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                         
                                     </tr>`;
 
@@ -938,7 +942,7 @@ $(document).ready(function() {
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="bi bi-trash"  aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -977,7 +981,7 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación" style="width: 70px;"></td>
                     <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos" style="width: 70px;"></td>
                     <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="bi bi-trash"  aria-hidden="true"></i></button></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     
                     </tr>`;
 
