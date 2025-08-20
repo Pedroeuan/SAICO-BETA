@@ -859,14 +859,15 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta"></td>
-                                        <td><input type="text" class="form-control" name="no indicación[${item.titulo}]" value="${item.inputs[2]}" placeholder="no Indicación"></td>
-                                        <td><input type="text" class="form-control" name="Tipo de indicación[${item.titulo}]" value="${item.inputs[3]}" placeholder="Tipo de indicación"></td>
+                                        <td><input type="text" class="form-control" name="Junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta"></td>
+                                        <td><input type="text" class="form-control" name="Zona_barrido[${item.titulo}]" value="${item.inputs[1]}" placeholder="Zona de Barrido"></td>
+                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[2]}" placeholder="no Indicación"></td>
+                                        <td><input type="text" class="form-control" name="Tipo_Ind[${item.titulo}]" value="${item.inputs[3]}" placeholder="Tipo de indicación"></td>
                                         <td><input type="text" class="form-control" name="LA[${item.titulo}]" value="${item.inputs[4]}" placeholder="LA"></td>
                                         <td><input type="text" class="form-control" name="LC[${item.titulo}]" value="${item.inputs[5]}" placeholder="LC"></td>
-                                        <td><input type="text" class="form-control" name="H T[${item.titulo}]" value="${item.inputs[6]}" placeholder="H T"></td>
-                                        <td><input type="text" class="form-control" name="AMP[${item.titulo}]" value="${item.inputs[7]}" placeholder="%Amp"></td>
-                                        <td><input type="text" class="form-control" name="largo[${item.titulo}]" value="${item.inputs[8]}" placeholder="Largo"></td>
+                                        <td><input type="text" class="form-control" name="HT[${item.titulo}]" value="${item.inputs[6]}" placeholder="H.T"></td>
+                                        <td><input type="text" class="form-control" name="AMP[${item.titulo}]" value="${item.inputs[7]}" placeholder="% Amp"></td>
+                                        <td><input type="text" class="form-control" name="Largo[${item.titulo}]" value="${item.inputs[8]}" placeholder="Largo"></td>
                                         <td><input type="text" class="form-control" name="Ancho[${item.titulo}]" value="${item.inputs[9]}" placeholder="Ancho"></td>
                                         <td><input type="text" class="form-control" name="Evaluacion[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
                                         <td><input type="text" class="form-control" name="Fotos[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
@@ -918,16 +919,16 @@ $(document).ready(function() {
 
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="junta[${lastTitle}][]" placeholder="Junta"></td>
-                    <td><input type="text" class="form-control" name="zona_barrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
-                    <td><input type="text" class="form-control" name="no indicacion[${lastTitle}][]" placeholder="No  IndIcación"></td>
-                    <td><input type="text" class="form-control" name="tipo de indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    </td><td><input type="text" class="form-control" name="Junta[${lastTitle}][]" placeholder="Junta"></td>
+                    <td><input type="text" class="form-control" name="Zona_barrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
+                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No Indicacion"></td>
+                    <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de indicacion"></td>
                     <td><input type="text" class="form-control" name="lA[${lastTitle}][]" placeholder="LA"></td>
                     <td><input type="text" class="form-control" name="lC[${lastTitle}][]" placeholder="LC"></td>
-                    <td><input type="text" class="form-control" name="H T.[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="HT.[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="AMP[${lastTitle}][]" placeholder="%Amp"></td>
-                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
-                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
+                    <td><input type="text" class="form-control" name="Largo[${lastTitle}][]" placeholder="Largo"></td>
+                    <td><input type="text" class="form-control" name="Ancho[${lastTitle}][]" placeholder="Ancho"></td>
                     <td><input type="text" class="form-control" name="Evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="Fotos[${lastTitle}][]" placeholder="Fotos"></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
@@ -1033,10 +1034,6 @@ $(document).ready(function() {
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-
-
-
-
 
                 function actualizarInputsA2() {
                 var selectedOption = $('#accesoriosSelectA2').find('option:selected');

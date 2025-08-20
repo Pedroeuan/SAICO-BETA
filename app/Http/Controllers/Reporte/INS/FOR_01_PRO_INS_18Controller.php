@@ -277,11 +277,11 @@ class FOR_01_PRO_INS_18Controller extends Controller
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'Junta' => 'nullable|array',
-            'no indicación' => 'nullable|array',
-            'Tipo de indicación' => 'nullable|array',
+            'No_Ind' => 'nullable|array',
+            'Tipo_Ind' => 'nullable|array',
             'LA' => 'nullable|array',
             'LC' => 'nullable|array',
-            'H T' => 'nullable|array',
+            'HT' => 'nullable|array',
             'AMP' => 'nullable|array',
             'Largo' => 'nullable|array',
             'Ancho' => 'nullable|array',
@@ -380,7 +380,7 @@ class FOR_01_PRO_INS_18Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("Junta.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -388,14 +388,15 @@ class FOR_01_PRO_INS_18Controller extends Controller
         
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
-                    'junta' => $request->input("elemento.$sinTituloKey.$i"),
-                    'no Indicación' => $request->input("no Indicación.$sinTituloKey.$i"),
-                    'Tipo de indicación' => $request->input("Tipo de indicación.$sinTituloKey.$i"),
+                    'Junta' => $request->input("Junta.$sinTituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$sinTituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$sinTituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$sinTituloKey.$i"),
                     'LA' => $request->input("LA.$sinTituloKey.$i"),
                     'LC' => $request->input("LC.$sinTituloKey.$i"),
-                    'H T' => $request->input("H T.$sinTituloKey.$i"),
+                    'HT' => $request->input("HT.$sinTituloKey.$i"),
                     'AMP' => $request->input("Amp.$sinTituloKey.$i"),
-                    'largo' => $request->input("Largo.$sinTituloKey.$i"),
+                    'Largo' => $request->input("Largo.$sinTituloKey.$i"),
                     'Ancho' => $request->input("Ancho.$sinTituloKey.$i"),
                     'Evaluacion' => $request->input("Evaluacion.$sinTituloKey.$i"),
                     'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
@@ -413,19 +414,20 @@ class FOR_01_PRO_INS_18Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("junta.$tituloKey", []);
+            $filas = $request->input("Junta.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
-                    'junta' => $request->input("junta.$tituloKey.$i"),
-                    'no indicación' => $request->input("no indicación.$tituloKey.$i"),
-                    'tipo de indicación' => $request->input("tipo de indicación.$tituloKey.$i"),
+                    'Junta' => $request->input("Junta.$tituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$tituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$tituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$tituloKey.$i"),
                     'LA' => $request->input("LA.$tituloKey.$i"),
                     'LC' => $request->input("LC.$tituloKey.$i"),
-                    'H T' => $request->input("H T.$tituloKey.$i"),
+                    'HT' => $request->input("HT.$tituloKey.$i"),
                     'AMP' => $request->input("Amp.$tituloKey.$i"),
                     'Largo' => $request->input("Largo.$tituloKey.$i"),
                     'Ancho' => $request->input("Ancho.$tituloKey.$i"),
@@ -603,13 +605,13 @@ class FOR_01_PRO_INS_18Controller extends Controller
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
+            'no aceptacion' => 'required|array',
+            'no serie' => 'required|array',
+            'no colada' => 'required|array',
             'tnominal' => 'required|array',
             'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
+            'no indicacion' => 'required|array',
+            'tipo indicacion' => 'required|array',
             'nr' => 'required|array',
             'ni' => 'required|array',
             'ht' => 'required|array',
