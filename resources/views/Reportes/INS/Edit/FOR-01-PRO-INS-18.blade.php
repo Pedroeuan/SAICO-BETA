@@ -361,7 +361,7 @@ edit
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BlOCK]" placeholder="" value="{{ old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{ old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 

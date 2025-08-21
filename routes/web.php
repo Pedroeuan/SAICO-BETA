@@ -236,7 +236,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_18*/
         Route::post('/Reportes_FOR_01_PRO_INS_18/update/{id}', [FOR_01_PRO_INS_18Controller::class, 'FOR_01_PRO_INS_18_update'])->name('Reportes_FOR_01_PRO_INS_18.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_18*/
-        Route::get('/Reporte/FOR-01-INS-17/PDF/{id}', [FOR_01_PRO_INS_18Controller::class, 'FOR_01_INS_17'])->name('Reporte_FOR_01_INS_17.PDF');
+        Route::get('/Reporte/FOR-01-INS-18/PDF/{id}', [FOR_01_PRO_INS_18Controller::class, 'FOR_01_INS_18'])->name('Reporte_FOR_01_INS_18.PDF');
         
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_19*/
         Route::post('/Reportes_FOR_01_PRO_INS_19/store', [FOR_01_PRO_INS_19Controller::class, 'FOR_01_PRO_INS_19_store'])->name('Reportes_FOR_01_PRO_INS_19.store');
