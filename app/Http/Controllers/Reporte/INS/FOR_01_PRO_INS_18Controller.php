@@ -579,6 +579,7 @@ class FOR_01_PRO_INS_18Controller extends Controller
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
+
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
@@ -591,9 +592,13 @@ class FOR_01_PRO_INS_18Controller extends Controller
             'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
 
+            'Datos_Equipo.MARCA_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_CABLE' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_CABLE' => 'nullable|string|max:255',
+
             'Datos_Equipo.FREC' => 'nullable|string|max:255',
             'Datos_Equipo.GAN_HZ' => 'nullable|string|max:255',
-            'Datos_Equipo.ESP_DE_PINT' => 'nullable|string|max:255',
+            'Datos_Equipo.ESP_PINT' => 'nullable|string|max:255',
             'Datos_Equipo.GAN_VERT' => 'nullable|string|max:255',
             'Datos_Equipo.Observacion' => 'nullable|string|max:255',
 
@@ -603,18 +608,18 @@ class FOR_01_PRO_INS_18Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'Junta' => 'required|array',
-            'No_Ind' => 'required|array',
-            'Tipo_Ind' => 'required|array',
-            'LA' => 'required|array',
-            'LC' => 'required|array',
-            'HT' => 'required|array',
-            'AMP' => 'required|array',
-            'Largo' => 'required|array',
-            'Ancho' => 'required|array',
-            'Evaluacion' => 'required|array',
-            'Fotos' => 'required|array',
-            'Observaciones' => 'required|array',
+            'Junta' => 'nullable|array',
+            'No_Ind' => 'nullable|array',
+            'Tipo_Ind' => 'nullable|array',
+            'LA' => 'nullable|array',
+            'LC' => 'nullable|array',
+            'HT' => 'nullable|array',
+            'AMP' => 'nullable|array',
+            'Largo' => 'nullable|array',
+            'Ancho' => 'nullable|array',
+            'Evaluacion' => 'nullable|array',
+            'Fotos' => 'nullable|array',
+            'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'required|integer|in:2,3,4',
