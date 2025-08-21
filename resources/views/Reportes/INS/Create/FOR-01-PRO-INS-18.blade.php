@@ -213,7 +213,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Codigo Aplicable</label>
-                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Codigo_Aplicable')}}">
                             @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -871,7 +871,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="Ancho[${item.titulo}]" value="${item.inputs[9]}" placeholder="Ancho"></td>
                                         <td><input type="text" class="form-control" name="Evaluacion[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
                                         <td><input type="text" class="form-control" name="Fotos[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
-                                        <td><input type="text" class="form-control" name="Observacion[${item.titulo}]" value="${item.inputs[14]}" placeholder="Observacion"></td>
+                                        <td><input type="text" class="form-control" name="Observaciones[${item.titulo}]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
 

@@ -76,7 +76,7 @@ edit
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-01-PRO-INS-18" action="{{route('Reportes_FOR_01_PRO_INS_18.store')}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-01-PRO-INS-18" action="{{ route('Reportes_FOR_01_PRO_INS_18.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -216,7 +216,7 @@ edit
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Codigo Aplicable</label>
-                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{ old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{ old('Detalles_Generales.Codigo_Aplicable', $Detalles_Generales['Codigo_Aplicable'] ?? '') }}">
                             @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -254,14 +254,14 @@ edit
                         <div class="form-group text-center">
                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -291,16 +291,16 @@ edit
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelect" id="accesoriosSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
+                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                            data-marca="{{ $accesorios->Marca }}"
+                                            data-modelo="{{ $accesorios->Modelo }}"
+                                            data-ns="{{ $accesorios->Serie }}">
+                                        {{ $accesorios->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -308,21 +308,21 @@ edit
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_SONDA]" placeholder="" value="{{ old('Datos_Equipo.MARCA_SONDA', $Datos_Equipo['MARCA_SONDA'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_SONDA]" placeholder="" value="{{ old('Datos_Equipo.MARCA_SONDA', $Datos_Equipo['MARCA_SONDA'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_SONDA]" placeholder="" value="{{ old('Datos_Equipo.MODELO_SONDA', $Datos_Equipo['MODELO_SONDA'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_SONDA]" placeholder="" value="{{ old('Datos_Equipo.MODELO_SONDA', $Datos_Equipo['MODELO_SONDA'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{ old('Datos_Equipo.NS_SONDA', $Datos_Equipo['NS_SONDA'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{ old('Datos_Equipo.NS_SONDA', $Datos_Equipo['NS_SONDA'] ?? '') }}">
                         </div>
                     </div>
 
@@ -330,16 +330,16 @@ edit
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="blockyprobetaSelect" id="blockyprobetaSelect">
                             <option value="" selected disabled>Seleccione block de calibración</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
+                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyProbeta)
+                                    <option value="{{ $blockyProbeta->idGeneral_EyC }}"
+                                            data-marca="{{ $blockyProbeta->Marca }}"
+                                            data-modelo="{{ $blockyProbeta->Modelo }}"
+                                            data-ns="{{ $blockyProbeta->Serie }}">
+                                        {{ $blockyProbeta->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -347,21 +347,21 @@ edit
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{ old('Datos_Equipo.MARCA_BLOCK', $Datos_Equipo['MARCA_BLOCK'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{ old('Datos_Equipo.MARCA_BLOCK', $Datos_Equipo['MARCA_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{ old('Datos_Equipo.MODELO_BLOCK', $Datos_Equipo['MODELO_BLOCK'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{ old('Datos_Equipo.MODELO_BLOCK', $Datos_Equipo['MODELO_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_BlOCK]" placeholder="" value="{{ old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BlOCK]" placeholder="" value="{{ old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
@@ -369,16 +369,16 @@ edit
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesoriosSelectA2" id="accesoriosSelectA2">
                             <option value="" selected disabled>Seleccione cable</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
+                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                            data-marca="{{ $accesorios->Marca }}"
+                                            data-modelo="{{ $accesorios->Modelo }}"
+                                            data-ns="{{ $accesorios->Serie }}">
+                                        {{ $accesorios->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -386,21 +386,21 @@ edit
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_CABLE]" placeholder="" value="{{ old('Datos_Equipo.MARCA_CABLE', $Datos_Equipo['MARCA_CABLE'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_CABLE]" placeholder="" value="{{ old('Datos_Equipo.MARCA_CABLE', $Datos_Equipo['MARCA_CABLE'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_CABLE]" placeholder="" value="{{ old('Datos_Equipo.MODELO_CABLE', $Datos_Equipo['MODELO_CABLE'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_CABLE]" placeholder="" value="{{ old('Datos_Equipo.MODELO_CABLE', $Datos_Equipo['MODELO_CABLE'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_CABLE]" placeholder="" value="{{ old('Datos_Equipo.NS_CABLE', $Datos_Equipo['NS_CABLE'] ?? '') }}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_CABLE]" placeholder="" value="{{ old('Datos_Equipo.NS_CABLE', $Datos_Equipo['NS_CABLE'] ?? '') }}">
                         </div>
                     </div>
 
@@ -533,7 +533,7 @@ edit
                                                         <td><input type="text" class="form-control" name='Ancho[{{ $tituloKey }}][]' value="{{ $resultado['Ancho'] }}"></td>
                                                         <td><input type="text" class="form-control" name='Evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['Evaluacion'] }}"></td>
                                                         <td><input type="text" class="form-control" name='Fotos[{{ $tituloKey }}][]' value="{{ $resultado['Fotos'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Observacion[{{ $tituloKey }}][]' value="{{ $resultado['Observacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp
@@ -785,11 +785,11 @@ edit
                             </table>
                         </div>
 
-                        <p>
+                       <p>
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                        
-                        <p>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+
+                                        <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
@@ -999,6 +999,85 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
+
+});
+
+
+ $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect').on('change', function() {
+                    actualizarInputsA();
+                });
+
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+
+                function actualizarInputsA2() {
+                var selectedOption = $('#accesoriosSelectA2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA2').val(marca);
+                $('#modeloInputA2').val(modelo);
+                $('#nsInputA2').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelectA2').on('change', function() {
+                    actualizarInputsA2();
+                });
 
 });
 
