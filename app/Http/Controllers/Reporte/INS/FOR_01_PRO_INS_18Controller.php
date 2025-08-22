@@ -268,7 +268,7 @@ class FOR_01_PRO_INS_18Controller extends Controller
             'Datos_Equipo.GAN_HZ' => 'nullable|string|max:255',
             'Datos_Equipo.ESP_PINT' => 'nullable|string|max:255',
             'Datos_Equipo.GAN_VERT' => 'nullable|string|max:255',
-            'Datos_Equipo.Observacion' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -1025,7 +1025,7 @@ class FOR_01_PRO_INS_18Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(126, -297);
+            $combinedPdf->SetXY(137, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
