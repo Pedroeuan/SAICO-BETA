@@ -73,7 +73,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_01_PRO_INS_15.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-01-PRO-INS-15" action="{{route('Reportes_FOR_01_PRO_INS_15.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -268,22 +268,20 @@
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>ID</th>
-                                                <th>No. de Junta</th>
-                                                <th>Elemento de Referencia</th>
-                                                <th>0</th>
-                                                <th>ID</th>
-                                                <th>Descripción</th>
+                                                <th>Elemento</th>
+                                                <th>No. Indicación</th>
                                                 <th>Tipo de Indicación</th>
-                                                <th>No. Serie</th>
-                                                <th>Material</th>
-                                                <th>0</th>
-                                                <th>Largo (m)</th>
-                                                <th>Ancho (m)</th>
-                                                <th>Cumple su Función</th>
-                                                <th>Identificación Legible</th>
-                                                <th>Daño por Corrosión</th>
-                                                <th>Resultados</th>
+                                                <th>Referencia</th>
+                                                <th>DNR (m)</th>
+                                                <th>H.T.</th>
+                                                <th>Long. Axial (in)</th>
+                                                <th>Long. Circ. (in)</th>
+                                                <th>d(in)</th>
+                                                <th><sup>t</sup>a(in)</th>
+                                                <th>%Perdida</th>
+                                                <th>Espesor remanente (in)</th>
                                                 <th>Observaciones</th>
                                                 <th>Eliminar</th>
                                             </tr>
@@ -296,20 +294,14 @@
                                                     <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 50px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 80px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 80px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 80px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 120px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="20" style="width: 150px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                         </thead>
@@ -320,6 +312,23 @@
                                     </table>
                                     </div>
 
+                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                        <div>
+                                            <label for="numRows">Número de Filas:</label>
+                                            <select id="numRows" class="form-select">
+                                                @for ($i = 1; $i <= 500; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                                    </div>
                                     <p>
 
                                         <table class="table table-bordered table-striped dt-responsive tablas">
@@ -328,56 +337,20 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="8" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
+                                                                <th colspan="10" class="p-2 alert alert-warning">NOMENCLATURAS</th>
                                                             </tr>
     
                                                             <tr>
-                                                                <td><strong>G:</strong></td>
-                                                                <td>GRIETAS</td>
-                                                                <td><strong>AG:</strong></td>
-                                                                <td>APERTURA DE GARGANTA</td>
-                                                                <td><strong>DCA</strong></td>
-                                                                <td>DAÑO CALIENTE</td>
-                                                                <td><strong>SIR</strong></td>
+                                                                <td><strong>DNR:</strong></td>
+                                                                <td>DISTANCIA DE NIVEL DE REFERENCIA</td>
+                                                                <td><strong>d:</strong></td>
+                                                                <td>PROFUNDIDAD DE LA INDICACIÓN</td>
+                                                                <td><strong>ta</strong></td>
+                                                                <td>ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                                                                <td><strong>C.E. GEN.:</strong></td>
+                                                                <td>CORROSIÓN EXTERNA GENERALIZADA</td>
+                                                                <td><strong>SIR:</strong></td>
                                                                 <td>SIN INDICACIONES RELEVANTES</td>
-                                                            </tr>
-    
-                                                            <tr>
-                                                                <td><strong>R:</strong></td>
-                                                                <td>ROTURA</td>
-                                                                <td><strong>H:</strong></td>
-                                                                <td>HENDIDURAS</td>
-                                                                <td><strong>MH</strong></td>
-                                                                <td>MANCHAS DE HIDROCARBUROS</td>
-                                                                <td colspan="2" rowspan="4"><strong></strong></td>                                                   
-
-                                                            </tr>
-    
-                                                            <tr>
-                                                                <td><strong>D, R, DE:</strong></td>
-                                                                <td>DOBLADO, RETORCIDO O DEFORMADO</td>
-                                                                <td><strong>D:</strong></td>
-                                                                <td>DESGASTE</td>
-                                                                <td><strong>DM:</strong></td>
-                                                                <td>DAÑO MECANICO</td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td><strong>DC:</strong></td>
-                                                                <td>DAÑO POR CALOR</td>
-                                                                <td><strong>EA:</strong></td>
-                                                                <td>EVIDENCIA DE ALTERACIONES</td>
-                                                                <td><strong>FI:</strong></td>
-                                                                <td>FALTA DE INDENTIFICACIÓN</td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td><strong>DCS:</strong></td>
-                                                                <td>DAÑO POR CORROSIÓN SEVERA</td>
-                                                                <td><strong>MF:</strong></td>
-                                                                <td>MAL FUNCIONAMIENTO</td>
-                                                                <td><strong>DSA:</strong></td>
-                                                                <td>DESALINEAMIENTO MECANICO</td>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -388,19 +361,86 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
+                                                <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B"></textarea>
                                             </div>
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-12">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="1">1 Firma</option>
+                                                    <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
                                                     <option value="4">4 Firmas</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <!-- 1 UNA FIRMA-->
+                                        <div id="firmas1" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                    </tr>
+                                                </thead>                            
+                                            </table>
+                                        </div>
+
+                                        <!-- 2 DOS FIRMAS-->
+                                        <div id="firmas2" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                                                        
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
                                         </div>
 
                                         <!-- 3 TRES FIRMAS-->
@@ -429,21 +469,21 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
 
@@ -451,9 +491,9 @@
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
                                                     
@@ -530,49 +570,53 @@
                                         </div>
 
                                         <p>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+                                        <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
 
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
 
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="container">
                                             <div class="float-right">
-                                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                                <button type="submit" class="btn btn-info bg-primary">Guardar</button>
                                             </div>
 
                                             <div class="float-left">
@@ -608,225 +652,183 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 <script>
 
-    /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
+/*Juntas-Resultados */
     $(document).ready(function() {
-        var rowCount = 0;
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[]" placeholder="No. de Junta" style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="Referencia" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="0" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="ID" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Descripción" style="width: 110px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="Indicación" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="No. Serie" style="width: 90px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Material" style="width: 90px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="0" style="width: 60px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Largo (m)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Ancho (m)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Función" style="width: 90px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Legible" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Corrosión" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Resultados" style="width: 110px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Observación" style="width: 130px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                    
-                    </tr>`;
-                $('#dynamicTable tbody').append(newRow);
-            }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
+        function restoreData() {
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            if (savedData) {
+                // Restaurar contadores
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                
+                savedData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="15">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="No_ind[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tipo_Ind[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="Referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Referencia"></td>
+                            <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[6]}" placeholder="DNR (m)"></td>
+                            <td><input type="text" class="form-control" name="HT[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="LAxial[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Long. Axial (in)"></td>
+                            <td><input type="text" class="form-control" name="LCirc[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Long Circ. (in)"></td>
+                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[10]}" placeholder="d(in)"></td>
+                            <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
+                            <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
+                            <td><input type="text" class="form-control" name="Espe[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor Remanente (in)"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
                     }
                 });
-            });
-        });
-
-        // Mostrar vista previa de las imágenes seleccionadas
-        function readURL(input, previewId) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $(previewId).html('<img src="' + e.target.result + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
-                }
-                reader.readAsDataURL(input.files[0]);
+                updateRowNumbers();
+                updateTitulos();
             }
         }
 
-        $('#image1').change(function() {
-            readURL(this, '#image1-preview');
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="15">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
-        $('#image2').change(function() {
-            readURL(this, '#image2-preview');
-        });
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
-        $('#image3').change(function() {
-            readURL(this, '#image3-preview');
-        });
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-        $('#image4').change(function() {
-            readURL(this, '#image4-preview');
-        });
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                    <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Aceptación"></td>
+                    <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="No. Colada"></td>
+                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="tnominal"></td>
+                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                </tr>`;
 
-
-    });
-
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
-
-        /*Selección de Firmas */
-
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '3') {
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
+                $('#dynamicTable tbody').append(newRow);
             }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '3') {
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
+            saveData(document.querySelectorAll("form")[1].id);
         }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }
-
-        });
-
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
+    );
+        
+        $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
-                
-            });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
+                return;
             }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
+            // Restaurar datos al cargar la página
+            restoreData();
+    });
+
+    /*FOR-01-PRO-INS-15*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-15');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-15_' + el.name);
+                if (value !== null) el.value = value;
             }
         });
 
-    </script>
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-15_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
+</script>
 @endsection

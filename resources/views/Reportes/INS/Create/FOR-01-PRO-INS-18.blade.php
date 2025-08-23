@@ -1056,7 +1056,43 @@ $(document).ready(function() {
                 $('#accesoriosSelectA2').on('change', function() {
                     actualizarInputsA2();
                 });
+            });
 
-});
+    /*FOR-01-PRO-INS-18*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-18');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-18_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-18_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-18_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-18_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
+
 </script>
 @endsection

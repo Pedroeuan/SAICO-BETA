@@ -139,7 +139,6 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
 
         /*Ruta de Guardado Reportes/INS*/
-        //ADD FER
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_03*/
         Route::post('/Reportes_FOR_01_PRO_INS_03/store', [FOR_01_PRO_INS_03Controller::class, 'FOR_01_PRO_INS_03_store'])->name('Reportes_FOR_01_PRO_INS_03.store');
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_03*/
@@ -215,7 +214,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_15*/
         Route::post('/Reportes_FOR_01_PRO_INS_15/update/{id}', [FOR_01_PRO_INS_15Controller::class, 'FOR_01_PRO_INS_15_update'])->name('Reportes_FOR_01_PRO_INS_15.update');
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_15*/
-        Route::get('/Reporte/FOR-INS-01/15/PDF/{id}', [FOR_01_PRO_INS_15Controller::class, 'FOR_01_INS_15'])->name('Reporte_FOR_01_INS_15.PDF');
+        Route::get('/Reporte/FOR-01-INS-15/PDF/{id}', [FOR_01_PRO_INS_15Controller::class, 'FOR_01_INS_15'])->name('Reporte_FOR_01_INS_15.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_16*/
         Route::post('/Reportes_FOR_01_PRO_INS_16/store', [FOR_01_PRO_INS_16Controller::class, 'FOR_01_PRO_INS_16_store'])->name('Reportes_FOR_01_PRO_INS_16.store');

@@ -1108,7 +1108,7 @@
             });
         });
 
-            /*FOR-02-PRO-INS-10*/
+    /*FOR-02-PRO-INS-10*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-02-PRO-INS-10');
         if (!form) return;
