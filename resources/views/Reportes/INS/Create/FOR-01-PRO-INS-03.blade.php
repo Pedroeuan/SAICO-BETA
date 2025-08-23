@@ -662,7 +662,7 @@
                                                     <tr>
 
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                                        <td></td>
+                                                        <td>hola</td>
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
 
                                                     </tr>

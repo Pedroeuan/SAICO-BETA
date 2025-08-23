@@ -81,16 +81,6 @@
 
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                                <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
-                                @error('Fecha')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Nombre</label>
                                 <input type="text" class="form-control  inputForm @error('Nombre') is-invalid @enderror" name="Detalles_Generales[Nombre]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Nombre')}}">
                                 @error('No_Reporte')
@@ -124,37 +114,53 @@
                             <p>Se deberá establecer N/A en los campos que queden sin informacion.</p>
                         </div>
 
-                        <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">Seleccióne con una "X"</div>
+                                                <div class="col-sm-15 my-2">
+                                            <div class="form-group">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="2"> J-1</option>
+                                                    <option value="3"> J-2</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">J-1:</label>
-                                <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[J-1]" placeholder="" value="{{old('Datos_Equipo.J-1')}}">
-                            </div>
-                        </div>
+                                        <div id="firmas2" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+                                                        <label>Sin corrección &nbsp;&nbsp; Con corrección</label>
+                                                        <th><input type="text" class="form-control  inputForm" name="Ojo_izquierdo" placeholder="Ejemplo: Ojo izquierdo" value="Ojo izquierdo" readonly></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Ojo_derecho" placeholder="Ejemplo: Ojo derecho" value="Ojo derecho" readonly></th>
 
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">J-2:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[J-2]" placeholder="" value="{{old('Datos_Equipo.J-2')}}">
-                            </div>
-                        </div>
+                                                    </tr>
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Ojo izquierdo:</label>
-                                <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[Ojo_izquierdo]" placeholder="Cumple / No cumple" value="{{old('Datos_Equipo.Ojo_izquierdo')}}">
-                            </div>
-                        </div>
+                                                    <tr>
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Ojo derecho:</label>
-                                <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[Ojo_derecho]" placeholder="Cumple / No cumple" value="{{old('Datos_Equipo.Ojo_derecho')}}">
-                            </div>
-                        </div>
-                        
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
 
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Ojo_izquierdo" placeholder="" value="{{old('Ojo_izquierdo')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Ojo_izquierdo" placeholder="" value="{{old('Ojo_izquierdo')}}"></td>
+                                                    </tr>
+                                                                                        
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Ojo_derecho" placeholder="" value="{{old('Ojo_derecho')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Ojo_derecho" placeholder="" value="{{old('Ojo_derecho')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+
+                                                </thead>                            
+                                            </table>
+                                        </div>
                         <div class="d-flex justify-content-center align-items-centerp-4 mb-3 bg-secondary text-white rounded">CONTRASTE DE COLOR / VISION DE COLORES </div>
                             <div class="alert alert-info alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -206,460 +212,56 @@
                         </div>
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Datos Del Examinador</div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Nombre:</label>
                                 <input type="text" class="form-control  inputForm" name="Datos_Equipo[GANANCIA]" placeholder="" value="{{old('Datos_Equipo.GANANCIA')}}">
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">RANGO:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RANGO]" placeholder="" value="{{old('Datos_Equipo.RANGO')}}">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">RECHAZO:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[RECHAZO]" placeholder="" value="{{old('Datos_Equipo.RECHAZO')}}">
-                            </div>
-                        </div>
-
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Dirección:</label>
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Direccion]" placeholder="" value="{{old('Datos_Equipo.Direccion')}}">
                             </div>
                         </div>
 
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Telefono:</label>
+                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Telefono]" placeholder="" value="{{old('Datos_Equipo.Telefono')}}">
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Registro / Licencia:</label>
                                 <input type="text" class="form-control  inputForm" name="Datos_Equipo[COND_SUPER]" placeholder="" value="{{old('Datos_Equipo.COND_SUPER')}}">
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">ESTADO DE LA PINTURA:</label>
-                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[EST_PINT]" placeholder="" value="{{old('Datos_Equipo.EST_PINT')}}">
-                            </div>
-                        </div>
+
                         
                         <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                         <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                                    
-                        <div style="margin-bottom: 5px;"></div>
+                        
 
-                        <div class="table-responsive">
-                            <div class="alert alert-warning alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="inputSuccess">Firma:</label>
+                                </div>
                             </div>
-                        <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                            <thead>
-                                <tr>
-                                    <th class="align-middle">#</th>
-                                    <th class="align-middle">ID</th>
-                                    <th class="align-middle">Elemento</th>
-                                    <th class="align-middle">Nivel</th>
-                                    <th class="align-middle">Ønom</th>
-                                    <th class="align-middle">Øext</th>
-                                    <th class="align-middle">No. Indicación</th>
-                                    <th class="align-middle">Tipo de Indicación</th>
-                                    <th class="align-middle">G (dB)</th>
-                                    <th class="align-middle">NR (%)</th>
-                                    <th class="align-middle">NI (%)</th>
-                                    <th class="align-middle">DNR</th>
-                                    <th class="align-middle">Horario Técnico</th>
-                                    <th class="align-middle">S.C. ó Lado de Referencia</th>
-                                    <th class="align-middle">LA</th>
-                                    <th class="align-middle">LC</th>
-                                    <th class="align-middle">tmin</th>
-                                    <th class="align-middle">d</th>
-                                    <th class="align-middle">ta</th>
-                                    <th class="align-middle">Perdida de Material (%)</th>
-                                    <th class="align-middle">Fotos No.</th>
-                                    <th class="align-middle">Observaciones</th>
-                                    <th class="align-middle">Eliminar</th>
-                                </tr>
-                                <tr id="inputRow">
-                                    <th></th>
-                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 75px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 50px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 50px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 50px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 50px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="19" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="20" style="width: 90px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="21" style="width: 130px;"></th>
-                                    <th></th> <!-- Para botón de eliminar -->
-                                </tr>
-                            </thead>
 
-                                <tbody>
-                                <!-- Filas dinámicas aparecerán aquí -->
-                                </tbody>
-                        </table>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Fecha:</label>
+                                <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
+                                @error('Fecha')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
                         </div>
-
-
-                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                        <div class="d-flex justify-content-between align-items-center w-100  my-3">
-                            <div>
-                                <label for="numRows">Número de Filas:</label>
-                                <select id="numRows" class="form-select">
-                                    @for ($i = 1; $i <= 500; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
-
-                            <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
-
-                            <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
-                        </div>
-
-
-
-                        <p>
-
-                            <table class="table table-bordered table-striped dt-responsive tablas">
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="4" class="p-2 alert alert-warning">INDICACIONES Y HALLAZGOS</th>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>NPIR:</strong></td>
-                                                    <td>NO PRESENTA INDICACIÓN RELEVANTE</td>
-                                                    <td><strong>CI:</strong></td>
-                                                    <td>CORROSIÓN INTERNA</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>I:</strong></td>
-                                                    <td>INCLUSIÓN NO METÁLICA</td>
-                                                    <td><strong>L:</strong></td>
-                                                    <td>LAMINACIÓN</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>ZI:</strong></td>
-                                                    <td>ZONA DE INCLUSIONES NO METALICAS</td>
-                                                    <td colspan="2" rowspan="2"><strong></strong></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>LE:</strong></td>
-                                                    <td>LAMINACIÓN ESCALONADA LINEAL</td>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-
-                                    <td>
-                                    </td>
-
-                                    <td>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="6" class="p-2 alert alert-warning">SIMBOLOGÍA DEL REPORTE</th>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>A:</strong></td>
-                                                    <td>ÁNGULO (°)</td>
-                                                    <td><strong>LA:</strong></td>
-                                                    <td>LONGITUD AXIAL (IN)</td>
-                                                    <td colspan="1" rowspan="2"><strong>ta</strong></td>
-                                                    <td colspan="1" rowspan="2">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>G:</strong></td>
-                                                    <td>GANANCIA (dB)</td>
-                                                    <td><strong>LC:</strong></td>
-                                                    <td>LONGITUD CIRCUNFERENCIAL (IN)</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>NR:</strong></td>
-                                                    <td>NIVEL DE REFERENCIA (%)</td>
-                                                    <td><strong>DNR:</strong></td>
-                                                    <td>DISTANCIA DE NIVEL DE REFERENCIA (IN)</td>
-                                                    <td><strong>H.T:</strong></td>
-                                                    <td>HORARIO TÉCNICO</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>NI:</strong></td>
-                                                    <td>NIVEL DE INDICACIÓN</td>
-                                                    <td><strong>Tmin:</strong></td>
-                                                    <td>ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                                    <td><strong>d:</strong></td>
-                                                    <td>PROFUNDIDAD DE LA INDICACIÓN (IN)</td>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                    <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
-                                </div>
-                            </div>
-
-                            <!-- Select para elegir el número de firmas -->
-                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                            <div class="col-sm-15">
-                                <div class="form-group">
-                                    <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                        <option value="2">2 Firmas</option>
-                                        <option value="3">3 Firmas</option>
-                                        <option value="4">4 Firmas</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- 2 DOS FIRMAS-->
-                            <div id="firmas2" class="col-12">
-                                <table class="table table-bordered table-striped dt-responsive tablas">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-                                        </tr>
-
-                                        <tr>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
-                                        </tr>
-                                                                            
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
-                                        </tr>
-                                    </thead>                            
-                                </table>
-                            </div>
-
-                            <!-- 3 TRES FIRMAS-->
-                            <div id="firmas3" class="col-12">
-                                <table class="table table-bordered table-striped dt-responsive tablas">
-                                    <thead>
-                                        <tr>
-                                            
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-
-                                        </tr>
-                                        
-                                        <tr>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                        </tr>
-
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
-
-                                        </tr>
-                                                                            
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
-
-                                        </tr>
-
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
-
-                                        </tr>
-                                    </thead>                            
-                                </table>
-                            </div>
-
-                            <!-- 4 CUATRO FIRMAS-->
-                            <div id="firmas4" class="col-12" style="display: none;">
-                                <table class="table table-bordered table-striped dt-responsive tablas">
-                                    <thead>
-                                        <tr>
-
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-                                            <td style="width: 30px;"></td>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-
-                                        </tr>
-
-                                        <tr>
-
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                            <td></td>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-
-                                        </tr>
-
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
-                                        </tr>
-                                                                            
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO')}}"></td>
-
-                                        </tr>
-
-                                        <tr>
-
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO')}}"></td>
-
-                                        </tr>
-                                        
-                                    </thead>                            
-                                </table>
-                            </div>
-
-                            <p>
-
-                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                            
-                            <p>
-
-                            <!--IMAGENES CON COMENTARIOS-->
-                                <div class="form-group">
-                                <label for="imageCount">Número de imágenes a subir:</label>
-                                <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                    <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                    @for ($i = 1; $i <= 50; $i++)
-                                        <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <div id="imageFieldsContainer" class="row">
-                                <!-- Aquí se agregarán dinámicamente los campos -->
-                            </div>
-
-                            <!-- Modal para recortar la imagen -->
-                            <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Recortar Imagen</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="img-container">
-                                                <img id="cropperImage" src="" style="max-width: 100%;">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                            <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                            <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                            <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                            <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="container">
                                 <div class="float-right">
