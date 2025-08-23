@@ -216,13 +216,13 @@ class FOR_01_PRO_INS_15Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_15_store(Request $request)
+    public function FOR_01_PRO_INS_15_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_15_store1(Request $request)
+    public function FOR_01_PRO_INS_15_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -248,8 +248,8 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            //'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            //'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -575,8 +575,8 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            //'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo.observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -757,12 +757,18 @@ class FOR_01_PRO_INS_15Controller extends Controller
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes']);
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas1 = json_encode($validatedData['Firmas_Reportes1']);
+            $Firmas->update([
+                'Firmas' => $Firmas1
+            ]);
         }
         else if ($numFirmas == 2) {
             $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
+            $Firmas->update([
+                'Firmas' => $Firmas2
+            ]);
         }
         else if ($numFirmas == 3) {
             $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
