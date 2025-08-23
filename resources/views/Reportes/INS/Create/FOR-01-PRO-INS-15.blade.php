@@ -279,7 +279,7 @@
                                                 <th>Long. Axial (in)</th>
                                                 <th>Long. Circ. (in)</th>
                                                 <th>d(in)</th>
-                                                <th><sup>t</sup>a(in)</th>
+                                                <th><span style="font-size: 20px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
                                                 <th>%Perdida</th>
                                                 <th>Espesor remanente (in)</th>
                                                 <th>Observaciones</th>
@@ -700,7 +700,7 @@
                             <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
                             <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
                             <td><input type="text" class="form-control" name="Espe[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor Remanente (in)"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -759,7 +759,7 @@
                     <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
                     <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Prof"></td>
-                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 

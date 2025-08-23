@@ -248,8 +248,8 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            //'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            //'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -269,13 +269,13 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'ta' => 'nullable|array',
             'Perdida' => 'nullable|array',
             'Espe' => 'nullable|array',
-            'observaciones' => 'nullable|array',
+            'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            //'Firmas_Reportes' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
@@ -444,8 +444,8 @@ class FOR_01_PRO_INS_15Controller extends Controller
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes']);
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes1']);
         }
         else if ($numFirmas == 2) {
             $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
@@ -516,7 +516,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Codigo_Aplicable'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -554,10 +554,10 @@ class FOR_01_PRO_INS_15Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-             /*DETALLES GENERALES */
+            /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.No_Reporte' => 'nullable|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
             'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
@@ -576,7 +576,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -602,7 +602,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            //'Firmas_Reportes' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',

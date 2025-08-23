@@ -444,8 +444,8 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes']);
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes1']);
         }
         else if ($numFirmas == 2) {
             $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];

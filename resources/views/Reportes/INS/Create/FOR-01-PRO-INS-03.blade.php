@@ -114,7 +114,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             
-                                           <div class="d-flex justify-content-between align-items-center w-100">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
                                                 <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
                                                 <div class="form-check form-switch mb-0">
                                                     <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
