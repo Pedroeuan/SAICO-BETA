@@ -431,12 +431,8 @@
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
 
-
     //numFirmasSelect.value = numFirmasLocal;
-
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2'; // Valor por defecto si no hay en localStorage
-    
-
+    //numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
     numFirmasSelect.addEventListener('change', function() {
         if (this.value == '1') {
             firmas1.style.display = 'block';

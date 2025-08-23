@@ -361,7 +361,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B"></textarea>
+                                                <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                                             </div>
                                         </div>
 
@@ -426,7 +426,7 @@
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                                     </tr>
-                                                                                        
+
                                                     <tr>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                                         <td></td>
@@ -700,7 +700,7 @@
                             <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
                             <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
                             <td><input type="text" class="form-control" name="Espe[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor Remanente (in)"></td>
-                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -759,7 +759,7 @@
                     <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
                     <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Prof"></td>
-                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 

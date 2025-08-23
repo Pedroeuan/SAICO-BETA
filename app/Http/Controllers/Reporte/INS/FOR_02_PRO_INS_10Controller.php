@@ -329,7 +329,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.No_Reporte' => 'nullable|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
             'Detalles_Generales.Proyecto' => 'nullable|string|max:255',

@@ -502,7 +502,7 @@
 
     //numFirmasSelect.value = numFirmasLocal;
 
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2'; // Valor por defecto si no hay en localStorage
+    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
     
 
     numFirmasSelect.addEventListener('change', function() {

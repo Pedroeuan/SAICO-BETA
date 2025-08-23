@@ -216,13 +216,13 @@ class FOR_01_PRO_INS_15Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_03_store1(Request $request)
+    public function FOR_01_PRO_INS_15_store(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_15_store(Request $request)
+    public function FOR_01_PRO_INS_15_store1(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -230,7 +230,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.No_Reporte' => 'nullable|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
             'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
@@ -248,7 +248,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            //'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
@@ -269,7 +269,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'ta' => 'nullable|array',
             'Perdida' => 'nullable|array',
             'Espe' => 'nullable|array',
-            'Observaciones' => 'nullable|array',
+            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
