@@ -278,7 +278,15 @@ class FOR_02_PRO_INS_04Controller extends Controller
             'comentarios' => 'nullable|array',
 
             //Validar el campo NumFirmas
-            'numFirmas' => 'nullable|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:1,2,3,4',
+
+            /*1 FIRMAS */
+            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+
+            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
 
             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
@@ -435,7 +443,11 @@ class FOR_02_PRO_INS_04Controller extends Controller
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
-        if ($numFirmas == 2) {
+        if ($numFirmas == 1) {
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes1']);
+        }
+        else if ($numFirmas == 2) {
             $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
         }
@@ -594,7 +606,15 @@ class FOR_02_PRO_INS_04Controller extends Controller
             'comentarios' => 'nullable|array',
 
             //Validar el campo NumFirmas
-            'numFirmas' => 'required|integer|in:2,3,4',
+            'numFirmas' => 'nullable|integer|in:1,2,3,4',
+
+            /*1 FIRMAS */
+            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+
+            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
 
              /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
@@ -740,7 +760,14 @@ class FOR_02_PRO_INS_04Controller extends Controller
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
-        if ($numFirmas == 2) {
+        if ($numFirmas == 1) {
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $Firmas1 = json_encode($validatedData['Firmas_Reportes1']);
+            $Firmas->update([
+                'Firmas' => $Firmas1
+            ]);
+        }
+        else if ($numFirmas == 2) {
             $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
             $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
             $Firmas->update([

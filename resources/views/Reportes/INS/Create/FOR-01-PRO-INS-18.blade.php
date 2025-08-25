@@ -570,12 +570,40 @@
                         <div class="col-sm-15">
                             <div class="form-group">
                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                    <option value="1">1 Firma</option>
                                     <option value="2">2 Firmas</option>
                                     <option value="3">3 Firmas</option>
                                     <option value="4">4 Firmas</option>
                                 </select>
                             </div>
                         </div>
+
+                            <!-- 1 UNA FIRMA-->
+                            <div id="firmas1" class="col-12">
+                                <table class="table table-bordered table-striped dt-responsive tablas">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
 
                         <!-- 2 DOS FIRMAS-->
                         <div id="firmas2" class="col-12">
@@ -1056,7 +1084,43 @@ $(document).ready(function() {
                 $('#accesoriosSelectA2').on('change', function() {
                     actualizarInputsA2();
                 });
+            });
 
-});
+    /*FOR-01-PRO-INS-18*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-18');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-18_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-18_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-18_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-18_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
+
 </script>
 @endsection

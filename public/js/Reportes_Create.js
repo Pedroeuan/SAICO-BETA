@@ -390,7 +390,7 @@
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -490,62 +490,14 @@
     });
 });
 
-
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
     const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
     const numFirmasSelect = document.getElementById('numFirmas');
+    const firmas1 = document.getElementById('firmas1');
     const firmas2 = document.getElementById('firmas2');
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
-
-
-    //numFirmasSelect.value = numFirmasLocal;
-
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '2'; // Valor por defecto si no hay en localStorage
-    
-
-    numFirmasSelect.addEventListener('change', function() {
-        if (this.value == '2') {
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '3') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (this.value == '4') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
-    });
-
-    // Inicializar la visibilidad de las secciones de firmas
-    if (numFirmasSelect.value == '2') {
-        firmas2.style.display = 'block';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '3') {
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'block';
-        firmas4.style.display = 'none';
-    } else if (numFirmasSelect.value == '4') {
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'block';
-    }
-    });
-
-
-/*Selección OJOS */
-    document.addEventListener('DOMContentLoaded', function() {
-    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_x');
-    const numFirmasSelect = document.getElementById('x');
-    const j1 = document.getElementById('j1');
-    const j2 = document.getElementById('j2');
 
 
     //numFirmasSelect.value = numFirmasLocal;
@@ -555,23 +507,52 @@
 
     numFirmasSelect.addEventListener('change', function() {
         if (this.value == '1') {
-            j1.style.display = 'block';
-            j2.style.display = 'none';
+            firmas1.style.display = 'block';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
         }
         else if (this.value == '2') {
-            j1.style.display = 'none';
-            j2.style.display = 'block';
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'block';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
+        }
+        else if (this.value == '3') {
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'block';
+            firmas4.style.display = 'none';
+        } else if (this.value == '4') {
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'block';
         }
     });
 
     // Inicializar la visibilidad de las secciones de firmas
     if (numFirmasSelect.value == '1') {
-        j1.style.display = 'block';
-        j2.style.display = 'none';
-
+        firmas1.style.display = 'block';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'none';
     }
     else if (numFirmasSelect.value == '2') {
-        j1.style.display = 'none';
-        j2.style.display = 'block';
-    } 
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'block';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'none';
+    }
+    else if (numFirmasSelect.value == '3') {
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'block';
+        firmas4.style.display = 'none';
+    } else if (numFirmasSelect.value == '4') {
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'block';
+    }
     });

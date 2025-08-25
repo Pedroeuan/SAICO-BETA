@@ -232,13 +232,14 @@
     
                 <div style="margin-bottom: 5px;"></div>
         
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>   
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -291,16 +292,15 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">DATOS Y AJUSTES DEL EQUIPO </th>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
                 <table class="datosinspeccion">
-                    <tbody>
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS Y AJUSTES DEL EQUIPO</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
+                        <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO</th>
                             <th colspan="2">SONDA</th>
@@ -376,13 +376,8 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
             </header>
 
             <footer>
@@ -426,7 +421,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 675px;"></td>                            
+                            <td class="lineaInferior" style="width: 606.5px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
@@ -585,9 +580,15 @@
             </footer>
 
             <div class="content">
-                <div style="margin-bottom: 0px;"></div>
-
                     <table class="datosresultados">
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="12">RESULTADOS</th></tr>
+                        </thead>
+
+                            <thead><tr class="sinBordeth"><th colspan="12"></th></tr></thead> <!-- Fila vacia -->
+
+                            <thead>
                         <thead>
                             <tr class="celdaGris">
                             <th style="width: 30px;" colspan="2">DATOS DE INSPECCIÓN</th>
