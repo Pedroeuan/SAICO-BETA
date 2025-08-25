@@ -540,3 +540,38 @@
     });
 
 
+/*Selección OJOS */
+    document.addEventListener('DOMContentLoaded', function() {
+    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_x');
+    const numFirmasSelect = document.getElementById('x');
+    const j1 = document.getElementById('j1');
+    const j2 = document.getElementById('j2');
+
+
+    //numFirmasSelect.value = numFirmasLocal;
+
+    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
+    
+
+    numFirmasSelect.addEventListener('change', function() {
+        if (this.value == '1') {
+            j1.style.display = 'block';
+            j2.style.display = 'none';
+        }
+        else if (this.value == '2') {
+            j1.style.display = 'none';
+            j2.style.display = 'block';
+        }
+    });
+
+    // Inicializar la visibilidad de las secciones de firmas
+    if (numFirmasSelect.value == '1') {
+        j1.style.display = 'block';
+        j2.style.display = 'none';
+
+    }
+    else if (numFirmasSelect.value == '2') {
+        j1.style.display = 'none';
+        j2.style.display = 'block';
+    } 
+    });
