@@ -222,140 +222,33 @@ class FOR_01_PRO_INS_11Controller extends Controller
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_01_PRO_INS_03_store(Request $request)
+    public function FOR_01_PRO_INS_11_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
-            'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Nombre' => 'nullable|date',
+            'Detalles_Generales.Datos_Del_Examinador_Nombre' => 'required|string|max:255',
+            'Detalles_Generales.Direccion' => 'nullable|string|max:255',
+            'Detalles_Generales.Telefono' => 'nullable|string|max:255',
+            'Detalles_Generales.COND_SUPER' => 'nullable|string|max:255',
+            'Detalles_Generales.Fecha' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
-
-            //Validar el campo NumFirmas
-            'numFirmas' => 'nullable|integer|in:1,2,3,4',
-
-            /*1 FIRMAS */
-            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
-
-            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
-
-            /*2 FIRMAS */
-            'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-
-            /*3 FIRMAS */
-            'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-
-            /*4 FIRMAS */
-            'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
-
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Datos_Equipo.J-1' => 'nullable|string|max:255',
+            'Datos_Equipo.J-2' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho_SC' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo_CC' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho_CN' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo_CN' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo' => 'nullable|string|max:255',
+            'Datos_Equipo.Diferenciación_Rojo_Verde' => 'nullable|string|max:255',
+            'Datos_Equipo.Diferenciación_Azul_Amarillo' => 'nullable|string|max:255',
         ]);
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
@@ -573,7 +466,7 @@ class FOR_01_PRO_INS_11Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
+    public function FOR_02_PRO_INS_11_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
@@ -587,42 +480,26 @@ class FOR_01_PRO_INS_11Controller extends Controller
         $validatedData = $request->validate([
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
-            'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Nombre' => 'nullable|date',
+            'Detalles_Generales.Datos_Del_Examinador_Nombre' => 'required|string|max:255',
+            'Detalles_Generales.Direccion' => 'nullable|string|max:255',
+            'Detalles_Generales.Telefono' => 'nullable|string|max:255',
+            'Detalles_Generales.COND_SUPER' => 'nullable|string|max:255',
+            'Detalles_Generales.Fecha' => 'nullable|string|max:255',
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.RANGO' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string|max:255',
-            'Datos_Equipo.PINTURA' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.J-1' => 'nullable|string|max:255',
+            'Datos_Equipo.J-2' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho_SC' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo_CC' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho_CN' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo_CN' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_derecho' => 'nullable|string|max:255',
+            'Datos_Equipo.Ojo_izquierdo' => 'nullable|string|max:255',
+            'Datos_Equipo.Diferenciación_Rojo_Verde' => 'nullable|string|max:255',
+            'Datos_Equipo.Diferenciación_Azul_Amarillo' => 'nullable|string|max:255',
 
             /*Titulos Juntas */
             'titulos' => 'nullable|array',  // Asegura que sea un array
