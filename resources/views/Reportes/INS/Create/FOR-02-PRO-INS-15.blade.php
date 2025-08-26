@@ -66,16 +66,15 @@
 <br>
 <br>
 
-{{-- <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4> --}}
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
                 <section class="content w-100">
-                    <div class="card w-100">
+                    <div class="card w-100 p-3">
                         <div class="card-body row w-100">
                             <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>INFORME DE INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION</strong></div>
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -201,7 +200,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
                                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -211,7 +210,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
                                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
@@ -221,7 +220,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo e Intensidad de Iluminación</label>
                                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -231,11 +230,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo de Inspección</label>
-                                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
-                                            @error('Criterio_Evaluacion')
+                                            <input type="text" class="form-control  inputForm @error('Tipo_de_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Inspeccion')}}">
+                                            @error('Tipo_de_Inspeccion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -258,60 +257,87 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
+                            <div style="margin-bottom: 5px;"></div>
 
-                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                        <div>
-                                            <label for="numRows">Número de Filas:</label>
-                                            <select id="numRows" class="form-select">
-                                                @for ($i = 1; $i <= 500; $i++)
-                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
-
-                                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
-
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
-                                    </div>
-
-                                    <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                            <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Elemento</th>
-                                                <th>No. de Indicación</th>
-                                                <th>Tipo de Indicación</th>
-                                                <th>Referencia</th>
-                                                <th>DNR (m)</th>
-                                                <th>H.T.</th>
-                                                <th>Long. Axial (in)</th>
-                                                <th>Long. Circ. (in)</th>
-                                                <th>d (in)</th>
-                                                <th>ta (in)</th>
-                                                <th>% Perdida</th>
-                                                <th>Epesor remanente (in)</th>
-                                                <th>Observaciones</th>
-                                                <th>Eliminar</th>
-                                            </tr>
-                                        </thead>
+                                                <th class="align-middle">#</th>
+                                                <th class="align-middle">ID</th>
+                                                <th class="align-middle">Elemento</th>
+                                                <th class="align-middle">No. de Indicación</th>
+                                                <th class="align-middle">Tipo de Indicación</th>
+                                                <th class="align-middle">Referencia</th>
+                                                <th class="align-middle">DNR (m)</th>
+                                                <th class="align-middle">H.T.</th>
+                                                <th class="align-middle">Long. Axial (in)</th>
+                                                <th class="align-middle">Long. Circ. (in)</th>
+                                                <th class="align-middle">d (in)</th>
+                                                <th class="align-middle">ta (in)</th>
+                                                <th class="align-middle">% Perdida</th>
+                                                <th class="align-middle">Espesor remanente (in)</th>
+                                    <th class="align-middle">Observaciones</th>
+                                    <th class="align-middle">Eliminar</th>
+                                </tr>
+                            <thead>
+                                <tr id="inputRow">
+                                    <th></th> <!-- Para ID vacío -->
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width:100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width:100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
+                                    <th></th> <!-- Para botón de eliminar -->
+                                </tr>
+                            </thead>
 
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
-                                    </table>
-                                    </div>
+                                <tbody>
+                                <!-- Filas dinámicas aparecerán aquí -->
+                                </tbody>
+                        </table>
+                        </div>
 
-                                    <p>
+                        <p>
 
-                                        <table class="table table-bordered table-striped dt-responsive tablas">
+                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                            <div>
+                                <label for="numRows">Número de Filas:</label>
+                                <select id="numRows" class="form-select">
+                                    @for ($i = 1; $i <= 500; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+
+                            <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                            <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                            <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                        </div>
+                        
+                        <table class="table table-bordered table-striped dt-responsive tablas">
+                            <tr>
+                                <td>
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
                                                                 <th colspan="10" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
                                                             </tr>
     
@@ -515,7 +541,7 @@
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
 
                                                     </tr>
-                                                                                        
+                                                    
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -546,62 +572,65 @@
 
                                         <p>
 
-                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
 
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="container">
-                                            <div class="float-right">
-                                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
-                                            </div>
-
-                                            <div class="float-left">
-                                                <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
-                                            </div>
-                                        </div>
-
-                                </div>
-                            </form>
+                        <!--IMAGENES CON COMENTARIOS-->
+                        <div class="form-group">
+                            <label for="imageCount">Número de imágenes a subir:</label>
+                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                @for ($i = 1; $i <= 50; $i++)
+                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                @endfor
+                            </select>
                         </div>
-                    </div>
-                </section>
-@stop
 
+                        <div id="imageFieldsContainer" class="row">
+                            <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
+
+                        <!-- Modal para recortar la imagen -->
+                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="float-right">
+                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                            </div>
+
+                            <div class="float-left">
+                                <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
+                            </div>
+                        </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+@stop
 
 @section('js')
 <!-- Incluye jQuery -->
@@ -623,222 +652,183 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 <script>
 
-    /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
+/*Juntas-Resultados */
     $(document).ready(function() {
-        var rowCount = 0;
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="Elemento" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="No." style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="Tipo" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Referencia" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="DNR (m)" style="width: 90px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="H.T." style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Axial (in)" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="Circ. (in)" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="d (in)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="ta (in)" style="width: 70px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="% Perdida" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Espesor (in)" style="width: 110px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Observaciones" style="width: 130px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                    
-                    </tr>`;
-                $('#dynamicTable tbody').append(newRow);
-            }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
+        function restoreData() {
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            if (savedData) {
+                // Restaurar contadores
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                
+                savedData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="15">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="No_de_Indicación[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. de Indicación"></td>
+                            <td><input type="text" class="form-control" name="Tipo_de_Indicación[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="Referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Referencia"></td>
+                            <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[6]}" placeholder="DNR (m)"></td>
+                            <td><input type="text" class="form-control" name="HT[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="Long_Axial[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Long. Axial (in)"></td>
+                            <td><input type="text" class="form-control" name="Long_Circ[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Long Circ. (in)"></td>
+                            <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[10]}" placeholder="d(in)"></td>
+                            <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
+                            <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
+                            <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor Remanente (in)"></td>
+                            <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
                     }
                 });
-            });
-        });
-
-        // Mostrar vista previa de las imágenes seleccionadas
-        function readURL(input, previewId) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $(previewId).html('<img src="' + e.target.result + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
-                }
-                reader.readAsDataURL(input.files[0]);
+                updateRowNumbers();
+                updateTitulos();
             }
         }
 
-        $('#image1').change(function() {
-            readURL(this, '#image1-preview');
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="15">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
-        $('#image2').change(function() {
-            readURL(this, '#image2-preview');
-        });
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
-        $('#image3').change(function() {
-            readURL(this, '#image3-preview');
-        });
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-        $('#image4').change(function() {
-            readURL(this, '#image4-preview');
-        });
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                    <td><input type="text" class="form-control" name="No_de_Indicación[${lastTitle}][]" placeholder="No. Aceptación"></td>
+                    <td><input type="text" class="form-control" name="Tipo_de_Indicación[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="No. Colada"></td>
+                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="tnominal"></td>
+                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="Long_Circ.[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="Espesor_remanente[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                </tr>`;
 
-
-    });
-
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
-
-        /*Selección de Firmas */
-
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '3') {
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
+                $('#dynamicTable tbody').append(newRow);
             }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '3') {
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
+            saveData(document.querySelectorAll("form")[1].id);
         }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }
-
-        });
-
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
+    );
+        
+        $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
-                
-            });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
+                return;
             }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
+            // Restaurar datos al cargar la página
+            restoreData();
+    });
+
+    /*FOR-01-PRO-INS-15*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-15');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-15_' + el.name);
+                if (value !== null) el.value = value;
             }
         });
 
-    </script>
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-15_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
+</script>
 @endsection
