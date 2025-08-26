@@ -385,7 +385,7 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
-                            @else
+                            @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
                                     <td style="width: 15px;"></td>

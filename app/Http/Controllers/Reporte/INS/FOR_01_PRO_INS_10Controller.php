@@ -295,7 +295,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
@@ -658,7 +658,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',

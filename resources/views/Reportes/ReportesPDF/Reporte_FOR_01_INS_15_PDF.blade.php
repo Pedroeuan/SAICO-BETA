@@ -346,7 +346,34 @@
                                                 
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -386,13 +413,13 @@
                             @elseif( $numFirmas == 3)
                             <!-- 3 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                 </tr>
 
                                 <tr>
@@ -430,29 +457,29 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
-                            @else
+                            @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 10px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <th></th>
                                 </tr>
 
