@@ -123,7 +123,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}">
+                                            <textarea type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}"></textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -133,7 +133,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                                            <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                            <textarea type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}"></textarea>
                                             @error('Orden_Trabajo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -173,7 +173,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
+                                            <textarea type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}"></textarea>
                                             @error('Isometrico_Plano')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -223,7 +223,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo e Intensidad de Iluminación</label>
-                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Tipo_e_Intensidad_de_Iluminación') is-invalid @enderror" name="Detalles_Generales[Tipo_e_Intensidad_de_Iluminación]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_e_Intensidad_de_Iluminación')}}">
                                             @error('Procedimiento')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -233,7 +233,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo de Inspección</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_de_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Inspeccion')}}">
+                                            <input type="text" class="form-control  inputForm @error('Tipo_de_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_de_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Inspeccion')}}">
                                             @error('Tipo_de_Inspeccion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -363,7 +363,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
+                                                <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                                             </div>
                                         </div>
 
@@ -689,8 +689,8 @@
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                             <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
                             <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Elemento / Tubo"></td>
-                            <td><input type="text" class="form-control" name="No_de_Indicación[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. de Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tipo_de_Indicación[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="No_de_Indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. de Indicacion"></td>
+                            <td><input type="text" class="form-control" name="Tipo_de_Indicacion[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicacion"></td>
                             <td><input type="text" class="form-control" name="Referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Referencia"></td>
                             <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[6]}" placeholder="DNR (m)"></td>
                             <td><input type="text" class="form-control" name="HT[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
@@ -748,13 +748,13 @@
                     <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                    <td><input type="text" class="form-control" name="No_de_Indicación[${lastTitle}][]" placeholder="No. Aceptación"></td>
-                    <td><input type="text" class="form-control" name="Tipo_de_Indicación[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="No_de_Indicacion[${lastTitle}][]" placeholder="No. Aceptacion"></td>
+                    <td><input type="text" class="form-control" name="Tipo_de_Indicacion[${lastTitle}][]" placeholder="No. Serie"></td>
                     <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="No. Colada"></td>
                     <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="tnominal"></td>
                     <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Ø"></td>
                     <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="No.Ind."></td>
-                    <td><input type="text" class="form-control" name="Long_Circ.[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="Long_Circ[${lastTitle}][]" placeholder="Tipo de Indicacion"></td>
                     <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="NR (%)"></td>
                     <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
                     <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
@@ -797,27 +797,27 @@
 
     /*FOR-01-PRO-INS-15*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-01-PRO-INS-15');
+        const form = document.getElementById('FOR-02-PRO-INS-15');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+            //    localStorage.setItem('FOR-02-PRO-INS-15_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-01-PRO-INS-15_' + el.name, el.value);
+                localStorage.setItem('FOR-02-PRO-INS-15_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-01-PRO-INS-15_' + el.name);
+                const value = localStorage.getItem('FOR-02-PRO-INS-15_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -825,7 +825,7 @@
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-15_' + el.name);
+                localStorage.removeItem('FOR-02-PRO-INS-15_' + el.name);
                 //localStorage.clear();
             });
         });

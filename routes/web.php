@@ -50,6 +50,7 @@ Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_19Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
+use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -273,11 +274,11 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
         Route::get('/Reporte/FOR-02-INS-10/PDF/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_INS_02'])->name('Reporte_FOR_02_INS_10.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_15*/
-        Route::post('/Reportes_FOR_02_PRO_INS_15/store', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_PRO_INS_15_store'])->name('Reportes_FOR_02_PRO_INS_15.store');
+        Route::post('/Reportes_FOR_02_PRO_INS_15/store', [FOR_02_PRO_INS_15Controller::class, 'FOR_02_PRO_INS_15_store'])->name('Reportes_FOR_02_PRO_INS_15.store');
         /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_15*/
-        Route::post('/Reportes_FOR_02_PRO_INS_10/update/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_PRO_INS_15_update'])->name('Reportes_FOR_02_PRO_INS_15.update');
+        Route::post('/Reportes_FOR_02_PRO_INS_15/update/{id}', [FOR_02_PRO_INS_15Controller::class, 'FOR_02_PRO_INS_15_update'])->name('Reportes_FOR_02_PRO_INS_15.update');
         /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_15*/
-        Route::get('/Reporte/FOR-02-INS-15/PDF/{id}', [FOR_02_PRO_INS_10Controller::class, 'FOR_02_INS_15'])->name('Reporte_FOR_02_INS_15.PDF');
+        Route::get('/Reporte/FOR-02-INS-15/PDF/{id}', [FOR_02_PRO_INS_15Controller::class, 'FOR_02_INS_15'])->name('Reporte_FOR_02_INS_15.PDF');
 
         /*Verificar y redistribuir rutas*/
         /*Route::post('/Reportes_FOR_01_PRO_INS_03/store', [ReporteController::class, 'FOR_01_PRO_INS_03_store'])->name('Reportes_FOR_01_PRO_INS_03.store');
