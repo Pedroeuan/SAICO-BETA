@@ -301,7 +301,34 @@
             <footer>
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
