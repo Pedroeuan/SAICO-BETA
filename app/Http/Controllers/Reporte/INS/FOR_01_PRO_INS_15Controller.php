@@ -275,7 +275,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            //'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
@@ -602,7 +602,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
-            //'Firmas_Reportes' => 'required|array',  // Asegura que es un array
+            'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
@@ -917,7 +917,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
     }
 
 
-    public function FOR_01_INS_03($id)
+    public function FOR_01_INS_15($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -989,10 +989,10 @@ class FOR_01_PRO_INS_15Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_03_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_03_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1032,7 +1032,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01-INS_03.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01-INS_15.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
