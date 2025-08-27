@@ -534,7 +534,7 @@
                             </tr>
                         </thead>
 
- <tbody>
+                                <tbody>
                                     @php
                                         $contador = 1;
                                         $filasPorPagina = 15;
