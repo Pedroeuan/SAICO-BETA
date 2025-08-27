@@ -2,21 +2,17 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-15/02</title>
+            <title>FORMATO FOR-02-INS-10</title>
             <style>
                 @page {
                     margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
                     3.0cm /* superior */
                     1.2cm /* derecho */
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalTitulosYFilas <=20)
+                @if ($totalFotos <=4)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -28,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: 30px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -57,7 +53,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -81,28 +77,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                }
-                    
-                .simbologia {
-                    border-collapse: collapse;  /*separate No colapsar bordes */
-                    border-spacing: 0px;        /* Espacio entre celdas */
-                    width: 100%;
-                    text-align: center;
                     font-size: 8px;
-                }
-
-                .simbologia td, .simbologia th {
-                    border: .6px solid black; 
-                }
-                .celdaAmarillo{
-                    background-color: #FFF2CC;
                 }
 
                 .tablaheader {
@@ -110,7 +93,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -123,52 +106,20 @@
             text-align: center;
             width: 100%;
             font-size: 8px;
-            background-color: #2F75B5;
+            background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
-            
-        .datosinspeccion{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
+
+        .border {
+            border: 1px solid black; 
         }
 
-        .datosinspeccion td, .datosinspeccion th {
-            border: .6px solid black; 
-        }
-
-        .datosinspeccionsinborde{
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-        }
-
-        .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
-            width: 100%;
-            text-align: center;
-            font-size: 8px;
-        }
-
-        .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
-        }
-        .celdaGris{
-            background-color: #DBDBDB;
-        }
-        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -176,7 +127,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -184,23 +134,79 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
         }
-        .rotar-texto-dividido {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: normal;
+        /* ************** */
+        .imagenes-reporte {
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 106%;
+            border-collapse: separate;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
-        .rotar-texto-sin-dividir {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-            max-width: 20px; /* Ajusta al ancho máximo deseado */
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para los comentarios */
+        .comment { 
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+        /* Estilo para los "comentarios" en blanco */
+        .empty-comment {
+            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 0px; /* Espaciado entre el borde y el texto */
+        }
+        
+        .empty-box {
+            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+        }
+
+        .cross-line {
+            width: 74%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
         }
             </style>
         </head>
@@ -213,15 +219,15 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-15/02</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">  INFORME DE  INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESIÓN</th>
                             <th>Versión</th>
-                            <th>0</th>
+                            <th>2</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -229,117 +235,70 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 5px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
+
+                <div style="margin-bottom: 4px;"></div>
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
-                            <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <th >PROCEDIMIENTO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                        <tr>
-                            <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior"></td>
-                            <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
+                <div style="margin-bottom: 6px;"></div>
             </header>
-
+            
             <footer>
-                <div style="margin-bottom: 5px;"></div>
-                
-                <table class="simbologia">
-                        <thead>
-                            <tr>
-                                <th colspan="10" class="celdaAmarillo">SIMBOLOGÍA</th>
-                            </tr>
-
-                            <tr>
-                                <td style="width: 20px;"><strong>DNR</strong></td>
-                                <td style="width: 110px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
-                                <td style="width: 20px;"><strong>d</strong></td>
-                                <td style="width: 150px;">PROFUNDIDAD DE LA INDICACION</td>
-                                <td style="width: 20px;"><strong>ta</strong></td>
-                                <td style="width: 180px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                <td style="width: 20px;"><strong>C.E. GEN.:</strong></td>
-                                <td style="width: 180px;">CORROSIÓN EXTERNA GENERALIZADA</td>
-                                <td style="width: 20px;"><strong>SIR: </strong></td>
-                                <td style="width: 180px;">SIN INDICACIONES RELEVANTES</td>
-                            </tr>
-
-                        </thead>
-                    </table>
-
-                    <div style="margin-bottom: 5px;"></div>
-
-                    <table>                               
-                        <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 916px;"></td>                            
-                        </tr>                      
-                    </table>
-
-                    <br>
-                                                
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -382,13 +341,13 @@
                             @elseif( $numFirmas == 3)
                             <!-- 3 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                 </tr>
 
                                 <tr>
@@ -429,26 +388,26 @@
                             @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 10px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <td></td>
-                                    <td style="width: 190px; height:40px" class="lineaInferior"></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
                                     <th></th>
                                 </tr>
 
@@ -491,52 +450,53 @@
                         </thead>                            
                     </table>
             </footer>
-            
+
             <div class="content">
-                <div style="margin-bottom: 0px;"></div>
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
 
-                    <table class="datosresultados">
-                        <thead>
-                            <tr class="celdaGris">
-                                <th style="width: 20px;">ID</th>
-                                <th style="width: 40px;">Elemento</th>
-                                <th style="width: 30px;">No. Indicación</th>
-                                <th style="width: 30px;">Tipo de Indicación</th>
-                                <th style="width: 30px;">Referencia</th>
-                                <th style="width: 30px;">DNR (m)</th>
-                                <th style="width: 20px;">H.T.</th>
-                                <th style="width: 30px;">Long. Axial  (in)</th>
-                                <th style="width: 30px;">Long. Circ. (in)</th>
-                                <th style="width: 30px;">d(in)</th>
-                                <th style="width: 30px;">ta (in)</th>
-                                <th style="width: 30px;">% Perdida</th>
-                                <th style="width: 30px;">Espesor remanente (in)</th>
-                                <th style="width: 30px;">Observaciones</th>
-                            </tr>
-                        </thead>
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                        @endphp
 
-                            <tbody>
-                                @for($i = 0; $i < 54; $i++)
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
                                 <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                </tr>
-                                @endfor
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
 
-                            </tbody>
-                    </table>
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
         </body>
