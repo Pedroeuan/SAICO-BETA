@@ -10,8 +10,8 @@
                     /*2.1cm /* derecho */
                     /*2.1cm /* inferior */
                     /*2.4cm; /* izquierdo */
-                    3.0cm /* superior */
-                    1.2cm /* derecho */
+                    2.0cm /* superior */
+                    2.1cm /* derecho */
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
@@ -221,7 +221,7 @@
                         <tr>
                             <th rowspan="2" style="font-size: 9pt;">  INFORME DE  INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION </th>
                             <th>Versión</th>
-                            <th>0</th>
+                            <th>2</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -230,7 +230,7 @@
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
         
                 <table class="encabezadoAzul">
                     <tr>
@@ -242,55 +242,55 @@
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                         <tr>
                             <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_e_Intensidad_de_Iluminación'] }}</td>
                             <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_de_Inspeccion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -307,34 +307,35 @@
             <footer>
                 <div style="margin-bottom: 5px;"></div>
                 
-                <table class="simbologia">
-                        <thead>
-                            <tr>
-                                <th colspan="10" class="celdaAmarillo">SIMBOLOGÍA</th>
-                            </tr>
+                                        <table class="simbologia">
+                                                <thead>
+                                                        <tr>
+                                                                <th colspan="10<<" class="celdaAmarillo">SIMBOLOGÍA</th>
+                                                        </tr>
 
-                            <tr>
-                                <td style="width: 20px;"><strong>DNR</strong></td>
-                                <td style="width: 110px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
-                                <td style="width: 20px;"><strong>d</strong></td>
-                                <td style="width: 150px;">PROFUNDIDAD DE LA INDICACION</td>
-                                <td style="width: 20px;"><strong>ta</strong></td>
-                                <td style="width: 180px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                <td style="width: 20px;"><strong>C.E. GEN.:</strong></td>
-                                <td style="width: 180px;">CORROSIÓN EXTERNA GENERALIZADA</td>
-                                <td style="width: 20px;"><strong>SIR: </strong></td>
-                                <td style="width: 180px;">SIN INDICACIONES RELEVANTES</td>
-                            </tr>
+                                                        <tr>
+                                                                <td style="width: 20px;"><strong>DNR:</strong></td>
+                                                                <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
+                                                                <td style="width: 20px;"><strong>d:</strong></td>
+                                                                <td style="width: 100px;">PROFUNDIDAD DE LA INDICACION</td>
+                                                                <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
+                                                                <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                                                                <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
+                                                                <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td>
+                                                                <td style="width: 20px;"><strong>SIR: </strong></td>
+                                                                <td style="width: 70px;">SIN INDICACIONES RELEVANTES</td>
+                                                        </tr>
 
-                        </thead>
-                    </table>
+                                                </thead>
+                                        </table>
 
-                    <div style="margin-bottom: 5px;"></div>
+
+                    <div style="margin-bottom: 3px;"></div>
 
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 916px;"></td>                            
+                            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
@@ -498,42 +499,80 @@
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th style="width: 20px;">ID</th>
-                                <th style="width: 40px;">Elemento</th>
-                                <th style="width: 30px;">No. Indicación</th>
-                                <th style="width: 30px;">Tipo de Indicación</th>
-                                <th style="width: 30px;">Referencia</th>
-                                <th style="width: 30px;">DNR (m)</th>
-                                <th style="width: 20px;">H.T.</th>
-                                <th style="width: 30px;">Long. Axial  (in)</th>
-                                <th style="width: 30px;">Long. Circ. (in)</th>
-                                <th style="width: 30px;">d(in)</th>
-                                <th style="width: 30px;">ta (in)</th>
-                                <th style="width: 30px;">% Perdida</th>
-                                <th style="width: 30px;">Espesor remanente (in)</th>
-                                <th style="width: 30px;">Observaciones</th>
+                                <th style="width: 10px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
+                                <th style="width: 50px; border: 1px solid black;">Elemento</th>
+                                <th style="width: 60px; border: 1px solid black;">No. Indicación</th>
+                                <th style="width: 40px; border: 1px solid black;">Tipo de Indicación</th>
+                                <th style="width: 40px; border: 1px solid black;">Referencia</th>
+                                <th style="width: 20px; border: 1px solid black;">DNR (m)</th>
+                                <th style="width: 20px; border: 1px solid black;">H.T.</th>
+                                <th style="width: 20px; border: 1px solid black;">Long. Axial  (in)</th>
+                                <th style="width: 20px; border: 1px solid black;">Long. Circ. (in)</th>
+                                <th style="width: 20px; border: 1px solid black;">d(in)</th>
+                                <th style="width: 20px; border: 1px solid black;">ta (in)</th>
+                                <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span% Perdida</th>
+                                <th style="width: 40px; border: 1px solid black;">Espesor remanente (in)</th>
+                                <th style="width: 40px; border: 1px solid black;">Observaciones</th>
                             </tr>
                         </thead>
 
                             <tbody>
-                                @for($i = 0; $i < 54; $i++)
-                                <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                </tr>
-                                @endfor
+                                    @php
+                                        $contador = 1;
+                                        $filasPorPagina = 15;
+                                        $contadorFilas = 0;
+                                        $contadorFilasPagina = 0;
+                                        $totalMetros = 0;
+                                    @endphp
+
+                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                                        @php
+                                            $titulo = $grupo['titulos_juntas'];
+                                            $juntasDelGrupo = count($grupo['resultados']);
+                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
+                                        @endphp
+
+                                        @if ($titulo !== 'SIN TITULO')
+                                            <!-- Fila del título -->
+                                            <tr class="titulo-row">
+                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ $titulo }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @php $contadorFilasPagina++; @endphp
+                                        @endif
+
+                                        @foreach ($grupo['resultados'] as $junta)
+                                            @php
+                                                $contadorFilas++;
+                                                $contadorFilasPagina++;
+                                                //$totalMetros += floatval($junta['Observaciones']);
+                                                $esUltimaFila = $loop->last;
+                                            @endphp
+                                            <tr class="juntas">
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ID'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Elemento'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['No_de_Indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Tipo_de_Indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Referencia'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['DNR'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['HT'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Long_Axial'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Long_Circ'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['d'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ta'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Perdida'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Epesor_remanente'] }}</td>
+                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Observaciones'] }}</td>
+                                            </tr>
+
+                                            @php $contador++; @endphp
+                                        @endforeach
+
+                                    @endforeach
+                                    
 
                             </tbody>
                     </table>
