@@ -339,7 +339,7 @@
                                                             <tr>
                                                                 <th colspan="10" class="p-2 alert alert-warning">NOMENCLATURAS</th>
                                                             </tr>
-    
+
                                                             <tr>
                                                                 <td><strong>DNR:</strong></td>
                                                                 <td>DISTANCIA DE NIVEL DE REFERENCIA</td>

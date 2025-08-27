@@ -6,17 +6,12 @@
             <style>
                 @page {
                     margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
-                    2.0cm /* superior */
+                    3.0cm /* superior */
                     2.1cm /* derecho */
                     2.1cm /* inferior */
-                    2.2cm; /* izquierdo */
+                    2.4cm; /* izquierdo */
                 }
-
-                @if ($totalTitulosYFilas <=20)
+                @if ($totalTitulosYFilas <=15)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -232,13 +227,15 @@
     
                 <div style="margin-bottom: 4px;"></div>
         
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
+
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>   
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -288,54 +285,46 @@
                         </tr>
                         <tr>
                             <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_e_Intensidad_de_Iluminación'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Iluminacion'] }}</td>
                             <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_de_Inspeccion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Inspeccion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
             </header>
 
             <footer>
                 <div style="margin-bottom: 5px;"></div>
-                
-                                        <table class="simbologia">
-                                                <thead>
-                                                        <tr>
-                                                                <th colspan="10<<" class="celdaAmarillo">SIMBOLOGÍA</th>
-                                                        </tr>
 
-                                                        <tr>
-                                                                <td style="width: 20px;"><strong>DNR:</strong></td>
-                                                                <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
-                                                                <td style="width: 20px;"><strong>d:</strong></td>
-                                                                <td style="width: 100px;">PROFUNDIDAD DE LA INDICACION</td>
-                                                                <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
-                                                                <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                                                <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
-                                                                <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td>
-                                                                <td style="width: 20px;"><strong>SIR: </strong></td>
-                                                                <td style="width: 70px;">SIN INDICACIONES RELEVANTES</td>
-                                                        </tr>
+                <table class="simbologia">
+                    <thead>
+                        <tr>
+                            <th colspan="10<<" class="celdaAmarillo">SIMBOLOGÍA</th>
+                        </tr>
 
-                                                </thead>
-                                        </table>
-
+                        <tr>
+                            <td style="width: 20px;"><strong>DNR:</strong></td>
+                            <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
+                            <td style="width: 20px;"><strong>d:</strong></td>
+                            <td style="width: 100px;">PROFUNDIDAD DE LA INDICACION</td>
+                            <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
+                            <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                            <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
+                            <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td> 
+                            <td style="width: 20px;"><strong>SIR: </strong></td>
+                            <td style="width: 70px;">SIN INDICACIONES RELEVANTES</td>
+                        </tr>
+                    </thead>
+                </table>
 
                     <div style="margin-bottom: 3px;"></div>
 
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                            <td class="lineaInferior" style="width: 805px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
@@ -494,25 +483,31 @@
             </footer>
             
             <div class="content">
-                <div style="margin-bottom: 0px;"></div>
 
                     <table class="datosresultados">
-                        <thead>
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="14">RESULTADOS</th></tr>
+                        </thead>
+
+                            <thead><tr class="sinBordeth"><th colspan="14"></th></tr></thead> <!-- Fila vacia -->
+
+                            <thead>
                             <tr class="celdaGris">
-                                <th style="width: 10px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
+                                <th style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
                                 <th style="width: 50px; border: 1px solid black;">Elemento</th>
-                                <th style="width: 60px; border: 1px solid black;">No. Indicación</th>
-                                <th style="width: 40px; border: 1px solid black;">Tipo de Indicación</th>
-                                <th style="width: 40px; border: 1px solid black;">Referencia</th>
-                                <th style="width: 20px; border: 1px solid black;">DNR (m)</th>
-                                <th style="width: 20px; border: 1px solid black;">H.T.</th>
-                                <th style="width: 20px; border: 1px solid black;">Long. Axial  (in)</th>
-                                <th style="width: 20px; border: 1px solid black;">Long. Circ. (in)</th>
-                                <th style="width: 20px; border: 1px solid black;">d(in)</th>
-                                <th style="width: 20px; border: 1px solid black;">ta (in)</th>
-                                <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span% Perdida</th>
-                                <th style="width: 40px; border: 1px solid black;">Espesor remanente (in)</th>
-                                <th style="width: 40px; border: 1px solid black;">Observaciones</th>
+                                <th style="width: 50px; border: 1px solid black;">No. Indicación</th>
+                                <th style="width: 50px; border: 1px solid black;">Tipo de Indicación</th>
+                                <th style="width: 50px; border: 1px solid black;">Referencia</th>
+                                <th style="width: 50px; border: 1px solid black;">DNR (m)</th>
+                                <th style="width: 50px; border: 1px solid black;">H.T.</th>
+                                <th style="width: 50px; border: 1px solid black;">Long. Axial  (in)</th>
+                                <th style="width: 50px; border: 1px solid black;">Long. Circ. (in)</th>
+                                <th style="width: 50px; border: 1px solid black;">d(in)</th>
+                                <th style="width: 50px;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
+                                <th style="width: 50px;">%Perdida</th>
+                                <th style="width: 50px; border: 1px solid black;">Espesor remanente (in)</th>
+                                <th style="width: 50px; border: 1px solid black;">Observaciones</th>
                             </tr>
                         </thead>
 
@@ -554,8 +549,8 @@
                                             <tr class="juntas">
                                                 <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ID'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Elemento'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['No_de_Indicacion'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Tipo_de_Indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['No_Indicacion'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Tipo_Indicacion'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Referencia'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['DNR'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['HT'] }}</td>
@@ -564,7 +559,7 @@
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['d'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ta'] }}</td>
                                                 <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Perdida'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Epesor_remanente'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Espesor_remanente'] }}</td>
                                                 <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Observaciones'] }}</td>
                                             </tr>
 
