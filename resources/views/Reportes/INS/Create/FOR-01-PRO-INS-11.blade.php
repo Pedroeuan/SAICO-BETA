@@ -81,7 +81,7 @@
                     <div style="margin-bottom: 2px;"></div>
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-20">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Nombre</label>
                                 <input type="text" class="form-control  inputForm @error('Nombre') is-invalid @enderror" name="Detalles_Generales[Nombre]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Nombre')}}">
@@ -117,7 +117,6 @@
                         </div>
 
                         <!-- Select para elegir el número de firmas -->
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
                             <div class="form-group">
                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -253,11 +252,11 @@
 
                         
 
-                            <div class="col-sm-6">
+                            <!--<div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="inputSuccess">Firma:</label>
                                 </div>
-                            </div>
+                            </div>-->
 
                         <div class="col-sm-4">
                             <div class="form-group">
