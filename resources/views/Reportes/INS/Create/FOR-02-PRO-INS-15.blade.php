@@ -695,11 +695,11 @@
                             <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[6]}" placeholder="DNR (m)"></td>
                             <td><input type="text" class="form-control" name="HT[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
                             <td><input type="text" class="form-control" name="Long_Axial[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Long. Axial (in)"></td>
-                            <td><input type="text" class="form-control" name="Long_Circ[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Long Circ. (in)"></td>
+                            <td><input type="text" class="form-control" name="Long_Circ[${item.titulo}][]" value="${item.inputs[9]}" placeholder="Long Circ (in)"></td>
                             <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[10]}" placeholder="d(in)"></td>
                             <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
                             <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
-                            <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor Remanente (in)"></td>
+                            <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor remanente (in)"></td>
                             <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
