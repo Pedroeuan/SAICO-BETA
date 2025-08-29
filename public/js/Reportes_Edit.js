@@ -422,6 +422,109 @@
         });
     });
 
+    /*Pre-Rellenado del formulario */
+    document.addEventListener("DOMContentLoaded", function () {
+    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+
+    formularios.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (!form) return; // Saltar si no existe
+
+        const inputs = form.querySelectorAll(".inputForm");
+        const textareas = form.querySelectorAll("textarea");
+
+        // Restaurar valores desde localStorage
+        inputs.forEach(input => {
+            const stored = localStorage.getItem(`${formId}_${input.name}`);
+            if (stored !== null) input.value = stored;
+
+            input.addEventListener("input", () => {
+                localStorage.setItem(`${formId}_${input.name}`, input.value);
+            });
+        });
+
+
+        textareas.forEach(textarea => {
+            // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
+            if (textarea.name === "comments[]" && textarea.id) {
+                // Guardar usando id como clave
+                const stored = localStorage.getItem(`${formId}_${textarea.id}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
+                });
+            } else {
+                // Para otros textareas (que no son comentarios), usar name
+                const stored = localStorage.getItem(`${formId}_${textarea.name}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                });
+            }
+        });
+
+        /* selects.forEach(select => {
+            const stored = localStorage.getItem(`${formId}_${select.name}`);
+            console.log(''+stored);
+
+            if (stored !== null) select.value = stored;
+
+            select.addEventListener("change", () => {
+                localStorage.setItem(`${formId}_${select.name}`, select.value);
+            });
+        });*/
+
+        // Botón rellenar campos vacíos
+        const rellenarBtn = form.querySelector("#preFormBtn");
+        if (rellenarBtn) {
+            rellenarBtn.addEventListener("click", function () {
+                inputs.forEach(input => {
+                    if (input.value.trim() === "") {
+                        input.value = "---";
+                        localStorage.setItem(`${formId}_${input.name}`, input.value);
+                    }
+                });
+                textareas.forEach(textarea => {
+                    if (textarea.value.trim() === "") {
+                        textarea.value = "---";
+                        localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                    }
+                });
+            });
+        }
+
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+
+            const stored = localStorage.getItem(key);
+            if (stored !== null) {
+                checkbox.checked = stored === "true";
+            }
+
+            checkbox.addEventListener("change", () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        }) : null;
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener("submit", function () {
+            inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
+            textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
+            
+            checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+                const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+                localStorage.removeItem(key);
+            }) : null;
+
+        });
+    });
+});
+
+
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
     const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
