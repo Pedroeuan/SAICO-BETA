@@ -853,9 +853,6 @@
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
-
-                                        
-
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control form-select" id="imageCount" name="imageCount" autocomplete="off">
