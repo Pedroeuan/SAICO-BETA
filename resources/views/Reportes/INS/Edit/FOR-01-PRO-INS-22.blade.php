@@ -630,7 +630,7 @@
                                             <tr>
                                                 <td><strong>SB:</strong></td>
                                                 <td>RAMAL</td>
-                                                <td><strong>C12:</strong></td>
+                                                <td><strong>C2:</strong></td>
                                                 <td>ANOMALÍA O IND. CATEGORIA 2</td>
                                                 <td><strong>-X:</strong></td>
                                                 <td>DISTANCIA NEGATIVA</td>
