@@ -76,7 +76,7 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
@@ -321,9 +321,9 @@
 
                     <div style="margin-bottom: 3px;"></div>
 
-                    <table>                               
+                    <table class="datosgenerales">                               
                         <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <th  >OBSERVACIONES:</th>                                         
                             <td class="lineaInferior" style="width: 805px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>

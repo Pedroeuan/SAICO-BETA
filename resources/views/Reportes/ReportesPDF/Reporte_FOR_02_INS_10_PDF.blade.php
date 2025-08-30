@@ -491,9 +491,9 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
-                    <table>                               
+                    <table class="datosgenerales">                              
                         <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <th>OBSERVACIONES:</th>                                         
                             <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>

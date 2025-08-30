@@ -418,9 +418,9 @@
 
                     <br>
 
-                    <table>                               
+                    <table class="datosgenerales">                               
                         <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <th>OBSERVACIONES:</th>                                         
                             <td class="lineaInferior" style="width: 606.5px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
