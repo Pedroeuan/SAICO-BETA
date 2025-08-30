@@ -556,7 +556,7 @@
                                                             <td><input type="text" class="form-control" name='Distancia_relativa_al_dato_m[{{ $tituloKey }}][]' value="{{ $resultado['Distancia_relativa_al_dato_m'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Horario_Tecnico[{{ $tituloKey }}][]' value="{{ $resultado['Horario_Tecnico'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Horario_Tecnico2[{{ $tituloKey }}][]' value="{{ $resultado['Perdida'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Epesor_remanente[{{ $tituloKey }}][]' value="{{ $resultado['Epesor_remanente'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Epesor_remanente[{{ $tituloKey }}][]' value="{{ $resultado['Espesor_remanente'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Direccionalidad[{{ $tituloKey }}][]' value="{{ $resultado['Direccionalidad'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Clasificacion[{{ $tituloKey }}][]' value="{{ $resultado['Clasificacion'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>

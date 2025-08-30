@@ -66,7 +66,7 @@
 <br>
 <br>
 
-<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
@@ -577,7 +577,7 @@
                                             <tr>
                                                 <td><strong>SB:</strong></td>
                                                 <td>RAMAL</td>
-                                                <td><strong>C12:</strong></td>
+                                                <td><strong>C2:</strong></td>
                                                 <td>ANOMALÍA O IND. CATEGORIA 2</td>
                                                 <td><strong>-X:</strong></td>
                                                 <td>DISTANCIA NEGATIVA</td>
@@ -1013,7 +1013,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${item.titulo}]" value="${item.inputs[9]}" placeholder="Distancia_relativa_al_dato_(m)"></td>
                                         <td><input type="text" class="form-control" name="Horario_Tecnico[${item.titulo}]" value="${item.inputs[10]}" placeholder="Horario_Tecnico"></td>
                                         <td><input type="text" class="form-control" name="Horario_Tecnico2[${item.titulo}] value="${item.inputs[11]}" placeholder="Horario_Tecnico"></td>
-                                        <td><input type="text" class="form-control" name="Categoria[${item.titulo}]" value="${item.inputs[12]}" placeholder="Categoria"></td>
+                                        <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}]" value="${item.inputs[12]}" placeholder="Categoria"></td>
                                         <td><input type="text" class="form-control" name="Direccionalidad[${item.titulo}]" value="${item.inputs[13]}" placeholder="Direccionalidad"></td>
                                         <td><input type="text" class="form-control" name="Clasificacion[${item.titulo}]" value="${item.inputs[14]}" placeholder="Clasificacion"></td>
                                         <td><input type="text" class="form-control" name="porcentaje_de_reflexion_%[${item.titulo}]" value="${item.inputs[15]}" placeholder="porcentaje_de_reflexion_(%)"></td>
