@@ -223,7 +223,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo e Intensidad de Iluminación</label>
-                                            <input type="text" class="form-control  inputForm @error('Iluminacion') is-invalid @enderror" name="Detalles_Generales[Iluminacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion')}}">
+                                            <input type="text" class="form-control  inputForm @error('Iluminacion') is-invalid @enderror" name="Detalles_Generales[Iluminacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion', $Detalles_Generales['Iluminacion'] ?? '')}}">
                                             @error('Iluminacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -233,7 +233,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo de Inspección</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Inspeccion')}}">
+                                            <input type="text" class="form-control  inputForm @error('Tipo_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion', $Detalles_Generales['Iluminacion'] ?? '')}}">
                                             @error('Tipo_Inspeccion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
