@@ -223,8 +223,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo e Intensidad de Iluminación</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_e_Intensidad_de_Iluminación') is-invalid @enderror" name="Detalles_Generales[Tipo_e_Intensidad_de_Iluminación]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_e_Intensidad_de_Iluminación')}}">
-                                            @error('Procedimiento')
+                                            <input type="text" class="form-control  inputForm @error('Iluminacion') is-invalid @enderror" name="Detalles_Generales[Iluminacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion', $Detalles_Generales['Iluminacion'] ?? '')}}">
+                                            @error('Iluminacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -233,8 +233,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo de Inspección</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_de_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_de_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Inspeccion')}}">
-                                            @error('Tipo_de_Inspeccion')
+                                            <input type="text" class="form-control  inputForm @error('Tipo_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion', $Detalles_Generales['Iluminacion'] ?? '')}}">
+                                            @error('Tipo_Inspeccion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -279,7 +279,7 @@
                                                 <th class="align-middle">Long. Axial (in)</th>
                                                 <th class="align-middle">Long. Circ. (in)</th>
                                                 <th class="align-middle">d (in)</th>
-                                                <th class="align-middle">ta (in)</th>
+                                                <th><span style="font-size: 20px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
                                                 <th class="align-middle">% Perdida</th>
                                                 <th class="align-middle">Espesor remanente (in)</th>
                                                 <th class="align-middle">Observaciones</th>
@@ -337,8 +337,8 @@
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                             <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Elemento[{{ $tituloKey }}][]' value="{{ $resultado['Elemento'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='No_de_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['No_de_Indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Tipo_de_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['Tipo_de_Indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='No_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['No_Indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Tipo_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['Tipo_Indicacion'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Referencia[{{ $tituloKey }}][]' value="{{ $resultado['Referencia'] }}"></td>
                                                             <td><input type="text" class="form-control" name='DNR[{{ $tituloKey }}][]' value="{{ $resultado['DNR'] }}"></td>
                                                             <td><input type="text" class="form-control" name='HT[{{ $tituloKey }}][]' value="{{ $resultado['HT'] }}"></td>
@@ -347,7 +347,7 @@
                                                             <td><input type="text" class="form-control" name='d[{{ $tituloKey }}][]' value="{{ $resultado['d'] }}"></td>
                                                             <td><input type="text" class="form-control" name='ta[{{ $tituloKey }}][]' value="{{ $resultado['ta'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Perdida[{{ $tituloKey }}][]' value="{{ $resultado['Perdida'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Epesor_remanente[{{ $tituloKey }}][]' value="{{ $resultado['Epesor_remanente'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Espesor_remanente[{{ $tituloKey }}][]' value="{{ $resultado['Espesor_remanente'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>
@@ -383,23 +383,20 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-
-                                                                <th colspan="10" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
+                                                                <th colspan="10" class="p-2 alert alert-warning">NOMENCLATURAS</th>
                                                             </tr>
-    
                                                             <tr>
                                                                 <td><strong>DNR:</strong></td>
                                                                 <td>DISTANCIA DE NIVEL DE REFERENCIA</td>
                                                                 <td><strong>d:</strong></td>
                                                                 <td>PROFUNDIDAD DE LA INDICACIÓN</td>
-                                                                <td><strong>ta:</strong></td>
+                                                                <td><strong>ta</strong></td>
                                                                 <td>ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                                                <td><strong>C.E.GEN:</strong></td>
+                                                                <td><strong>C.E. GEN.:</strong></td>
                                                                 <td>CORROSIÓN EXTERNA GENERALIZADA</td>
                                                                 <td><strong>SIR:</strong></td>
-                                                                <td>SIN INDICACIÓN RELEVANTES</td>
+                                                                <td>SIN INDICACIONES RELEVANTES</td>
                                                             </tr>
-
                                                         </thead>
                                                     </table>
                                                 </td>
@@ -409,7 +406,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <<textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
+                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                                             </div>
                                         </div>
 
@@ -620,7 +617,7 @@
 
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
 
-                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -741,6 +738,7 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
 /*Juntas-Resultados */
     $(document).ready(function() {
@@ -785,17 +783,17 @@
                     <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
-                    <td><input type="text" class="form-control" name="No_de_Indicacion[${lastTitle}][]" placeholder="No. de Indicacion"></td>
-                    <td><input type="text" class="form-control" name="Tipo_de_Indicacion[${lastTitle}][]" placeholder="Tipo de Indicacion"></td>
+                    <td><input type="text" class="form-control" name="No_Indicacion[${lastTitle}][]" placeholder="No. de Indicacion"></td>
+                    <td><input type="text" class="form-control" name="Tipo_Indicacion[${lastTitle}][]" placeholder="Tipo de Indicacion"></td>
                     <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="No. Colada"></td>
-                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="tnominal"></td>
-                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Ø"></td>
-                    <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="No.Ind."></td>
-                    <td><input type="text" class="form-control" name="Long_Circ[${lastTitle}][]" placeholder="Tipo de Indicacion"></td>
-                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="NR (%)"></td>
-                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
-                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="Espesor_remanente[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR"></td>
+                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
+                    <td><input type="text" class="form-control" name="Long_Circ[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d(in)"></td>
+                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
+                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="% Perdida"></td>
+                    <td><input type="text" class="form-control" name="Espesor_remanente[${lastTitle}][]" placeholder="Espesor remanente (in)"></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
