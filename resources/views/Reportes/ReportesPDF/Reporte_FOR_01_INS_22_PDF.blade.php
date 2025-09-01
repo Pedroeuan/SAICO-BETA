@@ -90,7 +90,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 5px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -225,15 +225,15 @@
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 4px;"></div>
         
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -259,19 +259,19 @@
                             <th>Folio:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Folio'] }}</td>
                             <th>Tipo de Fluido:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_de_Fluido'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Flu'] }}</td>
                         </tr>
                         <tr>
                             <th>Partida:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Partida'] }}</td>
                             <th>Temperatura de Operación:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Temperatura_de_Operacion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Temp_Op'] }}</td>
                         </tr>
                         <tr>
                             <th>Lugar:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>Espesor Nominal / Cedula:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Espesor_Nominal_Cedula'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Esp_Ced'] }}</td>
                         </tr>
                         <tr>
                             <th>Tuberia / UDC / Isometrico / Plano:</th>
@@ -283,7 +283,7 @@
                             <th>Procedimiento:</th>
                             <td class="lineaInferior"{{ $Detalles_Generales['Procedimiento'] }}></td>
                             <th>Espesor Diametro Nominal NPS:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Diametro_Nominal_NPS'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Dia_NPS'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -295,35 +295,35 @@
                 <table class="datosinspeccion">
 
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
+                        <tr><th colspan="7">DATOS DEL EQUIPO</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
                 
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="2">EQUIPO DE ONDAS GUIADAS</th>
-                            <th colspan="4">ANILLO TRASNSDUCTOR 1</th>
+                            <th colspan="2">ANILLO TRASNSDUCTOR 1</th>
                             <th colspan="2">ANILLO TRASNDUCTOR 2</th>
                             <th>NÚMERO DE MODULOS:</th>
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
+                            <td style="width: 80px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
                             <th class="celdaGris" style="width: 10px;">DIAMETRO PULG:</th>
-                            <td colspan="3">{{ $Datos_Equipo['DIAMETRO_PULG'] }}</td>
+                            <td style="width: 80px;">{{ $Datos_Equipo['DIAMETRO_PULG'] }}</td>
                             <th class="celdaGris" style="width: 60px;">DIAMETRO PULG:</th>
-                            <td style="width: 100px;">{{ $Datos_Equipo['DIAMETRO_PULG_AN2'] }}</td>
-                            <td class="" style="width: 100px;">{{ $Datos_Equipo['Numero_de_Modelos'] }}</td>
+                            <td style="width: 100px;">{{ $Datos_Equipo['DIAMETRO_AN2'] }}</td>
+                            <td class="" style="width: 100px;">{{ $Datos_Equipo['Num_Mode'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
                             <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
                             <th class="celdaGris">MARCA:</th>
-                            <td colspan="3">{{ $Datos_Equipo['MARCA_AN1'] }}</td>
+                            <td>{{ $Datos_Equipo['MARCA_AN1'] }}</td>
                             <th class="celdaGris">MODELO:</th>
                             <td>{{ $Datos_Equipo['MODELO_AN2'] }}</td>
-                            <th class="celdaGris" style="width: 100px;">NUMERO_DE_TRANSDUCTORES</th>
+                            <th class="celdaGris" style="width: 100px;">NUMERO DE TRANSDUCTORES</th>
                         </tr>
                         <tr>
                             <th class="celdaGris">N.S:</th>
@@ -332,56 +332,59 @@
                             <td style="width: 60px;">{{ $Datos_Equipo['NS_AN1'] }}</td>
                             <th class="celdaGris">N.S:</th>
                             <td style="width: 60px;">{{ $Datos_Equipo['NS_AN2'] }}</td>
-                            <th class="celdaGris" style="width: 10px;">N.S:</th>
-                            <td style="width: 60px;">{{ $Datos_Equipo['NS_AN2'] }}</td>
-                            <td>{{ $Datos_Equipo['NUMERO_DE_TRANSDUCTORES'] }}</td>
+                            <td>{{ $Datos_Equipo['NUM_TRANS'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="datosinspeccion">
+                
+                <table class="datosgenerales">
+
                     <thead class="encabezadoAzul">
-                        <th colspan="6">DATOS DE LA INSPECCIÓN</th>
-                    </thead> 
-                </table>
+                        <tr><th colspan="8">DATOS DE LA INSPECCIÓN</th></tr>
+                    </thead>  
 
-                <div style="margin-bottom: 2px;"></div>
+                    <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
 
-                    <div style="margin-bottom: 4px;"></div>
-
-                    <table class="datosinspeccionsinborde">
+                    <tbody>
                         <tr>
                             <th style="width: 15%;">FRECUENCIA:</th>
                             <td class="lineaInferior">{{ $Datos_Equipo['Frecuencia'] }}</td>
                             <th style="width: 15%;">ORIENTACIÓN DE LA TUBERIA:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Orientacion_de_la_Tuberia'] }}</td>
-                            <th style="width: 15%;">REFERENCIA DE LA POSICIÓN DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Referencia_de_la_Posicion_del_Anillo'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Ori_Tube'] }}</td>
+                            <th style="width: 15%;" colspan="2">REFERENCIA DE LA POSICIÓN DEL ANILLO:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['Ref_An'] }}</td>
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">MODO DE ONDA:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Modo_de_Onda'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Mod_Onda'] }}</td>
                             <th style="width: 15%;">DIRECCIÓN DEL DISPARO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Direccion_del_Disparo'] }}</td>
-                            <th style="width: 15%;">DISTANCIA DE POSICIÓN DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Distancia_de_Posicion_del_Anillo'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Dir_Dis'] }}</td>
+                            <th style="width: 15%;" colspan="2">DISTANCIA DE POSICIÓN DEL ANILLO:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['Dm_An'] }}</td>
+
                         </tr>
 
                         <tr>
                             <th style="width: 15%;">PRESIÓN DE OPERACIÓN DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Presion_de_Operacion_del_anillo'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Psi_an'] }}</td>
                             <th style="width: 15%;">TIPO DE RECUBRIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Tipo_de_Recubrimiento'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Tip_Rec'] }}</td>
                             <th style="width: 15%;">ANGULO DE ORIENTACIÓN DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Angulo_de_Orientacion_del_Anillo'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Ang_An'] }}</td>
                             <th style="width: 15%;">COORDENADAS GPS:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['Coordenadas_GPS'] }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Coor_GPS'] }}</td>
                         </tr>
                     </tbody>
                 </table>
+
+                <div style="margin-bottom: 4px;"></div>
+                
+            </header> <!-- falto cierre del header -->
+
 
             <footer>
                 <table style="margin: auto; border: 0px solid black;">
@@ -430,12 +433,124 @@
                                     </tr>
 
                                 </thead>
+
+                            </table>
+                        </td>
+                        
+                        <td>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class=""></th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+
+                        <td>
+                        <table class="simbologia" style="border: 1px solid black;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="8" class="celdaAmarillo">RELACIÓN ENTRE ÁNGULOS DE LA DIRECCIONALIDAD Y HORARIOS TÉCNICOS</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>0°</strong></td>
+                                        <td>12:00</td>
+                                        <td><strong>90°</strong></td>
+                                        <td>03:00</td>
+                                        <td><strong>180°</strong></td>
+                                        <td>06:00</td>
+                                        <td><strong>270°</strong></td>
+                                        <td>09:00</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>30°</strong></td>
+                                        <td>01:00</td>
+                                        <td><strong>120°</strong></td>
+                                        <td>04:00</td>
+                                        <td><strong>210°</strong></td>
+                                        <td>07:00</td>
+                                        <td><strong>300°</strong></td>
+                                        <td>10:00</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>45°</strong></td>
+                                        <td>01:30</td>
+                                        <td><strong>135°</strong></td>
+                                        <td>04:30</td>
+                                        <td><strong>225°</strong></td>
+                                        <td>07:30</td>
+                                        <td><strong>315°</strong></td>
+                                        <td>10:30</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>60°</strong></td>
+                                        <td>02:00</td>
+                                        <td><strong>150°</strong></td>
+                                        <td>05:00</td>
+                                        <td><strong>240°</strong></td>
+                                        <td>08:00</td>
+                                        <td><strong>330°</strong></td>
+                                        <td>11:00</td>
+                                    </tr>
+
+                                </thead>
                             </table>
                         </td>
                     </tr>
-                </table>
+                </table>                    
 
-                                                
+                <div style="margin-bottom: 3px;"></div>
+
+                    <table>                               
+                        <tr>                                     
+                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <td class="lineaInferior" style="width: 814px;"></td>                            
+                        </tr>  
+                    </table>      <!--FALTO CIERRE DE TABLE-->
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -478,13 +593,13 @@
                             @elseif( $numFirmas == 3)
                             <!-- 3 Firmas -->
                                 <tr>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 20px;"></td>
                                 </tr>
 
                                 <tr>
@@ -525,15 +640,15 @@
                             @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
-                                    <td style="width: 10px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 30px;"></td>
+                                    <td style="width: 15px;"></td>
                                 </tr>
 
                                 <tr>
@@ -584,7 +699,6 @@
                                     <th></th>
                                 </tr>
                             @endif
-                        </thead>                            
                     </table>
             </footer>
 
@@ -593,32 +707,31 @@
                     <table class="datosresultados">
 
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="20">RESULTADOS</th></tr>
+                            <tr><th colspan="17">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+                            <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
 
                                 <thead>
                                     <tr class="celdaGrisResultados">
-                                        <th rowspan="2" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">#</th>
-                                        <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">ID</th>
+                                        <th rowspan="2" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">ID</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Ønom (pulg)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Øext (pulg)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Long. (m)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Elementos idendificados</th>
-                                        <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Distancia del disparo (m)</th>
+                                        <th colspan="2" style="border: 1px solid black; border-top: 2px solid black;">Distancia del disparo (m)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">No. Ind.</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Distancia relativa al dato (m)</th>
                                         <th rowspan="2" colspan="2" style="border: 1px solid black; border-top: 2px solid black;">Horario Técnico</th>
-                                        <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Clasificación de la indicación o anomalía</th>
+                                        <th colspan="3" style="border: 1px solid black; border-top: 2px solid black;">Clasificación de la indicación o anomalía</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">porcentaje de reflexión (%)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Fotos No.</th>
-                                        <th rowspan="2" style="width: 10px; border: 1px solid black; border-right: 2px solid black; border-top: 2px solid black; border-bottom: 2px solid black;">Observaciones</th>
+                                        <th rowspan="2" style="width: 10px; border: 1px solid black; border-right: 2px solid black; border-top: 1px solid black; border-bottom: 1px solid black;">Observaciones</th>
                                     </tr>
                                     <tr class="celdaGrisResultados">
-                                        <th style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">(-X)</th>
+                                        <th style="width: 50px; border: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black;">(-X)</th>
                                         <th style="width: 50px; border: 1px solid black;">(+X)</th>
-                                        <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>Categoría</th>
+                                        <th style="width: 20px; border: 1px solid black;">Categoría</th>
                                         <th style="width: 20px; border: 1px solid black;"> Direccionalidad</th>
                                         <th style="width: 15px; border: 1px solid black;">Clasificación</th>
                                     </tr>
@@ -641,7 +754,7 @@
                                         @if ($titulo !== 'SIN TITULO')
                                             <!-- Fila del título -->
                                             <tr class="titulo-row">
-                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                <td colspan="17" style="border-left: 2px solid black; border-right: 2px solid black;">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         {{ $titulo }}
                                                     </div>
@@ -681,7 +794,7 @@
                                                 @if ($contadorFilas % $filasPorPagina === 0)
                                                     <!-- Fila de total antes del salto de página -->
                                                     <tr style="page-break-after: always;" class="sinBordetd">
-                                                        <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                        <td colspan="11" style="border-top: 2px solid black;"></td>
                                                         <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                         <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                     </tr>
@@ -697,7 +810,7 @@
                                             @if ($contadorFilasPagina + $filasDelGrupo > $filasPorPagina && $titulo != 'SIN TITULO') //detectar si todo el grupo no cabe en la página, y si es así, el título anterior es el último de esa página.  
                                             <!-- Salto de página porque no cabe el grupo completo -->
                                                 <tr style="page-break-after: always;" class="sinBordetd">
-                                                    <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                    <td colspan="11" style="border-top: 2px solid black;"></td>
                                                     <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                     <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                                 </tr>
@@ -712,7 +825,7 @@
                                     <!-- Total al final si no se llenó la última página -->
                                         @if ($contadorFilasPagina > 0)
                                             <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="12" style="border-top: 2px solid black;"></td>
+                                                <td colspan="11" style="border-top: 2px solid black;"></td>
                                                 <th colspan="5" style="border-right: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;"><strong>Longitud inspeccionada:</strong></th>
                                                 <th style="border-right: 2px solid black; border-left: 1px solid black; border-bottom: 2px solid black;">{{ number_format($totalMetros, 2) }} m</th>
                                             </tr>

@@ -273,20 +273,20 @@
                         </tr>
                         <tr>
                             <th>Tipo de Fluido:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Tipo_de_Fluido'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Tipo_Flu'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                             <th>Temperatura de Operación:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Temperatura_de_Operacion'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Temp_Op'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>Espesor Nominal / Cedula:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Espesor_Nominal_Cedula'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Esp_Ced'] }}</td>
                         </tr>
                         <tr>
                             <th>Tuberia / UDC / Isometrico / Plano:</th>
@@ -298,7 +298,7 @@
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">Diametro Nominal NPS:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Diametro_Nominal_NPS'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Dia_NPS'] }}</td>
                         </tr>
                     </tbody>
                 </table>

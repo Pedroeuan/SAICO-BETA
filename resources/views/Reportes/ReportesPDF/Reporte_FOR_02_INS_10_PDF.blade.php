@@ -404,7 +404,7 @@
                         </td>
 
                         <td>
-                        <table class="">
+                            <table class="">
                                 <thead>
                                     <tr>
                                         <th colspan="6" class=""></th>

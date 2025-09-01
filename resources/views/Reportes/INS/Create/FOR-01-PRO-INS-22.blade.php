@@ -153,8 +153,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tipo de Fluido</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_de_Fluido') is-invalid @enderror" name="Detalles_Generales[Tipo_de_Fluido]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Fluido')}}">
-                            @error('Tipo_de_Fluido')
+                            <input type="text" class="form-control  inputForm @error('Tipo_Fluido') is-invalid @enderror" name="Detalles_Generales[Tipo_Fluido]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Fluido')}}">
+                            @error('Tipo_Fluido')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -173,8 +173,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Temperatura de Operación</label>
-                            <input type="text" class="form-control  inputForm @error('Temperatura_de_Operacion') is-invalid @enderror" name="Detalles_Generales[Temperatura_de_Operacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Temperatura_de_Operacion')}}">
-                            @error('Temperatura_de_Operacion')
+                            <input type="text" class="form-control  inputForm @error('Temp_Op') is-invalid @enderror" name="Detalles_Generales[Temp_Op]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Temp_Op')}}">
+                            @error('Temp_Op')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -193,8 +193,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Espesor Nominal / Cedula</label>
-                            <input type="text" class="form-control  inputForm @error('Espesor_Nominal_Cedula') is-invalid @enderror" name="Detalles_Generales[Espesor_Nominal_Cedula]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Espesor_Nominal_Cedula')}}">
-                            @error('Espesor_Nominal_Cedula')
+                            <input type="text" class="form-control  inputForm @error('Esp_Ced') is-invalid @enderror" name="Detalles_Generales[Esp_Ced]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Esp_Ced')}}">
+                            @error('Esp_Ced')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -233,8 +233,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Diametro Nominal NPS</label>
-                            <input type="text" class="form-control  inputForm @error('Diametro_Nominal_NPS') is-invalid @enderror" name="Detalles_Generales[Diametro_Nominal_NPS]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Diametro_Nominal_NPS')}}">
-                            @error('Diametro_Nominal_NPS')
+                            <input type="text" class="form-control  inputForm @error('Dia_NPS') is-invalid @enderror" name="Detalles_Generales[Dia_NPS]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Dia_NPS')}}">
+                            @error('Dia_NPS')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -310,7 +310,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_PULG_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_PULG_A2')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2')}}">
                         </div>
                     </div>
 
@@ -334,14 +334,14 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Número de Modelos:</label>
-                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[Numero_de_Modelos]" placeholder="" value="{{old('Datos_Equipo.Numero_de_Modelos')}}">
+                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[Num_Mode]" placeholder="" value="{{old('Datos_Equipo.Num_Mode')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Número de Transductores:</label>
-                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[NUMERO_DE_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.NUMERO_DE_TRANSDUCTORES')}}">
+                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[NUM_TRANS]" placeholder="" value="{{old('Datos_Equipo.NUM_TRANS')}}">
                         </div>
                     </div>
 
@@ -365,8 +365,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ORIENTACIÓN DE LA TUBERIA</label>
-                            <input type="text" class="form-control  inputForm @error('Orientacion_de_la_Tuberia') is-invalid @enderror" name="Datos_Equipo[Orientacion_de_la_Tuberia]"  placeholder="" value="{{old('Datos_Equipo.Orientacion_de_la_Tuberia')}}">
-                            @error('Orientacion_de_la_Tuberia')
+                            <input type="text" class="form-control  inputForm @error('Ori_Tube') is-invalid @enderror" name="Datos_Equipo[Ori_Tube]"  placeholder="" value="{{old('Datos_Equipo.Ori_Tube')}}">
+                            @error('Ori_Tube')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -375,8 +375,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">REFERENCIA DE LA POSICIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Referencia_de_la_Posicion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Referencia_de_la_Posicion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Referencia_de_la_Posicion_del_Anillo')}}">
-                            @error('Referencia_de_la_Posicion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Ref_An') is-invalid @enderror" name="Datos_Equipo[Ref_An]"  placeholder="" value="{{old('Datos_Equipo.Ref_An')}}">
+                            @error('Ref_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -385,8 +385,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODO DE ONDA</label>
-                            <input type="text" class="form-control  inputForm @error('Modo_de_Onda') is-invalid @enderror" name="Datos_Equipo[Modo_de_Onda]"  placeholder="" value="{{old('Datos_Equipo.Modo_de_Onda')}}">
-                            @error('Modo_de_Onda')
+                            <input type="text" class="form-control  inputForm @error('Mod_Onda') is-invalid @enderror" name="Datos_Equipo[Mod_Onda]"  placeholder="" value="{{old('Datos_Equipo.Mod_Onda')}}">
+                            @error('Mod_Onda')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -395,8 +395,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIRECCIÓN DEL DISPARO</label>
-                            <input type="text" class="form-control  inputForm @error('Direccion_del_Disparo') is-invalid @enderror" name="Datos_Equipo[Direccion_del_Disparo]"  placeholder="" value="{{old('Datos_Equipo.Direccion_del_Disparo')}}">
-                            @error('Direccion_del_Disparo')
+                            <input type="text" class="form-control  inputForm @error('Dir_Dis') is-invalid @enderror" name="Datos_Equipo[Dir_Dis]"  placeholder="" value="{{old('Datos_Equipo.Dir_Dis')}}">
+                            @error('Dir_Dis')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -405,8 +405,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DISTANCIA DE POSICIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Distancia_de_Posicion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Distancia_de_Posicion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Distancia_de_Posicion_del_Anillo')}}">
-                            @error('Distancia_de_Posicion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Dm_An') is-invalid @enderror" name="Datos_Equipo[Dm_An]"  placeholder="" value="{{old('Datos_Equipo.Dm_An')}}">
+                            @error('Dm_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -415,8 +415,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">PRESIÓN DE OPERACIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Presion_de_Operacion_del_anillo') is-invalid @enderror" name="Datos_Equipo[Presion_de_Operacion_del_anillo]"  placeholder="" value="{{old('Datos_Equipo.Presion_de_Operacion_del_anillo')}}">
-                            @error('Presion_de_Operacion_del_anillo')
+                            <input type="text" class="form-control  inputForm @error('Psi_an') is-invalid @enderror" name="Datos_Equipo[Psi_an]"  placeholder="" value="{{old('Datos_Equipo.Psi_an')}}">
+                            @error('Psi_an')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -425,8 +425,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TIPO DE RECUBRIMIENTO</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_de_Recubrimiento') is-invalid @enderror" name="Datos_Equipo[Tipo_de_Recubrimiento]"  placeholder="" value="{{old('Datos_Equipo.Tipo_de_Recubrimiento')}}">
-                            @error('Tipo_de_Recubrimiento')
+                            <input type="text" class="form-control  inputForm @error('Tip_Rec') is-invalid @enderror" name="Datos_Equipo[Tip_Rec]"  placeholder="" value="{{old('Datos_Equipo.Tip_Rec')}}">
+                            @error('Tip_Rec')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -435,8 +435,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ANGULO DE ORIENTACIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Angulo_de_Orientacion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Angulo_de_Orientacion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Angulo_de_Orientacion_del_Anillo')}}">
-                            @error('Angulo_de_Orientacion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Ang_An') is-invalid @enderror" name="Datos_Equipo[Ang_An]"  placeholder="" value="{{old('Datos_Equipo.Ang_An')}}">
+                            @error('Ang_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -445,8 +445,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">COORDENADAS GPS</label>
-                            <input type="text" class="form-control  inputForm @error('Coordenadas_GPS') is-invalid @enderror" name="Datos_Equipo[Coordenadas_GPS]"  placeholder="" value="{{old('Datos_Equipo.Coordenadas_GPS')}}">
-                            @error('Coordenadas_GPS')
+                            <input type="text" class="form-control  inputForm @error('Coor_GPS') is-invalid @enderror" name="Datos_Equipo[Coor_GPS]"  placeholder="" value="{{old('Datos_Equipo.Coor_GPS')}}">
+                            @error('Coor_GPS')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>

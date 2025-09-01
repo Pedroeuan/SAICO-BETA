@@ -83,7 +83,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
+                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Detalles_Generales.Fecha', $Detalles_Generales['Fecha'] ?? '') }}">
                             @error('Fecha')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -93,7 +93,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">No. Reporte</label>
-                            <input type="text" class="form-control  inputForm @error('No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]"  placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte')}}">
+                            <input type="text" class="form-control  inputForm @error('No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]"  placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte', $Detalles_Generales['No_Reporte'] ?? '')}}">
                             @error('No_Reporte')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -103,7 +103,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
+                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
                             @error('Cliente')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -113,7 +113,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
                             @error('Contrato')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -123,7 +123,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -133,7 +133,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo', $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
                             @error('Orden_Trabajo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -143,7 +143,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Folio</label>
-                            <input type="text" class="form-control  inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Folio')}}">
+                            <input type="text" class="form-control  inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Folio', $Detalles_Generales['Folio'] ?? '')}}">
                             @error('Folio')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -153,8 +153,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tipo de Fluido</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_de_Fluido') is-invalid @enderror" name="Detalles_Generales[Tipo_de_Fluido]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Fluido')}}">
-                            @error('Tipo_de_Fluido')
+                            <input type="text" class="form-control  inputForm @error('Tipo_Flu') is-invalid @enderror" name="Detalles_Generales[Tipo_Flu]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Flu', $Detalles_Generales['Tipo_Flu'] ?? '')}}">
+                            @error('Tipo_Flu')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -163,7 +163,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Partida</label>
-                            <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Partida')}}">
+                            <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  "value="{{old('Detalles_Generales.Partida', $Detalles_Generales['Partida'] ?? '')}}">
                             @error('Partida')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -173,8 +173,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Temperatura de Operación</label>
-                            <input type="text" class="form-control  inputForm @error('Temperatura_de_Operacion') is-invalid @enderror" name="Detalles_Generales[Temperatura_de_Operacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Temperatura_de_Operacion')}}">
-                            @error('Temperatura_de_Operacion')
+                            <input type="text" class="form-control  inputForm @error('Temp_Op') is-invalid @enderror" name="Detalles_Generales[Temp_Op]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Temp_Op', $Detalles_Generales['Temp_Op'] ?? '')}}">
+                            @error('Temp_Op')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -183,7 +183,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                            <textarea class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  ">{{old('Detalles_Generales.Lugar')}}</textarea>
+                            <textarea class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  "value="{{old('Detalles_Generales.Lugar', $Detalles_Generales['Lugar'] ?? '')}}"></textarea>
                             @error('Lugar')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -193,8 +193,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Espesor Nominal / Cedula</label>
-                            <input type="text" class="form-control  inputForm @error('Espesor_Nominal_Cedula') is-invalid @enderror" name="Detalles_Generales[Espesor_Nominal_Cedula]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Espesor_Nominal_Cedula')}}">
-                            @error('Espesor_Nominal_Cedula')
+                            <input type="text" class="form-control  inputForm @error('Esp_Ced') is-invalid @enderror" name="Detalles_Generales[Esp_Ced]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Esp_Ced', $Detalles_Generales['Esp_Ced'] ?? '')}}">
+                            @error('Esp_Ced')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -203,8 +203,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tuberia / UDC / Isometrico / Plano</label>
-                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
-                            @error('Tuberia_UDC_Isometrico_Plano')
+                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano', $Detalles_Generales['Isometrico_Plano'] ?? '')}}">
+                            @error('Isometrico_Plano')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -213,7 +213,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Material</label>
-                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material')}}">
+                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material', $Detalles_Generales['Material'] ?? '')}}">
                             @error('Material')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -223,7 +223,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -233,8 +233,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Diametro Nominal NPS</label>
-                            <input type="text" class="form-control  inputForm @error('Diametro_Nominal_NPS') is-invalid @enderror" name="Detalles_Generales[Diametro_Nominal_NPS]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Diametro_Nominal_NPS')}}">
-                            @error('Diametro_Nominal_NPS')
+                            <input type="text" class="form-control  inputForm @error('Dia_NPS') is-invalid @enderror" name="Detalles_Generales[Dia_NPS]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Dia_NPS', $Detalles_Generales['Dia_NPS'] ?? '')}}">
+                            @error('Dia_NPS')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -265,21 +265,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}">
                         </div>
                     </div>
 
@@ -288,21 +288,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInputA" name="Datos_Equipo[DIAMETRO_PULG]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_PULG')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInputA" name="Datos_Equipo[DIAMETRO_PULG]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_PULG', $Datos_Equipo['DIAMETRO_PULG'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_AN1]" placeholder="" value="{{old('Datos_Equipo.MARCA_AN1')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_AN1]" placeholder="" value="{{old('Datos_Equipo.MARCA_AN1', $Datos_Equipo['MARCA_AN1'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_AN1]" placeholder="" value="{{old('Datos_Equipo.NS_AN1')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_AN1]" placeholder="" value="{{old('Datos_Equipo.NS_AN1', $Datos_Equipo['NS_AN1'] ?? '')}}">
                         </div>
                     </div>
 
@@ -311,21 +311,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_PULG_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_PULG_A2')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2', $Datos_Equipo['DIAMETRO_AN2'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_MODELO_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_AN2', $Datos_Equipo['MODELO_AN2'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2', $Datos_Equipo['NS_AN2'] ?? '')}}">
                         </div>
                     </div>
 
@@ -335,14 +335,14 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Número de Modelos:</label>
-                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[Numero_de_Modelos]" placeholder="" value="{{old('Datos_Equipo.Numero_de_Modelos')}}">
+                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[Num_Mode]" placeholder="" value="{{old('Datos_Equipo.Num_Mode', $Datos_Equipo['Num_Mode'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Número de Transductores:</label>
-                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[NUMERO_DE_TRANSDUCTORES]" placeholder="" value="{{old('Datos_Equipo.NUMERO_DE_TRANSDUCTORES')}}">
+                            <input type="text" class="form-control  inputForm" id="numeroInputE" name="Datos_Equipo[NUM_TRANS]" placeholder="" value="{{old('Datos_Equipo.NUM_TRANS', $Datos_Equipo['NUM_TRANS'] ?? '')}}">
                         </div>
                     </div>
 
@@ -358,7 +358,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA</label>
-                            <input type="text" class="form-control  inputForm @error('Frecuencia') is-invalid @enderror" name="Datos_Equipo[Frecuencia]"  placeholder="" value="{{old('Datos_Equipo.Frecuencia')}}">
+                            <input type="text" class="form-control  inputForm @error('Frecuencia') is-invalid @enderror" name="Datos_Equipo[Frecuencia]"  placeholder="" value="{{old('Datos_Equipo.Frecuencia', $Datos_Equipo['Frecuencia'] ?? '')}}">
                             @error('Frecuencia')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -368,8 +368,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ORIENTACIÓN DE LA TUBERIA</label>
-                            <input type="text" class="form-control  inputForm @error('Orientacion_de_la_Tuberia') is-invalid @enderror" name="Datos_Equipo[Orientacion_de_la_Tuberia]"  placeholder="" value="{{old('Datos_Equipo.Orientacion_de_la_Tuberia')}}">
-                            @error('Orientacion_de_la_Tuberia')
+                            <input type="text" class="form-control  inputForm @error('Ori_Tube') is-invalid @enderror" name="Datos_Equipo[Ori_Tube]"  placeholder="" value="{{old('Datos_Equipo.Ori_Tube', $Datos_Equipo['Ori_Tube'] ?? '')}}">
+                            @error('Ori_Tube')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -378,8 +378,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">REFERENCIA DE LA POSICIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Referencia_de_la_Posicion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Referencia_de_la_Posicion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Referencia_de_la_Posicion_del_Anillo')}}">
-                            @error('Referencia_de_la_Posicion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Ref_An') is-invalid @enderror" name="Datos_Equipo[Ref_An]"  placeholder="" value="{{old('Datos_Equipo.Ref_An', $Datos_Equipo['Ref_An'] ?? '')}}">
+                            @error('Ref_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -388,8 +388,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODO DE ONDA</label>
-                            <input type="text" class="form-control  inputForm @error('Modo_de_Onda') is-invalid @enderror" name="Datos_Equipo[Modo_de_Onda]"  placeholder="" value="{{old('Datos_Equipo.Modo_de_Onda')}}">
-                            @error('Modo_de_Onda')
+                            <input type="text" class="form-control  inputForm @error('Mod_Onda') is-invalid @enderror" name="Datos_Equipo[Mod_Onda]"  placeholder="" value="{{old('Datos_Equipo.Mod_Onda', $Datos_Equipo['Mod_Onda'] ?? '')}}">
+                            @error('Mod_Onda')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -398,8 +398,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIRECCIÓN DEL DISPARO</label>
-                            <input type="text" class="form-control  inputForm @error('Direccion_del_Disparo') is-invalid @enderror" name="Datos_Equipo[Direccion_del_Disparo]"  placeholder="" value="{{old('Datos_Equipo.Direccion_del_Disparo')}}">
-                            @error('Direccion_del_Disparo')
+                            <input type="text" class="form-control  inputForm @error('Dir_Dis') is-invalid @enderror" name="Datos_Equipo[Dir_Dis]"  placeholder="" value="{{old('Datos_Equipo.Dir_Dis', $Datos_Equipo['Dir_Dis'] ?? '')}}">
+                            @error('Dir_Dis')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -408,8 +408,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DISTANCIA DE POSICIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Distancia_de_Posicion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Distancia_de_Posicion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Distancia_de_Posicion_del_Anillo')}}">
-                            @error('Distancia_de_Posicion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Dm_An') is-invalid @enderror" name="Datos_Equipo[Dm_An]"  placeholder="" value="{{old('Datos_Equipo.Dm_An', $Datos_Equipo['Dm_An'] ?? '')}}">
+                            @error('Dm_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -418,8 +418,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">PRESIÓN DE OPERACIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Presion_de_Operacion_del_anillo') is-invalid @enderror" name="Datos_Equipo[Presion_de_Operacion_del_anillo]"  placeholder="" value="{{old('Datos_Equipo.Presion_de_Operacion_del_anillo')}}">
-                            @error('Presion_de_Operacion_del_anillo')
+                            <input type="text" class="form-control  inputForm @error('Psi_an') is-invalid @enderror" name="Datos_Equipo[Psi_an]"  placeholder="" value="{{old('Datos_Equipo.Psi_an', $Datos_Equipo['Psi_an'] ?? '')}}">
+                            @error('Psi_an')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -428,8 +428,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">TIPO DE RECUBRIMIENTO</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_de_Recubrimiento') is-invalid @enderror" name="Datos_Equipo[Tipo_de_Recubrimiento]"  placeholder="" value="{{old('Datos_Equipo.Tipo_de_Recubrimiento')}}">
-                            @error('Tipo_de_Recubrimiento')
+                            <input type="text" class="form-control  inputForm @error('Tip_Rec') is-invalid @enderror" name="Datos_Equipo[Tip_Rec]"  placeholder="" value="{{old('Datos_Equipo.Tip_Rec', $Datos_Equipo['Tip_Rec'] ?? '')}}">
+                            @error('Tip_Rec')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -438,8 +438,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ANGULO DE ORIENTACIÓN DEL ANILLO</label>
-                            <input type="text" class="form-control  inputForm @error('Angulo_de_Orientacion_del_Anillo') is-invalid @enderror" name="Datos_Equipo[Angulo_de_Orientacion_del_Anillo]"  placeholder="" value="{{old('Datos_Equipo.Angulo_de_Orientacion_del_Anillo')}}">
-                            @error('Angulo_de_Orientacion_del_Anillo')
+                            <input type="text" class="form-control  inputForm @error('Ang_An') is-invalid @enderror" name="Datos_Equipo[Ang_An]"  placeholder="" value="{{old('Datos_Equipo.Ang_An', $Datos_Equipo['Ang_An'] ?? '')}}">
+                            @error('Ang_An')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -448,8 +448,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">COORDENADAS GPS</label>
-                            <input type="text" class="form-control  inputForm @error('Coordenadas_GPS') is-invalid @enderror" name="Datos_Equipo[Coordenadas_GPS]"  placeholder="" value="{{old('Datos_Equipo.Coordenadas_GPS')}}">
-                            @error('Coordenadas_GPS')
+                            <input type="text" class="form-control  inputForm @error('Coor_GPS') is-invalid @enderror" name="Datos_Equipo[Coor_GPS]"  placeholder="" value="{{old('Datos_Equipo.Coor_GPS', $Datos_Equipo['Coor_GPS'] ?? '')}}">
+                            @error('Coor_GPS')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -1119,6 +1119,7 @@
                     <td><input type="text" class="form-control" name="Fotos_No[${lastTitle}][]" placeholder="Fotos_No" ></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
