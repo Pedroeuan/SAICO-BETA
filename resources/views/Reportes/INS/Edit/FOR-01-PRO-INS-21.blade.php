@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-01-PRO-INS-14')
+@section('title', 'FOR-01-PRO-INS-21')
 
 @section('css')
 <!--datatable -->
@@ -72,7 +72,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-01-PRO-INS-14" action="{{ route('Reportes_FOR_01_PRO_INS_14.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+            <form id="FOR-01-PRO-INS-21" action="{{ route('Reportes_FOR_01_PRO_INS_21.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>

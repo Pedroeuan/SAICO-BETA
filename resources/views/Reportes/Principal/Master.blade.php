@@ -49,7 +49,6 @@
 @endsection
 
 @section('content')
-
     @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
@@ -84,6 +83,8 @@
         @include('Reportes.INS.Create.FOR-01-PRO-INS-18')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-19') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-19')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-21') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-21')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-22') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-22')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-02') 
