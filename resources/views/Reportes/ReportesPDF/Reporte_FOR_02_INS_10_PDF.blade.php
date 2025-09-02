@@ -126,7 +126,7 @@
         .border {
             border: 1px solid black; 
         }
-            
+
         .datosinspeccion{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
@@ -404,7 +404,7 @@
                         </td>
 
                         <td>
-                        <table class="">
+                            <table class="">
                                 <thead>
                                     <tr>
                                         <th colspan="6" class=""></th>
@@ -491,9 +491,9 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
-                    <table>                               
+                    <table class="datosgenerales">                              
                         <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <th>OBSERVACIONES:</th>                                         
                             <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
@@ -585,7 +585,7 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
-                            @else
+                            @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
                                     <td style="width: 10px;"></td>
@@ -669,9 +669,9 @@
                                         <th rowspan="2" style="width: 10px; border: 1px solid black; border-right: 2px solid black; border-top: 2px solid black; border-bottom: 2px solid black;">Observaciones</th>
                                     </tr>
                                     <tr class="celdaGrisResultados">
-                                        <th style="width: 5px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
+                                        <th style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
                                         <th style="width: 50px; border: 1px solid black;">Elemento / Tubo</th>
-                                        <th style="width: 60px; border: 1px solid black;">No. Aceptación</th>
+                                        <th style="width: 50px; border: 1px solid black;">No. Aceptación</th>
                                         <th style="width: 40px; border: 1px solid black;">No. Serie</th>
                                         <th style="width: 20px; border: 1px solid black;">No. Colada</th>
                                         <th style="width: 20px; border: 1px solid black;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>nominal</th>

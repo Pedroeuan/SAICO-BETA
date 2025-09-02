@@ -3,7 +3,7 @@
         <head>
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-08/01</title>
-           <style>
+            <style>
                 @page {
                     margin: 
                     3.0cm /* superior */
@@ -533,9 +533,9 @@
 
                     <div style="margin-bottom: 5px;"></div>
 
-                    <table>                               
+                    <table class="datosgenerales">                                
                         <tr>                                     
-                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <th>OBSERVACIONES:</th>                                         
                             <td class="lineaInferior" style="width: 814px;"></td>                            
                         </tr>                      
                     </table>

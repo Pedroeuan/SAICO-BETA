@@ -513,6 +513,14 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_01_INS_13.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+        }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
         {
             return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
@@ -524,6 +532,14 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
             return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
         }
     }
 
