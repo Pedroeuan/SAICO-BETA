@@ -84,6 +84,10 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
     }
+    public function FOR_01_PRO_INS_14()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-14');
+    }
     public function FOR_01_PRO_INS_15()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
