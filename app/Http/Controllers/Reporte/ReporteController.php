@@ -84,6 +84,10 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
     }
+    public function FOR_01_PRO_INS_14()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-14');
+    }
     public function FOR_01_PRO_INS_15()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
@@ -109,6 +113,11 @@ class ReporteController extends Controller
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
     }
     
+    public function FOR_01_PRO_INS_21()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
+    }
+
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -513,6 +522,10 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_01_INS_13.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-14")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_14.PDF', ['id' => $id]);
+        }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-15")
         {
             return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
@@ -520,6 +533,10 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
         {
             return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_21.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
         {
