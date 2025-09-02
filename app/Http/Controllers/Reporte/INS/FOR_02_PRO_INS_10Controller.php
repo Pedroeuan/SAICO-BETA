@@ -786,10 +786,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-            /*DETALLES GENERALES */
+                        /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
@@ -826,31 +826,31 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Datos_Equipo.Observaciones' => 'nullable|string',
 
             /*Titulos Juntas */
-            'titulos' => 'nullable|array',  // Asegura que sea un array
-            'titulos.*' => 'string',  // Cada título debe ser un string válido
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
-            'ID' => 'required|array',
-            'elemento_tubo' => 'required|array',
-            'no_aceptacion' => 'required|array',
-            'no_serie' => 'required|array',
-            'no_colada' => 'required|array',
-            'tnominal' => 'required|array',
-            'diametro' => 'required|array',
-            'no_ind' => 'required|array',
-            'tipo_indicacion' => 'required|array',
-            'nr' => 'required|array',
-            'ni' => 'required|array',
-            'ht' => 'required|array',
-            'prof' => 'required|array',
-            'la' => 'required|array',
-            'lc' => 'required|array',
-            'tmax' => 'required|array',
-            'tmin' => 'required|array',
-            'metros_lineales' => 'required|array',
-            'evaluacion' => 'required|array',
-            'observaciones' => 'required|array',
+            'ID' => 'nullable|array',
+            'elemento_tubo' => 'nullable|array',
+            'no_aceptacion' => 'nullable|array',
+            'no_serie' => 'nullable|array',
+            'no_colada' => 'nullable|array',
+            'tnominal' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_ind' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'prof' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'metros_lineales' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -863,7 +863,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
