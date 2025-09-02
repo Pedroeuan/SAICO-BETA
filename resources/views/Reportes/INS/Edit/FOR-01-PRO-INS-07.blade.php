@@ -1020,7 +1020,6 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
         });
 
         $('#addBtn').click(function () {
@@ -1054,7 +1053,6 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData();
         }
     );
 

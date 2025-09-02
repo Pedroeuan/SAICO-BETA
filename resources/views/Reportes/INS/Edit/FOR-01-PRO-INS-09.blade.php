@@ -938,7 +938,6 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
         });
 
         $('#addBtn').click(function () {
@@ -973,7 +972,6 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData();
         }
     );
 
@@ -998,9 +996,6 @@
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
-            // Restaurar datos al cargar la página
-            restoreData();
     });
 
     $(document).ready(function() {
