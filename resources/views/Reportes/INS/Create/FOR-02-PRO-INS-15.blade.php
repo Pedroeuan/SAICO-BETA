@@ -73,7 +73,7 @@
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_15.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -223,8 +223,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo e Intensidad de Iluminación</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_e_Intensidad_de_Iluminación') is-invalid @enderror" name="Detalles_Generales[Tipo_e_Intensidad_de_Iluminación]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_e_Intensidad_de_Iluminación')}}">
-                                            @error('Procedimiento')
+                                            <input type="text" class="form-control  inputForm @error('Iluminacion') is-invalid @enderror" name="Detalles_Generales[Iluminacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Iluminacion')}}">
+                                            @error('Iluminacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -233,8 +233,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Tipo de Inspección</label>
-                                            <input type="text" class="form-control  inputForm @error('Tipo_de_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_de_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_de_Inspeccion')}}">
-                                            @error('Tipo_de_Inspeccion')
+                                            <input type="text" class="form-control  inputForm @error('Tipo_Inspeccion') is-invalid @enderror" name="Detalles_Generales[Tipo_Inspeccion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Inspeccion')}}">
+                                            @error('Tipo_Inspeccion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -279,7 +279,7 @@
                                                 <th class="align-middle">Long. Axial (in)</th>
                                                 <th class="align-middle">Long. Circ. (in)</th>
                                                 <th class="align-middle">d (in)</th>
-                                                <th class="align-middle">ta (in)</th>
+                                                <th><span style="font-size: 20px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
                                                 <th class="align-middle">% Perdida</th>
                                                 <th class="align-middle">Espesor remanente (in)</th>
                                     <th class="align-middle">Observaciones</th>
@@ -331,29 +331,27 @@
 
                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                         </div>
-                        
-                        <table class="table table-bordered table-striped dt-responsive tablas">
-                            <tr>
-                                <td>
-                                    <table>
-                                        <thead>
+
+                                        <table class="table table-bordered table-striped dt-responsive tablas">
                                             <tr>
-                                                                <th colspan="10" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
+                                                <td>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="10" class="p-2 alert alert-warning">NOMENCLATURAS</th>
                                                             </tr>
-    
                                                             <tr>
                                                                 <td><strong>DNR:</strong></td>
                                                                 <td>DISTANCIA DE NIVEL DE REFERENCIA</td>
                                                                 <td><strong>d:</strong></td>
                                                                 <td>PROFUNDIDAD DE LA INDICACIÓN</td>
-                                                                <td><strong>ta:</strong></td>
+                                                                <td><strong>ta</strong></td>
                                                                 <td>ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                                                <td><strong>C.E.GEN:</strong></td>
+                                                                <td><strong>C.E. GEN.:</strong></td>
                                                                 <td>CORROSIÓN EXTERNA GENERALIZADA</td>
                                                                 <td><strong>SIR:</strong></td>
-                                                                <td>SIN INDICACIÓN RELEVANTES</td>
+                                                                <td>SIN INDICACIONES RELEVANTES</td>
                                                             </tr>
-
                                                         </thead>
                                                     </table>
                                                 </td>
@@ -575,55 +573,67 @@
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
 
                         <!--IMAGENES CON COMENTARIOS-->
-                        <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 50; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
-                            </select>
-                        </div>
-
-                        <div id="imageFieldsContainer" class="row">
-                            <!-- Aquí se agregarán dinámicamente los campos -->
-                        </div>
-
-                        <!-- Modal para recortar la imagen -->
-                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="img-container">
-                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control form-select" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="container">
-                            <div class="float-right">
-                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
-                            </div>
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                            <p>
+                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
+                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
+                                            </p>
+                                        </div>
 
-                            <div class="float-left">
-                                <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
-                            </div>
-                        </div>
+                                        <div class="w-100">
+                                            <div id="imageFieldsContainer" class="row">
+                                                <!-- Aquí se agregarán dinámicamente los campos -->
+                                            </div>
+                                        </div>
+                                        
+
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="container">
+                                            <div class="float-right">
+                                                <button type="submit" class="btn btn-info bg-primary">Guardar</button>
+                                            </div>
+
+                                            <div class="float-left">
+                                                <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
+                                            </div>
+                                        </div>
 
                 </div>
             </form>
@@ -653,8 +663,13 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Create.js') }}"></script>
-<script>
 
+<!-- Biblioteca para recorte de imagenes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<script>
 /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
@@ -689,8 +704,8 @@
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                             <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
                             <td><input type="text" class="form-control" name="Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Elemento / Tubo"></td>
-                            <td><input type="text" class="form-control" name="No_de_Indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. de Indicacion"></td>
-                            <td><input type="text" class="form-control" name="Tipo_de_Indicacion[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicacion"></td>
+                            <td><input type="text" class="form-control" name="No_Indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. de Indicacion"></td>
+                            <td><input type="text" class="form-control" name="Tipo_Indicacion[${item.titulo}][]" value="${item.inputs[4]}" placeholder="Tipo de Indicacion"></td>
                             <td><input type="text" class="form-control" name="Referencia[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Referencia"></td>
                             <td><input type="text" class="form-control" name="DNR[${item.titulo}][]" value="${item.inputs[6]}" placeholder="DNR (m)"></td>
                             <td><input type="text" class="form-control" name="HT[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
@@ -699,7 +714,7 @@
                             <td><input type="text" class="form-control" name="d[${item.titulo}][]" value="${item.inputs[10]}" placeholder="d(in)"></td>
                             <td><input type="text" class="form-control" name="ta[${item.titulo}][]" value="${item.inputs[11]}" placeholder="ta(in)"></td>
                             <td><input type="text" class="form-control" name="Perdida[${item.titulo}][]" value="${item.inputs[12]}" placeholder="%Perdida"></td>
-                            <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor remanente (in)"></td>
+                            <td><input type="text" class="form-control" name="Espesor_remanente[${item.titulo}][]" value="${item.inputs[13]}" placeholder="Espesor remanente (in)"></td>
                             <td><input type="text" class="form-control" name="Observaciones[${item.titulo}][]" value="${item.inputs[14]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
@@ -748,17 +763,17 @@
                     <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                    <td><input type="text" class="form-control" name="No_de_Indicacion[${lastTitle}][]" placeholder="No. Aceptacion"></td>
-                    <td><input type="text" class="form-control" name="Tipo_de_Indicacion[${lastTitle}][]" placeholder="No. Serie"></td>
-                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="No. Colada"></td>
-                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="tnominal"></td>
-                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Ø"></td>
-                    <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="No.Ind."></td>
-                    <td><input type="text" class="form-control" name="Long_Circ[${lastTitle}][]" placeholder="Tipo de Indicacion"></td>
-                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="NR (%)"></td>
-                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="NI (%)"></td>
-                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="Espesor_remanente[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="No_Indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="Tipo_Indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
+                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (m)"></td>
+                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="Long_Axial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
+                    <td><input type="text" class="form-control" name="Long_Circ[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
+                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d(in)"></td>
+                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in"></td>
+                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="% Perdida"></td>
+                    <td><input type="text" class="form-control" name="Espesor_remanente[${lastTitle}][]" placeholder="Espesor remanente (in)"></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;

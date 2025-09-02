@@ -73,7 +73,11 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
+<<<<<<< HEAD
             <form id="FOR-01-PRO-INS-14" action="{{route('Reportes_FOR_01_PRO_INS_14.store')}}" method="post" enctype="multipart/form-data">
+=======
+            <form id="FOR-01-PRO-INS-13" action="{{route('Reportes_FOR_01_PRO_INS_14.store')}}" method="post" enctype="multipart/form-data">
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -1750,29 +1754,47 @@ $(document).ready(function() {
             });
     });
 
+<<<<<<< HEAD
     /*FOR-01-PRO-INS-14*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-14');
+=======
+    /*FOR-01-PRO-INS-13*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-13');
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
+<<<<<<< HEAD
             //    localStorage.setItem('FOR-01-PRO-INS-14_' + el.name, el.value);
+=======
+            //    localStorage.setItem('FOR-01-PRO-INS-13_' + el.name, el.value);
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+<<<<<<< HEAD
                 localStorage.setItem('FOR-01-PRO-INS-14_' + el.name, el.value);
+=======
+                localStorage.setItem('FOR-01-PRO-INS-13_' + el.name, el.value);
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
+<<<<<<< HEAD
                 const value = localStorage.getItem('FOR-01-PRO-INS-14_' + el.name);
+=======
+                const value = localStorage.getItem('FOR-01-PRO-INS-13_' + el.name);
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
                 if (value !== null) el.value = value;
             }
         });
@@ -1780,7 +1802,11 @@ $(document).ready(function() {
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+<<<<<<< HEAD
                 localStorage.removeItem('FOR-01-PRO-INS-14_' + el.name);
+=======
+                localStorage.removeItem('FOR-01-PRO-INS-13_' + el.name);
+>>>>>>> 68d24427ab742599dbe2bdfde08ba4e91be1d3e4
                 //localStorage.clear();
             });
         });
