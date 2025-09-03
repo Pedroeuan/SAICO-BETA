@@ -49,6 +49,7 @@ Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_16Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_17Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_18Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_19Controller;
+Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_20Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_21Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_22Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
@@ -270,6 +271,12 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_21*/
         Route::get('/Reporte/FOR-01-INS-21/PDF/{id}', [FOR_01_PRO_INS_21Controller::class, 'FOR_01_INS_21'])->name('Reporte_FOR_01_INS_21.PDF');
 
+        /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_20*/
+        Route::post('/Reportes_FOR_01_PRO_INS_20/store', [FOR_01_PRO_INS_20Controller::class, 'FOR_01_PRO_INS_20_store'])->name('Reportes_FOR_01_PRO_INS_20.store');
+        /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_20*/
+        Route::post('/Reportes_FOR_01_PRO_INS_20/update/{id}', [FOR_01_PRO_INS_20Controller::class, 'FOR_01_PRO_INS_20_update'])->name('Reportes_FOR_01_PRO_INS_20.update');
+        /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_20*/
+        Route::get('/Reporte/FOR-01-INS-20/PDF/{id}', [FOR_01_PRO_INS_20Controller::class, 'FOR_01_INS_20'])->name('Reporte_FOR_01_INS_20.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_22*/
         Route::post('/Reportes_FOR_01_PRO_INS_22/store', [FOR_01_PRO_INS_22Controller::class, 'FOR_01_PRO_INS_22_store'])->name('Reportes_FOR_01_PRO_INS_22.store');
@@ -352,8 +359,11 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
         Route::post('/Reportes_FOR_01_PRO_INS_18/store', [ReporteController::class, 'FOR_01_PRO_INS_18_store'])->name('Reportes_FOR_01_PRO_INS_18.store');
         Route::post('/Reportes_FOR_01_PRO_INS_18/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_18_update'])->name('Reportes_FOR_01_PRO_INS_18.update');
 
+        Route::post('/Reportes_FOR_01_PRO_INS_20/store', [ReporteController::class, 'FOR_01_PRO_INS_20_store'])->name('Reportes_FOR_01_PRO_INS_20.store');
+        Route::post('/Reportes_FOR_01_PRO_INS_20/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_20_update'])->name('Reportes_FOR_01_PRO_INS_20.update');
+
         Route::post('/Reportes_FOR_01_PRO_INS_21/store', [ReporteController::class, 'FOR_01_PRO_INS_21_store'])->name('Reportes_FOR_01_PRO_INS_21.store');
-        Route::post('/Reportes_FOR_01_PRO_INS_21/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_21_update'])->name('Reportes_FOR_01_PRO_INS_21.update');
+        Route::post('/Reportes_FOR_01_PRO_INS_/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_21_update'])->name('Reportes_FOR_01_PRO_INS_21.update');
 
         Route::post('/Reportes_FOR_01_PRO_INS_22/store', [ReporteController::class, 'FOR_01_PRO_INS_22_store'])->name('Reportes_FOR_01_PRO_INS_22.store');
         Route::post('/Reportes_FOR_01_PRO_INS_22/update/{id}', [ReporteController::class, 'FOR_01_PRO_INS_22_update'])->name('Reportes_FOR_01_PRO_INS_22.update');
