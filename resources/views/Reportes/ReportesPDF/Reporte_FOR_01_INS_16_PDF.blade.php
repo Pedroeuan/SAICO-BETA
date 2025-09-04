@@ -231,9 +231,7 @@
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
                         </tr>
                         <tr>
-                            <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
-                        </tr>
+
                         <tr>
                             <th>LUGAR:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
@@ -243,9 +241,7 @@
                         <tr>
                             <th>Procedimiento:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
-                        </tr>
+
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
