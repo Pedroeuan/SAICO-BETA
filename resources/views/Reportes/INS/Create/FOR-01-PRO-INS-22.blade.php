@@ -66,7 +66,7 @@
 <br>
 <br>
 
-<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
@@ -260,6 +260,24 @@
                     <div style="margin-bottom: 2px;"></div>
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO DE ONDAS GUIADAS</div>
+
+                    <!-- Select para Equipos -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                    <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                        @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                            <option value="{{ $equipo->idGeneral_EyC }}"
+                                                data-marca="{{ $equipo->Marca }}"
+                                                data-modelo="{{ $equipo->Modelo }}"
+                                                data-ns="{{ $equipo->Serie }}">
+                                                {{ $equipo->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">

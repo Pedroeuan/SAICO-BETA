@@ -235,7 +235,7 @@
         "FOR-01-PRO-INS-19": "INFORME DE INSPECCIÓN CON ACFM",
         "FOR-01-PRO-INS-20": " Informe de Análisis mediante Corriente Eddy Pulsada (PECT).",
         "FOR-01-PRO-INS-21": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-        "FOR-01-PRO-INS-22": "Ondas Guiadas"
+        "FOR-01-PRO-INS-22": "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
     };
 
     pruebaSelect.addEventListener('change', function () {
