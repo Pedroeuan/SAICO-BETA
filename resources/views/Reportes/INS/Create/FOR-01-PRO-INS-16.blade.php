@@ -73,6 +73,7 @@
     <div class="card w-100 p-3">
         <div class="card-body w-100">
             <form id="FOR-01-PRO-INS-16" action="{{route('Reportes_FOR_01_PRO_INS_16.store')}}" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>

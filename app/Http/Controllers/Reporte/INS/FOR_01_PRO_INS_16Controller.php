@@ -50,9 +50,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Contrato= $datosParaCrearOS_OC['Contrato'];
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
-        $Material = $datosParaCrearOS_OC['Material'];
+        //$Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        $Pieza = $datosParaCrearOS_OC['Pieza'];
+        //$Pieza = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
@@ -82,7 +82,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            $Orden_Servicio->Material = $Material;
+            //$Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -161,7 +161,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            $Orden_Servicio->Material = $Material;
+            //$Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -216,13 +216,8 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_16_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
 
-    public function FOR_02_PRO_INS_10_store(Request $request)
+    public function FOR_01_PRO_INS_16_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -432,10 +427,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        $Material = $validatedData['Detalles_Generales']['Material'];
+        //$Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        //$Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
@@ -444,9 +439,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Lugar' => $Lugar,
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
-            'Material' => $Material,
+            //'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
-            'Pieza' => $Pieza,
+            //'Pieza' => $Pieza,
             'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
@@ -470,7 +465,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
     }
 
 
-    public function FOR_02_PRO_INS_10_update(Request $request, $id)
+    public function FOR_01_PRO_INS_16_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
