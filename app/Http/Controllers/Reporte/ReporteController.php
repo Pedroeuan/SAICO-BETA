@@ -113,6 +113,11 @@ class ReporteController extends Controller
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
     }
     
+    public function FOR_01_PRO_INS_20()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-20');
+    }
+    
     public function FOR_01_PRO_INS_21()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
@@ -533,6 +538,10 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
         {
             return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
         {

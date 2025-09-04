@@ -259,7 +259,7 @@
                             <th>Folio:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Folio'] }}</td>
                             <th>Tipo de Fluido:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Flu'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tip_Flu'] }}</td>
                         </tr>
                         <tr>
                             <th>Partida:</th>

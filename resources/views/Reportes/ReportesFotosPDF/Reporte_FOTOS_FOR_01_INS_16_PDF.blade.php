@@ -225,7 +225,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)</th>
+                            <th rowspan="2" style="font-size: 8pt;"> INSPECCIÓN CON TERMOGRAFÍA</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -276,14 +276,14 @@
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
-                            <th>Instalación:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['ins'] }}</td>
+                            <th>LUGAR:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>ISOMETRICO/PLANO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
-                            <th>Nombre de la Pieza:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Nom_pz'] }}</td>
+                            <th>PIEZA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
                             <th>MATERIAL:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
@@ -301,7 +301,34 @@
             <footer>
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -490,7 +517,7 @@
                                 </tr>
                             </table>
 
-                            {{-- Salto de página cada 2 imágenes --}}
+                            {{-- Salto de página cada 4 imágenes --}}
                             @if (!$loop->last)
                                 <div style="page-break-after: always;"></div>
                             @endif
