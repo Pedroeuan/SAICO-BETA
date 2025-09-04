@@ -153,7 +153,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tipo de Fluido</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_Fluido') is-invalid @enderror" name="Detalles_Generales[Tipo_Fluido]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Fluido')}}">
+                            <input type="text" class="form-control  inputForm @error('Tipo_Flu') is-invalid @enderror" name="Detalles_Generales[Tipo_Flu]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Flu')}}">
                             @error('Tipo_Fluido')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -302,6 +302,24 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 1</div>
 
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
@@ -325,24 +343,42 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 2</div>
 
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect2">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInputA2" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_MODELO_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_MODELO_AN2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2')}}">
                         </div>
                     </div>
 
@@ -1137,6 +1173,75 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA').val(marca);
+            $('#modeloInputA').val(modelo);
+            $('#nsInputA').val(ns);
+        }
+
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect').on('change', function() {
+            actualizarInputsA();
+        });
+
+        function actualizarInputsA2() {
+            var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA2').val(marca);
+            $('#modeloInputA2').val(modelo);
+            $('#nsInputA2').val(ns);
+        }
+
+        const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios2');
+        selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect2').on('change', function() {
+            actualizarInputsA2();
+        });
+
+    });
 
     /*FOR-01-PRO-INS-22*/
     document.addEventListener('DOMContentLoaded', function () {
