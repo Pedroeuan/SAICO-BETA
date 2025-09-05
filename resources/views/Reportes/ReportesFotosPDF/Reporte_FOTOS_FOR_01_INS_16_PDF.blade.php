@@ -281,7 +281,12 @@
                             <th>ISOMETRICO/PLANO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
-
+                        <tr>
+                            <th>PIEZA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
+                            <th>MATERIAL:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
+                        </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
