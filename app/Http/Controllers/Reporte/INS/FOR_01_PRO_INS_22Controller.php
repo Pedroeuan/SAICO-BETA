@@ -1096,7 +1096,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(137, -266.5);
+            $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
