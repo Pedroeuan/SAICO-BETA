@@ -296,8 +296,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Cate' => 'nullable|array',
             'Direc' => 'nullable|array',
             'Clas' => 'nullable|array',
-            'Porc_Refl%' => 'nullable|array',
-            'Fotos_No' => 'nullable|array',
+            'Porc_Refl' => 'nullable|array',
+            'Fotos' => 'nullable|array',
             'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
@@ -424,7 +424,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
                     'Clas' => $request->input("Clas.$sinTituloKey.$i"),
                     'Porc_Refl' => $request->input("Porc_Refl.$sinTituloKey.$i"),
                     'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -462,7 +462,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
                     'Clas' => $request->input("Clas.$tituloKey.$i"),
                     'Porc_Refl' => $request->input("Porc_Refl.$tituloKey.$i"),
                     'Fotos' => $request->input("Fotos.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -641,8 +641,6 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Datos_Equipo.Ang_An' => 'nullable|string',
             'Datos_Equipo.Coor_GPS' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -678,7 +676,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
@@ -730,7 +728,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string', 
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
@@ -778,7 +776,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
                     'Clas' => $request->input("Clas.$sinTituloKey.$i"),
                     'Porc_Refl' => $request->input("Porc_Refl.$sinTituloKey.$i"),
                     'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -816,7 +814,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
                     'Clas' => $request->input("Clas.$tituloKey.$i"),
                     'Porc_Refl' => $request->input("Porc_Refl.$tituloKey.$i"),
                     'Fotos' => $request->input("Fotos.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -1046,7 +1044,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-22/01.PDF',
+            'title' => 'Reporte_FOR-01-INS-22.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1112,7 +1110,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_22_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01_INS_22.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

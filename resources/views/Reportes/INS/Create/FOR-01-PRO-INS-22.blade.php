@@ -1066,7 +1066,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="Ele_iden[${item.titulo}]" value="${item.inputs[6]}" placeholder="Elementos idendificados"></td>
                                         <td><input type="text" class="form-control" name="-X[${item.titulo}]" value="${item.inputs[7]}" placeholder="(-X)"></td>
                                         <td><input type="text" class="form-control" name="+X[${item.titulo}]" value="${item.inputs[8]}" placeholder="(+X)"></td>
-                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[9]}" placeholder="No_Ind"></td>
+                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[9]}" placeholder="No Ind"></td>
                                         <td><input type="text" class="form-control" name="Dis_rela[${item.titulo}]" value="${item.inputs[10]}" placeholder="Distancia relativa"></td>
                                         <td><input type="text" class="form-control" name="HT1[${item.titulo}]" value="${item.inputs[11]}" placeholder="Horario Tecnico"></td>
                                         <td><input type="text" class="form-control" name="HT2[${item.titulo}] value="${item.inputs[12]}" placeholder="Horario Tecnico"></td>
