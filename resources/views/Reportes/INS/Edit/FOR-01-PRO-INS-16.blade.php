@@ -202,7 +202,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
+                                            <label class="col-form-label" for="inputSuccess">ESTÁNDAR DE REFERENCIA</label>
                                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
                                             @error('Criterio_Evaluacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>

@@ -272,20 +272,20 @@
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
                         </tr>
                         <tr>
+                            <th>Equipo:</th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
+                        </tr>
+                        <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Partida'] }}</td>
+                            <th>UBICACIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
-                            <th>ISOMETRICO/PLANO:</th>
+                            <th>HORA DE INSPECCIÓN:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PIEZA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
-                            <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
