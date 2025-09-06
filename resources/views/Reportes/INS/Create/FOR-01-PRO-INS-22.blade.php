@@ -183,7 +183,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                            <textarea class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  ">{{old('Detalles_Generales.Lugar')}}</textarea>
+                            <input type="text" class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar')}}">
                             @error('Lugar')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -276,7 +276,7 @@
                                             </option>
                                         @endforeach
                                 </select>
-                            </div>
+                        </div>
                     </div>
 
                     <div class="col-sm-4">
@@ -507,68 +507,73 @@
                     </div>
 
 
-                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                            <div style="margin-bottom: 9px;"></div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                        <div style="margin-bottom: 5px;"></div>
                             <div class="table-responsive">
-                            <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-50">
-                            <thead>
-                                <tr>
-                                    <th class="align-middle" rowspan="2">#</th>
-                                    <th class="align-middle" rowspan="2">ID</th>
-                                    <th class="align-middle" rowspan="2">Elemento</th>
-                                    <th class="align-middle" rowspan="2">Ønom (pulg)</th>
-                                    <th class="align-middle" rowspan="2">Øext (pulg)</th>
-                                    <th class="align-middle" rowspan="2">Long. (m)</th>
-                                    <th class="align-middle" rowspan="2">Elementos idendificados</th>
-                                    <th class="align-middle" colspan="2">Distancia del disparo (m)</th>
-                                    <th class="align-middle" rowspan="2">No. Ind.</th>
-                                    <th class="align-middle" rowspan="2">Distancia relativa al dato (m)</th>
-                                    <th class="align-middle" rowspan="2" colspan="2">Horario Técnico</th>
-                                    <th class="align-middle" colspan="3">Clasificación de la indicación o anomalía</th>
-                                    <th class="align-middle" rowspan="2">porcentaje de reflexión (%)</th>
-                                    <th class="align-middle" rowspan="2">Fotos No.</th>
-                                    <th class="align-middle" rowspan="2">Observaciones</th>
-                                    <th class="align-middle" rowspan="2">Eliminar</th>
-                                </tr>
+                                <div class="alert alert-warning alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                    <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                                <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-50">
+                                <thead>
+                                    <tr>
+                                        <th class="align-middle" rowspan="2">#</th>
+                                        <th class="align-middle" rowspan="2">ID</th>
+                                        <th class="align-middle" rowspan="2">Elemento</th>
+                                        <th class="align-middle" rowspan="2">Ønom (pulg)</th>
+                                        <th class="align-middle" rowspan="2">Øext (pulg)</th>
+                                        <th class="align-middle" rowspan="2">Long. (m)</th>
+                                        <th class="align-middle" rowspan="2">Elementos idendificados</th>
+                                        <th class="align-middle" colspan="2">Distancia del disparo (m)</th>
+                                        <th class="align-middle" rowspan="2">No. Ind.</th>
+                                        <th class="align-middle" rowspan="2">Distancia relativa al dato (m)</th>
+                                        <th class="align-middle" rowspan="2" colspan="2">Horario Técnico</th>
+                                        <th class="align-middle" colspan="3">Clasificación de la indicación o anomalía</th>
+                                        <th class="align-middle" rowspan="2">porcentaje de reflexión (%)</th>
+                                        <th class="align-middle" rowspan="2">Fotos No.</th>
+                                        <th class="align-middle" rowspan="2">Observaciones</th>
+                                        <th class="align-middle" rowspan="2">Eliminar</th>
+                                    </tr>
 
-                                <tr>
+                                    <tr>
 
-                                    <th class="align-middle">(-X)</th>
-                                    <th class="align-middle">(+X)</th>
+                                        <th class="align-middle">(-X)</th>
+                                        <th class="align-middle">(+X)</th>
 
-                                    <th class="align-middle">Categoría</th>
-                                    <th class="align-middle">Direccionalidad</th>
-                                    <th class="align-middle">Clasificación</th>
-                                </tr>
+                                        <th class="align-middle">Categoría</th>
+                                        <th class="align-middle">Direccionalidad</th>
+                                        <th class="align-middle">Clasificación</th>
+                                    </tr>
 
-                                <tr id="inputRow">
-                                    <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6" style="width:100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7" style="width:100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10" style="width 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
-                                    <th></th> <!-- Para botón de eliminar -->
-                                </tr>-
-                            </thead>
+                                    <tr id="inputRow">
+                                        <th></th> <!-- Para ID vacío -->
+                                        <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="6" style="width:100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="7" style="width:100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="10" style="width 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
+                                        <th></th> <!-- Para botón de eliminar -->
+                                    </tr>
+                                </thead>
 
-                                <tbody>
-                                <!-- Filas dinámicas aparecerán aquí -->
-                                </tbody>
-                        </table>
+                                    <tbody>
+                                    <!-- Filas dinámicas aparecerán aquí -->
+                                    </tbody>
+                            </table>
                         </div>
 
                         <p>
@@ -1030,15 +1035,13 @@ $(document).ready(function() {
     let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -1056,23 +1059,23 @@ $(document).ready(function() {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                                         <td><input type="text" class="form-control" name="ID[${item.titulo}]" value="${item.inputs[1]}" placeholder="ID"></td>
-                                        <td><input type="text" class="form-control" name="Elemento[${item.titulo}]" value="${item.inputs[1]}" placeholder="Elemento"></td>
-                                        <td><input type="text" class="form-control" name="Ønom_pulg[${item.titulo}]" value="${item.inputs[2]}" placeholder="Ønom_(pulg)"></td>
-                                        <td><input type="text" class="form-control" name="Øext_pulg[${item.titulo}]" value="${item.inputs[3]}" placeholder="Øext_(pulg)"></td>
-                                        <td><input type="text" class="form-control" name="Long_m[${item.titulo}]" value="${item.inputs[4]}" placeholder="Long_(m)"></td>
-                                        <td><input type="text" class="form-control" name=Elementos_idendificados[${item.titulo}]" value="${item.inputs[5]}" placeholder="Elementos_idendificados"></td>
-                                        <td><input type="text" class="form-control" name="-X[${item.titulo}]" value="${item.inputs[6]}" placeholder="(-X)"></td>
-                                        <td><input type="text" class="form-control" name="+X[${item.titulo}]" value="${item.inputs[7]}" placeholder="(+X)"></td>
-                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[8]}" placeholder="No_Ind"></td>
-                                        <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${item.titulo}]" value="${item.inputs[9]}" placeholder="Distancia_relativa_al_dato_(m)"></td>
-                                        <td><input type="text" class="form-control" name="Horario_Tecnico[${item.titulo}]" value="${item.inputs[10]}" placeholder="Horario_Tecnico"></td>
-                                        <td><input type="text" class="form-control" name="Horario_Tecnico2[${item.titulo}] value="${item.inputs[11]}" placeholder="Horario_Tecnico"></td>
-                                        <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}]" value="${item.inputs[12]}" placeholder="Categoria"></td>
-                                        <td><input type="text" class="form-control" name="Direccionalidad[${item.titulo}]" value="${item.inputs[13]}" placeholder="Direccionalidad"></td>
-                                        <td><input type="text" class="form-control" name="Clasificacion[${item.titulo}]" value="${item.inputs[14]}" placeholder="Clasificacion"></td>
-                                        <td><input type="text" class="form-control" name="porcentaje_de_reflexion_%[${item.titulo}]" value="${item.inputs[15]}" placeholder="porcentaje_de_reflexion_(%)"></td>
-                                        <td><input type="text" class="form-control" name="Fotos_No[${item.titulo}]" value="${item.inputs[16]}" placeholder="Fotos_No"></td>
-                                        <td><input type="text" class="form-control" name="Observaciones[${item.titulo}]" value="${item.inputs[17]}" placeholder="Observaciones"></td>
+                                        <td><input type="text" class="form-control" name="Elemento[${item.titulo}]" value="${item.inputs[2]}" placeholder="Elemento"></td>
+                                        <td><input type="text" class="form-control" name="nom_pulg[${item.titulo}]" value="${item.inputs[3]}" placeholder="Ønom (pulg)"></td>
+                                        <td><input type="text" class="form-control" name="ext_pulg[${item.titulo}]" value="${item.inputs[4]}" placeholder="Øext (pulg)"></td>
+                                        <td><input type="text" class="form-control" name="Long_m[${item.titulo}]" value="${item.inputs[5]}" placeholder="Long (m)"></td>
+                                        <td><input type="text" class="form-control" name="Ele_iden[${item.titulo}]" value="${item.inputs[6]}" placeholder="Elementos idendificados"></td>
+                                        <td><input type="text" class="form-control" name="-X[${item.titulo}]" value="${item.inputs[7]}" placeholder="(-X)"></td>
+                                        <td><input type="text" class="form-control" name="+X[${item.titulo}]" value="${item.inputs[8]}" placeholder="(+X)"></td>
+                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[9]}" placeholder="No_Ind"></td>
+                                        <td><input type="text" class="form-control" name="Dis_rela[${item.titulo}]" value="${item.inputs[10]}" placeholder="Distancia relativa"></td>
+                                        <td><input type="text" class="form-control" name="HT1[${item.titulo}]" value="${item.inputs[11]}" placeholder="Horario Tecnico"></td>
+                                        <td><input type="text" class="form-control" name="HT2[${item.titulo}] value="${item.inputs[12]}" placeholder="Horario Tecnico"></td>
+                                        <td><input type="text" class="form-control" name="Cate[${item.titulo}]" value="${item.inputs[13]}" placeholder="Categoria"></td>
+                                        <td><input type="text" class="form-control" name="Direc[${item.titulo}]" value="${item.inputs[14]}" placeholder="Direccionalidad"></td>
+                                        <td><input type="text" class="form-control" name="Clas[${item.titulo}]" value="${item.inputs[15]}" placeholder="Clasificacion"></td>
+                                        <td><input type="text" class="form-control" name="Porc_Refl[${item.titulo}]" value="${item.inputs[16]}" placeholder="porcentaje de reflexion (%)"></td>
+                                        <td><input type="text" class="form-control" name="Fotos[${item.titulo}]" value="${item.inputs[17]}" placeholder="Fotos No"></td>
+                                        <td><input type="text" class="form-control" name="Observaciones[${item.titulo}]" value="${item.inputs[18]}" placeholder="Observaciones"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
 
@@ -1119,27 +1122,26 @@ $(document).ready(function() {
             let newRow = 
 
                     `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
-                    <td><input type="text" class="form-control" name="Ønom_pulg[${lastTitle}][]" placeholder="Ønom_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Øext_pulg[${lastTitle}][]" placeholder="Øext_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long_(m)"></td>
-                    <td><input type="text" class="form-control" name="Elementos_idendificados[${lastTitle}][]" placeholder="Elementos_idendificados"></td>
+                    <td><input type="text" class="form-control" name="nom_pulg[${lastTitle}][]" placeholder="Ønom (pulg)"></td>
+                    <td><input type="text" class="form-control" name="ext_pulg[${lastTitle}][]" placeholder="Øext (pulg)"></td>
+                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long (m)"></td>
+                    <td><input type="text" class="form-control" name="Ele_iden[${lastTitle}][]" placeholder="Elementos idendificados"></td>
                     <td><input type="text" class="form-control" name="-X[${lastTitle}][]" placeholder="(-X)"></td>
                     <td><input type="text" class="form-control" name="+X[${lastTitle}][]" placeholder="(+X)"></td>
                     <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind"></td>
-                    <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${lastTitle}][]" placeholder=""Distancia_relativa_al_dato_(m)"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico2[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name=Categoria[${lastTitle}][]" placeholder="Categoria"></td>
-                    <td><input type="text" class="form-control" name="Direccionalidad[${lastTitle}][]" placeholder="Direccionalidad" ></td>
-                    <td><input type="text" class="form-control" name=Clasificacion[${lastTitle}][]" placeholder="Clasificacion" ></td>
-                    <td><input type="text" class="form-control" name="porcentaje_de_reflexión_%[${lastTitle}][]" placeholder="porcentaje_de_reflexión_(%)" ></td>
-                    <td><input type="text" class="form-control" name="Fotos_No[${lastTitle}][]" placeholder="Fotos_No" ></td>
+                    <td><input type="text" class="form-control" name="Dis_rela[${lastTitle}][]" placeholder="Distancia relativa al dato (m)"></td>
+                    <td><input type="text" class="form-control" name="HT1[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="HT2[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="Cate[${lastTitle}][]" placeholder="Categoria"></td>
+                    <td><input type="text" class="form-control" name="Direc[${lastTitle}][]" placeholder="Direccionalidad" ></td>
+                    <td><input type="text" class="form-control" name="Clas[${lastTitle}][]" placeholder="Clasificacion" ></td>
+                    <td><input type="text" class="form-control" name="Porc_Refl[${lastTitle}][]" placeholder="porcentaje de reflexión (%)" ></td>
+                    <td><input type="text" class="form-control" name="Fotos[${lastTitle}][]" placeholder="Fotos No" ></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                    
                     </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
