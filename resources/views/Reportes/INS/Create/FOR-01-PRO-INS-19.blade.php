@@ -824,7 +824,6 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
 $(document).ready(function() {
     let tituloCount = 0;
@@ -863,7 +862,7 @@ $(document).ready(function() {
                                         <td><input type="text" class="form-control" name="long[${item.titulo}]" value="${item.inputs[6]}" placeholder="Long"></td>
                                         <td><input type="text" class="form-control" name="prof[${item.titulo}]" value="${item.inputs[7]}" placeholder="Prof"></td>
                                         <td><input type="text" class="form-control" name="NR[${item.titulo}]" value="${item.inputs[8]}" placeholder="Nivel de referencia"></td>
-                                        <td><input type="text" class="form-control" name="dnr[${item.titulo}]" value="${item.inputs[8]}" placeholder="Dnr"></td>
+                                        <td><input type="text" class="form-control" name="dnr[${item.titulo}]" value="${item.inputs[9]}" placeholder="Dnr"></td>
                                         <td><input type="text" class="form-control" name="evaluacion[${item.titulo}]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
                                         <td><input type="text" class="form-control" name="archivo[${item.titulo}]" value="${item.inputs[11]}" placeholder="Archivo"></td>
                                         <td><input type="text" class="form-control" name="long_ins[${item.titulo}]" value="${item.inputs[12]}" placeholder="Long inspeccionada"></td>
