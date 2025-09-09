@@ -7,9 +7,9 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    2.0cm /* derecho */
-                    2.0cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
                 @if ($totalTitulosYFilas <=15)
                 header {
@@ -215,7 +215,7 @@
                         <tr>
                             <th rowspan="2" style="font-size: 9pt;"> REPORTE DE INSPECCIÓN TERMOGRAFIA</th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>0</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -223,8 +223,8 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 5px;"></div>
+
+                <div style="margin-bottom: 4px;"></div>
         
                 <table class="datosgenerales">
 
@@ -241,10 +241,54 @@
                             <th style="width: 15%;">NO. REPORTE:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
+                <table class="datosinspeccion">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="5">REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead> 
+
+                <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 2); // Divide las imágenes en grupos de 2
+                        @endphp
+
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 2; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
                     </tbody>
                 </table>
-            </header>
-            <footer>
+            </div>
+        </header>
+    <footer>
         </body>
     </html>
 
@@ -257,9 +301,9 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    2.0cm /* derecho */
-                    2.0cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
                 @if ($totalTitulosYFilas <=15)
                 header {
@@ -465,7 +509,7 @@
                         <tr>
                             <th rowspan="2" style="font-size: 9pt;">  Inspección con Termografía </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>0</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -534,57 +578,82 @@
                 <div style="margin-bottom: 4px;"></div>
 
                 <table class="datosinspeccion">
-
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="9
-                            ">DATOS DEL EQUIPO</th></tr>
+                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
                 
                     <tbody>
                         <tr class="celdaGris">
-                            <th colspan="6">EQUIPO</th>
+                            <th colspan="5">EQUIPO</th>
 
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
                             <td style="width: 100px;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
                             <th class="celdaGris" style="width: 60px;">FECHA DE CALIBRACIÓN:</th>
-                            <td colspan="3">{{ $Datos_Equipo['FEC_CAL'] }}</td>
+                            <td colspan="2">{{ $Datos_Equipo['FEC_CAL'] }}</td>
                         </tr>
                         <tr>
-                            <th class="celdaGris">MODELO:</th>
+                            <th class="celdaGris"  style="width: 60px;">MODELO:</th>
                             <td>{{ $Datos_Equipo['MODELO_EQUIPO'] }}</td>
-                            <th class="celdaGris">CERTIFICADO POR:</th>
-                            <td colspan="3">{{ $Datos_Equipo['CER_POR'] }}</td>
+                            <th class="celdaGris"  style="width: 60px;">CERTIFICADO POR:</th>
+                            <td colspan="2">{{ $Datos_Equipo['CER_POR'] }}</td>
                         </tr>
                         <tr>
-                            <th class="celdaGris">N.S:</th>
+                            <th class="celdaGris"  style="width: 60px;">N.S:</th>
                             <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
-                            <th class="celdaGris">RANGO DE MEDICIÓN:</th>
-                            <td colspan="3">{{ $Datos_Equipo['RAN_MED'] }}</td>
+                            <th class="celdaGris"  style="width: 60px;">RANGO DE MEDICIÓN:</th>
+                            <td colspan="2">{{ $Datos_Equipo['RAN_MED'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
+            <div class="content">
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 2); // Divide las imágenes en grupos de 2
+                        @endphp
+
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 2; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
             <footer>
-
-                    <div style="margin-bottom: 5px;"></div>
-
-                    <table class="datosgenerales">                              
-                        <tr>                                     
-                            <th>OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
-                        </tr>                      
-                    </table>
-
-                    <table class="datosgenerales">                              
-                        <tr>                                     
-                            <th>Recomendaciones:</th>                                         
-                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Recomendaciones'] }}</td>                            
-                        </tr>                      
-                    </table>
 
 
                     <br>
@@ -780,9 +849,9 @@
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    2.0cm /* derecho */
-                    2.0cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
                 }
                 @if ($totalTitulosYFilas <=15)
                 header {
@@ -984,62 +1053,88 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> REPORTE DE INSPECCIÓN TERMOGRAFIA</th>
-                            <th>Versión</th>
-                            <th>2</th>
-                        </tr>
-                        <tr>
-                            <th>Página</th>
-                            <th></th>
-                        </tr>
-                    </tbody>
-                </table>
-    
                 <div style="margin-bottom: 5px;"></div>
         
                 <table class="datosgenerales">
 
+            <div class="content">
+                <table class="datosgenerales">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>   
-
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
-
-                        
-                <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosinspeccion">
-
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="9
-                            ">DATOS DE OPERACIÓN</th></tr>
+                        <tr><th>IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                        @endphp
+
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+                <div style="margin-bottom: 5px;"></div>
+                <table class="datosinspeccion">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="5"">DATOS DE OPERACIÓN</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="5"></th></tr></thead> <!-- Fila vacia -->
                 
                     <tbody>
                         <tr class="celdaGris">
-                            <th colspan="6">EQUIPO</th>
-
+                            <th colspan="4">EQUIPO</th>
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">VOLTAJE:</th>
                             <td style="width: 100px;">{{ $Datos_Equipo['voltaje'] }}</td>
                             <th class="celdaGris" style="width: 60px;">CARGA AMP:</th>
-                            <td colspan="3">{{ $Datos_Equipo['CARGA_AMP'] }}</td>
+                            <td colspan="1">{{ $Datos_Equipo['CARGA_AMP'] }}</td>
                         </tr>
-
                     </tbody>
                 </table>
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
-                <div style="margin-bottom: 5px;"></div>
+
+
+                <div style="margin-bottom: 1px;"></div>
                 
                 <table class="simbologia">
                         <thead>
                             <tr>
-                                <th colspan="4<<" class="celdaAmarillo">TABLA DE SEVERIDAD</th>
+                                <th colspan="4" class="celdaAmarillo">TABLA DE SEVERIDAD</th>
                             </tr>
 
                             <tr>
@@ -1060,21 +1155,21 @@
 
                     <div style="margin-bottom: 5px;"></div>
 
-                    <table class="datosgenerales">                              
+                    <table>                               
                         <tr>                                     
-                            <th>OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 700px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                            <th class="datosgenerales" >OBSERVACIONES:</th>                                         
+                            <td class="lineaInferior" style="width: 675px;"></td>                            
                         </tr>                      
                     </table>
-                    <tr>
 
+                    <tr>
                         <h5><i class="icon fas fa-info"></i> NOTA:</h5>
                         <p>Se utilizó las técnicas de análisis comparativa cualitativa/comparativa cuantitativa descritas en la NORMA ISO 18434-1 apartado 4 al 5 para establecer las condiciones del equipo.</p>
                     </tr>
-                    <table class="datosgenerales">                              
+                    <table>                               
                         <tr>                                     
-                            <th>Recomendaciones:</th>                                         
-                            <td class="lineaInferior" style="width: 700px;">{{ $Datos_Equipo['Recomendaciones'] }}</td>                            
+                            <th class="datosgenerales" >recomiendaciones:</th>                                         
+                            <td class="lineaInferior" style="width: 675px;"></td>                            
                         </tr>                      
                     </table>
 
@@ -1083,34 +1178,7 @@
                                                 
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 1)
-                            <!-- 1 Firmas -->
-                                <tr>
-                                    <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                </tr>
-                            @elseif( $numFirmas == 2)
+                            @if( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -1256,8 +1324,6 @@
                                     <th></th>
                                 </tr>
                             @endif
-
-
                     </tbody>
                 </table>
             </header>

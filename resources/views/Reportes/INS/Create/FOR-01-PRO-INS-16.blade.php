@@ -81,6 +81,16 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">EQUIPO:</label>
+                            <input type="date" class="form-control  inputForm @error('Equipo') is-invalid @enderror" name="Detalles_Generales[Equipo]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Equipo')}}">
+                            @error('Fecha')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
                             <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
                             @error('Fecha')
