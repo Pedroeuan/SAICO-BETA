@@ -83,7 +83,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                            <input type="date" class="form-control   @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
+                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
                             @error('Fecha')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -213,8 +213,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Codigo Aplicable</label>
-                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
-                            @error('Criterio_Evaluacion')
+                            <input type="text" class="form-control  inputForm @error('Codigo_Aplicable') is-invalid @enderror" name="Detalles_Generales[Codigo_Aplicable]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Codigo_Aplicable')}}">
+                            @error('Codigo_Aplicable')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -403,49 +403,49 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">FRECUENCIA:</label>
-                            <input type="text" class="form-control  inputForm" id="frecInputP" name="escaneo[frecuencia]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="frecInputP" name="Datos_Equipo[FRECUENCIA]" placeholder="" value="{{old('Datos_Equipo.FRECUENCIA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">RECUBRIMIENTO:</label>
-                            <input type="text" class="form-control  inputForm" id="recubrimientoInputP" name="escaneo[recubrimiento]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="recubrimientoInputP" name="Datos_Equipo[RECUBRIMIENTO]" placeholder="" value="{{old('Datos_Equipo.RECUBRIMIENTO')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MAGNETISMO RESIDUAL:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="escaneo[magnetismo]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[MAGNETISMO]" placeholder="" value="{{old('Datos_Equipo.MAGNETISMO')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DISTANCIA ENTRE MARCAS:</label>
-                            <input type="text" class="form-control  inputForm" id="disInputP" name="escaneo[distancia]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="disInputP" name="Datos_Equipo[DISTANCIA]" placeholder="" value="{{old('Datos_Equipo.DISTANCIA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">RASTREOS POR ELEMENTO:</label>
-                            <input type="text" class="form-control  inputForm" id=rasInputP" name="escaneo[rastreo]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="rasInputP" name="Datos_Equipo[RASTREOS]" placeholder="" value="{{old('Datos_Equipo.RASTREOS')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">EXCEPCIONES:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="escaneo[exce]" placeholder="Ejemplo: Excepciones">{{old('notas')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[EXCEP]" placeholder="Ejemplo: Excepciones">{{old('Datos_Equipo.EXCEP')}}</textarea>
                         </div>
                     </div>
 
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">NOTAS:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="escaneo[notas]" placeholder="Ejemplo: Notas">{{old('notas')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[NOTAS]" placeholder="Ejemplo: Notas">{{old('Datos_Equipo.NOTAS')}}</textarea>
                         </div>
                     </div>
 
@@ -466,6 +466,7 @@
                         <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                             <thead>
                                 <tr>
+                                    <th class="align-middle" rowspan="2">#</th>
                                     <th class="align-middle" rowspan="2">No.</th>
                                     <th class="align-middle" rowspan="2">JUNTA/ ELEMENTO</th>
                                     <th class="align-middle" rowspan="2">LADO</th>
@@ -487,17 +488,18 @@
                                 </tr>
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -531,7 +533,7 @@
 
                     <p>
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RASTREO DE VERIFICACIÓN DEL SISTEMA</div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS DE LA INSPECCIÓN</div>
                         
                         <p>
 
@@ -840,7 +842,7 @@ $(document).ready(function() {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="12">
+                            <td colspan="13">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -853,17 +855,18 @@ $(document).ready(function() {
                     } else if (item.type === 'fila') {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="lado[${item.titulo}]" value="${item.inputs[2]}" placeholder="Lado" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="no_indicacion[${item.titulo}]" value="${item.inputs[3]}" placeholder="No. de indicación"></td>
-                                        <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}]" value="${item.inputs[4]}" placeholder="Tipo Indicación"></td>
-                                        <td><input type="text" class="form-control" name="long[${item.titulo}]" value="${item.inputs[5]}" placeholder="Long" style="width: 60px;"></td>
-                                        <td><input type="text" class="form-control" name="prof[${item.titulo}]" value="${item.inputs[6]}" placeholder="Prof" style="width: 60px;"></td>
-                                        <td><input type="text" class="form-control" name="nivel_referencia[${item.titulo}]" value="${item.inputs[7]}" placeholder="Nivel de referencia"></td>
-                                        <td><input type="text" class="form-control" name="dnr[${item.titulo}]" value="${item.inputs[8]}" placeholder="Dnr" style="width: 70px;"></td>
-                                        <td><input type="text" class="form-control" name="evaluacion[${item.titulo}]" value="${item.inputs[9]}" placeholder="Evaluación"></td>
-                                        <td><input type="text" class="form-control" name="archivo[${item.titulo}]" value="${item.inputs[10]}" placeholder="Archivo" style="width: 100px;"></td>
-                                        <td><input type="text" class="form-control" name="long_inspeccionada[${item.titulo}]" value="${item.inputs[11]}" placeholder="Long inspeccionada"></td>
+                                        <td><input type="text" class="form-control" name="no[${item.titulo}]" value="${item.inputs[1]}" placeholder="NO"></td>
+                                        <td><input type="text" class="form-control" name="junta[${item.titulo}]" value="${item.inputs[2]}" placeholder="Junta / Elemento"></td>
+                                        <td><input type="text" class="form-control" name="lado[${item.titulo}]" value="${item.inputs[3]}" placeholder="Lado"></td>
+                                        <td><input type="text" class="form-control" name="no_ind[${item.titulo}]" value="${item.inputs[4]}" placeholder="No. de indicación"></td>
+                                        <td><input type="text" class="form-control" name="tipo_ind[${item.titulo}]" value="${item.inputs[5]}" placeholder="Tipo Indicación"></td>
+                                        <td><input type="text" class="form-control" name="long[${item.titulo}]" value="${item.inputs[6]}" placeholder="Long"></td>
+                                        <td><input type="text" class="form-control" name="prof[${item.titulo}]" value="${item.inputs[7]}" placeholder="Prof"></td>
+                                        <td><input type="text" class="form-control" name="NR[${item.titulo}]" value="${item.inputs[8]}" placeholder="Nivel de referencia"></td>
+                                        <td><input type="text" class="form-control" name="dnr[${item.titulo}]" value="${item.inputs[8]}" placeholder="Dnr"></td>
+                                        <td><input type="text" class="form-control" name="evaluacion[${item.titulo}]" value="${item.inputs[10]}" placeholder="Evaluación"></td>
+                                        <td><input type="text" class="form-control" name="archivo[${item.titulo}]" value="${item.inputs[11]}" placeholder="Archivo"></td>
+                                        <td><input type="text" class="form-control" name="long_ins[${item.titulo}]" value="${item.inputs[12]}" placeholder="Long inspeccionada"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                         
                                     </tr>`;
@@ -883,7 +886,7 @@ $(document).ready(function() {
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="12">
+                <td colspan="13">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
@@ -912,19 +915,20 @@ $(document).ready(function() {
             let newRow =                 
                     `<tr data-titulo="${lastTitle}">
                         <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no_junta[${lastTitle}]" placeholder="Junta / Elemento" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="lado[${lastTitle}]" placeholder="Lado" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}]" placeholder="No. de indicación"></td>
-                        <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}]" placeholder="Tipo Indicación"></td>
-                        <td><input type="text" class="form-control" name="long[${lastTitle}]" placeholder="Long" style="width: 60px;"></td>
-                        <td><input type="text" class="form-control" name="prof[${lastTitle}]" placeholder="Prof" style="width: 60px;"></td>
-                        <td><input type="text" class="form-control" name="nivel_referencia[${lastTitle}]" placeholder="Nivel de referencia"></td>
-                        <td><input type="text" class="form-control" name="dnr[${lastTitle}]" placeholder="Dnr" style="width: 70px;"></td>
+                        <td><input type="text" class="form-control" name="no[${lastTitle}]" placeholder="NO" value="${rowCount}"></td>
+                        <td><input type="text" class="form-control" name="junta[${lastTitle}]" placeholder="Junta / Elemento"></td>
+                        <td><input type="text" class="form-control" name="lado[${lastTitle}]" placeholder="Lado"></td>
+                        <td><input type="text" class="form-control" name="no_ind[${lastTitle}]" placeholder="No. de indicación"></td>
+                        <td><input type="text" class="form-control" name="tipo_ind[${lastTitle}]" placeholder="Tipo Indicación"></td>
+                        <td><input type="text" class="form-control" name="long[${lastTitle}]" placeholder="Long"></td>
+                        <td><input type="text" class="form-control" name="prof[${lastTitle}]" placeholder="Prof"></td>
+                        <td><input type="text" class="form-control" name="NR[${lastTitle}]" placeholder="Nivel de referencia"></td>
+                        <td><input type="text" class="form-control" name="dnr[${lastTitle}]" placeholder="Dnr"></td>
                         <td><input type="text" class="form-control" name="evaluacion[${lastTitle}]" placeholder="Evaluación"></td>
-                        <td><input type="text" class="form-control" name="archivo[${lastTitle}]" placeholder="Archivo" style="width: 100px;"></td>
-                        <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}]" placeholder="Long inspeccionada"></td>
+                        <td><input type="text" class="form-control" name="archivo[${lastTitle}]" placeholder="Archivo"></td>
+                        <td><input type="text" class="form-control" name="long_ins[${lastTitle}]" placeholder="Long inspeccionada"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                                            </tr>`;
+                    </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
