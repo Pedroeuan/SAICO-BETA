@@ -73,7 +73,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-03-PRO-INS-15" action="{{route('Reportes_FOR_03_PRO_INS_15.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>LISTADO DE COMPONENTES</strong></div>
                                 <div class="row">
@@ -227,9 +227,9 @@
                                             </div>
                                         </div>
 
-                                        <!-- Select para elegir el número de firmas -->
+<!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-12">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="1">1 Firma</option>
@@ -263,7 +263,7 @@
                                                     <tr>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                     </tr>
-                                                </thead>
+                                                </thead>                            
                                             </table>
                                         </div>
 
@@ -300,6 +300,7 @@
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                                     </tr>
+                                                    
                                                 </thead>                            
                                             </table>
                                         </div>
@@ -330,21 +331,21 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
 
@@ -352,9 +353,9 @@
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
 
                                                     </tr>
                                                     
@@ -430,46 +431,8 @@
                                             </table>
                                         </div>
 
+
                                         <p>
-
-                                        <!--IMAGENES CON COMENTARIOS-->
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
-                                            </div>
-                                        </div>
 
                                         <div class="container">
                                             <div class="float-right">
@@ -514,217 +477,195 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-    /*Prevenir el Enter*/
-    document.getElementById('FOR-02-PRO-INS-10').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
+    /*Juntas-Resultados */
     $(document).ready(function() {
-        var rowCount = 0;
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="no_serie[]" placeholder="Elemento" style="width: 100px;"></td>
-                    <td><input type="text" class="form-control" name="no_colada[]" placeholder="Nivel" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="tnominal[]" placeholder="0" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Longitud (m)" style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="no_ind[]" placeholder="Clase" style="width: 80px;"></td>
-                    <td><input type="text" class="form-control" name="la[]" placeholder="Especificación" style="width: 130px;"></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Observaciones" style="width: 130px;"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                    
-                    </tr>`;
-                $('#dynamicTable tbody').append(newRow);
-            }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
+        function restoreData() {
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            if (savedData) {
+                // Restaurar contadores
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                
+                savedData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="21">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
+                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento / Tubo"></td>
+                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Aceptación"></td>
+                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Serie"></td>
+                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Colada"></td>
+                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[5]}" placeholder="tnominal"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[7]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)"></td>
+                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Prof"></td>
+                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LA"></td>
+                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LC"></td>
+                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmáx"></td>
+                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[16]}" placeholder="tmin"></td>
+                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Metros Lineales"></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
                     }
                 });
-            });
-        });
-
-        // Mostrar vista previa de las imágenes seleccionadas
-        function readURL(input, previewId) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $(previewId).html('<img src="' + e.target.result + '" alt="Imagen" style="max-width: 100%; max-height: 100%;">');
-                }
-                reader.readAsDataURL(input.files[0]);
+                updateRowNumbers();
+                updateTitulos();
             }
         }
 
-        $('#image1').change(function() {
-            readURL(this, '#image1-preview');
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="21">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData(document.querySelectorAll("form")[1].id);
         });
 
-        $('#image2').change(function() {
-            readURL(this, '#image2-preview');
-        });
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
-        $('#image3').change(function() {
-            readURL(this, '#image3-preview');
-        });
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-        $('#image4').change(function() {
-            readURL(this, '#image4-preview');
-        });
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
+                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
+                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
+                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
+                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
+                    <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                </tr>`;
 
-
-    });
-
-    /*Pre-Rellenado del formulario */
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
-
-        /*Selección de Firmas */
-
-        document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '3') {
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
+                $('#dynamicTable tbody').append(newRow);
             }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '3') {
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
+            saveData(document.querySelectorAll("form")[1].id);
         }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#equiposSelect option').length > 0) {
-                $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-            }
-
-        });
-
-        $(document).ready(function() {
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
+    );
+        
+        $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-
-                // Seleccionar la primera opción si hay al menos una opción disponible
-                if ($('#accesoriosSelect option').length > 0) {
-                    $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-                }
-                
-            });
-
-        $(document).ready(function() {
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
+                return;
             }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        });
 
-            // Seleccionar la primera opción si hay al menos una opción disponible
-            if ($('#blockyprobetaSelect option').length > 0) {
-                $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
+            // Restaurar datos al cargar la página
+            restoreData();
+    });
+
+    /*FOR-02-PRO-INS-10*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-02-PRO-INS-10');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-02-PRO-INS-10_' + el.name);
+                if (value !== null) el.value = value;
             }
         });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-02-PRO-INS-10_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 
     </script>
 @endsection

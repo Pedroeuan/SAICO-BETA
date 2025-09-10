@@ -491,85 +491,6 @@
 
                                         <p>
 
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-
-                                        <!--IMAGENES CON COMENTARIOS-->
-                                        <div class="form-group">
-                                            <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                                @for ($i = 1; $i <= 50; $i++)
-                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
-
-                                        @if(!empty($Fotos_Comentarios))
-                                            <div class="row">
-                                                @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
-                                                        <div class="form-group">
-                                                            <!-- Vista previa de la imagen existente -->
-                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
-                                                            <div class="image-preview mt-2">
-                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
-                                                            </div>
-
-                                                            <!-- Campo para seleccionar una nueva imagen -->
-                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-
-                                                            <!-- Campo para el comentario -->
-                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                            <!-- Campo oculto para la imagen en base64 -->
-                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
-                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
-                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
-
-                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
-                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
-
-                                                            <!-- Botón de eliminación -->
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <p>No hay imágenes disponibles.</p>
-                                        @endif
-
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
-                                        </div>
-
-                                        <!-- Modal para recortar la imagen -->
-                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="img-container">
-                                                            <img id="cropperImage" src="" style="max-width: 100%;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -579,8 +500,6 @@
                                                 <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
                                             </div>
                                         </div>
-
-
                 </div>
             </form>
         </div>
