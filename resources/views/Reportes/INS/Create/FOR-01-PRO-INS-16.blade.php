@@ -660,6 +660,70 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
+$(document).ready(function() {
+    let tituloCount = 0;
+    let rowCount = 0;
+    let rowCountGlobal = 0;
+
+        function restoreData() {
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            if (savedData) {
+                // Restaurar contadores
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                
+                savedData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `<tr data-titulo="${item.titulo}">
+                                        <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}">
+                                        </td><td><input type="text" class="form-control" name="nombre_Equipo[${item.titulo}]" value="${item.inputs[0]}" placeholder="Nombre del equipo"></td>
+                                        <td><input type="text" class="form-control" name="status[${item.titulo}]" value="${item.inputs[1]}" placeholder="Estado"></td>
+                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                                    </tr>`;
+
+
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+                updateRowNumbers();
+                updateTitulos();
+            }
+        }
+
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData();
+
     /*FOR-01-PRO-INS-16*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-16');
@@ -678,6 +742,7 @@
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
                 localStorage.setItem('FOR-01-PRO-INS-16_' + el.name, el.value);
             });
+
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)

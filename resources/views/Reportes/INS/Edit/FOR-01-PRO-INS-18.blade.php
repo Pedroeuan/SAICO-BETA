@@ -1032,7 +1032,7 @@ $(document).ready(function() {
 });
 
 
- $(document).ready(function() {
+$(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 

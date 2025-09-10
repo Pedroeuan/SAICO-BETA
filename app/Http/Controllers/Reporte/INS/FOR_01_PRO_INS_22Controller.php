@@ -283,21 +283,21 @@ class FOR_01_PRO_INS_22Controller extends Controller
             /* FILAS DINÁMICAS */
             'ID' => 'nullable|array',
             'Elemento' => 'nullable|array',
-            'Ønom_pulg' => 'nullable|array',
-            'Øext_pulg' => 'nullable|array',
+            'nom_pulg' => 'nullable|array',
+            'ext_pulg' => 'nullable|array',
             'Long_m' => 'nullable|array',
-            'Elementos_idendificados' => 'nullable|array',
+            'Ele_iden' => 'nullable|array',
             '-X' => 'nullable|array',
             '+X' => 'nullable|array',
             'No_Ind' => 'nullable|array',
-            'Distancia_relativa_al_dato_m' => 'nullable|array',
-            'Horario_Tecnico' => 'nullable|array',
-            'Horario_Tecnico2' => 'nullable|array',
-            'Categoria' => 'nullable|array',
-            'Direccionalidad' => 'nullable|array',
-            'Clasificacion' => 'nullable|array',
-            'porcentaje_de_reflexión_%' => 'nullable|array',
-            'Fotos_No' => 'nullable|array',
+            'Dis_rela' => 'nullable|array',
+            'HT1' => 'nullable|array',
+            'HT2' => 'nullable|array',
+            'Cate' => 'nullable|array',
+            'Direc' => 'nullable|array',
+            'Clas' => 'nullable|array',
+            'Porc_Refl' => 'nullable|array',
+            'Fotos' => 'nullable|array',
             'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
@@ -399,7 +399,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("Junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -409,21 +409,22 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'Ønom_pulg' => $request->input("Ønom_pulg.$sinTituloKey.$i"),
-                    'Øext_pulg' => $request->input("Øext_pulg.$sinTituloKey.$i"),
+                    'nom_pulg' => $request->input("nom_pulg.$sinTituloKey.$i"),
+                    'ext_pulg' => $request->input("ext_pulg.$sinTituloKey.$i"),
                     'Long_m' => $request->input("Long_m.$sinTituloKey.$i"),
-                    'Elementos_idendificados' => $request->input("Elementos_idendificados.$sinTituloKey.$i"),
+                    'Ele_iden' => $request->input("Ele_iden.$sinTituloKey.$i"),
                     '-X' => $request->input("-X.$sinTituloKey.$i"),
                     '+X' => $request->input("+X.$sinTituloKey.$i"),
                     'No_Ind' => $request->input("No_Ind.$sinTituloKey.$i"),
-                    'Distancia_relativa_al_dato_m' => $request->input("Ancho.$sinTituloKey.$i"),
-                    'Horario_Tecnico' => $request->input("Evaluacion.$sinTituloKey.$i"),
-                    'Categoria' => $request->input("Fotos.$sinTituloKey.$i"),
-                    'Direccionalidad' => $request->input("Direccionalidad.$sinTituloKey.$i"),
-                    'Clasificacion' => $request->input("Clasificacion.$sinTituloKey.$i"),
-                    'porcentaje_de_reflexion_%' => $request->input("porcentaje_de_reflexion_%.$sinTituloKey.$i"),
-                    'Fotos_No' => $request->input("Fotos_No.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$sinTituloKey.$i"),
+                    'Dis_rela' => $request->input("Dis_rela.$sinTituloKey.$i"),
+                    'HT1' => $request->input("HT1.$sinTituloKey.$i"),
+                    'HT2' => $request->input("HT2.$sinTituloKey.$i"),
+                    'Cate' => $request->input("Cate.$sinTituloKey.$i"),
+                    'Direc' => $request->input("Direc.$sinTituloKey.$i"),
+                    'Clas' => $request->input("Clas.$sinTituloKey.$i"),
+                    'Porc_Refl' => $request->input("Porc_Refl.$sinTituloKey.$i"),
+                    'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -437,7 +438,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("Junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -446,21 +447,22 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
                     'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'Ønom_pulg' => $request->input("Ønom_pulg.$tituloKey.$i"),
-                    'Øext_pulg' => $request->input("Øext_pulg.$tituloKey.$i"),
+                    'nom_pulg' => $request->input("nom_pulg.$tituloKey.$i"),
+                    'ext_pulg' => $request->input("ext_pulg.$tituloKey.$i"),
                     'Long_m' => $request->input("Long_m.$tituloKey.$i"),
-                    'Elementos_idendificados' => $request->input("Elementos_idendificados.$tituloKey.$i"),
+                    'Ele_iden' => $request->input("Ele_iden.$tituloKey.$i"),
                     '-X' => $request->input("-X.$tituloKey.$i"),
                     '+X' => $request->input("+X.$tituloKey.$i"),
                     'No_Ind' => $request->input("No_Ind.$tituloKey.$i"),
-                    'Distancia_relativa_al_dato_m' => $request->input("Distancia_relativa_al_dato_m.$tituloKey.$i"),
-                    'Horario_Tecnico' => $request->input("Horario_Tecnico.$tituloKey.$i"),
-                    'Categoria' => $request->input("Categoria.$tituloKey.$i"),
-                    'Direccionalidad' => $request->input("Direccionalidad.$tituloKey.$i"),
-                    'Clasificacion' => $request->input("Clasificacion.$tituloKey.$i"),
-                    'porcentaje_de_reflexion_%' => $request->input("porcentaje_de_reflexion_%.$tituloKey.$i"),
-                    'Fotos_No' => $request->input("Fotos_No.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$tituloKey.$i"),
+                    'Dis_rela' => $request->input("Dis_rela.$tituloKey.$i"),
+                    'HT1' => $request->input("HT1.$tituloKey.$i"),
+                    'HT2' => $request->input("HT2.$tituloKey.$i"),
+                    'Cate' => $request->input("Cate.$tituloKey.$i"),
+                    'Direc' => $request->input("Direc.$tituloKey.$i"),
+                    'Clas' => $request->input("Clas.$tituloKey.$i"),
+                    'Porc_Refl' => $request->input("Porc_Refl.$tituloKey.$i"),
+                    'Fotos' => $request->input("Fotos.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -639,8 +641,6 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Datos_Equipo.Ang_An' => 'nullable|string',
             'Datos_Equipo.Coor_GPS' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -648,21 +648,21 @@ class FOR_01_PRO_INS_22Controller extends Controller
             /* FILAS DINÁMICAS */
             'ID' => 'nullable|array',
             'Elemento' => 'nullable|array',
-            'Ønom_pulg' => 'nullable|array',
-            'Øext_pulg' => 'nullable|array',
+            'nom_pulg' => 'nullable|array',
+            'ext_pulg' => 'nullable|array',
             'Long_m' => 'nullable|array',
-            'Elementos_idendificados' => 'nullable|array',
+            'Ele_iden' => 'nullable|array',
             '-X' => 'nullable|array',
             '+X' => 'nullable|array',
             'No_Ind' => 'nullable|array',
-            'Distancia_relativa_al_dato_m' => 'nullable|array',
-            'Horario_Tecnico' => 'nullable|array',
-            'Horario_Tecnico2' => 'nullable|array',
-            'Categoria' => 'nullable|array',
-            'Direccionalidad' => 'nullable|array',
-            'Clasificacion' => 'nullable|array',
-            'porcentaje_de_reflexión_%' => 'nullable|array',
-            'Fotos_No' => 'nullable|array',
+            'Dis_rela' => 'nullable|array',
+            'HT1' => 'nullable|array',
+            'HT2' => 'nullable|array',
+            'Cate' => 'nullable|array',
+            'Direc' => 'nullable|array',
+            'Clas' => 'nullable|array',
+            'Porc_Refl' => 'nullable|array',
+            'Fotos' => 'nullable|array',
             'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
@@ -676,7 +676,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
@@ -728,7 +728,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string', 
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
@@ -751,7 +751,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("Junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         $numFilasSinTitulo = count($filasSinTitulo);
         
         if ($numFilasSinTitulo > 0) {
@@ -761,21 +761,22 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'Ønom_pulg' => $request->input("Ønom_pulg.$sinTituloKey.$i"),
-                    'Øext_pulg' => $request->input("Øext_pulg.$sinTituloKey.$i"),
+                    'nom_pulg' => $request->input("nom_pulg.$sinTituloKey.$i"),
+                    'ext_pulg' => $request->input("ext_pulg.$sinTituloKey.$i"),
                     'Long_m' => $request->input("Long_m.$sinTituloKey.$i"),
-                    'Elementos_idendificados' => $request->input("Elementos_idendificados.$sinTituloKey.$i"),
+                    'Ele_iden' => $request->input("Ele_iden.$sinTituloKey.$i"),
                     '-X' => $request->input("-X.$sinTituloKey.$i"),
                     '+X' => $request->input("+X.$sinTituloKey.$i"),
                     'No_Ind' => $request->input("No_Ind.$sinTituloKey.$i"),
-                    'Distancia_relativa_al_dato_m' => $request->input("Ancho.$sinTituloKey.$i"),
-                    'Horario_Tecnico' => $request->input("Evaluacion.$sinTituloKey.$i"),
-                    'Categoria' => $request->input("Fotos.$sinTituloKey.$i"),
-                    'Direccionalidad' => $request->input("Direccionalidad.$sinTituloKey.$i"),
-                    'Clasificacion' => $request->input("Clasificacion.$sinTituloKey.$i"),
-                    'porcentaje_de_reflexion_%' => $request->input("porcentaje_de_reflexion_%.$sinTituloKey.$i"),
-                    'Fotos_No' => $request->input("Fotos_No.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$sinTituloKey.$i"),
+                    'Dis_rela' => $request->input("Dis_rela.$sinTituloKey.$i"),
+                    'HT1' => $request->input("HT1.$sinTituloKey.$i"),
+                    'HT2' => $request->input("HT2.$sinTituloKey.$i"),
+                    'Cate' => $request->input("Cate.$sinTituloKey.$i"),
+                    'Direc' => $request->input("Direc.$sinTituloKey.$i"),
+                    'Clas' => $request->input("Clas.$sinTituloKey.$i"),
+                    'Porc_Refl' => $request->input("Porc_Refl.$sinTituloKey.$i"),
+                    'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -789,7 +790,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         foreach ($titulos as $titulo) {
             //$tituloKey = "titulo_" . $titulo;
             $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("Junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -798,21 +799,22 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
                     'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'Ønom_pulg' => $request->input("Ønom_pulg.$tituloKey.$i"),
-                    'Øext_pulg' => $request->input("Øext_pulg.$tituloKey.$i"),
+                    'nom_pulg' => $request->input("nom_pulg.$tituloKey.$i"),
+                    'ext_pulg' => $request->input("ext_pulg.$tituloKey.$i"),
                     'Long_m' => $request->input("Long_m.$tituloKey.$i"),
-                    'Elementos_idendificados' => $request->input("Elementos_idendificados.$tituloKey.$i"),
+                    'Ele_iden' => $request->input("Ele_iden.$tituloKey.$i"),
                     '-X' => $request->input("-X.$tituloKey.$i"),
                     '+X' => $request->input("+X.$tituloKey.$i"),
                     'No_Ind' => $request->input("No_Ind.$tituloKey.$i"),
-                    'Distancia_relativa_al_dato_m' => $request->input("Distancia_relativa_al_dato_m.$tituloKey.$i"),
-                    'Horario_Tecnico' => $request->input("Horario_Tecnico.$tituloKey.$i"),
-                    'Categoria' => $request->input("Categoria.$tituloKey.$i"),
-                    'Direccionalidad' => $request->input("Direccionalidad.$tituloKey.$i"),
-                    'Clasificacion' => $request->input("Clasificacion.$tituloKey.$i"),
-                    'porcentaje_de_reflexion_%' => $request->input("porcentaje_de_reflexion_%.$tituloKey.$i"),
-                    'Fotos_No' => $request->input("Fotos_No.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observacion.$tituloKey.$i"),
+                    'Dis_rela' => $request->input("Dis_rela.$tituloKey.$i"),
+                    'HT1' => $request->input("HT1.$tituloKey.$i"),
+                    'HT2' => $request->input("HT2.$tituloKey.$i"),
+                    'Cate' => $request->input("Cate.$tituloKey.$i"),
+                    'Direc' => $request->input("Direc.$tituloKey.$i"),
+                    'Clas' => $request->input("Clas.$tituloKey.$i"),
+                    'Porc_Refl' => $request->input("Porc_Refl.$tituloKey.$i"),
+                    'Fotos' => $request->input("Fotos.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
         
@@ -1042,7 +1044,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-22/01.PDF',
+            'title' => 'Reporte_FOR-01-INS-22.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1092,7 +1094,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(137, -266.5);
+            $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1108,7 +1110,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_22_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01_INS_22.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

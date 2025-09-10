@@ -306,7 +306,7 @@ class ReporteController extends Controller
             "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
             "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
             "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-22" => "Ondas Guiadas"
+            "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -544,6 +544,10 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
+
         elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
         {
             return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
@@ -551,6 +555,10 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
         {
             return redirect()->route('Reporte_FOR_01_INS_21.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
         {

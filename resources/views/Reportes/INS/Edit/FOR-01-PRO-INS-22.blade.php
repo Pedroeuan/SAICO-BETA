@@ -183,7 +183,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                            <textarea class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  "value="{{old('Detalles_Generales.Lugar', $Detalles_Generales['Lugar'] ?? '')}}"></textarea>
+                            <input class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  "value="{{old('Detalles_Generales.Lugar', $Detalles_Generales['Lugar'] ?? '')}}">
                             @error('Lugar')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -262,6 +262,24 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO DE ONDAS GUIADAS</div>
 
+                    <!-- Select para Equipos -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                    <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                        @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                            <option value="{{ $equipo->idGeneral_EyC }}"
+                                                data-marca="{{ $equipo->Marca }}"
+                                                data-modelo="{{ $equipo->Modelo }}"
+                                                data-ns="{{ $equipo->Serie }}">
+                                                {{ $equipo->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -284,6 +302,24 @@
                     </div>
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 1</div>
+
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -308,24 +344,42 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 2</div>
 
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect2">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2', $Datos_Equipo['DIAMETRO_AN2'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInputA2" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2', $Datos_Equipo['DIAMETRO_AN2'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_AN2', $Datos_Equipo['MODELO_AN2'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_AN2', $Datos_Equipo['MODELO_AN2'] ?? '')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2', $Datos_Equipo['NS_AN2'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2', $Datos_Equipo['NS_AN2'] ?? '')}}">
                         </div>
                     </div>
 
@@ -511,7 +565,7 @@
                                     <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
-                                </tr>-
+                                </tr>
                             </thead>
 
                                             @php
@@ -527,7 +581,7 @@
                                                     @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                         <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
                                                         <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                            <td colspan="20">
+                                                            <td colspan="19">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                     <td>
@@ -546,22 +600,22 @@
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                             <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Elemento[{{ $tituloKey }}][]' value="{{ $resultado['Elemento'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Ønom_pulg[{{ $tituloKey }}][]' value="{{ $resultado['Ønom_pulg'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Øext_pulg[{{ $tituloKey }}][]' value="{{ $resultado['Øext_pulg'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='nom_pulg[{{ $tituloKey }}][]' value="{{ $resultado['nom_pulg'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ext_pulg[{{ $tituloKey }}][]' value="{{ $resultado['ext_pulg'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Long_m[{{ $tituloKey }}][]' value="{{ $resultado['Long_m'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Elementos_idendificados[{{ $tituloKey }}][]' value="{{ $resultado['Elementos_idendificados'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Ele_iden[{{ $tituloKey }}][]' value="{{ $resultado['Ele_iden'] }}"></td>
                                                             <td><input type="text" class="form-control" name='-X[{{ $tituloKey }}][]' value="{{ $resultado['-X'] }}"></td>
                                                             <td><input type="text" class="form-control" name='+X[{{ $tituloKey }}][]' value="{{ $resultado['+X'] }}"></td>
                                                             <td><input type="text" class="form-control" name='No_Ind[{{ $tituloKey }}][]' value="{{ $resultado['No_Ind'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Distancia_relativa_al_dato_m[{{ $tituloKey }}][]' value="{{ $resultado['Distancia_relativa_al_dato_m'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Horario_Tecnico[{{ $tituloKey }}][]' value="{{ $resultado['Horario_Tecnico'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Horario_Tecnico2[{{ $tituloKey }}][]' value="{{ $resultado['Perdida'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Epesor_remanente[{{ $tituloKey }}][]' value="{{ $resultado['Espesor_remanente'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Direccionalidad[{{ $tituloKey }}][]' value="{{ $resultado['Direccionalidad'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Clasificacion[{{ $tituloKey }}][]' value="{{ $resultado['Clasificacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Dis_rela[{{ $tituloKey }}][]' value="{{ $resultado['Dis_rela'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='HT1[{{ $tituloKey }}][]' value="{{ $resultado['HT1'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='HT2[{{ $tituloKey }}][]' value="{{ $resultado['HT2'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Cate[{{ $tituloKey }}][]' value="{{ $resultado['Cate'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Direc[{{ $tituloKey }}][]' value="{{ $resultado['Direc'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Clas[{{ $tituloKey }}][]' value="{{ $resultado['Clas'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Porc_Refl[{{ $tituloKey }}][]' value="{{ $resultado['Porc_Refl'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Fotos[{{ $tituloKey }}][]' value="{{ $resultado['Fotos'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='"porcentaje_de_reflexion_%[{{ $tituloKey }}][]' value="{{ $resultado['"porcentaje_de_reflexion_%'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Fotos_No[{{ $tituloKey }}][]' value="{{ $resultado['Fotos_No'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>
                                                         @php $contador++; @endphp
@@ -1024,7 +1078,6 @@
                                             </div>
                                         </div>
 
-
                 </div>
             </form>
         </div>
@@ -1065,7 +1118,6 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1100,23 +1152,23 @@
             let newRow = `
                 <tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
-                    <td><input type="text" class="form-control" name="Ønom_pulg[${lastTitle}][]" placeholder="Ønom_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Øext_pulg[${lastTitle}][]" placeholder="Øext_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long_(m)"></td>
-                    <td><input type="text" class="form-control" name="Elementos_idendificados[${lastTitle}][]" placeholder="Elementos_idendificados"></td>
+                    <td><input type="text" class="form-control" name="nom_pulg[${lastTitle}][]" placeholder="Ønom (pulg)"></td>
+                    <td><input type="text" class="form-control" name="ext_pulg[${lastTitle}][]" placeholder="Øext (pulg)"></td>
+                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long (m)"></td>
+                    <td><input type="text" class="form-control" name="Ele_iden[${lastTitle}][]" placeholder="Elementos idendificados"></td>
                     <td><input type="text" class="form-control" name="-X[${lastTitle}][]" placeholder="(-X)"></td>
                     <td><input type="text" class="form-control" name="+X[${lastTitle}][]" placeholder="(+X)"></td>
                     <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind"></td>
-                    <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${lastTitle}][]" placeholder=""Distancia_relativa_al_dato_(m)"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico2[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name=Categoria[${lastTitle}][]" placeholder="Categoria"></td>
-                    <td><input type="text" class="form-control" name="Direccionalidad[${lastTitle}][]" placeholder="Direccionalidad" ></td>
-                    <td><input type="text" class="form-control" name=Clasificacion[${lastTitle}][]" placeholder="Clasificacion" ></td>
-                    <td><input type="text" class="form-control" name="porcentaje_de_reflexión_%[${lastTitle}][]" placeholder="porcentaje_de_reflexión_(%)" ></td>
-                    <td><input type="text" class="form-control" name="Fotos_No[${lastTitle}][]" placeholder="Fotos_No" ></td>
+                    <td><input type="text" class="form-control" name="Dis_rela[${lastTitle}][]" placeholder="Distancia relativa al dato (m)"></td>
+                    <td><input type="text" class="form-control" name="HT1[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="HT2[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="Cate[${lastTitle}][]" placeholder="Categoria"></td>
+                    <td><input type="text" class="form-control" name="Direc[${lastTitle}][]" placeholder="Direccionalidad" ></td>
+                    <td><input type="text" class="form-control" name="Clas[${lastTitle}][]" placeholder="Clasificacion" ></td>
+                    <td><input type="text" class="form-control" name="Porc_Refl[${lastTitle}][]" placeholder="porcentaje de reflexión (%)" ></td>
+                    <td><input type="text" class="form-control" name="Fotos[${lastTitle}][]" placeholder="Fotos_No" ></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
@@ -1150,6 +1202,66 @@
         });
     });
 
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA').val(marca);
+            $('#modeloInputA').val(modelo);
+            $('#nsInputA').val(ns);
+        }
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect').on('change', function() {
+            actualizarInputsA();
+        });
+
+        function actualizarInputsA2() {
+            var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA2').val(marca);
+            $('#modeloInputA2').val(modelo);
+            $('#nsInputA2').val(ns);
+        }
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect2').on('change', function() {
+            actualizarInputsA2();
+        });
+
+    });
 
     </script>
 @endsection
