@@ -547,7 +547,7 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
         {
             return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
-
+        }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
         {
             return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
