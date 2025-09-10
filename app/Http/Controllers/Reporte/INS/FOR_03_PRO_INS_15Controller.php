@@ -39,7 +39,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class FOR_01_PRO_INS_16Controller extends Controller
+class FOR_02_PRO_INS_15Controller extends Controller
 {
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -50,9 +50,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Contrato= $datosParaCrearOS_OC['Contrato'];
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
-        //$Material = $datosParaCrearOS_OC['Material'];
+        $Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        //$Pieza = $datosParaCrearOS_OC['Pieza'];
+        $Pieza = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
@@ -82,7 +82,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            //$Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -161,7 +161,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            //$Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -216,8 +216,13 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
     }
 
+    public function FOR_02_PRO_INS_15_store1(Request $request)
+    {
+        // Verificar los datos recibidos antes de procesarlos
+        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
+    }
 
-    public function FOR_01_PRO_INS_16_store(Request $request)
+    public function FOR_02_PRO_INS_15_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -225,32 +230,47 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Equipo' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Iluminacion' => 'nullable|string',
+            'Detalles_Generales.Tipo_Inspeccion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            
+
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.FEC_CAL' => 'nullable|string',
-            'Datos_Equipo.CER_POR' => 'nullable|string',
-            'Datos_Equipo.RAN_MED' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-            'Datos_Equipo.voltaje' => 'nullable|string',
-            'Datos_Equipo.CARGA_AMP' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
+
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string',  // Cada título debe ser un string válido
+
+            /*Resultados_Juntas*/
+            'ID' => 'nullable|array',
+            'Elemento' => 'nullable|array',
+            'No_Indicacion' => 'nullable|array',
+            'Tipo_Indicacion' => 'nullable|array',
+            'Referencia' => 'nullable|array',
+            'DNR' => 'nullable|array',
+            'HT' => 'nullable|array',
+            'Long_Axial' => 'nullable|array',
+            'Long_Circ' => 'nullable|array',
+            'd' => 'nullable|array',
+            'ta' => 'nullable|array',
+            'Perdida' => 'nullable|array',
+            'Espesor_remanente' => 'nullable|array',
+            'Observaciones' => 'nullable|array',
+
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -349,6 +369,72 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
         
+        // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
+        
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
+                    'No_Indicacion' => $request->input("No_Indicacion.$sinTituloKey.$i"),
+                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$sinTituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
+                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
+                    'HT' => $request->input("HT.$sinTituloKey.$i"),
+                    'Long_Axial' => $request->input("Long_Axial.$sinTituloKey.$i"),
+                    'Long_Circ' => $request->input("Long_Circ.$sinTituloKey.$i"),
+                    'd' => $request->input("d.$sinTituloKey.$i"),
+                    'ta' => $request->input("ta.$sinTituloKey.$i"),
+                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
+                    'Espesor_remanente' => $request->input("Espesor_remanente.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
+                'resultados' => $resultados
+            ];
+        }
+        
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            //$tituloKey = "titulo_" . $titulo;
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("ID.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = [];
+        
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
+                    'No_Indicacion' => $request->input("No_Indicacion.$tituloKey.$i"),
+                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$tituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
+                    'DNR' => $request->input("DNR.$tituloKey.$i"),
+                    'HT' => $request->input("HT.$tituloKey.$i"),
+                    'Long_Axial' => $request->input("Long_Axial.$tituloKey.$i"),
+                    'Long_Circ' => $request->input("Long_Circ.$tituloKey.$i"),
+                    'd' => $request->input("d.$tituloKey.$i"),
+                    'ta' => $request->input("ta.$tituloKey.$i"),
+                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
+                    'Espesor_remanente' => $request->input("Espesor_remanente.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
         
         // Guardar en el modelo
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
@@ -395,14 +481,14 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -427,10 +513,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        //$Material = $validatedData['Detalles_Generales']['Material'];
+        $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        //$Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
@@ -439,9 +525,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Lugar' => $Lugar,
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
-            //'Material' => $Material,
+            'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
-            //'Pieza' => $Pieza,
+            'Pieza' => $Pieza,
             'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
@@ -458,14 +544,13 @@ class FOR_01_PRO_INS_16Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_16_update1(Request $request) 
+    public function FOR_02_PRO_INS_15_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-
-    public function FOR_01_PRO_INS_16_update(Request $request, $id)
+    public function FOR_02_PRO_INS_15_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -473,32 +558,46 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Equipo' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Iluminacion' => 'nullable|string',
+            'Detalles_Generales.Tipo_Inspeccion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            
+
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.FEC_CAL' => 'nullable|string',
-            'Datos_Equipo.CER_POR' => 'nullable|string',
-            'Datos_Equipo.RAN_MED' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-            'Datos_Equipo.voltaje' => 'nullable|string',
-            'Datos_Equipo.CARGA_AMP' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
+
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string',  // Cada título debe ser un string válido
+
+            /*Resultados_Juntas*/
+            'ID' => 'nullable|array',
+            'Elemento' => 'nullable|array',
+            'No_Indicacion' => 'nullable|array',
+            'Tipo_Indicacion' => 'nullable|array',
+            'Referencia' => 'nullable|array',
+            'DNR' => 'nullable|array',
+            'HT' => 'nullable|array',
+            'Long_Axial' => 'nullable|array',
+            'Long_Circ' => 'nullable|array',
+            'd' => 'nullable|array',
+            'ta' => 'nullable|array',
+            'Perdida' => 'nullable|array',
+            'Espesor_remanente' => 'nullable|array',
+            'Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -511,7 +610,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
@@ -581,6 +680,78 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
+        
+        // 1. Procesar filas SIN título (si existen)
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
+        $numFilasSinTitulo = count($filasSinTitulo);
+        
+        if ($numFilasSinTitulo > 0) {
+            $resultados = [];
+            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
+                $resultados[] = [
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
+                    'No_Indicacion' => $request->input("No_Indicacion.$sinTituloKey.$i"),
+                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$sinTituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
+                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
+                    'HT' => $request->input("HT.$sinTituloKey.$i"),
+                    'Long_Axial' => $request->input("Long_Axial.$sinTituloKey.$i"),
+                    'Long_Circ' => $request->input("Long_Circ.$sinTituloKey.$i"),
+                    'd' => $request->input("d.$sinTituloKey.$i"),
+                    'ta' => $request->input("ta.$sinTituloKey.$i"),
+                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
+                    'Espesor_remanente' => $request->input("Espesor_remanente.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
+                'resultados' => $resultados
+            ];
+        }
+        
+        // 2. Procesar los títulos existentes
+        foreach ($titulos as $titulo) {
+            
+            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $filas = $request->input("ID.$tituloKey", []);
+            $numFilas = count($filas);
+        
+            $resultados = [];
+            for ($i = 0; $i < $numFilas; $i++) {
+                $resultados[] = [
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
+                    'No_Indicacion' => $request->input("No_Indicacion.$tituloKey.$i"),
+                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$tituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
+                    'DNR' => $request->input("DNR.$tituloKey.$i"),
+                    'HT' => $request->input("HT.$tituloKey.$i"),
+                    'Long_Axial' => $request->input("Long_Axial.$tituloKey.$i"),
+                    'Long_Circ' => $request->input("Long_Circ.$tituloKey.$i"),
+                    'd' => $request->input("d.$tituloKey.$i"),
+                    'ta' => $request->input("ta.$tituloKey.$i"),
+                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
+                    'Espesor_remanente' => $request->input("Espesor_remanente.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                ];
+            }
+        
+            $datosAgrupados[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+        
+        // Actualizar el campo en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
+        ]);
 
         /*Firmas */
         // Guardar las firmas
@@ -621,7 +792,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -747,7 +918,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
     }
 
 
-    public function FOR_01_INS_16($id)
+    public function FOR_02_INS_15($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -796,7 +967,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-02-INS-15.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -819,10 +990,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_16_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_15_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_16_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -843,10 +1014,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265);
+            $combinedPdf->SetXY(179, -179.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -862,7 +1033,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_16_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_02-INS_15.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

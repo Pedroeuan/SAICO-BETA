@@ -241,7 +241,7 @@
                     <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
                     <tbody>
-<tr>
+                    <tr>
                             <th style="width: 12%;">FECHA:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
@@ -294,10 +294,10 @@
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="8">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                        <tr><th colspan="5">DATOS Y AJUSTES DEL EQUIPO </th></tr>
                     </thead>  
 
-                <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
+                                <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
 
                     <tbody>
                         <tr class="celdaGris">

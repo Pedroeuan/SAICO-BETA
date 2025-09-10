@@ -83,6 +83,8 @@
         @include('Reportes.INS.Create.FOR-01-PRO-INS-18')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-19') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-19')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-20') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-20')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-21') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-21')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-22') 
