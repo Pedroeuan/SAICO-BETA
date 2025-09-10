@@ -196,6 +196,56 @@
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
+        .imagenes-reporte {
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 106%;
+            border-collapse: separate;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
+        }
+
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .cross-line {
+            width: 74%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
+        }
             </style>
         </head>
         <body>
@@ -1038,6 +1088,56 @@
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
+        .imagenes-reporte {
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+            width: 100%;
+            border-collapse: separate;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
+        }
+
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 300px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 300.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .cross-line {
+            width: 75%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 10px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
+        }
             </style>
         </head>
         <body>
@@ -1066,7 +1166,7 @@
                     <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
                         <tbody>
                         @php
-                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                            $chunks = array_chunk($Fotos, 2); // Divide las imágenes en grupos de 4
                         @endphp
 
                         @foreach($chunks as $fotosGrupo)
@@ -1084,7 +1184,7 @@
                                     @endforeach
 
                                     {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
-                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                    @for($i = count($fotosGrupo); $i < 2; $i++)
                                         <td class="foto-container empty-box">
                                             <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
                                             <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
@@ -1139,15 +1239,15 @@
 
                             <tr>
                                 <td style="width: 50px;"><strong>BUENO:</strong></td>
-                                <td style="width: 100px;">El equipo se encuentra en condiciones de operación optimas.</td>
+                                <td style="width: 50px;">El equipo se encuentra en condiciones de operación optimas.</td>
                                 <td style="width: 50px;"><strong>PREVENTIVO:</strong></td>
-                                <td style="width: 150px;">Media anomalia programar el paro del equipo para su reparación.</td>
+                                <td style="width: 50px;">Media anomalia programar el paro del equipo para su reparación.</td>
                             </tr>
                             <tr>
                                 <td style="width: 50px;"><strong>MODERADO</strong></td>
-                                <td style="width: 100px;">ligera anomalia, mantener en observación y programar reparación.</td>
+                                <td style="width: 50px;">ligera anomalia, mantener en observación y programar reparación.</td>
                                 <td style="width: 50px;"><strong>NO ACEPTABLE:</strong></td>
-                                <td style="width: 100px;">Anomalia severa, se recomienda para el equipo para su intervención</td>
+                                <td style="width: 50px;">Anomalia severa, se recomienda para el equipo para su intervención</td>
                             </tr>
 
                         </thead>

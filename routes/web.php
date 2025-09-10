@@ -56,6 +56,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
+use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
     Route::get('/', function () {
         return view('auth.login');

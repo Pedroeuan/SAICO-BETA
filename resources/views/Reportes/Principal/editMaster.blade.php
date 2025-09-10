@@ -92,6 +92,8 @@
         @include('Reportes.INS.Edit.FOR-02-PRO-INS-10')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-15')
         @include('Reportes.INS.Edit.FOR-02-PRO-INS-15')
+    @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15')
+        @include('Reportes.INS.Edit.FOR-03-PRO-INS-15')
     @endif
 @stop
 
