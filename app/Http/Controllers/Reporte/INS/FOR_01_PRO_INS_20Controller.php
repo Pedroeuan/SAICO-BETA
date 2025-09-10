@@ -39,7 +39,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class FOR_01_PRO_INS_16Controller extends Controller
+class FOR_01_PRO_INS_20Controller extends Controller
 {
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -50,9 +50,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Contrato= $datosParaCrearOS_OC['Contrato'];
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
-        //$Material = $datosParaCrearOS_OC['Material'];
+        $Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        //$Pieza = $datosParaCrearOS_OC['Pieza'];
+        $Pieza = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
@@ -82,7 +82,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            //$Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -161,7 +161,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            //$Orden_Servicio->Material = $Material;
+            $Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -216,8 +216,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
     }
 
-
-    public function FOR_01_PRO_INS_16_store(Request $request)
+    public function FOR_01_PRO_INS_20_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -225,32 +224,38 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
-            'Detalles_Generales.Cliente' => 'nullable|string',
-            'Detalles_Generales.Contrato' => 'nullable|string',
-            'Detalles_Generales.Proyecto' => 'nullable|string',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
-            'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Equipo' => 'nullable|string',
-            'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
-            'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.tip_ais' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.ins' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Nom_pz' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Trazabilidad' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Accesorio' => 'nullable|string|max:255',
+            'Detalles_Generales.Tuberia' => 'nullable|string|max:255',
+            'Detalles_Generales.Estructural' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.FEC_CAL' => 'nullable|string',
-            'Datos_Equipo.CER_POR' => 'nullable|string',
-            'Datos_Equipo.RAN_MED' => 'nullable|string',
-            'Datos_Equipo.Observaciones' => 'nullable|string',
-            'Datos_Equipo.voltaje' => 'nullable|string',
-            'Datos_Equipo.CARGA_AMP' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
+
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -258,64 +263,64 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
-            'Firmas_Reportes1.Realizo' => 'nullable|string',
-            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
 
             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string',
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string',
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string',
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
         ]);
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
@@ -349,6 +354,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
         
+
         
         // Guardar en el modelo
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
@@ -395,14 +401,14 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos";
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -424,13 +430,13 @@ class FOR_01_PRO_INS_16Controller extends Controller
     }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $Lugar = $validatedData['Detalles_Generales']['Partida'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        //$Material = $validatedData['Detalles_Generales']['Material'];
+        $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        //$Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        $Pieza = $validatedData['Detalles_Generales']['Trazabilidad'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
@@ -439,9 +445,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Lugar' => $Lugar,
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
-            //'Material' => $Material,
+            'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
-            //'Pieza' => $Pieza,
+            'Pieza' => $Pieza,
             'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
@@ -458,14 +464,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_16_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
-
-    public function FOR_01_PRO_INS_16_update(Request $request, $id)
+    public function FOR_01_PRO_INS_14_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -473,32 +472,38 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
-            'Detalles_Generales.Cliente' => 'nullable|string',
-            'Detalles_Generales.Contrato' => 'nullable|string',
-            'Detalles_Generales.Proyecto' => 'nullable|string',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
-            'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Equipo' => 'nullable|string',
-            'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
-            'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
+            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
+            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Folio' => 'nullable|string|max:255',
+            'Detalles_Generales.tip_ais' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.ins' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Nom_pz' => 'nullable|string|max:255',
+            'Detalles_Generales.Material' => 'nullable|string|max:255',
+            'Detalles_Generales.Trazabilidad' => 'nullable|string|max:255',
+            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
+            'Detalles_Generales.Accesorio' => 'nullable|string|max:255',
+            'Detalles_Generales.Tuberia' => 'nullable|string|max:255',
+            'Detalles_Generales.Estructural' => 'nullable|string|max:255',
+            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.FEC_CAL' => 'nullable|string',
-            'Datos_Equipo.CER_POR' => 'nullable|string',
-            'Datos_Equipo.RAN_MED' => 'nullable|string',
-            'Datos_Equipo.Observaciones' => 'nullable|string',
-            'Datos_Equipo.voltaje' => 'nullable|string',
-            'Datos_Equipo.CARGA_AMP' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+
+
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
+
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -506,64 +511,64 @@ class FOR_01_PRO_INS_16Controller extends Controller
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
-            'Firmas_Reportes1.Realizo' => 'nullable|string',
-            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
 
              /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string',
+            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string',
+            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string',
+            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
 
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
@@ -579,6 +584,15 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+        ]);
+
+        $titulos = $request->input('titulos', []);
+        $datosAgrupados = [];
+        
+        
+        // Actualizar el campo en la base de datos
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
         ]);
 
 
@@ -621,7 +635,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -747,7 +761,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
     }
 
 
-    public function FOR_01_INS_16($id)
+    public function FOR_01_INS_20($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -796,7 +810,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-01-INS-20.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -819,10 +833,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_16_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_20_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_16_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_20_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -846,7 +860,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265);
+            $combinedPdf->SetXY(137, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -862,7 +876,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_INS_16_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_01_INS_20.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

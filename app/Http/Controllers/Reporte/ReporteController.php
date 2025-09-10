@@ -92,6 +92,7 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
     }
+    
     public function FOR_02_PRO_INS_15()
     {
         return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
@@ -111,6 +112,11 @@ class ReporteController extends Controller
     public function FOR_01_PRO_INS_18()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
+    }
+    
+    public function FOR_01_PRO_INS_20()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-20');
     }
     
     public function FOR_01_PRO_INS_21()
@@ -530,9 +536,21 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-16")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
+        }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
         {
             return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
         {
@@ -557,6 +575,14 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-02-PRO-INS-15")
         {
             return redirect()->route('Reporte_FOR_02_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_03_INS_15.PDF', ['id' => $id]);
         }
     }
 

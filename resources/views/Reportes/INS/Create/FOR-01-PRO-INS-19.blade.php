@@ -66,15 +66,15 @@
 <br>
 <br>
 
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
             <form id="FOR-01-PRO-INS-19" action="{{route('Reportes_FOR_01_PRO_INS_19.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
-                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>  
-                
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -248,14 +248,14 @@
                         <div class="form-group text-center">
                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -302,21 +302,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.MARCA_SOFTWARE')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInput" name="Datos_Equipo[MARCA_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.MARCA_SOFTWARE')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.MODELO_SOFTWARE')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.MODELO_SOFTWARE')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">VERSION:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[VERSION_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.VERSION_SOFTWARE')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[VERSION_SOFTWARE]" placeholder="" value="{{old('Datos_Equipo.VERSION_SOFTWARE')}}">
                         </div>
                     </div>
 
@@ -324,16 +324,16 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
+                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                        data-marca="{{ $accesorios->Marca }}"
+                                        data-modelo="{{ $accesorios->Modelo }}"
+                                        data-ns="{{ $accesorios->Serie }}">
+                                        {{ $accesorios->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -341,21 +341,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_SONDA]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_SONDA]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_SONDA]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_SONDA]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_SONDA]" placeholder="" value="{{old('Datos_Equipo.NS_SONDA')}}">
                         </div>
                     </div>
 
@@ -363,16 +363,16 @@
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Block de verificación</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
+                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
+                            <option value="" selected disabled>Seleccione un Block de verificación</option>
+                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
+                                        data-marca="{{ $blockyprobeta->Marca }}"
+                                        data-modelo="{{ $blockyprobeta->Modelo }}"
+                                        data-ns="{{ $blockyprobeta->Serie }}">
+                                        {{ $blockyprobeta->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -380,21 +380,21 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputbyp" name="Datos_Equipo[MODELO_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK')}}">
                         </div>
                     </div>
 
@@ -914,21 +914,20 @@ $(document).ready(function() {
             let newRow =                 
                     `<tr data-titulo="${lastTitle}">
                         <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="no[${lastTitle}]" placeholder="NO" value="${rowCount}"></td>
-                        <td><input type="text" class="form-control" name="junta[${lastTitle}]" placeholder="Junta / Elemento"></td>
-                        <td><input type="text" class="form-control" name="lado[${lastTitle}]" placeholder="Lado"></td>
-                        <td><input type="text" class="form-control" name="no_ind[${lastTitle}]" placeholder="No. de indicación"></td>
-                        <td><input type="text" class="form-control" name="tipo_ind[${lastTitle}]" placeholder="Tipo Indicación"></td>
-                        <td><input type="text" class="form-control" name="long[${lastTitle}]" placeholder="Long"></td>
-                        <td><input type="text" class="form-control" name="prof[${lastTitle}]" placeholder="Prof"></td>
-                        <td><input type="text" class="form-control" name="NR[${lastTitle}]" placeholder="Nivel de referencia"></td>
-                        <td><input type="text" class="form-control" name="dnr[${lastTitle}]" placeholder="Dnr"></td>
-                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}]" placeholder="Evaluación"></td>
-                        <td><input type="text" class="form-control" name="archivo[${lastTitle}]" placeholder="Archivo"></td>
-                        <td><input type="text" class="form-control" name="long_ins[${lastTitle}]" placeholder="Long inspeccionada"></td>
+                        <td><input type="text" class="form-control" name="no[${lastTitle}][]" placeholder="No" value="${rowCountGlobal}"></td>
+                        <td><input type="text" class="form-control" name="junta[${lastTitle}][]" placeholder="Junta / Elemento"></td>
+                        <td><input type="text" class="form-control" name="lado[${lastTitle}][]" placeholder="Lado"></td>
+                        <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. de indicación"></td>
+                        <td><input type="text" class="form-control" name="tipo_ind[${lastTitle}][]" placeholder="Tipo Indicación"></td>
+                        <td><input type="text" class="form-control" name="long[${lastTitle}][]" placeholder="Long"></td>
+                        <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
+                        <td><input type="text" class="form-control" name="NR[${lastTitle}][]" placeholder="Nivel de referencia"></td>
+                        <td><input type="text" class="form-control" name="dnr[${lastTitle}][]" placeholder="Dnr"></td>
+                        <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                        <td><input type="text" class="form-control" name="archivo[${lastTitle}][]" placeholder="Archivo"></td>
+                        <td><input type="text" class="form-control" name="long_ins[${lastTitle}][]" placeholder="Long inspeccionada"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                     </tr>`;
-
                 $('#dynamicTable tbody').append(newRow);
             }
             saveData();
@@ -960,6 +959,111 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
+ /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+
+            const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+            selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect').on('change', function() {
+                    actualizarInputsA();
+                });
+                
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
+                $('#nsInputbyp').val(ns);
+            }
+
+            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
+            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+        });
+
+    /*FOR-01-PRO-INS-19*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-19');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-19_' + el.name, el.value);
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-19_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-19_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-19_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 
 </script>
 @endsection
