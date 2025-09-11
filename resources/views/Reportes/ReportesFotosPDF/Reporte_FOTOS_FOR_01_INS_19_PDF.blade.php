@@ -263,36 +263,6 @@
                             <th>PROYECTO: </th>
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
-                        <tr>
-                            <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
-                            <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PIEZA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
-                            <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
-                        </tr>
-                        <tr>
-                            <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Codigo_Aplicable'] }}</td>
-                        </tr>
                     </tbody>
                 </table>
                 <div style="margin-bottom: 6px;"></div>

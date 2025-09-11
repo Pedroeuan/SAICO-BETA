@@ -426,13 +426,13 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
-                                    <td> style="width: 30px;"></td>
+                                    <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
