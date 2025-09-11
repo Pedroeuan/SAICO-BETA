@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-01-INS-12</title>
+            <title>FORMATO FOR-01-INS-19</title>
             <style>
                 @page {
                     margin: 
@@ -218,14 +218,14 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-10/02</th>
+                            <th style="width: 80%;">FOR-INS-19/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES EDDY</th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON ACFM</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
