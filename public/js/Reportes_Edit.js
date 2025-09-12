@@ -185,7 +185,7 @@
             generateImageFields(count);
         });
 
-        function generateImageFields(count) {
+        /*function generateImageFields(count) {
             container.innerHTML = '';
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
@@ -216,6 +216,73 @@
             });
 
             // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }*/
+
+            function generateImageFields(count) {
+            container.innerHTML = '';
+
+            // Calcular desde qué índice empezar (considerando imágenes del servidor)
+            const existingCount = document.querySelectorAll('[id^="image-container-"]').length;
+            let startIndex = existingCount; // Si tienes 3 imágenes cargadas, aquí vale 3
+
+            for (let i = 1; i <= count; i++) {
+                const index = startIndex + i; // Comenzamos desde el consecutivo real
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.setAttribute('id', `image-container-${index}`);
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${index}">Imagen por Subir ${index}:</label>
+                        <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
+                        <div class="image-preview mt-2" id="image${index}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${index}-base64">
+                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            // Eventos de eliminación
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                    }
+                });
+            });
+
+            // Eventos de cambio para inputs
             document.querySelectorAll('.image-input').forEach(input => {
                 input.addEventListener('change', function (e) {
                     const file = e.target.files[0];
@@ -306,7 +373,7 @@
 
 
     /*Guarda en sesionstorage */
-    function saveData() {
+    /*function saveData() {
         const data = [];
         
         $('#dynamicTable tbody tr').each(function () {
@@ -336,7 +403,7 @@
         });
 
         sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
-    }
+    }*/
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
