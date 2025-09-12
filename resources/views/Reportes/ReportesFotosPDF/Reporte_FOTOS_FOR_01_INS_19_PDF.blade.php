@@ -208,6 +208,37 @@
         .cross-line::after {
             transform: rotate(-27deg);
         }
+
+            /* Cuando la imagen es marcada como fullsize */
+            .foto-container.fullsize {
+                padding: 0;
+                margin: 0;
+                border: none;         /* Quita bordes para que no corte la imagen */
+                width: 100% !important;
+                height: auto !important;
+                text-align: center;   /* Centrar el comentario debajo */
+                border: 2px solid black; 
+            }
+
+            .foto-container.fullsize img {
+                /*width: 100% !important;   /* Ocupar todo el ancho disponible */
+                /*height: auto !important;  /* Mantener proporciones */
+                /*max-height: 92vh;         /* Ajusta para no salirse del alto de la hoja */
+                /*object-fit: contain;      /* Evita que se recorte */
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 682px;  /* Fija el ancho de la celda */
+            height: 400px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+            }
+
+            .foto-container.fullsize .comment {
+                border: none;
+                font-size: 14px;
+                margin-top: 5px;
+                text-align: center; 
+            }
+
             </style>
         </head>
         <body>
@@ -427,46 +458,77 @@
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
-                        <tbody>
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacía -->
+
+                    <tbody>
                         @php
-                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                            $i = 0;
                         @endphp
 
-                        @foreach($chunks as $fotosGrupo)
+                        @while($i < count($Fotos))
                             <table class="imagenes-reporte">
                                 <tr>
-                                    @foreach($fotosGrupo as $index => $foto)
-                                        <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
-                                        
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                                        @endif
-                                    @endforeach
+                                    @php
+                                        $foto = $Fotos[$i];
+                                        //dd($Fotos);
+                                    @endphp
 
-                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
-                                    @for($i = count($fotosGrupo); $i < 4; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
-                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
-                                        @if(($i + 1) % 2 == 0)
-                                            </tr><tr> <!-- Mantiene la estructura -->
-                                        @endif
-                                    @endfor
+                                    {{-- Si la foto está marcada --}}
+                                        @if(!empty($foto['fullsize']) && $foto['fullsize'] == true)
+                                            <table style="width:100%; border-collapse: collapse; margin:0; padding:0;">
+                                                <tr>
+                                                    <td class="foto-container fullsize">
+                                                        <img src="{{ $foto['path'] }}" alt="Foto Grande">
+                                                        <p class="comment">{{ $foto['comment'] }}</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            @php
+                                                $i++; // Avanzamos solo 1 porque esa ocupa toda la página
+                                            @endphp
+                                        @else
+                                        {{-- Agrupamos en bloques de 4 imágenes normales --}}
+                                        @php
+                                            $grupo = array_slice($Fotos, $i, 4);
+                                        @endphp
+
+                                        @foreach($grupo as $index => $fotoGrupo)
+                                            <td class="foto-container">
+                                                <img src="{{ $fotoGrupo['path'] }}" alt="Foto {{ $index + 1 }}">
+                                                <p class="comment">{{ $fotoGrupo['comment'] }}</p>
+                                            </td>
+
+                                            @if(($index + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endforeach
+
+                                        {{-- Rellenar cuadros vacíos si el grupo es menor a 4 --}}
+                                        @for($j = count($grupo); $j < 4; $j++)
+                                            <td class="foto-container empty-box">
+                                                <div class="cross-line"></div>
+                                                <p class="empty-comment">&nbsp;</p>
+                                            </td>
+                                            @if(($j + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endfor
+
+                                        @php
+                                            $i += count($grupo);
+                                        @endphp
+                                    @endif
                                 </tr>
                             </table>
 
-                            {{-- Salto de página cada 4 imágenes --}}
-                            @if (!$loop->last)
+                            {{-- Salto de página después de cada bloque (imagen grande o 4 normales) --}}
+                            @if($i < count($Fotos))
                                 <div style="page-break-after: always;"></div>
                             @endif
-                        @endforeach
+                        @endwhile
                     </tbody>
                 </table>
+
             </div>
 
         </body>

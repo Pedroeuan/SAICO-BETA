@@ -864,15 +864,20 @@ class FOR_01_PRO_INS_19Controller extends Controller
             $checked = in_array($index + 1, $imagenHoja) ? true : false; // ✅ Estado del checkbox
 
             if ($request->hasFile("replace_images.$index")) {
+                // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
+                 // Eliminar imagen anterior si existe
                 $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
                 if (Storage::exists($rutaImagenPublic)) {
                     Storage::delete($rutaImagenPublic);
                 }
+                 // Guardar la nueva imagen
                 $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
                 $path = $newImage->storeAs($rutaCarpeta, $imageName);
                 $rutaNueva = str_replace('public/', 'storage/', $path);
+
             } elseif (!empty($imagesBase64[$index])) {
+                // **Procesar imágenes en Base64**
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
                 $path = "{$rutaCarpeta}/{$imageName}";
@@ -882,6 +887,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
                 $rutaNueva = $ruta; // Mantener la ruta existente
             }
 
+            // Verificar si ya existe en el array
             if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
@@ -898,6 +904,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
                 $path = "{$rutaCarpeta}/{$imageName}";
+                // Guardar la imagen en el almacenamiento
                 Storage::put($path, $image);
                 $rutaNueva = str_replace('public/', 'storage/', $path);
 
@@ -914,7 +921,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
             }
         }
 
-        // 4️⃣ Guardar en BD
+        // **4️⃣ Guardar las imágenes actualizadas en la BD**
         $Fotos_Reportes->update([
             'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)),
         ]);
@@ -972,7 +979,8 @@ class FOR_01_PRO_INS_19Controller extends Controller
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
+                    'comment' => $foto['comentario'] ?? '',
+                    'fullsize' => !empty($foto['hoja']) ? (bool)$foto['hoja'] : false // 👈 aquí añadimos la bandera
                 ];
             }
         }
