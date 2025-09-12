@@ -66,9 +66,9 @@
 <br>
 <br>
 
-{{-- <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4> --}}
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
                 <section class="content w-100">
                     <div class="card w-100">
@@ -124,7 +124,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}">
+                                            <textarea class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}"></textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -154,7 +154,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
+                                            <textarea class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}"></textarea>
                                             @error('Isometrico_Plano')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -178,8 +178,50 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
+                                    <div style="margin-bottom: 5px;"></div>
 
+                                    <div class="table-responsive">
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                    </div>
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                                        <thead>
+
+                                            <tr>
+                                                <th>#</th>
+                                                <th>ID</th>
+                                                <th>Descripción del Elemento</th>
+                                                <th>Nivel</th>
+                                                <th>0</th>
+                                                <th>Longitud (m)</th>
+                                                <th>Clase</th>
+                                                <th>Especificación</th>
+                                                <th>Observaciones</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+
+                                                <tr id="inputRow">
+                                                    <th></th> <!-- Para ID vacío -->
+                                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 50px;"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
+                                                    <th></th> <!-- Para botón de eliminar -->
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <!-- Filas dinámicas aparecerán aquí -->
+                                            </tbody>
+                                    </table>
+                                    </div>
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -193,31 +235,10 @@
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Pre-rellenar Tabla "---"</button>
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
-
-                                    <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Descripción del Elemento</th>
-                                                <th>Nivel</th>
-                                                <th>0</th>
-                                                <th>Longitud (m)</th>
-                                                <th>Clase</th>
-                                                <th>Especificación</th>
-                                                <th>Observaciones</th>
-                                                <th>Eliminar</th>
-                                            </tr>
-                                        </thead>
-
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
-                                    </table>
-                                    </div>
-
                                     <p>
 
                                         <div class="col-sm-12">
@@ -430,8 +451,7 @@
                                                 </thead>                            
                                             </table>
                                         </div>
-
-
+                                        
                                         <p>
 
                                         <div class="container">
@@ -472,7 +492,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create_SF.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -497,7 +517,7 @@
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="21">
+                            <td colspan="10">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
                                     <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
@@ -512,25 +532,13 @@
                         <tr data-titulo="${item.titulo}">
                             <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                             <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
-                            <td><input type="text" class="form-control" name="elemento_tubo[${item.titulo}][]" value="${item.inputs[1]}" placeholder="Elemento / Tubo"></td>
-                            <td><input type="text" class="form-control" name="no_aceptacion[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No. Aceptación"></td>
-                            <td><input type="text" class="form-control" name="no_serie[${item.titulo}][]" value="${item.inputs[3]}" placeholder="No. Serie"></td>
-                            <td><input type="text" class="form-control" name="no_colada[${item.titulo}][]" value="${item.inputs[4]}" placeholder="No. Colada"></td>
-                            <td><input type="text" class="form-control" name="tnominal[${item.titulo}][]" value="${item.inputs[5]}" placeholder="tnominal"></td>
-                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[7]}" placeholder="No.Ind."></td>
-                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="nr[${item.titulo}][]" value="${item.inputs[9]}" placeholder="NR (%)"></td>
-                            <td><input type="text" class="form-control" name="ni[${item.titulo}][]" value="${item.inputs[10]}" placeholder="NI (%)"></td>
-                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[11]}" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="prof[${item.titulo}][]" value="${item.inputs[12]}" placeholder="Prof"></td>
-                            <td><input type="text" class="form-control" name="la[${item.titulo}][]" value="${item.inputs[13]}" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${item.titulo}][]" value="${item.inputs[14]}" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}][]" value="${item.inputs[15]}" placeholder="tmáx"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}][]" value="${item.inputs[16]}" placeholder="tmin"></td>
-                            <td><input type="text" class="form-control" name="metros_lineales[${item.titulo}][]" value="${item.inputs[17]}" placeholder="Metros Lineales"></td>
-                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[18]}" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[19]}" placeholder="Observaciones"></td>
+                            <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Descripcion_del_Elemento"></td>
+                            <td><input type="text" class="form-control" name="Nivel[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Nivel"></td>
+                            <td><input type="text" class="form-control" name="0[${item.titulo}][]" value="${item.inputs[4]}" placeholder="0"></td>
+                            <td><input type="text" class="form-control" name="Longitud_(m)[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Longitud_(m)"></td>
+                            <td><input type="text" class="form-control" name="Clase[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Clase"></td>
+                            <td><input type="text" class="form-control" name="Especificación[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Especificación"></td>
+                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Observaciones"></td>
                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                         </tr>`;
                         $('#dynamicTable tbody').append(newRow);
@@ -547,7 +555,7 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="21">
+                <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
@@ -577,24 +585,12 @@
                 <tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="elemento_tubo[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                    <td><input type="text" class="form-control" name="no_aceptacion[${lastTitle}][]" placeholder="No. Aceptación"></td>
-                    <td><input type="text" class="form-control" name="no_serie[${lastTitle}][]" placeholder="No. Serie"></td>
-                    <td><input type="text" class="form-control" name="no_colada[${lastTitle}][]" placeholder="No. Colada"></td>
-                    <td><input type="text" class="form-control" name="tnominal[${lastTitle}][]" placeholder="tnominal"></td>
-                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
-                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="nr[${lastTitle}][]" placeholder="NR (%)"></td>
-                    <td><input type="text" class="form-control" name="ni[${lastTitle}][]" placeholder="NI (%)"></td>
-                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="prof[${lastTitle}][]" placeholder="Prof"></td>
-                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
-                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
-                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="tmáx"></td>
-                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="tmin"></td>
-                    <td><input type="text" class="form-control" name="metros_lineales[${lastTitle}][]" placeholder="Metros Lineales"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion_del_Elemento"></td>
+                    <td><input type="text" class="form-control" name="Nivel[${lastTitle}][]" placeholder="Nivel"></td>
+                    <td><input type="text" class="form-control" name="0[${lastTitle}][]" placeholder="0"></td>
+                    <td><input type="text" class="form-control" name="Longitud_(m)[${lastTitle}][]" placeholder="Longitud_(m)"></td>
+                    <td><input type="text" class="form-control" name="Clase[${lastTitle}][]" placeholder="Clase"></td>
+                    <td><input type="text" class="form-control" name="Especificación[${lastTitle}][]" placeholder="Especificación"></td>
                     <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
@@ -631,29 +627,29 @@
             restoreData();
     });
 
-    /*FOR-02-PRO-INS-10*/
+    /*FOR-03-PRO-INS-15*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-02-PRO-INS-10');
+        const form = document.getElementById('FOR-03-PRO-INS-15');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+            //    localStorage.setItem('FOR-03-PRO-INS-15_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+                localStorage.setItem('FOR-03-PRO-INS-15_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-02-PRO-INS-10_' + el.name);
+                const value = localStorage.getItem('FOR-03-PRO-INS-15_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -661,7 +657,7 @@
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-02-PRO-INS-10_' + el.name);
+                localStorage.removeItem('FOR-03-PRO-INS-15_' + el.name);
                 //localStorage.clear();
             });
         });

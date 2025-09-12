@@ -231,7 +231,6 @@
                                                                     <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                     <td>
                                                                         <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                            
                                                                             <i class="fa fa-times"  aria-hidden="true"></i>
                                                                         </button>
                                                                     </td>
@@ -244,12 +243,12 @@
                                                         <tr data-titulo="{{ $tituloKey }}">
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                             <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Elemento[{{ $tituloKey }}][]' value="{{ $resultado['Descripcion_del_Elemento'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='No_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['Nivel'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Tipo_Indicacion[{{ $tituloKey }}][]' value="{{ $resultado['0'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Referencia[{{ $tituloKey }}][]' value="{{ $resultado['Longitud_(m)'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='DNR[{{ $tituloKey }}][]' value="{{ $resultado['Clase'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='HT[{{ $tituloKey }}][]' value="{{ $resultado['Especificación'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Descripcion_del_Elemento[{{ $tituloKey }}][]' value="{{ $resultado['Descripcion_del_Elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Nivel[{{ $tituloKey }}][]' value="{{ $resultado['NIVEL'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='0[{{ $tituloKey }}][]' value="{{ $resultado['Ø'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Longitud_(m)[{{ $tituloKey }}][]' value="{{ $resultado['LONGITUD_(m)'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Clase[{{ $tituloKey }}][]' value="{{ $resultado['CLASE'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Especificación[{{ $tituloKey }}][]' value="{{ $resultado['ESPECIFICACIÓN'] }}"></td>
                                                             <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>

@@ -252,7 +252,7 @@
                         </tr>
                         <tr>
                             <th>DESCRIPCION DEL EQUIPO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
@@ -265,11 +265,89 @@
                 </table>
 
                     <div style="margin-bottom: 5px;"></div>
+            
+            <div class="content">
+
+                    <table class="datosresultados">
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="14">RESULTADOS</th></tr>
+                        </thead>
+
+                            <thead><tr class="sinBordeth"><th colspan="14"></th></tr></thead> <!-- Fila vacia -->
+
+                            <thead>
+                            <tr class="celdaGris">
+                                <th style="width: 100px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">ID</th>
+                                <th style="width: 100px; border: 1px solid black;">DESCRIPCIÓN DEL ELEMENTO</th>
+                                <th style="width: 100px; border: 1px solid black;">NIVEL</th>
+                                <th style="width: 50px; border: 1px solid black;">Ø</th>
+                                <th style="width: 50px; border: 1px solid black;">LONGITUD (m)</th>
+                                <th style="width: 50px; border: 1px solid black;">CLASE</th>
+                                <th style="width: 50px; border: 1px solid black;">ESPECIFICACIÓN</th>
+                                <th style="width: 100px; border: 1px solid black;">OBSERVACIONES</th>
+                            </tr>
+                        </thead>
+
+                            <tbody>
+                                    @php
+                                        $contador = 1;
+                                        $filasPorPagina = 15;
+                                        $contadorFilas = 0;
+                                        $contadorFilasPagina = 0;
+                                        $totalMetros = 0;
+                                    @endphp
+
+                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                                        @php
+                                            $titulo = $grupo['titulos_juntas'];
+                                            $juntasDelGrupo = count($grupo['resultados']);
+                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
+                                        @endphp
+
+                                        @if ($titulo !== 'SIN TITULO')
+                                            <!-- Fila del título -->
+                                            <tr class="titulo-row">
+                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ $titulo }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @php $contadorFilasPagina++; @endphp
+                                        @endif
+
+                                        @foreach ($grupo['resultados'] as $junta)
+                                            @php
+                                                $contadorFilas++;
+                                                $contadorFilasPagina++;
+                                                //$totalMetros += floatval($junta['Observaciones']);
+                                                $esUltimaFila = $loop->last;
+                                            @endphp
+                                            <tr class="juntas">
+                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ID'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Descripcion_del_Elemento'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['NIVEL'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Ø'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['LONGITUD_(m)'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['CLASE'] }}</td>
+                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ESPECIFICACIÓN'] }}</td>
+                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Observaciones'] }}</td>
+                                            </tr>
+
+                                            @php $contador++; @endphp
+                                        @endforeach
+
+                                    @endforeach
+                                    
+                                </tbody>
+                    </table>
+            </div>
 
                     <table class="datosgenerales">                               
                         <tr>                                     
                             <th>OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 805px;"></td>                            
+                            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>                           
                         </tr>                      
                     </table>
 
@@ -453,76 +531,5 @@
                         </thead>                            
                     </table>
             </footer>
-            
-            <div class="content">
-                <div style="margin-bottom: 0px;"></div>
-
-                    <table class="datosresultados">
-                        <thead>
-                            <tr class="celdaGris">
-                                <th style="width: 20px;">ID</th>
-                                <th style="width: 40px;">DESCRIPCIÓN DEL ELEMENTO</th>
-                                <th style="width: 30px;">NIVEL</th>
-                                <th style="width: 30px;">Ø</th>
-                                <th style="width: 30px;">LONGITUD (m)</th>
-                                <th style="width: 30px;">CLASE</th>
-                                <th style="width: 20px;">ESPECIFICACIÓN</th>
-                                <th style="width: 30px;">OBSERVACIONES</th>
-
-                            </tr>
-                        </thead>
-                                <tbody>
-                                    @php
-                                        $contador = 1;
-                                        $filasPorPagina = 15;
-                                        $contadorFilas = 0;
-                                        $contadorFilasPagina = 0;
-                                        $totalMetros = 0;
-                                    @endphp
-
-                                    @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
-                                        @php
-                                            $titulo = $grupo['titulos_juntas'];
-                                            $juntasDelGrupo = count($grupo['resultados']);
-                                            $filasDelGrupo = $juntasDelGrupo + ($titulo !== 'SIN TITULO' ? 1 : 0); // +1 por el título si aplica
-                                        @endphp
-
-                                        @if ($titulo !== 'SIN TITULO')
-                                            <!-- Fila del título -->
-                                            <tr class="titulo-row">
-                                                <td colspan="14" style="border-left: 2px solid black; border-right: 2px solid black;">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        {{ $titulo }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @php $contadorFilasPagina++; @endphp
-                                        @endif
-
-                                        @foreach ($grupo['resultados'] as $junta)
-                                            @php
-                                                $contadorFilas++;
-                                                $contadorFilasPagina++;
-                                                $totalMetros += floatval($junta['Observaciones']);
-                                                $esUltimaFila = $loop->last;
-                                            @endphp
-                                            <tr class="juntas">
-                                                <td style="border-left: 2px solid black; @if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['ID'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['DESCRIPCION_DEL_ELEMENTO'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['NIVEL'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Ø'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['LONGITUD_(m)'] }}</td>
-                                                <td style="@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['CLASE'] }}</td>
-                                                <td style="border-right: 2px solid black;@if ($contadorFilas % $filasPorPagina === 0) border-bottom: 2px solid black; @elseif ($esUltimaFila) @if($titulo == 'SIN TITULO') border-bottom: 2px solid black; @endif @endif">{{ $junta['Observaciones'] }}</td>
-                                            </tr>
-                                            @php $contador++; @endphp
-                                        @endforeach
-
-                                    @endforeach
-                                    
-                                </tbody>
-                    </table>
-            </div>
-
         </body>
     </html>

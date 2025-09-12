@@ -1148,11 +1148,23 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-16/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 80%;">FOR-INS-03/01</th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
+                            <th>Versión</th>
+                            <th>3</th>
+                        </tr>
+                        <tr>
+                            <th>Página</th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
                 <div style="margin-bottom: 5px;"></div>
         
                 <table class="datosgenerales">
@@ -1208,28 +1220,25 @@
                 <div style="margin-bottom: 5px;"></div>
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="5"">DATOS DE OPERACIÓN</th></tr>
+                        <tr><th colspan="4">DATOS DE OPERACIÓN</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="5"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
                 
                     <tbody>
                         <tr class="celdaGris">
                             <th colspan="4">EQUIPO</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris" style="width: 60px;">VOLTAJE:</th>
+                            <th class="celdaGris" style="width: 100px;">VOLTAJE:</th>
                             <td style="width: 100px;">{{ $Datos_Equipo['voltaje'] }}</td>
-                            <th class="celdaGris" style="width: 60px;">CARGA AMP:</th>
-                            <td colspan="1">{{ $Datos_Equipo['CARGA_AMP'] }}</td>
+                            <th class="celdaGris" style="width: 100px;">CARGA AMP:</th>
+                            <td style="width: 100px;">{{ $Datos_Equipo['CARGA_AMP'] }}</td>
                         </tr>
                     </tbody>
                 </table>
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
-
-
-                <div style="margin-bottom: 1px;"></div>
+                <div style="margin-bottom: 5px;"></div>
                 
                 <table class="simbologia">
                         <thead>
@@ -1258,7 +1267,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 675px;"></td>                            
+                            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>
                         </tr>                      
                     </table>
 
@@ -1269,7 +1278,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >recomiendaciones:</th>                                         
-                            <td class="lineaInferior" style="width: 675px;"></td>                            
+                            <td class="lineaInferior" style="width: 600px;"></td>                            
                         </tr>                      
                     </table>
 
@@ -1278,7 +1287,34 @@
                                                 
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -1424,9 +1460,8 @@
                                     <th></th>
                                 </tr>
                             @endif
-                    </tbody>
-                </table>
-            </header>
-            <footer>
+                        </thead>                            
+                    </table>
+            </footer>
         </body>
     </html>
