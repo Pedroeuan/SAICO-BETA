@@ -974,6 +974,25 @@ class FOR_01_PRO_INS_19Controller extends Controller
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
             $totalFotos = count($fotos); // Contar el total de imágenes
+            $FotosMarcadas = [];
+            $FotosNormales = [];
+
+            foreach ($fotos as $foto) {
+                $item = [
+                    'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
+                    'comment' => $foto['comentario'] ?? '',
+                    'fullsize' => !empty($foto['hoja']) ? (bool)$foto['hoja'] : false
+                ];
+                if ($item['fullsize']) {
+                    $FotosMarcadas[] = $item;
+                } else {
+                    $FotosNormales[] = $item;
+                }
+            }
+        }
+        /*if ($Fotos_Reportes) {
+            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+            $totalFotos = count($fotos); // Contar el total de imágenes
             $Fotos = [];
         
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
@@ -983,7 +1002,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
                     'fullsize' => !empty($foto['hoja']) ? (bool)$foto['hoja'] : false // 👈 aquí añadimos la bandera
                 ];
             }
-        }
+        }*/
 
         $data = [
             'title' => 'Reporte_FOR-01-INS-19.PDF',
@@ -999,13 +1018,16 @@ class FOR_01_PRO_INS_19Controller extends Controller
             'totalFilas' => $totalFilas,*/
             'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
-            'Fotos' => $Fotos,
+            //'Fotos' => $Fotos,
             //Total de Fotos
-            'totalFotos' => $totalFotos,
+            //'totalFotos' => $totalFotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
+            'FotosMarcadas' => $FotosMarcadas,
+            'FotosNormales' => $FotosNormales,
+            'totalFotos' => $totalFotos,
         ];
 
         // Generar el PDF principal en orientación horizontal

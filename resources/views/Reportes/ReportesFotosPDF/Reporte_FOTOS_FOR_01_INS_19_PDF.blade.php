@@ -65,7 +65,7 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 235px; /* Altura del header */
+                    padding-top: 110px; /* Altura del header */
                     padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
@@ -166,6 +166,37 @@
             align-items: center;
         }
 
+        .foto-container-full {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container-full img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para los comentarios full */
+        .comment-full { 
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
+        }
+
         /* Estilo para los comentarios */
         .comment { 
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
@@ -208,37 +239,6 @@
         .cross-line::after {
             transform: rotate(-27deg);
         }
-
-            /* Cuando la imagen es marcada como fullsize */
-            .foto-container.fullsize {
-                padding: 0;
-                margin: 0;
-                border: none;         /* Quita bordes para que no corte la imagen */
-                width: 100% !important;
-                height: auto !important;
-                text-align: center;   /* Centrar el comentario debajo */
-                border: 2px solid black; 
-            }
-
-            .foto-container.fullsize img {
-                /*width: 100% !important;   /* Ocupar todo el ancho disponible */
-                /*height: auto !important;  /* Mantener proporciones */
-                /*max-height: 92vh;         /* Ajusta para no salirse del alto de la hoja */
-                /*object-fit: contain;      /* Evita que se recorte */
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 682px;  /* Fija el ancho de la celda */
-            height: 400px; /* Fija la altura de la celda */
-            border: 1px solid black; 
-            vertical-align: middle;
-            }
-
-            .foto-container.fullsize .comment {
-                border: none;
-                font-size: 14px;
-                margin-top: 5px;
-                text-align: center; 
-            }
-
             </style>
         </head>
         <body>
@@ -456,79 +456,55 @@
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>  
-
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacía -->
-
+                    </thead>
+                    <thead><tr class="sinBordeth"><th></th></tr></thead>
                     <tbody>
-                        @php
-                            $i = 0;
-                        @endphp
-
-                        @while($i < count($Fotos))
-                            <table class="imagenes-reporte">
+                        {{-- Cada foto marcada ocupa una hoja completa --}}
+                        @foreach($FotosMarcadas as $foto)
+                            <table class="imagenes-reporte" style="width:100%;">
                                 <tr>
-                                    @php
-                                        $foto = $Fotos[$i];
-                                        //dd($Fotos);
-                                    @endphp
-
-                                    {{-- Si la foto está marcada --}}
-                                        @if(!empty($foto['fullsize']) && $foto['fullsize'] == true)
-                                            <table style="width:100%; border-collapse: collapse; margin:0; padding:0;">
-                                                <tr>
-                                                    <td class="foto-container fullsize">
-                                                        <img src="{{ $foto['path'] }}" alt="Foto Grande">
-                                                        <p class="comment">{{ $foto['comment'] }}</p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            @php
-                                                $i++; // Avanzamos solo 1 porque esa ocupa toda la página
-                                            @endphp
-                                        @else
-                                        {{-- Agrupamos en bloques de 4 imágenes normales --}}
-                                        @php
-                                            $grupo = array_slice($Fotos, $i, 4);
-                                        @endphp
-
-                                        @foreach($grupo as $index => $fotoGrupo)
-                                            <td class="foto-container">
-                                                <img src="{{ $fotoGrupo['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                <p class="comment">{{ $fotoGrupo['comment'] }}</p>
-                                            </td>
-
-                                            @if(($index + 1) % 2 == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endforeach
-
-                                        {{-- Rellenar cuadros vacíos si el grupo es menor a 4 --}}
-                                        @for($j = count($grupo); $j < 4; $j++)
-                                            <td class="foto-container empty-box">
-                                                <div class="cross-line"></div>
-                                                <p class="empty-comment">&nbsp;</p>
-                                            </td>
-                                            @if(($j + 1) % 2 == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endfor
-
-                                        @php
-                                            $i += count($grupo);
-                                        @endphp
-                                    @endif
+                                    <td class="foto-container-full" style="width:100%;height:100%;">
+                                        <img src="{{ $foto['path'] }}" alt="Foto marcada" style="width:100%;height:200px;object-fit:contain;">
+                                        <p class="comment-full">{{ $foto['comment'] }}</p>
+                                    </td>
                                 </tr>
                             </table>
+                            <div style="page-break-after: always;"></div>
+                        @endforeach
 
-                            {{-- Salto de página después de cada bloque (imagen grande o 4 normales) --}}
-                            @if($i < count($Fotos))
+                        {{-- Las fotos normales en grupos de 4 por hoja --}}
+                        @php
+                            $chunks = array_chunk($FotosNormales, 4);
+                        @endphp
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr>
+                                        @endif
+                                    @endforeach
+                                    @for($i = count($fotosGrupo); $i < 4; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div>
+                                            <p class="empty-comment">&nbsp;</p>
+                                        </td>
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr>
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+                            @if (!$loop->last)
                                 <div style="page-break-after: always;"></div>
                             @endif
-                        @endwhile
+                        @endforeach
                     </tbody>
                 </table>
-
             </div>
 
         </body>
