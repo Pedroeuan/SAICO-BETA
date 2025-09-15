@@ -576,7 +576,8 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
     }
-
+    
+        /*Creación de OC */
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];

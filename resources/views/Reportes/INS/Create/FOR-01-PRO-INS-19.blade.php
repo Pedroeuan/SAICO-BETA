@@ -578,8 +578,6 @@
                             </div>
                         </div>
 
-                    
-
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
