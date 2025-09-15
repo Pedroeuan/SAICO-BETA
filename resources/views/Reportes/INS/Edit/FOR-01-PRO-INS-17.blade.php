@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-03-PRO-INS-15')
+@section('title', 'FOR-01-PRO-INS-17')
 
 @section('css')
 <!--datatable -->
@@ -65,17 +65,15 @@
 <br>
 <br>
 <br>
-
-<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+<h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
+<h4 align="center">{{ $formatoNombrePersonalizado }}</h4>
 <br>
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-03-PRO-INS-15" action="{{route('Reportes_FOR_03_PRO_INS_15.store')}}" method="post" enctype="multipart/form-data">
-                                @csrf 
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-white text-dark rounded"><strong>LISTADO DE COMPONENTES</strong></div>
+                            <form id="FOR-01-PRO-INS-17" action="{{ route('Reportes_FOR_01_PRO_INS_17.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -84,7 +82,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
+                                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Detalles_Generales.Fecha') }}">
                                             @error('Fecha')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -124,18 +122,48 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <textarea class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}"></textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Descripción del Equipo</label>
-                                            <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo',)}}</textarea>
                                             @error('Orden_Trabajo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Folio</label>
+                                            <input type="text" class="form-control  inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Folio')}}">
+                                            @error('Folio')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Equipo</label>
+                                            <input type="text" class="form-control  inputForm @error('Equipo') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Equipo')}}">
+                                            @error('Equipo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Partida</label>
+                                            <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Partida')}}">
+                                            @error('Partida')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -151,15 +179,37 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <textarea class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}"></textarea>
+                                            <label class="col-form-label" for="inputSuccess">Hora de Inspeccíon</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Isometrico_Plano]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Isometrico_Plano')}}</textarea>
                                             @error('Isometrico_Plano')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
+
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Procedimiento</label>
+                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            @error('Procedimiento')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ESTÁNDAR DE REFERENCIA</label>
+                                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                                            @error('Criterio_Evaluacion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -176,70 +226,34 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                                    
-                                    <div style="margin-bottom: 5px;"></div>
 
-                                    <div class="table-responsive">
-                                    <div class="alert alert-warning alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                                    </div>
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <thead>
-
+                                        <table class="table table-bordered table-striped dt-responsive tablas">
                                             <tr>
-                                                <th>#</th>
-                                                <th>ID</th>
-                                                <th>Descripción del Elemento</th>
-                                                <th>Nivel</th>
-                                                <th>0</th>
-                                                <th>Longitud (m)</th>
-                                                <th>Clase</th>
-                                                <th>Especificación</th>
-                                                <th>Observaciones</th>
-                                                <th>Eliminar</th>
+                                                <td>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="10" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
+                                                            </tr>
+    
+                                            <tr>
+                                                <td><strong>BUENO:</strong></td>
+                                                <td>El equipo se encuentra en condiciones de operación optimas.</td>
+                                                <td><strong>PREVENTIVO:</strong></td>
+                                                <td>Media anomalia programar el paro del equipo para su reparación.</td>
                                             </tr>
 
-                                                <tr id="inputRow">
-                                                    <th></th> <!-- Para ID vacío -->
-                                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 50px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 60px;"></th>
-                                                    <th></th> <!-- Para botón de eliminar -->
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
-                                    </table>
-                                    </div>
-                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                        <div>
-                                            <label for="numRows">Número de Filas:</label>
-                                            <select id="numRows" class="form-select">
-                                                @for ($i = 1; $i <= 500; $i++)
-                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
-
-                                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
-
-                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
-
-                                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
-                                    </div>
-                                    <p>
+                                            <tr>
+                                                <td><strong>MODERADO</strong></td>
+                                                <td>ligera anomalia, mantener en observación y programar reparación.</td>
+                                                <td><strong>NO ACEPTABLE</strong></td>
+                                                <td>Anomalia severa, se recomienda para el equipo para su intervención</td>
+                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -248,9 +262,16 @@
                                             </div>
                                         </div>
 
-<!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-12">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Recomendaciones:</label>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Recomendaciones]" placeholder="Ejemplo:">{{old('Recomendaciones')}}</textarea>
+                        </div>
+                    </div>
+
+                                    <!-- Select para elegir el número de firmas -->
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
+                                        <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                                     <option value="1">1 Firma</option>
@@ -261,12 +282,12 @@
                                             </div>
                                         </div>
 
-                                        <!-- 1 UNA FIRMA-->
+                                        <!-- 1 DOS FIRMAS-->
                                         <div id="firmas1" class="col-12">
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizo" value="Realizó"></th>
                                                     </tr>
 
                                                     <tr>
@@ -284,6 +305,7 @@
                                                     <tr>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                     </tr>
+                                                    
                                                 </thead>                            
                                             </table>
                                         </div>
@@ -293,33 +315,43 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizo" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vobo1" value="Vo.Bo."></th>
+                                                    
                                                     </tr>
 
                                                     <tr>
+
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                                         <td></td>
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
                                                     </tr>
 
                                                     <tr>
+
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
-                                                    </tr>
-                                                                                        
-                                                    <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
-                                                        <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+
                                                     </tr>
 
                                                     <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        
                                                     </tr>
                                                     
                                                 </thead>                            
@@ -332,11 +364,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizo" value="Realizó"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vobo1" value="Vo.Bo."></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vobo2" value="Vo.Bo."></th>
 
                                                     </tr>
 
@@ -390,13 +422,13 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizo" value=""></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vobo1" value=""></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vobo2" value=""></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vobo3" value=""></th>
 
                                                     </tr>
 
@@ -414,25 +446,25 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO')}}"></td>
 
                                                     </tr>
 
@@ -440,23 +472,109 @@
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO')}}"></td>
 
                                                     </tr>
                                                     
                                                 </thead>                            
                                             </table>
                                         </div>
+
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
                                         
                                         <p>
 
+                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div class="w-100">
+
+                                            @if(!empty($Fotos_Comentarios))
+                                                <div class="row">
+                                                    @foreach($Fotos_Comentarios as $index => $foto)
+                                                        <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                            <div class="form-group">
+                                                                <!-- Vista previa de la imagen existente -->
+                                                                <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                                <div class="image-preview mt-2">
+                                                                    <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                                </div>
+
+                                                                <!-- Campo para seleccionar una nueva imagen -->
+                                                                <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+
+                                                                <!-- Campo para el comentario -->
+                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+
+                                                                <!-- Campo oculto para la imagen en base64 -->
+                                                                <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                                <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                                <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                                <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                                <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                                <!-- Botón de eliminación -->
+                                                                <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <p>No hay imágenes disponibles.</p>
+                                            @endif
+
+                                        </div>
+                                        
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
+                                        
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="container">
                                             <div class="float-right">
-                                                <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                                <button type="submit" class="btn btn-info bg-primary">Guardar</button>
                                             </div>
 
                                             <div class="float-left">
@@ -492,176 +610,13 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_SF.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-    /*Juntas-Resultados */
-    $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
-
-        function restoreData() {
-            //const savedData = sessionStorage.getItem('dynamicTableData');
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
-                // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
-                
-                savedData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="10">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `
-                        <tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="ID[${item.titulo}][]" value="${item.inputs[1]}" placeholder="ID"></td>
-                            <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${item.titulo}][]" value="${item.inputs[2]}" placeholder="Descripcion_del_Elemento"></td>
-                            <td><input type="text" class="form-control" name="Nivel[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="0[${item.titulo}][]" value="${item.inputs[4]}" placeholder="0"></td>
-                            <td><input type="text" class="form-control" name="Longitud_(m)[${item.titulo}][]" value="${item.inputs[5]}" placeholder="Longitud_(m)"></td>
-                            <td><input type="text" class="form-control" name="Clase[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Clase"></td>
-                            <td><input type="text" class="form-control" name="Especificación[${item.titulo}][]" value="${item.inputs[7]}" placeholder="Especificación"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }
-
-        $('#addTituloBtn').click(function () {
-            tituloCount++;
-            rowCount = 0; // Reiniciar el contador de filas para este título
-
-            let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="10">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        saveData(document.querySelectorAll("form")[1].id);
-        });
-
-        $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-
-            for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
-
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion_del_Elemento"></td>
-                    <td><input type="text" class="form-control" name="Nivel[${lastTitle}][]" placeholder="Nivel"></td>
-                    <td><input type="text" class="form-control" name="0[${lastTitle}][]" placeholder="0"></td>
-                    <td><input type="text" class="form-control" name="Longitud_(m)[${lastTitle}][]" placeholder="Longitud_(m)"></td>
-                    <td><input type="text" class="form-control" name="Clase[${lastTitle}][]" placeholder="Clase"></td>
-                    <td><input type="text" class="form-control" name="Especificación[${lastTitle}][]" placeholder="Especificación"></td>
-                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                </tr>`;
-
-                $('#dynamicTable tbody').append(newRow);
-            }
-            saveData(document.querySelectorAll("form")[1].id);
-        }
-    );
-        
-        $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-        });
-
-            // Restaurar datos al cargar la página
-            restoreData();
-    });
-
-    /*FOR-03-PRO-INS-15*/
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-03-PRO-INS-15');
-        if (!form) return;
-
-        // Guardar en localStorage al escribir
-        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-          //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-03-PRO-INS-15_' + el.name, el.value);
-            //});
-        //});
-
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-03-PRO-INS-15_' + el.name, el.value);
-            });
-        });
-
-        // Restaurar al cargar la página (solo si el campo está vacío)
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            if (!el.value) {
-                const value = localStorage.getItem('FOR-03-PRO-INS-15_' + el.name);
-                if (value !== null) el.value = value;
-            }
-        });
-
-        // Limpiar localStorage al enviar el formulario
-        form.addEventListener('submit', function () {
-            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-03-PRO-INS-15_' + el.name);
-                //localStorage.clear();
-            });
-        });
-    });
-
-    </script>
+</script>
 @endsection

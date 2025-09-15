@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-03-INS-15</title>
+            <title>FORMATO FOR-01-INS-12</title>
             <style>
                 @page {
                     margin: 
@@ -146,6 +146,26 @@
             table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
+        .foto-container {
+            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            vertical-align: middle;
+        }
+
+        .foto-container img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
         /* Estilo para los comentarios */
         .comment { 
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
@@ -166,6 +186,28 @@
         .empty-box {
             background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
         }
+
+        .cross-line {
+            width: 74%;
+            height: 0px; /* Ajusta según el tamaño de las imágenes */
+            position: relative;
+        }
+
+        .cross-line::before,
+        .cross-line::after {
+            content: "";
+            position: absolute;
+            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la línea */
+            width: 152.5%; /* Aumenta el ancho de la línea */
+            height: 100%;
+            border-top: 2px solid black;
+            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        }
+
+        .cross-line::after {
+            transform: rotate(-27deg);
+        }
             </style>
         </head>
         <body>
@@ -176,14 +218,14 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-15/03</th>
+                            <th style="width: 80%;">FOR-INS-10/02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">LISTADO DE COMPONENTES</th>
+                            <th rowspan="2" style="font-size: 8pt;">INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -226,12 +268,30 @@
                             <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
-                            <th>LUGAR:</th>
+                            <th>FOLIO:</th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Equipo:</th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>PARTIDA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Partida'] }}</td>
+                            <th>UBICACIÓN:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                         </tr>
                         <tr>
-                            <th>ISOMETRICO/PLANO:</th>
+                            <th>LUGAR:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
+                            <th>HORA DE INSPECCIÓN:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                        </tr>
+                        <tr>
+                            <th >PROCEDIMIENTO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
+                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -241,7 +301,34 @@
             <footer>
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -390,5 +477,54 @@
                         </thead>                            
                     </table>
             </footer>
+
+            <div class="content">
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
+                        @php
+                            $chunks = array_chunk($Fotos, 2); // Divide las imágenes en grupos de 2
+                        @endphp
+
+                        @foreach($chunks as $fotosGrupo)
+                            <table class="imagenes-reporte">
+                                <tr>
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        <td class="foto-container">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                        
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    @for($i = count($fotosGrupo); $i < 2; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
+                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
+                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                        @if(($i + 1) % 2 == 0)
+                                            </tr><tr> <!-- Mantiene la estructura -->
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
         </body>
     </html>

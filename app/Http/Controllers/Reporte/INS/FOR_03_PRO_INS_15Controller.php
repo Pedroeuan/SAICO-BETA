@@ -39,7 +39,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class FOR_02_PRO_INS_15Controller extends Controller
+class FOR_03_PRO_INS_15Controller extends Controller
 {
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -48,12 +48,12 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $Cliente = $datosParaCrearOS_OC['Cliente'];
         $Lugar = $datosParaCrearOS_OC['Lugar'];
         $Contrato= $datosParaCrearOS_OC['Contrato'];
-        //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
+        $Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
-        $Material = $datosParaCrearOS_OC['Material'];
+        //$Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        $Pieza = $datosParaCrearOS_OC['Pieza'];
-        $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
+        //$Pieza = $datosParaCrearOS_OC['Pieza'];
+        //$Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
@@ -82,7 +82,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            $Orden_Servicio->Material = $Material;
+            //$Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -161,7 +161,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
-            $Orden_Servicio->Material = $Material;
+            //$Orden_Servicio->Material = $Material;
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
@@ -216,13 +216,13 @@ class FOR_02_PRO_INS_15Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_15_store1(Request $request)
+    public function FOR_03_PRO_INS_15_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_02_PRO_INS_15_store(Request $request)
+    public function FOR_03_PRO_INS_15_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -235,16 +235,8 @@ class FOR_02_PRO_INS_15Controller extends Controller
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
-            'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
-            'Detalles_Generales.Material' => 'nullable|string',
-            'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
-            'Detalles_Generales.Iluminacion' => 'nullable|string',
-            'Detalles_Generales.Tipo_Inspeccion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
@@ -257,18 +249,12 @@ class FOR_02_PRO_INS_15Controller extends Controller
 
             /*Resultados_Juntas*/
             'ID' => 'nullable|array',
-            'Elemento' => 'nullable|array',
-            'No_Indicacion' => 'nullable|array',
-            'Tipo_Indicacion' => 'nullable|array',
-            'Referencia' => 'nullable|array',
-            'DNR' => 'nullable|array',
-            'HT' => 'nullable|array',
-            'Long_Axial' => 'nullable|array',
-            'Long_Circ' => 'nullable|array',
-            'd' => 'nullable|array',
-            'ta' => 'nullable|array',
-            'Perdida' => 'nullable|array',
-            'Espesor_remanente' => 'nullable|array',
+            'Descripcion_del_Elemento' => 'nullable|array',
+            'Nivel' => 'nullable|array',
+            '0' => 'nullable|array',
+            'Longitud_(m)' => 'nullable|array',
+            'Clase' => 'nullable|array',
+            'Especificación' => 'nullable|array',
             'Observaciones' => 'nullable|array',
 
 
@@ -380,18 +366,12 @@ class FOR_02_PRO_INS_15Controller extends Controller
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'No_Indicacion' => $request->input("No_Indicacion.$sinTituloKey.$i"),
-                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$sinTituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
-                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
-                    'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'Long_Axial' => $request->input("Long_Axial.$sinTituloKey.$i"),
-                    'Long_Circ' => $request->input("Long_Circ.$sinTituloKey.$i"),
-                    'd' => $request->input("d.$sinTituloKey.$i"),
-                    'ta' => $request->input("ta.$sinTituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
-                    'Espesor_remanente' => $request->input("Espesor_remanente.$sinTituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
+                    'Nivel' => $request->input("Nivel.$sinTituloKey.$i"),
+                    '0' => $request->input("0.$sinTituloKey.$i"),
+                    'Longitud_(m)' => $request->input("Longitud_(m).$sinTituloKey.$i"),
+                    'Clase' => $request->input("Clase.$sinTituloKey.$i"),
+                    'Especificación' => $request->input("Especificación.$sinTituloKey.$i"),
                     'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
@@ -414,18 +394,12 @@ class FOR_02_PRO_INS_15Controller extends Controller
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'No_Indicacion' => $request->input("No_Indicacion.$tituloKey.$i"),
-                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$tituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
-                    'DNR' => $request->input("DNR.$tituloKey.$i"),
-                    'HT' => $request->input("HT.$tituloKey.$i"),
-                    'Long_Axial' => $request->input("Long_Axial.$tituloKey.$i"),
-                    'Long_Circ' => $request->input("Long_Circ.$tituloKey.$i"),
-                    'd' => $request->input("d.$tituloKey.$i"),
-                    'ta' => $request->input("ta.$tituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
-                    'Espesor_remanente' => $request->input("Espesor_remanente.$tituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
+                    'Nivel' => $request->input("Nivel.$tituloKey.$i"),
+                    '0' => $request->input("0.$tituloKey.$i"),
+                    'Longitud_(m)' => $request->input("Longitud_(m).$tituloKey.$i"),
+                    'Clase' => $request->input("Clase.$tituloKey.$i"),
+                    'Especificación' => $request->input("Especificación.$tituloKey.$i"),
                     'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
@@ -481,14 +455,14 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_03_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_03_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -513,11 +487,11 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        $Material = $validatedData['Detalles_Generales']['Material'];
+        //$Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        //$Pieza = $validatedData['Detalles_Generales']['Pieza'];
+        //$Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -525,11 +499,11 @@ class FOR_02_PRO_INS_15Controller extends Controller
             'Lugar' => $Lugar,
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
-            'Material' => $Material,
+            //'Material' => $Material,
             'Isometrico_Plano' => $Isometrico_Plano,
-            'Pieza' => $Pieza,
+            //'Pieza' => $Pieza,
             'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
-            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
+            //'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
             
@@ -544,13 +518,13 @@ class FOR_02_PRO_INS_15Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_15_update1(Request $request) 
+    public function FOR_03_PRO_INS_15_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
-    public function FOR_02_PRO_INS_15_update(Request $request, $id)
+    public function FOR_03_PRO_INS_15_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -563,16 +537,8 @@ class FOR_02_PRO_INS_15Controller extends Controller
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
-            'Detalles_Generales.Folio' => 'nullable|string',
-            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
-            'Detalles_Generales.Material' => 'nullable|string',
-            'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
-            'Detalles_Generales.Iluminacion' => 'nullable|string',
-            'Detalles_Generales.Tipo_Inspeccion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
@@ -583,22 +549,14 @@ class FOR_02_PRO_INS_15Controller extends Controller
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
-            /*Resultados_Juntas*/
             'ID' => 'nullable|array',
-            'Elemento' => 'nullable|array',
-            'No_Indicacion' => 'nullable|array',
-            'Tipo_Indicacion' => 'nullable|array',
-            'Referencia' => 'nullable|array',
-            'DNR' => 'nullable|array',
-            'HT' => 'nullable|array',
-            'Long_Axial' => 'nullable|array',
-            'Long_Circ' => 'nullable|array',
-            'd' => 'nullable|array',
-            'ta' => 'nullable|array',
-            'Perdida' => 'nullable|array',
-            'Espesor_remanente' => 'nullable|array',
+            'Descripcion_del_Elemento' => 'nullable|array',
+            'Nivel' => 'nullable|array',
+            '0' => 'nullable|array',
+            'Longitud_(m)' => 'nullable|array',
+            'Clase' => 'nullable|array',
+            'Especificación' => 'nullable|array',
             'Observaciones' => 'nullable|array',
-
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -693,19 +651,13 @@ class FOR_02_PRO_INS_15Controller extends Controller
             for ($i = 0; $i < $numFilasSinTitulo; $i++) {
                 $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'No_Indicacion' => $request->input("No_Indicacion.$sinTituloKey.$i"),
-                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$sinTituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
-                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
-                    'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'Long_Axial' => $request->input("Long_Axial.$sinTituloKey.$i"),
-                    'Long_Circ' => $request->input("Long_Circ.$sinTituloKey.$i"),
-                    'd' => $request->input("d.$sinTituloKey.$i"),
-                    'ta' => $request->input("ta.$sinTituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
-                    'Espesor_remanente' => $request->input("Espesor_remanente.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
+                    'NIVEL' => $request->input("NIVEL.$sinTituloKey.$i"),
+                    'Ø' => $request->input("Ø.$sinTituloKey.$i"),
+                    'LONGITUD_(m)' => $request->input("Referencia.$sinTituloKey.$i"),
+                    'CLASE' => $request->input("DNR.$sinTituloKey.$i"),
+                    'ESPECIFICACIÓN' => $request->input("HT.$sinTituloKey.$i"),
+                    'OBSERVACIONES' => $request->input("OBSERVACIONES.$sinTituloKey.$i"),
                 ];
             }
         
@@ -726,18 +678,12 @@ class FOR_02_PRO_INS_15Controller extends Controller
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'No_Indicacion' => $request->input("No_Indicacion.$tituloKey.$i"),
-                    'Tipo_Indicacion' => $request->input("Tipo_Indicacion.$tituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
-                    'DNR' => $request->input("DNR.$tituloKey.$i"),
-                    'HT' => $request->input("HT.$tituloKey.$i"),
-                    'Long_Axial' => $request->input("Long_Axial.$tituloKey.$i"),
-                    'Long_Circ' => $request->input("Long_Circ.$tituloKey.$i"),
-                    'd' => $request->input("d.$tituloKey.$i"),
-                    'ta' => $request->input("ta.$tituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
-                    'Espesor_remanente' => $request->input("Espesor_remanente.$tituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
+                    'NIVEL' => $request->input("NIVEL.$tituloKey.$i"),
+                    'Ø' => $request->input("Ø.$tituloKey.$i"),
+                    'LONGITUD_(m)' => $request->input("Referencia.$tituloKey.$i"),
+                    'CLASE' => $request->input("DNR.$tituloKey.$i"),
+                    'ESPECIFICACIÓN' => $request->input("HT.$tituloKey.$i"),
                     'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
@@ -792,7 +738,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+        $rutaCarpeta = "public/Reportes/FOR_03_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -918,7 +864,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
     }
 
 
-    public function FOR_02_INS_15($id)
+    public function FOR_03_INS_15($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -967,7 +913,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-02-INS-15.PDF',
+            'title' => 'Reporte_FOR-03-INS-15.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -990,10 +936,10 @@ class FOR_02_PRO_INS_15Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_15_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_15_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1014,8 +960,8 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
+            $combinedPdf->AddPage('p');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(179, -179.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
@@ -1025,7 +971,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
+            $combinedPdf->AddPage('p');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(138, -265.5);
@@ -1033,7 +979,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_02-INS_15.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_03-INS_15.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

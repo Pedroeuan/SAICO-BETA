@@ -186,7 +186,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">  Inspección con Termografía </th>
+                            <th rowspan="2" style="font-size: 9pt;">INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS</th>
                             <th>Versión</th>
                             <th>1</th>
                         </tr>
