@@ -97,6 +97,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="Estatus">Estatus</label>
+                            <input type="text" class="form-control @error('Estatus') is-invalid @enderror" placeholder="ALTA" id="Estatus" name="Estatus" value="ALTA" readonly>
+                            @error('Estatus')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Registrar">
                         </div>
                     </div>

@@ -65,6 +65,7 @@ class UsuariosController extends Controller
                 'required',
                 'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
             ],
+            'Estatus' => 'required|string|max:255',
         ]);
     
         // Crear una nueva instancia de Usuario
@@ -79,6 +80,8 @@ class UsuariosController extends Controller
         $Usuario->password = Hash::make($request->input('ContrasenaUsuario'));
         
         $Usuario->rol = $request->input('RolUsuario') ?? $EsperaDato;
+
+        $Usuario->Estatus = $request->input('Estatus') ?? $EsperaDato;
 
         // Guardar el usuario en la base de datos
         $Usuario->save();
@@ -128,16 +131,18 @@ class UsuariosController extends Controller
                 'required',
                 'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
             ],
+            'Estatus' => 'required|string|max:255',
         ]);
-        // Obtener el equipo existente
+        // Obtener el usuario existente
         $Usuario  = Usuario::find($id);
 
-        // Actualizar los datos del equipo
+        // Actualizar los datos del usuario
         $Usuario ->update([
             'name' => $request->input('NombreUsuario'),
             'email' => $request->input('CorreoUsuario'),
             'password' => Hash::make($request->input('ContrasenaUsuario')),
             'rol' => $request->input('RolUsuario'),
+            'Estatus' => $request->input('Estatus'),
         ]);
     }
     else{
@@ -151,16 +156,18 @@ class UsuariosController extends Controller
                 'required',
                 'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
             ],
+            'Estatus' => 'required|string|max:255',
         ]);
-        // Obtener el equipo existente
+        // Obtener el usuario existente
         $Usuario  = Usuario::find($id);
 
-        // Actualizar los datos del equipo
+        // Actualizar los datos del usuario
         $Usuario ->update([
             'name' => $request->input('NombreUsuario'),
             'email' => $request->input('CorreoUsuario'),
             //'password' => Hash::make($request->input('ContrasenaUsuario')),
             'rol' => $request->input('RolUsuario'),
+            'Estatus' => $request->input('Estatus'),
         ]);
 
     }
@@ -177,13 +184,19 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        $usuario = Usuario::find($id);
-    
-        if ($usuario) {
+        $Usuario = Usuario::where('id', $id)->first();
+        //$usuario = Usuario::find($id);
+            // Actualizar los datos del usuario
+        $Usuario ->update([
+
+            'Estatus' => 'Baja',
+        ]);
+        /*if ($usuario) {
             $usuario->delete();
             return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente.']);
         } else {
             return response()->json(['success' => false, 'message' => 'No se pudo encontrar el Usuario.']);
-        }
+        }*/
+
     }
 }
