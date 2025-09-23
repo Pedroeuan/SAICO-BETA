@@ -70,8 +70,11 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
 
         if (!empty($row['idalmacen']) && !empty($row['stock'])) {
             $almacenRow = almacen::updateOrCreate(
-                ['idAlmacen' => $row['idalmacen'], 'idGeneral_EyC' => $generalEyC->idGeneral_EyC],
-                ['Lote' => $row['lote'], 'Stock' => $row['stock']]
+                ['idAlmacen' => $row['idalmacen'], 
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC],
+                ['Lote' => $row['lote'],
+                'Stock' => $row['stock']
+                ]
             );
         }
 
