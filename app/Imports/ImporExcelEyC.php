@@ -57,17 +57,29 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
         ]);
 
         // Comprobamos si hay datos para almacenar en la tabla Almacen
-        if (!empty($row['idalmacen']) && !empty($row['stock'])) {
+        /*if (!empty($row['idalmacen']) && !empty($row['stock'])) {
             almacen::updateOrCreate([
                 'idAlmacen' => $row['idalmacen'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
                 'Lote' => $row['lote'],
                 'Stock' => $row['stock'],
             ]);
+        }*/
+
+        $almacenRow = null;
+
+        if (!empty($row['idalmacen']) && !empty($row['stock'])) {
+            $almacenRow = almacen::updateOrCreate(
+                ['idAlmacen' => $row['idalmacen'], 
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC],
+                ['Lote' => $row['lote'],
+                'Stock' => $row['stock']
+                ]
+            );
         }
 
         // Comprobamos si hay datos para almacenar en la tabla Herramientas
-        if (!empty($row['idhistorial_almacen'])) {
+        /*if (!empty($row['idhistorial_almacen'])) {
             $fecha = is_numeric($row['fecha']) 
             ? Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d')
             : $row['fecha'];
@@ -82,6 +94,25 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 'Fecha' => $fecha,
                 'Tierra_Costafuera' => $row['tierra_costafuera'],
             ]);
+        }*/
+
+            if (!empty($row['idhistorial_almacen']) && $almacenRow) {
+            $fecha = is_numeric($row['fecha']) 
+                ? Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d')
+                : $row['fecha'];
+
+            Historial_Almacen::updateOrCreate(
+                ['idHistorial_almacen' => $row['idhistorial_almacen']],
+                [
+                    'idAlmacen' => $almacenRow->idAlmacen,
+                    'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
+                    'Folio' => $row['folio'],
+                    'Tipo' => $row['tipoh'],
+                    'Cantidad' => $row['cantidad'],
+                    'Fecha' => $fecha,
+                    'Tierra_Costafuera' => $row['tierra_costafuera'],
+                ]
+            );
         }
 
         // Comprobamos si hay datos para almacenar en la tabla Certificados
