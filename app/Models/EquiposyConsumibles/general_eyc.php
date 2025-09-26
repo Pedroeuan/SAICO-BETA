@@ -77,6 +77,11 @@ class general_eyc extends Model
         return $this->hasOne(clasificacion::class, 'idGeneral_EyC');
     }
 
+    public function ISO()
+    {
+        return $this->hasOne(ISO::class, 'idGeneral_EyC');
+    }
+
     public function historial_certificado()
     {
         return $this->hasOne(historial_certificado::class, 'idGeneral_EyC');
