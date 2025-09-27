@@ -362,7 +362,6 @@
                             </span>
                         </div>
                     </div>
-                   
 
                     
 
@@ -430,7 +429,7 @@
                             </div>
                         </div>
 
-                         <div class="col-sm-12">
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Análisis del termograma:</label>
                                 <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Análisis]" placeholder="Análisis del termograma"></textarea>

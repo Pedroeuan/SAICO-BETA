@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-18/01</title>
             <style>
-@page {
+                @page {
                     margin: 
                     /*3.0cm /* superior */
                     /*2.1cm /* derecho */
@@ -318,9 +318,9 @@
                             <td>{{ $Datos_Equipo['MODELO_SONDA'] }}</td>
                         </tr>
                         <tr>
-                            <th class="celdaGris">No.serie:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>{{ $Datos_Equipo['NS_EQUIPO'] }}</td>
-                            <th class="celdaGris">No.serie:</th>
+                            <th class="celdaGris">SERIE:</th>
                             <td>{{ $Datos_Equipo['NS_SONDA'] }}</td>
                         </tr>
                     </tbody>
@@ -426,13 +426,13 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
-                                    <td> style="width: 30px;"></td>
+                                    <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Realizo'] }}</th>
                                     <td style="width: 30px;"></td>
                                     <th>{{ $Firmas_Reportes['Vobo1'] }}</th>

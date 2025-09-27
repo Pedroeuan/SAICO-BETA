@@ -111,7 +111,17 @@
         const cropperImage = document.getElementById('cropperImage');
 
         const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
-        selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
+        //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
+
+        if (selImgCountLocal != null) {
+            $('#imageCountSelect').val(selImgCountLocal);
+            generateImageFields(selImgCountLocal);
+
+            const msgImgNoSave = document.getElementById('msgImgNoSave');
+            if (msgImgNoSave) {
+                msgImgNoSave.classList.remove('d-none');
+            }
+        }
 
         imageCountSelect.addEventListener('change', function () {
             const count = parseInt(this.value);
@@ -129,6 +139,14 @@
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+                        
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
+                            <label class="form-check-label" for="imagenHoja${i}">
+                                Imagen en una hoja
+                            </label>
+                        </div>
+
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
@@ -139,7 +157,7 @@
             }
             
             // Agregar eventos de eliminación a los botones
-            document.querySelectorAll('.remove-image').forEach(button => {
+            /*document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
                     const index = this.getAttribute('data-index');
                     const fieldToRemove = document.getElementById(`image-container-${index}`);
@@ -153,6 +171,29 @@
                         alert('No se pudo encontrar el campo de imagen para eliminar.');
                     }
                     
+                });
+            });*/
+
+            // Agregar eventos de eliminación a los botones
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
+                        
+                        const msgImgNoSave = document.getElementById('msgImgNoSave');
+                        if (msgImgNoSave) {
+                            msgImgNoSave.classList.remove('d-none');
+                        }
+
+                        // Actualizar el localStorage
+                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+                        localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
+                    } else {
+                        alert('No se pudo encontrar el campo de imagen para eliminar.');
+                    }
                 });
             });
 
@@ -390,7 +431,7 @@
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19", "FOR-01-PRO-INS-22", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13","FOR-01-PRO-INS-14", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19","FOR-01-PRO-INS-20","FOR-01-PRO-INS-21","FOR-01-PRO-INS-22", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);

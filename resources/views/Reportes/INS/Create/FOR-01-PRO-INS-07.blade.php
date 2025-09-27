@@ -942,8 +942,6 @@
         function restoreData() {
             const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                
-                
                 // Restaurar contadores
                 tituloCount = savedData.filter(item => item.type === 'titulo').length;
                 rowCountGlobal = savedData.filter(item => item.type === 'fila').length;

@@ -65,20 +65,29 @@
 <br>
 <br>
 <br>
-
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
+<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
+<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
             <form id="FOR-01-PRO-INS-16" action="{{route('Reportes_FOR_01_PRO_INS_16.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
-                <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
-                <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-                <h4 align="center">{{$formatoNombrePersonalizado}}</h4>  
-                
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">EQUIPO:</label>
+                            <input type="date" class="form-control  inputForm @error('Equipo') is-invalid @enderror" name="Detalles_Generales[Equipo]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Equipo')}}">
+                            @error('Fecha')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -152,6 +161,17 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Equipo</label>
+                            <input type="text" class="form-control  inputForm @error('Equipo') is-invalid @enderror" name="Detalles_Generales[Equipo]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Equipo')}}">
+                            @error('Equipo')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Partida</label>
                             <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Partida')}}">
                             @error('Partida')
@@ -172,7 +192,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
+                            <label class="col-form-label" for="inputSuccess">Hora de Inspeccíon</label>
                             <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
                             @error('Isometrico_Plano')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -219,12 +239,6 @@
 
                     <div style="margin-bottom: 2px;"></div>
 
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                        <p>Puedes Seleccionar un equipo, transductor y un block del menu o escribir directamente</p>
-                    </div>
-
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
@@ -265,72 +279,33 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-3">INTRODUCCIÓN</div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <textarea class="form-control  is-waning" id="inputIntroduccion" name="Introduccion[introduccion]" placeholder="Introducción">{{old('Intoduccion')}}</textarea>
+                            <label class="col-form-label" for="inputSuccess">FECHA DE CALIBRACIÓN:</label>
+                            <input type="text" class="form-control  inputForm" id="fechaInputE" name="Datos_Equipo[FEC_CAL]" placeholder="" value="{{old('Datos_Equipo.FEC_CAL')}}">
                         </div>
                     </div>
-                    
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">CERTIFICADO POR:</label>
+                            <input type="text" class="form-control  inputForm" id="certificadoInputE" name="Datos_Equipo[CER_POR]" placeholder="" value="{{old('Datos_Equipo.CER_POR')}}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">RANGO DE MEDICIÓN:</label>
+                            <input type="text" class="form-control  inputForm" id="rangoInputE" name="Datos_Equipo[RAN_MED]" placeholder="" value="{{old('Datos_Equipo.RAN_MED')}}">
+                        </div>
+                    </div>
+
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">LISTA DE EQUIPOS</div>
-                    
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div>
+
                     <div style="margin-bottom: 2px;"></div>
-
-                    
-
-                    <div class="table-responsive pt-2">
-                        <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                            <thead>
-                                <tr>
-                                    <th>ID.</th>
-                                    <th>NOMBRE DEL EQUIPO</th>
-                                    <th>ESTATUS</th>
-                                    <th>Eliminar</th>
-                                </tr>
-
-                                <tr id="inputRow">
-                                    <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                    <th></th> <!-- Para botón de eliminar -->
-                                </tr>
-                            </thead>
-
-                                <tbody>
-                                <!-- Filas dinámicas aparecerán aquí -->
-                                </tbody>
-                        </table>
-                    </div>
-
-                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                        <div>
-                            <label for="numRows">Número de Filas:</label>
-                            <select id="numRows" class="form-select">
-                                @for ($i = 1; $i <= 500; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-
-                        <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
-
-                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
-
-                        <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
-                    </div>
-
-                    <p>
-
-
-                    <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADO DE LA INSPECCIÓN</div>
-                        
-                        <p>
 
                         <!--IMAGENES CON COMENTARIOS-->
                         <div class="form-group">
@@ -373,144 +348,75 @@
                             </div>
                         </div>
 
+                    <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
+                    <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">ITEM:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputItem" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-card-checklist fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE OPERACIÓN</div>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">UBICACIÓN DE LA INSPECCIÓN:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputUbi" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-geo-alt fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                    <div style="margin-bottom: 2px;"></div>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">HORA DE LA INSPECCIÓN:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputHora" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-clock fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">VOLTAJE:</label>
+                                            <input type="text" class="form-control  inputForm" id="voltajeInputE" name="Datos_Equipo[voltaje]" placeholder="" value="{{old('Datos_Equipo.voltaje')}}">
+                                        </div>
+                                    </div>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">HÚMEDAD:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputHumedad" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-moisture fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CARGA AMP:</label>
+                                            <input type="text" class="form-control  inputForm" id="cargaInputE" name="Datos_Equipo[CARGA_AMP]" placeholder="" value="{{old('Datos_Equipo.CARGA_AMP')}}">
+                                        </div>
+                                    </div>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">VELOCIDAD DEL VIENTO:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputVelViento" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-wind fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                        <table class="table table-bordered table-striped dt-responsive tablas">
+                            <tr>
+                                <td>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th colspan="6" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
+                                            </tr>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">TEMP. AMBIENTAL:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputTempAmbiental" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-thermometer-half fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                                            <tr>
+                                                <td><strong>BUENO:</strong></td>
+                                                <td>El equipo se encuentra en condiciones de operación optimas.</td>
+                                                <td><strong>PREVENTIVO:</strong></td>
+                                                <td>Media anomalia programar el paro del equipo para su reparación.</td>
+                                            </tr>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">TEMP. REFLEJADA:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputTempReflejada" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-thermometer-sun fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                                            <tr>
+                                                <td><strong>MODERADO</strong></td>
+                                                <td>ligera anomalia, mantener en observación y programar reparación.</td>
+                                                <td><strong>NO ACEPTABLE</strong></td>
+                                                <td>Anomalia severa, se recomienda para el equipo para su intervención</td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">DISTANCIA DE LA TOMA:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputDistancia" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-arrows-expand-vertical fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                         </div>
+                    </div>
 
-                        <div class="col-sm-3">
-                            <label class="col-form-label" for="inputSuccess">EMISIVIDAD:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputEmi" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-webcam fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> NOTA:</h5>
+                        <p>Se utilizó las técnicas de análisis comparativa cualitativa/comparativa cuantitativa descritas en la NORMA ISO 18434-1 apartado 4 al 5 para establecer las condiciones del equipo.</p>
+                    </div>
 
-                        <div class="col-sm-12">
-                            <label class="col-form-label" for="inputSuccess">CONDICIONES ESPECIALES:</label>
-                            <div class="form-group">
-                                <textarea class="form-control  is-waning" id="inputCoindiciones" name="Introduccion[introduccion]" placeholder="Condiciones">{{old('Intoduccion')}}</textarea>
-                            </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Recomendaciones:</label>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Recomendaciones]" placeholder="Ejemplo:">{{old('Recomendaciones', $Datos_Equipo['Recomendaciones'] ?? '')}}</textarea>
                         </div>
-                        
-                        <div class="col-sm-6">
-                            <label class="col-form-label" for="inputSuccess">ANALISIS DE EXCEPCIONES:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputAnalisis" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-graph-down-arrow fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="col-sm-6">
-                            <label class="col-form-label" for="inputSuccess">PRIORIDAD DE LA EXCEPCIÓN:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control inputForm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text text-black-50" id="inputGroup-sizing-sm" style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-clipboard2-data fs-5 lh-1" style="transform: scale(1.2);"></i>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <label class="col-form-label" for="inputSuccess">RECOMENDACIONES:</label>
-                            <div class="form-group">
-                                <textarea class="form-control  is-waning" id="inputCoindiciones" name="Introduccion[introduccion]" placeholder="Recomendaciones">{{old('recomendaciones')}}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <label class="col-form-label" for="inputSuccess">NOTAS:</label>
-                            <div class="form-group">
-                                <textarea class="form-control  is-waning" id="inputCoindiciones" name="Introduccion[introduccion]" placeholder="Notas">{{old('notas')}}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-3">CONCLUSIONES</div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <textarea class="form-control  is-waning" id="inputIntroduccion" name="Introduccion[introduccion]" placeholder="Conclusiones">{{old('Conclusiones')}}</textarea>
-                            </div>
-                        </div>
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -525,7 +431,7 @@
                             </div>
                         </div>
 
-                            <!-- 1 UNA FIRMA-->
+                        <!-- 1 UNA FIRMA-->
                             <div id="firmas1" class="col-12">
                                 <table class="table table-bordered table-striped dt-responsive tablas">
                                     <thead>
@@ -548,7 +454,7 @@
                                         <tr>
                                             <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                         </tr>
-                                    </thead>
+                                    </thead>                            
                                 </table>
                             </div>
 
@@ -594,13 +500,11 @@
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
-                                        
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
-
                                     </tr>
                                     
                                     <tr>
@@ -749,7 +653,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/includes.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -762,15 +666,13 @@ $(document).ready(function() {
     let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -821,59 +723,44 @@ $(document).ready(function() {
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
         saveData();
+
+    /*FOR-01-PRO-INS-16*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-01-PRO-INS-16');
+        if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-01-PRO-INS-16_' + el.name, el.value);
+
+            //});
+        //});
+
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-01-PRO-INS-16_' + el.name, el.value);
+            });
+
         });
 
-        $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-
-            for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
-
-            let newRow = 
-
-                        `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="nombre_Equipo[${lastTitle}][]" placeholder="Nombre del equipo"></td>
-                    <td><input type="text" class="form-control" name="status[${lastTitle}][]" placeholder="Estado"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                    
-                    </tr>`;
-
-                $('#dynamicTable tbody').append(newRow);
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-01-PRO-INS-16_' + el.name);
+                if (value !== null) el.value = value;
             }
-            saveData();
-        }
-    );
-
-        $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-            restoreData();
-});
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-01-PRO-INS-16_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 
 </script>
 @endsection

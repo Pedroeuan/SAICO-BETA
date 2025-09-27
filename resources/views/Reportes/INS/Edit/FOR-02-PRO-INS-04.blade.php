@@ -955,7 +955,6 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //updateRowNumbers();
         }
     );
         

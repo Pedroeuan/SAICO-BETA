@@ -49,7 +49,6 @@
 @endsection
 
 @section('content')
-
     @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
@@ -72,6 +71,8 @@
         @include('Reportes.INS.Create.FOR-01-PRO-INS-12')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-13') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-13')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-14') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-14')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-16') 
@@ -82,6 +83,10 @@
         @include('Reportes.INS.Create.FOR-01-PRO-INS-18')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-19') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-19')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-20') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-20')
+    @elseif($Nombre_Formato == 'FOR-01-PRO-INS-21') 
+        @include('Reportes.INS.Create.FOR-01-PRO-INS-21')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-22') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-22')
     @elseif($Nombre_Formato == 'FOR-02-PRO-INS-02') 

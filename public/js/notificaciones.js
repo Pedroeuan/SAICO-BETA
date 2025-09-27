@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function updateNotifications() {
         const data = await fetchNotifications();
-        console.log('Notificaciones recibidas:', data); // <-- Aquí ves todo, incluyendo url
+        //console.log('Notificaciones recibidas:', data); // <-- Aquí ves todo, incluyendo url
         updateNotificationBadge(data.length);
 
         const notificationList = document.querySelector('#my-notification .dropdown-menu');

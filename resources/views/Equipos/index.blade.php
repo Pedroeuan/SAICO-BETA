@@ -54,7 +54,7 @@
                     @foreach ($generalConCertificadosConAlmacen as $general_eyc)
                         <tr>
                             @if($general_eyc)
-                                <td scope="row">{{$general_eyc->Tipo}}</td>
+                                <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
                                 <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                 <td scope="row">{{$general_eyc->No_economico}}</td>
                                 <td scope="row">{{$general_eyc->Marca}}</td>

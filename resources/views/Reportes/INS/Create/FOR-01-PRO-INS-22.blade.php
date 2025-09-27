@@ -66,7 +66,7 @@
 <br>
 <br>
 
-<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+<h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
 <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
 <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
 <br>
@@ -153,7 +153,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tipo de Fluido</label>
-                            <input type="text" class="form-control  inputForm @error('Tipo_Fluido') is-invalid @enderror" name="Detalles_Generales[Tipo_Fluido]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Fluido')}}">
+                            <input type="text" class="form-control  inputForm @error('Tipo_Flu') is-invalid @enderror" name="Detalles_Generales[Tipo_Flu]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tipo_Flu')}}">
                             @error('Tipo_Fluido')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -183,7 +183,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                            <textarea class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  ">{{old('Detalles_Generales.Lugar')}}</textarea>
+                            <input type="text" class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar')}}">
                             @error('Lugar')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -261,6 +261,24 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO DE ONDAS GUIADAS</div>
 
+                    <!-- Select para Equipos -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                    <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                        @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                            <option value="{{ $equipo->idGeneral_EyC }}"
+                                                data-marca="{{ $equipo->Marca }}"
+                                                data-modelo="{{ $equipo->Modelo }}"
+                                                data-ns="{{ $equipo->Serie }}">
+                                                {{ $equipo->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -283,6 +301,24 @@
                     </div>
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 1</div>
+
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -307,24 +343,42 @@
 
                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ANILLO TRANSDUCTOR 2</div>
 
+                    <!-- Select para Accesorios -->
+                    <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            <label class="col-form-label" for="inputSuccess">TRANSDUCTORES:</label>
+                                <select class="form-select inputForm" name="accesorios" id="accesoriosSelect2">
+                                    <option value="" selected disabled>Seleccione un Accesorio</option>
+                                        @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                            <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                    data-marca="{{ $accesorios->Marca }}"
+                                                    data-modelo="{{ $accesorios->Modelo }}"
+                                                    data-ns="{{ $accesorios->Serie }}">
+                                                    {{ $accesorios->Nombre_E_P_BP }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">DIAMETRO PULG:</label>
-                            <input type="text" class="form-control  inputForm" id="diametroInput" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="diametroInputA2" name="Datos_Equipo[DIAMETRO_AN2]" placeholder="" value="{{old('Datos_Equipo.DIAMETRO_AN2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInput" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_MODELO_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_AN2]" placeholder="" value="{{old('Datos_Equipo.MODELO_MODELO_AN2')}}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInput" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[NS_AN2]" placeholder="" value="{{old('Datos_Equipo.NS_AN2')}}">
                         </div>
                     </div>
 
@@ -453,68 +507,73 @@
                     </div>
 
 
-                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
-                            <div style="margin-bottom: 9px;"></div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                        <div style="margin-bottom: 5px;"></div>
                             <div class="table-responsive">
-                            <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-50">
-                            <thead>
-                                <tr>
-                                    <th class="align-middle" rowspan="2">#</th>
-                                    <th class="align-middle" rowspan="2">ID</th>
-                                    <th class="align-middle" rowspan="2">Elemento</th>
-                                    <th class="align-middle" rowspan="2">Ønom (pulg)</th>
-                                    <th class="align-middle" rowspan="2">Øext (pulg)</th>
-                                    <th class="align-middle" rowspan="2">Long. (m)</th>
-                                    <th class="align-middle" rowspan="2">Elementos idendificados</th>
-                                    <th class="align-middle" colspan="2">Distancia del disparo (m)</th>
-                                    <th class="align-middle" rowspan="2">No. Ind.</th>
-                                    <th class="align-middle" rowspan="2">Distancia relativa al dato (m)</th>
-                                    <th class="align-middle" rowspan="2" colspan="2">Horario Técnico</th>
-                                    <th class="align-middle" colspan="3">Clasificación de la indicación o anomalía</th>
-                                    <th class="align-middle" rowspan="2">porcentaje de reflexión (%)</th>
-                                    <th class="align-middle" rowspan="2">Fotos No.</th>
-                                    <th class="align-middle" rowspan="2">Observaciones</th>
-                                    <th class="align-middle" rowspan="2">Eliminar</th>
-                                </tr>
+                                <div class="alert alert-warning alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                    <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                                <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-50">
+                                <thead>
+                                    <tr>
+                                        <th class="align-middle" rowspan="2">#</th>
+                                        <th class="align-middle" rowspan="2">ID</th>
+                                        <th class="align-middle" rowspan="2">Elemento</th>
+                                        <th class="align-middle" rowspan="2">Ønom (pulg)</th>
+                                        <th class="align-middle" rowspan="2">Øext (pulg)</th>
+                                        <th class="align-middle" rowspan="2">Long. (m)</th>
+                                        <th class="align-middle" rowspan="2">Elementos idendificados</th>
+                                        <th class="align-middle" colspan="2">Distancia del disparo (m)</th>
+                                        <th class="align-middle" rowspan="2">No. Ind.</th>
+                                        <th class="align-middle" rowspan="2">Distancia relativa al dato (m)</th>
+                                        <th class="align-middle" rowspan="2" colspan="2">Horario Técnico</th>
+                                        <th class="align-middle" colspan="3">Clasificación de la indicación o anomalía</th>
+                                        <th class="align-middle" rowspan="2">porcentaje de reflexión (%)</th>
+                                        <th class="align-middle" rowspan="2">Fotos No.</th>
+                                        <th class="align-middle" rowspan="2">Observaciones</th>
+                                        <th class="align-middle" rowspan="2">Eliminar</th>
+                                    </tr>
 
-                                <tr>
+                                    <tr>
 
-                                    <th class="align-middle">(-X)</th>
-                                    <th class="align-middle">(+X)</th>
+                                        <th class="align-middle">(-X)</th>
+                                        <th class="align-middle">(+X)</th>
 
-                                    <th class="align-middle">Categoría</th>
-                                    <th class="align-middle">Direccionalidad</th>
-                                    <th class="align-middle">Clasificación</th>
-                                </tr>
+                                        <th class="align-middle">Categoría</th>
+                                        <th class="align-middle">Direccionalidad</th>
+                                        <th class="align-middle">Clasificación</th>
+                                    </tr>
 
-                                <tr id="inputRow">
-                                    <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6" style="width:100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7" style="width:100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="10" style="width 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
-                                    <th></th> <!-- Para botón de eliminar -->
-                                </tr>-
-                            </thead>
+                                    <tr id="inputRow">
+                                        <th></th> <!-- Para ID vacío -->
+                                        <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="6" style="width:100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="7" style="width:100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="10" style="width 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="15" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="16" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="17" style="width: 100px;"></th>
+                                        <th><input type="text" class="form-control default-input" data-column="18" style="width: 100px;"></th>
+                                        <th></th> <!-- Para botón de eliminar -->
+                                    </tr>
+                                </thead>
 
-                                <tbody>
-                                <!-- Filas dinámicas aparecerán aquí -->
-                                </tbody>
-                        </table>
+                                    <tbody>
+                                    <!-- Filas dinámicas aparecerán aquí -->
+                                    </tbody>
+                            </table>
                         </div>
 
                         <p>
@@ -976,15 +1035,13 @@ $(document).ready(function() {
     let rowCountGlobal = 0;
 
         function restoreData() {
-            const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
             if (savedData) {
-                const tableData = JSON.parse(savedData);
-                
                 // Restaurar contadores
-                tituloCount = tableData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = tableData.filter(item => item.type === 'fila').length;
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
                 
-                tableData.forEach((item) => {
+                savedData.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -1002,23 +1059,23 @@ $(document).ready(function() {
                         let newRow = `<tr data-titulo="${item.titulo}">
                                         <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
                                         <td><input type="text" class="form-control" name="ID[${item.titulo}]" value="${item.inputs[1]}" placeholder="ID"></td>
-                                        <td><input type="text" class="form-control" name="Elemento[${item.titulo}]" value="${item.inputs[1]}" placeholder="Elemento"></td>
-                                        <td><input type="text" class="form-control" name="Ønom_pulg[${item.titulo}]" value="${item.inputs[2]}" placeholder="Ønom_(pulg)"></td>
-                                        <td><input type="text" class="form-control" name="Øext_pulg[${item.titulo}]" value="${item.inputs[3]}" placeholder="Øext_(pulg)"></td>
-                                        <td><input type="text" class="form-control" name="Long_m[${item.titulo}]" value="${item.inputs[4]}" placeholder="Long_(m)"></td>
-                                        <td><input type="text" class="form-control" name=Elementos_idendificados[${item.titulo}]" value="${item.inputs[5]}" placeholder="Elementos_idendificados"></td>
-                                        <td><input type="text" class="form-control" name="-X[${item.titulo}]" value="${item.inputs[6]}" placeholder="(-X)"></td>
-                                        <td><input type="text" class="form-control" name="+X[${item.titulo}]" value="${item.inputs[7]}" placeholder="(+X)"></td>
-                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[8]}" placeholder="No_Ind"></td>
-                                        <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${item.titulo}]" value="${item.inputs[9]}" placeholder="Distancia_relativa_al_dato_(m)"></td>
-                                        <td><input type="text" class="form-control" name="Horario_Tecnico[${item.titulo}]" value="${item.inputs[10]}" placeholder="Horario_Tecnico"></td>
-                                        <td><input type="text" class="form-control" name="Horario_Tecnico2[${item.titulo}] value="${item.inputs[11]}" placeholder="Horario_Tecnico"></td>
-                                        <td><input type="text" class="form-control" name="Epesor_remanente[${item.titulo}]" value="${item.inputs[12]}" placeholder="Categoria"></td>
-                                        <td><input type="text" class="form-control" name="Direccionalidad[${item.titulo}]" value="${item.inputs[13]}" placeholder="Direccionalidad"></td>
-                                        <td><input type="text" class="form-control" name="Clasificacion[${item.titulo}]" value="${item.inputs[14]}" placeholder="Clasificacion"></td>
-                                        <td><input type="text" class="form-control" name="porcentaje_de_reflexion_%[${item.titulo}]" value="${item.inputs[15]}" placeholder="porcentaje_de_reflexion_(%)"></td>
-                                        <td><input type="text" class="form-control" name="Fotos_No[${item.titulo}]" value="${item.inputs[16]}" placeholder="Fotos_No"></td>
-                                        <td><input type="text" class="form-control" name="Observaciones[${item.titulo}]" value="${item.inputs[17]}" placeholder="Observaciones"></td>
+                                        <td><input type="text" class="form-control" name="Elemento[${item.titulo}]" value="${item.inputs[2]}" placeholder="Elemento"></td>
+                                        <td><input type="text" class="form-control" name="nom_pulg[${item.titulo}]" value="${item.inputs[3]}" placeholder="Ønom (pulg)"></td>
+                                        <td><input type="text" class="form-control" name="ext_pulg[${item.titulo}]" value="${item.inputs[4]}" placeholder="Øext (pulg)"></td>
+                                        <td><input type="text" class="form-control" name="Long_m[${item.titulo}]" value="${item.inputs[5]}" placeholder="Long (m)"></td>
+                                        <td><input type="text" class="form-control" name="Ele_iden[${item.titulo}]" value="${item.inputs[6]}" placeholder="Elementos idendificados"></td>
+                                        <td><input type="text" class="form-control" name="-X[${item.titulo}]" value="${item.inputs[7]}" placeholder="(-X)"></td>
+                                        <td><input type="text" class="form-control" name="+X[${item.titulo}]" value="${item.inputs[8]}" placeholder="(+X)"></td>
+                                        <td><input type="text" class="form-control" name="No_Ind[${item.titulo}]" value="${item.inputs[9]}" placeholder="No Ind"></td>
+                                        <td><input type="text" class="form-control" name="Dis_rela[${item.titulo}]" value="${item.inputs[10]}" placeholder="Distancia relativa"></td>
+                                        <td><input type="text" class="form-control" name="HT1[${item.titulo}]" value="${item.inputs[11]}" placeholder="Horario Tecnico"></td>
+                                        <td><input type="text" class="form-control" name="HT2[${item.titulo}] value="${item.inputs[12]}" placeholder="Horario Tecnico"></td>
+                                        <td><input type="text" class="form-control" name="Cate[${item.titulo}]" value="${item.inputs[13]}" placeholder="Categoria"></td>
+                                        <td><input type="text" class="form-control" name="Direc[${item.titulo}]" value="${item.inputs[14]}" placeholder="Direccionalidad"></td>
+                                        <td><input type="text" class="form-control" name="Clas[${item.titulo}]" value="${item.inputs[15]}" placeholder="Clasificacion"></td>
+                                        <td><input type="text" class="form-control" name="Porc_Refl[${item.titulo}]" value="${item.inputs[16]}" placeholder="porcentaje de reflexion (%)"></td>
+                                        <td><input type="text" class="form-control" name="Fotos[${item.titulo}]" value="${item.inputs[17]}" placeholder="Fotos No"></td>
+                                        <td><input type="text" class="form-control" name="Observaciones[${item.titulo}]" value="${item.inputs[18]}" placeholder="Observaciones"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>`;
 
@@ -1065,27 +1122,26 @@ $(document).ready(function() {
             let newRow = 
 
                     `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
-                    <td><input type="text" class="form-control" name="Ønom_pulg[${lastTitle}][]" placeholder="Ønom_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Øext_pulg[${lastTitle}][]" placeholder="Øext_(pulg)"></td>
-                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long_(m)"></td>
-                    <td><input type="text" class="form-control" name="Elementos_idendificados[${lastTitle}][]" placeholder="Elementos_idendificados"></td>
+                    <td><input type="text" class="form-control" name="nom_pulg[${lastTitle}][]" placeholder="Ønom (pulg)"></td>
+                    <td><input type="text" class="form-control" name="ext_pulg[${lastTitle}][]" placeholder="Øext (pulg)"></td>
+                    <td><input type="text" class="form-control" name="Long_m[${lastTitle}][]" placeholder="Long (m)"></td>
+                    <td><input type="text" class="form-control" name="Ele_iden[${lastTitle}][]" placeholder="Elementos idendificados"></td>
                     <td><input type="text" class="form-control" name="-X[${lastTitle}][]" placeholder="(-X)"></td>
                     <td><input type="text" class="form-control" name="+X[${lastTitle}][]" placeholder="(+X)"></td>
                     <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind"></td>
-                    <td><input type="text" class="form-control" name="Distancia_relativa_al_dato_m[${lastTitle}][]" placeholder=""Distancia_relativa_al_dato_(m)"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name="Horario_Tecnico2[${lastTitle}][]" placeholder="Horario_Tecnico"></td>
-                    <td><input type="text" class="form-control" name=Categoria[${lastTitle}][]" placeholder="Categoria"></td>
-                    <td><input type="text" class="form-control" name="Direccionalidad[${lastTitle}][]" placeholder="Direccionalidad" ></td>
-                    <td><input type="text" class="form-control" name=Clasificacion[${lastTitle}][]" placeholder="Clasificacion" ></td>
-                    <td><input type="text" class="form-control" name="porcentaje_de_reflexión_%[${lastTitle}][]" placeholder="porcentaje_de_reflexión_(%)" ></td>
-                    <td><input type="text" class="form-control" name="Fotos_No[${lastTitle}][]" placeholder="Fotos_No" ></td>
+                    <td><input type="text" class="form-control" name="Dis_rela[${lastTitle}][]" placeholder="Distancia relativa al dato (m)"></td>
+                    <td><input type="text" class="form-control" name="HT1[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="HT2[${lastTitle}][]" placeholder="Horario Tecnico"></td>
+                    <td><input type="text" class="form-control" name="Cate[${lastTitle}][]" placeholder="Categoria"></td>
+                    <td><input type="text" class="form-control" name="Direc[${lastTitle}][]" placeholder="Direccionalidad" ></td>
+                    <td><input type="text" class="form-control" name="Clas[${lastTitle}][]" placeholder="Clasificacion" ></td>
+                    <td><input type="text" class="form-control" name="Porc_Refl[${lastTitle}][]" placeholder="porcentaje de reflexión (%)" ></td>
+                    <td><input type="text" class="form-control" name="Fotos[${lastTitle}][]" placeholder="Fotos No" ></td>
                     <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones" ></td>
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                    
                     </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
@@ -1119,6 +1175,75 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
+        function actualizarInputsA() {
+            var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA').val(marca);
+            $('#modeloInputA').val(modelo);
+            $('#nsInputA').val(ns);
+        }
+
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
+        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect').on('change', function() {
+            actualizarInputsA();
+        });
+
+        function actualizarInputsA2() {
+            var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputA2').val(marca);
+            $('#modeloInputA2').val(modelo);
+            $('#nsInputA2').val(ns);
+        }
+
+        const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios2');
+        selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+
+        // Evento cuando se cambia la selección en el select
+        $('#accesoriosSelect2').on('change', function() {
+            actualizarInputsA2();
+        });
+
+    });
 
     /*FOR-01-PRO-INS-22*/
     document.addEventListener('DOMContentLoaded', function () {
