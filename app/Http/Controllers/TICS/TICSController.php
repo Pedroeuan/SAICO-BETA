@@ -57,7 +57,7 @@ class TICSController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
             ]);
-
+            $Clasificacion = 'N/A';
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('ID');
             $serie = Str::lower($request->input('Serie'));
@@ -171,6 +171,7 @@ class TICSController extends Controller
                 $general->Disponibilidad_Estado = $request->input('Disponibilidad_Estado');
             } 
             $general->save();
+
         // Validar que se ha enviado el archivo de factura
         if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
             $pdf = $request->file('Factura');
@@ -225,6 +226,16 @@ class TICSController extends Controller
         $generalConTICS = new TICS;
         $generalConTICS->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConTICS->save();
+
+        /* CLASIFICACIÓN */
+        /*$generalConclasificacion = new clasificacion;
+        $generalConclasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConclasificacion->save();*/
+
+        /* ISO */
+        /*$generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConISO->save();*/
 
         /* Certificados */
         $generalConCertificados = new certificados;
