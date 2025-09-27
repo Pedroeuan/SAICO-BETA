@@ -228,14 +228,14 @@ class TICSController extends Controller
         $generalConTICS->save();
 
         /* CLASIFICACIÓN */
-        $generalConclasificacion = new clasificacion;
+        /*$generalConclasificacion = new clasificacion;
         $generalConclasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConclasificacion->save();
+        $generalConclasificacion->save();*/
 
         /* ISO */
-        $generalConISO = new ISO;
+        /*$generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConISO->save();
+        $generalConISO->save();*/
 
         /* Certificados */
         $generalConCertificados = new certificados;
