@@ -87,6 +87,18 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="inputSubject">Estatus</label>
+                            <select class="form-control select2 @error('Estatus') is-invalid @enderror" style="width: 100%;" name="Estatus">
+                                <option selected disabled>Selecciona un Estatus</option>
+                                <option value="ALTA" @if($Usuario->Estatus == 'ALTA') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                            </select>
+                            @error('Estatus')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Actualizar">
                         </div>
                     </div>

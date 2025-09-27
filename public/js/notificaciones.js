@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function updateNotifications() {
         const data = await fetchNotifications();
+        //console.log('Notificaciones recibidas:', data); // <-- Aquí ves todo, incluyendo url
         updateNotificationBadge(data.length);
 
         const notificationList = document.querySelector('#my-notification .dropdown-menu');
@@ -104,8 +105,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const viewAllItem = document.createElement('li');
             viewAllItem.classList.add('dropdown-item', 'text-center');
-            viewAllItem.innerHTML = `<a href="${config.viewAllUrl}">Todas las notificaciones</a>`;
+            viewAllItem.textContent = "Todas las notificaciones"; // texto visible
+            viewAllItem.style.cursor = "pointer"; // indica que es clicable
+            viewAllItem.onclick = function() {
+                window.open(config.viewAllUrl, "_blank"); // abre la URL en nueva pestaña
+            };
+
             fragment.appendChild(viewAllItem);
+
 
             notificationList.appendChild(fragment);
         }
@@ -114,78 +121,3 @@ document.addEventListener('DOMContentLoaded', function () {
     updateNotifications();
     setInterval(updateNotifications, config.updatePeriod);
 });
-/*document.addEventListener('DOMContentLoaded', function () {
-    function updateNotifications() {
-        fetch(updateNotificationUrl)  // Usa la URL correcta aquí
-            .then(response => {
-                //console.log('Respuesta completa:', response);
-                return response.json();  // Intenta convertir a JSON aquí
-            })
-            .then(data => {
-                //console.log('Datos recibidos:', data);
-                const notificationBadge = document.querySelector('#my-notification .badge');
-                const notificationList = document.querySelector('#my-notification .dropdown-menu');
-
-                if (notificationBadge && notificationList) {
-                    if (data.length > 0) {
-                        notificationBadge.textContent = data.length;
-                        notificationBadge.style.display = 'inline';
-                        notificationBadge.style.color = 'black';  // Cambia el color a negro
-                        notificationBadge.style.position = 'relative'; // Posición relativa
-                        notificationBadge.style.top = '-3px';  // Mueve el número hacia arriba
-                        notificationList.innerHTML = '';
-
-                        data.forEach(notificacion => {
-                            const listItem = document.createElement('li');
-                            listItem.classList.add('dropdown-item', 'd-flex', 'align-items-center');
-
-                            const icon = document.createElement('i');
-                            icon.classList.add('mr-2');
-
-                            switch (notificacion.type) {
-                                case 'info':
-                                    icon.classList.add('fas', 'fa-info-circle', 'text-info');
-                                    break;
-                                case 'warning':
-                                    icon.classList.add('fas', 'fa-exclamation-triangle', 'text-warning');
-                                    break;
-                                case 'error':
-                                    icon.classList.add('fas', 'fa-times-circle', 'text-danger');
-                                    break;
-                                default:
-                                    icon.classList.add('fas', 'fa-bell', 'text-secondary');
-                            }
-
-                            listItem.appendChild(icon);
-
-                            const messageText = document.createElement('span');
-                            messageText.textContent = shortenText(notificacion.message, 40);
-                            messageText.style.whiteSpace = 'nowrap';
-                            messageText.style.overflow = 'hidden';
-                            messageText.style.textOverflow = 'ellipsis';
-                            messageText.style.flexGrow = '1';
-                            listItem.appendChild(messageText);
-
-                            notificationList.appendChild(listItem);
-                        });
-
-                        const viewAllItem = document.createElement('li');
-                        viewAllItem.classList.add('dropdown-item', 'text-center');
-                        viewAllItem.innerHTML = `<a href="${viewAllNotificationsUrl}">Todas las notificaciones</a>`;
-                        notificationList.appendChild(viewAllItem);
-                    } else {
-                        notificationBadge.style.display = 'none';
-                    }
-                }
-            })
-            .catch(error => console.error('Error al analizar el JSON:', error));
-    }
-
-    function shortenText(text, maxLength) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
-    }
-
-    updateNotifications();
-    setInterval(updateNotifications, 10000); // 10 segundos
-});
-*/

@@ -252,6 +252,7 @@ class ManifiestoController extends Controller
                         $Manifiesto->Puesto = $request->input('Puesto');
                         $Manifiesto->Responsable = $request->input('Responsable');
                         $Manifiesto->Observaciones = $request->input('Observaciones');
+                        $Manifiesto->Entrega = $request->input('Entrega_Nombre');
                         $Manifiesto->ScanPDF = 'ESPERA DE DATO';
                         $Manifiesto->SATBMPRO = 'ESPERA DE DATO';
                         $Manifiesto->save();
@@ -291,6 +292,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Entrega_Nombre' => 'required|string|max:255',
             'Recibe_Nombre' => 'required|string|max:255',
         ]);
 
@@ -387,6 +389,7 @@ class ManifiestoController extends Controller
                 $Manifiestos->Trabajo = $request->input('Trabajo');
                 $Manifiestos->Puesto = $request->input('Puesto');
                 $Manifiestos->Responsable = $request->input('Responsable');
+                $Manifiestos->Entrega = $request->input('Entrega_Nombre');
                 $Manifiestos->ScanPDF = $EsperaDato;
                 $Manifiestos->SATBMPRO = $SATBMPRO;
                 if($request->input('Observaciones')==null)
@@ -431,6 +434,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Entrega_Nombre' => 'required|string|max:255',
             'Recibe_Nombre' => 'required|string|max:255',
         ]);
 
@@ -580,6 +584,7 @@ class ManifiestoController extends Controller
                         'Trabajo' =>$request->input('Trabajo'),
                         'Puesto' =>$request->input('Puesto'),
                         'Responsable' =>$request->input('Responsable'),
+                        'Entrega' =>$request->input('Entrega_Nombre'),
                         'Observaciones' =>$request->input('Observaciones'),
                         'SATBMPRO' => $SATBMPRO,
                     ]);
@@ -625,6 +630,7 @@ class ManifiestoController extends Controller
             'Trabajo' => 'required|string|max:255',
             'Puesto' => 'required|string|max:255',
             'Responsable' => 'required|string|max:255',
+            'Entrega_Nombre' => 'required|string|max:255',
             'Recibe_Nombre' => 'required|string|max:255',
         ]);
 
@@ -795,6 +801,7 @@ class ManifiestoController extends Controller
                         'Trabajo' =>$request->input('Trabajo'),
                         'Puesto' =>$request->input('Puesto'),
                         'Responsable' =>$request->input('Responsable'),
+                        'Entrega' =>$request->input('Entrega_Nombre'),
                         'Observaciones' =>$request->input('Observaciones'),
                         'SATBMPRO' => $SATBMPRO,
                     ]);

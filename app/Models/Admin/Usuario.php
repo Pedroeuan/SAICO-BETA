@@ -16,6 +16,7 @@ class Usuario extends Model
         'email',
         'password',
         'rol',
+        'Estatus',
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';

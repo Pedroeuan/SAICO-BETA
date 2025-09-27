@@ -64,9 +64,9 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="col-form-label" for="inputSuccess">Prueba Seleccionada</label>
-                                        <select class="form-control inputForm" name="Prueba" id="PruebaSelect" required>
+                                        <select class="form-select" name="Prueba" id="PruebaSelect" required>
                                             <option value="">Seleccione una Prueba</option>
-                                            @foreach ($Pruebas as $Prueba)
+                                            @foreach ($Pruebas->sortBy('Nombre') as $Prueba)
                                                 <option value="{{ $Prueba->idPrueba }}" data-image="{{ asset('images/Menu Servicios SVG/' . 
                                                 ($Prueba->Nombre == 'PARTÍCULAS MAGNÉTICAS' ? 'PARTICULAS_MAGNETICAS.svg' :
                                                 ($Prueba->Nombre == 'LÍQUIDOS PENETRANTES' ? 'LIQUIDOS_PENETRANTES.svg' :
@@ -98,7 +98,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="col-form-label" for="inputSuccess">Norma o Código</label>
-                                        <select class="form-control inputForm" name="NormaCodigo" id="NormaCodigoSelect" required>
+                                        <select class="form-select" name="NormaCodigo" id="NormaCodigoSelect" required>
                                         </select>
                                         @error('NormaCodigo')
                                             <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -109,7 +109,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="col-form-label" for="inputSuccess">Formato</label>
-                                        <select class="form-control inputForm" name="Formato" id="FormatoSelect" required>
+                                        <select class="form-select" name="Formato" id="FormatoSelect" required>
                                         </select>
                                         @error('Formato')
                                             <div class="alert alert-danger"><span>*{{ $message }}</span></div>
@@ -122,7 +122,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="Tipo_Prueba" id="formatoNombre">IMAGEN DE LA PRUEBA SELECCIONADA</label>
-                                            <svg 
+                                            <svg class="rounded"
                                                 width="100%" height="200" 
                                                 role="img" aria-label="IMAGEN DE LA PRUEBA" 
                                                 focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -235,7 +235,7 @@
         "FOR-01-PRO-INS-19": "INFORME DE INSPECCIÓN CON ACFM",
         "FOR-01-PRO-INS-20": " Informe de Análisis mediante Corriente Eddy Pulsada (PECT).",
         "FOR-01-PRO-INS-21": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-        "FOR-01-PRO-INS-22": "Ondas Guiadas"
+        "FOR-01-PRO-INS-22": "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
     };
 
     pruebaSelect.addEventListener('change', function () {

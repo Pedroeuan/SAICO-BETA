@@ -46,6 +46,7 @@
                     <tr>
                         <th>Contrato</th>
                         <th>Nombre del Proyecto</th>
+                        <th>Cliente</th>
                         <th>Fecha</th>
                         <th>Seleccionar</th>
                     </tr>
@@ -55,6 +56,7 @@
                         <tr>
                             <td>{{ $detalle['Contrato'] }}</td>
                             <td>{{ $detalle['Proyecto'] }}</td>
+                            <td>{{ $detalle['Cliente'] }}</td>
                             <td>{{ $detalle['Fecha'] }}</td>
                             <td>
                                 <input type="radio" name="selectedContrato_Proyecto" value="{{ $detalle['Contrato'] }}">

@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ReporteController extends Controller
 {
-public function FOR_01_PRO_INS_02()
+    public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
     }
@@ -84,10 +84,15 @@ public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
     }
+    public function FOR_01_PRO_INS_14()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-14');
+    }
     public function FOR_01_PRO_INS_15()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
     }
+    
     public function FOR_02_PRO_INS_15()
     {
         return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
@@ -108,6 +113,17 @@ public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
     }
+    
+    public function FOR_01_PRO_INS_20()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-20');
+    }
+    
+    public function FOR_01_PRO_INS_21()
+    {
+        return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
+    }
+
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -123,6 +139,7 @@ public function FOR_01_PRO_INS_02()
             $reportesDetalles_Generales[] = [
                 'Contrato' => $detalles['Contrato'],
                 'Proyecto' => $detalles['Proyecto'],
+                'Cliente' => $detalles['Cliente'],
                 'Fecha' => $detalles['Fecha'],
                 'No_Reporte' => $detalles['No_Reporte'],
                 'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
@@ -210,10 +227,13 @@ public function FOR_01_PRO_INS_02()
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
-        // Iterar sobre el arreglo y obtener los comentarios
-        /*foreach ($Fotos_Comentarios as $foto) {
-            $comentarios[] = $foto['comment'];
-        }*/
+        //dd($Grupo_Juntas_Re);
+
+        //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
+
+        //$Juntas_resultados = $Grupo_Juntas_Re['resultados'];
+        //$Titulos_resultados = $Grupo_Juntas_Re['titulos'];
+
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
         // Obtener el idSolicitud
@@ -227,13 +247,14 @@ public function FOR_01_PRO_INS_02()
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
-        // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         /*Obtener id de Prueba_Aplica */
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
@@ -254,7 +275,7 @@ public function FOR_01_PRO_INS_02()
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
 
     }
 
@@ -285,7 +306,7 @@ public function FOR_01_PRO_INS_02()
             "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
             "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
             "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-22" => "Ondas Guiadas"
+            "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -400,13 +421,14 @@ public function FOR_01_PRO_INS_02()
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
-        // Buscar los registros en la tabla General_EyC
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        //Consumibles
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         // Verificar si el registro ya existe
         $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
@@ -438,7 +460,7 @@ public function FOR_01_PRO_INS_02()
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
     
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
     }
 
     public function indexINS2(Request $request)
@@ -466,16 +488,147 @@ public function FOR_01_PRO_INS_02()
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-02-PRO-INS-02")
+        if($Nombre_Formato == "FOR-01-PRO-INS-03")
         {
-            return redirect()->route('Reporte_FOR_INS_02_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_01_INS_03.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_04.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-05")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_05.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-06")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_06.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-07")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_07.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-08")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_08.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-09")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_09.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-10")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_10.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-12")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_12.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-13")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_13.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-14")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_14.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-16")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_21.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
-            return redirect()->route('Reporte_FOR_INS_10_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-02-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_02_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
+        {
+            return redirect()->route('Reporte_FOR_03_INS_15.PDF', ['id' => $id]);
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyReportes($id)
+    {
+        //Primero Eliminar el registro de la tabla 'lineal_ideal'
+        $Lineal_Ideal  = Lineal_Ideal::where('idReportes', $id)->first();
+        if ($Lineal_Ideal) {
+            $Lineal_Ideal->delete();
+        }
+
+        //Segundo Eliminar el registro de la tabla 'Firma_Reporte'
+        $Firma_Reporte  = Firma_Reporte::where('idReportes', $id)->first();
+        if ($Firma_Reporte) {
+            $Firma_Reporte->delete();
+        }
+
+        //Tercero Eliminar el registro de la tabla 'Fotos_Reporte'
+        $Fotos_Reporte  = Fotos_Reporte::where('idReportes', $id)->first();
+        if ($Fotos_Reporte) {
+            $Fotos_Reporte->delete();
+        }
+
+        //Cuarto Eliminar el registro de la tabla 'Grupo_Juntas_Detalles_Re'
+        $Grupo_Juntas_Detalles_Re  = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        if ($Grupo_Juntas_Detalles_Re) {
+            $Grupo_Juntas_Detalles_Re->delete();
+        }
+
+        //Cuarto y ultimo Eliminar el registro de la tabla 'reporte'
+        $reporte  = reporte::where('idReportes', $id)->first();
+        if ($reporte) {
+            $reporte->delete();
+        }
+
+        
+        // ✅ Retornar respuesta JSON para el AJAX
+        return response()->json([
+            'success' => true,
+            'message' => 'Reporte eliminado correctamente.'
+        ]);
+
+    }
 
     /**
      * Display the specified resource.
@@ -501,11 +654,5 @@ public function FOR_01_PRO_INS_02()
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(reporte $reporte)
-    {
-        //
-    }
+
 }

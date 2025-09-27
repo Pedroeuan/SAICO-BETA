@@ -21,6 +21,7 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
 
 class consumiblesController extends Controller
 {

@@ -134,7 +134,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Proyecto')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -144,7 +144,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo</label>
-                                            <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                                             @error('Orden_Trabajo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -184,7 +184,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Isometrico_Plano]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Isometrico_Plano')}}</textarea>
                                             @error('Isometrico_Plano')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -261,16 +261,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">PARTICULAS:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect1">
                                             <option value="" selected disabled>Seleccione una Particula</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -278,42 +278,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputP" name="Datos_Equipo[MARCA_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MARCA_PARTICULAS')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC1" name="Datos_Equipo[MARCA_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MARCA_PARTICULAS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputP" name="Datos_Equipo[MODELO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MODELO_PARTICULAS')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC1" name="Datos_Equipo[MODELO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MODELO_PARTICULAS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputP" name="Datos_Equipo[LOTE_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.LOTE_PARTICULAS')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC1" name="Datos_Equipo[LOTE_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.LOTE_PARTICULAS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIPO:</label>
-                                            <input type="text" class="form-control  inputForm" id="tipoInputP" name="Datos_Equipo[TIPO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[TIPO_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.TIPO_PARTICULAS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">COLOR:</label>
-                                            <input type="text" class="form-control  inputForm" id="colorInputP" name="Datos_Equipo[COLOR_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.COLOR_PARTICULAS')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[COLOR_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.COLOR_PARTICULAS')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">APLICACIÓN:</label>
-                                            <input type="text" class="form-control  inputForm" id="aplicacionInputP" name="Datos_Equipo[APLICACION_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.APLICACION_PARTICULAS')}}">
+                                            <input type="text" class="form-control  inputForm"  name="Datos_Equipo[APLICACION_PARTICULAS]" placeholder="" value="{{old('Datos_Equipo.APLICACION_PARTICULAS')}}">
                                         </div>
                                     </div>
 
@@ -322,16 +322,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">CONTRASTANTE:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="consumibles" id="consumiblesSelect2">
                                             <option value="" selected disabled>Seleccione un Contrastante</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                                            data-marca="{{ $equipo->Marca }}"
-                                                            data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
-                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                @foreach($idsGeneral_EyCs_Consumibles as $Consumibles)
+                                                    <option value="{{ $Consumibles->idGeneral_EyC }}"
+                                                            data-marca="{{ $Consumibles->Marca }}"
+                                                            data-modelo="{{ $Consumibles->Modelo }}"
+                                                            data-lote="{{ $Consumibles->almacen->Lote }}">
+                                                        {{ $Consumibles->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -339,21 +339,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputC" name="Datos_Equipo[MARCA_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.MARCA_CONTRASTE')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputC2" name="Datos_Equipo[MARCA_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.MARCA_CONTRASTE')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputC" name="Datos_Equipo[MODELO_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.MODELO_CONTRASTE')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputC2" name="Datos_Equipo[MODELO_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.MODELO_CONTRASTE')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">LOTE:</label>
-                                            <input type="text" class="form-control  inputForm" id="loteInputC" name="Datos_Equipo[LOTE_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.LOTE_CONTRASTE')}}">
+                                            <input type="text" class="form-control  inputForm" id="loteInputC2" name="Datos_Equipo[LOTE_CONTRASTE]" placeholder="" value="{{old('Datos_Equipo.LOTE_CONTRASTE')}}">
                                         </div>
                                     </div>
 
@@ -385,16 +385,16 @@
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">EQUIPOS:</label>
-                                            <select class="form-control inputForm" name="equipos" id="equiposSelect">
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
                                             <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
-                                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
                                                             data-modelo="{{ $equipo->Modelo }}"
                                                             data-ns="{{ $equipo->Serie }}">
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -481,15 +481,15 @@
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     
-                                    <div style="margin-bottom: 2px;"></div>
+                                    <div style="margin-bottom: 5px;"></div>
 
                                     <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                                        <div class="alert alert-warning alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                                        </div>
+                                        <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                    </div>
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                                 <tr>
                                                     <th rowspan="2">NO.</th>
@@ -543,17 +543,12 @@
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
+                                        <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
                                     </div>
                                     <p>
-                                    
-                                    {{-- <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">LONGITUD TOTAL INSPECCIONADA:</div>
-                                    <div>
-                                        <div class="form-group">
-                                        <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
-                                        </div>
-                                    </div> --}}
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">SIMBOLOGÍA</div>
 
@@ -618,14 +613,42 @@
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-15">
+                                        <div class="col-sm-12">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="1">1 Firma</option>
                                                     <option value="2">2 Firmas</option>
                                                     <option value="3">3 Firmas</option>
                                                     <option value="4">4 Firmas</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <!-- 1 UNA FIRMA-->
+                                        <div id="firmas1" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
 
                                         <!-- 2 DOS FIRMAS-->
@@ -800,12 +823,23 @@
                                         </div>
 
                                         <p>
-
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                                        
                                         <p>
 
                                         <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -823,48 +857,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                                        <button type="button" class="btn btn-primary" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Campos para subir imágenes y comentarios -->
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image1">Imagen 1:</label>
-                                                <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
-                                                <div class="image-preview" id="image1-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment1" placeholder="Comentario para la imagen 1"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image2">Imagen 2:</label>
-                                                <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
-                                                <div class="image-preview" id="image2-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment2" placeholder="Comentario para la imagen 2"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image3">Imagen 3:</label>
-                                                <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
-                                                <div class="image-preview" id="image3-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment3" placeholder="Comentario para la imagen 3"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="image4">Imagen 4:</label>
-                                                <input type="file" class="form-control" id="image4" name="image4" accept="image/*">
-                                                <div class="image-preview" id="image4-preview"></div>
-                                                <textarea class="form-control mt-2" name="comment4" placeholder="Comentario para la imagen 4"></textarea>
                                             </div>
                                         </div>
 
@@ -905,339 +904,191 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
+     /*Juntas-Resultados */
     $(document).ready(function() {
-        var rowCount = 0;
+        let tituloCount = 0;
+        let rowCount = 0;
+        let rowCountGlobal = 0;
 
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
+        function restoreData() {
+            //const savedData = sessionStorage.getItem('dynamicTableData');
+            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            if (savedData) {
+                // Restaurar contadores
+                tituloCount = savedData.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                
+                savedData.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="10">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow = `
+                        <tr data-titulo="${item.titulo}">
+                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
+                            <td><input type="text" class="form-control" name="componente[${item.titulo}][]" value="${item.inputs[1]}" placeholder="No. Junta/Componente"></td>
+                            <td><input type="text" class="form-control" name="no_ind[${item.titulo}][]" value="${item.inputs[2]}" placeholder="No.Ind."></td>
+                            <td><input type="text" class="form-control" name="tipo_indicacion[${item.titulo}][]" value="${item.inputs[3]}" placeholder="Tipo de Indicación"></td>
+                            <td><input type="text" class="form-control" name="largo[${item.titulo}][]" value="${item.inputs[4]}" placeholder="LARGO"></td>
+                            <td><input type="text" class="form-control" name="ancho[${item.titulo}][]" value="${item.inputs[5]}" placeholder="ANCHO"></td>
+                            <td><input type="text" class="form-control" name="diametro[${item.titulo}][]" value="${item.inputs[6]}" placeholder="Ø"></td>
+                            <td><input type="text" class="form-control" name="ht[${item.titulo}][]" value="${item.inputs[7]}" placeholder="H.T."></td>
+                            <td><input type="text" class="form-control" name="evaluacion[${item.titulo}][]" value="${item.inputs[8]}" placeholder="Evaluación"></td>
+                            <td><input type="text" class="form-control" name="longitud_inspeccionada[${item.titulo}][]" value="${item.inputs[9]}" placeholder="L.I."></td>
+                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+                updateRowNumbers();
+                updateTitulos();
+            }
         }
 
-        $('#addBtn').click(function() {
-            var numRows = $('#numRows').val();
-            for (var i = 0; i < numRows; i++) {
-                rowCount++;
-                var newRow = `<tr>
-                    <td>${rowCount}</td>
-                    <td><input type="text" class="form-control" name="componente[]" placeholder="No. Junta/Componente"></td>
-                    <td><input type="text" class="form-control" name="no_indicacion[]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="tipo_indicacion[]" placeholder="Tipo Indicación"></td>
-                    <td><input type="text" class="form-control" name="largo[]" placeholder="LARGO" ></td>
-                    <td><input type="text" class="form-control" name="ancho[]" placeholder="ANCHO" ></td>
-                    <td><input type="text" class="form-control" name="diametro[]" placeholder="Ø" ></td>
-                    <td><input type="text" class="form-control" name="ht[]" placeholder="H.T." style="width: 120px;"></td>
-                    <td><input type="text" class="form-control" name="evaluacion[]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="longitud_inspeccionada[]" placeholder="L.I."></td>
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+                <td colspan="10">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        saveData(document.querySelectorAll("form")[1].id);
+        });
+
+        $('#addBtn').click(function () {
+            let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            for (let i = 0; i < numFilas; i++) {
+            rowCount++; // Incrementar el contador general de filas
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
+            let newRow = `
+                <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. Junta/Componente"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
+                    <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="LARGO"></td>
+                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="ANCHO"></td>
+                    <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="longitud_inspeccionada[${lastTitle}][]" placeholder="L.I."></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>`;
+                </tr>
+            `;
+
                 $('#dynamicTable tbody').append(newRow);
             }
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-        });
-
+            saveData(document.querySelectorAll("form")[1].id);
+        }
+    );
+        
         $('form').submit(function(e) {
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
-         // Deshabilitar el botón de submit y cambiar el texto (opcional)
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-
-        // Opcional: Agregar un indicador de carga
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputFields = document.querySelectorAll(".default-input");
-
-        // Evento para actualizar filas cuando se escriba en los inputs superiores
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = input.getAttribute("data-column");
-                document.querySelectorAll(`#dynamicTable tbody tr`).forEach(row => {
-                    const cellInput = row.querySelectorAll("td input")[column - 1];
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-            });
+                return;
+            }
+
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
+            // Restaurar datos al cargar la página
+            restoreData();
     });
 
+    /*Selects */
     $(document).ready(function() {
-    var cropper;
-    var selectedInput;
+            function actualizarInputsC1() {
+                var selectedOption = $('#consumiblesSelect1').find('option:selected');
 
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var lote = selectedOption.data('lote') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputC1').val(marca);
+                $('#modeloInputC1').val(modelo);
+                $('#loteInputC1').val(lote);
             }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
+            const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
+            selectedOptionLocalCons1 != null ?  ($('#consumiblesSelect1').val(selectedOptionLocalCons1),actualizarInputsC1()):"";
 
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect1').on('change', function() {
+                    actualizarInputsC1();
+                });
 
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
+            function actualizarInputsC2() {
+                var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var lote = selectedOption.data('lote') || '';
 
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});
-    /*$(document).ready(function() {
-    var cropper;
-    var selectedInput;
-
-    // Función para leer la imagen seleccionada y mostrarla en el modal
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#cropperImage').attr('src', e.target.result);
-                $('#cropperModal').modal('show');
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputC2').val(marca);
+                $('#modeloInputC2').val(modelo);
+                $('#loteInputC2').val(lote);
             }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
-    // Cuando el input de archivo cambia (cuando se selecciona una imagen)
-    $('input[type="file"]').change(function() {
-        selectedInput = this;
-        readURL(this);
-    });
+            const selectedOptionLocalCons2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
+            selectedOptionLocalCons2 != null ?  ($('#consumiblesSelect2').val(selectedOptionLocalCons2),actualizarInputsC2()):"";
 
-    // Inicializar el Cropper cuando se muestre el modal
-    $('#cropperModal').on('shown.bs.modal', function() {
-        var image = document.getElementById('cropperImage');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Puedes cambiar el aspecto según tus necesidades
-            viewMode: 2,
-            autoCropArea: 1
-        });
-    }).on('hidden.bs.modal', function() {
-        // Asegurarse de que el Cropper se destruye al cerrar el modal
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect2').on('change', function() {
+                    actualizarInputsC2();
+                });
 
-    // Acción para recortar la imagen y guardarla
-    $('#cropImageBtn').click(function() {
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Ajusta el tamaño de la imagen recortada
-            height: 300
-        });
-
-        canvas.toBlob(function(blob) {
-            var file = new File([blob], selectedInput.files[0].name, { type: 'image/jpeg' });
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            selectedInput.files = dataTransfer.files;
-
-            var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-            $(previewId).html('<img src="' + canvas.toDataURL('image/jpeg') + '" style="max-width: 100%;">');
-
-            $('#cropperModal').modal('hide');
-        }, 'image/jpeg');
-    });
-
-    // Acción para guardar la imagen sin recortarla
-    $('#saveWithoutCropBtn').click(function() {
-        var file = selectedInput.files[0];
-
-        var dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        selectedInput.files = dataTransfer.files;
-
-        var previewId = '#' + $(selectedInput).attr('id') + '-preview';
-        $(previewId).html('<img src="' + URL.createObjectURL(file) + '" style="max-width: 100%;">');
-
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegurarse de que el modal también se puede cerrar si se hace clic en "Cancelar" o en la "X"
-    $('#cropperModal').on('hidden.bs.modal', function() {
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-    });
-
-    // Hacer que el botón de cancelar cierre el modal
-    $('#cancelBtn').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Asegúrate de que la "X" también cierre el modal (Bootstrap la maneja por defecto, pero lo confirmamos aquí)
-    $('.close').click(function() {
-        $('#cropperModal').modal('hide');
-    });
-});*/
-
-    // Pre-Rellenado del formulario
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("preFormBtn").addEventListener("click", function () {
-            // Seleccionar todos los inputs y textareas del formulario
-            let inputs = document.querySelectorAll(".inputForm");
-            let textareas = document.querySelectorAll("textarea");
-
-            inputs.forEach(function (input) {
-                if (input.value.trim() === "") { 
-                    input.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-
-            textareas.forEach(function (textarea) {
-                if (textarea.value.trim() === "") { 
-                    textarea.value = "---"; // Asignar "---" si está vacío
-                }
-            });
-        });
-    });
-
-    // Selección de Firmas
-    document.addEventListener('DOMContentLoaded', function() {
-        const numFirmasSelect = document.getElementById('numFirmas');
-        const firmas2 = document.getElementById('firmas2');
-        const firmas3 = document.getElementById('firmas3');
-        const firmas4 = document.getElementById('firmas4');
-
-        numFirmasSelect.addEventListener('change', function() {
-            if (this.value == '2') {
-                firmas2.style.display = 'block';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'none';
-            } else if (this.value == '3') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'block';
-                firmas4.style.display = 'none';
-            } else if (this.value == '4') {
-                firmas2.style.display = 'none';
-                firmas3.style.display = 'none';
-                firmas4.style.display = 'block';
-            }
-        });
-
-        // Inicializar la visibilidad de las secciones de firmas
-        if (numFirmasSelect.value == '2') {
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '3') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (numFirmasSelect.value == '4') {
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
-    });
-
-    $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 
@@ -1252,67 +1103,50 @@
             $('#nsInputE').val(ns);
         }
 
-        // Evento cuando se cambia la selección en el select
-        $('#equiposSelect').on('change', function() {
-            actualizarInputsE();
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+
         });
 
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#equiposSelect option').length > 0) {
-            $('#equiposSelect').prop('selectedIndex', 0).trigger('change');
-        }
-    });
+    /*FOR-02-PRO-INS-02*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-02-PRO-INS-02');
+        if (!form) return;
 
-    $(document).ready(function() {
-        function actualizarInputsA() {
-            var selectedOption = $('#accesoriosSelect').find('option:selected');
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-02-PRO-INS-02_' + el.name, el.value);
+            //});
+        //});
 
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputA').val(marca);
-            $('#modeloInputA').val(modelo);
-            $('#nsInputA').val(ns);
-        }
-
-        // Evento cuando se cambia la selección en el select
-        $('#accesoriosSelect').on('change', function() {
-            actualizarInputsA();
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-02-PRO-INS-02_' + el.name, el.value);
+            });
         });
 
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#accesoriosSelect option').length > 0) {
-            $('#accesoriosSelect').prop('selectedIndex', 0).trigger('change');
-        }
-    });
-
-    $(document).ready(function() {
-        function actualizarInputsbyp() {
-            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputbyp').val(marca);
-            $('#modeloInputbyp').val(modelo);
-            $('#nsInputbyp').val(ns);
-        }
-
-        // Evento cuando se cambia la selección en el select
-        $('#blockyprobetaSelect').on('change', function() {
-            actualizarInputsbyp();
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-02-PRO-INS-02_' + el.name);
+                if (value !== null) el.value = value;
+            }
         });
 
-        // Seleccionar la primera opción si hay al menos una opción disponible
-        if ($('#blockyprobetaSelect option').length > 0) {
-            $('#blockyprobetaSelect').prop('selectedIndex', 0).trigger('change');
-        }
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-02-PRO-INS-02_' + el.name);
+                //localStorage.clear();
+            });
+        });
     });
 </script>
 @endsection

@@ -437,7 +437,7 @@ class SolicitudesController extends Controller
             //$clientes = clientes::all();
             // Obtén todos los clientes excepto el cliente "POR DEFINIR"
             $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
-    
+
             if ($Solicitud->Estatus == 'PENDIENTE') {
 
                 return view("Solicitud.aprobacionplus", compact('id','Solicitud', 'DetallesSolicitud', 'generalEyC', 'general', 'generalConCertificados','Manifiestos'));

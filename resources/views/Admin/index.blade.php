@@ -39,8 +39,9 @@
                         <th>Usuario</th>
                         <th>Rol</th>
                         <th>Fecha alta</th>
+                        <th>Estatus</th>
                         <th>Editar</th>
-                        <th>Eliminar</th>
+                        <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,7 @@
                         <td>{{ $Usuario->email}}</td>
                         <td>{{ $Usuario->rol }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
+                        <td>{{ $Usuario->Estatus }}</td>
                         @if($rol == 'Administrador' && $Usuario->rol == 'Super Administrador')
                             <td>
                                 <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
@@ -131,7 +133,7 @@ let table = new DataTable('#tablaJs', {
     $(document).on("click", ".btnEliminarUsuario", function() {
         var idUsuario = $(this).attr("idUsuario");
         Swal.fire({
-            title: "¿Seguro de eliminar este elemento?",
+            title: "¿Solo se dara de BAJA el Usuario?",
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
