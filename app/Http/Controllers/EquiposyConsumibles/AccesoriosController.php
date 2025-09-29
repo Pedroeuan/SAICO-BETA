@@ -463,6 +463,12 @@ class AccesoriosController extends Controller
         $generalConAccesorios->update([
             'Proveedor' => $request->input('Proveedor'),
         ]);
+        
+        // Almacen
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen->update([
+            'Stock' => $request->input('Stock'),
+        ]);
     }
     else
     {
@@ -622,6 +628,12 @@ class AccesoriosController extends Controller
         $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
         $generalConAccesorios->update([
             'Proveedor' => $request->input('Proveedor'),
+        ]);
+
+        // Almacen
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen->update([
+            'Stock' => $request->input('Stock'),
         ]);
     }
     
