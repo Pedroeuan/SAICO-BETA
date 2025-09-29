@@ -786,6 +786,13 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalEyC->SAT }}" name="SAT" placeholder="Enter ...">
                                         </div>

@@ -187,7 +187,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
-                                            <input type="number" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
                                             @error('Stock')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -523,7 +523,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
-                                            <input type="number" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
                                             @error('Stock')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -673,6 +673,16 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
                                             <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Ejemplo: ZION" value="{{ old('Proveedor') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            @error('Stock')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 
