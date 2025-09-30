@@ -38,7 +38,7 @@
 <br>
 <br>
 <div class="welcome-container">
-    <h1 class="welcome-title">Bienvenido a S'AICO 123</h1>
+    <h1 class="welcome-title">Bienvenido a S'AICO</h1>
     <p class="welcome-message">Estamos encantados de tenerte aquí. Explora nuestras funcionalidades y disfruta de la experiencia.</p>
     <div style="text-align: center; padding: 50px;">
         <img src="{{ asset('images/Logo_AICO_R1.jpg') }}" alt="Página en construcción" style="width: 400px; margin-bottom: 20px;">
