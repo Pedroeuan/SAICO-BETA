@@ -22,6 +22,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 
 class equiposController extends Controller
@@ -92,7 +94,7 @@ class equiposController extends Controller
             }
             //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
 
-        /* Tabla General_EyC */
+            /* Tabla General_EyC */
             $general = new general_eyc;
             $EsperaDato ='ESPERA DE DATO';
             if($request->input('Nombre_E_P_BP')==null)
@@ -221,6 +223,29 @@ class equiposController extends Controller
         $generalConEquipos = new equipos;
         $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConEquipos->save();
+
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('Clasificacion')=='Elige el tipo de inspección que pertenece')
+        {
+            $general->Disponibilidad_Estado = $EsperaDato;
+        }else{
+            $generalConClasificacion->NombreC =  $request->input('Clasificacion');
+        } 
+        $generalConClasificacion->save();
+
+        // ISO
+        $generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        } 
+        $generalConISO->save();
+        
         /* Certificados */
         $generalConCertificados = new certificados;
         $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -342,7 +367,8 @@ class equiposController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-        if($No_EF == $No_EBD && $SerF==$SerBD)
+        if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
+        strcasecmp(trim($SerF), trim($SerBD)) == 0)
         {
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
