@@ -402,6 +402,14 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
