@@ -225,7 +225,7 @@ class equiposController extends Controller
         $generalConEquipos->save();
 
         // Clasificación
-        $generalConClasificacion = new clasificacion;
+        /*$generalConClasificacion = new clasificacion;
         $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         if($request->input('Clasificacion')=='Elige el tipo de inspección que pertenece')
         {
@@ -244,7 +244,7 @@ class equiposController extends Controller
         }else{
             $generalConISO->NombreISO =  $request->input('ISO');
         } 
-        $generalConISO->save();
+        $generalConISO->save();*/
         
         /* Certificados */
         $generalConCertificados = new certificados;
