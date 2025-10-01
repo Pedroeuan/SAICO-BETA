@@ -338,9 +338,9 @@ class AccesoriosController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-        if($No_EF == $No_EBD && $SerF==$SerBD)
+        if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
+        strcasecmp(trim($SerF), trim($SerBD)) == 0)
         {
-
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
@@ -462,6 +462,12 @@ class AccesoriosController extends Controller
         $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
         $generalConAccesorios->update([
             'Proveedor' => $request->input('Proveedor'),
+        ]);
+        
+        // Almacen
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen->update([
+            'Stock' => $request->input('Stock'),
         ]);
     }
     else
@@ -622,6 +628,12 @@ class AccesoriosController extends Controller
         $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
         $generalConAccesorios->update([
             'Proveedor' => $request->input('Proveedor'),
+        ]);
+
+        // Almacen
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen->update([
+            'Stock' => $request->input('Stock'),
         ]);
     }
     

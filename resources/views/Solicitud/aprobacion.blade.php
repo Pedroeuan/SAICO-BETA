@@ -141,10 +141,9 @@
                         @endif
                     @endif
 
-                    @if($general->Tipo == 'CONSUMIBLES')
                         <td scope="row">
                             <div class="input-group">
-                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" required>
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" @if($stockDisponible == 1)required @else required @endif>
                             </div>
                         </td>
                         <td scope="row">
@@ -157,23 +156,6 @@
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </button>
                         </td>
-                    @else
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" readonly>
-                            </div>
-                        </td>
-                        <td scope="row">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Unidad ?? 'ESPERA DE DATO' }}" required>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="{{ $detalle->idDetalles_Solicitud }}">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    @endif
                 </tr>
             @endforeach
         </tbody>

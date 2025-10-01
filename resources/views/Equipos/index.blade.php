@@ -20,6 +20,21 @@
     max-height: 200px; /* Ajusta la altura según sea necesario */
     overflow-y: auto;
     }
+
+    
+    .tablaheader {
+        border-collapse: collapse; 
+        border-spacing: 0px;        /* Espacio entre celdas */
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+        }
+                    
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaheader th {
+        /*width: 70%;*/
+        border: 1px solid black; 
+    }
 </style>
 @endsection
 
@@ -32,6 +47,29 @@
     <div class="box ">
         <div class="box-body">
         <h3 align="center">Inventario</h3>
+                <!--<table class="tablaheader">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">FORMATO</th>
+                            <th style="width: 10%;">Código:</th>
+                            <th style="width: 10%;">FOR-PCVE-01/04</th>
+                            <th rowspan="3"><img src="{{ asset('images/Logo_AICO_R.png') }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
+                            <th>Versión</th>
+                            <th>3</th>
+                        </tr>
+                        <tr>
+                            <th>Página</th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table> -->
+
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
