@@ -381,6 +381,35 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
+                                                <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO">
+                                                <option selected="selected">Elige el tipo de ISO que pertenece</option>
+                                                <option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>
+                                                <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
