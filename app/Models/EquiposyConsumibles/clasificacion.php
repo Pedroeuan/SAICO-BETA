@@ -2,6 +2,7 @@
 
 namespace App\Models\EquiposyConsumibles;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class clasificacion extends Model
