@@ -381,7 +381,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion">
@@ -401,7 +401,7 @@
                                                 <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
