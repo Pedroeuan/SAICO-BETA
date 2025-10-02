@@ -337,6 +337,7 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
@@ -431,6 +432,40 @@
                                         </div>
                                     </div>
 
+                                    <!--div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                <option selected="selected">Elige un Tipo</option>
+                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" @if($generalConClasificacion->NombreC == 'PND') selected="selected" @endif >PND</option>
+                                                <option value="IM" @if($generalConClasificacion->NombreC == 'IM') selected="selected" @endif >IM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO">
+                                                <option selected="selected">Elige el tipo de ISO que pertenece</option>
+                                                <option value="9001" @if($generalConISO->NombreISO == '9001') selected="selected" @endif >9001</option>
+                                                <option value="17025" @if($generalConISO->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -439,7 +474,6 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>

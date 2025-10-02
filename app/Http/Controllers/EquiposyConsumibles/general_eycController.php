@@ -21,6 +21,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 
 
@@ -70,9 +72,11 @@ class general_eycController extends Controller
         $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
         $generalConBlocks = block_y_probeta::where('idGeneral_EyC', $id)->first();
         $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
+        $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
+        $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
         // Retornar la vista con los datos obtenidos
-        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados'));
+        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO'));
     }
 
     public function BajaEyC($id)

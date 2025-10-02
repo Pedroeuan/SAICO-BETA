@@ -455,6 +455,18 @@ class equiposController extends Controller
                 $generalEyC->save();
             }
 
+            // Actualizar los datos de Clasificación
+            $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
+            $generalConClasificacion->update([
+                'NombreC' => $request->input('Clasificacion'),
+            ]);
+
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
+
             $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
             if($request->input('Fecha_calibracion')==null)
             {
