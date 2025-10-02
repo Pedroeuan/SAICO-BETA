@@ -449,8 +449,8 @@
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion">
                                                 <option selected="selected">Elige el tipo de inspección que pertenece</option>
-                                                <option value="PND" @if($generalConClasificacion->NombreC == 'PND') selected="selected" @endif >PND</option>
-                                                <option value="IM" @if($generalConClasificacion->NombreC == 'IM') selected="selected" @endif >IM</option>
+                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected @endif>PND</option>
+                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @else  @endif >IM</option>
                                             </select>
                                         </div>
                                     </div>
@@ -460,8 +460,8 @@
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
                                             <select class="form-control select2" style="width: 100%;" name="ISO">
                                                 <option selected="selected">Elige el tipo de ISO que pertenece</option>
-                                                <option value="9001" @if($generalConISO->NombreISO == '9001') selected="selected" @endif >9001</option>
-                                                <option value="17025" @if($generalConISO->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                                <option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>
+                                                <option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>
                                             </select>
                                         </div>
                                     </div>

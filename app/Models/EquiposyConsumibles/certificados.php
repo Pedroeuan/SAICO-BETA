@@ -38,5 +38,10 @@ class certificados extends Model
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha_calibracion'])->format('d-m-Y');
     }
+
+    public function getFormattedDate2Attribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Prox_fecha_calibracion'])->format('d-m-Y');
+    }
     
 }
