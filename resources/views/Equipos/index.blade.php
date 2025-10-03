@@ -35,6 +35,13 @@
         /*width: 70%;*/
         border: 1px solid black; 
     }
+
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
 </style>
 @endsection
 
@@ -47,6 +54,7 @@
     <div class="box ">
         <div class="box-body">
         <h3 align="center">Inventario</h3>
+        <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
                         <tr>
@@ -70,12 +78,12 @@
                     </tbody>
                 </table> -->
 
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                 <thead>
                     <tr>
                         <th>Categoria</th>
                         <th>Nombre</th>
-                        <th>Num. Económico / ID</th>
+                        <th>Numero / ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
@@ -186,6 +194,10 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+
+$('#tablaJs').on('draw.dt', function() {
+    $('.table-responsive').scrollLeft(0);
+});
 
 let table = new DataTable('#tablaJs', {
     // options
