@@ -222,6 +222,12 @@ class equiposController extends Controller
         // Equipos
         $generalConEquipos = new equipos;
         $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('Num_Reporte')==null)
+            {
+                $generalConEquipos->Num_Reporte = $EsperaDato;
+            }else{
+                $generalConEquipos->Num_Reporte = $request->input('Num_Reporte');
+            }
         $generalConEquipos->save();
 
         // Clasificación
@@ -243,6 +249,30 @@ class equiposController extends Controller
             $generalConISO->NombreISO = $EsperaDato;
         }else{
             $generalConISO->NombreISO =  $request->input('ISO');
+        } 
+        if($request->input('Alcance')==null)
+        {
+            $generalConISO->Alcance = $EsperaDato;
+        }else{
+            $generalConISO->Alcance =  $request->input('Alcance');
+        }
+        if($request->input('Frec_Cali_Mant_Prev')==null)
+        {
+            $generalConISO->Frec_Cali_Mant_Prev = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Cali_Mant_Prev =  $request->input('Frec_Cali_Mant_Prev');
+        } 
+        if($request->input('Frec_Man_Inter_Time')==null)
+        {
+            $generalConISO->Frec_Man_Inter_Time = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Man_Inter_Time =  $request->input('Frec_Man_Inter_Time');
+        } 
+        if($request->input('Frec_Verificacion')==null)
+        {
+            $generalConISO->Frec_Verificacion = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Verificacion =  $request->input('Frec_Verificacion');
         } 
         $generalConISO->save();
         
@@ -266,6 +296,30 @@ class equiposController extends Controller
             $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
         }else{
             $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+        }  
+        if($request->input('Fecha_verificacion')==null)
+        {
+            $generalConCertificados->Fecha_verificacion = '01/01/0001';
+        }else{
+            $generalConCertificados->Fecha_verificacion = $request->input('Fecha_verificacion');
+        }
+        if($request->input('Prox_fecha_verificacion')==null)
+        {
+            $generalConCertificados->Prox_fecha_verificacion = '01/01/0001';
+        }else{
+            $generalConCertificados->Prox_fecha_verificacion = $request->input('Prox_fecha_verificacion');
+        }
+        if($request->input('Fecha_mantenimiento')==null)
+        {
+            $generalConCertificados->Fecha_mantenimiento = '01/01/0001';
+        }else{
+            $generalConCertificados->Fecha_mantenimiento = $request->input('Fecha_mantenimiento');
+        }
+        if($request->input('Prox_fecha_mantenimiento')==null)
+        {
+            $generalConCertificados->Prox_fecha_mantenimiento = '01/01/0001';
+        }else{
+            $generalConCertificados->Prox_fecha_mantenimiento = $request->input('Prox_fecha_mantenimiento');
         }  
         if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
             $certificado = $request->file('Certificado_Actual');

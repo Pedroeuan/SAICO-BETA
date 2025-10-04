@@ -294,7 +294,16 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    
+
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Alcance</label>
+                                                <input type="text" class="form-control inputForm" name="Alcance" placeholder="Ejemplo: PT-MT/UT (PAUT)/UT (HR & HA)" value="{{old('Alcance')}}">
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     @if($rol != 'Laboratorio')
                                         <div class="col-sm-4">
                                             <div class="form-group">
@@ -323,7 +332,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected">Elige un Tipo</option>
                                                 @if($rol == 'Laboratorio')
@@ -351,6 +360,7 @@
                                         </div>
                                     </div>
                                     @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No de certificado</label>
@@ -370,17 +380,80 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @else Ultima calibración @endif</label>
                                             <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @else Próxima calibración @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
                                         </div>
                                     </div>
+
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
+                                                <input type="date" class="form-control inputForm" id="fecha" name="Fecha_verificacion" value="{{ old('Fecha_verificacion') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess"> Siguiente Verificación</label>
+                                                <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion" value="{{ old('Prox_fecha_verificacion') }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_mantenimiento" value="{{ old('Fecha_mantenimiento') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @else Fecha de Proximo Mantenimiento @endif</label>
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ old('Prox_fecha_mantenimiento') }}">
+                                        </div>
+                                    </div>
+
+                                    @if($rol != 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Numero de Reporte</label>
+                                                <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{old('Num_Reporte')}}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @else Mantenimiento Preventivo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Cali_Mant_Prev" @if($rol == 'Laboratorio' ) placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: SI/NO/N/A" @endif value="{{ old('Frec_Cali_Mant_Prev') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @else Intervalo de Tiempo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ old('Frec_Man_Inter_Time') }}">
+                                        </div>
+                                    </div>
+
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Frecuencia de Verificación</label>
+                                                <input type="text" class="form-control inputForm" name="Frec_Verificacion" placeholder="Ejemplo: ANUAL" value="{{old('Frec_Verificacion')}}">
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     @if($rol != 'Laboratorio')
                                         <div class="col-sm-4">
@@ -413,9 +486,9 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
                                             <select class="form-control select2" style="width: 100%;" name="ISO">
-                                                <option selected="selected">Elige el tipo de ISO que pertenece</option>
-                                                <option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>
-                                                <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
+                                                <option>Elige el tipo de ISO que pertenece</option>
+                                                @if ($rol != 'Laboratorio')<option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
+                                                <option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> 
                                             </select>
                                         </div>
                                     </div>
