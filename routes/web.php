@@ -355,7 +355,6 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
-    
     /*EQUIPOS INVENTARIO-REGISTRO*/
     Route::middleware('can:equipos-lab-access')->group(function () {
     /*DEVOLUCIONES*/

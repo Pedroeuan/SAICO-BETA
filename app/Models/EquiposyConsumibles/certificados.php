@@ -13,7 +13,11 @@ class certificados extends Model
         'No_certificado',
         'Certificado_Actual',
         'Fecha_calibracion',
-        'Prox_fecha_calibracion'
+        'Prox_fecha_calibracion',
+        'Fecha_verificacion',
+        'Prox_fecha_verificacion',
+        'Fecha_mantenimiento',
+        'Prox_fecha_mantenimiento',
     ];
     protected $table = 'certificados';
     protected $primaryKey = 'idGeneral_EyC';

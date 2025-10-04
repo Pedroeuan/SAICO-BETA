@@ -23,6 +23,7 @@ use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\EquiposyConsumibles\clasificacion;
 use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -45,7 +46,7 @@ class general_eycController extends Controller
     /*GENERAL*/
     public function index()
     {
-    // Obtener todos los equipos con sus certificados y almacen
+        // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
         $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
 
@@ -55,10 +56,15 @@ class general_eycController extends Controller
 
     public function createEquipos()
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
 
-        return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
+        return view('Equipos.create', compact('general','generalConCertificados','rol')); /*Muestra la vista de equipos*/
     }
 
     public function editEyC($id)
