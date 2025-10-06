@@ -69,6 +69,11 @@ class general_eycController extends Controller
 
     public function editEyC($id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         $generalEyC = general_eyc::findOrFail($id);
         /*devuelven los datos de la tabla a la que estan ligados */
         $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
@@ -81,8 +86,9 @@ class general_eycController extends Controller
         $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
         $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
+
         // Retornar la vista con los datos obtenidos
-        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO'));
+        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO','rol'));
     }
 
     public function BajaEyC($id)

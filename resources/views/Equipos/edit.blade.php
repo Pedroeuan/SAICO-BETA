@@ -164,7 +164,6 @@
                                         </div>
                                     </div>
                                     @endif
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
@@ -287,6 +286,16 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Alcance</label>
+                                                <input type="text" class="form-control inputForm" name="Alcance" placeholder="Ejemplo: PT-MT/UT (PAUT)/UT (HR & HA)" value="{{ $generalConISO->Alcance }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
@@ -331,39 +340,48 @@
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                                @if($rol == 'Laboratorio')
+                                                    <option value="Equipo Disponible" @if($generalEyC->Disponibilidad_Estado == 'Equipo Disponible') selected="selected" @endif>Equipo Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" @if($generalEyC->Disponibilidad_Estado == 'Equipo Fuera de Servicio') selected="selected" @endif>Equipo Fuera de Servicio</option>
+                                                    <option value="En Servicio" @if($generalEyC->Disponibilidad_Estado == 'En Servicio') selected="selected" @endif>En Servicio </option>
+                                                    <option value="Equipo en Resguardo" @if($generalEyC->Disponibilidad_Estado == 'Equipo en Resguardo') selected="selected" @endif>Equipo en Resguardo</option>
+                                                @else
+                                                    <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                    <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
-                                            <input type="file" class="form-control inputForm" name="Foto">
-                                        </div>
-                                    </div>
-                                    @if ($generalEyC->Foto != 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                            <label class="col-form-label" for="inputSuccess">Ver Foto</label> 
-                                            <div>                                             
-                                                <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
+                                                <input type="file" class="form-control inputForm" name="Foto">
                                             </div>
                                         </div>
-                                    </div>
-                                    @elseif($generalEyC->Foto == 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
-                                            <label class="col-form-label" for="inputSuccess">No se encontraron Fotos</label> 
-                                            <div>
-                                                <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>   
-                                            </div>                                                                                     
+                                        @if ($generalEyC->Foto != 'ESPERA DE DATO')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                <label class="col-form-label" for="inputSuccess">Ver Foto</label> 
+                                                <div>                                             
+                                                    <a href="{{ asset('storage/' . $generalEyC->Foto) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        @elseif($generalEyC->Foto == 'ESPERA DE DATO')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
+                                                <label class="col-form-label" for="inputSuccess">No se encontraron Fotos</label> 
+                                                <div>
+                                                    <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>   
+                                                </div>                                                                                     
+                                            </div>
+                                        </div>
+                                        @endif
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -398,7 +416,7 @@
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @else Ultima calibración @endif</label>
                                             @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
                                             <input type="date" class="form-control inputForm" name="Fecha_calibracion">
                                             @else
@@ -409,7 +427,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @else Próxima calibración @endif</label>
                                             @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion">
                                             @else
@@ -418,31 +436,83 @@
                                         </div>
                                     </div>
 
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
+                                                <input type="date" class="form-control inputForm" id="fecha" name="Fecha_verificacion" value="{{ $generalConCertificados->Fecha_verificacion  }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess"> Siguiente Verificación</label>
+                                                <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion" value="{{ $generalConCertificados->Prox_fecha_verificacion }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
+                                            <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
+                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_mantenimiento" value="{{ $generalConCertificados->Fecha_mantenimiento }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @else Fecha de Proximo Mantenimiento @endif</label>
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ $generalConCertificados->Prox_fecha_mantenimiento }}">
                                         </div>
                                     </div>
 
-                                    <!--div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
-                                            </select>
+                                    @if($rol != 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Numero de Reporte</label>
+                                                <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{ $generalConEquipos->Num_Reporte }}">
+                                            </div>
                                         </div>
-                                    </div>-->
+                                    @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @else Mantenimiento Preventivo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Cali_Mant_Prev" @if($rol == 'Laboratorio' ) placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: SI/NO/N/A" @endif value="{{ $generalConISO->Frec_Cali_Mant_Prev }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @else Intervalo de Tiempo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ $generalConISO->Frec_Man_Inter_Time }}">
+                                        </div>
+                                    </div>
+
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Frecuencia de Verificación</label>
+                                                <input type="text" class="form-control inputForm" name="Frec_Verificacion" placeholder="Ejemplo: ANUAL" value="{{ $generalConISO->Frec_Verificacion }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">SAT</label>
+                                                <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                                <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -459,9 +529,9 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
                                             <select class="form-control select2" style="width: 100%;" name="ISO">
-                                                <option selected="selected">Elige el tipo de ISO que pertenece</option>
-                                                <option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>
-                                                <option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                                @if($rol != 'Laboratorio' || $rol != 'Equipos')<option selected="selected">Elige el tipo de ISO que pertenece</option>@endif
+                                                @if ($rol == 'Equipos')<option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>@endif
                                             </select>
                                         </div>
                                     </div>

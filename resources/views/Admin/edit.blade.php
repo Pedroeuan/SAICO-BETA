@@ -68,7 +68,6 @@
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
-
                         <div class="form-group">
                             <label for="inputSubject">Rol</label>
                             <select class="form-control select2 @error('RolUsuario') is-invalid @enderror" style="width: 100%;" name="RolUsuario">
@@ -83,6 +82,7 @@
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
                                 @else
+                                <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
                                 <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
                                 <option value="Cliente" @if($Usuario->rol == 'Cliente') selected="selected" @endif> Cliente</option>
                                 <option value="Ventas" @if($Usuario->rol == 'Ventas') selected="selected" @endif> Ventas</option>
