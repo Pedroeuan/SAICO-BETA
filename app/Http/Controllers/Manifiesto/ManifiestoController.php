@@ -67,7 +67,13 @@ class ManifiestoController extends Controller
     {
         $Solicitud = Solicitudes::findOrFail($id);
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud

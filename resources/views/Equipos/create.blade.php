@@ -485,7 +485,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
                                             <select class="form-control select2" style="width: 100%;" name="ISO">
-                                                @if($rol != 'Laboratorio' || $rol != 'Equipos')<option selected="selected">Elige el tipo de ISO que pertenece</option>@endif
+                                                <option>Elige el tipo de ISO que pertenece</option>
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                             </select>
