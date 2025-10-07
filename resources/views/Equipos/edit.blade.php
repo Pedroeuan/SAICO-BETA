@@ -583,7 +583,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @else Lote @endif</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalConAlmacen->Lote }}" name="Lote" placeholder="Enter ...">
                                         </div>
                                     </div>

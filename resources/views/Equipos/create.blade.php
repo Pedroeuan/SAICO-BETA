@@ -556,7 +556,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @else Lote @endif</label>
                                             <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
                                         </div>
                                     </div>

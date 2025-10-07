@@ -11,7 +11,9 @@ use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\historial_certificado;
-
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 class CertificadosController extends Controller
 {
@@ -20,7 +22,26 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+    // Obtener el usuario autenticado
+        $user = Auth::user();
+        $rol = $user->rol;
+
+        if ($rol === 'Laboratorio') {
+            // Solo equipos con ISO 17025
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado', 'ISO'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '17025');
+                })
+                ->get();
+        } else {
+            // Solo equipos con ISO 9001
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado', 'ISO'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '9001');
+                })
+                ->get();
+        }
+        //$generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
 
         return view("certificados.index", compact('generalConCertificadosConHistorial'));
         
