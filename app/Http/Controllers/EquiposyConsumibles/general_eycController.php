@@ -46,11 +46,33 @@ class general_eycController extends Controller
     /*GENERAL*/
     public function index()
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
-        $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+         // Filtrar según el rol
+        if ($rol === 'Laboratorio') {
+            // Solo registros con ISO 17025
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '17025');
+                })
+                ->get();
+        } else {
+            //Todos los registros
+            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+            // Solo registros con ISO 9001
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '9001');
+                })
+                ->get();
+        }
 
-        return view('Equipos.index', compact('general','generalConCertificadosConAlmacen'));
+        return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
 

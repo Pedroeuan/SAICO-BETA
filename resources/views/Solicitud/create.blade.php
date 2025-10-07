@@ -93,16 +93,23 @@
                         <td scope="row">{{$general_eyc->Modelo}}</td>
                         <td scope="row">{{$general_eyc->Serie}}</td>
                         <td scope="row">{{$general_eyc->almacen->Stock}}</td>
-                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
-                        @endif
-
+                                @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='En servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En servicio <i class="far fa-clock" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
+                                @endif
                         <td scope="row">
                         @if($general_eyc->certificados)
                             @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
