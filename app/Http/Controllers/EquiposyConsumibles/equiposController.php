@@ -356,6 +356,7 @@ class equiposController extends Controller
         {
             $generalConAlmacen->Stock = 1;
         }
+        $generalConAlmacen->Unidad = 'PZ';
         $generalConAlmacen->save();
 
         /*Historial Almacen */

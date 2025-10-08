@@ -84,8 +84,14 @@ class general_eycController extends Controller
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
+        //dd($generalConCertificados);
         return view('Equipos.create', compact('general','generalConCertificados','rol')); /*Muestra la vista de equipos*/
     }
 

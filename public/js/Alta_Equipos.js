@@ -46,16 +46,28 @@ function actualizarTabla() {
                 var disponibilidad = '';
                 switch(item.Disponibilidad_Estado) {
                     case 'DISPONIBLE':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo Disponible':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></button>';
                         break;
                     case 'NO DISPONIBLE':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo Fuera de Servicio':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
                         break;
                     case 'FUERA DE SERVICIO/BAJA':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo en Resguardo':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        break;
+                    case 'En servicio':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></button>';
                         break;
                     case 'ESPERA DE DATO':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></button>';
                         break;
                 }
 

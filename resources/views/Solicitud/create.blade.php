@@ -318,7 +318,11 @@ function consultarCantidadAlmacen(id, callback) {
         url: '/Obtener/CantidadAlmacen/' + id,
         method: 'GET',
         success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            //callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            //callback(null, data.Unidad); // Asume que la respuesta contiene un campo "Unidad"
+            const cantidad = data.Cantidad || 0;
+            const unidad = data.Unidad || ''; 
+            callback(null, cantidad, unidad); // 👈 Enviamos los 2 valores en una sola llamada
         },
         error: function(error) {
             callback(error);
@@ -372,7 +376,7 @@ $(document).ready(function() {
             return;
         }
 
-        consultarCantidadAlmacen(rowId, function(error, Cantidad) {
+        consultarCantidadAlmacen(rowId, function(error, Cantidad, unidad) {
             if (error || Cantidad <= 0) {
                 Swal.fire({
                     icon: 'error',
@@ -402,7 +406,7 @@ $(document).ready(function() {
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" value="${unidad}" required></td>
                     <td>
                         <input type="hidden" name="general_eyc_id[]" value="${rowId}">
                         <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>
