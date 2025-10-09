@@ -64,7 +64,11 @@ class AccesoriosController extends Controller
         ->where('Tipo', 'ACCESORIOS')
         ->exists();
 
-        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+        //Verifica el duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if($serie != '---'){
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
         //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
         //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
