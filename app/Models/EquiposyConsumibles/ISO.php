@@ -15,6 +15,7 @@ class ISO extends Model
         'Frec_Cali_Mant_Prev',
         'Frec_Man_Inter_Time',
         'Frec_Verificacion',
+        'Usado',
     ];
     protected $table = 'ISO';
     protected $primaryKey = 'idGeneral_EyC';

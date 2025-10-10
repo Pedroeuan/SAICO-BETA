@@ -64,7 +64,11 @@ class AccesoriosController extends Controller
         ->where('Tipo', 'ACCESORIOS')
         ->exists();
 
-        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
         //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
         //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -268,6 +272,12 @@ class AccesoriosController extends Controller
         $generalConAlmacen->Stock = 1;
     }else{
         $generalConAlmacen->Stock = $request->input('Stock');
+    }
+    if($request->input('Unidad')==null)
+    {
+        $generalConAlmacen->Unidad = $EsperaDato;
+    }else{
+        $generalConAlmacen->Unidad = $request->input('Unidad');
     }
     $generalConAlmacen->save();
 

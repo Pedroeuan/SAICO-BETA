@@ -63,7 +63,7 @@ function actualizarTabla() {
                     case 'Equipo en Resguardo':
                         disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></button>';
                         break;
-                    case 'En servicio':
+                    case 'En Servicio':
                         disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></button>';
                         break;
                     case 'ESPERA DE DATO':
@@ -491,6 +491,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -503,6 +505,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -600,6 +614,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -612,6 +628,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -710,6 +738,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -722,6 +752,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -819,6 +861,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var stock = formData.get('Stock');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -830,6 +874,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -896,6 +952,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -916,6 +974,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Equipos',
@@ -1007,6 +1076,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var modelo = formData.get('Modelo');
         var stock = formData.get('Stock');
 
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
         if (!marca) camposVacios.push('Marca');
@@ -1017,6 +1089,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });

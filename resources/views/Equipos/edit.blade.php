@@ -209,6 +209,14 @@
                                             <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Ejemplo: 1.2.3..20..">
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
@@ -538,9 +546,17 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
                                         </div>
+
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -548,6 +564,7 @@
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Comentario" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
+
                                     <div class="container">
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-info bg-success">Guardar</button>
@@ -714,19 +731,28 @@
                                             @endif
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Stock</label>
                                             <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Enter ...">
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalConConsumibles->Proveedor }}" name="Proveedor" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
@@ -747,12 +773,14 @@
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="CONSUMIBLES">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Ejemplo: Equipo con bateria INCLUYE: Cables con puntas de contacto.">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
+
                                     <div class="container">
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-info bg-success">Guardar</button>
@@ -911,16 +939,25 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="ACCESORIOS">
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ...">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
+
                                     <div class="container">
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-info bg-success">Guardar</button>
@@ -1130,6 +1167,13 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalEyC->BMPRO }}" name="BMPRO" placeholder="Enter ...">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
                                         </div>
                                     </div>
 
@@ -1363,16 +1407,25 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
                                     </div>
+                                    
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
                                             <textarea class="form-control is-waning" name="Comentario" id="inputSuccess" placeholder="Enter ...">{{ $generalEyC->Comentario }}</textarea>
                                         </div>
                                     </div>
+
                                     <div class="container">
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-info bg-success">Guardar</button>

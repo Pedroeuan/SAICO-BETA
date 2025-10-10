@@ -71,7 +71,7 @@
                                     @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En servicio <i class="far fa-clock" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif

@@ -251,6 +251,12 @@ class consumiblesController extends Controller
         }else{
             $generalConAlmacen->Stock = $request->input('Stock');
         }
+        if($request->input('Unidad')==null)
+        {
+            $generalConAlmacen->Unidad = $EsperaDato;
+        }else{
+            $generalConAlmacen->Unidad = $request->input('Unidad');
+        }
         $generalConAlmacen->save();
 
         /*Historial Almacen */
