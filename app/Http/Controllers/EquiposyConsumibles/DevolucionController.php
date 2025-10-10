@@ -171,7 +171,7 @@ class DevolucionController extends Controller
                 } else {
                     // Para los demás, volver a "DISPONIBLE"
                     $generalEyC->update([
-                        'Disponibilidad_Estado' => $disponibilidadEstado,
+                        'Disponibilidad_Estado' => 'DISPONIBLE',
                     ]);
                 }
             }
