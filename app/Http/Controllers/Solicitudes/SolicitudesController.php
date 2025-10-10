@@ -482,7 +482,6 @@ class SolicitudesController extends Controller
             $detalle = detalles_solicitud::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $idSolicitud = $detalle->idSolicitud; // idSolicitud
             
-            
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
@@ -651,6 +650,7 @@ class SolicitudesController extends Controller
                         'status' => 'success',
                         'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
                         'stock' => $almacen->Stock,
+                        'Unidad' => $almacen->Unidad,
                     ]);
                 } else {
                     return response()->json([

@@ -43,7 +43,7 @@ class CertificadosController extends Controller
         }
         //$generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
 
-        return view("certificados.index", compact('generalConCertificadosConHistorial'));
+        return view("Certificados.index", compact('generalConCertificadosConHistorial'));
         
     }
 

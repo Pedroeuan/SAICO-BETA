@@ -148,7 +148,11 @@ function actualizarTabla() {
                 url: '/Obtener/CantidadAlmacen/' + id,
                 method: 'GET',
                 success: function(data) {
-                    callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+                    //callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+                    //callback(null, data.Unidad); // Asume que la respuesta contiene un campo "Unidad"
+                    const cantidad = data.Cantidad || 0;
+                    const unidad = data.Unidad || ''; 
+                    callback(null, cantidad, unidad); // 👈 Enviamos los 2 valores en una sola llamada
                 },
                 error: function(error) {
                     callback(error);

@@ -137,18 +137,19 @@ class ManifiestoController extends Controller
         }else{ 
                 if ($request->filled('idSolicitud'))
                 {
-                        //Log::info('Si no existe un manifiesto'); 
-                        $Manifiesto = new manifiesto;
-                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
-                        $Manifiesto->Cliente = $request->input('Cliente');
-                        $Manifiesto->Folio = $request->input('Folio');
-                        $Manifiesto->Destino = $request->input('Destino');
-                        $Manifiesto->Trabajo = $request->input('Trabajo');
-                        $Manifiesto->Puesto = $request->input('Puesto');
-                        $Manifiesto->Responsable = $request->input('Responsable');
-                        $Manifiesto->Observaciones = $request->input('Observaciones');
-                        $Manifiesto->ScanPDF = 'ESPERA DE DATO';
-                        $Manifiesto->save();
+                    //Log::info('Si no existe un manifiesto'); 
+                    $Manifiesto = new manifiesto;
+                    $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                    $Manifiesto->Cliente = $request->input('Cliente');
+                    $Manifiesto->Folio = $request->input('Folio');
+                    $Manifiesto->Destino = $request->input('Destino');
+                    $Manifiesto->Trabajo = $request->input('Trabajo');
+                    $Manifiesto->Puesto = $request->input('Puesto');
+                    $Manifiesto->Responsable = $request->input('Responsable');
+                    $Manifiesto->Entrega = $request->input('Entrega_Nombre');
+                    $Manifiesto->Observaciones = $request->input('Observaciones');
+                    $Manifiesto->ScanPDF = 'ESPERA DE DATO';
+                    $Manifiesto->save();
                 }
             }
 
@@ -528,7 +529,7 @@ class ManifiestoController extends Controller
                         // Actualizar el estado en general_eyc a "NO DISPONIBLE"
                         //$generalEyC = general_eyc::find($detalle->idGeneral_EyC);
                         // Obtener el equipo con su relación ISO
-                        $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
+                        $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
                         $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first(); 
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
