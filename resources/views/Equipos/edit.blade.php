@@ -448,7 +448,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
-                                                <input type="date" class="form-control inputForm" id="fecha" name="Fecha_verificacion" value="{{ $generalConCertificados->Fecha_verificacion  }}">
+                                                <input type="date" class="form-control inputForm" id="fechav" name="Fecha_verificacion" value="{{ $generalConCertificados->Fecha_verificacion  }}">
                                             </div>
                                         </div>
 
@@ -463,7 +463,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_mantenimiento" value="{{ $generalConCertificados->Fecha_mantenimiento }}">
+                                            <input type="date" class="form-control inputForm" id="fecham" name="Fecha_mantenimiento" value="{{ $generalConCertificados->Fecha_mantenimiento }}">
                                         </div>
                                     </div>
 

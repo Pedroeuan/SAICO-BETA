@@ -404,11 +404,9 @@ class ManifiestoController extends Controller
                             $Almacen ->update([
                                 'Stock' => $TotalActual,
                             ]);
-
                             $generalEyC ->update([
                                 'Disponibilidad_Estado' => $NO_DISPONIBLE,
                             ]);
-
                         }
                         else
                         {

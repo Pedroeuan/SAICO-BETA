@@ -26,7 +26,6 @@ use App\Models\EquiposyConsumibles\iso;
 use Illuminate\Support\Facades\Auth;
 
 
-
 class general_eycController extends Controller
 {
     /**

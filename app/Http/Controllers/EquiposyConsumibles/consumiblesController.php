@@ -22,6 +22,8 @@ use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 class consumiblesController extends Controller
 {
@@ -45,6 +47,12 @@ class consumiblesController extends Controller
         /*CONSUMIBLES*/
         public function storeConsumibles(Request $request)
         {
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+            // Obtener el nombre del usuario
+            $Nombre = $user->name;
+            $rol = Auth::user()->rol;
+
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
@@ -188,6 +196,58 @@ class consumiblesController extends Controller
         } 
         $generalConConsumible->save();
 
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('Clasificacion')=='Elige el tipo de inspección que pertenece')
+        {
+            $general->Disponibilidad_Estado = $EsperaDato;
+        }else{
+            $generalConClasificacion->NombreC =  $request->input('Clasificacion');
+        } 
+        $generalConClasificacion->save();
+
+        // ISO
+        $generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        } 
+        if($request->input('Alcance')==null)
+        {
+            $generalConISO->Alcance = $EsperaDato;
+        }else{
+            $generalConISO->Alcance =  $request->input('Alcance');
+        }
+        if($request->input('Frec_Cali_Mant_Prev')==null)
+        {
+            $generalConISO->Frec_Cali_Mant_Prev = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Cali_Mant_Prev =  $request->input('Frec_Cali_Mant_Prev');
+        } 
+        if($request->input('Frec_Man_Inter_Time')==null)
+        {
+            $generalConISO->Frec_Man_Inter_Time = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Man_Inter_Time =  $request->input('Frec_Man_Inter_Time');
+        } 
+        if($request->input('Frec_Verificacion')==null)
+        {
+            $generalConISO->Frec_Verificacion = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Verificacion =  $request->input('Frec_Verificacion');
+        } 
+        if($request->input('Usado')==null)
+        {
+            $generalConISO->Usado = $EsperaDato;
+        }else{
+            $generalConISO->Usado =  $request->input('Usado');
+        } 
+        $generalConISO->save();
+
         /* Certificados */
         $generalConCertificados = new certificados;
         $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -277,7 +337,15 @@ class consumiblesController extends Controller
         $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
         $historialAlmacen->Tipo = $Tipo;
         $historialAlmacen->Cantidad = $request->input('Stock');
-        $historialAlmacen->Fecha = $Fecha;
+        if($rol == 'Laboratotio')
+        {
+            $historialAlmacen->Fecha = $request->input('Fecha_Alta');
+        }
+        else
+        {
+            $historialAlmacen->Fecha = $Fecha;
+        }
+
         $historialAlmacen->Tierra_Costafuera = $Tierra_Costafuera;
         $historialAlmacen->Folio = $Folio;
         $historialAlmacen->save();
