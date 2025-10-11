@@ -43,14 +43,10 @@ class CrearNotificacionesCertificados extends Command
         $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
-        $certificados = Certificados::with('generaleyc') // Cargar la relación con general_eyc
+        $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
             ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
-
-        // Obtener todos los usuarios con los roles especificados
-        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos','Laboratorio'])->get();
-        //$usuarios = User::whereIn('rol', ['Equipos'])->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
@@ -130,8 +126,17 @@ class CrearNotificacionesCertificados extends Command
                     }
                     
                 }
+                // Filtrar usuarios según el ISO
+                $usuarios = User::where(function($query) use ($iso) {
+                    $query->whereIn('rol', ['Super Administrador', 'Administrador']);
+                    if ($iso == '17025') {
+                        $query->orWhere('rol', 'Laboratorio');
+                    }
+                    if ($iso == '9001') {
+                        $query->orWhere('rol', 'Equipos');
+                    }
+                })->get();
 
-                //if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
                 // Crear notificaciones para todos los usuarios con los roles especificados
                 foreach ($usuarios as $usuario){
                 // Verificar si la notificación ya existe
