@@ -62,6 +62,23 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
         return view('auth.login');
     });
 
+    //solicitud_AD
+
+// Si quieres proteger con autenticación, agrega el middleware 'auth'
+Route::middleware(['auth'])->group(function () {
+
+
+    Route::get('/solicitudes', [SolicitudADController::class, 'index'])->name('solicitudes.index');
+    Route::get('/solicitudes/create', [SolicitudADController::class, 'create'])->name('solicitudes.create');
+    Route::post('/solicitudes', [SolicitudADController::class, 'store'])->name('solicitudes.store');
+    Route::get('/solicitudes/{id}/edit', [SolicitudADController::class, 'edit'])->name('solicitudes.edit');
+    Route::put('/solicitudes/{id}', [SolicitudADController::class, 'update'])->name('solicitudes.update');
+    Route::delete('/solicitudes/{id}', [SolicitudADController::class, 'destroy'])->name('solicitudes.destroy');
+    Route::get('/solicitudes/{id}', [SolicitudADController::class, 'show'])->name('solicitudes.show');
+});
+
+
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
