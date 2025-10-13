@@ -246,6 +246,12 @@ class consumiblesController extends Controller
         }else{
             $generalConISO->Usado =  $request->input('Usado');
         } 
+        if($request->input('Nuevo')==null)
+        {
+            $generalConISO->Nuevo = $EsperaDato;
+        }else{
+            $generalConISO->Nuevo =  $request->input('Nuevo');
+        } 
         $generalConISO->save();
 
         /* Certificados */

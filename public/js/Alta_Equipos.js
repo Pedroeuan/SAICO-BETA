@@ -497,6 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var serie = formData.get('Serie');
         // Validación de disponibilidad
         var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -529,6 +530,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+        
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Herramientas',
@@ -620,6 +633,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var serie = formData.get('Serie');
         // Validación de disponibilidad
         var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -644,6 +658,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -744,6 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var serie = formData.get('Serie');
         // Validación de disponibilidad
         var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -756,6 +783,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -867,6 +906,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var stock = formData.get('Stock');
         // Validación de disponibilidad
         var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -890,6 +930,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -958,6 +1010,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var serie = formData.get('Serie');
         // Validación de disponibilidad
         var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -982,6 +1035,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });

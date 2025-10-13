@@ -227,6 +227,20 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="ISO" value="N/A">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
@@ -480,7 +494,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
                                                 <option selected="selected" value="ESPERA DE DATO">Elige el tipo de inspección que pertenece</option>
                                                 <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
@@ -491,8 +505,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
-                                            <select class="form-control select2" style="width: 100%;" name="ISO">
-                                                <option>Elige el tipo de ISO que pertenece</option>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required>
+                                                <option>Elige el tipo de ISO</option>
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                             </select>
@@ -502,7 +516,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif required>
                                         </div>
                                     </div>
 
@@ -620,9 +634,10 @@
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected" value="">Elige un Tipo</option>
                                                 @if($rol == 'Laboratorio')
-                                                    <option value="Nuevo" {{ old('Disponibilidad_Estado') == 'Nuevo' ? 'selected' : '' }}>Nuevo</option> 
-                                                    <option value="Usado" {{ old('Disponibilidad_Estado') == 'Usado' ? 'selected' : '' }}>Usado</option>
-                                                    <option value="Terminado" {{ old('Disponibilidad_Estado') == 'Terminado' ? 'selected' : '' }}>Terminado</option>
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
+                                                    <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
                                                 @else
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
@@ -696,6 +711,18 @@
                                             </div>
                                         </div>
                                     @endif
+                                    
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nuevo</label>
+                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror" name="Nuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado') }}">
+                                                @error('Nuevo')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -704,6 +731,28 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
+                                                <option selected="selected" value="ESPERA DE DATO">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
+                                                <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required>
+                                                <option>Elige el tipo de ISO que pertenece</option>
+                                                @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
                                     @if($rol == 'Laboratorio')
                                         <div class="col-sm-4">
                                             <div class="form-group">
