@@ -32,7 +32,11 @@ class AlmacenController extends Controller
 
         
         if ($Almacen) {
-            return response()->json(['Cantidad' => $Almacen->Stock]);
+            return response()->json([
+                'Cantidad' => $Almacen->Stock,
+                'Unidad' => $Almacen->Unidad
+            ]);
+            
         } else {
             return response()->json(['error' => 'Elemento no encontrado'], 404);
         }

@@ -67,7 +67,13 @@ class ManifiestoController extends Controller
     {
         $Solicitud = Solicitudes::findOrFail($id);
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
@@ -105,6 +111,12 @@ class ManifiestoController extends Controller
 
         $general = general_eyc::get();
         $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        /*$generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();*/
         $Solicitud = Solicitudes::find($id);
         if (!$Solicitud) {
             return redirect()->back()->with('error', 'Solicitud no encontrada.');
@@ -125,18 +137,19 @@ class ManifiestoController extends Controller
         }else{ 
                 if ($request->filled('idSolicitud'))
                 {
-                        //Log::info('Si no existe un manifiesto'); 
-                        $Manifiesto = new manifiesto;
-                        $Manifiesto->idSolicitud = $request->input('idSolicitud');
-                        $Manifiesto->Cliente = $request->input('Cliente');
-                        $Manifiesto->Folio = $request->input('Folio');
-                        $Manifiesto->Destino = $request->input('Destino');
-                        $Manifiesto->Trabajo = $request->input('Trabajo');
-                        $Manifiesto->Puesto = $request->input('Puesto');
-                        $Manifiesto->Responsable = $request->input('Responsable');
-                        $Manifiesto->Observaciones = $request->input('Observaciones');
-                        $Manifiesto->ScanPDF = 'ESPERA DE DATO';
-                        $Manifiesto->save();
+                    //Log::info('Si no existe un manifiesto'); 
+                    $Manifiesto = new manifiesto;
+                    $Manifiesto->idSolicitud = $request->input('idSolicitud');
+                    $Manifiesto->Cliente = $request->input('Cliente');
+                    $Manifiesto->Folio = $request->input('Folio');
+                    $Manifiesto->Destino = $request->input('Destino');
+                    $Manifiesto->Trabajo = $request->input('Trabajo');
+                    $Manifiesto->Puesto = $request->input('Puesto');
+                    $Manifiesto->Responsable = $request->input('Responsable');
+                    $Manifiesto->Entrega = $request->input('Entrega_Nombre');
+                    $Manifiesto->Observaciones = $request->input('Observaciones');
+                    $Manifiesto->ScanPDF = 'ESPERA DE DATO';
+                    $Manifiesto->save();
                 }
             }
 
@@ -188,7 +201,13 @@ class ManifiestoController extends Controller
         $Nombre = $user->name;
 
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+            ->where(function ($query) {
+                $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                    ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                    })
+            ->get();
         $Solicitud = Solicitudes::find($id);
         if (!$Solicitud) {
             return redirect()->back()->with('error', 'Solicitud no encontrada.');
@@ -321,7 +340,7 @@ class ManifiestoController extends Controller
                 'Fecha' => $Fecha_Form,
             ]);
         }
-        
+        //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
@@ -350,23 +369,44 @@ class ManifiestoController extends Controller
                     $historialAlmacen->save();
         
                     // Actualizar el estado en general_eyc a "NO DISPONIBLE"
-                    $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                    //$generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                    $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
                     $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
                     $AlmacenStock = $Almacen->Stock;
                     $AlmacenDescuento = $detalle->Cantidad;
                     $Verificar = $AlmacenStock-$AlmacenDescuento;
-                    
-                        if($Verificar == 0)
+
+                        // Actualizar stock
+                        $Almacen->update([
+                            'Stock' => $Verificar
+                        ]);
+
+                    // Verificar si el equipo pertenece a la ISO 17025
+                    if ($generalEyC->ISO->NombreISO == '17025') {
+                        if ($Verificar == 0) {
+                        // Cambiar disponibilidad a 'EN SERVICIO'
+                        $generalEyC->update([
+                            'Disponibilidad_Estado' => 'En Servicio',
+                        ]);
+                        }
+                    } 
+                    else {
+                        // Si no es 17025 y el stock llega a 0, marcar como no disponible
+                        if ($Verificar == 0) {
+                            $generalEyC->update([
+                                'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                            ]);
+                        }
+                    }
+                        /*if($Verificar == 0)
                         {
                             $TotalActual = $AlmacenStock-$AlmacenDescuento;
                             $Almacen ->update([
                                 'Stock' => $TotalActual,
                             ]);
-
                             $generalEyC ->update([
                                 'Disponibilidad_Estado' => $NO_DISPONIBLE,
                             ]);
-
                         }
                         else
                         {
@@ -374,7 +414,7 @@ class ManifiestoController extends Controller
                             $Almacen ->update([
                                 'Stock' => $TotalActual,
                             ]);
-                        }
+                        }*/
                 }
             }
         }
@@ -485,13 +525,38 @@ class ManifiestoController extends Controller
                         $historialAlmacen->save();
             
                         // Actualizar el estado en general_eyc a "NO DISPONIBLE"
-                        $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                        //$generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                        // Obtener el equipo con su relación ISO
+                        $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
                         $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first(); 
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
                         $Verificar = $AlmacenStock-$AlmacenDescuento;
-                        
-                        if($Verificar == 0)
+
+                        // Actualizar stock
+                        $Almacen->update([
+                            'Stock' => $Verificar
+                        ]);
+
+                    // Verificar si el equipo pertenece a la ISO 17025
+                    if ($generalEyC->ISO->NombreISO == '17025') {
+                        if ($Verificar == 0) {
+                        // Cambiar disponibilidad a 'EN SERVICIO'
+                        $generalEyC->update([
+                            'Disponibilidad_Estado' => 'En Servicio',
+                        ]);
+                        }
+                    } 
+                    else {
+                        // Si no es 17025 y el stock llega a 0, marcar como no disponible
+                        if ($Verificar == 0) {
+                            $generalEyC->update([
+                                'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                            ]);
+                        }
+                    }
+
+                        /*if($Verificar == 0)
                         {
                             $TotalActual = $AlmacenStock-$AlmacenDescuento;
                             $Almacen ->update([
@@ -508,7 +573,7 @@ class ManifiestoController extends Controller
                             $Almacen ->update([
                                 'Stock' => $TotalActual,
                             ]);
-                        }
+                        }*/
                     }
                     else /*Si ya existe un $historialAlmacenExistente */
                         {
@@ -678,13 +743,37 @@ class ManifiestoController extends Controller
                         $historialAlmacen->save();
             
                         // Actualizar el estado en general_eyc a "NO DISPONIBLE"
-                        $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                        //$generalEyC = general_eyc::find($detalle->idGeneral_EyC);
+                        $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
                         $Almacen = almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)->first();
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
                         $Verificar = $AlmacenStock-$AlmacenDescuento;
                         
-                        if($Verificar == 0)
+                        // Actualizar stock
+                        $Almacen->update([
+                            'Stock' => $Verificar
+                        ]);
+
+                    // Verificar si el equipo pertenece a la ISO 17025
+                    if ($generalEyC->ISO->NombreISO == '17025') {
+                        if ($Verificar == 0) {
+                        // Cambiar disponibilidad a 'EN SERVICIO'
+                        $generalEyC->update([
+                            'Disponibilidad_Estado' => 'En Servicio',
+                        ]);
+                        }
+                    } 
+                    else {
+                        // Si no es 17025 y el stock llega a 0, marcar como no disponible
+                        if ($Verificar == 0) {
+                            $generalEyC->update([
+                                'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                            ]);
+                        }
+                    }
+
+                        /*if($Verificar == 0)
                         {
                             $TotalActual = $AlmacenStock-$AlmacenDescuento;
                             $Almacen ->update([
@@ -701,7 +790,7 @@ class ManifiestoController extends Controller
                             $Almacen ->update([
                                 'Stock' => $TotalActual,
                             ]);
-                        }
+                        }*/
                     }
                     else /*Si ya existe un $historialAlmacenExistente  */
                         {

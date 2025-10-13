@@ -287,7 +287,7 @@
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar esta Solicitud?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",

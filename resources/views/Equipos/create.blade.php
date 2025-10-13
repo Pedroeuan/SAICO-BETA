@@ -48,6 +48,10 @@
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
+                        @if($rol == 'Laboratorio')
+                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                        @else
                         <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
@@ -56,6 +60,7 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>
+                        @endif
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>
                 </div><!-- /.card-header p-2-->
@@ -196,6 +201,13 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">SAT</label>
                                             <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
                                         </div>
@@ -215,6 +227,20 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="ISO" value="N/A">
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
@@ -252,7 +278,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Número Económico</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio') ID @else Número Económico @endif</label>
                                             <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
                                             @error('No_economico')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -290,19 +316,30 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Alcance</label>
+                                                <input type="text" class="form-control inputForm" name="Alcance" placeholder="Ejemplo: PT-MT/UT (PAUT)/UT (HR & HA)" value="{{old('Alcance')}}">
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Ubicación</label>
+                                                <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
+                                                <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -316,16 +353,24 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                <option selected="selected" value="">Elige un Tipo</option>
+                                                @if($rol == 'Laboratorio')
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
+                                                    <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
+                                                @else
+                                                    <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                                                    <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
 
+                                    @if($rol != 'Laboratorio')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
@@ -335,6 +380,7 @@
                                             @endif
                                         </div>
                                     </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -355,37 +401,101 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ultima calibración</label>
-                                            <input type="date" class="form-control inputForm" id="fecha" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @else Ultima calibración @endif</label>
+                                            <input type="date" class="form-control inputForm" id="fechac" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Próxima calibración</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @else Próxima calibración @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
                                         </div>
                                     </div>
 
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
+                                                <input type="date" class="form-control inputForm" id="fechav" name="Fecha_verificacion" value="{{ old('Fecha_verificacion') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess"> Siguiente Verificación</label>
+                                                <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion" value="{{ old('Prox_fecha_verificacion') }}">
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
+                                            <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
+                                            <input type="date" class="form-control inputForm" id="fecham" name="Fecha_mantenimiento" value="{{ old('Fecha_mantenimiento') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @else Fecha de Proximo Mantenimiento @endif</label>
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ old('Prox_fecha_mantenimiento') }}">
+                                        </div>
+                                    </div>
+
+                                    @if($rol != 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Numero de Reporte</label>
+                                                <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{old('Num_Reporte')}}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @else Mantenimiento Preventivo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Cali_Mant_Prev" @if($rol == 'Laboratorio' ) placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: SI/NO/N/A" @endif value="{{ old('Frec_Cali_Mant_Prev') }}">
                                         </div>
                                     </div>
 
                                     <!--<div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @else Intervalo de Tiempo @endif</label>
+                                            <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ old('Frec_Man_Inter_Time') }}">
+                                        </div>
+                                    </div>
+
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Frecuencia de Verificación</label>
+                                                <input type="text" class="form-control inputForm" name="Frec_Verificacion" placeholder="Ejemplo: ANUAL" value="{{old('Frec_Verificacion')}}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">SAT</label>
+                                                <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                                <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
-                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
+                                                <option selected="selected" value="ESPERA DE DATO">Elige el tipo de inspección que pertenece</option>
                                                 <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
                                             </select>
@@ -395,13 +505,20 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
-                                            <select class="form-control select2" style="width: 100%;" name="ISO">
-                                                <option selected="selected">Elige el tipo de ISO que pertenece</option>
-                                                <option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>
-                                                <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required>
+                                                <option>Elige el tipo de ISO</option>
+                                                @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                             </select>
                                         </div>
                                     </div>-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif required>
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -438,7 +555,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Cable de Corriente" value="{{old('Nombre_E_P_BP')}}">
+                                            @if($rol != 'Laboratorio')
+                                                <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: Yugo" value="{{old('Nombre_E_P_BP')}}">
+                                                @else
+                                                <textarea class="form-control is-waning" id="inputSuccess" name="Nombre_E_P_BP" placeholder="Ejemplo:  Bote en aerosol de liquido penetrante visiblere movible con solvente o post emulsificable.">{{old('Nombre_E_P_BP')}}</textarea>
+                                            @endif
+                                            
                                             @error('Nombre_E_P_BP')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -467,25 +589,35 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lote</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @else Lote @endif</label>
                                             <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Ubicación</label>
-                                            <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Alcance</label>
+                                                <input type="text" class="form-control inputForm" name="Alcance" placeholder="Ejemplo: PT-MT/UT (PAUT)/UT (HR & HA)" value="{{old('Alcance')}}">
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
-                                            <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Ubicación</label>
+                                                <input type="text" class="form-control inputForm" name="Ubicacion" placeholder="Ejemplo: OFICINA" value="{{old('Ubicacion')}}">
+                                            </div>
                                         </div>
-                                    </div>
 
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Almacenamiento</label>
+                                                <input type="text" class="form-control inputForm" name="Almacenamiento" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL" value="{{old('Almacenamiento')}}">
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
@@ -498,22 +630,31 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                <option selected="selected" value="">Elige un Tipo</option>
+                                                @if($rol == 'Laboratorio')
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
+                                                    <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
+                                                @else
+                                                    <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                                                    <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Proveedor</label>
-                                            <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Brüder NDT " value="{{old('Proveedor')}}">
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Proveedor</label>
+                                                <input type="text" class="form-control inputForm" name="Proveedor" placeholder="Brüder NDT " value="{{old('Proveedor')}}">
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -551,7 +692,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Stock</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio' )Stock @else Stock Total (Usado y NO Usado) @endif</label>
                                             <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
                                             @error('Stock')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -559,20 +700,83 @@
                                         </div>
                                     </div>
 
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Usado</label>
+                                                <input type="number" class="form-control inputForm @error('Usado') is-invalid @enderror" name="Usado" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado') }}">
+                                                @error('Usado')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    @if($rol == 'Laboratorio' )
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nuevo</label>
+                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror" name="Nuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado') }}">
+                                                @error('Nuevo')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
+                                                <option selected="selected" value="ESPERA DE DATO">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
+                                                <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
+                                            </select>
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required>
+                                                <option>Elige el tipo de ISO que pertenece</option>
+                                                @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    @if($rol == 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Fecha de adquisición /Fecha de alta</label>
+                                                <input type="date" class="form-control inputForm" name="Fecha_Alta" value="{{ old('Fecha_Alta') }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">SAT</label>
+                                                <input type="text" class="form-control inputForm" name="SAT" placeholder="Ejemplo: 41116500" value="{{old('SAT')}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                                <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -681,7 +885,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
+                                                <option selected="selected" value="">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
@@ -712,6 +916,13 @@
                                             @error('Stock')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
                                         </div>
                                     </div>
 
@@ -837,7 +1048,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
+                                                <option selected="selected" value="">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
@@ -898,6 +1109,13 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
                                             <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
                                         </div>
                                     </div>
 
@@ -1009,7 +1227,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
+                                                <option selected="selected" value="">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
@@ -1071,6 +1289,12 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Unidad</label>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -1139,7 +1363,7 @@
                                     </div>
                                 </div>
                                     <!-- Tabla de Elementos Disponibles -->
-                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -1156,6 +1380,8 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($generalConCertificados as $general_eyc)
+                                            @php //dump($general_eyc->Disponibilidad_Estado);
+                                            @endphp
                                             <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
                                                 <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                                 <td scope="row">{{$general_eyc->No_economico}}</td>
@@ -1164,13 +1390,21 @@
                                                 <td scope="row">{{$general_eyc->Serie}}</td>
                                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
                                                     @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                    @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
                                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                                 @endif
 
                                                 @if($general_eyc->certificados)
@@ -1293,6 +1527,40 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Alta_Equipos.js') }}"></script>
 <script>
+$(document).ready(function() {
+    function setDisponibilidadBgColor(select) {
+        var val = $(select).val();
+        var bg = '';
+        var color = 'white';
+        // Solo para opciones del laboratorio
+        if (val === 'Equipo Disponible' || val === 'Nuevo') {
+            bg = '#28a745'; // verde
+            color = 'white';
+        } else if (val === 'Equipo Fuera de Servicio' || val === 'Usado') {
+            bg = '#eeff07ff'; // amarillo
+            color = 'black';
+        } else if (val === 'En Servicio') {
+            bg = '#dca735'; // naranja
+            color = 'white';
+        }else if (val === 'Equipo en Resguardo' || val === 'Terminado') {
+            bg = '#dc3545'; // rojo
+            color = 'white';
+        } else {
+            bg = 'white';
+            color = 'black';
+        }
+        $(select).css({
+            'background-color': bg,
+            'color': color
+        });
+    }
+
+    $('select[name="Disponibilidad_Estado"]').each(function() {
+        setDisponibilidadBgColor(this);
+    }).on('change', function() {
+        setDisponibilidadBgColor(this);
+    });
+});
 
 document.getElementById('btnImportar').addEventListener('click', function () {
     // Crear un objeto FormData con el formulario

@@ -35,6 +35,13 @@
         /*width: 70%;*/
         border: 1px solid black; 
     }
+
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
 </style>
 @endsection
 
@@ -47,6 +54,7 @@
     <div class="box ">
         <div class="box-body">
         <h3 align="center">Inventario</h3>
+        <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
                         <tr>
@@ -70,26 +78,27 @@
                     </tbody>
                 </table> -->
 
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                 <thead>
                     <tr>
                         <th>Categoria</th>
                         <th>Nombre</th>
-                        <th>Num. Económico / ID</th>
+                        <th>Numero / ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
-                        <th>Fecha Calibración/Caducidad</th>
+                        <th>Prox. Fecha Calibración/Caducidad</th>
+                        <th>Días Restantes</th>
                         <th>Hoja de Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($generalConCertificadosConAlmacen as $general_eyc)
+                    @foreach ($generalConCertificadosConAlmacenConISOConClasificacion as $general_eyc)
                         <tr>
                             @if($general_eyc)
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
@@ -101,23 +110,45 @@
                                 <td scope="row">{{$general_eyc->almacen->Lote}}</td>
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
-                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
                             @endif 
                             @if($general_eyc->certificados)
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
-                                                @else
+                                                    <td scope="row">-</td>
+                                                @elseif($general_eyc->Tipo=='CONSUMIBLES')
                                                     <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    <td scope="row">
+                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) ) 
+                                                            <= 0 ? 'CADUCADO' : 
+                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) }}
+                                                    </td>
+                                                @else
+                                                    <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                    <td scope="row">
+                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                            <= 0 ? 'VENCIDO' : 
+                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
+                                                    </td>
                                             @endif
                                         @else
+                                            <td scope="row">N/A</td>
                                             <td scope="row">N/A</td>
                                     @endif
                                             <td scope="row"> 
@@ -171,6 +202,10 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+
+$('#tablaJs').on('draw.dt', function() {
+    $('.table-responsive').scrollLeft(0);
+});
 
 let table = new DataTable('#tablaJs', {
     // options

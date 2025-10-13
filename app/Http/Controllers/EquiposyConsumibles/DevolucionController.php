@@ -152,14 +152,29 @@ class DevolucionController extends Controller
         $cantidad = $request->input('cantidad');
         $folio = $request->input('folio'); // Obtener el Folio de la solicitud
         // Buscar el registro en General_EyC
-        $generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+        //$generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+        $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
 
         if (!$generalEyC) {
             return response()->json(['error' => 'Elemento no encontrado'], 404);
         }
 
         // Cambiar el estado a "DISPONIBLE"
-        $generalEyC->Disponibilidad_Estado = 'DISPONIBLE';
+        //$generalEyC->Disponibilidad_Estado = 'DISPONIBLE';
+            if ($generalEyC) {
+                // Verificar si el equipo pertenece a la ISO 17025
+                if ($generalEyC->ISO->NombreISO == '17025') {
+                    // Cambiar disponibilidad a "EN SERVICIO"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'Equipo Disponible',
+                    ]);
+                } else {
+                    // Para los demás, volver a "DISPONIBLE"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'DISPONIBLE',
+                    ]);
+                }
+            }
         $generalEyC->save();
 
         // Actualizar la cantidad en Almacen

@@ -213,7 +213,7 @@ class SolicitudesController extends Controller
             $solicitud->hidePlus = isset($ultimoFolioPorGrupo[$folioBase]) && $folioLetra !== $ultimoFolioPorGrupo[$folioBase];
         }
 
-        return view("Solicitud.Solicitudindex", compact('Solicitudes','Nombre','rol'));
+        return view("Solicitud.solicitudindex", compact('Solicitudes','Nombre','rol'));
     }
 
     public function obtenerDetallesKits($id)
@@ -238,7 +238,13 @@ class SolicitudesController extends Controller
 
         /*Inventario */
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->where('Disponibilidad_Estado', 'Equipo Disponible')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
 
         return view('Solicitud.create', compact('general','generalConCertificados','kitsConDetalles'));
                                     /*vista*/    /*variable donde se guardan los datos*/
@@ -313,7 +319,13 @@ class SolicitudesController extends Controller
         $Solicitud = Solicitudes::findOrFail($id);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
 
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
 
         // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
         $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
@@ -425,7 +437,13 @@ class SolicitudesController extends Controller
     
             $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
     
-            $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+            //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+            $generalConCertificados = general_eyc::with('certificados')
+            ->where(function ($query) {
+                $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                    ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                    })
+            ->get();
     
             // Obtener los IDs de General_EyC relacionados con los DetallesSolicitud
             $generalEyCIds = $DetallesSolicitud->pluck('idGeneral_EyC');
@@ -464,25 +482,30 @@ class SolicitudesController extends Controller
             $detalle = detalles_solicitud::findOrFail($id); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $idSolicitud = $detalle->idSolicitud; // idSolicitud
             
-            
             // Busca la solicitud en la tabla Solicitudes
             $solicitud = Solicitudes::findOrFail($idSolicitud); // Utiliza findOrFail para lanzar una excepción si no encuentra el modelo
             $Fecha_Solicitud = $solicitud->Fecha; // Fecha de Solicitud
             $Tipo = ['SALIDA', 'EN RENTA'];
             $idGeneral_EyC = $detalle->idGeneral_EyC; // idGeneral_EyC
 
-            $EyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+            //$EyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+            // Obtiene el registro de Equipos y Consumibles con su relación ISO
+            $EyC = general_eyc::with('ISO')->find($idGeneral_EyC);
 
             if ($EyC) {
-                if($EyC->Disponibilidad_Estado == 'NO DISPONIBLE' )
-                    {
+                // Si estaba "NO DISPONIBLE", actualizamos según su ISO
+                if ($EyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $EyC->Disponibilidad_Estado == 'En Servicio') {
+                    if ($EyC->ISO->NombreISO == '17025') {
+                        $Estatus = 'Equipo Disponible';
+                    } else {
                         $Estatus = 'DISPONIBLE';
-                        // Actualizar el estado de la solicitud
-                        $EyC->update([
-                            'Disponibilidad_Estado' => $Estatus,
-                        ]);
                     }
+
+                    $EyC->update([
+                        'Disponibilidad_Estado' => $Estatus,
+                    ]);
                 }
+            }
 
             // Busca el historial en la tabla Historial_Almacen
             $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)->where('Fecha', $Fecha_Solicitud)->where('Tipo', $Tipo)->first();
@@ -535,9 +558,9 @@ class SolicitudesController extends Controller
     
             // Obtener el historial relacionado
             $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
-                                                    ->where('Fecha', $fechaSalida)
-                                                    ->whereIn('Tipo', $Tipo)
-                                                    ->get();
+                ->where('Fecha', $fechaSalida)
+                ->whereIn('Tipo', $Tipo)
+                ->get();
     
             foreach ($Historial_Almacen as $h_almacen) {
                 // Obtener el registro en la tabla Almacen
@@ -550,12 +573,27 @@ class SolicitudesController extends Controller
                 }
     
                 // Actualizar el estado de General_EyC a "DISPONIBLE"
-                $generalEyC = general_eyc::find($idGeneral_EyC);
+                //$generalEyC = general_eyc::find($idGeneral_EyC);
+                // Obtener el equipo con su relación ISO
+                $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
     
-                if ($generalEyC) {
+                /*if ($generalEyC) {
                     $generalEyC->update(['Disponibilidad_Estado' => $disponibilidadEstado]);
+                }*/
+                if ($generalEyC) {
+                // Verificar si el equipo pertenece a la ISO 17025
+                if ($generalEyC->ISO->NombreISO == '17025') {
+                    // Cambiar disponibilidad a "EN SERVICIO"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'Equipo Disponible',
+                    ]);
+                } else {
+                    // Para los demás, volver a "DISPONIBLE"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => $disponibilidadEstado,
+                    ]);
                 }
-    
+            }
                 // Eliminar el historial
                 $h_almacen->delete();
             }
@@ -612,6 +650,7 @@ class SolicitudesController extends Controller
                         'status' => 'success',
                         'idDetalles_Solicitud' => $DetallesSolicitud->idDetalles_Solicitud,
                         'stock' => $almacen->Stock,
+                        'Unidad' => $almacen->Unidad,
                     ]);
                 } else {
                     return response()->json([

@@ -71,7 +71,7 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     });
 
     Route::middleware('auth')->group(function () {
-    Route::middleware('can:equipos-access')->group(function () {
+    Route::middleware('can:equipos-lab-access')->group(function () {
         /*Creación de Notificaciones*/
         Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
         /*Obtener Notificaciones*/
@@ -326,7 +326,7 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
     Route::middleware('auth')->group(function () {
         
-    Route::middleware('can:tecnicos-equipos-access')->group(function () {
+    Route::middleware('can:tecnicos-equipos-lab-access')->group(function () {
     /*IMPORTAR EXCEL */
     Route::post('/importarEyC', [ExcelEyCController::class, 'importarExcel'])->name('importar.EyC');
     /*SOLICITUDES-1*/
@@ -355,9 +355,8 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
-    
     /*EQUIPOS INVENTARIO-REGISTRO*/
-    Route::middleware('can:equipos-access')->group(function () {
+    Route::middleware('can:equipos-lab-access')->group(function () {
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');

@@ -63,7 +63,7 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
@@ -106,7 +106,13 @@ class UsuariosController extends Controller
     {
         $Usuario = Usuario::where('id', $id)->first();
 
-        return view('Admin.edit', compact('id','Usuario'));
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
+        return view('Admin.edit', compact('id','Usuario','rol'));
     }
 
     /**
@@ -129,7 +135,7 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
@@ -154,7 +160,7 @@ class UsuariosController extends Controller
             //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
             ],
             'Estatus' => 'required|string|max:255',
         ]);

@@ -11,6 +11,11 @@ class ISO extends Model
         'idISO',
         'idGeneral_EyC',
         'NombreISO',
+        'Alcance',
+        'Frec_Cali_Mant_Prev',
+        'Frec_Man_Inter_Time',
+        'Frec_Verificacion',
+        'Usado',
     ];
     protected $table = 'ISO';
     protected $primaryKey = 'idGeneral_EyC';

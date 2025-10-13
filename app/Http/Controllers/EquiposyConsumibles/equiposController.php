@@ -70,7 +70,12 @@ class equiposController extends Controller
             ->where('Tipo', 'EQUIPOS')
             ->exists();
 
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -222,6 +227,12 @@ class equiposController extends Controller
         // Equipos
         $generalConEquipos = new equipos;
         $generalConEquipos->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('Num_Reporte')==null)
+            {
+                $generalConEquipos->Num_Reporte = $EsperaDato;
+            }else{
+                $generalConEquipos->Num_Reporte = $request->input('Num_Reporte');
+            }
         $generalConEquipos->save();
 
         // Clasificación
@@ -244,7 +255,32 @@ class equiposController extends Controller
         }else{
             $generalConISO->NombreISO =  $request->input('ISO');
         } 
-        $generalConISO->save();*/
+        if($request->input('Alcance')==null)
+        {
+            $generalConISO->Alcance = $EsperaDato;
+        }else{
+            $generalConISO->Alcance =  $request->input('Alcance');
+        }
+        if($request->input('Frec_Cali_Mant_Prev')==null)
+        {
+            $generalConISO->Frec_Cali_Mant_Prev = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Cali_Mant_Prev =  $request->input('Frec_Cali_Mant_Prev');
+        } 
+        if($request->input('Frec_Man_Inter_Time')==null)
+        {
+            $generalConISO->Frec_Man_Inter_Time = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Man_Inter_Time =  $request->input('Frec_Man_Inter_Time');
+        } 
+        if($request->input('Frec_Verificacion')==null)
+        {
+            $generalConISO->Frec_Verificacion = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Verificacion =  $request->input('Frec_Verificacion');
+        } 
+        $generalConISO->save();
+
         
         /* Certificados */
         $generalConCertificados = new certificados;
@@ -266,6 +302,30 @@ class equiposController extends Controller
             $generalConCertificados->Prox_fecha_calibracion = '01/01/0001';
         }else{
             $generalConCertificados->Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
+        }  
+        if($request->input('Fecha_verificacion')==null)
+        {
+            $generalConCertificados->Fecha_verificacion = '01/01/0001';
+        }else{
+            $generalConCertificados->Fecha_verificacion = $request->input('Fecha_verificacion');
+        }
+        if($request->input('Prox_fecha_verificacion')==null)
+        {
+            $generalConCertificados->Prox_fecha_verificacion = '01/01/0001';
+        }else{
+            $generalConCertificados->Prox_fecha_verificacion = $request->input('Prox_fecha_verificacion');
+        }
+        if($request->input('Fecha_mantenimiento')==null)
+        {
+            $generalConCertificados->Fecha_mantenimiento = '01/01/0001';
+        }else{
+            $generalConCertificados->Fecha_mantenimiento = $request->input('Fecha_mantenimiento');
+        }
+        if($request->input('Prox_fecha_mantenimiento')==null)
+        {
+            $generalConCertificados->Prox_fecha_mantenimiento = '01/01/0001';
+        }else{
+            $generalConCertificados->Prox_fecha_mantenimiento = $request->input('Prox_fecha_mantenimiento');
         }  
         if ($request->hasFile('Certificado_Actual') && $request->file('Certificado_Actual')->isValid()) {
             $certificado = $request->file('Certificado_Actual');
@@ -301,6 +361,12 @@ class equiposController extends Controller
         if($request->input('Stock')==null)
         {
             $generalConAlmacen->Stock = 1;
+        }
+        if($request->input('Unidad')==null)
+        {
+            $generalConAlmacen->Unidad = $EsperaDato;
+        }else{
+            $generalConAlmacen->Unidad = $request->input('Unidad');
         }
         $generalConAlmacen->save();
 
@@ -394,6 +460,9 @@ class equiposController extends Controller
 
             // Actualizar los datos del equipo asociado
             $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+            $generalConEquipos->update([
+                'Num_Reporte' => $request->input('Num_Reporte'),
+            ]);
             // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
@@ -455,6 +524,22 @@ class equiposController extends Controller
                 $generalEyC->save();
             }
 
+            // Actualizar los datos de Clasificación
+            $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
+            $generalConClasificacion->update([
+                'NombreC' => $request->input('Clasificacion'),
+            ]);
+
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+                'Alcance' => $request->input('Alcance'),
+                'Frec_Cali_Mant_Prev' => $request->input('Frec_Cali_Mant_Prev'),
+                'Frec_Man_Inter_Time' => $request->input('Frec_Man_Inter_Time'),
+                'Frec_Verificacion' => $request->input('Frec_Verificacion'),
+            ]);
+
             $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
             if($request->input('Fecha_calibracion')==null)
             {
@@ -467,11 +552,39 @@ class equiposController extends Controller
                 $proxFechaCalibracion = '2001-01-01';
             }else{
                     $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
+            }
+            if($request->input('Fecha_verificacion')==null)
+            {
+                $Fecha_verificacion = '2001-01-01';
+            }else{
+                $Fecha_verificacion = $request->input('Fecha_verificacion');
+            }  
+                if($request->input('Prox_fecha_verificacion')==null)
+            {
+                $Prox_fecha_verificacion = '2001-01-01';
+            }else{
+                $Prox_fecha_verificacion = $request->input('Prox_fecha_verificacion');
+            }  
+                if($request->input('Fecha_mantenimiento')==null)
+            {
+                $Fecha_mantenimiento = '2001-01-01';
+            }else{
+                $Fecha_mantenimiento = $request->input('Fecha_mantenimiento');
+            }  
+                if($request->input('Prox_fecha_mantenimiento')==null)
+            {
+                $Prox_fecha_mantenimiento = '2001-01-01';
+            }else{
+                $Prox_fecha_mantenimiento = $request->input('Prox_fecha_mantenimiento');
             }  
             $generalConCertificado->update([
                 'No_certificado' => $request->input('No_certificado'),
                 'Fecha_calibracion' => $fechaCalibracion,
                 'Prox_fecha_calibracion' => $proxFechaCalibracion,
+                'Fecha_verificacion' => $proxFechaCalibracion,
+                'Prox_fecha_verificacion' => $proxFechaCalibracion,
+                'Fecha_mantenimiento' => $proxFechaCalibracion,
+                'Prox_fecha_mantenimiento' => $proxFechaCalibracion,
             ]);
 
             // Verificar si se ha proporcionado un nuevo certificado actual
@@ -582,6 +695,9 @@ class equiposController extends Controller
 
             // Actualizar los datos del equipo asociado
             $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+            $generalConEquipos->update([
+                'Num_Reporte' => $request->input('Num_Reporte'),
+            ]);
             // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
@@ -643,6 +759,22 @@ class equiposController extends Controller
                 $generalEyC->save();
             }
 
+            // Actualizar los datos de Clasificación
+            $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
+            $generalConClasificacion->update([
+                'NombreC' => $request->input('Clasificacion'),
+            ]);
+
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+                'Alcance' => $request->input('Alcance'),
+                'Frec_Cali_Mant_Prev' => $request->input('Frec_Cali_Mant_Prev'),
+                'Frec_Man_Inter_Time' => $request->input('Frec_Man_Inter_Time'),
+                'Frec_Verificacion' => $request->input('Frec_Verificacion'),
+            ]);
+
             $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
             if($request->input('Fecha_calibracion')==null)
             {
@@ -660,6 +792,10 @@ class equiposController extends Controller
                 'No_certificado' => $request->input('No_certificado'),
                 'Fecha_calibracion' => $fechaCalibracion,
                 'Prox_fecha_calibracion' => $proxFechaCalibracion,
+                'Fecha_verificacion' => $proxFechaCalibracion,
+                'Prox_fecha_verificacion' => $proxFechaCalibracion,
+                'Fecha_mantenimiento' => $proxFechaCalibracion,
+                'Prox_fecha_mantenimiento' => $proxFechaCalibracion,
             ]);
 
             // Verificar si se ha proporcionado un nuevo certificado actual

@@ -58,15 +58,23 @@
                             <td scope="row">{{$general_eyc->Modelo}}</td>
                             <td scope="row">{{$general_eyc->Serie}}</td>
                             <td scope="row">{{$general_eyc->almacen->Stock}}</td>
-                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
-                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
-                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
-                            @endif
+                                @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En servicio <i class="far fa-clock" aria-hidden="true"></i></td>
+                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
+                                @endif
                         @endif 
                             @if($general_eyc->certificados)
                                 @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
@@ -214,6 +222,13 @@
                                             <input type="hidden" class="form-control inputForm" name="Responsable" placeholder="Ejemplo: ALFREDO MARTINEZ TORRRES" value="{{ $Manifiestos->Responsable }}" readonly>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Persona que Entrega</label>-->
+                                            <input type="hidden" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Manifiestos->Entrega }}" readonly>
+                                        </div>
+                                    </div>
                                     
                                     <!--Campo Oculto para pasar el id de Solicitud -->
                                     <!--<label class="col-form-label" for="inputSuccess">idSolicitud</label>-->
@@ -281,194 +296,196 @@
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
-});
-
-
-$(document).ready(function() {
-    $('#btnFinalizaraprobacion').click(function(event) {
-        // Verificar si hay filas en la tabla
-        if ($('#TablaSolicitud tbody tr').length === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Tabla vacía',
-                text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
-                confirmButtonText: 'Entendido'
             });
-            event.preventDefault(); // Prevenir el envío del formulario
-        } else {
-            // Si hay elementos en la tabla, puedes continuar con el envío del formulario
-            // Si usas un formulario real, aquí podrías hacer el submit
-        }
-    });
-});
 
-function consultarCantidadAlmacen(id, callback) {
-    $.ajax({
-        url: '/Obtener/CantidadAlmacen/' + id,
-        method: 'GET',
-        success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
-        },
-        error: function(error) {
-            callback(error);
-        }
-    });
-}
-$(document).ready(function() {
-    // Validar la cantidad ingresada en los inputs de cantidad
-    $('#TablaSolicitud').on('input', '.input-cantidad', function() {
-        let maxCantidad = $(this).data('stock'); // Obtener el stock máximo desde data-stock
-        let cantidadIngresada = $(this).val();
-
-        if (cantidadIngresada > maxCantidad) {
-            $(this).val(maxCantidad); // Limitar al máximo permitido
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cantidad excedida',
-                text: `La cantidad máxima permitida es ${maxCantidad}.`,
-                confirmButtonText: 'Entendido'
-            });
-        }
-    });
-    
-// Delegación de eventos para el botón "Eliminar"
-$('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
-    var idDetalles_Solicitud = $(this).data('id');
-    var token = $('meta[name="csrf-token"]').attr('content');
-    var row = $(this).closest('tr'); // Encuentra la fila más cercana
-    var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre está en la primera celda
-
-    Swal.fire({
-        title: "¿Seguro de eliminar este elemento?",
-        text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
-        icon: "warning",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Sí",
-        denyButtonText: "No"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
-                type: 'DELETE',
-                data: {
-                    "_token": token,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#row-' + idDetalles_Solicitud).remove();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Confirmado!',
-                            text: `Elemento "${nombreElemento}" Eliminado Correctamente!`,
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+        $(document).ready(function() {
+            $('#btnFinalizaraprobacion').click(function(event) {
+                // Verificar si hay filas en la tabla
+                if ($('#TablaSolicitud tbody tr').length === 0) {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessage,
+                        icon: 'warning',
+                        title: 'Tabla vacía',
+                        text: 'Debes agregar al menos un elemento antes de finalizar la solicitud.',
+                        confirmButtonText: 'Entendido'
+                    });
+                    event.preventDefault(); // Prevenir el envío del formulario
+                } else {
+                    // Si hay elementos en la tabla, puedes continuar con el envío del formulario
+                    // Si usas un formulario real, aquí podrías hacer el submit
+                }
+            });
+        });
+
+        function consultarCantidadAlmacen(id, callback) {
+            $.ajax({
+                url: '/Obtener/CantidadAlmacen/' + id,
+                method: 'GET',
+                success: function(data) {
+                    //callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+                    //callback(null, data.Unidad); // Asume que la respuesta contiene un campo "Unidad"
+                    const cantidad = data.Cantidad || 0;
+                    const unidad = data.Unidad || ''; 
+                    callback(null, cantidad, unidad); // 👈 Enviamos los 2 valores en una sola llamada
+                },
+                error: function(error) {
+                    callback(error);
+                }
+            });
+        }
+        $(document).ready(function() {
+            // Validar la cantidad ingresada en los inputs de cantidad
+            $('#TablaSolicitud').on('input', '.input-cantidad', function() {
+                let maxCantidad = $(this).data('stock'); // Obtener el stock máximo desde data-stock
+                let cantidadIngresada = $(this).val();
+
+                if (cantidadIngresada > maxCantidad) {
+                    $(this).val(maxCantidad); // Limitar al máximo permitido
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad excedida',
+                        text: `La cantidad máxima permitida es ${maxCantidad}.`,
+                        confirmButtonText: 'Entendido'
                     });
                 }
             });
-        } else if (result.isDenied) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Cancelado',
-                text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
-            });
-        }
-    });
-});
+            
+            // Delegación de eventos para el botón "Eliminar"
+            $('#TablaSolicitud').on('click', '.btnEliminarDetallesSolicitud', function() {
+                var idDetalles_Solicitud = $(this).data('id');
+                var token = $('meta[name="csrf-token"]').attr('content');
+                var row = $(this).closest('tr'); // Encuentra la fila más cercana
+                var nombreElemento = row.find('td').eq(0).text(); // Asume que el nombre está en la primera celda
 
-});
-
-$(document).ready(function() {
-    // Delegación de eventos para el botón "Agregar"
-    $('#tablaJs').on('click', '.btnAgregar', function() {
-        $(this).prop('disabled', true);
-
-        let idFila = $(this).data('id');
-        let idSolicitud = $(this).data('id-solicitud');
-        let row = $('#row-' + idFila);
-        let nombre = row.find('td:nth-child(1)').text(); // Obtener el nombre del elemento
-
-        fetch('/solicitudes/agregar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: JSON.stringify({
-                idFila: idFila,
-                idSolicitud: idSolicitud
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Elemento Agregado Exitosamente.',
-                    showConfirmButton: false,
-                    timer: 2000
+                    title: "¿Seguro de eliminar este elemento?",
+                    text: `¿Deseas eliminar el elemento "${nombreElemento}"?`,
+                    icon: "warning",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Sí",
+                    denyButtonText: "No"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Detalles_solicitudes/eliminar/' + idDetalles_Solicitud,
+                            type: 'DELETE',
+                            data: {
+                                "_token": token,
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#row-' + idDetalles_Solicitud).remove();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Confirmado!',
+                                        text: `Elemento "${nombreElemento}" Eliminado Correctamente!`,
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                var errorMessage = xhr.responseJSON.error || 'Se produjo un error al eliminar el registro.';
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: errorMessage,
+                                });
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cancelado',
+                            text: `El elemento "${nombreElemento}" no ha sido eliminado.`,
+                        });
+                    }
                 });
-
-                row.remove();
-
-                // Crear una nueva fila en la segunda tabla
-                let newRow = `
-                    <tr id="row-${data.idDetalles_Solicitud}">
-                        <td>${nombre}</td>
-                        <td>${row.find('td:nth-child(2)').text()}</td>
-                        <td>${row.find('td:nth-child(3)').text()}</td>
-                        <td>${row.find('td:nth-child(8)').text()}</td>
-                        <td>
-                            <div class="input-group">
-                                <input type="number" class="form-control input-cantidad" name="Cantidad[${data.idDetalles_Solicitud}]" value="1" min="1" max="${data.stock}" data-stock="${data.stock}" ${data.stock === 1 ? 'readonly' : ''}>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="Unidad[${data.idDetalles_Solicitud}]" value="ESPERA DE DATO">
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${data.idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                `;
-                $('#TablaSolicitud tbody').append(newRow);
-
-                // Animar la nueva fila
-                $('#row-' + data.idDetalles_Solicitud).addClass('table-success');
-                setTimeout(() => {
-                    $('#row-' + data.idDetalles_Solicitud).removeClass('table-success');
-                }, 1500);
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Elemento duplicado',
-                    text: `El elemento "${nombre}" ya está agregado.`,
-                    confirmButtonText: 'Entendido'
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Hubo un error al agregar el detalle.',
             });
-        })
-        .finally(() => {
-            $(this).prop('disabled', false);
         });
-    });
-});
+
+        $(document).ready(function() {
+            // Delegación de eventos para el botón "Agregar"
+            $('#tablaJs').on('click', '.btnAgregar', function() {
+                $(this).prop('disabled', true);
+
+                let idFila = $(this).data('id');
+                let idSolicitud = $(this).data('id-solicitud');
+                let row = $('#row-' + idFila);
+                let nombre = row.find('td:nth-child(1)').text(); // Obtener el nombre del elemento
+
+                fetch('/solicitudes/agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    body: JSON.stringify({
+                        idFila: idFila,
+                        idSolicitud: idSolicitud
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Elemento Agregado Exitosamente.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                        row.remove();
+
+                        // Crear una nueva fila en la segunda tabla
+                        let newRow = `
+                            <tr id="row-${data.idDetalles_Solicitud}">
+                                <td>${nombre}</td>
+                                <td>${row.find('td:nth-child(2)').text()}</td>
+                                <td>${row.find('td:nth-child(3)').text()}</td>
+                                <td>${row.find('td:nth-child(8)').text()}</td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control input-cantidad" name="Cantidad[${data.idDetalles_Solicitud}]" value="1" min="1" max="${data.stock}" data-stock="${data.stock}" ${data.stock === 1 ? 'readonly' : ''}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="Unidad[${data.idDetalles_Solicitud}]" value="${data.Unidad}" required>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminarDetallesSolicitud" data-id="${data.idDetalles_Solicitud}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                        $('#TablaSolicitud tbody').append(newRow);
+
+                        // Animar la nueva fila
+                        $('#row-' + data.idDetalles_Solicitud).addClass('table-success');
+                        setTimeout(() => {
+                            $('#row-' + data.idDetalles_Solicitud).removeClass('table-success');
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Elemento duplicado',
+                            text: `El elemento "${nombre}" ya está agregado.`,
+                            confirmButtonText: 'Entendido'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Hubo un error al agregar el detalle.',
+                    });
+                })
+                .finally(() => {
+                    $(this).prop('disabled', false);
+                });
+            });
+        });
 
 </script>
 @endsection

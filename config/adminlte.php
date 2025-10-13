@@ -627,20 +627,20 @@ return [
                 [
                     'text' => 'Equipos',
                     'icon' => 'fas fa-pencil-ruler',
-                    'can' => 'tecnicos-equipos-access',
+                    'can' => 'tecnicos-equipos-lab-access',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
                             'url' => 'inventario',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Clientes',
@@ -658,7 +658,7 @@ return [
                             'text' => 'Registro de altas',
                             'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Solicitar E y C',
@@ -670,7 +670,7 @@ return [
                             'text' => ' Ver E/S/D',
                             'icon' => 'fas fa-exchange-alt',
                             'url' => 'Historial_Almacen/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Ver Kits',
