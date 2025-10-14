@@ -87,6 +87,10 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
         /*vista Page welcome*/
         Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
 
+        /*A DEFINIR EL ACCESO */
+        /*Obtener Ruta del PDF */
+        Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
+        
         /*REPORTES*/
         /*Obtiene las Normas segun La prueba del select*/
         Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
@@ -497,10 +501,6 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-
-    /*A DEFINIR EL ACCESO */
-    /*Obtener Ruta del PDF */
-    Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
     
     });
 
