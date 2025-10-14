@@ -53,6 +53,8 @@ class BlockYProbetaController extends Controller
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
 
             // Limpia y normaliza el número económico
@@ -385,6 +387,15 @@ class BlockYProbetaController extends Controller
      */
     public function updateBlocks(Request $request, $id)
     {
+            $request->validate([
+                'Nombre_E_P_BP' => 'required|string|max:255',
+                'No_economico' => 'required|string|max:255',
+                'Marca' => 'required|string|max:255',
+                'Modelo' => 'required|string|max:255',
+                'Serie' => 'required|string|max:255',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
+            ]);
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
         $EsperaDato ='ESPERA DE DATO';

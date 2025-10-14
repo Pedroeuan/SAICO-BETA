@@ -58,6 +58,8 @@ class consumiblesController extends Controller
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
 
         /* Tabla General_EyC */
@@ -380,6 +382,14 @@ class consumiblesController extends Controller
      */
         public function updateConsumibles(Request $request, $id)
         {
+            $request->validate([
+                'Nombre_E_P_BP' => 'required|string|max:255',
+                'Marca' => 'required|string|max:255',
+                'Modelo' => 'required|string|max:255',
+                'Stock' => 'required|integer|min:1',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
+            ]);
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
         // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'

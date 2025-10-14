@@ -55,6 +55,8 @@ class equiposController extends Controller
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
 
             // Limpia y normaliza el número económico
@@ -419,6 +421,8 @@ class equiposController extends Controller
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
+            'ISO' => 'required|in:9001,17025',
+            'Disponibilidad_Estado' => 'required|string|max:255',
         ]);
 
         // Obtener el equipo existente
