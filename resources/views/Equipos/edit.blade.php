@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Número Económico</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio') ID @else Número Económico @endif</label>
                                             <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" value="{{ $generalEyC->No_economico }}" placeholder="Ejemplo: ECO-001">
                                             @error('No_economico')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -304,6 +304,7 @@
                                         </div>
                                     @endif
 
+                                    @if($rol != 'Laboratorio')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Ubicación</label>
@@ -316,6 +317,8 @@
                                             <input type="text" class="form-control inputForm" name="Almacenamiento" value="{{ $generalEyC->Almacenamiento }}" placeholder="Ejemplo: TEMPERATURA AMBIENTE, SIN POLVO, SIN HUMEDAD E INDIRECTO AL SOL">
                                         </div>
                                     </div>
+                                    @endif
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>

@@ -60,15 +60,16 @@ class general_eycController extends Controller
                     $query->where('NombreISO', '17025');
                 })
                 ->get();
-        } else {
-            //Todos los registros
-            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+        } elseif($rol === 'Equipos') {
             // Solo registros con ISO 9001
             $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
                 ->whereHas('ISO', function ($query) {
                     $query->where('NombreISO', '9001');
                 })
                 ->get();
+        }else{
+             //Todos los registros
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         }
 
         return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));

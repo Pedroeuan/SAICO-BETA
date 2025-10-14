@@ -459,7 +459,7 @@
                                         </div>
                                     </div>
 
-                                    <!--<div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @else Intervalo de Tiempo @endif</label>
                                             <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ old('Frec_Man_Inter_Time') }}">
@@ -511,7 +511,7 @@
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                             </select>
                                         </div>
-                                    </div>-->
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -631,18 +631,18 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" required>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected" value="">Elige un Tipo</option>
-                                                {{--@if($rol == 'Laboratorio')
-                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible</option> 
-                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
+                                                @if($rol == 'Laboratorio')
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Fuera de Servicio</option>
                                                     <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
-                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
-                                                @else--}}
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>En Resguardo</option>
+                                                @else
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                     <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
-                                                {{--@endif--}}
+                                                @endif
                                             </select>
                                         </div>
                                     </div>

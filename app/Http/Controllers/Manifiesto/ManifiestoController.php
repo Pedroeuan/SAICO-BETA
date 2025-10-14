@@ -375,7 +375,8 @@ class ManifiestoController extends Controller
                     $AlmacenStock = $Almacen->Stock;
                     $AlmacenDescuento = $detalle->Cantidad;
                     $Verificar = $AlmacenStock-$AlmacenDescuento;
-
+                    Log::info('***********************');
+                    Log::info('Verificar: ', ['Verificar' => $Verificar]);
                         // Actualizar stock
                         $Almacen->update([
                             'Stock' => $Verificar
@@ -532,7 +533,6 @@ class ManifiestoController extends Controller
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
                         $Verificar = $AlmacenStock-$AlmacenDescuento;
-
                         // Actualizar stock
                         $Almacen->update([
                             'Stock' => $Verificar
@@ -606,6 +606,22 @@ class ManifiestoController extends Controller
                                     $historialAlmacenExistente ->update([
                                         'Cantidad' => $Cantidad_Detalle_Solicitud,
                                     ]);
+                                    // 🔹 Agregar validación para actualizar disponibilidad
+                                    $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
+
+                                    if ($generalEyC->ISO->NombreISO == '17025') {
+                                        if ($StockAlmacenActualizar == 0) {
+                                            $generalEyC->update([
+                                                'Disponibilidad_Estado' => 'En Servicio',
+                                            ]);
+                                        }
+                                    } else {
+                                        if ($StockAlmacenActualizar == 0) {
+                                            $generalEyC->update([
+                                                'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                                            ]);
+                                        }
+                                    }
                                 }
 
                             if($Destino_Form != $Destino_BD)

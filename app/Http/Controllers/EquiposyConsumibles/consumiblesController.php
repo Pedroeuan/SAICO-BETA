@@ -244,13 +244,13 @@ class consumiblesController extends Controller
         } 
         if($request->input('Usado')==null)
         {
-            $generalConISO->Usado = $EsperaDato;
+            $generalConISO->Usado = 0;
         }else{
             $generalConISO->Usado =  $request->input('Usado');
         } 
         if($request->input('Nuevo')==null)
         {
-            $generalConISO->Nuevo = $EsperaDato;
+            $generalConISO->Nuevo = 0;
         }else{
             $generalConISO->Nuevo =  $request->input('Nuevo');
         } 
