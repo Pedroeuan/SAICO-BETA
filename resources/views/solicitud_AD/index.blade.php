@@ -106,7 +106,7 @@
                         // Aquí puedes hacer un fetch a tu ruta Laravel si tienes endpoint de detalle
                         Swal.update({
                             html: `<p>ID Solicitud: <b>${id}</b></p>
-                                   <p>Más detalles disponibles en el backend...</p>`
+                                <p>Más detalles disponibles en el backend...</p>`
                         });
                         Swal.showConfirmButton = true;
                     }

@@ -57,25 +57,26 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
+use App\Http\Controllers\solicitud_AD\SolicitudADcontroller;
 
     Route::get('/', function () {
         return view('auth.login');
     });
 
     //solicitud_AD
-
-// Si quieres proteger con autenticación, agrega el middleware 'auth'
-Route::middleware(['auth'])->group(function () {
-
-
-    Route::get('/solicitudes', [SolicitudADController::class, 'index'])->name('solicitudes.index');
-    Route::get('/solicitudes/create', [SolicitudADController::class, 'create'])->name('solicitudes.create');
-    Route::post('/solicitudes', [SolicitudADController::class, 'store'])->name('solicitudes.store');
-    Route::get('/solicitudes/{id}/edit', [SolicitudADController::class, 'edit'])->name('solicitudes.edit');
-    Route::put('/solicitudes/{id}', [SolicitudADController::class, 'update'])->name('solicitudes.update');
-    Route::delete('/solicitudes/{id}', [SolicitudADController::class, 'destroy'])->name('solicitudes.destroy');
-    Route::get('/solicitudes/{id}', [SolicitudADController::class, 'show'])->name('solicitudes.show');
-});
+    Route::middleware('auth')->group(function () {
+    /*SOLICITUDES-1*/
+    /*Rutas de Vistas de Solicitudes-Registro*/
+    Route::get('/solicitud/create', [SolicitudADController::class, 'create'])->name('solicitud.create');
+    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
+    Route::get('/solicitud/index', [SolicitudADController::class, 'index'])->name('solicitud.index');
+    /*Ruta de Guardado-index*/
+    Route::post('/solicitudes/storeSolicitud', [SolicitudADController::class, 'storeSolicitudAD'])->name('solicitudes.storeSolicitud');
+    /*Ruta de botón Agregar-datos a detalles solicitud-por aprobar*/
+    Route::post('/solicitudes/agregar', [SolicitudADController::class, 'agregarDetallesSolicitudAD'])->name('solicitudes.agregarDetallesSolicitud');
+    /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
+    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudADController::class, 'destroyDetallesSolicitudAD'])->name('solicitudes.destroyDetallesSolicitud');
+    });
 
 
 
