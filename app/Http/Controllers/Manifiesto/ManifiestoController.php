@@ -531,6 +531,7 @@ class ManifiestoController extends Controller
                             $CantidadNueva = $detalle->Cantidad;
                             $StockAnterior = $CantidadAnterior + $CantidadAlmacen;
                             $StockAlmacenActualizar = $StockAnterior - $CantidadNueva;
+                            $generalEyC = general_eyc::find($detalle->idGeneral_EyC);
                             
                             if($Cantidad_Detalle_Solicitud != $Cantidad_Actualizar)
                                 {
