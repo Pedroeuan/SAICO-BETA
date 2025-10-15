@@ -202,7 +202,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -278,7 +278,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio') ID @else Número Económico @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio') Número Económico @elseif($rol != 'Equipos') ID @else Número Económico/ID @endif</label>
                                             <input type="text" class="form-control inputForm @error('No_economico') is-invalid @enderror" name="No_economico" placeholder="Ejemplo: ECO-001" value="{{old('No_economico')}}">
                                             @error('No_economico')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -316,7 +316,7 @@
                                         </div>
                                     </div>
 
-                                    @if($rol == 'Laboratorio' )
+                                    @if($rol == 'Laboratorio' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Alcance</label>
@@ -353,7 +353,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @elseif($rol != 'Equipos') Estatus @else Disponibilidad/Estatus @endif</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected" value="">Elige un Tipo</option>
                                                 @if($rol == 'Laboratorio')
@@ -361,10 +361,18 @@
                                                     <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
                                                     <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
                                                     <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
-                                                @else
+                                                @elseif($rol == 'Equipos')
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                     <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                    @elseif($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE-9001</option>
+                                                    <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE-9001</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA-9001</option>
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible-17025</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio-17025</option>
+                                                    <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio-17025</option>
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo-17025</option>
                                                 @endif
                                             </select>
                                         </div>
@@ -401,19 +409,19 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @else Ultima calibración @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @elseif($rol == 'Equipos') Ultima calibración @else Fecha Calibración/Ultima calibración  @endif</label>
                                             <input type="date" class="form-control inputForm" id="fechac" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @else Próxima calibración @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @elseif($rol == 'Equipos') Próxima calibración @else Siguiente Calibración/Próxima calibración @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
                                         </div>
                                     </div>
 
-                                    @if($rol == 'Laboratorio' )
+                                    @if($rol == 'Laboratorio' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
@@ -438,7 +446,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @else Fecha de Proximo Mantenimiento @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @elseif($rol == 'Equipos') Fecha de Proximo Mantenimiento @else Siguiente Mantenimiento/Fecha de Proximo Mantenimiento @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ old('Prox_fecha_mantenimiento') }}">
                                         </div>
                                     </div>
@@ -454,19 +462,19 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @else Mantenimiento Preventivo @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @elseif($rol == 'Equipos') Mantenimiento Preventivo @else Frecuencia de Calibración/Mantenimiento Preventivo @endif</label>
                                             <input type="text" class="form-control inputForm" name="Frec_Cali_Mant_Prev" @if($rol == 'Laboratorio' ) placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: SI/NO/N/A" @endif value="{{ old('Frec_Cali_Mant_Prev') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @else Intervalo de Tiempo @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @elseif($rol == 'Equipos') Intervalo de Tiempo @else Frecuencia de Mantenimiento/Intervalo de Tiempo @endif</label>
                                             <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ old('Frec_Man_Inter_Time') }}">
                                         </div>
                                     </div>
 
-                                    @if($rol == 'Laboratorio' )
+                                    @if($rol == 'Laboratorio' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Frecuencia de Verificación</label>
@@ -509,6 +517,10 @@
                                                 <option>Elige el tipo de ISO</option>
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
+                                                @if ($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>
+                                                    <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
@@ -516,7 +528,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif required>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -634,14 +646,22 @@
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected" value="">Elige un Tipo</option>
                                                 @if($rol == 'Laboratorio')
-                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Disponible</option> 
-                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Fuera de Servicio</option>
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio</option>
                                                     <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio </option>
-                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>En Resguardo</option>
-                                                @else
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo</option>
+                                                @elseif($rol == 'Equipos')
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                     <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
+                                                    @elseif($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE-9001</option>
+                                                    <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE-9001</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA-9001</option>
+                                                    <option value="Equipo Disponible" {{ old('Disponibilidad_Estado') == 'Equipo Disponible' ? 'selected' : '' }}>Equipo Disponible-17025</option> 
+                                                    <option value="Equipo Fuera de Servicio" {{ old('Disponibilidad_Estado') == 'Equipo Fuera de Servicio' ? 'selected' : '' }}>Equipo Fuera de Servicio-17025</option>
+                                                    <option value="En Servicio" {{ old('Disponibilidad_Estado') == 'En Servicio' ? 'selected' : '' }}>En Servicio-17025</option>
+                                                    <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo-17025</option>
                                                 @endif
                                             </select>
                                         </div>
@@ -727,7 +747,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA">
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -922,7 +942,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -1115,7 +1135,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -1292,7 +1312,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 

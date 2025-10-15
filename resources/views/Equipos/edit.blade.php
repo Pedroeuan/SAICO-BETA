@@ -213,7 +213,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -318,7 +318,7 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Factura</label>
@@ -348,7 +348,7 @@
                                     @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @else Estatus @endif</label>
                                             <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                 <option selected="selected">Elige un Tipo</option>
                                                 @if($rol == 'Laboratorio')
@@ -451,14 +451,22 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
+                                                @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                                <input type="date" class="form-control inputForm" name="Fecha_verificacion">
+                                                @else
                                                 <input type="date" class="form-control inputForm" id="fechav" name="Fecha_verificacion" value="{{ $generalConCertificados->Fecha_verificacion  }}">
+                                                @endif
                                             </div>
                                         </div>
 
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess"> Siguiente Verificación</label>
+                                                @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                                <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion">
+                                                @else
                                                 <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion" value="{{ $generalConCertificados->Prox_fecha_verificacion }}">
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
@@ -466,14 +474,22 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
+                                            @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Fecha_mantenimiento">
+                                            @else
                                             <input type="date" class="form-control inputForm" id="fecham" name="Fecha_mantenimiento" value="{{ $generalConCertificados->Fecha_mantenimiento }}">
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @else Fecha de Proximo Mantenimiento @endif</label>
+                                            @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                            <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento">
+                                            @else
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ $generalConCertificados->Prox_fecha_mantenimiento }}">
+                                            @endif
                                         </div>
                                     </div>
 
@@ -530,8 +546,8 @@
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion">
                                                 <option selected="selected">Elige el tipo de inspección que pertenece</option>
-                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected @endif>PND</option>
-                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @else  @endif >IM</option>
+                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected="selected" @endif>PND</option>
+                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @endif>IM</option>
                                             </select>
                                         </div>
                                     </div>
@@ -550,7 +566,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -745,7 +761,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -943,7 +959,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -1176,7 +1192,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
@@ -1411,7 +1427,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
-                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" @if($rol!='Super Administrador' || $rol!='Administrador')readonly @endif>
+                                            <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
                                         </div>
                                     </div>
 
