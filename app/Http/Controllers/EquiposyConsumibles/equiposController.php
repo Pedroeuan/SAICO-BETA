@@ -58,7 +58,6 @@ class equiposController extends Controller
                 'ISO' => 'required|in:9001,17025',
                 'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
-
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));

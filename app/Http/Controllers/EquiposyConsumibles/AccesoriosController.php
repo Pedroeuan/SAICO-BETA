@@ -22,6 +22,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 class AccesoriosController extends Controller
 {
@@ -198,7 +200,30 @@ class AccesoriosController extends Controller
     }
     }
     $general->save();
-    
+
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConClasificacion->NombreC =  $NA;
+        $generalConClasificacion->save();
+
+        // ISO
+        $generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        }
+        /*$generalConISO->Alcance = $NA;
+        $generalConISO->Frec_Cali_Mant_Prev = $NA;
+        $generalConISO->Frec_Mant_Inter_Time = $NA;
+        $generalConISO->Frec_Verificacion = $NA;
+        $generalConISO->Usado = $NA;
+        $generalConISO->Nuevo = $NA;*/
+        $generalConISO->save();
+
      /* Certificados */
     $generalConCertificados = new certificados;
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
