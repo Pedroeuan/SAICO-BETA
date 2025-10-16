@@ -27,7 +27,6 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-
 function actualizarTabla() {
     $.ajax({
         url: '/obtenerDatos/Actualizados', // Ruta que devuelve los datos actualizados
@@ -182,7 +181,7 @@ $(document).on('click', '.btnAgregar', function() {
     }
 
     // Consultar la cantidad en el almacén antes de agregar la fila
-    consultarCantidadAlmacen(id, function(error, cantidad) {
+    consultarCantidadAlmacen(id, function(error, cantidad, unidad) {
         if (error) {
             alert('Error al obtener cantidad de almacén.');
             button.prop('disabled', false); // Habilitar el botón en caso de error
@@ -201,7 +200,7 @@ $(document).on('click', '.btnAgregar', function() {
                 <td>${row.find('td').eq(2).text()}</td>
                 <td>${row.find('td').eq(7).text()}</td>
                 <td>${cantidadInput}</td>
-                <td><input type="text" class="form-control unidad" name="unidad_${id}" value="EN ESPERA DE DATOS" required></td>
+                <td><input type="text" class="form-control unidad" name="unidad_${id}" value="${unidad}" required></td>
                 <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
             </tr>
         `;

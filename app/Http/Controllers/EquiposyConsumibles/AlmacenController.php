@@ -29,7 +29,6 @@ class AlmacenController extends Controller
     {
         // Consulta la cantidad del elemento en la tabla 'almacen'
         $Almacen = Almacen::where('idGeneral_EyC', $id)->first();
-
         
         if ($Almacen) {
             return response()->json([

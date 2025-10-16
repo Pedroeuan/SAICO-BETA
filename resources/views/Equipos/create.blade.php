@@ -1448,6 +1448,9 @@
                                         </button>
                                     </div>
                                 </div>
+                    <div class="box">
+                        <div class="box-body d-flex justify-content-center">
+                            <div style="display: inline-block;">
                                     <!-- Tabla de Elementos Disponibles -->
                                 <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
                                         <thead>
@@ -1519,6 +1522,9 @@
                                             @endforeach
                                         </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
                                 <br>
                                 <div class="alert alert-info alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
