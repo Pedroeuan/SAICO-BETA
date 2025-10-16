@@ -52,16 +52,15 @@ class TICSController extends Controller
      */
     public function storeTICS(Request $request)
     {
-            $validated = $request->validate([
-                'Nombre_E_P_BP' => 'required|string|max:255',
-                'ID' => 'required|string|max:255',
-                'Marca' => 'required|string|max:255',
-                'Modelo' => 'required|string|max:255',
-                'Serie' => 'required|string|max:255',
-                'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
-            ]);
-
+    $validated = $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'ID' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+        //'ISO' => 'required|in:9001,17025',
+        'Disponibilidad_Estado' => 'required|string|max:255',
+    ]);
             $NA='N/A';
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('ID');
@@ -246,7 +245,7 @@ class TICSController extends Controller
         // ISO
         $generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        if($request->input('ISO')=='Elige el tipo de ISO')
         {
             $generalConISO->NombreISO = $EsperaDato;
         }else{

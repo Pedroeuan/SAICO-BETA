@@ -82,26 +82,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <!--<div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">NOMBRE</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Nombre_E_P_BP">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="COMPUTADORA" {{ old('Nombre_E_P_BP') == 'ADAPTADOR' ? 'selected' : '' }}>ADAPTADOR</option>
-                                                <option value="ESCRITORIO" {{ old('Nombre_E_P_BP') == 'ESCRITORIO' ? 'selected' : '' }}>ESCRITORIO</option>
-                                                <option value="LAPTOP" {{ old('Nombre_E_P_BP') == 'LAPTOP' ? 'selected' : '' }}>LAPTOP</option>
-                                                <option value="ELIMINADOR DE CORRIENTE" {{ old('Nombre_E_P_BP') == 'ELIMINADOR DE CORRIENTE' ? 'selected' : '' }}>ELIMINADOR DE CORRIENTE</option>
-                                                <option value="IMPRESORA" {{ old('Nombre_E_P_BP') == 'IMPRESORA' ? 'selected' : '' }}>IMPRESORA</option>
-                                                <option value="TINTA" {{ old('Nombre_E_P_BP') == 'TINTA' ? 'selected' : '' }}>TINTA</option>
-                                                <option value="ESCANER" {{ old('Nombre_E_P_BP') == 'ESCANER' ? 'selected' : '' }}>ESCANER</option>
-                                                <option value="MODEM PORTATIL" {{ old('Nombre_E_P_BP') == 'MODEM PORTATIL' ? 'selected' : '' }}>MODEM PORTATIL</option>
-                                                <option value="USB" {{ old('Nombre_E_P_BP') == 'USB' ? 'selected' : '' }}>USB</option>
-                                                <option value="MOUSE" {{ old('Nombre_E_P_BP') == 'MOUSE' ? 'selected' : '' }}>MOUSE</option>
-                                                <option value="TECLADO" {{ old('Nombre_E_P_BP') == 'TECLADO' ? 'selected' : '' }}>TECLADO</option>
-                                                <option value="ADAPTADOR" {{ old('Nombre_E_P_BP') == 'ADAPTADOR' ? 'selected' : '' }}>ADAPTADOR</option>
-                                            </select>
-                                        </div>
-                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -216,7 +196,7 @@
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                                 @if ($rol == 'Super Administrador' || $rol == 'Administrador')
-                                                <option>Elige el tipo de ISO</option>
+                                                    <option>Elige el tipo de ISO</option>
                                                     <option value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
@@ -245,19 +225,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="ISO" value="N/A">
-                                        </div>
-                                    </div>
                                     
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -383,7 +350,7 @@
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                     <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
-                                                    @elseif($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                @elseif($rol == 'Super Administrador' || $rol == 'Administrador')
                                                     <option value="DISPONIBLE" {{ old('Disponibilidad_Estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE-9001</option>
                                                     <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE-9001</option>
                                                     <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA-9001</option>

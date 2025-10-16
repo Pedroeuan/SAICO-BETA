@@ -250,7 +250,7 @@ class equiposController extends Controller
         // ISO
         $generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        if($request->input('ISO')=='Elige el tipo de ISO')
         {
             $generalConISO->NombreISO = $EsperaDato;
         }else{

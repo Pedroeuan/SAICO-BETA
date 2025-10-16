@@ -58,7 +58,7 @@ class BlockYProbetaController extends Controller
                 'ISO' => 'required|in:9001,17025',
                 'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
-
+            $NA='N/A';
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
@@ -242,7 +242,7 @@ class BlockYProbetaController extends Controller
         // ISO
         $generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        if($request->input('ISO')=='Elige el tipo de ISO')
         {
             $generalConISO->NombreISO = $EsperaDato;
         }else{
