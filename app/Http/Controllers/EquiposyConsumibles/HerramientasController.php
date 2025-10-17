@@ -465,7 +465,7 @@ class HerramientasController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -627,6 +627,17 @@ class HerramientasController extends Controller
                 $generalConHerramientas->Plano = $PlanoPath;
                 $generalConHerramientas->save();
                 }
+
+            // Almacen
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
             }
             else
             {
@@ -681,7 +692,7 @@ class HerramientasController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -843,7 +854,17 @@ class HerramientasController extends Controller
                 $generalConHerramientas->Plano = $PlanoPath;
                 $generalConHerramientas->save();
                 }
-            }
+            // Almacen
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
+        }
 
         return redirect()->route('inventario');
     }

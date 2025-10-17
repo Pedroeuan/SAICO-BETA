@@ -225,6 +225,12 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Clasificación</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
+                                        </div>
+                                    </div>
                                     
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -715,9 +721,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                    @endif
-                                    
-                                    @if($rol == 'Laboratorio' )
+
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Nuevo</label>
@@ -935,7 +939,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
@@ -944,7 +948,7 @@
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -972,6 +976,13 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">BMPRO</label>
                                             <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Clasificación</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
                                         </div>
                                     </div>
 
@@ -1146,7 +1157,8 @@
                                             <input type="text" class="form-control inputForm" name="BMPRO" placeholder="Ejemplo: 5K010014" value="{{old('BMPRO')}}">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
@@ -1155,7 +1167,7 @@
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -1176,6 +1188,13 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
                                             <input type="text" class="form-control inputForm" name="Unidad" placeholder="Ejemplo: PZ, Bote, Caja, etc" value="PZA" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Clasificación</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
                                         </div>
                                     </div>
 
@@ -1349,7 +1368,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <!--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Clasificación</label>
                                             <select class="form-control select2" style="width: 100%;" name="Clasificacion" required>
@@ -1358,7 +1377,7 @@
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -1386,6 +1405,13 @@
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!--<label class="col-form-label" for="inputSuccess">Clasificación</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Clasificacion" value="N/A">
                                         </div>
                                     </div>
 

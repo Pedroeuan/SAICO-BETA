@@ -452,7 +452,7 @@ class BlockYProbetaController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -614,6 +614,16 @@ class BlockYProbetaController extends Controller
                 $CertificadosHistorialCertificados->save();
                 }
             }
+            // Almacen
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
         else
         {
@@ -669,7 +679,7 @@ class BlockYProbetaController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -831,6 +841,16 @@ class BlockYProbetaController extends Controller
                 $CertificadosHistorialCertificados->save();
                 }
             }
+            // Almacen
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
         return redirect()->route('inventario');
     }

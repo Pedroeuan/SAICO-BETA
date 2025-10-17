@@ -456,7 +456,6 @@ class equiposController extends Controller
                 'Comentario' => $request->input('Comentario'),
                 'SAT' => $request->input('SAT'),
                 'BMPRO' => $request->input('BMPRO'),
-                'Tipo' => $request->input('Tipo'),
                 'Disponibilidad_Estado' => $disponibilidadEstado,
             ]);
 
@@ -525,7 +524,10 @@ class equiposController extends Controller
                 $generalEyC->Foto = $imagenPath;
                 $generalEyC->save();
             }
-
+            $Almacen = almacen::where('idGeneral_EyC', $id)->first();
+            $Almacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
             // Actualizar los datos de Clasificación
             $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
             $generalConClasificacion->update([
@@ -583,10 +585,10 @@ class equiposController extends Controller
                 'No_certificado' => $request->input('No_certificado'),
                 'Fecha_calibracion' => $fechaCalibracion,
                 'Prox_fecha_calibracion' => $proxFechaCalibracion,
-                'Fecha_verificacion' => $proxFechaCalibracion,
-                'Prox_fecha_verificacion' => $proxFechaCalibracion,
-                'Fecha_mantenimiento' => $proxFechaCalibracion,
-                'Prox_fecha_mantenimiento' => $proxFechaCalibracion,
+                'Fecha_verificacion' => $Fecha_verificacion,
+                'Prox_fecha_verificacion' => $Prox_fecha_verificacion,
+                'Fecha_mantenimiento' => $Fecha_mantenimiento,
+                'Prox_fecha_mantenimiento' => $Prox_fecha_mantenimiento,
             ]);
 
             // Verificar si se ha proporcionado un nuevo certificado actual
@@ -691,7 +693,6 @@ class equiposController extends Controller
                 'Comentario' => $request->input('Comentario'),
                 'SAT' => $request->input('SAT'),
                 'BMPRO' => $request->input('BMPRO'),
-                'Tipo' => $request->input('Tipo'),
                 'Disponibilidad_Estado' => $disponibilidadEstado,
             ]);
 
@@ -760,6 +761,10 @@ class equiposController extends Controller
                 $generalEyC->Foto = $imagenPath;
                 $generalEyC->save();
             }
+            $Almacen = almacen::where('idGeneral_EyC', $id)->first();
+            $Almacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
 
             // Actualizar los datos de Clasificación
             $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
@@ -789,15 +794,39 @@ class equiposController extends Controller
                 $proxFechaCalibracion = '2001-01-01';
             }else{
                     $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
+            }
+            if($request->input('Fecha_verificacion')==null)
+            {
+                $Fecha_verificacion = '2001-01-01';
+            }else{
+                $Fecha_verificacion = $request->input('Fecha_verificacion');
+            }  
+                if($request->input('Prox_fecha_verificacion')==null)
+            {
+                $Prox_fecha_verificacion = '2001-01-01';
+            }else{
+                $Prox_fecha_verificacion = $request->input('Prox_fecha_verificacion');
+            }  
+                if($request->input('Fecha_mantenimiento')==null)
+            {
+                $Fecha_mantenimiento = '2001-01-01';
+            }else{
+                $Fecha_mantenimiento = $request->input('Fecha_mantenimiento');
+            }  
+                if($request->input('Prox_fecha_mantenimiento')==null)
+            {
+                $Prox_fecha_mantenimiento = '2001-01-01';
+            }else{
+                $Prox_fecha_mantenimiento = $request->input('Prox_fecha_mantenimiento');
             }  
             $generalConCertificado->update([
                 'No_certificado' => $request->input('No_certificado'),
                 'Fecha_calibracion' => $fechaCalibracion,
                 'Prox_fecha_calibracion' => $proxFechaCalibracion,
-                'Fecha_verificacion' => $proxFechaCalibracion,
-                'Prox_fecha_verificacion' => $proxFechaCalibracion,
-                'Fecha_mantenimiento' => $proxFechaCalibracion,
-                'Prox_fecha_mantenimiento' => $proxFechaCalibracion,
+                'Fecha_verificacion' => $Fecha_verificacion,
+                'Prox_fecha_verificacion' => $Prox_fecha_verificacion,
+                'Fecha_mantenimiento' => $Fecha_mantenimiento,
+                'Prox_fecha_mantenimiento' => $Prox_fecha_mantenimiento,
             ]);
 
             // Verificar si se ha proporcionado un nuevo certificado actual

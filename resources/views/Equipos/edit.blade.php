@@ -477,7 +477,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha Verificación</label>
-                                                @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                                @if($generalConCertificados->Fecha_verificacion =='2001-01-01')
                                                 <input type="date" class="form-control inputForm" name="Fecha_verificacion">
                                                 @else
                                                 <input type="date" class="form-control inputForm" id="fechav" name="Fecha_verificacion" value="{{ $generalConCertificados->Fecha_verificacion  }}">
@@ -488,7 +488,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess"> Siguiente Verificación</label>
-                                                @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                                @if($generalConCertificados->Prox_fecha_verificacion =='2001-01-01')
                                                 <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion">
                                                 @else
                                                 <input type="date" class="form-control inputForm" name="Prox_fecha_verificacion" value="{{ $generalConCertificados->Prox_fecha_verificacion }}">
@@ -500,7 +500,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha Mantenimiento</label>
-                                            @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                            @if($generalConCertificados->Fecha_mantenimiento =='2001-01-01')
                                             <input type="date" class="form-control inputForm" name="Fecha_mantenimiento">
                                             @else
                                             <input type="date" class="form-control inputForm" id="fecham" name="Fecha_mantenimiento" value="{{ $generalConCertificados->Fecha_mantenimiento }}">
@@ -511,7 +511,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Mantenimiento @elseif($rol == 'Equipos') Fecha de Proximo Mantenimiento @else Siguiente Mantenimiento/Fecha de Proximo Mantenimiento @endif</label>
-                                            @if($generalConCertificados->Prox_fecha_calibracion =='2001-01-01')
+                                            @if($generalConCertificados->Prox_fecha_mantenimiento =='2001-01-01')
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento">
                                             @else
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ $generalConCertificados->Prox_fecha_mantenimiento }}">
@@ -880,25 +880,30 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha de adquisición /Fecha de alta</label>
-                                                <input type="date" class="form-control inputForm" name="Fecha_Alta" value="{{ $generalConAlmacenConHistorialAlamcen->Fecha }}">
+                                                @if($generalConCertificados->Fecha_calibracion == '2001-01-01')
+                                                    <input type="date" class="form-control inputForm" name="Fecha_calibracion">
+                                                @else
+                                                    <input type="date" class="form-control inputForm" name="Fecha_Alta" value="{{ $generalConAlmacenConHistorialAlmacen->historialAlmacen->first()->Fecha }}">
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">SAT</label>
-                                            <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
+                                    @if($rol != 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">SAT</label>
+                                                <input type="text" class="form-control inputForm" name="SAT" value="{{ $generalEyC->SAT }}" placeholder="Ejemplo: 41116500">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">BMPRO</label>
-                                            <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">BMPRO</label>
+                                                <input type="text" class="form-control inputForm" name="BMPRO" value="{{ $generalEyC->BMPRO }}" placeholder="Ejemplo: 5K010014">
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -1014,6 +1019,7 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Certificado</label>
@@ -1041,6 +1047,7 @@
                                         </div>
                                     </div>
                                     @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proveedor</label>
@@ -1073,6 +1080,32 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
                                             <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" required>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected="selected" @endif>PND</option>
+                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @endif>IM</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO">
+                                                @if($rol != 'Laboratorio' || $rol != 'Equipos')<option selected="selected">Elige el tipo de ISO que pertenece</option>@endif
+                                                @if ($rol == 'Equipos')<option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>@endif
+                                                @if ($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>
+                                                    <option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                                @endif
+                                            </select>
                                         </div>
                                     </div>
 
@@ -1309,6 +1342,32 @@
                                         </div>
                                     </div>
 
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected="selected" @endif>PND</option>
+                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @endif>IM</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO">
+                                                @if($rol != 'Laboratorio' || $rol != 'Equipos')<option selected="selected">Elige el tipo de ISO que pertenece</option>@endif
+                                                @if ($rol == 'Equipos')<option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>@endif
+                                                @if ($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>
+                                                    <option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -1541,6 +1600,32 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Unidad</label>
                                             <input type="text" class="form-control inputForm" name="Unidad" value="{{ $generalConAlmacen->Unidad }}" placeholder="Ejemplo: PZ, Bote, Caja, etc" required>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Clasificación</label>
+                                            <select class="form-control select2" style="width: 100%;" name="Clasificacion">
+                                                <option selected="selected">Elige el tipo de inspección que pertenece</option>
+                                                <option value="PND" @if($generalConClasificacion?->NombreC == 'PND') selected="selected" @endif>PND</option>
+                                                <option value="IM" @if($generalConClasificacion?->NombreC == 'IM') selected="selected" @endif>IM</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">ISO</label>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO">
+                                                @if($rol != 'Laboratorio' || $rol != 'Equipos')<option selected="selected">Elige el tipo de ISO que pertenece</option>@endif
+                                                @if ($rol == 'Equipos')<option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>@endif
+                                                @if ($rol == 'Laboratorio')<option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>@endif
+                                                @if ($rol == 'Super Administrador' || $rol == 'Administrador')
+                                                    <option value="9001" @if($generalConISO?->NombreISO == '9001') selected="selected" @endif >9001</option>
+                                                    <option value="17025" @if($generalConISO?->NombreISO == '17025') selected="selected" @endif >17025</option>
+                                                @endif
+                                            </select>
                                         </div>
                                     </div>
 

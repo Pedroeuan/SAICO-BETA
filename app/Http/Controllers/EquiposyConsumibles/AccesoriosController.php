@@ -398,7 +398,7 @@ class AccesoriosController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -508,6 +508,12 @@ class AccesoriosController extends Controller
         $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
         $generalConAlmacen->update([
             'Stock' => $request->input('Stock'),
+            'Unidad' => $request->input('Unidad'),
+        ]);
+        // Actualizar los datos de ISO
+        $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+        $generalConISO->update([
+            'NombreISO' => $request->input('ISO'),
         ]);
     }
     else
@@ -564,7 +570,7 @@ class AccesoriosController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -674,6 +680,12 @@ class AccesoriosController extends Controller
         $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
         $generalConAlmacen->update([
             'Stock' => $request->input('Stock'),
+            'Unidad' => $request->input('Unidad'),
+        ]);
+        // Actualizar los datos de ISO
+        $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+        $generalConISO->update([
+            'NombreISO' => $request->input('ISO'),
         ]);
     }
     

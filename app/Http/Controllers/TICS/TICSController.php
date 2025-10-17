@@ -484,11 +484,17 @@ class TICSController extends Controller
                 $generalEyC->save();
             }
 
-                    // Actualizar los datos del Almacen asociado
-        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
-        $generalConAlmacen->update([
-            'Stock' => $request->input('Stock'),
-        ]);
+            // Actualizar los datos del Almacen asociado
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
         else
         {
@@ -617,9 +623,13 @@ class TICSController extends Controller
             // Actualizar los datos del Almacen asociado
             $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
             $generalConAlmacen->update([
-                'Stock' => $request->input('Stock'),
+                'Unidad' => $request->input('Unidad'),
             ]);
-
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
             return redirect()->route('inventario');
     }
