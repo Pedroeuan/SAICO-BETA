@@ -57,7 +57,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
-use App\Http\Controllers\solicitud_AD\SolicitudADcontroller;
+use App\Http\Controllers\solicitud_AD\SolicitudADController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -67,15 +67,12 @@ use App\Http\Controllers\solicitud_AD\SolicitudADcontroller;
     Route::middleware('auth')->group(function () {
     /*SOLICITUDES-1*/
     /*Rutas de Vistas de Solicitudes-Registro*/
-    Route::get('/solicitud/create', [SolicitudADController::class, 'create'])->name('solicitud.create');
+    Route::get('/ADsolicitud/create', [SolicitudADController::class, 'create'])->name('ADsolicitud.create');
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
-    Route::get('/solicitud/index', [SolicitudADController::class, 'index'])->name('solicitud.index');
+    Route::get('/ADsolicitud/index', [SolicitudADController::class, 'index'])->name('ADsolicitud.index');
     /*Ruta de Guardado-index*/
-    Route::post('/solicitudes/storeSolicitud', [SolicitudADController::class, 'storeSolicitudAD'])->name('solicitudes.storeSolicitud');
-    /*Ruta de botón Agregar-datos a detalles solicitud-por aprobar*/
-    Route::post('/solicitudes/agregar', [SolicitudADController::class, 'agregarDetallesSolicitudAD'])->name('solicitudes.agregarDetallesSolicitud');
-    /*Ruta de botón Eliminación-detalles_Solicitud-por aprobar*/
-    Route::delete('/Detalles_solicitudes/eliminar/{id}', [SolicitudADController::class, 'destroyDetallesSolicitudAD'])->name('solicitudes.destroyDetallesSolicitud');
+    Route::post('/ADsolicitud/store', [SolicitudADController::class, 'store'])->name('ADsolicitud.store');
+
     });
 
 

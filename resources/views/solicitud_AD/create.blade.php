@@ -22,79 +22,40 @@
 <br>
 
 <!-- form start -->
-<form id="solicitudForm" role="form" method="POST" action="{{route('solicitudAD.storeSolicitud')}}" enctype="multipart/form-data">
-    @csrf
-
     <div class="card-body">
-        <form id="form-solicitud" method="POST" action="{{ route('solicitudes.store') }}">
+        <form id="form-solicitud" method="POST" action="{{ route('ADsolicitud.store') }}">
             @csrf
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" required>
+                    <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label for="estatus" class="form-label">Estatus</label>
-                    <select class="form-control" id="estatus" name="estatus" required>
-                        <option value="">Seleccione...</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Aprobado">Aprobado</option>
-                        <option value="Rechazado">Rechazado</option>
-                    </select>
+                    <input type="text" class="form-control" id="estatus" name="estatus" value="PENDIENTE" readonly>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label for="TEMA" class="form-label">Tema Principal</label>
+                    <input type="text" class="form-control" id="TEMA" name="Tema" placeholder="Ejemplo: SERVICIO PROTEXA" required>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label for="comentario" class="form-label">Comentario</label>
-                    <input type="text" class="form-control" id="comentario" name="comentario" placeholder="Observaciones...">
+                    <input type="text" class="form-control" id="comentario" name="comentario" placeholder="Observaciones..." required>
                 </div>
-            </div>
 
-            <div class="mt-4">
-                <h5>Seleccionar Usuario(s) asociados a la solicitud</h5>
-                <table id="tabla-usuarios" class="table table-bordered table-striped mt-3">
-                    <thead class="text-center">
-                        <tr>
-                            <th>Seleccionar</th>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Estatus</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($usuarios as $user)
-                            <tr>
-                                <td class="text-center">
-                                    <input type="checkbox" name="usuarios[]" value="{{ $user->id }}">
-                                </td>
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->rol }}</td>
-                                <td>
-                                    <span class="badge {{ $user->estatus == 'Activo' ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $user->estatus }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> Guardar Solicitud
+                    </button>
+                </div>
 
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success btn-lg">
-                    <i class="fas fa-save"></i> Guardar Solicitud
-                </button>
-                <a href="{{ route('solicitudes.index') }}" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-arrow-left"></i> Volver
-                </a>
             </div>
         </form>
     </div>
-</div>
+
 @stop
 
 @section('css')
@@ -111,67 +72,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $(function() {
-            // Inicializar DataTable
-            $('#tabla-usuarios').DataTable({
-                responsive: true,
-                autoWidth: false,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                }
-            });
 
-            // Interceptar envío del formulario
-            $('#form-solicitud').on('submit', function(e) {
-                e.preventDefault();
-
-                // Verificar que al menos un usuario esté seleccionado
-                if ($('input[name="usuarios[]"]:checked').length === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Atención',
-                        text: 'Debe seleccionar al menos un usuario para asociar la solicitud.'
-                    });
-                    return;
-                }
-
-                // Confirmar envío
-                Swal.fire({
-                    title: '¿Desea guardar esta solicitud?',
-                    text: "Se asociará con los usuarios seleccionados.",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, guardar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: $(this).attr('action'),
-                            type: 'POST',
-                            data: $(this).serialize(),
-                            success: function(response) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Solicitud creada correctamente',
-                                    showConfirmButton: false,
-                                    timer: 1800
-                                }).then(() => {
-                                    window.location.href = "{{ route('solicitudes.index') }}";
-                                });
-                            },
-                            error: function(xhr) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error al guardar',
-                                    text: 'Verifique los datos e intente nuevamente.'
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        });
     </script>
 @stop

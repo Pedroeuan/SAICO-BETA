@@ -16,6 +16,7 @@ class solicitud_AD extends Model
         'fecha',
         'estatus',
         'comentario',
+        'Tema',
     ];
 
     public $timestamps = false; // si tu tabla no tiene created_at / updated_at

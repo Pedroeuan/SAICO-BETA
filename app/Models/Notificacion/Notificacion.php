@@ -4,6 +4,7 @@ namespace App\Models\Notificacion;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Notificacion extends Model
 {
