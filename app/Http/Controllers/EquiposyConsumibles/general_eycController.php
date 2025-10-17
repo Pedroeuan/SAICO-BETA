@@ -114,6 +114,7 @@ class general_eycController extends Controller
         $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
         $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacenConHistorialAlamcen = general_eyc::with('historialAlmacen')->where('idGeneral_EyC', $id)->first();
 
         // Retornar la vista con los datos obtenidos
         return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO','rol'));

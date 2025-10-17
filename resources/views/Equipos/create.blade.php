@@ -192,7 +192,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
-                                            <select class="form-control select2" style="width: 100%;" name="ISO" required readonly>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required @if($rol != 'Super Administrador' || $rol != 'Administrador')readonly @endif>
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                                 @if ($rol == 'Super Administrador' || $rol == 'Administrador')
@@ -586,7 +586,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @else Lote @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @elseif($rol =='Equipos') Lote @else No. SERIE / No. DE LOTE @endif</label>
                                             <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
                                         </div>
                                     </div>
@@ -1008,7 +1008,7 @@
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Nombre</label>
-                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: BLOCK ASME T= 3/4"" value="{{old('Nombre_E_P_BP')}}">
+                                            <input type="text" class="form-control inputForm @error('Nombre_E_P_BP') is-invalid @enderror" name="Nombre_E_P_BP"  placeholder="Ejemplo: BLOCK ASME T= 3/4" value="{{old('Nombre_E_P_BP')}}">
                                             @error('Nombre_E_P_BP')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -1448,83 +1448,83 @@
                                         </button>
                                     </div>
                                 </div>
-                    <div class="box">
-                        <div class="box-body d-flex justify-content-center">
-                            <div style="display: inline-block;">
-                                    <!-- Tabla de Elementos Disponibles -->
-                                <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Num. Económico</th>
-                                                <th>Marca</th>
-                                                <th>Modelo</th>
-                                                <th>NS</th>
-                                                <th>Stock</th>
-                                                <th>Disponibilidad</th>
-                                                <th>Fecha calibración</th>
-                                                <th>Ver</th>
-                                                <th>Agregar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($generalConCertificados as $general_eyc)
-                                            @php //dump($general_eyc->Disponibilidad_Estado);
-                                            @endphp
-                                            <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
-                                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                                                <td scope="row">{{$general_eyc->No_economico}}</td>
-                                                <td scope="row">{{$general_eyc->Marca}}</td>
-                                                <td scope="row">{{$general_eyc->Modelo}}</td>
-                                                <td scope="row">{{$general_eyc->Serie}}</td>
-                                                <td scope="row">{{$general_eyc->almacen->Stock}}</td>
-                                                @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
-                                                    @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                                        <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
-                                                @endif
-
-                                                @if($general_eyc->certificados)
-                                                    @if($general_eyc->Tipo == 'EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
-                                                            @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                                <td scope="row">SIN FECHA ASIGNADA</td>
-                                                                @else
-                                                                <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                <div class="box">
+                                    <div class="box-body d-flex justify-content-center">
+                                        <div style="display: inline-block;">
+                                                <!-- Tabla de Elementos Disponibles -->
+                                            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nombre</th>
+                                                            <th>Num. Económico</th>
+                                                            <th>Marca</th>
+                                                            <th>Modelo</th>
+                                                            <th>NS</th>
+                                                            <th>Stock</th>
+                                                            <th>Disponibilidad</th>
+                                                            <th>Fecha calibración</th>
+                                                            <th>Ver</th>
+                                                            <th>Agregar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($generalConCertificados as $general_eyc)
+                                                        @php //dump($general_eyc->Disponibilidad_Estado);
+                                                        @endphp
+                                                        <tr data-id="{{ $general_eyc->idGeneral_EyC }}">
+                                                            <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                                            <td scope="row">{{$general_eyc->No_economico}}</td>
+                                                            <td scope="row">{{$general_eyc->Marca}}</td>
+                                                            <td scope="row">{{$general_eyc->Modelo}}</td>
+                                                            <td scope="row">{{$general_eyc->Serie}}</td>
+                                                            <td scope="row">{{$general_eyc->almacen->Stock}}</td>
+                                                            @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
+                                                                @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                                    <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                                             @endif
-                                                        @else
-                                                        <td scope="row">N/A</td>
-                                                    @endif
-                                                @endif
 
-                                                <td scope="row">
-                                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
-                                                    @else
-                                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                                                            @if($general_eyc->certificados)
+                                                                @if($general_eyc->Tipo == 'EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                                                        @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
+                                                                            <td scope="row">SIN FECHA ASIGNADA</td>
+                                                                            @else
+                                                                            <td scope="row">{{$general_eyc->certificados->Fecha_calibracion}}</td>
+                                                                        @endif
+                                                                    @else
+                                                                    <td scope="row">N/A</td>
+                                                                @endif
+                                                            @endif
+
+                                                            <td scope="row">
+                                                                @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="fa fa-eye"></i></a>
+                                                                @else
+                                                                <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-success btnAgregar" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                                 <br>
                                 <div class="alert alert-info alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
