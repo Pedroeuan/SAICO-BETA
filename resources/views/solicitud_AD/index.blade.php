@@ -37,11 +37,11 @@
                     <th>Fecha</th>
                     <th>Estatus</th>
                     <th>Comentario</th>
-                    <th>Usuario</th>
+                    <th>Tema</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($Usuarios as $Usuario)
+                @foreach($solicitudes as $Usuario)
                     <tr>
                         <td>{{ $Usuario->name }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
