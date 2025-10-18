@@ -37,7 +37,7 @@
         </tr>
         <tr style="background-color: #f1f1f1; color: #555;">
             <td style="padding: 10px; text-align: center; font-size: 12px;">
-                <span style="color: #003b80;">S</span><span style="color: #E01A22;">istema</span> - 
+                <span style="color: #003b80;">S</span><span style="color: #E01A22;">ISTEMA</span> - 
                 <span style="color: #E01A22;">A</span>SESORIA E 
                 <span style="color: #E01A22;">I</span>NSPECCIÓN EN CONSTRUCCIÓN 
                 <span style="color: #E01A22;">CO</span>STA FUERA
