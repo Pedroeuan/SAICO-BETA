@@ -704,7 +704,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio' )Stock @else Stock Total (Usado y NO Usado) @endif</label>
-                                            <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock') }}">
+                                            <input type="number" class="form-control inputForm @error('Stock') is-invalid @enderror" name="Stock" id="stockTotal" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Stock',0) }}" min="0">
                                             @error('Stock')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -715,7 +715,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Usado</label>
-                                                <input type="number" class="form-control inputForm @error('Usado') is-invalid @enderror" name="Usado" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado') }}">
+                                                <input type="number" class="form-control inputForm @error('Usado') is-invalid @enderror" name="Usado" id="stockUsado" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado',0) }}" min="0">
                                                 @error('Usado')
                                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -725,7 +725,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Nuevo</label>
-                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror" name="Nuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Usado') }}">
+                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror" name="Nuevo" id="stockNuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ old('Nuevo',0) }}" min="0">
                                                 @error('Nuevo')
                                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -1407,7 +1407,7 @@
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="HERRAMIENTAS">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!--<label class="col-form-label" for="inputSuccess">Clasificación</label>-->
@@ -1645,40 +1645,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Alta_Equipos.js') }}"></script>
 <script>
-$(document).ready(function() {
-    function setDisponibilidadBgColor(select) {
-        var val = $(select).val();
-        var bg = '';
-        var color = 'white';
-        // Solo para opciones del laboratorio
-        if (val === 'Equipo Disponible' || val === 'Nuevo') {
-            bg = '#28a745'; // verde
-            color = 'white';
-        } else if (val === 'Equipo Fuera de Servicio' || val === 'Usado') {
-            bg = '#eeff07ff'; // amarillo
-            color = 'black';
-        } else if (val === 'En Servicio') {
-            bg = '#dca735'; // naranja
-            color = 'white';
-        }else if (val === 'Equipo en Resguardo' || val === 'Terminado') {
-            bg = '#dc3545'; // rojo
-            color = 'white';
-        } else {
-            bg = 'white';
-            color = 'black';
-        }
-        $(select).css({
-            'background-color': bg,
-            'color': color
-        });
-    }
 
-    $('select[name="Disponibilidad_Estado"]').each(function() {
-        setDisponibilidadBgColor(this);
-    }).on('change', function() {
-        setDisponibilidadBgColor(this);
-    });
-});
 
 document.getElementById('btnImportar').addEventListener('click', function () {
     // Crear un objeto FormData con el formulario

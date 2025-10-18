@@ -381,7 +381,7 @@ class consumiblesController extends Controller
     /* Update the specified resource in storage.
      */
         public function updateConsumibles(Request $request, $id)
-        {
+        { //dd($request->all());
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
@@ -539,7 +539,6 @@ class consumiblesController extends Controller
             'Stock' => $request->input('Stock'),
             'Unidad' => $request->input('Unidad'),
         ]);
-
         $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $generalConISO->update([
             'ISO' => $request->input('ISO'),

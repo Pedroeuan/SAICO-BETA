@@ -817,7 +817,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio' )Stock @else Stock Total (Usado y NO Usado) @endif</label>
-                                            <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" name="Stock" placeholder="Enter ...">
+                                            <input type="number" class="form-control inputForm" value="{{ $generalConAlmacen->Stock }}" id="stockTotal" name="Stock" placeholder="Enter ...">
                                         </div>
                                     </div>
 
@@ -825,7 +825,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Usado</label>
-                                                <input type="number" class="form-control inputForm @error('Usado') is-invalid @enderror" name="Usado" placeholder="Ejemplo: 1.2.3..20.." value="{{ $generalConISO->Usado }}">
+                                                <input type="number" class="form-control inputForm @error('Usado') is-invalid @enderror" id="stockUsado" name="Usado" placeholder="Ejemplo: 1.2.3..20.." value="{{ $generalConISO->Usado }}">
                                                 @error('Usado')
                                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -835,7 +835,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Nuevo</label>
-                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror" name="Nuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ $generalConISO->Nuevo }}">
+                                                <input type="number" class="form-control inputForm @error('Nuevo') is-invalid @enderror"  id="stockNuevo" name="Nuevo" placeholder="Ejemplo: 1.2.3..20.." value="{{ $generalConISO->Nuevo }}">
                                                 @error('Nuevo')
                                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -1684,64 +1684,9 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Edit_Equipos.js') }}"></script>
 
 <Script>
-    document.addEventListener('DOMContentLoaded', function() {
 
-                /*Prevenir el Enter TICS*/
-    var equiposForm = document.getElementById('TICSForm');
-    if (equiposForm) {
-        equiposForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Equipos*/
-    var equiposForm = document.getElementById('equiposForm');
-    if (equiposForm) {
-        equiposForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Consumibles*/
-    var consumiblesForm = document.getElementById('consumiblesForm');
-    if (consumiblesForm) {
-        consumiblesForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Accesorios*/
-    var accesoriosForm = document.getElementById('accesoriosForm');
-    if (accesoriosForm) {
-        accesoriosForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Blocks*/
-    var blocksForm = document.getElementById('blocksForm');
-    if (blocksForm) {
-        blocksForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Herramientas*/
-    var herramientasForm = document.getElementById('herramientasForm');
-    if (herramientasForm) {
-        herramientasForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-});
 </script>
 @endsection
