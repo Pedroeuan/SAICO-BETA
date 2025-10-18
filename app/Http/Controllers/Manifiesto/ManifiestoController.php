@@ -598,6 +598,12 @@ class ManifiestoController extends Controller
                         'Observaciones' =>$request->input('Observaciones'),
                         'SATBMPRO' => $SATBMPRO,
                     ]);
+                }
+        }
+            // 🔥 ELIMINAR ARCHIVO ANTERIOR SI EXISTE
+                if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+                    Storage::disk('public')->delete($Manifiestos->ScanPDF);
+                }
 
                 // Validar que se ha enviado el archivo de foto
                     if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
@@ -623,9 +629,6 @@ class ManifiestoController extends Controller
                     }
 
                     $Manifiestos->save();
-                }
-            
-        }
 
         return redirect()->route('solicitud.index');
     }
