@@ -429,6 +429,10 @@ class BlockYProbetaController extends Controller
 
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
+        Log::info('No_economico desde BD: ' . $No_EBD);
+        Log::info('No_economico desde Formulario: ' . $No_EF);
+        Log::info('Serie desde BD: ' . $SerBD);
+        Log::info('Serie desde Formulario: ' . $SerF);
 
         if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
         strcasecmp(trim($SerF), trim($SerBD)) == 0)
@@ -638,9 +642,10 @@ class BlockYProbetaController extends Controller
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'BLOCK Y PROBETA')
             ->exists();
+            log::info('Verificación de duplicado para No_economico: ' . $noEconomicoLimpio . ' - Resultado: ' . ($existsNo_Economico ? 'Existe' : 'No existe'));
 
             $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
-
+            log::info('Verificación de duplicado para Serie: ' . $serie . ' - Resultado: ' . ($existsSerie ? 'Existe' : 'No existe'));
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
             if ($existsNo_Economico && $existsSerie)
