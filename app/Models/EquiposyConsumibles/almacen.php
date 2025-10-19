@@ -13,6 +13,7 @@ class almacen extends Model
         'No_certificado',
         'Lote',
         'Stock',
+        'Unidad',
     ];
     protected $table = 'almacen';
     protected $primaryKey = 'idAlmacen';

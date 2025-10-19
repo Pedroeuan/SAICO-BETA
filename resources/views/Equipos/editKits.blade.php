@@ -70,7 +70,9 @@
 
                                         </div><!--d-flex justify -->
                                     </div><!--box -->
-
+                    <div class="box">
+                        <div class="box-body d-flex justify-content-center">
+                            <div style="display: inline-block;">
                                     <h5 align="center">Elige los equipos y consumibles para editar el KIT</h5>
                                     <!-- Tabla de Elementos Disponibles -->
                                     <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
@@ -146,7 +148,10 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-
+                                </div>
+                                </div><!--box-body d-flex justify-content-center-->
+                                </div><!--box-->
+                                <br>
                                     <!-- Tabla de Elementos Seleccionados -->
                                     <div class="container">
                                     <h5 align="center">Nuevo Kit editado</h5>

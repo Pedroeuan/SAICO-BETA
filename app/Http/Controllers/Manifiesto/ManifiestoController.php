@@ -375,7 +375,8 @@ class ManifiestoController extends Controller
                     $AlmacenStock = $Almacen->Stock;
                     $AlmacenDescuento = $detalle->Cantidad;
                     $Verificar = $AlmacenStock-$AlmacenDescuento;
-
+                    Log::info('***********************');
+                    Log::info('Verificar: ', ['Verificar' => $Verificar]);
                         // Actualizar stock
                         $Almacen->update([
                             'Stock' => $Verificar
@@ -532,7 +533,6 @@ class ManifiestoController extends Controller
                         $AlmacenStock = $Almacen->Stock;
                         $AlmacenDescuento = $detalle->Cantidad;
                         $Verificar = $AlmacenStock-$AlmacenDescuento;
-
                         // Actualizar stock
                         $Almacen->update([
                             'Stock' => $Verificar
@@ -606,6 +606,22 @@ class ManifiestoController extends Controller
                                     $historialAlmacenExistente ->update([
                                         'Cantidad' => $Cantidad_Detalle_Solicitud,
                                     ]);
+                                    // 🔹 Agregar validación para actualizar disponibilidad
+                                    $generalEyC = general_eyc::with('ISO')->find($detalle->idGeneral_EyC);
+
+                                    if ($generalEyC->ISO->NombreISO == '17025') {
+                                        if ($StockAlmacenActualizar == 0) {
+                                            $generalEyC->update([
+                                                'Disponibilidad_Estado' => 'En Servicio',
+                                            ]);
+                                        }
+                                    } else {
+                                        if ($StockAlmacenActualizar == 0) {
+                                            $generalEyC->update([
+                                                'Disponibilidad_Estado' => 'NO DISPONIBLE',
+                                            ]);
+                                        }
+                                    }
                                 }
 
                             if($Destino_Form != $Destino_BD)
@@ -653,7 +669,13 @@ class ManifiestoController extends Controller
                         'Observaciones' =>$request->input('Observaciones'),
                         'SATBMPRO' => $SATBMPRO,
                     ]);
-
+                }
+                }
+                
+                // 🔥 ELIMINAR ARCHIVO ANTERIOR SI EXISTE
+                if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
+                    Storage::disk('public')->delete($Manifiestos->ScanPDF);
+                }
                 // Validar que se ha enviado el archivo de foto
                     if ($request->hasFile('ScanPDF') && $request->file('ScanPDF')->isValid()) {
                         $ScanPDF = $request->file('ScanPDF');
@@ -676,11 +698,7 @@ class ManifiestoController extends Controller
 
                         $Manifiestos->ScanPDF = $ScanPDFPath;
                     }
-
-                    $Manifiestos->save();
-                }
-            
-        }
+            $Manifiestos->save();
 
         return redirect()->route('solicitud.index');
     }
@@ -902,7 +920,7 @@ class ManifiestoController extends Controller
     }
 
     public function PreConcluirManifiesto (Request $request, $id)
-    { 
+    { //dd(request()->all());
         /**/
         $EntregaDevolucion = $request->input('Entrega_Nombre_Devolucion');
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
@@ -912,9 +930,12 @@ class ManifiestoController extends Controller
 
         // Obtener los ids de las solicitudes en formato array
         $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
+        Log::info('***********************');
+        Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'PRE-CONCLUIDO']);
+        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'PRE-CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
@@ -941,10 +962,20 @@ class ManifiestoController extends Controller
             $idManifiesto = DB::table('manifiestos')
             ->where('idSolicitud', $idSolicitud)
             ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
-
+            Log::info('idManifiesto: ', ['idManifiesto' => $idManifiesto]);
             $Fecha = Carbon::now();
             // Crear una nueva devolución
-            DB::table('devoluciones')->insert([
+            $Devoluciones = new devolucion;
+            $Devoluciones->idManifiestos = $idManifiesto;
+            $Devoluciones->idSolicitud = $idSolicitud;
+            $Devoluciones->Entrega = $EntregaDevolucion;
+            $Devoluciones->Recibe = $RecibeDevolucion;
+            $Devoluciones->Fecha = $Fecha;
+            $Devoluciones->Observaciones = $Observaciones;
+            $Devoluciones->Condiciones = $Condiciones;
+            $Devoluciones->ScanPDF = $ScanPDF;
+            $Devoluciones->save();
+            /*DB::table('devoluciones')->insert([
 
                 'idManifiestos'=> $idManifiesto,
                 'idSolicitud'=> $idSolicitud,
@@ -954,7 +985,7 @@ class ManifiestoController extends Controller
                 'Observaciones'  => $Observaciones,
                 'Condiciones'  => $Condiciones,
                 'ScanPDF'  => $ScanPDF,
-            ]);
+            ]);*/
         }
 
         if($rol == 'Técnicos')
@@ -980,7 +1011,6 @@ class ManifiestoController extends Controller
 
             if ($manifiesto) 
             {
-                
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
                 
@@ -1056,6 +1086,7 @@ class ManifiestoController extends Controller
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
+        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario

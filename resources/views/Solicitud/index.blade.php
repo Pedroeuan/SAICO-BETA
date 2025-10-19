@@ -131,14 +131,14 @@
                                         </td>
                                     <!--PDF DE RESGUARDO-->
                                         <td>
-                                            @if ($solicitud->devolucion_pdf)
+                                            @if (empty($solicitud->devolucion_pdf) || in_array($solicitud->devolucion_pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                            @else ($solicitud->devolucion_pdf)
                                                 <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
                                                     <i class="far fa-file-pdf"></i> 
                                                 </a>
-                                            @else
-                                                <span class="btn btn-secondary" style="cursor: not-allowed; background-color: gray; border-color: gray;">
-                                                    <i class="far fa-file-pdf"></i> 
-                                                </span>
                                             @endif
                                         </td>
 

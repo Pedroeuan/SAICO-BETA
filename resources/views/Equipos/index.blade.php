@@ -42,6 +42,18 @@
     .table-responsive {
         overflow-x: auto;
     }
+    .box {
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-body {
+        display: inline-block;
+    }
+
+    #tablaJs {
+        width: auto !important;
+    }
 </style>
 @endsection
 
@@ -50,9 +62,9 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form">
-    <div class="box ">
-        <div class="box-body">
+    <div class="box">
+        <div class="box-body d-flex justify-content-center">
+        <div style="display: inline-block;">
         <h3 align="center">Inventario</h3>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
@@ -78,21 +90,21 @@
                     </tbody>
                 </table> -->
 
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas" style="width:100%">
+            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Categoria</th>
                         <th>Nombre</th>
-                        <th>Numero / ID</th>
+                        <th>Numero/ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
-                        <th>Prox. Fecha Calibración/Caducidad</th>
+                        <th>Prox.Fecha Calibración/Caducidad</th>
                         <th>Días Restantes</th>
-                        <th>Hoja de Presentación</th>
+                        <th>Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
                     </tr>
@@ -175,9 +187,10 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
-</form>
+
 @stop
 
 @section('js')

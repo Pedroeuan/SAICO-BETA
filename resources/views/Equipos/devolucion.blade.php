@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Inventario')
+@section('title', 'Devoluciones')
 
 @section('css')
 <!--datatable -->
@@ -181,6 +181,7 @@
                         </td>
                         <td>
                             <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}" data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
+                            {{-- <a href="#" class="btn btn-info btn-devolver" role="button" data-id="{{ $dato['idGeneral_EyC'] }}"data-nombre="{{ $dato['Nombre'] }}"data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -303,11 +304,11 @@ $(document).ready(function() {
 
             const row = $(this).closest('tr'); // Fila de la tabla
             const idGeneral_EyC = row.find('input[name^="cantidad"]').attr('name').match(/\d+/)[0]; // Obtener idGeneral_EyC
+            //const idGeneral_EyC = $(this).data('id');
             const nombre = this.getAttribute('data-nombre'); // Obtener el nombre del atributo data-nombre
             const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
             const folio = $(this).data('folio'); // Obtener el folio del atributo data-folio
-            //const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
-
+            //console.log($(this).data());
             // Confirmación de SweetAlert2
             Swal.fire({
                 title: '¿Estás seguro?',
