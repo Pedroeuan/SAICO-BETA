@@ -39,7 +39,7 @@ class KitsController extends Controller
         public function obtenerDatosActualizados()
     {
         //$generalConCertificados = general_eyc::with(['almacen', 'certificados'])->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-        $generalConCertificados = general_eyc::with('certificados')
+        $generalConCertificados = general_eyc::with(['certificados', 'almacen'])
         ->where(function ($query) {
             $query->where('Disponibilidad_Estado', 'DISPONIBLE')
                 ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');

@@ -26,6 +26,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 class TICSController extends Controller
 {
@@ -50,14 +52,16 @@ class TICSController extends Controller
      */
     public function storeTICS(Request $request)
     {
-            $request->validate([
-                'Nombre_E_P_BP' => 'required|string|max:255',
-                'ID' => 'required|string|max:255',
-                'Marca' => 'required|string|max:255',
-                'Modelo' => 'required|string|max:255',
-                'Serie' => 'required|string|max:255',
-            ]);
-            $Clasificacion = 'N/A';
+    $validated = $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'ID' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+        //'ISO' => 'required|in:9001,17025',
+        'Disponibilidad_Estado' => 'required|string|max:255',
+    ]);
+            $NA='N/A';
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('ID');
             $serie = Str::lower($request->input('Serie'));
@@ -71,7 +75,12 @@ class TICSController extends Controller
             ->where('Tipo', 'TICS')
             ->exists();
 
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -227,15 +236,28 @@ class TICSController extends Controller
         $generalConTICS->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConTICS->save();
 
-        /* CLASIFICACIÓN */
-        /*$generalConclasificacion = new clasificacion;
-        $generalConclasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConclasificacion->save();*/
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConClasificacion->NombreC =  $NA;
+        $generalConClasificacion->save();
 
-        /* ISO */
-        /*$generalConISO = new ISO;
+        // ISO
+        $generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConISO->save();*/
+        if($request->input('ISO')=='Elige el tipo de ISO')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        }
+        /*$generalConISO->Alcance = $NA;
+        $generalConISO->Frec_Cali_Mant_Prev = $NA;
+        $generalConISO->Frec_Mant_Inter_Time = $NA;
+        $generalConISO->Frec_Verificacion = $NA;
+        $generalConISO->Usado = $NA;
+        $generalConISO->Nuevo = $NA;*/
+        $generalConISO->save();
 
         /* Certificados */
         $generalConCertificados = new certificados;
@@ -359,6 +381,8 @@ class TICSController extends Controller
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
+            'ISO' => 'required|in:9001,17025',
+            'Disponibilidad_Estado' => 'required|string|max:255',
         ]);
 
         // Obtener el equipo existente
@@ -460,11 +484,17 @@ class TICSController extends Controller
                 $generalEyC->save();
             }
 
-                    // Actualizar los datos del Almacen asociado
-        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
-        $generalConAlmacen->update([
-            'Stock' => $request->input('Stock'),
-        ]);
+            // Actualizar los datos del Almacen asociado
+            $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+            $generalConAlmacen->update([
+                'Unidad' => $request->input('Unidad'),
+            ]);
+            
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
         else
         {
@@ -593,9 +623,13 @@ class TICSController extends Controller
             // Actualizar los datos del Almacen asociado
             $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
             $generalConAlmacen->update([
-                'Stock' => $request->input('Stock'),
+                'Unidad' => $request->input('Unidad'),
             ]);
-
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
         }
             return redirect()->route('inventario');
     }

@@ -60,7 +60,7 @@ class general_eycController extends Controller
                     $query->where('NombreISO', '17025');
                 })
                 ->get();
-        } else {
+        } elseif($rol === 'Equipos') {
             //Todos los registros
             //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
             // Solo registros con ISO 9001
@@ -69,6 +69,9 @@ class general_eycController extends Controller
                     $query->where('NombreISO', '9001');
                 })
                 ->get();
+        }else{
+             //Todos los registros
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         }
 
         return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));
@@ -113,9 +116,11 @@ class general_eycController extends Controller
         $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
         $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacenConHistorialAlmacen = general_eyc::with('historialAlmacen')->where('idGeneral_EyC', $id)->first();
+        //dd($generalConAlmacenConHistorialAlmacen->historialAlmacen->first()->Fecha);
 
         // Retornar la vista con los datos obtenidos
-        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO','rol'));
+        return view('Equipos.edit', compact('id','generalEyC', 'generalConAlmacenConHistorialAlmacen', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO','rol'));
     }
 
     public function BajaEyC($id)
