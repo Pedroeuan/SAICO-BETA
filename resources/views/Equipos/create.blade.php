@@ -594,6 +594,9 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">@if($rol =='Laboratorio') No. SERIE / No. DE LOTE @elseif($rol =='Equipos') Lote @else No. SERIE / No. DE LOTE @endif</label>
                                             <input type="text" class="form-control inputForm" name="Lote" placeholder="Ejemplo: 4092" value="{{old('Lote')}}">
+                                            @error('Lote')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -711,7 +714,7 @@
                                         </div>
                                     </div>
 
-                                    @if($rol == 'Laboratorio' )
+                                    @if($rol == 'Laboratorio' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Usado</label>
@@ -766,7 +769,7 @@
                                         </div>
                                     </div>
                                     
-                                    @if($rol == 'Laboratorio')
+                                    @if($rol == 'Laboratorio' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Fecha de adquisición /Fecha de alta</label>

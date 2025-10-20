@@ -152,12 +152,17 @@
                                                             (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) }}
                                                     </td>
                                                 @else
-                                                    <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
-                                                    <td scope="row">
-                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
-                                                            <= 0 ? 'VENCIDO' : 
-                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
-                                                    </td>
+                                                    @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
+                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <td scope="row">-</td>
+                                                    @else
+                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <td scope="row">
+                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                                <= 0 ? 'VENCIDO' : 
+                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
+                                                        </td>
+                                                    @endif
                                             @endif
                                         @else
                                             <td scope="row">N/A</td>
