@@ -423,7 +423,7 @@ class BlockYProbetaController extends Controller
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
         $EsperaDato ='ESPERA DE DATO';
-
+/* */
         $No_EBD = $generalEyC->No_economico;
         $SerBD = $generalEyC->Serie;
 
