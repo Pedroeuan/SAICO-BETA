@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -62,6 +63,39 @@ class consumiblesController extends Controller
                 'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
 
+            // Limpia y normaliza el número económico
+            $serie_lote = Str::lower($request->input('Lote'));
+
+            //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie_lote !== '---') {
+                $existsSerie = almacen::whereRaw("LOWER(Lote) = ?", [$serie_lote])->exists();
+            }
+
+            if ($existsSerie)
+            {
+                if($rol == 'Laboratorio')
+                {
+
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie/Lote ya existe en la base de datos.',
+                ])->withInput();
+
+                }
+                elseif($rol == 'Equipos')
+                {
+
+                return redirect()->back()->withErrors([
+                    'Serie' => 'El Lote ya existe en la base de datos.',
+                ])->withInput();
+
+                }else{
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie/Lote ya existe en la base de datos.',
+                ])->withInput();
+                }
+            }
         /* Tabla General_EyC */
         $general = new general_eyc;
         $EsperaDato ='ESPERA DE DATO';
@@ -391,7 +425,21 @@ class consumiblesController extends Controller
                 'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
         // Obtener el equipo existente
-        $generalEyC  = general_eyc::find($id);
+        $generalEyC  = general_eyc::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $LoteBD = $generalConAlmacen->Lote;
+        $LoteF = $request->input('Lote');
+        if(strcasecmp(trim($LoteF), trim($LoteBD)) != 0 )
+        {
+            $Lote = Str::lower($request->input('Lote'));
+            $existsLote = almacen::whereRaw("LOWER(Lote) = ?", [$Lote])->exists();
+            if ($existsLote)
+            {
+                return redirect()->back()->withErrors([
+                    'Lote' => 'El Lote ya existe en la base de datos.',
+                ])->withInput();
+            }
+        }
         // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
         $EsperaDato ='ESPERA DE DATO';
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
