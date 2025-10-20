@@ -81,6 +81,7 @@
                                 <option value="Planeación" @if($Usuario->rol == 'Planeación') selected="selected" @endif> Planeación</option>
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
+                                <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
                                 @else
                                 <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
                                 <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
@@ -90,6 +91,7 @@
                                 <option value="Planeación" @if($Usuario->rol == 'Planeación') selected="selected" @endif> Planeación</option>
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
+                                <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
                                 @endif
 
                             </select>

@@ -61,22 +61,19 @@ class general_eycController extends Controller
                 })
                 ->get();
         } elseif($rol === 'Equipos') {
+        //Todos los registros
+        //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+        // Solo registros con ISO 9001
+        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+            ->whereHas('ISO', function ($query) {
+                $query->where('NombreISO', '9001')->where('Tipo', '!=', 'TICS');
+            })
+            ->get();
+        }elseif($rol === 'Tics') {
             //Todos los registros
             //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
             // Solo registros con ISO 9001
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
-                ->whereHas('ISO', function ($query) {
-                    $query->where('NombreISO', '9001');
-                })
-                ->get();
-        }elseif($rol === 'TICS') {
-            //Todos los registros
-            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
-            // Solo registros con ISO 9001
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
-                ->whereHas('TIPO', function ($query) {
-                    $query->where('Disponibilidad_Estado', 'TICS');
-                })
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::where('Tipo','TICS')
                 ->get();
             }else{
              //Todos los registros

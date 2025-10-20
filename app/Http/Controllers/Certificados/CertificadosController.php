@@ -33,13 +33,20 @@ class CertificadosController extends Controller
                     $query->where('NombreISO', '17025');
                 })
                 ->get();
-        } else {
+        } elseif($rol === 'Equipos' || $rol === 'Administrador' || $rol === 'Super Administrador') {
             // Solo equipos con ISO 9001
             $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado', 'ISO'])
                 ->whereHas('ISO', function ($query) {
                     $query->where('NombreISO', '9001');
                 })
                 ->get();
+        }elseif($rol === 'Tics') {
+            //Todos los registros
+            $generalConCertificadosConHistorial = general_eyc::where('Tipo','TICS')
+                ->get();
+            }else{
+             //Todos los registros
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         }
         //$generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
 

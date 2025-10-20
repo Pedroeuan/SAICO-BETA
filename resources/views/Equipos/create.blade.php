@@ -51,8 +51,9 @@
                         @if($rol == 'Laboratorio')
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
-                        @else
+                        @elseif($rol == 'Tics')
                         <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
+                        @else
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
