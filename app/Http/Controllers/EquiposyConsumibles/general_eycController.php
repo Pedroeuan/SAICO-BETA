@@ -69,7 +69,16 @@ class general_eycController extends Controller
                     $query->where('NombreISO', '9001');
                 })
                 ->get();
-        }else{
+        }elseif($rol === 'TICS') {
+            //Todos los registros
+            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+            // Solo registros con ISO 9001
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+                ->whereHas('TIPO', function ($query) {
+                    $query->where('Disponibilidad_Estado', 'TICS');
+                })
+                ->get();
+            }else{
              //Todos los registros
             $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         }

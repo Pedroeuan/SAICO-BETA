@@ -428,15 +428,11 @@ class consumiblesController extends Controller
         $generalEyC  = general_eyc::where('idGeneral_EyC', $id)->first();
         $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
         $LoteBD = $generalConAlmacen->Lote;
-        Log::info('Lote en BD: ' . $LoteBD);
         $LoteF = $request->input('Lote');
-        Log::info('Lote del formulario: ' . $LoteF);
         if(strcasecmp(trim($LoteF), trim($LoteBD)) != 0 )
         {
             $Lote = Str::lower($request->input('Lote'));
-            Log::info('Lote a verificar: ' . $Lote);
             $existsLote = almacen::whereRaw("LOWER(Lote) = ?", [$Lote])->exists();
-            Log::info('Lote existente: ' . ($existsLote ? 'Sí' : 'No'));
             if ($existsLote)
             {
                 return redirect()->back()->withErrors([
