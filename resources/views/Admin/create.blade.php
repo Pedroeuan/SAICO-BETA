@@ -82,6 +82,7 @@
                                     <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
                                     <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
+                                    <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
                                 @else
                                     <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
                                     <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
@@ -91,6 +92,7 @@
                                     <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
                                     <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
+                                    <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
                                 @endif
                             </select>
                             @error('RolUsuario')

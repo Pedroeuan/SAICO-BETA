@@ -58,11 +58,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('equipos-lab-access', function ($user) {
-            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio';
+            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio' || $user->rol === 'Tics';
         });
 
         Gate::define('tecnicos-equipos-lab-access', function ($user) {
-            return $user->rol === 'Técnicos' || $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio';
+            return $user->rol === 'Técnicos' || $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio' || $user->rol === 'Tics';
         });
 
         Gate::define('tecnicos-equipos-access', function ($user) {
