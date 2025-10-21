@@ -16,6 +16,7 @@
 <br>
 <br>
 <br>
+@php use Illuminate\Support\Str; @endphp
     <h2>PreManifiesto de Salida y/o Resguardo</h2>
     <br>
     <div class="alert alert-info alert-dismissible">
@@ -108,7 +109,7 @@
                 <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Persona que Entrega</label>
-                                <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ $Nombre }}" required>
+                                <input type="text" class="form-control inputForm" name="Entrega_Nombre" value="{{ Str::startsWith($Solicitud->tecnico, 'Ing.') ? $Solicitud->tecnico : 'Ing. ' . $Solicitud->tecnico }}"  required>
                                     @error('Entrega_Nombre')
                                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                                     @enderror
@@ -118,7 +119,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Técnico que Recibe</label>
-                                <input type="text" class="form-control inputForm" name="Recibe_Nombre" value="{{ $Solicitud->tecnico }}" required>
+                                <input type="text" class="form-control inputForm" name="Recibe_Nombre" value="Ing.{{ $Solicitud->tecnico }}" required>
                                     @error('Recibe_Nombre')
                                         <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                                     @enderror
