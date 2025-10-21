@@ -34,17 +34,19 @@ class NotificacionController extends Controller
         $user = Auth::user();
         $rol = $user->rol;
 
-        // Consulta base con relación al usuario
-        $query = Notificacion::with('user')->orderBy('created_at', 'desc');
-
-        // Si el usuario no es Administrador o SuperAdministrador, filtra por su rol
-        if (!in_array($rol, ['Administrador', 'SuperAdministrador'])) {
-            $query->whereHas('user', function ($q) use ($rol) {
-                $q->where('rol', $rol);
-            });
+        // Si es Admin o SuperAdmin → ver todas
+        if (in_array($rol, ['Administrador', 'SuperAdministrador'])) {
+            $notificaciones = Notificacion::with('users_id')
+                ->orderBy('created_at', 'desc')
+                ->distinct()  // evita duplicados
+                ->get();
+        } else {
+            // Si NO es Admin → solo sus notificaciones, no de todo su rol
+            $notificaciones = Notificacion::where('users_id', $user->id)
+                ->with('user')
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
-
-        $notificaciones = $query->get();
 
         return view('notifications.index', compact('notificaciones'));
     }
