@@ -369,6 +369,8 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
     /*Ruta para devolver los articulos de la lista al almacen */
     Route::post('/devolver-item', [DevolucionController::class, 'devolverItem'])->name('devolver.item');
+    /*Ruta para devolver Todos los items*/
+    Route::post('/manifiesto/devolver-todo', [DevolucionController::class, 'devolverTodo'])->name('DevolverTodo.Manifiesto');
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
