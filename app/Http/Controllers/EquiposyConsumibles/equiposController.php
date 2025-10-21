@@ -498,11 +498,21 @@ class equiposController extends Controller
                 'Disponibilidad_Estado' => $disponibilidadEstado,
             ]);
 
-            // Actualizar los datos del equipo asociado
-            $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
-            $generalConEquipos->update([
-                'Num_Reporte' => $request->input('Num_Reporte'),
-            ]);
+                // Actualizar los datos del equipo asociado
+                $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
+
+                if ($generalConEquipos) {
+
+                    // Si el Num_Reporte viene vacío o no viene, asignar "ESPERA DE DATO"
+                    $numReporte = $request->filled('Num_Reporte') 
+                        ? $request->input('Num_Reporte') 
+                        : 'ESPERA DE DATO';
+
+                    $generalConEquipos->update([
+                        'Num_Reporte' => $numReporte,
+                    ]);
+                }
+            
             // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
