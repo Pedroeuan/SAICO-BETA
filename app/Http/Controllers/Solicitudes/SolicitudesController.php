@@ -35,7 +35,9 @@ class SolicitudesController extends Controller
 
         if($rol == 'Técnicos')
         {
-            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+            //$Solicitudes = Solicitudes::where('tecnico','Ing.',$Nombre)->get();
+            $Solicitudes = Solicitudes::where('tecnico', 'LIKE', '%Ing. ' . $Nombre . '%')->get();
+            //dd($Solicitudes);
         }
         else
         {
