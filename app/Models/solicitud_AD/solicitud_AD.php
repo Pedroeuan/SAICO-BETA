@@ -4,6 +4,7 @@ namespace App\Models\solicitud_AD;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Admin\Usuario;
 
 class solicitud_AD extends Model
 {
@@ -20,5 +21,14 @@ class solicitud_AD extends Model
     ];
 
     public $timestamps = false; // si tu tabla no tiene created_at / updated_at
+    public function users()
+    {
+        return $this->belongsToMany(
+            Usuario::class,
+            'users_has_solicitud',
+            'idsolicitud_AD',  // FK en pivote hacia SolicitudAD
+            'users_id'          // FK en pivote hacia User
+        );
+    }
 }
 

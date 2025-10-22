@@ -5,6 +5,8 @@ namespace App\Models\solicitud_AD;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Admin\Usuario;
+use App\Models\solicitud_AD\solicitud_AD;
 
 class Users_Has_solicitud_AD extends Model
 {
@@ -19,13 +21,18 @@ class Users_Has_solicitud_AD extends Model
         'idsolicitud_AD',
     ];
 
-    public function user()
+    // Relación hacia el usuario
+    public function Users()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        // belongsTo porque este registro "pertenece a" un usuario
+        return $this->belongsTo(Usuario::class, 'users_id', 'id');
     }
 
-    public function solicitud()
+    // Relación hacia la solicitud
+    public function Solicitud_AD()
     {
-        return $this->belongsTo(Solicitud_AD::class, 'idsolicitud_AD');
+        // belongsTo porque este registro "pertenece a" una solicitud
+        return $this->belongsTo(Solicitud_AD::class, 'idsolicitud_AD', 'idsolicitud_AD');
     }
+
 }

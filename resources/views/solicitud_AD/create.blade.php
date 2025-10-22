@@ -26,6 +26,10 @@
         <form id="form-solicitud" method="POST" action="{{ route('ADsolicitud.store') }}">
             @csrf
             <div class="row">
+
+        <div class="card">
+            <div class="card-body row">
+
                 <div class="col-md-4 mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
                     <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly>

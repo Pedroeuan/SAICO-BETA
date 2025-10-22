@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Users;
 class SolicitudADController extends Controller
 {
     /**
@@ -20,10 +20,20 @@ class SolicitudADController extends Controller
      */
     public function index()
     {
+
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $solicitudes = solicitud_AD::all();
-
-        return view('solicitud_AD.index', compact('solicitudes'));
+        //dd($solicitudes);
+        //$users_has_solicitud_AD = Users::with('user_has_solicitud_AD', 'solicitud_AD')->get();
+        $Solicitud = users_has_solicitud_AD::with('Users', 'Solicitud_AD')->get();
+        dd($Solicitud);
+        return view('solicitud_AD.index', compact('solicitudes','rol'));
     }
 
     /**

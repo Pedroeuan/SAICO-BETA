@@ -38,15 +38,18 @@
                     <th>Estatus</th>
                     <th>Comentario</th>
                     <th>Tema</th>
+                    <th>editar</th>
+                    <th>eliminar</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($solicitudes as $Usuario)
                     <tr>
-                        <td>{{ $Usuario->name }}</td>
                         <td>{{ $Usuario->formatted_date }}</td>
                         <td>{{ $Usuario->Estatus }}</td>
-                        @if($rol == 'Administrador' && $Usuario->rol == 'Super Administrador')
+                        <td>{{ $Usuario->comentario }}</td>
+                        <td>{{ $Usuario->Tema }}</td>
+                        @if($rol == 'Administrador' || $Usuario->rol == 'Super Administrador')
                             <td>
                                 <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                 <i class="fas fa-pencil-alt"></i></a>
@@ -58,7 +61,7 @@
                             </td>
                         @else
                             <td>
-                                <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
 
                             <td>
