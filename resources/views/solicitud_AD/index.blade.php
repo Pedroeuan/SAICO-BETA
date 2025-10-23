@@ -46,7 +46,7 @@
                 @foreach($solicitudes as $Usuario)
                     <tr>
                         <td>{{ $Usuario->formatted_date }}</td>
-                        <td>{{ $Usuario->Estatus }}</td>
+                        <td>{{ $Usuario->estatus }}</td>
                         <td>{{ $Usuario->comentario }}</td>
                         <td>{{ $Usuario->Tema }}</td>
                         @if($rol == 'Administrador' || $Usuario->rol == 'Super Administrador')

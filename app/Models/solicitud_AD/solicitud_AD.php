@@ -30,5 +30,9 @@ class solicitud_AD extends Model
             'users_id'          // FK en pivote hacia User
         );
     }
+        public function getFormattedDateAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['fecha'])->format('d-m-Y');
+    }
 }
 

@@ -32,7 +32,7 @@ class SolicitudADController extends Controller
         //dd($solicitudes);
         //$users_has_solicitud_AD = Users::with('user_has_solicitud_AD', 'solicitud_AD')->get();
         $Solicitud = users_has_solicitud_AD::with('Users', 'Solicitud_AD')->get();
-        dd($Solicitud);
+        //dd($Solicitud);
         return view('solicitud_AD.index', compact('solicitudes','rol'));
     }
 
