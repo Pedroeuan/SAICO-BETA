@@ -10,6 +10,8 @@ use PhpOffice\PhpSpreadsheet\Shared\Date; // Importa esta clase para convertir f
 use Illuminate\Support\Facades\Log;
 
 use App\Models\TICS\TICS;
+use App\Models\EquiposyConsumibles\ISO;
+use App\Models\EquiposyConsumibles\clasificacion;
 use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\almacen;
 use App\Models\EquiposyConsumibles\certificados;
@@ -19,6 +21,7 @@ use App\Models\EquiposyConsumibles\accesorios;
 use App\Models\EquiposyConsumibles\block_y_probeta;
 use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\Historial_Almacen;
+
 
 class ImporExcelEyC implements ToModel, WithHeadingRow
 {
@@ -56,16 +59,6 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
             'Disponibilidad_Estado' => $row['disponibilidad_estado'],
         ]);
 
-        // Comprobamos si hay datos para almacenar en la tabla Almacen
-        /*if (!empty($row['idalmacen']) && !empty($row['stock'])) {
-            almacen::updateOrCreate([
-                'idAlmacen' => $row['idalmacen'],
-                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-                'Lote' => $row['lote'],
-                'Stock' => $row['stock'],
-            ]);
-        }*/
-
         $almacenRow = null;
 
         if (!empty($row['idalmacen']) && isset($row['stock'])) {
@@ -73,28 +66,10 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 ['idAlmacen' => $row['idalmacen'], 
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC],
                 ['Lote' => $row['lote'],
-                'Stock' => $row['stock']]
+                'Stock' => $row['stock'],
+                'Unidad' => $row['unidad']],
             );
         }
-
-
-        // Comprobamos si hay datos para almacenar en la tabla Herramientas
-        /*if (!empty($row['idhistorial_almacen'])) {
-            $fecha = is_numeric($row['fecha']) 
-            ? Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d')
-            : $row['fecha'];
-
-            Historial_Almacen::updateOrCreate([
-                'idHistorial_almacen' => $row['idhistorial_almacen'],
-                'idAlmacen' => $row['idalmacen'],
-                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
-                'Folio' => $row['folio'],
-                'Tipo' => $row['tipoh'],
-                'Cantidad' => $row['cantidad'],
-                'Fecha' => $fecha,
-                'Tierra_Costafuera' => $row['tierra_costafuera'],
-            ]);
-        }*/
 
             if (!empty($row['idhistorial_almacen']) && $almacenRow) {
             $fecha = is_numeric($row['fecha']) 
@@ -121,9 +96,25 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 ? Date::excelToDateTimeObject($row['fecha_calibracion'])->format('Y-m-d')
                 : $row['fecha_calibracion'];
 
-            $proxFechaCalibracion = is_numeric($row['prox_fecha_calibracion']) 
+                $proxFechaCalibracion = is_numeric($row['prox_fecha_calibracion']) 
                 ? Date::excelToDateTimeObject($row['prox_fecha_calibracion'])->format('Y-m-d')
                 : $row['prox_fecha_calibracion'];
+
+                $FechaVerificacion = is_numeric($row['Fecha_verificacion']) 
+                ? Date::excelToDateTimeObject($row['Fecha_verificacion'])->format('Y-m-d')
+                : $row['Fecha_verificacion'];
+
+                $proxFechaVerificacion = is_numeric($row['Prox_fecha_verificacion']) 
+                ? Date::excelToDateTimeObject($row['Prox_fecha_verificacion'])->format('Y-m-d')
+                : $row['Prox_fecha_verificacion'];
+
+                $FechaMantenimiento = is_numeric($row['Fecha_mantenimiento']) 
+                ? Date::excelToDateTimeObject($row['Fecha_mantenimiento'])->format('Y-m-d')
+                : $row['Fecha_mantenimiento'];
+
+                $proxFechaCproxFechaMantenimientoalibracion = is_numeric($row['Prox_fecha_mantenimiento']) 
+                ? Date::excelToDateTimeObject($row['Prox_fecha_mantenimiento'])->format('Y-m-d')
+                : $row['Prox_fecha_mantenimiento'];
 
             certificados::updateOrCreate([
                 'idCertificados' => $row['idcertificados'],
@@ -132,6 +123,11 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
                 'Certificado_Actual' => $row['certificado_actual'],
                 'Fecha_calibracion' => $fechaCalibracion,
                 'Prox_fecha_calibracion' => $proxFechaCalibracion,
+                
+                'Fecha_verificacion' => $FechaVerificacion,
+                'Prox_fecha_verificacion' => $proxFechaVerificacion,
+                'Fecha_mantenimiento' => $FechaMantenimiento,
+                'Prox_fecha_mantenimiento' => $proxFechaMantenimiento,
             ]);
         }
 
@@ -140,6 +136,7 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
             equipos::updateOrCreate([
                 'idEquipos' => $row['idequipos'],
                 'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
+                'Num_reporte' => $row['num_reporte'],
             ]);
         }
 
@@ -188,6 +185,29 @@ class ImporExcelEyC implements ToModel, WithHeadingRow
             ]);
         }
 
+        // Comprobamos si hay datos para almacenar en la tabla Clasificacion
+        if (!empty($row['idClasificacion'])) {
+            clasificacion::updateOrCreate([
+                'idClasificacion' => $row['idClasificacion'],
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
+                'NombreC' => $row['nombrec'],
+            ]);
+        }
+
+        // Comprobamos si hay datos para almacenar en la tabla Clasificacion
+        if (!empty($row['idISO'])) {
+            ISO::updateOrCreate([
+                'idISO' => $row['idISO'],
+                'idGeneral_EyC' => $generalEyC->idGeneral_EyC,
+                'NombreISO' => $row['NombreISO'],
+                'Alcance' => $row['alcance'],
+                'Frec_Cali_Mant_Prev' => $row['Frec_Cali_Mant_Prev'],
+                'Frec_Man_Inter_Time' => $row['Frec_Man_Inter_Time'],
+                'Frec_Verificacion' => $row['Frec_Verificacion'],
+                'Usado' => $row['usado'],
+                'Nuevo' => $row['nuevo'],
+            ]);
+        }
         // Retorna el registro general_eyc, aunque no es estrictamente necesario si no se necesita más adelante.
         return $generalEyC;
     }

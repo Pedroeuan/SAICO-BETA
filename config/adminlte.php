@@ -294,8 +294,8 @@ return [
 
     'menu' => [
             [
-            'type' => 'navbar-notification',
-            'id' => 'my-notification',                // An ID attribute (required).
+            //'type' => 'navbar-notification',
+            //'id' => 'my-notification',                // An ID attribute (required).
             'icon' => 'fa fa-bell',                  // A font awesome icon (required).
             'icon_color' => 'danger',                // The initial icon color (optional).
             'label' => 0,                             // The initial label for the badge (optional).
