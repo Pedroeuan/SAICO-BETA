@@ -58,6 +58,9 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
+    require __DIR__.'/auth.php';
+
+    Auth::routes();
     Route::get('/', function () {
         return view('auth.login');
     });
@@ -545,9 +548,6 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     });
 });
 
-require __DIR__.'/auth.php';
-
-Auth::routes();
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 
