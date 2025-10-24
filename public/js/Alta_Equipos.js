@@ -498,7 +498,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Herramientas',
@@ -607,7 +610,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-BlockyProbeta',
@@ -673,7 +679,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 /*ACCESORIOS*/
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('accesoriosForm');
@@ -717,7 +722,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Accesorios',
@@ -903,7 +911,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Equipos',
