@@ -58,12 +58,14 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
-    Route::get('/', function () {
-        return view('auth.login');
-    });
-    /*Route::any('/register', function () {
-        abort(404);
-    });*/
+    require __DIR__.'/auth.php';
+
+    Auth::routes();
+
+    Route::get('/register', function () {return view('auth.login');});
+
+    Auth::routes(['register' => false]);
+
     Route::redirect('/register', '/login');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -545,9 +547,7 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     });
 });
 
-require __DIR__.'/auth.php';
 
-Auth::routes();
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 

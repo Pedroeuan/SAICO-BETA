@@ -259,7 +259,7 @@ return [
     'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    //'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -296,18 +296,18 @@ return [
             [
             //'type' => 'navbar-notification',
             //'id' => 'my-notification',                // An ID attribute (required).
-            'icon' => 'fa fa-bell',                  // A font awesome icon (required).
-            'icon_color' => 'danger',                // The initial icon color (optional).
-            'label' => 0,                             // The initial label for the badge (optional).
-            'label_color' => '',                // The initial badge color (optional).
-            'url' => 'notificacion/index',            // The url to access all notifications/elements (required).
-            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
-            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
-            'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
-            'update_cfg' => [
+            //'icon' => 'fa fa-bell',                  // A font awesome icon (required).
+            //'icon_color' => 'danger',                // The initial icon color (optional).
+            //'label' => 0,                             // The initial label for the badge (optional).
+            //'label_color' => '',                // The initial badge color (optional).
+            //'url' => 'notificacion/index',            // The url to access all notifications/elements (required).
+            //'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            //'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
+            //'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
+            /*'update_cfg' => [
                 'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
                 'period' => 60,                       // The update period for get new data (in seconds, optional).
-            ],
+            ],*/
         ],
                 // Sidebar Administrativo:
                 [
