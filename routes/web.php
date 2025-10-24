@@ -62,10 +62,6 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
     Auth::routes();
 
-    Route::get('/register', function () {return view('auth.login');});
-
-    Auth::routes(['register' => false]);
-
     Route::redirect('/register', '/login');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
