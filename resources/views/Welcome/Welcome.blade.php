@@ -61,11 +61,11 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-{{-- 
+<!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
-<script src="{{ asset('js/notificaciones.js') }}"></script>--}}
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 @endsection

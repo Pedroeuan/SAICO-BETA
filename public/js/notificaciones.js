@@ -119,5 +119,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateNotifications();
-    //setInterval(updateNotifications, config.updatePeriod);
+    setInterval(updateNotifications, config.updatePeriod);
 });
