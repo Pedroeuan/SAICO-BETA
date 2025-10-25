@@ -5,10 +5,18 @@
 
 @section('css')
 <style>
-    #my-notification .dropdown-menu {
+    /*#my-notification .dropdown-menu {
     max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+    /*overflow-y: auto;
+    }*/
+
+    <style>
+    #my-notification .navbar-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
     }
+</style>
 </style>
 @endsection
 
@@ -130,20 +138,7 @@
             }]
         });
     });
-    </script>
-@stop
-@push('css')
-<style>
-    #my-notification .navbar-badge {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-    }
-</style>
-@endpush
 
-@push('js')
-<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Asegura que el badge exista siempre
         let link = document.querySelector('#my-notification a.nav-link');
@@ -154,5 +149,5 @@
             link.appendChild(badge);
         }
     });
-</script>
-@endpush
+    </script>
+@stop
