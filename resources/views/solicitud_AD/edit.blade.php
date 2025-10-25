@@ -13,7 +13,7 @@
     </div>
 
     <div class="card-body">
-        <form id="form-solicitud-edit" method="POST" action="{{ route('solicitudes.update', $solicitud->idsolicitud_AD) }}">
+        <form id="form-solicitud-edit" method="POST" action="{{ route('ADsolicitud.update', $solicitud->idsolicitud_AD) }}">
             @csrf
             @method('PUT')
 
@@ -21,7 +21,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
                     <input type="date" class="form-control" id="fecha" name="fecha"
-                            value="{{ $solicitud->fecha }}" required>
+                           value="{{ $solicitud->fecha }}" required>
                 </div>
 
                 <div class="col-md-4 mb-3">
@@ -36,7 +36,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="comentario" class="form-label">Comentario</label>
                     <input type="text" class="form-control" id="comentario" name="comentario"
-                            value="{{ $solicitud->comentario }}" placeholder="Observaciones...">
+                           value="{{ $solicitud->Comentario }}" placeholder="Observaciones...">
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                             <tr>
                                 <td class="text-center">
                                     <input type="checkbox" name="usuarios[]" value="{{ $user->id }}"
-                                        {{ in_array($user->id, $usuariosAsociados) ? 'checked' : '' }}>
+                                           {{ in_array($user->id, $usuariosAsociados) ? 'checked' : '' }}>
                                 </td>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
@@ -79,7 +79,7 @@
                 <button type="submit" class="btn btn-warning btn-lg">
                     <i class="fas fa-save"></i> Actualizar Solicitud
                 </button>
-                <a href="{{ route('solicitudes.index') }}" class="btn btn-secondary btn-lg">
+                <a href="{{ route('ADsolicitud.index') }}" class="btn btn-secondary btn-lg">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
             </div>
@@ -148,7 +148,7 @@
                                     showConfirmButton: false,
                                     timer: 1800
                                 }).then(() => {
-                                    window.location.href = "{{ route('solicitudes.index') }}";
+                                    window.location.href = "{{ route('ADsolicitud.index') }}";
                                 });
                             },
                             error: function () {

@@ -5,116 +5,126 @@ namespace App\Http\Controllers\solicitud_AD;
 use App\Models\solicitud_AD\solicitud_AD;
 use App\Models\solicitud_AD\users_has_solicitud_AD;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Users;
+use App\Models\User;
+
 class SolicitudADController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * Muestra todas las solicitudes.
+     * Mostrar todas las solicitudes.
      */
     public function index()
     {
-
-        // Obtener el usuario autenticado
         $user = Auth::user();
-        // Obtener el nombre del usuario
-        $Nombre = $user->name;
-        $rol = Auth::user()->rol;
+        $rol = $user->rol;
 
-        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $solicitudes = solicitud_AD::all();
-        //dd($solicitudes);
-        //$users_has_solicitud_AD = Users::with('user_has_solicitud_AD', 'solicitud_AD')->get();
-        $Solicitud = users_has_solicitud_AD::with('Users', 'Solicitud_AD')->get();
-        //dd($Solicitud);
-        return view('solicitud_AD.index', compact('solicitudes','rol'));
+
+        return view('solicitud_AD.index', compact('solicitudes', 'rol'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     * (Normalmente no se usa en API REST)
+     * Mostrar el formulario para crear una nueva solicitud.
      */
+
+public function show($id)
+{
+    // Opcional: devolver JSON, vista o simplemente vacía
+    return abort(404); // si no lo necesitas
+}
+
     public function create()
     {
-        //
         return view('solicitud_AD.create');
     }
 
     /**
-     * Store a newly created resource in storage.
-     * Guarda una nueva solicitud en la base de datos.
+     * Guardar una nueva solicitud en la base de datos.
      */
-    public function store(Request $request)
-    {
-        //dd($request->all());
-        $solicitud_AD = new solicitud_AD;
+public function store(Request $request)
+{
+    $request->validate([
+        'fecha' => 'required|date',
+        'estatus' => 'required|string',
+        'Tema' => 'required|string|max:255',
+        'comentario' => 'nullable|string',
+    ]);
 
-        $solicitud_AD->fecha = $request->input('fecha');
+    $solicitud = new solicitud_AD();
+    $solicitud->fecha = $request->fecha;
+    $solicitud->estatus = $request->estatus;
+    $solicitud->Tema = $request->Tema;
+    $solicitud->Comentario = $request->comentario;
+    $solicitud->save();
 
-        $solicitud_AD->estatus = $request->input('estatus');
+    // Asociar al usuario autenticado
+    $user = Auth::user();
 
-        $solicitud_AD->Tema = $request->input('Tema');
+    $user_has_solicitud = new users_has_solicitud_AD();
+    $user_has_solicitud->users_id = $user->id;
+    $user_has_solicitud->idsolicitud_AD = $solicitud->idsolicitud_AD;
+    $user_has_solicitud->save();
 
-        $solicitud_AD->Comentario = $request->input('comentario');
+    return redirect()->route('ADsolicitud.index')->with('success', 'Solicitud creada correctamente.');
+}
 
-        $solicitud_AD->save();
-
-        $idSolicitud = $solicitud_AD->idsolicitud_AD;
-
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-        // Obtener el nombre del usuario
-        $iduser = $user->id;
-
-        $user_has_solicitud = new users_has_solicitud_AD;
-
-        $user_has_solicitud->users_id = $iduser;
-        $user_has_solicitud->idsolicitud_AD = $idSolicitud;
-        $user_has_solicitud->save();
-
-        return redirect()->route('ADsolicitud.index');
-
-    }
-
-    /**
-     * Display the specified resource.
-     * Muestra una solicitud específica.
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * (No se usa en API)
-     */
     public function edit($id)
     {
-        //
+        // Buscar la solicitud por su ID correcto
+        $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
+
+        // Obtener todos los usuarios y los asociados a la solicitud
+        $usuarios = User::all();
+        $usuariosAsociados = users_has_solicitud_AD::where('idsolicitud_AD', $id)->pluck('users_id')->toArray();
+
+        return view('solicitud_AD.edit', compact('solicitud', 'usuarios', 'usuariosAsociados'));
     }
 
     /**
-     * Update the specified resource in storage.
-     * Actualiza una solicitud existente.
+     * Actualizar una solicitud existente.
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'fecha' => 'required|date',
+            'estatus' => 'required|string',
+            'comentario' => 'nullable|string',
+            'usuarios' => 'required|array|min:1',
+        ]);
 
+        // Buscar la solicitud
+        $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
+
+        // Actualizar los campos
+        $solicitud->update([
+            'fecha' => $request->fecha,
+            'estatus' => $request->estatus,
+            'Comentario' => $request->comentario,
+        ]);
+
+        // Actualizar usuarios asociados
+        users_has_solicitud_AD::where('idsolicitud_AD', $id)->delete();
+
+        foreach ($request->usuarios as $userId) {
+            users_has_solicitud_AD::create([
+                'users_id' => $userId,
+                'idsolicitud_AD' => $id,
+            ]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     * Elimina una solicitud.
+     * Eliminar una solicitud.
      */
-    public function destroy($id)
-    {
+public function destroy($id)
+{
+    $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
+    $solicitud->delete();
 
-    }
+    return response()->json(['success' => true]);
+}
+
 }

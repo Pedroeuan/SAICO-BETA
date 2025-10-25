@@ -1,130 +1,122 @@
-
 @extends('adminlte::page')
 
-@section('title', 'Usuarios')
+@section('title', 'Solicitudes AD')
 
-@section('css')
-<!--datatable -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
-
-<style>
-    #tablaJs td {
-        text-align: center; /* Centra el contenido horizontalmente */
-    }
-    #tablaJs th {
-        text-align: center; /* Centra el texto del encabezado horizontalmente */
-    }
-    #my-notification .dropdown-menu {
-    max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
-    }
-</style>
-@endsection
+@section('content_header')
+<h1 class="text-primary">Listado de Solicitudes AD</h1>
+@stop
 
 @section('content')
-<br>  
-<br>
-<br>
-<!-- form start -->
-<form role="form">
-    <div class="box ">
-            <br>
-        <div class="box-body">
-        <h3 align="center">Usuarios Registrados</h3>
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
-                <thead> 
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Solicitudes Registradas</h3>
+        <a href="{{ route('ADsolicitud.create') }}" class="btn btn-success btn-sm">
+            <i class="fas fa-plus"></i> Nueva Solicitud
+        </a>
+    </div>
+
+    <div class="card-body">
+        <table id="tabla-solicitudes" class="table table-bordered table-striped">
+            <thead class="text-center">
+                <tr>
+                    <th>ID</th>
                     <th>Fecha</th>
                     <th>Estatus</th>
-                    <th>Comentario</th>
                     <th>Tema</th>
-                    <th>editar</th>
-                    <th>eliminar</th>
+                    <th>Comentario</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($solicitudes as $Usuario)
-                    <tr>
-                        <td>{{ $Usuario->formatted_date }}</td>
-                        <td>{{ $Usuario->estatus }}</td>
-                        <td>{{ $Usuario->comentario }}</td>
-                        <td>{{ $Usuario->Tema }}</td>
-                        @if($rol == 'Administrador' || $Usuario->rol == 'Super Administrador')
-                            <td>
-                                <a class="btn btn-warning" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                <i class="fas fa-pencil-alt"></i></a>
-                            </td>
+                @foreach($solicitudes as $solicitud)
+                <tr>
+                    <td>{{ $solicitud->idsolicitud_AD }}</td>
+                    <td>{{ $solicitud->fecha }}</td>
+                    <td>
+                        <span class="badge 
+                            {{ $solicitud->estatus == 'Aprobado' ? 'bg-success' : 
+                            ($solicitud->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
+                            {{ $solicitud->estatus }}
+                        </span>
+                    </td>
+                    <td>{{ $solicitud->Tema }}</td>
+                    <td>{{ $solicitud->Comentario }}</td>
+                    <td class="text-center">
+                        {{-- Botón Editar --}}
+                        <a href="{{ route('ADsolicitud.edit', $solicitud->idsolicitud_AD) }}" 
+                        class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
 
-                            <td>
-                                <button type="button" class="btn btn-danger"style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                <i class="fa fa-times"></i></button>
-                            </td>
-                        @else
-                            <td>
-                                <a href="" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                            </td>
-
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminarUsuario" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        @endif
-                    </tr>
+                        {{-- Botón Eliminar --}}
+                        <button type="button"
+                            class="btn btn-danger btn-sm btn-eliminar"
+                            data-id="{{ $solicitud->idsolicitud_AD }}">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
-            </table>
-        </div>
+        </table>
     </div>
-</form>
+</div>
+@stop
+
+@section('css')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css">
 @stop
 
 @section('js')
-<!-- Incluye jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--datatable -->
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
-<!--sweet alert -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Incluir el script de sesión -->
-<script src="{{ asset('js/session-handler.js') }}"></script>
-<script>
-    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
-    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
-</script>
-<script src="{{ asset('js/notificaciones.js') }}"></script>
-<script>
 
-let table = new DataTable('#tablaJs', {
-    // options
-    language: {
-                    "decimal": "",
-                    "emptyTable": "No hay datos disponibles en la tabla",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se encontraron registros coincidentes",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
+<script>
+$(function () {
+    $('.btn-eliminar').click(function() {
+        let id = $(this).data('id');
+
+        // URL de la ruta destroy (RESTful)
+        let url = "{{ route('ADsolicitud.destroy', ':id') }}".replace(':id', id);
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta solicitud se eliminará permanentemente.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE', // método correcto
+                    data: { _token: '{{ csrf_token() }}' }, // token CSRF
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => location.reload());
                     },
-                    "aria": {
-                        "sortAscending": ": activar para ordenar la columna ascendente",
-                        "sortDescending": ": activar para ordenar la columna descendente"
+                    error: function(xhr) {
+                        console.error(xhr);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo eliminar la solicitud.'
+                        });
                     }
-                }
+                });
+            }
+        });
+    });
 });
-    </script>
+</script>
 @stop

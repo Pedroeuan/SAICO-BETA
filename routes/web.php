@@ -72,6 +72,10 @@ use App\Http\Controllers\solicitud_AD\SolicitudADController;
     Route::get('/ADsolicitud/index', [SolicitudADController::class, 'index'])->name('ADsolicitud.index');
     /*Ruta de Guardado-index*/
     Route::post('/ADsolicitud/store', [SolicitudADController::class, 'store'])->name('ADsolicitud.store');
+    Route::resource('ADsolicitud', SolicitudADController::class);
+    Route::resource('ADsolicitud', SolicitudADController::class)->except(['show']);
+
+    Route::delete('/ADsolicitud/detroy', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
 
     });
 
