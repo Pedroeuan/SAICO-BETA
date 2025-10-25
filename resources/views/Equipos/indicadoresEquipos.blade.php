@@ -132,3 +132,27 @@
     });
     </script>
 @stop
+@push('css')
+<style>
+    #my-notification .navbar-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+    }
+</style>
+@endpush
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Asegura que el badge exista siempre
+        let link = document.querySelector('#my-notification a.nav-link');
+        if (link && !link.querySelector('.navbar-badge')) {
+            let badge = document.createElement('span');
+            badge.classList.add('badge', 'navbar-badge');
+            badge.style.display = 'none'; // oculto inicialmente
+            link.appendChild(badge);
+        }
+    });
+</script>
+@endpush
