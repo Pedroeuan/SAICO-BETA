@@ -71,15 +71,19 @@ class DevolucionController extends Controller
         $EstadoSolicitud = $solicitud->Estatus;
 
         // Extraer el prefijo (n letras antes del "-"), número y año del Folio base
-        //preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
-        preg_match('/^([A-Z]+)-\d+\/(\d{2})$/', $folioBase, $matches);
+        /*preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
         if (count($matches) > 0) {
             $folioPattern = $matches[1]; // Prefijo + número como "PROP-001"
-            //$anioPattern = substr($folioBase, -2); // Año como "24"
-            $anioPattern = $matches[2];
+            $anioPattern = substr($folioBase, -2); // Año como "24" */
+            // Extraer prefijo (1 o más letras antes del "-"), número y año del Folio base
+            preg_match('/^([A-Z]+-\d+)/', $folioBase, $matches);
+            if (count($matches) > 0) {
+                $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001", etc.
+                $anioPattern = substr($folioBase, -2); // Año como "24"
+
             // Usar expresión regular para buscar folios similares
-            //$foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
-            $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '-\\d+[A-Z]?\/' . $anioPattern . '$')->get();
+            $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
+
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
 
