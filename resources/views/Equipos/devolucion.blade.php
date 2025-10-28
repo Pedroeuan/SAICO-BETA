@@ -112,7 +112,7 @@
     </div>
 
     <!-- Campo oculto para enviar todos los idSolicitud -->
-    <input type="hidden" name="idSolicitudes" value="{{ json_encode($idsSolicitud) }}">
+    <input type="text" name="idSolicitudes" value="{{ json_encode($idsSolicitud) }}">
 
     <div class="row">
         <div class="col-sm-6">
