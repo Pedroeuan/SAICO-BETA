@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!numeroEconomico) camposVacios.push('Número Económico');
         if (!marca) camposVacios.push('Marca');
         if (!modelo) camposVacios.push('Modelo');
-        if (!serie) camposVacios.push('Número de Serie');
+        if (!serie || serie === '') camposVacios.push('Número de Serie');
 
         if (camposVacios.length > 0) {
             Swal.fire({
@@ -540,7 +540,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-        
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Herramientas',
@@ -639,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!numeroEconomico) camposVacios.push('Número Económico');
         if (!marca) camposVacios.push('Marca');
         if (!modelo) camposVacios.push('Modelo');
-        if (!serie) camposVacios.push('Número de Serie');
+        if (!serie || serie === '') camposVacios.push('Número de Serie');
 
         if (camposVacios.length > 0) {
             Swal.fire({
@@ -676,7 +679,10 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
-
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-BlockyProbeta',
@@ -814,6 +820,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
+        }
         // Validación de duplicados en No_economico y Serie
         $.ajax({
             url: '/verificar-duplicado-Accesorios',
@@ -1052,6 +1062,10 @@ document.addEventListener('DOMContentLoaded', function() {
             finalizarButton.disabled = false;
             guardarContinuarButton.disabled = false;
             return;
+        }
+        // Si la serie es exactamente '---', se envía como null para no validarla
+        if (serie === '---') {
+            serie = null; // También podrías usar '' si prefieres
         }
         // Validación de duplicados en No_economico y Serie
         $.ajax({

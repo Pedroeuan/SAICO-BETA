@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateNotificationBadge(count) {
-        const notificationBadge = document.querySelector('#my-notification .badge');
+        //const notificationBadge = document.querySelector('#my-notification .badge');
+        const notificationBadge = document.querySelector('#my-notification .navbar-badge');
         if (notificationBadge) {
             if (count > 0) {
                 notificationBadge.textContent = count;

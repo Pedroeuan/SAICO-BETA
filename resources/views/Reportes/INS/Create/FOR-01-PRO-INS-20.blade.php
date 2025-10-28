@@ -212,7 +212,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Trazabilidad</label>
                             <input type="text" class="form-control  inputForm @error('Trazabilidad') is-invalid @enderror" name="Detalles_Generales[Trazabilidad]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Trazabilidad')}}">
@@ -222,7 +222,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -233,7 +233,7 @@
                     </div>
 
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
@@ -243,7 +243,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Accesorio</label>
                             <input type="text" class="form-control  inputForm @error('Accesorio') is-invalid @enderror" name="Detalles_Generales[Accesorio]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Accesorio')}}">
@@ -253,7 +253,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tuberia</label>
                             <input type="text" class="form-control  inputForm @error('Tuberia') is-invalid @enderror" name="Detalles_Generales[Tuberia]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tuberia')}}">
@@ -263,7 +263,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Estructural</label>
                             <input type="text" class="form-control  inputForm @error('Estructural') is-invalid @enderror" name="Detalles_Generales[Estructural]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Estructural')}}">
@@ -291,7 +291,34 @@
 
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS Y AJUSTES DEL EQUIPO</div>
 
-                    <div style="margin-bottom: 2px;"></div>
+
+                                    <div style="margin-bottom: 5px;"></div>
+
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                        <p>Puedes Seleccionar un equipo, accesorio o block del menu o escribir directamente</p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+
+                                    <!-- Select para Equipos -->
+                                    <div class="col-sm-50 d-flex justify-content-center">
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                    <option value="{{ $equipo->idGeneral_EyC }}"
+                                                            data-marca="{{ $equipo->Marca }}"
+                                                            data-modelo="{{ $equipo->Modelo }}"
+                                                            data-ns="{{ $equipo->Serie }}">
+                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -609,7 +636,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
+    /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
 
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+        });
     /*FOR-01-PRO-INS-20*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-20');
