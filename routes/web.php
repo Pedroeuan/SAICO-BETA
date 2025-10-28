@@ -58,12 +58,12 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 
-    Route::get('/', function () {
-        return view('auth.login');
-    });
-    /*Route::any('/register', function () {
-        abort(404);
-    });*/
+    require __DIR__.'/auth.php';
+
+    Auth::routes();
+
+    Route::redirect('/', '/login');
+    
     Route::redirect('/register', '/login');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -369,6 +369,8 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
     /*Ruta para devolver los articulos de la lista al almacen */
     Route::post('/devolver-item', [DevolucionController::class, 'devolverItem'])->name('devolver.item');
+    /*Ruta para devolver Todos los items*/
+    Route::post('/manifiesto/devolver-todo', [DevolucionController::class, 'devolverTodo'])->name('DevolverTodo.Manifiesto');
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
@@ -543,9 +545,6 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     });
 });
 
-require __DIR__.'/auth.php';
-
-Auth::routes();
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 

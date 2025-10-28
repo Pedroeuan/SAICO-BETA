@@ -181,22 +181,29 @@
                         </td>
                         <td>
                             <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}" data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
-                            {{-- <a href="#" class="btn btn-info btn-devolver" role="button" data-id="{{ $dato['idGeneral_EyC'] }}"data-nombre="{{ $dato['Nombre'] }}"data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a> --}}
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
         <br>
-        
-        <div class="container d-flex justify-content-center">
-            <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">
-                @if($EstadoSolicitud == 'MANIFIESTO')
-                        Pre-Concluir Manifiesto
-                    @else    
-                        Concluir Manifiesto
-                @endif
-            </button>
+        <div class="container d-flex justify-content-between mb-3">
+            <div class="container d-flex justify-content-center mb-3">
+                <button type="submit" class="btn btn-info bg-success" id="ConcluirManifiesto">
+                    @if($EstadoSolicitud == 'MANIFIESTO')
+                            Pre-Concluir Manifiesto
+                        @else    
+                            Concluir Manifiesto
+                    @endif
+                </button>
+            </div>
+            @if(count($datosManifiesto) > 0)
+                <div class="container d-flex justify-content-center mb-3">
+                    <button type="button" class="btn btn-warning" id="btnDevolverTodo">
+                        Devolver Todo
+                    </button>
+                </div>
+            @endif
         </div>
     </form>
 @stop
@@ -292,7 +299,87 @@ $(document).ready(function() {
     table.draw();
 });
 
-/*Devolución*/
+/*Devolver Todo*/
+/* Devolver Todo */
+document.getElementById('btnDevolverTodo').addEventListener('click', function () {
+
+    Swal.fire({
+        title: '¿Devolver TODO?',
+        html: '<b>Esta acción es irreversible.</b><br>Se regresarán todos los elementos al almacén.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, devolver todo',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        backdrop: true,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            fetch("{{ route('DevolverTodo.Manifiesto') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    idSolicitudes: {!! json_encode($idsSolicitud) !!},
+                    devolverTodo: true
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Operación exitosa',
+                    text: data.success,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => location.reload(), 2000);
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al devolver',
+                    text: 'Ocurrió un problema inesperado.'
+                });
+                console.error('Error:', error);
+            });
+
+        }
+    });
+
+});
+
+/*document.getElementById('btnDevolverTodo').addEventListener('click', function() {
+    if (confirm('¿Estás seguro que deseas devolver TODO? Esta acción no se puede deshacer.')) {
+
+        fetch("{{ route('DevolverTodo.Manifiesto') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                idSolicitudes: {!! json_encode($idsSolicitud) !!}, // TODOS los idSolicitud
+                devolverTodo: true
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.success);
+            location.reload(); // recarga la página
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});*/
+
+
+/*Devolución 1X1 */
 $(document).ready(function() {
     var table = $('#tablaJs').DataTable();
 

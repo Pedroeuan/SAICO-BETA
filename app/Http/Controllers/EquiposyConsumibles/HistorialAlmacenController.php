@@ -46,7 +46,13 @@ class HistorialAlmacenController extends Controller
                 $query->where('NombreISO', '17025');
             })
             ->get();
-    } else {
+    }elseif($rol === 'Tics') {
+        //Todos los registros
+        $historiales = Historial_Almacen::whereHas('Almacen.General_EyC', function ($query) {
+            $query->where('Tipo','TICS');
+        })->get();
+    }
+    else {
         // Solo registros con ISO 9001
         $historiales = Historial_Almacen::with(['Almacen.General_EyC.ISO'])
             ->whereHas('Almacen.General_EyC.ISO', function ($query) {
@@ -55,7 +61,7 @@ class HistorialAlmacenController extends Controller
             ->get();
     }
 
-    return view('Historial_Almacen/index', compact('historiales','rol'));
+    return view('Historial_Almacen.index', compact('historiales','rol'));
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use Illuminate\Support\Str;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\EquiposyConsumibles\kits;
@@ -35,7 +36,12 @@ class SolicitudesController extends Controller
 
         if($rol == 'Técnicos')
         {
-            $Solicitudes = Solicitudes::where('tecnico',$Nombre)->get();
+            $nombreLimpio = Str::ascii(strtolower($Nombre)); // quita acentos y convierte a minúsculas
+
+            $Solicitudes = Solicitudes::whereRaw("
+                LOWER(REPLACE(REPLACE(REPLACE(REPLACE(tecnico, 'Ing.', ''), 'ing.', ''), 'Ing ', ''), 'ing ', ''))
+                LIKE ?
+            ", ['%' . $nombreLimpio . '%'])->get();
         }
         else
         {
