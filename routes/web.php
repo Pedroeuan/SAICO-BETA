@@ -546,6 +546,5 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 });
 
 
-
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 
