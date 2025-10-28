@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class SolicitudADController extends Controller
 {
@@ -19,7 +20,9 @@ class SolicitudADController extends Controller
         $user = Auth::user();
         $rol = $user->rol;
 
-        $solicitudes = solicitud_AD::all();
+        //$solicitudes = solicitud_AD::all();
+        $solicitudes = users_has_solicitud_AD::with('solicitud_AD', 'users')->get(); 
+        //dd($solicitudes);
 
         return view('solicitud_AD.index', compact('solicitudes', 'rol'));
     }
@@ -28,11 +31,11 @@ class SolicitudADController extends Controller
      * Mostrar el formulario para crear una nueva solicitud.
      */
 
-public function show($id)
-{
-    // Opcional: devolver JSON, vista o simplemente vacía
-    return abort(404); // si no lo necesitas
-}
+    public function show($id)
+    {
+        // Opcional: devolver JSON, vista o simplemente vacía
+        return abort(404); // si no lo necesitas
+    }
 
     public function create()
     {
@@ -71,6 +74,11 @@ public function store(Request $request)
 
     public function edit($id)
     {
+        // Obtener el usuario autenticado
+        $Usuario = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $Usuario->name;
+        $rol = Auth::user()->rol;
         // Buscar la solicitud por su ID correcto
         $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
 
@@ -78,7 +86,7 @@ public function store(Request $request)
         $usuarios = User::all();
         $usuariosAsociados = users_has_solicitud_AD::where('idsolicitud_AD', $id)->pluck('users_id')->toArray();
 
-        return view('solicitud_AD.edit', compact('solicitud', 'usuarios', 'usuariosAsociados'));
+        return view('solicitud_AD.edit', compact('solicitud', 'usuarios', 'usuariosAsociados','rol','Usuario','id'));
     }
 
     /**
@@ -86,34 +94,36 @@ public function store(Request $request)
      */
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+        $rol = $user->rol;
+
         $request->validate([
             'fecha' => 'required|date',
+            'Tema' => 'required|string|max:255',
             'estatus' => 'required|string',
             'comentario' => 'nullable|string',
-            'usuarios' => 'required|array|min:1',
+            //'usuarios' => 'required|array|min:1',
         ]);
 
         // Buscar la solicitud
-        $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
+        //$solicitud = solicitud_AD::where('idsolicitud_AD', $id)->first();
+        //Log::info('Solicitud encontrada: ' . ($solicitud ? 'Sí' : 'No'));
+        $solicitud = solicitud_AD::find($id);
 
         // Actualizar los campos
         $solicitud->update([
-            'fecha' => $request->fecha,
-            'estatus' => $request->estatus,
-            'Comentario' => $request->comentario,
+            'fecha' => $request->input('fecha'),
+            'Tema' => $request->input('Tema'),
+            'estatus' => $request->input('estatus'),
+            'Comentario' => $request->input('comentario'),
         ]);
 
-        // Actualizar usuarios asociados
-        users_has_solicitud_AD::where('idsolicitud_AD', $id)->delete();
 
-        foreach ($request->usuarios as $userId) {
-            users_has_solicitud_AD::create([
-                'users_id' => $userId,
-                'idsolicitud_AD' => $id,
-            ]);
-        }
+        //$solicitudes = solicitud_AD::all();
+        $solicitudes = users_has_solicitud_AD::with('solicitud_AD', 'users')->get(); 
+        //dd($solicitudes);
 
-        return response()->json(['success' => true]);
+        return view('solicitud_AD.index', compact('solicitudes', 'rol'));
     }
 
     /**
@@ -121,7 +131,14 @@ public function store(Request $request)
      */
 public function destroy($id)
 {
-    $solicitud = solicitud_AD::where('idsolicitud_AD', $id)->firstOrFail();
+    
+    $solicitud = solicitud_AD::find($id);
+    log::info('Eliminando solicitud con ID: ' . $id);
+
+    if (!$solicitud) {
+        return response()->json(['error' => 'Solicitud no encontrada.'], 404);
+    }
+
     $solicitud->delete();
 
     return response()->json(['success' => true]);

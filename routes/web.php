@@ -70,12 +70,14 @@ use App\Http\Controllers\solicitud_AD\SolicitudADController;
     Route::get('/ADsolicitud/create', [SolicitudADController::class, 'create'])->name('ADsolicitud.create');
     /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
     Route::get('/ADsolicitud/index', [SolicitudADController::class, 'index'])->name('ADsolicitud.index');
+    /*Rutas de Vistas Solicitudes_AD*/
+    Route::get('/ADsolicitud/edit/{id}', [SolicitudADController::class, 'edit'])->name('ADsolicitud.edit');
+    /*Ruta de Actualización Solicitud_AD*/
+    Route::post('/ADsolicitud/update/{id}', [SolicitudADController::class, 'update'])->name('ADsolicitud.update');
     /*Ruta de Guardado-index*/
     Route::post('/ADsolicitud/store', [SolicitudADController::class, 'store'])->name('ADsolicitud.store');
-    Route::resource('ADsolicitud', SolicitudADController::class);
-    Route::resource('ADsolicitud', SolicitudADController::class)->except(['show']);
-
-    Route::delete('/ADsolicitud/detroy', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
+    /*Ruta de Eliminar-index*/
+    Route::delete('/ADsolicitud/destroy/{id}', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
 
     });
 

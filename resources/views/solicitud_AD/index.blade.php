@@ -14,12 +14,11 @@
             <i class="fas fa-plus"></i> Nueva Solicitud
         </a>
     </div>
-
     <div class="card-body">
         <table id="tabla-solicitudes" class="table table-bordered table-striped">
             <thead class="text-center">
                 <tr>
-                    <th>ID</th>
+                    <th>Nombre</th>
                     <th>Fecha</th>
                     <th>Estatus</th>
                     <th>Tema</th>
@@ -30,17 +29,17 @@
             <tbody>
                 @foreach($solicitudes as $solicitud)
                 <tr>
-                    <td>{{ $solicitud->idsolicitud_AD }}</td>
-                    <td>{{ $solicitud->fecha }}</td>
+                    <td>{{ $solicitud->users->name }}</td>
+                    <td>{{ $solicitud->solicitud_ad->fecha }}</td>
                     <td>
                         <span class="badge 
-                            {{ $solicitud->estatus == 'Aprobado' ? 'bg-success' : 
-                            ($solicitud->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
-                            {{ $solicitud->estatus }}
+                            {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
+                            ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
+                            {{ $solicitud->solicitud_ad->estatus }}
                         </span>
                     </td>
-                    <td>{{ $solicitud->Tema }}</td>
-                    <td>{{ $solicitud->Comentario }}</td>
+                    <td>{{ $solicitud->solicitud_ad->Tema }}</td>
+                    <td>{{ $solicitud->solicitud_ad->comentario }}</td>
                     <td class="text-center">
                         {{-- Botón Editar --}}
                         <a href="{{ route('ADsolicitud.edit', $solicitud->idsolicitud_AD) }}" 
@@ -76,44 +75,42 @@
 
 <script>
 $(function () {
-    $('.btn-eliminar').click(function() {
-        let id = $(this).data('id');
-
-        // URL de la ruta destroy (RESTful)
-        let url = "{{ route('ADsolicitud.destroy', ':id') }}".replace(':id', id);
-
+    $(document).on("click", ".btn-eliminar", function() {
+        var idUsuario = $(this).attr("idUsuario");
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta solicitud se eliminará permanentemente.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+            title: "¿Se eliminara?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: url,
-                    type: 'DELETE', // método correcto
-                    data: { _token: '{{ csrf_token() }}' }, // token CSRF
-                    success: function(response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Eliminado',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => location.reload());
+                    url: '/Usuarios/eliminar/' + data-id,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
                     },
-                    error: function(xhr) {
-                        console.error(xhr);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No se pudo eliminar la solicitud.'
-                        });
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Eliminado!",
+                                text: response.message,
+                                icon: "success",
+                                didClose: function() {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire("Error!", response.message, "error");
+                        }
+                    },
+                    error: function() {
+                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
                     }
                 });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
             }
         });
     });

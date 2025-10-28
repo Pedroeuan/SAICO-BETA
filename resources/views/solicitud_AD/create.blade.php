@@ -20,43 +20,49 @@
 <br>  
 <br>
 <br>
-
+    <div class="col-15 text-center d-flex align-items-center justify-content-center">
+        <div class>
+            <h2>Creación de Solicitud</h2>
+            <br>
+        </div>
+    </div>
 <!-- form start -->
     <div class="card-body">
-        <form id="form-solicitud" method="POST" action="{{ route('ADsolicitud.store') }}">
+        <form id="form-solicitud" method="POST" enctype="multipart/form-data" action="{{ route('ADsolicitud.store') }}">
             @csrf
             <div class="row">
 
-        <div class="card">
-            <div class="card-body row">
+                <div class="card">
+                    <div class="card-body row">
 
-                <div class="col-md-4 mb-3">
-                    <label for="fecha" class="form-label">Fecha</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly>
+                        <div class="col-md-4 mb-3">
+                            <label for="fecha" class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="estatus" class="form-label">Estatus</label>
+                            <input type="text" class="form-control" id="estatus" name="estatus" value="PENDIENTE" readonly>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="TEMA" class="form-label">Tema Principal</label>
+                            <input type="text" class="form-control" id="TEMA" name="Tema" placeholder="Ejemplo: SERVICIO PROTEXA" required>
+                        </div>
+
+                        <div class="col-md-15 mb-3">
+                            <label for="comentario" class="form-label">Comentario</label>
+                            <textarea class="form-control  is-waning" id="comentario" name="comentario" placeholder="Ejemplo: CALIBRACIONES DE EQUIPOS">{{old('comentario')}}</textarea>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save"></i> Guardar Solicitud
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="estatus" class="form-label">Estatus</label>
-                    <input type="text" class="form-control" id="estatus" name="estatus" value="PENDIENTE" readonly>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="TEMA" class="form-label">Tema Principal</label>
-                    <input type="text" class="form-control" id="TEMA" name="Tema" placeholder="Ejemplo: SERVICIO PROTEXA" required>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="comentario" class="form-label">Comentario</label>
-                    <input type="text" class="form-control" id="comentario" name="comentario" placeholder="Observaciones..." required>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success btn-lg">
-                        <i class="fas fa-save"></i> Guardar Solicitud
-                    </button>
-                </div>
-
-            </div>
         </form>
     </div>
 

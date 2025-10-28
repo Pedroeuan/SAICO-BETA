@@ -711,7 +711,7 @@ return [
                 [
                     'text' => 'Solicitudes AD',
                     'icon' => 'fas fa-file-alt',
-                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
+                    'can' => 'tecnicos-equipos-access',  // Define una política en Laravel para controlar el acceso
                     //'topnav' => true,
                     'submenu' => [
                         [
@@ -721,7 +721,7 @@ return [
                         ],
                         [
                             'text' => 'Ver solicitudes',
-                            'url' => '',
+                            'url' => '/ADsolicitud/index',
                             //can => 'nombre-ruta'
                         ],
                     ],
