@@ -1091,35 +1091,17 @@
                                     </div>
                                     @endif
 
-                                    <div class="col-sm-4">
+                                <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @elseif($rol != 'Equipos') Estatus @else Disponibilidad/Estatus @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
-                                                <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
-                                            @else
+                                                    <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
+                                                @else
                                                 <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
                                                     <option selected="selected">Elige un Tipo</option>
-                                                    @if($rol == 'Laboratorio')
-                                                        <option value="Equipo Disponible" @if($generalEyC->Disponibilidad_Estado == 'Equipo Disponible') selected="selected" @endif>Equipo Disponible</option> 
-                                                        <option value="Equipo Fuera de Servicio" @if($generalEyC->Disponibilidad_Estado == 'Equipo Fuera de Servicio') selected="selected" @endif>Equipo Fuera de Servicio</option>
-                                                        <option value="En Servicio" @if($generalEyC->Disponibilidad_Estado == 'En Servicio') selected="selected" @endif>En Servicio </option>
-                                                        <option value="Equipo en Resguardo" @if($generalEyC->Disponibilidad_Estado == 'Equipo en Resguardo') selected="selected" @endif>Equipo en Resguardo</option>
-                                                    @elseif($rol == 'Equipos')
-                                                        <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
-                                                        <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
-                                                        <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
-                                                    @elseif($rol == 'Super Administrador' || $rol == 'Administrador')
-                                                            @if($generalConISO->NombreISO == '17025')
-                                                        <option value="Equipo Disponible" @if($generalEyC->Disponibilidad_Estado == 'Equipo Disponible') selected="selected" @endif>Equipo Disponible-17025</option> 
-                                                        <option value="Equipo Fuera de Servicio" @if($generalEyC->Disponibilidad_Estado == 'Equipo Fuera de Servicio') selected="selected" @endif>Equipo Fuera de Servicio-17025</option>
-                                                        <option value="En Servicio" @if($generalEyC->Disponibilidad_Estado == 'En Servicio') selected="selected" @endif>En Servicio-17025</option>
-                                                        <option value="Equipo en Resguardo" @if($generalEyC->Disponibilidad_Estado == 'Equipo en Resguardo') selected="selected" @endif>Equipo en Resguardo-17025</option>
-                                                            @elseif($generalConISO->NombreISO == '9001')
-                                                        <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE-9001</option>
-                                                        <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE-9001</option>
-                                                        <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA-9001</option>
-                                                            @endif
-                                                    @endif
+                                                    <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                    <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
                                                 </select>
                                             @endif
                                         </div>
@@ -1880,16 +1862,16 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                        @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
-                                                <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
-                                            @else
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
-                                                <option selected="selected">Elige un Tipo</option>
-                                                <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
-                                                <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
-                                                <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
-                                            </select>
-                                        @endif
+                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                                    <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
+                                                @else
+                                                <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
+                                                    <option selected="selected">Elige un Tipo</option>
+                                                    <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
+                                                    <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
+                                                    <option value="FUERA DE SERVICIO/BAJA" @if($generalEyC->Disponibilidad_Estado == 'FUERA DE SERVICIO/BAJA') selected="selected" @endif >FUERA DE SERVICIO/BAJA</option>
+                                                </select>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
