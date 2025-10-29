@@ -304,10 +304,10 @@ return [
                     'topnav_right' => true,          // Lo coloca en la parte derecha del top navbar (si fuera "topnav" va del lado izquierdo).
                     'dropdown_mode' => true,         // Activa el modo desplegable con lista de notificaciones.
                     'dropdown_flabel' => 'Todas las notificaciones', // Texto del enlace al final del dropdown (footer).
-                    'update_cfg' => [
+                    /*'update_cfg' => [
                         'url' => 'notificaciones/update', // Ruta que AdminLTE usará para hacer AJAX y actualizar datos.
                         'period' => 60,                   // Cada cuántos segundos consultar nuevas notificaciones.
-                    ],
+                    ],*/
                 ],
                 // Sidebar Administrativo:
                 [
