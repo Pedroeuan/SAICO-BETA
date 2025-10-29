@@ -524,13 +524,30 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
+                                    @if ($rol == 'Laboratorio')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Tipo</label>
+                                                <select class="form-control select2" style="width: 100%;" name="TIPO" required>
+                                                        <option>Elige el tipo</option>
+                                                        <option value="EQUIPOS" {{ old('TIPO') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
+                                                        <option value="ACCESORIOS" {{ old('TIPO') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
+                                                        <option value="BLOCK Y PROBETA" {{ old('TIPO') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
+                                                        <option value="HERRAMIENTAS" {{ old('TIPO') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
 
+                                    @if ($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                                <input type="hidden" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS">
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Comentario</label>
