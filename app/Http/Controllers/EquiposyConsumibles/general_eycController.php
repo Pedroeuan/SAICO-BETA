@@ -133,12 +133,22 @@ class general_eycController extends Controller
     {
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
+        $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
+        if($generalConISO->NombreISO == '17025' && $generalEyC->Tipo == 'EQUIPOS'){
+        $Baja='Equipo Fuera de Servicio';
+        // Actualizar los datos del equipo
+        $generalEyC ->update([
+            'Disponibilidad_Estado' => $Baja,
+        ]);
+        }else{
         $Baja='FUERA DE SERVICIO/BAJA';
         // Actualizar los datos del equipo
         $generalEyC ->update([
             'Disponibilidad_Estado' => $Baja,
         ]);
+        }
         return redirect()->route('inventario');
+
     }
 
     public function verificarDuplicadoEquipos(Request $request)
