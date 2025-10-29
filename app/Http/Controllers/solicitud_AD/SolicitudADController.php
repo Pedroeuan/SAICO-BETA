@@ -19,12 +19,12 @@ class SolicitudADController extends Controller
     {
         $user = Auth::user();
         $rol = $user->rol;
-
+        $usuarios=[];
         //$solicitudes = solicitud_AD::all();
         $solicitudes = users_has_solicitud_AD::with('solicitud_AD', 'users')->get(); 
         //dd($solicitudes);
 
-        return view('solicitud_AD.index', compact('solicitudes', 'rol'));
+        return view('solicitud_AD.index', compact('solicitudes', 'rol','usuarios'));
     }
 
     /**
@@ -125,20 +125,38 @@ public function store(Request $request)
 
         return view('solicitud_AD.index', compact('solicitudes', 'rol'));
     }
+        public function actualizar(Request $request, $id)
+        {
+            $solicitud = solicitud_AD::find($id);
+            if (!$solicitud) {
+                return response()->json(['success' => false, 'message' => 'Solicitud no encontrada.']);
+            }
+
+            $request->validate([
+                'estatus' => 'required|string'
+            ]);
+
+            $solicitud->estatus = $request->estatus;
+            $solicitud->save();
+
+            return response()->json(['success' => true, 'message' => 'Estatus actualizado correctamente.']);
+        }
+
 
     /**
      * Eliminar una solicitud.
      */
 public function destroy($id)
 {
-    
+    //Log::info('Iniciando proceso de eliminación para solicitud con ID: ' . $id);
+    $user_has_solicitud = users_has_solicitud_AD::where('idsolicitud_AD', $id);
     $solicitud = solicitud_AD::find($id);
-    log::info('Eliminando solicitud con ID: ' . $id);
+    //log::info('Eliminando solicitud con ID: ' . $id);
 
-    if (!$solicitud) {
+    if (!$user_has_solicitud && !$solicitud) {
         return response()->json(['error' => 'Solicitud no encontrada.'], 404);
     }
-
+    $user_has_solicitud->delete();
     $solicitud->delete();
 
     return response()->json(['success' => true]);

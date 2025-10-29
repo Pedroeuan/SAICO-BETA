@@ -58,6 +58,7 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 use App\Http\Controllers\solicitud_AD\SolicitudADController;
+use App\Http\Controllers\UsuarioController;
 
     Route::get('/', function () {
         return view('auth.login');
@@ -78,11 +79,11 @@ use App\Http\Controllers\solicitud_AD\SolicitudADController;
     Route::post('/ADsolicitud/store', [SolicitudADController::class, 'store'])->name('ADsolicitud.store');
     /*Ruta de Eliminar-index*/
     Route::delete('/ADsolicitud/destroy/{id}', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
+    /*Ruta de actualizar-index*/
+    Route::post('/ADsolicitud/actualizar/{id}', [SolicitudADController::class, 'actualizar'])->name('adsolicitud.actualizar');
+
 
     });
-
-
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {

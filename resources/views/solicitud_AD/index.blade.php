@@ -10,50 +10,80 @@
 <div class="card shadow-lg">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h3 class="card-title">Solicitudes Registradas</h3>
+        @if($rol != 'Super Administrador' && $rol != 'Administrador')
         <a href="{{ route('ADsolicitud.create') }}" class="btn btn-success btn-sm">
             <i class="fas fa-plus"></i> Nueva Solicitud
         </a>
+        @endif
     </div>
     <div class="card-body">
-        <table id="tabla-solicitudes" class="table table-bordered table-striped">
+        <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
             <thead class="text-center">
                 <tr>
-                    <th>Nombre</th>
+                    @if($rol != 'Super Administrador' && $rol != 'Administrador')
+                    <th>Tu Solcitud</th>
                     <th>Fecha</th>
                     <th>Estatus</th>
                     <th>Tema</th>
                     <th>Comentario</th>
                     <th>Acciones</th>
+                    @else
+                    <th>Seleccionar</th>
+                    <th>Solcitud de:</th>
+                    <th>Fecha</th>
+                    <th>Estatus</th>
+                    <th>Tema</th>
+                    <th>Comentario</th>
+                    <th>Estatus</th>
+                    <th>Actualizar</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
                 @foreach($solicitudes as $solicitud)
                 <tr>
-                    <td>{{ $solicitud->users->name }}</td>
-                    <td>{{ $solicitud->solicitud_ad->fecha }}</td>
-                    <td>
-                        <span class="badge 
-                            {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
-                            ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
-                            {{ $solicitud->solicitud_ad->estatus }}
-                        </span>
-                    </td>
-                    <td>{{ $solicitud->solicitud_ad->Tema }}</td>
-                    <td>{{ $solicitud->solicitud_ad->comentario }}</td>
-                    <td class="text-center">
-                        {{-- Botón Editar --}}
-                        <a href="{{ route('ADsolicitud.edit', $solicitud->idsolicitud_AD) }}" 
-                        class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
-
-                        {{-- Botón Eliminar --}}
-                        <button type="button"
-                            class="btn btn-danger btn-sm btn-eliminar"
-                            data-id="{{ $solicitud->idsolicitud_AD }}">
-                            <i class="fas fa-trash-alt"></i> Eliminar
-                </button>
-                    </td>
+                    @if($rol != 'Super Administrador' && $rol != 'Administrador')
+                        <td class="text-center">{{ $solicitud->users->name }}</td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->fecha }}</td>
+                        <td class="text-center">
+                            <span class="badge 
+                                {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
+                                ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
+                                {{ $solicitud->solicitud_ad->estatus }}
+                            </span>
+                        </td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->Tema }}</td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->comentario }}</td>
+                        <td class="text-center">
+                            {{-- Botón Editar --}}
+                            <a href="{{ route('ADsolicitud.edit', $solicitud->idsolicitud_AD) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
+                            {{-- Botón Eliminar --}}
+                            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                        </td>
+                    @else
+                        <td class="text-center"><input type="checkbox" name="usuarios[]" value="{{ $solicitud->users->id }}"{{ in_array($solicitud->users->id, $usuarios) ? 'checked' : '' }}></td>
+                        <td>{{ $solicitud->users->name }}</td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->fecha }}</td>
+                        <td class="text-center">
+                            <span class="badge 
+                                {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
+                                ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
+                                {{ $solicitud->solicitud_ad->estatus }}
+                            </span>
+                        </td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->Tema }}</td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->comentario }}</td>
+                        <td class="text-center">
+                            <select class="form-control select2 @error('estatus') is-invalid @enderror" style="width: 100%;" name="estatus">
+                                <option selected disabled>Selecciona un perfil</option>
+                                <option value="PASAR" {{ old('estatus') == 'PASAR' ? 'selected' : '' }}>PASAR</option>
+                                <option value="SIGUIENTE" {{ old('estatus') == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
+                        </td>
+                        <td class="text-center">
+                            <!--<a href="#" class="btn btn-info btn-actualizar" role="button" actualizar-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>-->
+                            <button type="button" class="btn btn-info btn-actualizar" data-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></button>
+                        </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
@@ -74,11 +104,12 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(function () {
-    $(document).on("click", ".btn-eliminar", function() {
-        var idUsuario = $(this).attr("idUsuario");
+    /*Boton Eliminar*/
+        $(document).on("click", ".btn-eliminar", function() {
+        var idUsuario = $(this).attr("data-id");
+        //console.log("🟢 ID capturado:", idUsuario);
         Swal.fire({
-            title: "¿Se eliminara?",
+            title: "¿Deseas eliminar este usuario?",
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
@@ -86,7 +117,7 @@ $(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Usuarios/eliminar/' + data-id,
+                    url: '/ADsolicitud/destroy/' + idUsuario,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
@@ -114,6 +145,76 @@ $(function () {
             }
         });
     });
+
+    /*Boton Actualizar*/
+$(document).on("click", ".btn-actualizar", function() {
+    var idUsuario = $(this).data("id"); // obtiene el data-id
+    /*var estatus = $(this).closest('tr').find('select.RolUsuario').val(); // obtiene el select de la fila
+
+    if(!estatus){
+        Swal.fire("Error", "Debes seleccionar un estatus.", "warning");
+        return;
+    }*/
+
+    Swal.fire({
+        title: "¿Deseas actualizar esta solicitud?",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: "No"
+    }).then((result) => {
+        if(result.isConfirmed){
+            $.ajax({
+                url: '/ADsolicitud/actualizar/' + idUsuario,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                //data: { estatus: estatus },
+                success: function(response){
+                    if(response.success){
+                        Swal.fire("Actualizado!", response.message, "success").then(() => location.reload());
+                    } else {
+                        Swal.fire("Error!", response.message, "error");
+                    }
+                },
+                error: function(xhr){
+                    Swal.fire("Error!", "No se pudo actualizar. (" + xhr.status + ")", "error");
+                }
+            });
+        } else if(result.isDenied){
+            Swal.fire("Cancelado", "", "info");
+        }
+    });
 });
+
+
+    let table = new DataTable('#tablaJs', {
+        // options
+        language: {
+                        "decimal": "",
+                        "emptyTable": "No hay datos disponibles en la tabla",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                        "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrar _MENU_ entradas",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "No se encontraron registros coincidentes",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "aria": {
+                            "sortAscending": ": activar para ordenar la columna ascendente",
+                            "sortDescending": ": activar para ordenar la columna descendente"
+                        }
+                    }
+    });
+
 </script>
 @stop
