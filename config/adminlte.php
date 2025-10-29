@@ -304,10 +304,10 @@ return [
             'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
             'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
             'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
-            'update_cfg' => [
+            /*'update_cfg' => [
                 'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
                 'period' => 60,                       // The update period for get new data (in seconds, optional).
-            ],
+            ],*/
         ],
                 // Sidebar Administrativo:
                 [
