@@ -531,7 +531,6 @@
                                                 <select class="form-control select2" style="width: 100%;" name="TIPO" required>
                                                         <option>Elige el tipo</option>
                                                         <option value="EQUIPOS" {{ old('TIPO') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
-                                                        <option value="CONSUMIBLES" {{ old('TIPO') == 'CONSUMIBLES' ? 'selected' : '' }}>CONSUMIBLES</option>
                                                         <option value="ACCESORIOS" {{ old('TIPO') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
                                                         <option value="BLOCK Y PROBETA" {{ old('TIPO') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
                                                         <option value="HERRAMIENTAS" {{ old('TIPO') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
