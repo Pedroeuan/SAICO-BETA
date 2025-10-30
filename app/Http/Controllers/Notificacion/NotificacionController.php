@@ -182,7 +182,7 @@ class NotificacionController extends Controller
         
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
-                                        //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                        ->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
                                         ->orderBy('created_at', 'desc')
                                         ->get(['idNotificaciones', 'Mensaje_Corto', 'url']); // Asegúrate de tener el 'id' también
     
