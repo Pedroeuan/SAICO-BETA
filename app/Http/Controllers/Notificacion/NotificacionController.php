@@ -182,6 +182,7 @@ class NotificacionController extends Controller
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->url = $url;
+                        $notificacion->leida = false;
                         $notificacion->save();
                     }
 
@@ -199,7 +200,7 @@ class NotificacionController extends Controller
         
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
-                                        //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                        ->where('leida', false) // Descomenta esto si necesitas filtrar solo no leídas
                                         ->orderBy('created_at', 'desc')
                                         ->get(['idNotificaciones', 'Mensaje_Corto', 'url']); // Asegúrate de tener el 'id' también
     
@@ -216,5 +217,17 @@ class NotificacionController extends Controller
         return response()->json($formattedNotifications);
     }
     
-    
+    public function marcarComoLeida($id)
+    {
+        $notificacion = Notificacion::find($id);
+
+        if ($notificacion) {
+            $notificacion->leida = true;
+            $notificacion->save();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
+
 }

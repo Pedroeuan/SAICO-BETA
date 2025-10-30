@@ -81,6 +81,7 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
         /*Obtener Notificaciones*/
         Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
         });
+    Route::post('/notificaciones/marcar-leida/{id}', [NotificacionController::class, 'marcarComoLeida'])->name('notificaciones.marcarLeida');
     });
     
 
