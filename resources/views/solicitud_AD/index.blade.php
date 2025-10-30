@@ -71,17 +71,22 @@
                                 {{ $solicitud->solicitud_ad->estatus }}
                             </span>
                         </td>
-                        <td class="text-center">{{ $solicitud->solicitud_ad->Tema }}</td>
-                        <td class="text-center">{{ $solicitud->solicitud_ad->comentario }}</td>
-                        <td class="text-center">
+                        <select class="form-control select2 " style="width: 100%;" name="estatus">
+                            <option disabled>Selecciona un estatus</option>
+                            <option value="PASAR" {{ $solicitud->solicitud_ad->estatus == 'PASAR' ? 'selected' : '' }}>PASAR</option>
+                            <option value="SIGUIENTE" {{ $solicitud->solicitud_ad->estatus == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
+                            <option value="NO PASAR" {{ $solicitud->solicitud_ad->estatus == 'NO PASAR' ? 'selected' : '' }}>NO PASAR</option>
+                        </select>
+
                             <select class="form-control select2 @error('estatus') is-invalid @enderror" style="width: 100%;" name="estatus">
                                 <option selected disabled>Selecciona un perfil</option>
                                 <option value="PASAR" {{ old('estatus') == 'PASAR' ? 'selected' : '' }}>PASAR</option>
                                 <option value="SIGUIENTE" {{ old('estatus') == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
+                                <option value="NO PASAR" {{ old('estatus') == 'NO_PASAR' ? 'selected' : '' }}>NO PASAR</option>
                         </td>
                         <td class="text-center">
                             <!--<a href="#" class="btn btn-info btn-actualizar" role="button" actualizar-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>-->
-                            <button type="button" class="btn btn-info btn-actualizar" data-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-info btn-actualizar" actualizar-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></button>
                         </td>
                     @endif
                 </tr>
@@ -148,13 +153,16 @@
 
     /*Boton Actualizar*/
 $(document).on("click", ".btn-actualizar", function() {
-    var idUsuario = $(this).data("id"); // obtiene el data-id
-    /*var estatus = $(this).closest('tr').find('select.RolUsuario').val(); // obtiene el select de la fila
-
+    var idUsuario = $(this).attr("actualizar-id");
+    //var idUsuario = $(this).data("id"); // obtiene el data-id
+    //var estatus = $(this).closest('tr').find('select.estatus').val(); // obtiene el select de la fila
+    var estatus = $(this).closest('tr').find('select[name="estatus"]').val(); // obtiene el valor del select
+    console.log("🟢 ID capturado:", idUsuario);
+    console.log("🟢 Estatus capturado:", estatus);
     if(!estatus){
         Swal.fire("Error", "Debes seleccionar un estatus.", "warning");
         return;
-    }*/
+    }
 
     Swal.fire({
         title: "¿Deseas actualizar esta solicitud?",
@@ -169,7 +177,7 @@ $(document).on("click", ".btn-actualizar", function() {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                //data: { estatus: estatus },
+                data: { estatus: estatus },
                 success: function(response){
                     if(response.success){
                         Swal.fire("Actualizado!", response.message, "success").then(() => location.reload());

@@ -125,6 +125,7 @@ public function store(Request $request)
 
         return view('solicitud_AD.index', compact('solicitudes', 'rol'));
     }
+    
         public function actualizar(Request $request, $id)
         {
             $solicitud = solicitud_AD::find($id);

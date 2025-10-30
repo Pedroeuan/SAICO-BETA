@@ -42,7 +42,7 @@
 
                         <div class="col-md-4 mb-3">
                             <label for="estatus" class="form-label">Estatus</label>
-                            <select class="form-control" id="estatus" name="estatus" @if ($rol == 'Administrador' || $rol == 'Super Administrador') require @else readonly  @endif>
+                            <select class="form-control" id="estatus" name="estatus" @if ($rol == 'Administrador' || $rol == 'Super Administrador') require @else disabled  @endif>
                                 <option value="PENDIENTE" @if($Usuario->rol == 'PENDIENTE') selected="selected" @endif> PENDIENTE</option>
                                 <option value="APROBADO" @if($Usuario->rol == 'APROBADO') selected="selected" @endif> APROBADO</option>
                                 <option value="RECHAZADO" @if($Usuario->rol == 'RECHAZADO') selected="selected" @endif> RECHAZADO</option>
