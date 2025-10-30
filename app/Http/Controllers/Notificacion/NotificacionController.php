@@ -199,5 +199,16 @@ class NotificacionController extends Controller
         return response()->json($formattedNotifications);
     }
     
-    
+    public function marcarComoLeida($id)
+    {
+        $notificacion = Notificacion::find($id);
+
+        if ($notificacion) {
+            $notificacion->leida = true;
+            $notificacion->save();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
 }
