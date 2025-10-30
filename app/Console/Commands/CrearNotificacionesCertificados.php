@@ -146,6 +146,7 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->url = $url;
+                        $notificacion->leida = false;
                         $notificacion->save();
                     }
 

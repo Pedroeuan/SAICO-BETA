@@ -42,8 +42,77 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-
+    
     function createNotificationItem(notificacion) {
+        const listItem = document.createElement('li');
+        listItem.classList.add('dropdown-item', 'd-flex', 'align-items-center');
+
+        const link = document.createElement('a');
+        link.href = notificacion.url; // URL asociada a la notificación
+        link.classList.add('d-flex', 'align-items-center');
+        link.style.textDecoration = 'none';
+        link.style.color = 'inherit';
+
+        const icon = document.createElement('i');
+        icon.classList.add('mr-2');
+
+        switch (notificacion.type) {
+            case 'info':
+                icon.classList.add('fas', 'fa-info-circle', 'text-info');
+                break;
+            case 'warning':
+                icon.classList.add('fas', 'fa-exclamation-triangle', 'text-warning');
+                break;
+            case 'error':
+                icon.classList.add('fas', 'fa-times-circle', 'text-danger');
+                break;
+            default:
+                icon.classList.add('fas', 'fa-bell', 'text-secondary');
+        }
+
+        link.appendChild(icon);
+
+        const messageText = document.createElement('span');
+        messageText.textContent = shortenText(notificacion.message, 40);
+        messageText.style.whiteSpace = 'nowrap';
+        messageText.style.overflow = 'hidden';
+        messageText.style.textOverflow = 'ellipsis';
+        messageText.style.flexGrow = '1';
+        link.appendChild(messageText);
+
+        // 🟢 NUEVO: Marcar como leída al hacer clic
+        link.addEventListener('click', async (e) => {
+            e.preventDefault(); // Evita que recargue antes de marcar como leída
+
+            try {
+                const response = await fetch(`/notificaciones/marcar-leida/${notificacion.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Eliminar la notificación del DOM
+                    listItem.remove();
+                    // Actualizar contador
+                    const remaining = document.querySelectorAll('#my-notification .dropdown-item').length - 1; // quitamos el "Todas las notificaciones"
+                    updateNotificationBadge(remaining);
+                }
+                // Abrir la notificación después de marcarla
+                window.location.href = notificacion.url;
+
+            } catch (error) {
+                console.error('Error al marcar como leída:', error);
+            }
+        });
+
+        listItem.appendChild(link);
+
+        return listItem;
+    }
+    /*function createNotificationItem(notificacion) {
         const listItem = document.createElement('li');
         listItem.classList.add('dropdown-item', 'd-flex', 'align-items-center');
 
@@ -83,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         listItem.appendChild(link);
 
         return listItem;
-    }
+    }*/
 
     function shortenText(text, maxLength) {
         return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
