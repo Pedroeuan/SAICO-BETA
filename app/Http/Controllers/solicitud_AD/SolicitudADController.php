@@ -115,7 +115,7 @@ public function store(Request $request)
             'fecha' => $request->input('fecha'),
             'Tema' => $request->input('Tema'),
             'estatus' => $request->input('estatus'),
-            'Comentario' => $request->input('comentario'),
+            'comentario' => $request->input('comentario'),
         ]);
 
 

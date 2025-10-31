@@ -71,18 +71,16 @@
                                 {{ $solicitud->solicitud_ad->estatus }}
                             </span>
                         </td>
-                        <select class="form-control select2 " style="width: 100%;" name="estatus">
-                            <option disabled>Selecciona un estatus</option>
-                            <option value="PASAR" {{ $solicitud->solicitud_ad->estatus == 'PASAR' ? 'selected' : '' }}>PASAR</option>
-                            <option value="SIGUIENTE" {{ $solicitud->solicitud_ad->estatus == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
-                            <option value="NO PASAR" {{ $solicitud->solicitud_ad->estatus == 'NO PASAR' ? 'selected' : '' }}>NO PASAR</option>
-                        </select>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->Tema }}</td>
+                        <td class="text-center">{{ $solicitud->solicitud_ad->comentario }}</td>
+                        <td class="text-center">
 
                             <select class="form-control select2 @error('estatus') is-invalid @enderror" style="width: 100%;" name="estatus">
-                                <option selected disabled>Selecciona un perfil</option>
-                                <option value="PASAR" {{ old('estatus') == 'PASAR' ? 'selected' : '' }}>PASAR</option>
-                                <option value="SIGUIENTE" {{ old('estatus') == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
-                                <option value="NO PASAR" {{ old('estatus') == 'NO_PASAR' ? 'selected' : '' }}>NO PASAR</option>
+                                <option disabled>Selecciona un estatus</option>
+                                <option   option value="PASAR" {{ $solicitud->solicitud_ad->estatus == 'PASAR' ? 'selected' : '' }}>PASAR</option>
+                                <option value="SIGUIENTE" {{ $solicitud->solicitud_ad->estatus == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
+                                <option value="NO PASAR" {{ $solicitud->solicitud_ad->estatus == 'NO PASAR' ? 'selected' : '' }}>NO PASAR</option>
+                            </select>
                         </td>
                         <td class="text-center">
                             <!--<a href="#" class="btn btn-info btn-actualizar" role="button" actualizar-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>-->
@@ -93,6 +91,11 @@
                 @endforeach
             </tbody>
         </table>
+         <div class="text-center mt-3">
+                <button type="button" id="btn-actualizar-seleccionados" class="btn btn-success">
+                        <i class="fas fa-sync-alt"></i> Actualizar seleccionados
+                </button>
+        </div>
     </div>
 </div>
 @stop
