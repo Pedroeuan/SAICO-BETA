@@ -81,6 +81,9 @@ use App\Http\Controllers\UsuarioController;
     Route::delete('/ADsolicitud/destroy/{id}', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
     /*Ruta de actualizar-index*/
     Route::post('/ADsolicitud/actualizar/{id}', [SolicitudADController::class, 'actualizar'])->name('adsolicitud.actualizar');
+    /*Ruta de actualizar-multiple*/
+    Route::post('/ADsolicitud/actualizarMultiple', [SolicitudADController::class, 'actualizarMultiple'])->name('ADsolicitud.actualizarMultiple');
+
 
 
     });

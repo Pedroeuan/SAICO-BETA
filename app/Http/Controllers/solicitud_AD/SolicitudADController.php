@@ -163,4 +163,24 @@ public function destroy($id)
     return response()->json(['success' => true]);
 }
 
+/* Actualizar multiples solicitudes */
+
+public function actualizarMultiple(Request $request)
+{
+    if (!$request->has('solicitudes') || empty($request->solicitudes)) {
+        return response()->json(['success' => false, 'message' => 'No se recibieron solicitudes.']);
+    }
+
+    foreach ($request->solicitudes as $dato) {
+        $solicitud = \App\Models\solicitud_AD\solicitud_AD::find($dato['id']);
+
+        if ($solicitud) {
+            $solicitud->estatus = $dato['estatus'];
+            $solicitud->save();
+        }
+    }
+
+    return response()->json(['success' => true, 'message' => 'Solicitudes actualizadas correctamente.']);
+}
+
 }
