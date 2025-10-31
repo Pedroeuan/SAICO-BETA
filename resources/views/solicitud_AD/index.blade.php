@@ -117,9 +117,9 @@
         </table>
         @if($rol == 'Super Administrador' || $rol == 'Administrador')
         <div class="text-center mt-3">
-                <button type="button" id="btn-actualizar-seleccionados" class="btn btn-success">
-                        <i class="fas fa-sync-alt"></i> Actualizar solicitudes seleccionadas
-                </button>
+            <button type="button" id="btn-actualizar-seleccionados" class="btn btn-success">
+                <i class="fas fa-sync-alt"></i> Actualizar solicitudes seleccionadas
+            </button>
         </div>
         @endif
     </div>
