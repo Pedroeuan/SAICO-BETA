@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Models\EquiposyConsumibles\general_eyc;
@@ -22,6 +23,8 @@ use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 class consumiblesController extends Controller
 {
@@ -43,15 +46,56 @@ class consumiblesController extends Controller
      * Store a newly created resource in storage.
      */
         /*CONSUMIBLES*/
-        public function storeConsumibles(Request $request)
+    public function storeConsumibles(Request $request)
         {
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+            // Obtener el nombre del usuario
+            $Nombre = $user->name;
+            $rol = Auth::user()->rol;
+
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
             ]);
 
+            // Limpia y normaliza el número económico
+            $serie_lote = Str::lower($request->input('Lote'));
+
+            //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie_lote !== '---') {
+                $existsSerie = almacen::whereRaw("LOWER(Lote) = ?", [$serie_lote])->exists();
+            }
+
+            if ($existsSerie)
+            {
+                if($rol == 'Laboratorio')
+                {
+
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie/Lote ya existe en la base de datos.',
+                ])->withInput();
+
+                }
+                elseif($rol == 'Equipos')
+                {
+
+                return redirect()->back()->withErrors([
+                    'Serie' => 'El Lote ya existe en la base de datos.',
+                ])->withInput();
+
+                }else{
+                return redirect()->back()->withErrors([
+                    'Serie' => 'La Serie/Lote ya existe en la base de datos.',
+                ])->withInput();
+                }
+            }
         /* Tabla General_EyC */
         $general = new general_eyc;
         $EsperaDato ='ESPERA DE DATO';
@@ -188,6 +232,64 @@ class consumiblesController extends Controller
         } 
         $generalConConsumible->save();
 
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('Clasificacion')=='Elige el tipo de inspección que pertenece')
+        {
+            $general->Disponibilidad_Estado = $EsperaDato;
+        }else{
+            $generalConClasificacion->NombreC =  $request->input('Clasificacion');
+        } 
+        $generalConClasificacion->save();
+
+        // ISO
+        $generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('ISO')=='Elige el tipo de inspección que pertenece')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        } 
+        if($request->input('Alcance')==null)
+        {
+            $generalConISO->Alcance = $EsperaDato;
+        }else{
+            $generalConISO->Alcance =  $request->input('Alcance');
+        }
+        if($request->input('Frec_Cali_Mant_Prev')==null)
+        {
+            $generalConISO->Frec_Cali_Mant_Prev = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Cali_Mant_Prev =  $request->input('Frec_Cali_Mant_Prev');
+        } 
+        if($request->input('Frec_Man_Inter_Time')==null)
+        {
+            $generalConISO->Frec_Man_Inter_Time = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Man_Inter_Time =  $request->input('Frec_Man_Inter_Time');
+        } 
+        if($request->input('Frec_Verificacion')==null)
+        {
+            $generalConISO->Frec_Verificacion = $EsperaDato;
+        }else{
+            $generalConISO->Frec_Verificacion =  $request->input('Frec_Verificacion');
+        } 
+        if($request->input('Usado')==null)
+        {
+            $generalConISO->Usado = 0;
+        }else{
+            $generalConISO->Usado =  $request->input('Usado');
+        } 
+        if($request->input('Nuevo')==null)
+        {
+            $generalConISO->Nuevo = 0;
+        }else{
+            $generalConISO->Nuevo =  $request->input('Nuevo');
+        } 
+        $generalConISO->save();
+
         /* Certificados */
         $generalConCertificados = new certificados;
         $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -251,6 +353,12 @@ class consumiblesController extends Controller
         }else{
             $generalConAlmacen->Stock = $request->input('Stock');
         }
+        if($request->input('Unidad')==null)
+        {
+            $generalConAlmacen->Unidad = $EsperaDato;
+        }else{
+            $generalConAlmacen->Unidad = $request->input('Unidad');
+        }
         $generalConAlmacen->save();
 
         /*Historial Almacen */
@@ -271,7 +379,15 @@ class consumiblesController extends Controller
         $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
         $historialAlmacen->Tipo = $Tipo;
         $historialAlmacen->Cantidad = $request->input('Stock');
-        $historialAlmacen->Fecha = $Fecha;
+        if($rol == 'Laboratotio')
+        {
+            $historialAlmacen->Fecha = $request->input('Fecha_Alta');
+        }
+        else
+        {
+            $historialAlmacen->Fecha = $Fecha;
+        }
+
         $historialAlmacen->Tierra_Costafuera = $Tierra_Costafuera;
         $historialAlmacen->Folio = $Folio;
         $historialAlmacen->save();
@@ -299,9 +415,31 @@ class consumiblesController extends Controller
     /* Update the specified resource in storage.
      */
         public function updateConsumibles(Request $request, $id)
-        {
+        { //dd($request->all());
+            $request->validate([
+                'Nombre_E_P_BP' => 'required|string|max:255',
+                'Marca' => 'required|string|max:255',
+                'Modelo' => 'required|string|max:255',
+                'Stock' => 'required|integer|min:1',
+                'ISO' => 'required|in:9001,17025',
+                'Disponibilidad_Estado' => 'required|string|max:255',
+            ]);
         // Obtener el equipo existente
-        $generalEyC  = general_eyc::find($id);
+        $generalEyC  = general_eyc::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $LoteBD = $generalConAlmacen->Lote;
+        $LoteF = $request->input('Lote');
+        if(strcasecmp(trim($LoteF), trim($LoteBD)) != 0 )
+        {
+            $Lote = Str::lower($request->input('Lote'));
+            $existsLote = almacen::whereRaw("LOWER(Lote) = ?", [$Lote])->exists();
+            if ($existsLote)
+            {
+                return redirect()->back()->withErrors([
+                    'Lote' => 'El Lote ya existe en la base de datos.',
+                ])->withInput();
+            }
+        }
         // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
         $EsperaDato ='ESPERA DE DATO';
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
@@ -318,7 +456,6 @@ class consumiblesController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -384,6 +521,11 @@ class consumiblesController extends Controller
         }
         $generalEyC->save();
 
+        $generalConConsumibles = consumibles::where('idGeneral_EyC', $id)->first();
+        $generalConConsumibles->update([
+            'Proveedor' => $request->input('Proveedor'),
+        ]);
+
         // Actualizar los datos del certificado asociado
         $generalConCertificado = certificados::where('idGeneral_EyC', $id)->first();
         if($request->input('Fecha_calibracion')==null)
@@ -394,13 +536,14 @@ class consumiblesController extends Controller
         }  
         if($request->input('Prox_fecha_calibracion')==null)
         {
-            $proxFechaCalibracion = '2001-01-01';
+            $Prox_fecha_calibracion = '2001-01-01';
         }else{
-                $proxFechaCalibracion = $request->input('Prox_fecha_calibracion');
+                $Prox_fecha_calibracion = $request->input('Prox_fecha_calibracion');
         }  
         $generalConCertificado->update([
             'No_certificado' => $request->input('No_certificado'),
             'Fecha_calibracion' => $fechaCalibracion,
+            'Prox_fecha_calibracion' => $Prox_fecha_calibracion,
         ]);
 
         // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
@@ -442,8 +585,23 @@ class consumiblesController extends Controller
         $generalConAlmacen->update([
             'Lote' => $request->input('Lote'),
             'Stock' => $request->input('Stock'),
+            'Unidad' => $request->input('Unidad'),
+        ]);
+        $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
+        $generalConISO->update([
+            'ISO' => $request->input('ISO'),
+            'Alcance' => $request->input('Alcance'),
+            'Frec_Cali_Mant_Prev' => $request->input('Frec_Cali_Mant_Prev'),
+            'Frec_Man_Inter_Time' => $request->input('Frec_Man_Inter_Time'),
+            'Frec_Verificacion' => $request->input('Frec_Verificacion'),
+            'Usado' => $request->input('Usado'),
+            'Nuevo' => $request->input('Nuevo'),
         ]);
 
+        $generalConAlmacenonHistorialAlmacen = almacen::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacenonHistorialAlmacen->update([
+            'Fecha' => $request->input('Fecha_Alta'),
+        ]);
 
         return redirect()->route('inventario');
     }

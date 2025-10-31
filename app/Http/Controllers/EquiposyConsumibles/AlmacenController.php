@@ -29,10 +29,13 @@ class AlmacenController extends Controller
     {
         // Consulta la cantidad del elemento en la tabla 'almacen'
         $Almacen = Almacen::where('idGeneral_EyC', $id)->first();
-
         
         if ($Almacen) {
-            return response()->json(['Cantidad' => $Almacen->Stock]);
+            return response()->json([
+                'Cantidad' => $Almacen->Stock,
+                'Unidad' => $Almacen->Unidad
+            ]);
+            
         } else {
             return response()->json(['error' => 'Elemento no encontrado'], 404);
         }

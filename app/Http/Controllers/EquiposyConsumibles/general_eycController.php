@@ -21,7 +21,9 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
-
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 
 class general_eycController extends Controller
@@ -43,24 +45,71 @@ class general_eycController extends Controller
     /*GENERAL*/
     public function index()
     {
-    // Obtener todos los equipos con sus certificados y almacen
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+        // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
-        $generalConCertificadosConAlmacen = general_eyc::with('certificados')->with('almacen')->get();
+         // Filtrar según el rol
+        if ($rol === 'Laboratorio') {
+            // Solo registros con ISO 17025
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '17025');
+                })
+                ->get();
+        } elseif($rol === 'Equipos') {
+        //Todos los registros
+        //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+        // Solo registros con ISO 9001
+        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+            ->whereHas('ISO', function ($query) {
+                $query->where('NombreISO', '9001')->where('Tipo', '!=', 'TICS');
+            })
+            ->get();
+        }elseif($rol === 'Tics') {
+            //Todos los registros
+            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+            // Solo registros con ISO 9001
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::where('Tipo','TICS')
+                ->get();
+            }else{
+             //Todos los registros
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+        }
 
-        return view('Equipos.index', compact('general','generalConCertificadosConAlmacen'));
+        return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
 
     public function createEquipos()
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         $general = general_eyc::get();
-        $generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
-
-        return view('Equipos.create', compact('general','generalConCertificados')); /*Muestra la vista de equipos*/
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->orWhere('Disponibilidad_Estado', 'Equipo Disponible');
+                })
+        ->get();
+        //dd($generalConCertificados);
+        return view('Equipos.create', compact('general','generalConCertificados','rol')); /*Muestra la vista de equipos*/
     }
 
     public function editEyC($id)
     {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
         $generalEyC = general_eyc::findOrFail($id);
         /*devuelven los datos de la tabla a la que estan ligados */
         $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
@@ -70,21 +119,36 @@ class general_eycController extends Controller
         $generalConAccesorios = accesorios::where('idGeneral_EyC', $id)->first();
         $generalConBlocks = block_y_probeta::where('idGeneral_EyC', $id)->first();
         $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
+        $generalConClasificacion = clasificacion::where('idGeneral_EyC', $id)->first();
+        $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
+        $generalConAlmacenConHistorialAlmacen = general_eyc::with('historialAlmacen')->where('idGeneral_EyC', $id)->first();
+        //dd($generalConAlmacenConHistorialAlmacen->historialAlmacen->first()->Fecha);
+
         // Retornar la vista con los datos obtenidos
-        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados'));
+        return view('Equipos.edit', compact('id','generalEyC', 'generalConAlmacenConHistorialAlmacen', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','generalConClasificacion','generalConISO','rol'));
     }
 
     public function BajaEyC($id)
     {
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
+        $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
+        if($generalConISO->NombreISO == '17025' && $generalEyC->Tipo == 'EQUIPOS'){
+        $Baja='Equipo Fuera de Servicio';
+        // Actualizar los datos del equipo
+        $generalEyC ->update([
+            'Disponibilidad_Estado' => $Baja,
+        ]);
+        }else{
         $Baja='FUERA DE SERVICIO/BAJA';
         // Actualizar los datos del equipo
         $generalEyC ->update([
             'Disponibilidad_Estado' => $Baja,
         ]);
+        }
         return redirect()->route('inventario');
+
     }
 
     public function verificarDuplicadoEquipos(Request $request)

@@ -5,10 +5,18 @@
 
 @section('css')
 <style>
-    #my-notification .dropdown-menu {
+    /*#my-notification .dropdown-menu {
     max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+    /*overflow-y: auto;
+    }*/
+
+    <style>
+    #my-notification .navbar-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
     }
+</style>
 </style>
 @endsection
 
@@ -57,6 +65,7 @@
 <script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!-- Incluir el script de sesión -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
 <script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
@@ -128,6 +137,17 @@
                 }
             }]
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Asegura que el badge exista siempre
+        let link = document.querySelector('#my-notification a.nav-link');
+        if (link && !link.querySelector('.navbar-badge')) {
+            let badge = document.createElement('span');
+            badge.classList.add('badge', 'navbar-badge');
+            badge.style.display = 'none'; // oculto inicialmente
+            link.appendChild(badge);
+        }
     });
     </script>
 @stop

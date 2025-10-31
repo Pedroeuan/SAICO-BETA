@@ -63,7 +63,7 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio,Tics',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
@@ -106,7 +106,13 @@ class UsuariosController extends Controller
     {
         $Usuario = Usuario::where('id', $id)->first();
 
-        return view('Admin.edit', compact('id','Usuario'));
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        // Obtener el nombre del usuario
+        $Nombre = $user->name;
+        $rol = Auth::user()->rol;
+
+        return view('Admin.edit', compact('id','Usuario','rol'));
     }
 
     /**
@@ -129,7 +135,7 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
@@ -154,7 +160,7 @@ class UsuariosController extends Controller
             //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
@@ -184,19 +190,21 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        $Usuario = Usuario::where('id', $id)->first();
-        //$usuario = Usuario::find($id);
-            // Actualizar los datos del usuario
-        $Usuario ->update([
+        try {
+            $Usuario = Usuario::find($id);
+            if (! $Usuario) {
+                return response()->json(['success' => false, 'message' => 'No se pudo encontrar el Usuario.'], 404);
+            }
 
-            'Estatus' => 'Baja',
-        ]);
-        /*if ($usuario) {
-            $usuario->delete();
-            return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente.']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'No se pudo encontrar el Usuario.']);
-        }*/
+            // Actualizar el estatus a 'Baja'
+            $Usuario->Estatus = 'BAJA';
+            $Usuario->save();
+
+            return response()->json(['success' => true, 'message' => 'Usuario dado de baja correctamente.']);
+        } catch (\Exception $e) {
+            Log::error('Error al dar de baja usuario: ' . $e->getMessage(), ['id' => $id]);
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error al procesar la petición.'], 500);
+        }
 
     }
 }

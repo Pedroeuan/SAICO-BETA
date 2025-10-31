@@ -32,11 +32,21 @@ class NotificacionController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $rol = $user->rol;
 
-        // Obtener solo las notificaciones del usuario autenticado
-        $notificaciones = Notificacion::where('users_id', $user->id)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
+        // Si es Admin o SuperAdmin → ver todas
+        if (in_array($rol, ['Administrador', 'SuperAdministrador'])) {
+            $notificaciones = Notificacion::with('users_id')
+                ->orderBy('created_at', 'desc')
+                ->distinct()  // evita duplicados
+                ->get();
+        } else {
+            // Si NO es Admin → solo sus notificaciones, no de todo su rol
+            $notificaciones = Notificacion::where('users_id', $user->id)
+                ->with('user')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
         return view('notifications.index', compact('notificaciones'));
     }
@@ -48,10 +58,12 @@ class NotificacionController extends Controller
 
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
+        $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
         $fecha40DiasAntes = $fechaActual->copy()->addDays(40)->toDateString();
         $fecha35DiasAntes = $fechaActual->copy()->addDays(35)->toDateString();
         $fecha30DiasAntes = $fechaActual->copy()->addDays(30)->toDateString();
         $fecha25DiasAntes = $fechaActual->copy()->addDays(25)->toDateString();
+        $fecha20DiasAntes = $fechaActual->copy()->addDays(20)->toDateString();
         $fecha15DiasAntes = $fechaActual->copy()->addDays(15)->toDateString();
         $fecha10DiasAntes = $fechaActual->copy()->addDays(10)->toDateString();
         $fecha7DiasAntes = $fechaActual->copy()->addDays(7)->toDateString();
@@ -59,14 +71,10 @@ class NotificacionController extends Controller
         $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
-        $certificados = Certificados::with('generaleyc') // Cargar la relación con general_eyc
-            ->whereIn('Prox_fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            ->orWhereIn('Fecha_calibracion', [$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+        $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
+            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
-
-        // Obtener todos los usuarios con los roles especificados
-        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
-        //$usuarios = User::whereIn('rol', ['Equipos'])->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
@@ -75,7 +83,8 @@ class NotificacionController extends Controller
             $No_economico = $generalEyc->No_economico;
             $Nombre_C = $generalEyc->Nombre_E_P_BP;
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
-
+            // Obtener el ISO relacionado
+            $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
@@ -146,8 +155,17 @@ class NotificacionController extends Controller
                     }
                     
                 }
+                // Filtrar usuarios según el ISO
+                $usuarios = User::where(function($query) use ($iso) {
+                    $query->whereIn('rol', ['Super Administrador', 'Administrador']);
+                    if ($iso == '17025') {
+                        $query->orWhere('rol', 'Laboratorio');
+                    }
+                    if ($iso == '9001') {
+                        $query->orWhere('rol', 'Equipos');
+                    }
+                })->get();
 
-                //if($user->rol == 'Super Administrador' || $user->rol == 'Administrador' || $user->rol == 'Equipos' )
                 // Crear notificaciones para todos los usuarios con los roles especificados
                 foreach ($usuarios as $usuario){
                 // Verificar si la notificación ya existe
@@ -164,6 +182,7 @@ class NotificacionController extends Controller
                         $notificacion->Mensaje_Corto = $mensajeCorto;
                         $notificacion->Mensaje_Largo = $mensajeLargo;
                         $notificacion->url = $url;
+                        $notificacion->leida = false;
                         $notificacion->save();
                     }
 
@@ -181,7 +200,7 @@ class NotificacionController extends Controller
         
         // Obtener notificaciones para el usuario
         $notificaciones = Notificacion::where('users_id', $user->id)
-                                        //->where('leido', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                        ->where('leida', false) // Descomenta esto si necesitas filtrar solo no leídas
                                         ->orderBy('created_at', 'desc')
                                         ->get(['idNotificaciones', 'Mensaje_Corto', 'url']); // Asegúrate de tener el 'id' también
     
@@ -198,5 +217,17 @@ class NotificacionController extends Controller
         return response()->json($formattedNotifications);
     }
     
-    
+    public function marcarComoLeida($id)
+    {
+        $notificacion = Notificacion::find($id);
+
+        if ($notificacion) {
+            $notificacion->leida = true;
+            $notificacion->save();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
+
 }

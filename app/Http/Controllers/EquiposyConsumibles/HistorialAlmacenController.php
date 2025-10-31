@@ -20,8 +20,9 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
-
-
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 class HistorialAlmacenController extends Controller
 {
@@ -30,10 +31,37 @@ class HistorialAlmacenController extends Controller
      */
     public function index()
     {
+    // Obtener el usuario autenticado
+    $user = Auth::user();
+    // Obtener el nombre del usuario
+    $Nombre = $user->name;
+    $rol = Auth::user()->rol;
     // Obtener todos los registros de historial_almacen con sus relaciones
-    $historiales = Historial_Almacen::with(['Almacen.General_EyC'])->get();
+    //$historiales = Historial_Almacen::with(['Almacen.General_EyC'])->get();
+    // Filtrar según el rol
+    if ($rol === 'Laboratorio') {
+        // Solo registros con ISO 17025
+        $historiales = Historial_Almacen::with(['Almacen.General_EyC.ISO'])
+            ->whereHas('Almacen.General_EyC.ISO', function ($query) {
+                $query->where('NombreISO', '17025');
+            })
+            ->get();
+    }elseif($rol === 'Tics') {
+        //Todos los registros
+        $historiales = Historial_Almacen::whereHas('Almacen.General_EyC', function ($query) {
+            $query->where('Tipo','TICS');
+        })->get();
+    }
+    else {
+        // Solo registros con ISO 9001
+        $historiales = Historial_Almacen::with(['Almacen.General_EyC.ISO'])
+            ->whereHas('Almacen.General_EyC.ISO', function ($query) {
+                $query->where('NombreISO', '9001');
+            })
+            ->get();
+    }
 
-    return view('Historial_Almacen/index', compact('historiales'));
+    return view('Historial_Almacen.index', compact('historiales','rol'));
     }
 
     /**

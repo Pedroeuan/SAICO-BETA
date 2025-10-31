@@ -60,9 +60,13 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 use App\Http\Controllers\solicitud_AD\SolicitudADController;
 use App\Http\Controllers\UsuarioController;
 
-    Route::get('/', function () {
-        return view('auth.login');
-    });
+    require __DIR__.'/auth.php';
+
+    Auth::routes();
+
+    Route::redirect('/', '/login');
+    
+    Route::redirect('/register', '/login');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {
@@ -96,12 +100,13 @@ use App\Http\Controllers\UsuarioController;
     });
 
     Route::middleware('auth')->group(function () {
-    Route::middleware('can:equipos-access')->group(function () {
+    Route::middleware('can:equipos-lab-access')->group(function () {
         /*Creación de Notificaciones*/
         Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
         /*Obtener Notificaciones*/
         Route::get('notificaciones/update', [NotificacionController::class, 'getNotificaciones']);
         });
+    Route::post('/notificaciones/marcar-leida/{id}', [NotificacionController::class, 'marcarComoLeida'])->name('notificaciones.marcarLeida');
     });
     
 
@@ -112,6 +117,9 @@ use App\Http\Controllers\UsuarioController;
         /*vista Page welcome*/
         Route::get('/Welcome', [general_eycController::class, 'Welcome'])->name('Welcome');
 
+        /*A DEFINIR EL ACCESO */
+        /*Obtener Ruta del PDF */
+        Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
         /*REPORTES*/
         /*Obtiene las Normas segun La prueba del select*/
         Route::get('/Obtener/normas/{id}', [ReporteController::class, 'ObtenerNormas'])->name('Obtener.normas');
@@ -351,7 +359,7 @@ use App\Http\Controllers\UsuarioController;
 
     Route::middleware('auth')->group(function () {
         
-    Route::middleware('can:tecnicos-equipos-access')->group(function () {
+    Route::middleware('can:tecnicos-equipos-lab-access')->group(function () {
     /*IMPORTAR EXCEL */
     Route::post('/importarEyC', [ExcelEyCController::class, 'importarExcel'])->name('importar.EyC');
     /*SOLICITUDES-1*/
@@ -380,14 +388,15 @@ use App\Http\Controllers\UsuarioController;
     Route::get('Manifiesto/NewFormatPDF/{id}', [PDFController::class, 'generaManifiestoNewFormatPDF'])->name('Manifiesto.NewFormat.pdf');
     });
     
-    
     /*EQUIPOS INVENTARIO-REGISTRO*/
-    Route::middleware('can:equipos-access')->group(function () {
+    Route::middleware('can:equipos-lab-access')->group(function () {
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
     /*Ruta para devolver los articulos de la lista al almacen */
     Route::post('/devolver-item', [DevolucionController::class, 'devolverItem'])->name('devolver.item');
+    /*Ruta para devolver Todos los items*/
+    Route::post('/manifiesto/devolver-todo', [DevolucionController::class, 'devolverTodo'])->name('DevolverTodo.Manifiesto');
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
@@ -523,10 +532,6 @@ use App\Http\Controllers\UsuarioController;
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-
-    /*A DEFINIR EL ACCESO */
-    /*Obtener Ruta del PDF */
-    Route::get('/Obtener/RutaPDF/{id}', [ReporteController::class, 'ObtenerRutaPDF'])->name('Obtener.RutaPDF');
     
     });
 
@@ -566,9 +571,6 @@ use App\Http\Controllers\UsuarioController;
     });
 });
 
-require __DIR__.'/auth.php';
-
-Auth::routes();
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
 

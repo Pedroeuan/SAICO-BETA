@@ -259,7 +259,7 @@ return [
     'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -293,22 +293,22 @@ return [
     */
 
     'menu' => [
-            [
-            'type' => 'navbar-notification',
-            'id' => 'my-notification',                // An ID attribute (required).
-            'icon' => 'fa fa-bell',                  // A font awesome icon (required).
-            'icon_color' => 'danger',                // The initial icon color (optional).
-            'label' => 0,                             // The initial label for the badge (optional).
-            'label_color' => '',                // The initial badge color (optional).
-            'url' => 'notificacion/index',            // The url to access all notifications/elements (required).
-            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
-            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
-            'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
-            'update_cfg' => [
-                'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
-                'period' => 60,                       // The update period for get new data (in seconds, optional).
-            ],
-        ],
+                [
+                    'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
+                    'id' => 'my-notification',       // ID único para identificar este componente (requerido para actualizarlo vía JS/AJAX).
+                    'icon' => 'fa fa-bell',          // Icono FontAwesome que se mostrará como campana.
+                    'icon_color' => 'danger',        // Color inicial del icono (rojo = danger). Opcional.
+                    'label' => 0,                    // Número inicial que aparece como contador (badge). Puede empezar en 0.
+                    'label_color' => '',            // Color de la etiqueta del contador (badge). Ej: 'warning', 'info', 'success'.
+                    'url' => 'notificacion/index',   // Ruta a donde te lleva al hacer clic en "Ver todas".
+                    'topnav_right' => true,          // Lo coloca en la parte derecha del top navbar (si fuera "topnav" va del lado izquierdo).
+                    'dropdown_mode' => true,         // Activa el modo desplegable con lista de notificaciones.
+                    'dropdown_flabel' => 'Todas las notificaciones', // Texto del enlace al final del dropdown (footer).
+                    /*'update_cfg' => [
+                        'url' => 'notificaciones/update', // Ruta que AdminLTE usará para hacer AJAX y actualizar datos.
+                        'period' => 60,                   // Cada cuántos segundos consultar nuevas notificaciones.
+                    ],*/
+                ],
                 // Sidebar Administrativo:
                 [
                     'text' => 'REPORTES',
@@ -627,20 +627,20 @@ return [
                 [
                     'text' => 'Equipos',
                     'icon' => 'fas fa-pencil-ruler',
-                    'can' => 'tecnicos-equipos-access',
+                    'can' => 'tecnicos-equipos-lab-access',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
                             'url' => 'inventario',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Clientes',
@@ -658,7 +658,7 @@ return [
                             'text' => 'Registro de altas',
                             'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Solicitar E y C',
@@ -670,7 +670,7 @@ return [
                             'text' => ' Ver E/S/D',
                             'icon' => 'fas fa-exchange-alt',
                             'url' => 'Historial_Almacen/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Ver Kits',

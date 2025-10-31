@@ -17,6 +17,7 @@ class Notificacion extends Model
         'url',
         'created_at',
         'updated_at',
+        'leida',
     ];
     protected $table = 'notificaciones';
     protected $primaryKey = 'idNotificaciones';
@@ -26,7 +27,7 @@ class Notificacion extends Model
        // Relación con el modelo User
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id', 'id');
     }
 
 }
