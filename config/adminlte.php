@@ -689,25 +689,44 @@ return [
                 ],
 
                  // Sidebar Administrativo:
-        [
-            'text' => 'Admin',
-            'icon' => 'fas fa-universal-access',
-            'can' => 'administrador-access',
-            //'topnav' => true,
-            'submenu' => [
                 [
-                    'text' => 'Ver usuarios',
-                    'icon' => 'fas fa-users',
-                    'url' => 'Admin/index',
+                    'text' => 'Admin',
+                    'icon' => 'fas fa-universal-access',
+                    'can' => 'administrador-access',
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'Ver usuarios',
+                            'icon' => 'fas fa-users',
+                            'url' => 'Admin/index',
+                        ],
+                        [
+                            'text' => 'Registro de usuarios',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'Admin/create',
+                        ],
+                        
+                    ],
                 ],
                 [
-                    'text' => 'Registro de usuarios',
-                    'icon' => 'fas fa-user-plus',
-                    'url' => 'Admin/create',
+                    'text' => 'Solicitudes AD',
+                    'icon' => 'fas fa-file-alt',
+                    'can' => 'tecnicos-equipos-access',  // Define una política en Laravel para controlar el acceso
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'Solicitar',
+                            'url' => '/ADsolicitud/create',
+                            //can => 'nombre-ruta'
+                        ],
+                        [
+                            'text' => 'Ver solicitudes',
+                            'url' => '/ADsolicitud/index',
+                            //can => 'nombre-ruta'
+                        ],
+                    ],
                 ],
-                
-            ],
-        ],
+
     ],//Final Menu
 
     /*

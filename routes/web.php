@@ -57,6 +57,8 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
+use App\Http\Controllers\solicitud_AD\SolicitudADController;
+use App\Http\Controllers\UsuarioController;
 
     require __DIR__.'/auth.php';
 
@@ -66,6 +68,29 @@ use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
     
     Route::redirect('/register', '/login');
 
+    //solicitud_AD
+    Route::middleware('auth')->group(function () {
+    /*SOLICITUDES-1*/
+    /*Rutas de Vistas de Solicitudes-Registro*/
+    Route::get('/ADsolicitud/create', [SolicitudADController::class, 'create'])->name('ADsolicitud.create');
+    /*Rutas de Vistas de Solicitudes-Tabla de Solicitud*/
+    Route::get('/ADsolicitud/index', [SolicitudADController::class, 'index'])->name('ADsolicitud.index');
+    /*Rutas de Vistas Solicitudes_AD*/
+    Route::get('/ADsolicitud/edit/{id}', [SolicitudADController::class, 'edit'])->name('ADsolicitud.edit');
+    /*Ruta de Actualización Solicitud_AD*/
+    Route::post('/ADsolicitud/update/{id}', [SolicitudADController::class, 'update'])->name('ADsolicitud.update');
+    /*Ruta de Guardado-index*/
+    Route::post('/ADsolicitud/store', [SolicitudADController::class, 'store'])->name('ADsolicitud.store');
+    /*Ruta de Eliminar-index*/
+    Route::delete('/ADsolicitud/destroy/{id}', [SolicitudADController::class, 'destroy'])->name('ADsolicitud.destroy');
+    /*Ruta de actualizar-index*/
+    Route::post('/ADsolicitud/actualizar/{id}', [SolicitudADController::class, 'actualizar'])->name('adsolicitud.actualizar');
+    /*Ruta de actualizar-multiple*/
+    Route::post('/ADsolicitud/actualizarMultiple', [SolicitudADController::class, 'actualizarMultiple'])->name('ADsolicitud.actualizarMultiple');
+
+
+
+    });
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
