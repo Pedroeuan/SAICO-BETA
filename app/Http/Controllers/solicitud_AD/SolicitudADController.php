@@ -19,12 +19,14 @@ class SolicitudADController extends Controller
     {
         $user = Auth::user();
         $rol = $user->rol;
+        $Estatus = $user->Estatus;
         $usuarios=[];
         //$solicitudes = solicitud_AD::all();
         $solicitudes = users_has_solicitud_AD::with('solicitud_AD', 'users')->get(); 
         //dd($solicitudes);
+        $solicitudes_estatus = solicitud_ad::select('idsolicitud_AD', 'estatus')->get();
 
-        return view('solicitud_AD.index', compact('solicitudes', 'rol','usuarios'));
+        return view('solicitud_AD.index', compact('solicitudes', 'rol','usuarios','solicitudes_estatus','Estatus'));
     }
 
     /**
@@ -147,40 +149,46 @@ public function store(Request $request)
     /**
      * Eliminar una solicitud.
      */
-public function destroy($id)
-{
-    //Log::info('Iniciando proceso de eliminación para solicitud con ID: ' . $id);
-    $user_has_solicitud = users_has_solicitud_AD::where('idsolicitud_AD', $id);
-    $solicitud = solicitud_AD::find($id);
-    //log::info('Eliminando solicitud con ID: ' . $id);
+    public function destroy($id)
+    {
+        //Log::info('Iniciando proceso de eliminación para solicitud con ID: ' . $id);
+        $user_has_solicitud = users_has_solicitud_AD::where('idsolicitud_AD', $id);
+        $solicitud = solicitud_AD::find($id);
+        //log::info('Eliminando solicitud con ID: ' . $id);
 
-    if (!$user_has_solicitud && !$solicitud) {
-        return response()->json(['error' => 'Solicitud no encontrada.'], 404);
-    }
-    $user_has_solicitud->delete();
-    $solicitud->delete();
-
-    return response()->json(['success' => true]);
-}
-
-/* Actualizar multiples solicitudes */
-
-public function actualizarMultiple(Request $request)
-{
-    if (!$request->has('solicitudes') || empty($request->solicitudes)) {
-        return response()->json(['success' => false, 'message' => 'No se recibieron solicitudes.']);
-    }
-
-    foreach ($request->solicitudes as $dato) {
-        $solicitud = \App\Models\solicitud_AD\solicitud_AD::find($dato['id']);
-
-        if ($solicitud) {
-            $solicitud->estatus = $dato['estatus'];
-            $solicitud->save();
+        if (!$user_has_solicitud && !$solicitud) {
+            return response()->json(['error' => 'Solicitud no encontrada.'], 404);
         }
+        $user_has_solicitud->delete();
+        $solicitud->delete();
+
+        return response()->json(['success' => true]);
     }
 
-    return response()->json(['success' => true, 'message' => 'Solicitudes actualizadas correctamente.']);
-}
+    /* Actualizar multiples solicitudes */
 
+    public function actualizarMultiple(Request $request)
+    {
+        if (!$request->has('solicitudes') || empty($request->solicitudes)) {
+            return response()->json(['success' => false, 'message' => 'No se recibieron solicitudes.']);
+        }
+
+        foreach ($request->solicitudes as $dato) {
+            $solicitud = solicitud_AD::find($dato['id']);
+
+            if ($solicitud) {
+                $solicitud->estatus = $dato['estatus'];
+                $solicitud->save();
+            }
+        }
+
+        return response()->json(['success' => true, 'message' => 'Solicitudes actualizadas correctamente.']);
+    }
+
+    public function obtenerEstatus()
+    {
+    $solicitudes = solicitud_ad::select('idsolicitud_AD as id', 'estatus')->get();
+    return response()->json($solicitudes);
+    
+    }
 }

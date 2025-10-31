@@ -87,8 +87,8 @@ use App\Http\Controllers\UsuarioController;
     Route::post('/ADsolicitud/actualizar/{id}', [SolicitudADController::class, 'actualizar'])->name('adsolicitud.actualizar');
     /*Ruta de actualizar-multiple*/
     Route::post('/ADsolicitud/actualizarMultiple', [SolicitudADController::class, 'actualizarMultiple'])->name('ADsolicitud.actualizarMultiple');
-
-
+    /*Ruta de actualizar-estatus*/
+    Route::get('/estatus-solicitudes', [SolicitudADController::class, 'obtenerEstatus'])->name('estatus.solicitudes');
 
     });
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');

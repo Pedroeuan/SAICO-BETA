@@ -3,7 +3,33 @@
 @section('title', 'Solicitudes AD')
 
 @section('content_header')
-<h1 class="text-primary">Listado de Solicitudes AD</h1>
+<br>  
+<br>
+<br>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Título a la izquierda -->
+    <h1 class="text-primary m-0">Listado de Solicitudes</h1>
+    @if($rol == 'Super Administrador' || $rol == 'Administrador')
+        <!-- Contenedor derecho con select + botón -->
+        <div class="d-flex align-items-center gap-2">
+            <select class="form-control select2 @error('estatus') is-invalid @enderror" 
+                    style="width: 200px;" 
+                    name="estatus">
+                <option selected>Selecciona un estatus</option>
+                <option value="ALTA" @if($Estatus == 'ALTA') selected="selected" @endif>DISPONIBLE</option>
+                <option value="ALTA2" @if($Estatus == 'ALTA2') selected="selected" @endif>NO DISPONIBLE</option>
+                <option value="ALTA3" @if($Estatus == 'ALTA3') selected="selected" @endif>EN REUNIÓN</option>
+                <option value="ALTA4" @if($Estatus == 'ALTA4') selected="selected" @endif>EN LLAMADA</option>
+                <option value="ALTA5" @if($Estatus == 'ALTA5') selected="selected" @endif>ALMUERZO</option>
+            </select>
+
+            <button type="button" class="btn btn-info">
+                <i class="fas fa-sync-alt"></i> Actualizar estado
+            </button>
+        </div>
+        @endif
+</div>
+
 @stop
 
 @section('content')
@@ -26,12 +52,12 @@
                     <th>Estatus</th>
                     <th>Tema</th>
                     <th>Comentario</th>
-                    <th>Acciones</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                     @else
                     <th>Seleccionar</th>
                     <th>Solcitud de:</th>
                     <th>Fecha</th>
-                    <th>Estatus</th>
                     <th>Tema</th>
                     <th>Comentario</th>
                     <th>Estatus</th>
@@ -47,8 +73,9 @@
                         <td class="text-center">{{ $solicitud->solicitud_ad->fecha }}</td>
                         <td class="text-center">
                             <span class="badge 
-                                {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
-                                ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
+                                {{ 
+                                $solicitud->solicitud_ad->estatus == 'PASAR' ? 'bg-success' : ($solicitud->solicitud_ad->estatus == 'PENDIENTE' ? 'bg-warning' : 'bg-danger') }}"
+                                data-id-solicitud="{{ $solicitud->idsolicitud_AD }}">
                                 {{ $solicitud->solicitud_ad->estatus }}
                             </span>
                         </td>
@@ -57,6 +84,8 @@
                         <td class="text-center">
                             {{-- Botón Editar --}}
                             <a href="{{ route('ADsolicitud.edit', $solicitud->idsolicitud_AD) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
+                        </td>
+                        <td>
                             {{-- Botón Eliminar --}}
                             <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="{{ $solicitud->idsolicitud_AD }}"><i class="fas fa-trash-alt"></i> Eliminar</button>
                         </td>
@@ -64,22 +93,17 @@
                         <td class="text-center"><input type="checkbox" name="usuarios[]" value="{{ $solicitud->users->id }}"{{ in_array($solicitud->users->id, $usuarios) ? 'checked' : '' }}></td>
                         <td>{{ $solicitud->users->name }}</td>
                         <td class="text-center">{{ $solicitud->solicitud_ad->fecha }}</td>
-                        <td class="text-center">
-                            <span class="badge 
-                                {{ $solicitud->solicitud_ad->estatus == 'Aprobado' ? 'bg-success' : 
-                                ($solicitud->solicitud_ad->estatus == 'Pendiente' ? 'bg-warning' : 'bg-danger') }}">
-                                {{ $solicitud->solicitud_ad->estatus }}
-                            </span>
-                        </td>
                         <td class="text-center">{{ $solicitud->solicitud_ad->Tema }}</td>
                         <td class="text-center">{{ $solicitud->solicitud_ad->comentario }}</td>
                         <td class="text-center">
 
                             <select class="form-control select2 @error('estatus') is-invalid @enderror" style="width: 100%;" name="estatus">
-                                <option disabled>Selecciona un estatus</option>
-                                <option   option value="PASAR" {{ $solicitud->solicitud_ad->estatus == 'PASAR' ? 'selected' : '' }}>PASAR</option>
-                                <option value="SIGUIENTE" {{ $solicitud->solicitud_ad->estatus == 'SIGUIENTE' ? 'selected' : '' }}>SIGUIENTE</option>
-                                <option value="NO PASAR" {{ $solicitud->solicitud_ad->estatus == 'NO PASAR' ? 'selected' : '' }}>NO PASAR</option>
+                                @if($solicitud->solicitud_ad->estatus == 'PENDIENTE')
+                                <option selected>Selecciona un estatus</option>
+                                @endif
+                                <option value="PASAR" @if($solicitud->solicitud_ad->estatus == 'PASAR') selected="selected" @endif>PASAR</option>
+                                <option value="NO PASAR" @if($solicitud->solicitud_ad->estatus == 'NO PASAR') selected="selected" @endif>NO PASAR</option>
+                                <option value="SIGUIENTE" @if($solicitud->solicitud_ad->estatus == 'SIGUIENTE') selected="selected" @endif>SIGUIENTE</option>
                             </select>
                         </td>
                         <td class="text-center">
@@ -91,11 +115,13 @@
                 @endforeach
             </tbody>
         </table>
-         <div class="text-center mt-3">
+        @if($rol == 'Super Administrador' || $rol == 'Administrador')
+        <div class="text-center mt-3">
                 <button type="button" id="btn-actualizar-seleccionados" class="btn btn-success">
-                        <i class="fas fa-sync-alt"></i> Actualizar seleccionados
+                        <i class="fas fa-sync-alt"></i> Actualizar solicitudes seleccionadas
                 </button>
         </div>
+        @endif
     </div>
 </div>
 @stop
@@ -106,11 +132,25 @@
 @stop
 
 @section('js')
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--datatable -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+<!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- Incluir el script de sesión -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     /*Boton Eliminar*/
         $(document).on("click", ".btn-eliminar", function() {
@@ -160,8 +200,8 @@ $(document).on("click", ".btn-actualizar", function() {
     //var idUsuario = $(this).data("id"); // obtiene el data-id
     //var estatus = $(this).closest('tr').find('select.estatus').val(); // obtiene el select de la fila
     var estatus = $(this).closest('tr').find('select[name="estatus"]').val(); // obtiene el valor del select
-    console.log("🟢 ID capturado:", idUsuario);
-    console.log("🟢 Estatus capturado:", estatus);
+    //console.log("🟢 ID capturado:", idUsuario);
+    //console.log("🟢 Estatus capturado:", estatus);
     if(!estatus){
         Swal.fire("Error", "Debes seleccionar un estatus.", "warning");
         return;
@@ -226,6 +266,93 @@ $(document).on("click", ".btn-actualizar", function() {
                         }
                     }
     });
+
+document.addEventListener('DOMContentLoaded', function () {
+    let estatusActuales = {};
+
+    // Guardar los estatus iniciales
+    document.querySelectorAll('[data-id-solicitud]').forEach(el => {
+        const id = el.getAttribute('data-id-solicitud');
+        const estatus = el.textContent.trim();
+        estatusActuales[id] = estatus;
+    });
+
+    async function verificarEstatus() {
+        try {
+            const response = await fetch("{{ route('estatus.solicitudes') }}");
+            const data = await response.json();
+
+            data.forEach(item => {
+                const elemento = document.querySelector(`[data-id-solicitud="${item.id}"]`);
+                if (!elemento) return;
+
+                const estatusNuevo = item.estatus.trim().toUpperCase();
+                const estatusAnterior = (estatusActuales[item.id] || '').trim().toUpperCase();
+
+                if (estatusNuevo !== estatusAnterior) {
+                    //console.log(`Cambio detectado en ID ${item.id}: ${estatusAnterior} → ${estatusNuevo}`);
+                    elemento.textContent = estatusNuevo.charAt(0) + estatusNuevo.slice(1).toLowerCase();
+                    elemento.className = 'badge ' + obtenerClaseBadge(estatusNuevo);
+                    estatusActuales[item.id] = estatusNuevo;
+
+                    mostrarToast(`El estatus de una solicitud cambió a "${estatusNuevo}"`);
+                }
+            });
+        } catch (error) {
+            console.error('Error verificando estatus:', error);
+        }
+    }
+
+    function obtenerClaseBadge(estatus) {
+        switch (estatus.toUpperCase()) {
+            case 'APROBADO': return 'bg-success';
+            case 'PENDIENTE': return 'bg-warning';
+            case 'RECHAZADO': return 'bg-danger';
+            default: return 'bg-secondary';
+        }
+    }
+
+    // Función para mostrar un “toast” (mensaje flotante)
+    function mostrarToast(mensaje) {
+        const toast = document.createElement('div');
+        toast.textContent = mensaje;
+        toast.className = 'toast-alert';
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+
+    // Estilos CSS del toast
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .toast-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #343a40;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            z-index: 9999;
+        }
+        .toast-alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Verificar cada 20 segundos
+    setInterval(verificarEstatus, 20000);
+});
 
 </script>
 @stop
