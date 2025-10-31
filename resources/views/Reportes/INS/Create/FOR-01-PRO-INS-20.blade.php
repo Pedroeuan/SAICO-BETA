@@ -502,7 +502,7 @@
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
 
                                     </tr>
-                                                                        
+
                                     <tr>
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -564,7 +564,7 @@
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
                                     </tr>
-                                                                        
+
                                     <tr>
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -654,6 +654,11 @@
 
         const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
         selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
         });
     /*FOR-01-PRO-INS-20*/
     document.addEventListener('DOMContentLoaded', function () {
@@ -690,6 +695,7 @@
                 //localStorage.clear();
             });
         });
+
     });
 </script>
 @endsection
