@@ -127,7 +127,7 @@ class CrearNotificacionesCertificados extends Command
                     
                 }
                 // Filtrar usuarios según el ISO
-                $usuarios = User::where('Estatus', 'Alta')
+                $usuarios = User::where('Estatus', 'ALTA')
                     ->where(function($query) use ($iso) {
                         $query->whereIn('rol', ['Super Administrador', 'Administrador']);
                         if ($iso == '17025') {
