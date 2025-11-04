@@ -38,7 +38,7 @@ class ManifiestoController extends Controller
     $currentYear = date('y');
 
     // Expresión regular para extraer folios del año actual con el formato deseado
-    $folios = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]{4}-[0-9]+/' . $currentYear . '$')
+    $folios = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]+-[0-9]+/' . $currentYear . '$')
         ->pluck('Folio');
 
     // Inicializar el número más alto en 0
@@ -47,7 +47,7 @@ class ManifiestoController extends Controller
     // Recorrer los folios obtenidos y extraer el número posterior al guion
     foreach ($folios as $folio) {
         // Extraer el número usando expresión regular
-        if (preg_match('/^[A-Z]{4}-([0-9]+)/', $folio, $matches)) {
+        if (preg_match('/^[A-Z]+-([0-9]+)/', $folio, $matches)) {
             // Convertir el número extraído a entero
             $number = (int) $matches[1];
 
