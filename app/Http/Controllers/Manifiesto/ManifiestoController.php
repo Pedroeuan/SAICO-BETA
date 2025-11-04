@@ -930,12 +930,11 @@ class ManifiestoController extends Controller
 
         // Obtener los ids de las solicitudes en formato array
         $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
-        Log::info('***********************');
-        Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
+        //Log::info('***********************');
+        //Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'PRE-CONCLUIDO']);
-        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'PRE-CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
@@ -1086,7 +1085,6 @@ class ManifiestoController extends Controller
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
-        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario

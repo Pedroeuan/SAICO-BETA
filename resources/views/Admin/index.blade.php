@@ -149,7 +149,7 @@ let table = new DataTable('#tablaJs', {
                     success: function(response) {
                         if (response.success) {
                             Swal.fire({
-                                title: "DE BAJA!",
+                                title: "BAJA!",
                                 text: response.message,
                                 icon: "success",
                                 didClose: function() {
