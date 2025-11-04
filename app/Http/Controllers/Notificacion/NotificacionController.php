@@ -65,7 +65,8 @@ class NotificacionController extends Controller
             ->get();
 
         // Obtener todos los usuarios con los roles especificados
-        $usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        $usuarios = User::where('Estatus', 'Alta')->whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
+        //$usuarios = User::whereIn('rol', ['Super Administrador', 'Administrador', 'Equipos'])->get();
         //$usuarios = User::whereIn('rol', ['Equipos'])->get();
 
         // Recorrer cada certificado
