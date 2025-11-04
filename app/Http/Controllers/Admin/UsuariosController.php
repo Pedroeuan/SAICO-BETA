@@ -184,13 +184,21 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        $Usuario = Usuario::where('id', $id)->first();
-        //$usuario = Usuario::find($id);
-            // Actualizar los datos del usuario
-        $Usuario ->update([
+        try {
+            $Usuario = Usuario::find($id);
+            if (! $Usuario) {
+                return response()->json(['success' => false, 'message' => 'No se pudo encontrar el Usuario.'], 404);
+            }
 
-            'Estatus' => 'Baja',
-        ]);
+            // Actualizar el estatus a 'Baja'
+            $Usuario->Estatus = 'BAJA';
+            $Usuario->save();
+
+            return response()->json(['success' => true, 'message' => 'Usuario dado de baja correctamente.']);
+        } catch (\Exception $e) {
+            Log::error('Error al dar de baja usuario: ' . $e->getMessage(), ['id' => $id]);
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error al procesar la petición.'], 500);
+        }
         /*if ($usuario) {
             $usuario->delete();
             return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente.']);
