@@ -127,15 +127,17 @@ class CrearNotificacionesCertificados extends Command
                     
                 }
                 // Filtrar usuarios según el ISO
-                $usuarios = User::where(function($query) use ($iso) {
-                    $query->whereIn('rol', ['Super Administrador', 'Administrador']);
-                    if ($iso == '17025') {
-                        $query->orWhere('rol', 'Laboratorio');
-                    }
-                    if ($iso == '9001') {
-                        $query->orWhere('rol', 'Equipos');
-                    }
-                })->get();
+                $usuarios = User::where('Estatus', 'ALTA')
+                    ->where(function($query) use ($iso) {
+                        $query->whereIn('rol', ['Super Administrador', 'Administrador']);
+                        if ($iso == '17025') {
+                            $query->orWhere('rol', 'Laboratorio');
+                        }
+                        if ($iso == '9001') {
+                            $query->orWhere('rol', 'Equipos');
+                        }
+                    })
+                    ->get();
 
                 // Crear notificaciones para todos los usuarios con los roles especificados
                 foreach ($usuarios as $usuario){

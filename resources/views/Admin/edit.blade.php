@@ -104,8 +104,25 @@
                             <label for="inputSubject">Estatus</label>
                             <select class="form-control select2 @error('Estatus') is-invalid @enderror" style="width: 100%;" name="Estatus">
                                 <option selected disabled>Selecciona un Estatus</option>
+                                @if($Usuario->Estatus == 'ALTA')
                                 <option value="ALTA" @if($Usuario->Estatus == 'ALTA') selected="selected" @endif>ALTA</option>
                                 <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA2')
+                                <option value="ALTA2" @if($Usuario->Estatus == 'ALTA2') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA3')
+                                <option value="ALTA3" @if($Usuario->Estatus == 'ALTA3') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA4')
+                                <option value="ALTA4" @if($Usuario->Estatus == 'ALTA4') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA5')
+                                <option value="ALTA5" @if($Usuario->Estatus == 'ALTA5') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @else
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                <option value="ALTA" @if($Usuario->Estatus == 'ALTA') selected="selected" @endif>ALTA</option>
+                                @endif 
                             </select>
                             @error('Estatus')
                                 <div class="invalid-feedback">{{ $message }}</div>
