@@ -1008,7 +1008,7 @@
                             <!-- Contenido de la primera pestaña -->
                     @endif
                 @endif
-                @if($generalConISO->NombreISO == '9001' || $generalConISO->NombreISO == '17025')
+                
                     @if($generalEyC->Tipo=='CONSUMIBLES')
                         <div class="tab-pane active" id="tab_3">
                             <form id="consumiblesForm" action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
@@ -1301,7 +1301,6 @@
                             </form>
                         </div>
                     @endif
-                @endif
                     <!--ACCESORIOS -->
                 @if($generalConISO->NombreISO == '9001')
                     @if($generalEyC->Tipo=='ACCESORIOS')
