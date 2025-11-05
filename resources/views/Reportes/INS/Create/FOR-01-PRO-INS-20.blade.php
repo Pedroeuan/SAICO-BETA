@@ -57,6 +57,14 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .bg-light {
+            background-color: #f9f9f9 !important;
+        }
+
+        .col-12.border {
+            border: 1px solid #ccc !important;
+        }
+
     </style>
 @endsection
 
@@ -629,7 +637,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create_CF.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
