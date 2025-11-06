@@ -228,15 +228,15 @@
             });
 
         // Evento para reagrupar imágenes cada vez que se marca o desmarca una casilla
-        document.querySelectorAll('[id^="imagenHoja"]').forEach(checkbox => {
+        /*document.querySelectorAll('[id^="imagenHoja"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 handleGroupImages();
             });
-        });
+        });*/
 
         }
 
-        function handleGroupImages() {
+        /*function handleGroupImages() {
             const container = document.getElementById('imageFieldsContainer');
             const allContainers = Array.from(container.children);
 
@@ -280,7 +280,7 @@
                 `;
                 container.appendChild(groupDiv);
             }
-        }
+        }*/
 
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
