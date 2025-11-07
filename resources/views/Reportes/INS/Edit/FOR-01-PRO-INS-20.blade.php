@@ -294,7 +294,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">>
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -317,58 +317,65 @@
 
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA</div>
                                     
-                        <!--IMAGENES CON COMENTARIOS-->
-                                        <div class="form-group">
-                                            <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                                @for ($i = 1; $i <= 50; $i++)
-                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                                @endfor
-                                            </select>
-                                        </div>
+                        <!-- IMÁGENES CON COMENTARIOS -->
+                        <div class="form-group">
+                            <label for="imageCount">Número de imágenes a subir:</label>
+                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                <option value="">Selecciona Cuántas Imágenes Quieres Agregar</option>
+                                @for ($i = 1; $i <= 50; $i++)
+                                    <option value="{{ $i }}" {{ isset($Fotos_Comentarios) && count($Fotos_Comentarios) == $i ? 'selected' : '' }}>
+                                        {{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
 
-                                        @if(!empty($Fotos_Comentarios))
-                                            <div class="row">
-                                                @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
-                                                        <div class="form-group">
-                                                            <!-- Vista previa de la imagen existente -->
-                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
-                                                            <div class="image-preview mt-2">
-                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
-                                                            </div>
+                        @if(!empty($Fotos_Comentarios))
+                            <div class="row">
+                                @php
+                                    // Para evitar repetir comentarios grupales
+                                    $comentariosMostrados = [];
+                                @endphp
 
-                                                            <!-- Campo para seleccionar una nueva imagen -->
-                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+                                @foreach ($imagenes as $img)
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card shadow-sm position-relative" 
+                                            style="border: 2px solid {{ $img['comentario_grupal'] ?? false ? '#1e88e5' : '#dee2e6' }}">
+                                            
+                                            <div class="card-body text-center">
+                                                <img src="{{ asset($img['ruta']) }}" class="img-fluid rounded mb-2" alt="Imagen {{ $img['id'] }}">
+                                                
+                                                {{-- Comentario individual --}}
+                                                @if (!empty($img['comentario']) && empty($img['comentario_grupal']))
+                                                    <textarea class="form-control mt-2" name="comments[]"
+                                                        placeholder="Comentario individual">{{ $img['comentario'] }}</textarea>
+                                                @endif
 
-                                                            <!-- Campo para el comentario -->
-                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                            <!-- Campo oculto para la imagen en base64 -->
-                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
-                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
-                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
-
-                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
-                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
-
-                                                            <!-- Botón de eliminación -->
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
-                                                        </div>
+                                                {{-- Comentario grupal (solo mostrar una vez por grupo) --}}
+                                                @if (!empty($img['comentario_grupal']) && !in_array($img['comentario_grupal'], $comentariosMostrados))
+                                                    <div class="mt-3 p-2 bg-light border border-primary rounded">
+                                                        <strong>Comentario grupal:</strong>
+                                                        <textarea class="form-control mt-2" name="comentario_grupo[]">{{ $img['comentario_grupal'] }}</textarea>
                                                     </div>
-                                                @endforeach
+                                                    @php
+                                                        $comentariosMostrados[] = $img['comentario_grupal'];
+                                                    @endphp
+                                                @endif
                                             </div>
-                                        @else
-                                            <p>No hay imágenes disponibles.</p>
-                                        @endif
-
-                                        <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
+                                    </div>
+                                @endforeach
+                            </div>
 
-                                        <!-- Modal para recortar la imagen -->
+
+                        @else
+                            <p>No hay imágenes disponibles.</p>
+                        @endif
+
+                        <!-- Contenedor para nuevas imágenes -->
+                        <div id="imageFieldsContainer" class="row"></div>
+
+                                    <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
@@ -394,26 +401,18 @@
                                             </div>
                                         </div>
 
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
-                        </div>
-                    </div>
-
-
-                    <!-- Select para elegir el número de firmas -->
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
-                        <div class="col-sm-15">
-                            <div class="form-group">
-                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
-                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
-                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
-                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
-                                </select>
-                            </div>
-                        </div>
+                                <!-- Select para elegir el número de firmas -->
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
+                                    <div class="col-sm-15">
+                                        <div class="form-group">
+                                            <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
+                                                <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                            </select>
+                                        </div>
+                                    </div>
                         
                                         <!-- 1 DOS FIRMAS-->
                                         <div id="firmas1" class="col-12">
