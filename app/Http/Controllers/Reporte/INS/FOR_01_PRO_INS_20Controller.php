@@ -406,13 +406,29 @@ class FOR_01_PRO_INS_20Controller extends Controller
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
-            // Guardar la ruta en el array con su comentario correspondiente
+            // Guardar imagen con su comentario individual
             $imagenesGuardadas[] = [
+                'id' => $index + 1, // posición visual (1,2,3...)
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'comentario' => $request->comments[$index] ?? null,
             ];
         }
 
+        // Si existen comentarios grupales
+        if ($request->has('comentario_grupo') && $request->has('comentario_grupo_ids')) {
+            foreach ($request->comentario_grupo as $gIndex => $textoGrupo) {
+                $ids = explode(',', $request->comentario_grupo_ids[$gIndex]);
+
+                // Asignar el mismo comentario grupal a cada imagen del grupo
+                foreach ($ids as $idImagen) {
+                    $pos = intval($idImagen) - 1;
+                    if (isset($imagenesGuardadas[$pos])) {
+                        $imagenesGuardadas[$pos]['comentario_grupal'] = $textoGrupo;
+                    }
+                }
+            }
+        }
+        
         // Convertir el array de fotos a JSON
         $Fotos = json_encode($imagenesGuardadas); 
 

@@ -1,24 +1,67 @@
-
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-        if (element.tagName !== 'TEXTAREA') {
-            element.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    }
-                });
-            }
+        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+            if (element.tagName !== 'TEXTAREA') {
+                element.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        }
+                    });
+                }
+            });
         });
-    });
-    
-    $('#dynamicTable').on('keydown', 'input', function(e) {
+        $('#dynamicTable').on('keydown', 'input', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
         }
     });
 
-    /* Imágenes */
+    /*Botón eliminar para imagenes subidas */
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.remove-image').forEach(button => {
+            button.addEventListener('click', function () {
+                const index = this.getAttribute('data-index');
+                const fieldToRemove = document.getElementById(`image-container-${index}`);
+                if (fieldToRemove) {
+                    fieldToRemove.style.display = 'none'; // Oculta el elemento
+                    document.getElementById(`deleted_image_${index}`).value = index; // Marca como eliminado
+                }
+            });
+        });
+    });
+
+    /*Modal para las imagenes que ya estan subidos */
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('image-input')) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    // Mostrar la imagen seleccionada en el modal
+                    const cropperImage = document.getElementById('cropperImage');
+                    cropperImage.src = event.target.result;
+
+                    // Mostrar el modal automáticamente
+                    $('#cropperModal').modal('show');
+
+                    // Inicializar Cropper.js
+                    if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
+                    cropper = new Cropper(cropperImage, {
+                        aspectRatio: 1, // Cambia según tus necesidades
+                        viewMode: 1,
+                        minContainerWidth: 760,
+                        minContainerHeight: 600,
+                        responsive: true,
+                    });
+                    // Guardar el input actual para referencia
+                    currentInput = e.target;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+    /* Imágenes Al seleccionar numero de imagenes a subir*/
     let cropper;
     let currentInput;
 
@@ -37,66 +80,85 @@
         $('#cropperModal').modal('hide');
     });
 
-    // Botón: Guardar sin recortar (manteniendo rotación)
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-
-        try {
-            // Obtener los datos de la imagen original (incluyendo rotación)
-            const imageData = cropper.getImageData();
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                canvas.width = imageData.naturalHeight;
-                canvas.height = imageData.naturalWidth;
-            } else {
-                canvas.width = imageData.naturalWidth;
-                canvas.height = imageData.naturalHeight;
-            }
-
-            // Dibujar la imagen rotada en el lienzo
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate((imageData.rotate * Math.PI) / 180);
-            ctx.drawImage(
-                cropper.element, // Aquí usamos el elemento de la imagen directamente
-                -imageData.naturalWidth / 2,
-                -imageData.naturalHeight / 2,
-                imageData.naturalWidth,
-                imageData.naturalHeight
-            );
-
-            // Convertir el lienzo a base64
-            const base64data = canvas.toDataURL();
-            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-            previewDiv.innerHTML = `
-                <img src="${base64data}" class="img-fluid img-thumbnail" />
-                <span class="badge bg-success">¡Guardado!</span>
-            `;
-            document.getElementById(`${currentInput.id}-base64`).value = base64data;
-
-            // Cerrar el modal
-            $('#cropperModal').modal('hide');
-        } catch (error) {
-            console.error('Error al guardar la imagen sin recortar:', error);
-        }
-    });
-
-    // Botón: Recortar y guardar
+    // Botón: Recortar y Guardar
     document.getElementById('cropImageBtn').addEventListener('click', function () {
         if (cropper && currentInput) {
             const croppedCanvas = cropper.getCroppedCanvas();
             if (croppedCanvas) {
                 const base64data = croppedCanvas.toDataURL();
-                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+
+                // Actualizar la vista previa de la imagen
+                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
                 previewDiv.innerHTML = `
                     <img src="${base64data}" class="img-fluid img-thumbnail" />
                     <span class="badge bg-success">¡Recortado!</span>
                 `;
-                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+                // Actualizar el campo oculto con la imagen en base64
+                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
+                if (base64Input) {
+                    base64Input.value = base64data;
+                }
             }
+            $('#cropperModal').modal('hide');
+        } else {
+            console.error('Cropper o currentInput no están inicializados.');
         }
-        $('#cropperModal').modal('hide');
+    });
+
+    // Botón: Guardar Sin Recortar
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            try {
+                // Obtener los datos de la imagen original (incluyendo rotación)
+                const imageData = cropper.getImageData();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                    canvas.width = imageData.naturalHeight;
+                    canvas.height = imageData.naturalWidth;
+                } else {
+                    canvas.width = imageData.naturalWidth;
+                    canvas.height = imageData.naturalHeight;
+                }
+
+                // Dibujar la imagen rotada en el lienzo
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate((imageData.rotate * Math.PI) / 180);
+                ctx.drawImage(
+                    cropper.element, // Aquí usamos el elemento de la imagen directamente
+                    -imageData.naturalWidth / 2,
+                    -imageData.naturalHeight / 2,
+                    imageData.naturalWidth,
+                    imageData.naturalHeight
+                );
+
+                // Convertir el lienzo a base64
+                const base64data = canvas.toDataURL();
+
+                // Actualizar la vista previa de la imagen
+                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Guardado!</span>
+                `;
+
+                // Actualizar el campo oculto con la imagen en base64
+                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
+                if (base64Input) {
+                    base64Input.value = base64data;
+                }
+
+                // Cerrar el modal
+                $('#cropperModal').modal('hide');
+            } catch (error) {
+                console.error('Error al guardar la imagen sin recortar:', error);
+            }
+        } else {
+            console.error('Cropper o currentInput no están inicializados.');
+        }
     });
 
     // Destruir Cropper al cerrar el modal
@@ -109,19 +171,6 @@
         const imageCountSelect = document.getElementById('imageCount');
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
-
-        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
-        //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
-
-        if (selImgCountLocal != null) {
-            $('#imageCountSelect').val(selImgCountLocal);
-            generateImageFields(selImgCountLocal);
-
-            const msgImgNoSave = document.getElementById('msgImgNoSave');
-            if (msgImgNoSave) {
-                msgImgNoSave.classList.remove('d-none');
-            }
-        }
 
         imageCountSelect.addEventListener('change', function () {
             const count = parseInt(this.value);
@@ -299,16 +348,45 @@
     }
 
     // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-        // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-            titulos.push($(this).val());
+        function updateTitulos() {
+            var titulos = [];
+            // Recolectar todos los títulos en el array
+            $('.titulo-row input[type="text"]').each(function() {
+                titulos.push($(this).val());
+            });
+
+            // Asignar los títulos al campo oculto
+            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
+                inputTitulo.addEventListener('input', function() {
+                    const row = inputTitulo.closest('tr');
+                    const oldTituloKey = row.getAttribute('data-titulo')?.replace('titulo_', '');
+
+                    // Generar nuevo tituloKey con guiones bajos
+                    const nuevoTituloRaw = inputTitulo.value.trim() || 'sin_titulo';
+                    const nuevoTituloKey = nuevoTituloRaw.replace(/\s+/g, '_');
+                    const nuevoDataTitulo = `titulo_${nuevoTituloKey}`;
+
+                    // Actualizar el data-titulo del row del título
+                    row.setAttribute('data-titulo', nuevoDataTitulo);
+
+                    // Actualizar todos los <tr> que tenían el antiguo data-titulo relacionado
+                    document.querySelectorAll(`tr[data-titulo="${oldTituloKey}"]`).forEach(function(rowResultado) {
+                        rowResultado.setAttribute('data-titulo', nuevoTituloKey);
+
+                        // También puedes actualizar los name de los inputs si lo necesitas:
+                        rowResultado.querySelectorAll('input').forEach(function(input) {
+                            input.name = input.name.replace(oldTituloKey, nuevoTituloKey);
+                        });
+                    });
+                });
+            });
         });
 
-        // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
 
     /*Guarda en sesionstorage */
     /*function saveData() {
@@ -343,123 +421,69 @@
         sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
     }*/
 
-
-
-    function saveData(formKey) {
-    const data = [];
-    console.log('Saving data for form:', formKey);
-    
-    $('#dynamicTable tbody tr').each(function () {
-        const tr = $(this);
-        const isTitulo = tr.hasClass('titulo-row');
-        const tituloId = tr.attr('data-titulo');
-        
-        if (isTitulo) {
-            const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-            data.push({
-                type: 'titulo',
-                id: tituloId,
-                text: tituloText
-            });
-        } else {
-            const inputs = tr.find('input').map(function () {
-                return $(this).val();
-            }).get();
-
-            data.push({
-                type: 'fila',
-                titulo: tituloId,
-                rowNumber: tr.index() + 1,
-                inputs: inputs
-            });
-        }
-    });
-
-    // Usa la clave dinámica
-    sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
-}
-
-    // Escuchar en tiempo real y guarda en el momento que se cambia un input
-    $('#dynamicTable').on('input', 'input', function () {
-        //console.log('Input changed, saving data...');
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
     // Evento para eliminar un título
-    $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-        let tituloRow = $(this).closest('tr');
-        let tituloId = tituloRow.data('titulo');
-        
-        // Eliminar la fila del título
-        tituloRow.remove();
-        
-        // Eliminar todas las filas que tengan el mismo data-titulo
-        $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
+        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+            let tituloRow = $(this).closest('tr');
+            let tituloId = tituloRow.data('titulo');
+            
+            // Eliminar la fila del título
+            tituloRow.remove();
+            
+            // Eliminar todas las filas que tengan el mismo data-titulo
+            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
-        updateRowNumbers(); // Si quieres actualizar el contador global
-        saveData(document.querySelectorAll("form")[1].id);
-    });
+            updateRowNumbers(); // Si quieres actualizar el contador global
+        });
 
-    /*Cambia el data-titulo y guarda en sesionstorage */
-    $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-        const input = $(this);
-        const text = input.val().trim();
-        const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+            const input = $(this);
+            const text = input.val().trim();
+            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
 
-        const tr = input.closest('tr');
-        const oldTitulo = tr.attr('data-titulo');
+            const tr = input.closest('tr');
+            const oldTitulo = tr.attr('data-titulo');
 
-        // Cambia el data-titulo del título
-        tr.attr('data-titulo', safeTitulo);
+            // Cambia el data-titulo del título
+            tr.attr('data-titulo', safeTitulo);
 
-        // Cambia el data-titulo de las filas asociadas a este título
-        $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-            $(this).attr('data-titulo', safeTitulo);
+            // Cambia el data-titulo de las filas asociadas a este título
+            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
+                $(this).attr('data-titulo', safeTitulo);
 
-            // Actualiza solo el valor entre corchetes en los names
-            $(this).find('input').each(function () {
-                let name = $(this).attr('name');
-                if (name) {
-                    // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                    name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
-                        return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                    });
-                    $(this).attr('name', name);
-                }
+                // Actualiza solo el valor entre corchetes en los names
+                $(this).find('input').each(function () {
+                    let name = $(this).attr('name');
+                    if (name) {
+                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
+                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) 
+                        {
+                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
+                        });
+                        //name = name.replace(new RegExp(`\\[${oldTitulo}\\]`, 'g'), `[${safeTitulo}]`);
+                        $(this).attr('name', name);
+                    }
+                });
+            });
+
+            updateTitulos();
+            saveData();
+        });
+
+        $('#dynamicTable').on('click', '.btnEliminar', function() {
+            $(this).closest('tr').remove();
+            updateRowNumbers();
+        });
+
+        $('#preFillBtn').click(function() {
+            $('#dynamicTable tbody tr').each(function() {
+                $(this).find('input').each(function() {
+                    if ($(this).val() === '') {
+                        $(this).val('----');
+                    }
+                });
             });
         });
-
-        updateTitulos();
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#dynamicTable').on('click', '.btnEliminar', function() {
-        $(this).closest('tr').remove();
-        updateRowNumbers();
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#preFillBtn').click(function() {
-        $('#dynamicTable tbody tr').each(function() {
-            $(this).find('input').each(function() {
-                if ($(this).val() === '') {
-                    $(this).val('----');
-                }
-            });
-        });
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-            // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-        titulos.push($(this).val());
-        });
-            // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
 
     /*llenado de campos vacios*/
     document.addEventListener("DOMContentLoaded", function () {
@@ -583,6 +607,7 @@
     });
 });
 
+
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
     const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
@@ -592,12 +617,8 @@
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
 
-
     //numFirmasSelect.value = numFirmasLocal;
-
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
-    
-
+    //numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
     numFirmasSelect.addEventListener('change', function() {
         if (this.value == '1') {
             firmas1.style.display = 'block';
