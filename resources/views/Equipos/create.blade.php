@@ -370,7 +370,6 @@
                                         </div>
                                     </div>
 
-                                    @if($rol != 'Laboratorio')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
@@ -380,7 +379,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
