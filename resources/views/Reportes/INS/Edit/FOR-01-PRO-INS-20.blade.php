@@ -330,52 +330,11 @@
                             </select>
                         </div>
 
-                        @if(!empty($Fotos_Comentarios))
-                            <div class="row">
-                                @php
-                                    // Para evitar repetir comentarios grupales
-                                    $comentariosMostrados = [];
-                                @endphp
+                        <div id="imageFieldsContainer" class="row">
+                            <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
 
-                                @foreach ($imagenes as $img)
-                                    <div class="col-md-6 mb-4">
-                                        <div class="card shadow-sm position-relative" 
-                                            style="border: 2px solid {{ $img['comentario_grupal'] ?? false ? '#1e88e5' : '#dee2e6' }}">
-                                            
-                                            <div class="card-body text-center">
-                                                <img src="{{ asset($img['ruta']) }}" class="img-fluid rounded mb-2" alt="Imagen {{ $img['id'] }}">
-                                                
-                                                {{-- Comentario individual --}}
-                                                @if (!empty($img['comentario']) && empty($img['comentario_grupal']))
-                                                    <textarea class="form-control mt-2" name="comments[]"
-                                                        placeholder="Comentario individual">{{ $img['comentario'] }}</textarea>
-                                                @endif
-
-                                                {{-- Comentario grupal (solo mostrar una vez por grupo) --}}
-                                                @if (!empty($img['comentario_grupal']) && !in_array($img['comentario_grupal'], $comentariosMostrados))
-                                                    <div class="mt-3 p-2 bg-light border border-primary rounded">
-                                                        <strong>Comentario grupal:</strong>
-                                                        <textarea class="form-control mt-2" name="comentario_grupo[]">{{ $img['comentario_grupal'] }}</textarea>
-                                                    </div>
-                                                    @php
-                                                        $comentariosMostrados[] = $img['comentario_grupal'];
-                                                    @endphp
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-
-                        @else
-                            <p>No hay imágenes disponibles.</p>
-                        @endif
-
-                        <!-- Contenedor para nuevas imágenes -->
-                        <div id="imageFieldsContainer" class="row"></div>
-
-                                    <!-- Modal para recortar la imagen -->
+                                <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
@@ -400,7 +359,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                 <!-- Select para elegir el número de firmas -->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                                     <div class="col-sm-15">
@@ -643,7 +601,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit_CF.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
