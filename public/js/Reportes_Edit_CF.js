@@ -15,9 +15,193 @@
             e.preventDefault();
         }
     });
+    /*Imagenes */
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+        const imageCountSelect = document.getElementById('imageCount');
+        let cropper;
+        let currentInput;
+
+        /* === 1️⃣ MANEJO DE BOTONES ELIMINAR (tanto nuevas como existentes) === */
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.remove-image');
+            if (!btn) return;
+
+            const index = btn.dataset.index;
+            const containerToRemove = document.getElementById(`image-container-${index}`);
+
+            if (containerToRemove) {
+                // 🔹 Si es una imagen ya guardada, marcarla para borrar
+                const hiddenDelete = document.createElement('input');
+                hiddenDelete.type = 'hidden';
+                hiddenDelete.name = 'imagenes_eliminar[]';
+                hiddenDelete.value = index;
+                document.querySelector('form').appendChild(hiddenDelete);
+
+                // 🔹 Eliminar visualmente
+                containerToRemove.remove();
+
+                // 🔹 Recalcular agrupaciones
+                recalcularAgrupaciones();
+
+                // 🔹 Actualizar el contador visual si estás en modo creación
+                if (imageCountSelect && imageCountSelect.value > 0) {
+                    imageCountSelect.value = parseInt(imageCountSelect.value) - 1;
+                }
+            }
+        });
+
+        /* === 2️⃣ MANEJO DE INPUT FILE PARA RECORTE Y ROTACIÓN === */
+        document.addEventListener('change', function (e) {
+            if (!e.target.matches('.image-input')) return;
+
+            const file = e.target.files[0];
+            if (!file || !file.type.startsWith('image/')) {
+                alert('Por favor, selecciona un archivo de imagen válido.');
+                return;
+            }
+
+            currentInput = e.target;
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                if (cropper) cropper.destroy();
+                cropperImage.src = event.target.result;
+                $('#cropperModal').modal('show');
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 4 / 3,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                    minContainerWidth: 760,
+                    minContainerHeight: 600,
+                    responsive: true
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Destruir cropper al cerrar modal
+        $('#cropperModal').on('hidden.bs.modal', function () {
+            if (cropper) cropper.destroy();
+        });
+
+        /* === 3️⃣ REASIGNAR AGRUPACIONES DE 2 EN 2 === */
+        document.addEventListener('change', function (e) {
+            if (e.target.matches('input[name="imagen_hoja[]"]')) {
+                recalcularAgrupaciones();
+            }
+        });
+
+        function recalcularAgrupaciones() {
+            const todasLasImagenes = Array.from(document.querySelectorAll('[id^="image-container-"]'));
+
+            // Reset visual
+            todasLasImagenes.forEach(div => {
+                div.classList.remove('d-none');
+                div.style.border = '';
+                const comentario = div.querySelector('textarea[name="comments[]"]');
+                if (comentario) comentario.classList.remove('d-none');
+            });
+
+            // Eliminar comentarios grupales antiguos
+            document.querySelectorAll('.comentario-grupo').forEach(el => el.remove());
+
+            // Obtener IDs seleccionadas como "una por hoja"
+            const seleccionadas = Array.from(document.querySelectorAll('input[name="imagen_hoja[]"]:checked'))
+                .map(chk => parseInt(chk.value));
+
+            // Marcar seleccionadas
+            seleccionadas.forEach(id => {
+                const div = document.getElementById(`image-container-${id}`);
+                if (div) div.style.border = '3px solid #28a745'; // verde
+            });
+
+            // Agrupar las restantes de 2 en 2
+            const restantes = todasLasImagenes.filter(div => {
+                const idNum = parseInt(div.id.split('-').pop());
+                return !seleccionadas.includes(idNum);
+            });
+
+            for (let i = 0; i < restantes.length; i += 2) {
+                const par = restantes.slice(i, i + 2);
+                par.forEach(div => {
+                    const comentario = div.querySelector('textarea[name="comments[]"]');
+                    if (comentario) comentario.classList.add('d-none');
+                    div.style.border = '2px dashed #007bff'; // azul
+                });
+
+                const nums = par.map(div => div.id.split('-').pop());
+                const textoGrupo = nums.length === 2
+                    ? `Comentario para imágenes ${nums[0]} y ${nums[1]}`
+                    : `Comentario para imagen ${nums[0]}`;
+
+                const comentarioGrupo = document.createElement('textarea');
+                comentarioGrupo.classList.add('form-control', 'mt-2', 'comentario-grupo');
+                comentarioGrupo.name = 'comentario_grupo[]';
+                comentarioGrupo.placeholder = textoGrupo;
+
+                const idsHidden = document.createElement('input');
+                idsHidden.type = 'hidden';
+                idsHidden.name = 'comentario_grupo_ids[]';
+                idsHidden.value = nums.join(',');
+
+                const ultimo = par[par.length - 1];
+                ultimo.insertAdjacentElement('afterend', comentarioGrupo);
+                comentarioGrupo.insertAdjacentElement('afterend', idsHidden);
+            }
+        }
+
+        /* === 4️⃣ BOTONES DE ROTAR / RECORTAR === */
+        document.getElementById('rotateLeftBtn').addEventListener('click', () => cropper?.rotate(-90));
+        document.getElementById('rotateRightBtn').addEventListener('click', () => cropper?.rotate(90));
+        document.getElementById('cancelBtn').addEventListener('click', () => $('#cropperModal').modal('hide'));
+
+        document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+            try {
+                const imageData = cropper.getImageData();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                    canvas.width = imageData.naturalHeight;
+                    canvas.height = imageData.naturalWidth;
+                } else {
+                    canvas.width = imageData.naturalWidth;
+                    canvas.height = imageData.naturalHeight;
+                }
+
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate((imageData.rotate * Math.PI) / 180);
+                ctx.drawImage(cropper.element, -imageData.naturalWidth / 2, -imageData.naturalHeight / 2);
+
+                const base64data = canvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />
+                                        <span class="badge bg-success">¡Guardado!</span>`;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+                $('#cropperModal').modal('hide');
+            } catch (error) {
+                console.error('Error al guardar sin recorte:', error);
+            }
+        });
+
+        document.getElementById('cropImageBtn').addEventListener('click', function () {
+            if (cropper && currentInput) {
+                const croppedCanvas = cropper.getCroppedCanvas();
+                if (croppedCanvas) {
+                    const base64data = croppedCanvas.toDataURL();
+                    const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                    previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />
+                                            <span class="badge bg-success">¡Recortado!</span>`;
+                    document.getElementById(`${currentInput.id}-base64`).value = base64data;
+                }
+            }
+            $('#cropperModal').modal('hide');
+        });
+    });
 
     /* Imágenes */
-        let cropper;
+        /*let cropper;
         let currentInput;
 
         // Botón: Rotar -90° (Antihorario)
@@ -170,7 +354,7 @@
 
                             // Actualizar el localStorage
                             const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
-                            localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
+                            //localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
                         } else {
                             alert('No se pudo encontrar el campo de imagen para eliminar.');
                         }
@@ -277,332 +461,7 @@
             }
 
             }
-
-            // Limpiar localStorage al enviar el formulario
-            /*document.querySelector("form").addEventListener("submit", function () {
-                localStorage.removeItem('imageCount');
-            });*/
-        });
-
-    /*Botón eliminar para imagenes subidas */
-    /*document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.remove-image').forEach(button => {
-            button.addEventListener('click', function () {
-                const index = this.getAttribute('data-index');
-                const fieldToRemove = document.getElementById(`image-container-${index}`);
-                if (fieldToRemove) {
-                    fieldToRemove.style.display = 'none'; // Oculta el elemento
-                    document.getElementById(`deleted_image_${index}`).value = index; // Marca como eliminado
-                }
-            });
-        });
-    });
-
-    /*Modal para las imagenes que ya estan subidos */
-    /*document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('image-input')) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    // Mostrar la imagen seleccionada en el modal
-                    const cropperImage = document.getElementById('cropperImage');
-                    cropperImage.src = event.target.result;
-
-                    // Mostrar el modal automáticamente
-                    $('#cropperModal').modal('show');
-
-                    // Inicializar Cropper.js
-                    if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
-                    cropper = new Cropper(cropperImage, {
-                        aspectRatio: 1, // Cambia según tus necesidades
-                        viewMode: 1,
-                        minContainerWidth: 760,
-                        minContainerHeight: 600,
-                        responsive: true,
-                    });
-                    // Guardar el input actual para referencia
-                    currentInput = e.target;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    /* Imágenes Al seleccionar numero de imagenes a subir*/
-    /*let cropper;
-    let currentInput;
-
-    // Botón: Rotar -90° (Antihorario)
-    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(-90);
-    });
-
-    // Botón: Rotar +90° (Horario)
-    document.getElementById('rotateRightBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(90);
-    });
-
-    // Botón: Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function () {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Botón: Recortar y Guardar
-    document.getElementById('cropImageBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Recortado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    base64Input.value = base64data;
-                }
-            }
-            $('#cropperModal').modal('hide');
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Botón: Guardar Sin Recortar
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            try {
-                // Obtener los datos de la imagen original (incluyendo rotación)
-                const imageData = cropper.getImageData();
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                    canvas.width = imageData.naturalHeight;
-                    canvas.height = imageData.naturalWidth;
-                } else {
-                    canvas.width = imageData.naturalWidth;
-                    canvas.height = imageData.naturalHeight;
-                }
-
-                // Dibujar la imagen rotada en el lienzo
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate((imageData.rotate * Math.PI) / 180);
-                ctx.drawImage(
-                    cropper.element, // Aquí usamos el elemento de la imagen directamente
-                    -imageData.naturalWidth / 2,
-                    -imageData.naturalHeight / 2,
-                    imageData.naturalWidth,
-                    imageData.naturalHeight
-                );
-
-                // Convertir el lienzo a base64
-                const base64data = canvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Guardado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    base64Input.value = base64data;
-                }
-
-                // Cerrar el modal
-                $('#cropperModal').modal('hide');
-            } catch (error) {
-                console.error('Error al guardar la imagen sin recortar:', error);
-            }
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Destruir Cropper al cerrar el modal
-    $('#cropperModal').on('hidden.bs.modal', function () {
-        if (cropper) cropper.destroy();
-    });
-
-    // Generar campos de imágenes
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageCountSelect = document.getElementById('imageCount');
-        const container = document.getElementById('imageFieldsContainer');
-        const cropperImage = document.getElementById('cropperImage');
-
-        imageCountSelect.addEventListener('change', function () {
-            const count = parseInt(this.value);
-            //localStorage.setItem('imageCount', count);
-            generateImageFields(count);
-        });
-
-        function generateImageFields(count) {
-            container.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                const col = document.createElement('div');
-                col.classList.add('col-sm-6');
-                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
-                col.innerHTML = `
-                    <div class="form-group">
-                        <label for="image${i}">Imagen por Subir ${i}:</label>
-                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
-                        
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
-                            <label class="form-check-label" for="imagenHoja${i}">
-                                Imagen en una hoja
-                            </label>
-                        </div>
-
-                        <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
-                    </div>
-                `;
-                container.appendChild(col);
-            }
-
-            // Agregar eventos de eliminación a los botones
-            document.querySelectorAll('.remove-image').forEach(button => {
-                button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
-                        
-                        const msgImgNoSave = document.getElementById('msgImgNoSave');
-                        if (msgImgNoSave) {
-                            msgImgNoSave.classList.remove('d-none');
-                        }
-
-                        // Actualizar el localStorage
-                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
-                        localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
-                    } else {
-                        alert('No se pudo encontrar el campo de imagen para eliminar.');
-                    }
-                });
-            });
-
-            // Asignar eventos a los nuevos inputs
-            document.querySelectorAll('.image-input').forEach(input => {
-                input.addEventListener('change', function (e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    if (!file.type.startsWith('image/')) {
-                        alert('Por favor, sube solo imágenes.');
-                        return;
-                    }
-
-                    currentInput = e.target;
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        if (cropper) cropper.destroy();
-                        cropperImage.src = event.target.result;
-                        $('#cropperModal').modal('show');
-                        cropper = new Cropper(cropperImage, {
-                            aspectRatio: 4 / 3,
-                            viewMode: 1,
-                            autoCropArea: 1,
-                            minContainerWidth: 760,
-                            minContainerHeight: 600,
-                            responsive: true
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-
-        // Escuchar cambios en cualquier checkbox de "Imagen en una hoja"
-        container.addEventListener('change', function (e) {
-            if (e.target && e.target.matches('input[name="imagen_hoja[]"]')) {
-                recalcularAgrupaciones();
-            }
-        });
-
-        function recalcularAgrupaciones() {
-            const todasLasImagenes = Array.from(container.querySelectorAll('[id^="image-container-"]'));
-
-            // Restaurar estado inicial
-            todasLasImagenes.forEach(div => {
-                div.classList.remove('d-none');
-                div.style.border = '';
-                const comentario = div.querySelector('textarea[name="comments[]"]');
-                if (comentario) comentario.classList.remove('d-none');
-            });
-
-            // Eliminar comentarios grupales previos
-            container.querySelectorAll('.comentario-grupo').forEach(el => el.remove());
-
-            // Obtener IDs de las imágenes seleccionadas como "una por hoja"
-            const seleccionadas = Array.from(container.querySelectorAll('input[name="imagen_hoja[]"]:checked'))
-                .map(chk => parseInt(chk.value));
-
-            // Marcar visualmente las seleccionadas
-            seleccionadas.forEach(id => {
-                const div = document.getElementById(`image-container-${id}`);
-                if (div) {
-                    div.style.border = '3px solid #28a745';
-                }
-            });
-
-            // Obtener las imágenes restantes (no seleccionadas)
-            const restantes = todasLasImagenes.filter(div => {
-                const idNum = parseInt(div.id.split('-').pop());
-                return !seleccionadas.includes(idNum);
-            });
-
-            // Agrupar de 2 en 2 las restantes
-            for (let i = 0; i < restantes.length; i += 2) {
-                const par = restantes.slice(i, i + 2);
-
-                // Ocultar comentarios individuales
-                par.forEach(div => {
-                    const comentario = div.querySelector('textarea[name="comments[]"]');
-                    if (comentario) comentario.classList.add('d-none');
-                    //div.style.border = '2px dashed #ccc'; // visual opcional
-                    div.style.border = '2px dashed #007bff'; // borde azul
-                });
-
-                // Identificar los números de las imágenes agrupadas
-                const nums = par.map(div => div.id.split('-').pop());
-                const textoGrupo = nums.length === 2
-                    ? `Comentario para imágenes ${nums[0]} y ${nums[1]}`
-                    : `Comentario para imagen ${nums[0]}`;
-
-                // Crear comentario grupal
-                const comentarioGrupo = document.createElement('textarea');
-                comentarioGrupo.classList.add('form-control', 'mt-2', 'comentario-grupo');
-                comentarioGrupo.name = 'comentario_grupo[]';
-                comentarioGrupo.placeholder = textoGrupo;
-
-                // Insertar debajo del último div del grupo
-                const ultimo = par[par.length - 1];
-                ultimo.insertAdjacentElement('afterend', comentarioGrupo);
-            }
-        }
-
-        }
-
-        // Limpiar localStorage al enviar el formulario
-        document.querySelector("form").addEventListener("submit", function () {
-            localStorage.removeItem('imageCount');
-        });
-    });*/
-
+        });*/
     /*Juntas-Resultados */
     function updateRowNumbers() {
         let count = 0;

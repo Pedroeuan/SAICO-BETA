@@ -385,65 +385,71 @@ class FOR_01_PRO_INS_20Controller extends Controller
         $Firmas_Reportes->save();
 
         /* Fotos y Comentarios */
-        $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>=1)
-        {
-        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+        $imageCount = $request->input('imageCount');
 
-        foreach ($request->images_base64 as $index => $base64Image) {
-            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        if ($imageCount >= 1) {
+            $imagenesGuardadas = []; // Para almacenar rutas y comentarios de las imágenes
 
-            // Decodificar Base64
-            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-            
-            // Crear un nombre único para la imagen
-            $imageName = 'imagen_' . time() . '_' . $index . '.png';
+            // --- 1️⃣ Guardar cada imagen individualmente ---
+            foreach ($request->images_base64 as $index => $base64Image) {
+                $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-            // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos";
-            
-            // Guardar la imagen en la ruta personalizada
-            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+                if (empty($base64Image)) continue; // Evita errores si hay campos vacíos
 
-            // Guardar imagen con su comentario individual
-            $imagenesGuardadas[] = [
-                'id' => $index + 1, // posición visual (1,2,3...)
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                'comentario' => $request->comments[$index] ?? null,
-            ];
-        }
+                // Decodificar Base64
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
 
-        // Si existen comentarios grupales
-        if ($request->has('comentario_grupo') && $request->has('comentario_grupo_ids')) {
-            foreach ($request->comentario_grupo as $gIndex => $textoGrupo) {
-                $ids = explode(',', $request->comentario_grupo_ids[$gIndex]);
+                // Nombre único para la imagen
+                $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
-                // Asignar el mismo comentario grupal a cada imagen del grupo
-                foreach ($ids as $idImagen) {
-                    $pos = intval($idImagen) - 1;
-                    if (isset($imagenesGuardadas[$pos])) {
-                        $imagenesGuardadas[$pos]['comentario_grupal'] = $textoGrupo;
+                // Ruta personalizada
+                $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos";
+
+                // Guardar la imagen
+                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                // Guardar info básica de la imagen
+                $imagenesGuardadas[] = [
+                    'id' => $index + 1,
+                    'ruta' => "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                    'comentario' => $request->comments[$index] ?? null,
+                ];
+            }
+
+            // --- 2️⃣ Procesar comentarios grupales (si los hay) ---
+            if ($request->has('comentario_grupo') && is_array($request->comentario_grupo)) {
+                foreach ($request->comentario_grupo as $gIndex => $comentarioTexto) {
+                    // Verificar que también haya IDs de grupo
+                    if (!empty($request->comentario_grupo_ids[$gIndex])) {
+                        $idsGrupo = explode(',', $request->comentario_grupo_ids[$gIndex]);
+
+                        // Asignar el comentario grupal a cada imagen del grupo
+                        foreach ($idsGrupo as $idImg) {
+                            $pos = intval($idImg) - 1;
+                            if (isset($imagenesGuardadas[$pos])) {
+                                $imagenesGuardadas[$pos]['comentario_grupal'] = $comentarioTexto;
+                            }
+                        }
                     }
                 }
             }
-        }
-        
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($imagenesGuardadas); 
 
-        // Guardar en la base de datos
-        $Fotos_Reportes->idReportes = $idReportes;
-        $Fotos_Reportes->Fotos_Reportes = $Fotos;
-        $Fotos_Reportes->save();
-    }else{
-        $imagenesGuardadas = [];
-        $Fotos = json_encode($imagenesGuardadas);
-        $Fotos = json_encode($imagenesGuardadas); 
-        $Fotos_Reportes->idReportes = $idReportes;
-        $Fotos_Reportes->Fotos_Reportes = $Fotos;
-        $Fotos_Reportes->save();
-    }
+            // --- 3️⃣ Guardar todo en JSON ---
+            $Fotos = json_encode($imagenesGuardadas);
+
+            // --- 4️⃣ Guardar en la base de datos ---
+            $Fotos_Reportes->idReportes = $idReportes;
+            $Fotos_Reportes->Fotos_Reportes = $Fotos;
+            $Fotos_Reportes->save();
+
+        } else {
+            // No hay imágenes
+            $Fotos_Reportes->idReportes = $idReportes;
+            $Fotos_Reportes->Fotos_Reportes = json_encode([]);
+            $Fotos_Reportes->save();
+        }
+
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Partida'];

@@ -906,7 +906,7 @@
 
                                         <p>
 
-                                        <!--IMAGENES CON COMENTARIOS-->
+                            <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -953,70 +953,9 @@
                                             <p>No hay imágenes disponibles.</p>
                                         @endif
 
-                                        <div class="row" id="imageFieldsContainer">
-                                            @php
-                                                $usadas = []; // Para no repetir imágenes agrupadas
-                                            @endphp
-
-                                            @foreach ($fotos as $index => $foto)
-                                                @if (in_array($foto['id'], $usadas))
-                                                    @continue
-                                                @endif
-
-                                                {{-- Caso 1: Imagen individual --}}
-                                                @if (!isset($foto['comentario_grupal']))
-                                                    <div class="col-sm-6" id="image-container-{{ $foto['id'] }}">
-                                                        <div class="form-group">
-                                                            <label>Imagen {{ $foto['id'] }}:</label>
-                                                            <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail mb-2" alt="Imagen {{ $foto['id'] }}">
-                                                            
-                                                            <div class="form-check mt-2">
-                                                                <input class="form-check-input" type="checkbox" name="imagen_hoja[]" 
-                                                                    id="imagenHoja{{ $foto['id'] }}" value="{{ $foto['id'] }}" checked>
-                                                                <label class="form-check-label" for="imagenHoja{{ $foto['id'] }}">
-                                                                    Imagen en una hoja
-                                                                </label>
-                                                            </div>
-
-                                                            <textarea class="form-control mt-2" name="comments[]" id="comment{{ $foto['id'] }}">{{ $foto['comentario'] ?? '' }}</textarea>
-                                                            <input type="hidden" name="images_base64[]" id="image{{ $foto['id'] }}-base64" value="">
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $foto['id'] }}">Eliminar</button>
-                                                        </div>
-                                                    </div>
-
-                                                {{-- Caso 2: Grupo de 2 imágenes --}}
-                                                @elseif(isset($foto['comentario_grupal']))
-                                                    @php
-                                                        // Buscar la otra imagen del grupo
-                                                        $grupo = collect($fotos)->filter(function ($f) use ($foto) {
-                                                            return isset($f['comentario_grupal']) &&
-                                                                $f['comentario_grupal'] === $foto['comentario_grupal'];
-                                                        });
-                                                        $idsGrupo = $grupo->pluck('id')->toArray();
-                                                        $usadas = array_merge($usadas, $idsGrupo);
-                                                    @endphp
-
-                                                    <div class="col-12">
-                                                        <div class="row">
-                                                            @foreach ($grupo as $img)
-                                                                <div class="col-sm-6" id="image-container-{{ $img['id'] }}">
-                                                                    <div class="form-group">
-                                                                        <label>Imagen {{ $img['id'] }}:</label>
-                                                                        <img src="{{ asset($img['ruta']) }}" class="img-fluid img-thumbnail mb-2" alt="Imagen {{ $img['id'] }}">
-                                                                        <textarea class="form-control mt-2 d-none" name="comments[]" id="comment{{ $img['id'] }}">{{ $img['comentario'] ?? '' }}</textarea>
-                                                                        <input type="hidden" name="images_base64[]" id="image{{ $img['id'] }}-base64" value="">
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                        {{-- Comentario grupal --}}
-                                                        <textarea class="form-control mt-2 comentario-grupo" name="comentario_grupo[]"
-                                                            placeholder="Comentario para imágenes {{ implode(' y ', $idsGrupo) }}">{{ $foto['comentario_grupal'] }}</textarea>
-                                                    </div>
-                                                @endif
-                                            @endforeach
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-
 
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
