@@ -325,16 +325,15 @@
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA</div>
                                     
                         <!-- IMÁGENES CON COMENTARIOS -->
-                        <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                <option value="">Selecciona Cuántas Imágenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 50; $i++)
-                                    <option value="{{ $i }}" {{ isset($Fotos_Comentarios) && count($Fotos_Comentarios) == $i ? 'selected' : '' }}>
-                                        {{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}
-                                    </option>
-                                @endfor
-                            </select>
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
 
                         </div>
                             @php
@@ -349,40 +348,37 @@
                                 {{-- 🟩 Caso 1: Imagen individual --}}
                                 @if (!isset($foto['comentario_grupal']) || empty($foto['comentario_grupal']))
                                     <div class="col-sm-6" id="image-container-{{ $foto['id'] }}">
-                                            <br>
-                                            <label>Imagen {{ $foto['id'] }}:</label>
-                                            <img src="{{ asset($foto['ruta']) }}" 
-                                                class="img-fluid img-thumbnail mb-2" 
-                                                alt="Imagen {{ $foto['id'] }}">
+                                        <br>
+                                        <label>Imagen {{ $foto['id'] }}:</label>
+                                        <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail mb-2" alt="Imagen {{ $foto['id'] }}">
 
-                                            {{-- Checkbox --}}
-                                            <div class="form-check mt-2">
-                                                <input class="form-check-input imagen-hoja-checkbox" type="checkbox" name="imagen_hoja[]" 
-                                                    id="imagenHoja{{ $foto['id'] }}" value="{{ $foto['id'] }}" 
-                                                    {{ empty($foto['comentario_grupal']) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="imagenHoja{{ $foto['id'] }}">
-                                                    Imagen en una hoja
-                                                </label>
-                                            </div>
+                                        {{-- Checkbox --}}
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input imagen-hoja-checkbox" type="checkbox" name="imagen_hoja[]" 
+                                                id="imagenHoja{{ $foto['id'] }}" value="{{ $foto['id'] }}" 
+                                                {{ empty($foto['comentario_grupal']) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="imagenHoja{{ $foto['id'] }}">
+                                                Imagen en una hoja
+                                            </label>
+                                        </div>
 
-                                            {{-- Comentario individual --}}
-                                            <textarea class="form-control mt-2 comment-individual" 
-                                                    name="comments[]" 
-                                                    id="comment{{ $foto['id'] }}"
-                                                    placeholder="Comentario de la imagen">{{ $foto['comentario'] ?? '' }}</textarea>
+                                        {{-- Comentario individual --}}
+                                        <textarea class="form-control mt-2 comment-individual" 
+                                                name="comments[]" 
+                                                id="comment{{ $foto['id'] }}"
+                                                placeholder="Comentario de la imagen">{{ $foto['comentario'] ?? '' }}</textarea>
 
-                                            {{-- Input oculto para base64 --}}
-                                            <input type="hidden" name="images_base64[]" id="image{{ $foto['id'] }}-base64" value="">
+                                        {{-- 🟢 Input oculto con la ruta actual --}}
+                                        <input type="hidden" name="existing_images[]" value="{{ $foto['ruta'] }}">
 
-                                            {{-- ✅ Botón eliminar --}}
-                                            <button type="button" 
-                                                    class="btn btn-danger mt-2 remove-image" 
-                                                    data-index="{{ $foto['id'] }}">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                            
+                                        {{-- 🟣 Input oculto para una posible nueva imagen --}}
+                                        <input type="hidden" name="images_base64[]" id="image{{ $foto['id'] }}-base64" value="">
+
+                                        {{-- Botón eliminar --}}
+                                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $foto['id'] }}">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
                                     </div>
-
                                 {{-- 🟦 Caso 2: Grupo de imágenes --}}
                                 @else
                                     @php

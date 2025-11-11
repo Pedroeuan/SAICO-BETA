@@ -15,6 +15,7 @@
             e.preventDefault();
         }
     });
+
     /*Imagenes */
     document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById('imageFieldsContainer');
@@ -22,6 +23,51 @@
         const imageCountSelect = document.getElementById('imageCount');
         let cropper;
         let currentInput;
+
+        /* === NUEVO: GENERAR CAMPOS DE IMÁGENES IGUAL A LAS EXISTENTES === */
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            container.innerHTML = ''; // Limpia los anteriores
+
+            if (isNaN(count) || count < 1) return;
+
+            for (let i = 1; i <= count; i++) {
+                const div = document.createElement('div');
+                div.classList.add('col-sm-6');
+                div.id = `image-container-new-${i}`;
+
+                div.innerHTML = `
+                    <br>
+                    <label>Imagen nueva ${i}:</label>
+                    <input type="file" class="form-control image-input" id="imageInput${i}" accept="image/*">
+                    <div id="imageInput${i}-preview" class="mt-2"></div>
+
+                    <div class="form-check mt-2">
+                        <input class="form-check-input imagen-hoja-checkbox" type="checkbox" name="imagen_hoja[]" 
+                            id="imagenHojaNew${i}" value="new-${i}">
+                        <label class="form-check-label" for="imagenHojaNew${i}">
+                            Imagen en una hoja
+                        </label>
+                    </div>
+
+                    <textarea class="form-control mt-2 comment-individual" 
+                            name="comments[]" 
+                            id="commentNew${i}"
+                            placeholder="Comentario de la imagen nueva ${i}"></textarea>
+
+                    <input type="hidden" name="images_base64[]" id="imageInput${i}-base64">
+                    <button type="button" class="btn btn-danger mt-2 remove-image" data-index="new-${i}">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                `;
+
+                container.appendChild(div);
+            }
+
+            // Recalcular agrupaciones automáticas después de generar
+            recalcularAgrupaciones();
+        });
+
 
         /* === 1️⃣ MANEJO DE BOTONES ELIMINAR (tanto nuevas como existentes) === */
         document.addEventListener('click', function (e) {
