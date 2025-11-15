@@ -485,6 +485,7 @@ class FOR_01_PRO_INS_20Controller extends Controller
 
     public function FOR_01_PRO_INS_20_update(Request $request, $id)
     {
+        //dd($request->all());
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -648,7 +649,102 @@ class FOR_01_PRO_INS_20Controller extends Controller
         } 
 
         /* === FOTOS Y COMENTARIOS === */
+    $No_Reporte = $request->Detalles_Generales['No_Reporte'];
+    $Contrato = $request->Detalles_Generales['Contrato'];
 
+    $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos";
+
+    /** ===========================
+     * 1️⃣ Cargar fotos existentes
+     * =========================== */
+    $existentes = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+
+    /** ===========================
+     * 2️⃣ Quitar imágenes ELIMINADAS
+     * =========================== */
+    $deleted = json_decode($request->deleted_images ?? '[]', true);
+
+    if (!empty($deleted)) {
+        $existentes = array_filter($existentes, function ($img) use ($deleted) {
+            return !in_array($img['id'], $deleted);
+        });
+    }
+
+    /** ===========================
+     * 3️⃣ Inicializar arreglo final
+     * =========================== */
+    $imagenesFinales = [];
+
+    /** ===========================
+     * 4️⃣ Procesar imágenes existentes (reemplazadas o no)
+     * =========================== */
+    foreach ($existingRoutes = $request->existing_images ?? [] as $key => $ruta) {
+
+        $imgID = $request->input('existing_ids')[$key]; // <-- debes agregar este hidden
+
+        $base64 = $request->images_base64[$key] ?? null;
+
+        if (!empty($base64)) {
+            // Imagen fue reemplazada
+            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
+            $imageName = 'imagen_' . time() . "_{$imgID}.png";
+
+            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+            $ruta = "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+        }
+
+        // Guardar
+        $imagenesFinales[] = [
+            "id" => $imgID,
+            "ruta" => $ruta,
+            "comentario" => $request->comments[$key] ?? null
+        ];
+    }
+
+    /** ===========================
+     * 5️⃣ Procesar NUEVAS imágenes
+     * =========================== */
+    if (!empty($request->images_base64)) {
+        foreach ($request->images_base64 as $i => $base64) {
+            if (empty($base64)) continue;
+
+            $newID = count($imagenesFinales) + 1;
+
+            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
+            $imageName = "new_{$newID}_" . time() . ".png";
+
+            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+            $imagenesFinales[] = [
+                "id" => $newID,
+                "ruta" => "storage/Reportes/FOR_01_PRO_INS_20/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                "comentario" => $request->comments[$i] ?? null
+            ];
+        }
+    }
+
+    /** ===========================
+     * 6️⃣ Aplicar comentarios grupales
+     * =========================== */
+    if ($request->has('comentario_grupo')) {
+        foreach ($request->comentario_grupo as $gIndex => $texto) {
+
+            $ids = explode(',', $request->comentario_grupo_ids[$gIndex]);
+
+            foreach ($imagenesFinales as &$img) {
+                if (in_array($img["id"], $ids)) {
+                    $img["comentario_grupal"] = $texto;
+                }
+            }
+        }
+    }
+
+    /** ===========================
+     * 7️⃣ Guardar JSON final
+     * =========================== */
+    $Fotos_Reportes->Fotos_Reportes = json_encode(array_values($imagenesFinales));
+    $Fotos_Reportes->save();
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];

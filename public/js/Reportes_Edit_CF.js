@@ -16,7 +16,7 @@
         }
     });
 
-    /*Imagenes */
+        /* Imágenes */
         let cropper;
         let currentInput;
 
@@ -102,13 +102,13 @@
             const container = document.getElementById('imageFieldsContainer');
             const cropperImage = document.getElementById('cropperImage');
 
-            const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1]?.id + '_imageCount');
+            /*const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1]?.id + '_imageCount');
             if (selImgCountLocal != null) {
                 $('#imageCountSelect').val(selImgCountLocal);
                 generateImageFields(selImgCountLocal);
                 const msgImgNoSave = document.getElementById('msgImgNoSave');
                 if (msgImgNoSave) msgImgNoSave.classList.remove('d-none');
-            }
+            }*/
 
             imageCountSelect.addEventListener('change', function () {
                 const count = parseInt(this.value);
@@ -146,14 +146,38 @@
                     button.addEventListener('click', function () {
                         const index = this.getAttribute('data-index');
                         const fieldToRemove = document.getElementById(`image-container-${index}`);
+
                         if (fieldToRemove) {
                             fieldToRemove.remove();
+
+                            // 🔥 1. Buscar si pertenecía a un grupo
+                            const grupos = container.querySelectorAll('input[name="comentario_grupo_ids[]"]');
+
+                            grupos.forEach(input => {
+                                let ids = input.value.split(',').map(n => parseInt(n));
+                                let textareaGrupo = input.previousElementSibling;
+
+                                if (ids.includes(parseInt(index))) {
+
+                                    // 🔥 Eliminar comentario grupal e input
+                                    if (textareaGrupo && textareaGrupo.classList.contains('comentario-grupo')) {
+                                        textareaGrupo.remove();
+                                    }
+                                    input.remove();
+                                }
+                            });
+
+                            // 🔥 2. Recalcular agrupaciones
+                            recalcularAgrupaciones();
+
                             imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0;
+
                             const msgImgNoSave = document.getElementById('msgImgNoSave');
                             if (msgImgNoSave) msgImgNoSave.classList.remove('d-none');
                         }
                     });
                 });
+
 
                 document.querySelectorAll('.image-input').forEach(input => {
                     input.addEventListener('change', function (e) {
@@ -253,140 +277,39 @@
 
                 }
             }
+            // Delegación para eliminar imágenes existentes y nuevas
+            document.addEventListener("click", function (e) {
+
+                // Si dieron clic en un botón con clase remove-image
+                if (e.target.closest(".remove-image")) {
+
+                    const btn = e.target.closest(".remove-image");
+                    const id = btn.dataset.index;
+
+                    // Eliminar visualmente
+                    const cont = document.getElementById("image-container-" + id);
+                    if (cont) cont.remove();
+
+                    // Registrar eliminación en hidden input
+                    const deleted = document.getElementById("deletedImages");
+                    let lista = deleted.value ? deleted.value.split(",") : [];
+                    lista.push(id);
+                    deleted.value = lista.join(",");
+                }
+            });
+
+            // Delegación para checkboxes de imágenes ya guardadas
+            document.addEventListener("change", function(e) {
+                if (e.target.classList.contains("imagen-hoja-checkbox")) {
+                    // Aquí puedes poner acciones si necesitas reaccionar
+                    console.log("Checkbox modificado en imagen ID:", e.target.value);
+                }
+            });
 
             document.querySelector("form").addEventListener("submit", function () {
-                localStorage.removeItem('imageCount');
+                //localStorage.removeItem('imageCount');
             });
         });
-    /*document.addEventListener("DOMContentLoaded", function () {
-        const imageCountSelect = document.getElementById("imageCount");
-        const imageFieldsContainer = document.getElementById("imageFieldsContainer");
-        const cropperModal = document.getElementById("cropperModal");
-        const cropperImage = document.getElementById("cropperImage");
-        const cropButton = document.getElementById("cropImageBtn");
-        const closeModalButton = document.getElementById("cancelBtn");
-
-        let cropper = null;
-        let currentImageField = null;
-
-        // 🟢 CAMBIO DE SELECT: CREA LOS CAMPOS DE IMAGEN
-        imageCountSelect.addEventListener("change", function () {
-            const count = parseInt(this.value);
-            imageFieldsContainer.innerHTML = "";
-
-            if (!isNaN(count) && count > 0) {
-                for (let i = 1; i <= count; i++) {
-                    const fieldHTML = `
-                        <div class="col-md-4 mb-3 image-field" id="image-container-${i}">
-                            <label>Imagen ${i}</label>
-                            <input type="file" class="form-control image-input" id="image${i}" name="images[]" accept="image/*">
-
-                            <img id="preview${i}" class="img-thumbnail mt-2" style="display:none; width:100%; max-height:200px; object-fit:cover;">
-
-                            <textarea name="comments[]" id="comment${i}" class="form-control mt-2" placeholder="Agrega un comentario (opcional)"></textarea>
-
-                            <div class="form-check mt-2">
-                                <input type="checkbox" class="form-check-input" id="imagen_hoja${i}" name="imagen_hoja[]" value="${i}">
-                                <label class="form-check-label" for="imagen_hoja${i}">Agregar imagen a la hoja</label>
-                            </div>
-
-                            <input type="hidden" name="images_base64[]" id="image${i}-base64">
-                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-image" data-id="${i}">Eliminar</button>
-                        </div>
-                    `;
-                    imageFieldsContainer.insertAdjacentHTML("beforeend", fieldHTML);
-                }
-            }
-        });
-
-        // 🟢 EVENTO: ABRIR CROP AL ELEGIR IMAGEN
-        document.body.addEventListener("change", function (event) {
-            if (event.target.classList.contains("image-input")) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        cropperImage.src = e.target.result;
-                        currentImageField = event.target.id.replace("image", "");
-                        const modal = new bootstrap.Modal(cropperModal);
-                        modal.show();
-
-                        cropper = new Cropper(cropperImage, {
-                            aspectRatio: 1,
-                            viewMode: 2,
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-
-        // 🟢 CROP Y GUARDADO DE IMAGEN BASE64
-        cropButton.addEventListener("click", function () {
-            if (cropper) {
-                const canvas = cropper.getCroppedCanvas({
-                    width: 760,
-                    height: 600,
-                });
-                const base64Image = canvas.toDataURL("image/png");
-
-                const preview = document.getElementById("preview" + currentImageField);
-                preview.src = base64Image;
-                preview.style.display = "block";
-
-                document.getElementById("image" + currentImageField + "-base64").value = base64Image;
-
-                const modalInstance = bootstrap.Modal.getInstance(cropperModal);
-                modalInstance.hide();
-                cropper.destroy();
-                cropper = null;
-            }
-        });
-
-        // 🟡 CERRAR MODAL SIN GUARDAR
-        closeModalButton.addEventListener("click", function () {
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-        });
-
-        // 🟢 ELIMINAR IMAGEN (de nuevas o existentes)
-        document.body.addEventListener("click", function (event) {
-            if (event.target.classList.contains("remove-image")) {
-                const container = event.target.closest(".image-field"); // sube hasta el contenedor
-                if (container) {
-                    container.remove();
-                }
-            }
-        });
-        /*document.body.addEventListener("click", function (event) {
-            if (event.target.classList.contains("remove-image")) {
-                const id = event.target.getAttribute("data-id");
-                const container = document.getElementById("image-container-" + id);
-                if (container) {
-                    container.remove();
-                }
-            }
-        });*/
-
-        // 🟢 OPCIONAL: VALIDAR ANTES DE ENVIAR
-        /*const form = document.querySelector("form");
-        form.addEventListener("submit", function (e) {
-            const allImages = document.querySelectorAll('input[name="images_base64[]"]');
-            const hasImage = Array.from(allImages).some(input => input.value.trim() !== "");
-
-            if (!hasImage) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Faltan imágenes",
-                    text: "Debes agregar al menos una imagen antes de guardar.",
-                });
-            }
-        });
-    });
-*/
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {

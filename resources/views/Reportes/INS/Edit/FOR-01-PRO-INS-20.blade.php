@@ -371,6 +371,7 @@
 
                                         {{-- 🟣 Inputs ocultos --}}
                                         <input type="hidden" name="existing_images[]" value="{{ $foto['ruta'] }}">
+                                        <input type="hidden" name="existing_ids[]" value="{{ $foto['id'] }}">
                                         <input type="hidden" name="images_base64[]" id="image{{ $foto['id'] }}-base64" value="">
 
                                         {{-- 🔴 Botón eliminar --}}
@@ -416,6 +417,7 @@
                                                     {{-- 🟣 Inputs ocultos --}}
                                                     <input type="hidden" name="images_base64[]" id="image{{ $img['id'] }}-base64" value="">
                                                     <input type="hidden" name="existing_images[]" value="{{ $img['ruta'] }}">
+                                                    <input type="hidden" name="existing_ids[]" value="{{ $img['id'] }}">
 
                                                     {{-- 🔴 Botón eliminar --}}
                                                     <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $img['id'] }}">
@@ -439,6 +441,9 @@
 
                         <!-- 🆕 Contenedor para nuevas imágenes -->
                         <div class="row" id="imageFieldsContainer"></div>
+
+                        <!-- 🔴 Aquí se guardarán los IDs eliminados -->
+                        <input type="hidden" id="deletedImages" name="deleted_images">
 
                         <!-- ===============================
                             MODAL PARA RECORTAR IMAGEN
