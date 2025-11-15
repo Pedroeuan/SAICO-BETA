@@ -108,6 +108,7 @@
             if (selImgCountLocal != null) {
                 $('#imageCountSelect').val(selImgCountLocal);
                 generateImageFields(selImgCountLocal);
+                // Muestra mensaje indicando que hay imágenes no guardadas
                 const msgImgNoSave = document.getElementById('msgImgNoSave');
                 if (msgImgNoSave) msgImgNoSave.classList.remove('d-none');
             }
@@ -117,8 +118,15 @@
                 generateImageFields(count);
             });
 
+            /*Crea para cada imagen:
+            *-Input file para subir imagen
+            *-Checkbox "Imagen en una hoja"
+            *-Área de previsualización
+            *-Textarea para comentarios
+            *-Input hidden para imagen en base64
+            *-Botón para eliminar */
             function generateImageFields(count) {
-                container.innerHTML = '';
+                container.innerHTML = ''; // Limpia contenedor
                 for (let i = 1; i <= count; i++) {
                     const col = document.createElement('div');
                     col.classList.add('col-sm-6');
@@ -144,6 +152,7 @@
                     container.appendChild(col);
                 }
 
+                //Manejo de Eliminación
                 document.querySelectorAll('.remove-image').forEach(button => {
                     button.addEventListener('click', function () {
                         const index = this.getAttribute('data-index');
@@ -159,6 +168,7 @@
                 });
 
                 document.querySelectorAll('.image-input').forEach(input => {
+                    //Procesamiento de Imágenes
                     input.addEventListener('change', function (e) {
                         const file = e.target.files[0];
                         if (!file) return;
@@ -196,27 +206,28 @@
                 // 🔹 MODIFICADO
                 function recalcularAgrupaciones() {
                     const todasLasImagenes = Array.from(container.querySelectorAll('[id^="image-container-"]'));
-
+                    // Remueve clases de ocultamiento y estilos previos
                     todasLasImagenes.forEach(div => {
                         div.classList.remove('d-none');
                         div.style.border = '';
+                        // Muestra comentarios individuales
                         const comentario = div.querySelector('textarea[name="comments[]"]');
                         if (comentario) comentario.classList.remove('d-none');
                     });
 
                     container.querySelectorAll('.comentario-grupo').forEach(el => el.remove());
-
+                    //Manejo de Imágenes Individuales (en hoja)
                     const seleccionadas = Array.from(container.querySelectorAll('input[name="imagen_hoja[]"]:checked'))
                         .map(chk => parseInt(chk.value));
 
                     seleccionadas.forEach(id => {
                         const div = document.getElementById(`image-container-${id}`);
-                        if (div) div.style.border = '3px solid #28a745';
+                        if (div) div.style.border = '3px solid #28a745'; // Borde verde
                     });
 
                     const restantes = todasLasImagenes.filter(div => {
                         const idNum = parseInt(div.id.split('-').pop());
-                        return !seleccionadas.includes(idNum);
+                        return !seleccionadas.includes(idNum); // Imágenes NO seleccionadas
                     });
 
                         // Agrupar de 2 en 2 las restantes
@@ -258,7 +269,7 @@
             }
 
             document.querySelector("form").addEventListener("submit", function () {
-                localStorage.removeItem('imageCount');
+                localStorage.removeItem('imageCount'); // Limpia almacenamiento
             });
         });
 
