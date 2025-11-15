@@ -151,6 +151,7 @@
                         if (fieldToRemove) {
                             fieldToRemove.remove();
                             imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0;
+                            recalcularAgrupaciones();
                             const msgImgNoSave = document.getElementById('msgImgNoSave');
                             if (msgImgNoSave) msgImgNoSave.classList.remove('d-none');
                         }
