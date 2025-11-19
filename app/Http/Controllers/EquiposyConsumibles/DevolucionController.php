@@ -103,7 +103,7 @@ class DevolucionController extends Controller
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
             $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo']);
+                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);
 
             // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
             $datosManifiesto = [];
@@ -124,6 +124,8 @@ class DevolucionController extends Controller
                     $datosManifiesto[] = [
                         'idGeneral_EyC' => $detalle->idGeneral_EyC,
                         'Nombre' => $general->Nombre_E_P_BP,
+                        'Eco' => $general->No_economico,
+                        'Serie' => $general->Serie,
                         'Tipo' => $general->Tipo,
                         'cantidad' => $detalle->cantidad, // Cantidad de ocurrencias
                         'Folio' => $folio, // Agregar el Folio desde manifiesto
@@ -135,7 +137,6 @@ class DevolucionController extends Controller
             $datosManifiesto = [];
             $idsSolicitud = [];
         }
-
         $FechaActual = Carbon::now();
 
         $devoluciones = devolucion::where('idSolicitud', $id)->first();

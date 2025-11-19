@@ -159,6 +159,8 @@
                 <tr>
                     <th>Folio</th>
                     <th>Nombre</th>
+                    <th>ECO</th>
+                    <th>Serie</th>
                     <th>Cantidad</th>
                     <th>Devolver</th>
                 </tr>
@@ -171,6 +173,8 @@
                         {{ $dato['Folio'] }}
                         </td>
                         <td>{{ $dato['Nombre'] }}</td>
+                        <td>{{ $dato['Eco'] }}</td>
+                        <td>{{ $dato['Serie'] }}</td>
                         <td>
                             <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
                             @if($dato['cantidad'] == 1)

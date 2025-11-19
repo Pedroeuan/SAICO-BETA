@@ -906,7 +906,7 @@
 
                                         <p>
 
-                                        <!--IMAGENES CON COMENTARIOS-->
+                            <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -1021,7 +1021,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit_CF.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">

@@ -57,6 +57,14 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .bg-light {
+            background-color: #f9f9f9 !important;
+        }
+
+        .col-12.border {
+            border: 1px solid #ccc !important;
+        }
+
     </style>
 @endsection
 
@@ -344,7 +352,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA / SEÑAL DE REFERENCIA</div>
                         
                         <p>
 
@@ -389,12 +397,12 @@
                             </div>
                         </div>
 
-                    <div class="col-sm-12">
+                    <!--<div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Observaciones:</label>
                             <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                         </div>
-                    </div>
+                    </div>-->
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -629,7 +637,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create_CF.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">

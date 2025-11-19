@@ -310,7 +310,7 @@ return [
                     ],*/
                 ],
                 // Sidebar Administrativo:
-                [
+                /*[
                     'text' => 'REPORTES',
                     'icon' => 'fas fa-file-alt',
                     'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
@@ -399,7 +399,7 @@ return [
                             'url' => '/Reporte/FOR-INS-18/01/PDF',
                         ],
                     ],
-                ],
+                ],*/
         
         // Sidebar Administrativo:
         /*[
