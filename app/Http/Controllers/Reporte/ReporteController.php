@@ -230,7 +230,10 @@ class ReporteController extends Controller
         //dd($Grupo_Juntas_Re);
 
         //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
-
+        $imagenes = [];
+        if ($Fotos_Reporte && $Fotos_Reporte->Fotos_Reportes) {
+            $imagenes = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        }
         //$Juntas_resultados = $Grupo_Juntas_Re['resultados'];
         //$Titulos_resultados = $Grupo_Juntas_Re['titulos'];
 
@@ -275,7 +278,7 @@ class ReporteController extends Controller
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re'));
 
     }
 

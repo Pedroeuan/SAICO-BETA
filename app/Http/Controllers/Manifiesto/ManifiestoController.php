@@ -38,7 +38,7 @@ class ManifiestoController extends Controller
     $currentYear = date('y');
 
     // Expresión regular para extraer folios del año actual con el formato deseado
-    $folios = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]{4}-[0-9]+/' . $currentYear . '$')
+    $folios = Manifiesto::where('Folio', 'REGEXP', '^[A-Z]+-[0-9]+/' . $currentYear . '$')
         ->pluck('Folio');
 
     // Inicializar el número más alto en 0
@@ -47,7 +47,7 @@ class ManifiestoController extends Controller
     // Recorrer los folios obtenidos y extraer el número posterior al guion
     foreach ($folios as $folio) {
         // Extraer el número usando expresión regular
-        if (preg_match('/^[A-Z]{4}-([0-9]+)/', $folio, $matches)) {
+        if (preg_match('/^[A-Z]+-([0-9]+)/', $folio, $matches)) {
             // Convertir el número extraído a entero
             $number = (int) $matches[1];
 
@@ -930,12 +930,11 @@ class ManifiestoController extends Controller
 
         // Obtener los ids de las solicitudes en formato array
         $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
-        Log::info('***********************');
-        Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
+        //Log::info('***********************');
+        //Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'PRE-CONCLUIDO']);
-        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'PRE-CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
@@ -1086,7 +1085,6 @@ class ManifiestoController extends Controller
 
         // Actualizar el estatus de las solicitudes
         Solicitudes::whereIn('idSolicitud', $idsSolicitud)->update(['Estatus' => 'CONCLUIDO']);
-        Solicitudes::whereIn('idSolicitud', $id)->update(['Estatus' => 'CONCLUIDO']);
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario

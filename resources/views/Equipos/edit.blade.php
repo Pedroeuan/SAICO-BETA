@@ -399,7 +399,6 @@
                                             </div>
                                         </div>
 
-                                        @if($rol != 'Laboratorio')
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Hoja de presentación</label>
@@ -427,7 +426,7 @@
                                                 </div>
                                             </div>
                                             @endif
-                                        @endif
+
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">No de certificado</label>
@@ -1008,7 +1007,7 @@
                             <!-- Contenido de la primera pestaña -->
                     @endif
                 @endif
-                @if($generalConISO->NombreISO == '9001')
+                
                     @if($generalEyC->Tipo=='CONSUMIBLES')
                         <div class="tab-pane active" id="tab_3">
                             <form id="consumiblesForm" action="{{ route('editConsumibles.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
@@ -1301,7 +1300,7 @@
                             </form>
                         </div>
                     @endif
-                @endif
+
                     <!--ACCESORIOS -->
                 @if($generalConISO->NombreISO == '9001')
                     @if($generalEyC->Tipo=='ACCESORIOS')
