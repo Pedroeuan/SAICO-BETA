@@ -577,6 +577,7 @@
                         <p>
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS DE LA INSPECCIÓN</div>
                         <p>
+
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
@@ -604,15 +605,6 @@
 
                                                             <!-- Campo para el comentario -->
                                                             <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                            <!-- Checkbox para "Imagen en una hoja" -->
-                                                            <div class="form-check mt-2">
-                                                                <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja{{ $index }}" value="{{ $index + 1 }}" 
-                                                                    {{ !empty($foto['hoja']) && $foto['hoja'] ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
-                                                                    Imagen en una hoja
-                                                                </label>
-                                                            </div>
 
                                                             <!-- Campo oculto para la imagen en base64 -->
                                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
