@@ -637,7 +637,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_CF.js') }}"></script> <!--Se realiza el cambio a las imagenes que se tienene de foto y comentario-->
+<script src="{{ asset('js/Reportes_Create.js') }}"></script> <!--Se realiza el cambio a las imagenes que se tienene de foto y comentario-->
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">

@@ -320,158 +320,82 @@
                         <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                         <!--***************************************** INICIO RESULTADOS *****************************************-->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA / SEÑAL DE REFERENCIA</div>
-                        <!-- ==========================
-                            IMÁGENES CON COMENTARIOS
-                        =========================== -->
-                        <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                <option value="">Selecciona Cuántas Imágenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 50; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
-                            </select>
-                        </div>
-
-                        <!-- 🟢 Imágenes ya guardadas -->
-                        <div class="row">
-                            @php
-                                $usadas = [];
-                            @endphp
-
-                            @foreach ($Fotos_Comentarios as $index => $foto)
-                                @if (in_array($foto['id'], $usadas))
-                                    @continue
-                                @endif
-
-                                {{-- 🟩 Caso 1: Imagen individual --}}
-                                @if (!isset($foto['comentario_grupal']) || empty($foto['comentario_grupal']))
-                                    <div class="col-sm-6 mb-3" id="image-container-{{ $foto['id'] }}">
-                                        <label>Imagen {{ $foto['id'] }}:</label>
-                                        <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail mb-2" alt="Imagen {{ $foto['id'] }}">
-
-                                        {{-- 🟦 Input file para reemplazar imagen --}}
-                                        <input type="file" class="form-control image-input" id="image{{ $foto['id'] }}" accept="image/*">
-
-                                        {{-- ✅ Checkbox --}}
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input imagen-hoja-checkbox" type="checkbox" name="imagen_hoja[]"
-                                                id="imagenHoja{{ $foto['id'] }}" value="{{ $foto['id'] }}"
-                                                {{ empty($foto['comentario_grupal']) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="imagenHoja{{ $foto['id'] }}">
-                                                Imagen en una hoja
-                                            </label>
+                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
 
-                                        {{-- 🟨 Comentario individual --}}
-                                        <textarea class="form-control mt-2 comment-individual"
-                                            name="comments[]"
-                                            id="comment{{ $foto['id'] }}"
-                                            placeholder="Comentario de la imagen">{{ $foto['comentario'] ?? '' }}</textarea>
+                                        @if(!empty($Fotos_Comentarios))
+                                            <div class="row">
+                                                @foreach($Fotos_Comentarios as $index => $foto)
+                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                        <div class="form-group">
+                                                            <!-- Vista previa de la imagen existente -->
+                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                            <div class="image-preview mt-2">
+                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                            </div>
 
-                                        {{-- 🟣 Inputs ocultos --}}
-                                        <input type="hidden" name="existing_images[]" value="{{ $foto['ruta'] }}">
-                                        <input type="hidden" name="existing_ids[]" value="{{ $foto['id'] }}">
-                                        <input type="hidden" name="images_base64[]" id="image{{ $foto['id'] }}-base64" value="">
+                                                            <!-- Campo para seleccionar una nueva imagen -->
+                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
-                                        {{-- 🔴 Botón eliminar --}}
-                                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $foto['id'] }}">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                    </div>
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 
-                                {{-- 🟦 Caso 2: Grupo de imágenes --}}
-                                @else
-                                    @php
-                                        $grupo = collect($Fotos_Comentarios)->filter(function ($f) use ($foto) {
-                                            return isset($f['comentario_grupal']) && $f['comentario_grupal'] === $foto['comentario_grupal'];
-                                        });
-                                        $idsGrupo = $grupo->pluck('id')->toArray();
-                                        $usadas = array_merge($usadas, $idsGrupo);
-                                    @endphp
+                                                            <!-- Campo oculto para la imagen en base64 -->
+                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
 
-                                    <div class="row w-100 mb-4">
-                                        @foreach ($grupo as $img)
-                                            <div class="col-sm-6" id="image-container-{{ $img['id'] }}">
-                                                <div class="form-group">
-                                                    <label>Imagen {{ $img['id'] }}:</label>
-                                                    <img src="{{ asset($img['ruta']) }}" class="img-fluid img-thumbnail mb-2" alt="Imagen {{ $img['id'] }}">
+                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
 
-                                                    {{-- 🟦 Input file para reemplazar --}}
-                                                    <input type="file" class="form-control image-input" id="image{{ $img['id'] }}" accept="image/*">
+                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
 
-                                                    {{-- ✅ Checkbox --}}
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input imagen-hoja-checkbox" type="checkbox"
-                                                            name="imagen_hoja[]" id="imagenHoja{{ $img['id'] }}"
-                                                            value="{{ $img['id'] }}"
-                                                            {{ isset($img['comentario_grupal']) ? '' : 'checked' }}>
-                                                        <label class="form-check-label" for="imagenHoja{{ $img['id'] }}">
-                                                            Imagen en una hoja
-                                                        </label>
+                                                            <!-- Botón de eliminación -->
+                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                        </div>
                                                     </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
 
-                                                    {{-- Comentario individual oculto --}}
-                                                    <textarea class="form-control mt-2 d-none" name="comments[]" id="comment{{ $img['id'] }}">{{ $img['comentario'] ?? '' }}</textarea>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
-                                                    {{-- 🟣 Inputs ocultos --}}
-                                                    <input type="hidden" name="images_base64[]" id="image{{ $img['id'] }}-base64" value="">
-                                                    <input type="hidden" name="existing_images[]" value="{{ $img['ruta'] }}">
-                                                    <input type="hidden" name="existing_ids[]" value="{{ $img['id'] }}">
-
-                                                    {{-- 🔴 Botón eliminar --}}
-                                                    <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $img['id'] }}">
-                                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                                    </button>
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-
-                                        {{-- 🟢 Comentario grupal --}}
-                                        <textarea class="form-control mt-2 comentario-grupo"
-                                            name="comentario_grupo[]"
-                                            placeholder="Comentario para imágenes {{ implode(' y ', $idsGrupo) }}">{{ $foto['comentario_grupal'] }}</textarea>
-
-                                        {{-- 🟣 IDs del grupo --}}
-                                        <input type="hidden" name="comentario_grupo_ids[]" value="{{ implode(',', $idsGrupo) }}">
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        <!-- 🆕 Contenedor para nuevas imágenes -->
-                        <div class="row" id="imageFieldsContainer"></div>
-
-                        <!-- 🔴 Aquí se guardarán los IDs eliminados -->
-                        <input type="hidden" id="deletedImages" name="deleted_images">
-
-                        <!-- ===============================
-                            MODAL PARA RECORTAR IMAGEN
-                        ================================ -->
-                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="img-container">
-                                            <img id="cropperImage" src="" style="max-width: 100%;">
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                                 <!-- Select para elegir el número de firmas -->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -715,7 +639,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit_CF.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
