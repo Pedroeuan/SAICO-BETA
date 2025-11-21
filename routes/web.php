@@ -68,6 +68,8 @@ use App\Http\Controllers\UsuarioController;
     
     Route::redirect('/register', '/login');
 
+    Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
+
     //solicitud_AD
     Route::middleware('auth')->group(function () {
     /*SOLICITUDES-1*/

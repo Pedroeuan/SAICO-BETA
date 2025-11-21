@@ -454,10 +454,10 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                         [
-                            'text' => 'FOR-02-PRO-INS-02',
+                            'text' => 'FOR-PIMP-02_B/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_02_PRO_INS_02',
-                            'can' => 'equipos-access',
+                            'url' => '/Reporte/FOR_PIMP_02_B/03',
+                            'can' => '',
                         ],
                         [
                             'text' => 'FOR-01-PRO-INS-03',
