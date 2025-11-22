@@ -602,7 +602,8 @@
 
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-
+                                                            <!-- Checkbox para "Imagen en una hoja" -->
+                                                            <div class="form-check mt-2"><input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja_existente_{{ $index }}" value="{{ $index }}"{{ $foto['imagen_hoja'] == 1 ? 'checked' : '' }}><label class="form-check-label" for="imagenHoja_existente_{{ $index }}">Imagen en una hoja</label> </div>
                                                             <!-- Campo para el comentario -->
                                                             <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 

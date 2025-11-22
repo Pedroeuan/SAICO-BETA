@@ -195,6 +195,14 @@
                     <div class="form-group">
                         <label for="image${index}">Imagen por Subir ${index}:</label>
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
+
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${index}" value="${index}">
+                            <label class="form-check-label" for="imagenHoja${index}">
+                                Imagen en una hoja
+                            </label>
+                        </div>
+                        
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
