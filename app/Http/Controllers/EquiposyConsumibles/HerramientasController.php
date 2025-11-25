@@ -411,8 +411,7 @@ class HerramientasController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-        if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
-        strcasecmp(trim($SerF), trim($SerBD)) == 0)
+    if (strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
         {
 
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');

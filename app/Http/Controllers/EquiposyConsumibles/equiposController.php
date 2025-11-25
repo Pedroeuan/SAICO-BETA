@@ -369,8 +369,7 @@ class equiposController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-        if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
-        strcasecmp(trim($SerF), trim($SerBD)) == 0)
+        if (strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
         {
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
