@@ -369,7 +369,38 @@ class FOR_01_PRO_INS_08Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+        // Lógica para manejar el campo Contrato
+        if ($request->TieneContrato === "no") {
 
+            // Si el usuario alteró el valor o no llegó, se recalcula en backend
+            $actual = $request->Detalles_Generales['Contrato'] ?? null;
+
+            // Verificar que realmente tenga el formato correcto
+            if (!$actual || !preg_match('/^AICO-INT-\d{4}$/', $actual)) {
+
+                // Seguridad: volver a calcular el consecutivo
+                $registros = reporte::orderBy('idReportes', 'DESC')->get();
+                $ultimoNumero = 0;
+
+                foreach ($registros as $r) {
+                    $json = json_decode($r->Detalles_Generales, true);
+
+                    if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+                        $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+                        if ($n > $ultimoNumero) $ultimoNumero = $n;
+                        break;
+                    }
+                }
+
+                $nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);
+
+                $validatedData['Detalles_Generales']['Contrato'] = $nuevo;
+
+            } else {
+                // Si el frontend envió un contrato válido, se utiliza ese
+                $validatedData['Detalles_Generales']['Contrato'] = $actual;
+            }
+        }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
