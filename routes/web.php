@@ -64,9 +64,9 @@ use App\Http\Controllers\UsuarioController;
 
     Auth::routes();
 
-    Route::redirect('/', '/login');
+    Route::redirect('/', '/dashboard');
     
-    Route::redirect('/register', '/login');
+    Route::redirect('/register', '/dashboard');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {

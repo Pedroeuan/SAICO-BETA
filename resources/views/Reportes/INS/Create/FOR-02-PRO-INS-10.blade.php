@@ -113,10 +113,33 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
+                                            <label class="col-form-label">
+                                                Contrato
+
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneContrato" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm @error('Contrato') is-invalid @enderror"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required   <!-- IMPORTANTE: inicia siendo obligatorio -->
+
+                                            <!-- CAMPO OCULTO PARA EL NÚMERO INTERNO -->
+                                            <input type="hidden" id="numeroInterno" name="Detalles_Generales[NumeroInterno]">
+
                                             @error('Contrato')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>

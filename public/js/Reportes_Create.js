@@ -1,3 +1,38 @@
+    /*check del contrato, si y no */
+    document.addEventListener("DOMContentLoaded", function () {
+        const radios = document.getElementsByName("TieneContrato");
+        const campoContrato = document.getElementById("campoContrato");
+        const numeroInterno = document.getElementById("numeroInterno");
+
+        // Estado inicial: "Sí" preseleccionado → Campo habilitado y requerido
+        campoContrato.disabled = false;
+        campoContrato.required = true;
+
+        radios.forEach(radio => {
+            radio.addEventListener("change", function () {
+                if (this.value === "si") {
+
+                    campoContrato.disabled = false;
+                    campoContrato.required = true;
+                    numeroInterno.value = ""; // Se borra el número interno
+
+                } else {
+
+                    campoContrato.disabled = true;
+                    campoContrato.required = false;
+                    campoContrato.value = ""; // Limpia el campo
+
+                    // Genera número interno automáticamente
+                    numeroInterno.value = generarNumeroInterno();
+                }
+            });
+        });
+
+        function generarNumeroInterno() {
+            // Ejemplo: número interno tipo "INT-XXXXX"
+            return "INT-" + Math.floor(Math.random() * 90000 + 10000);
+        }
+    });
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
