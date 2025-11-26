@@ -123,7 +123,42 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
     }
+    
+    public function obtenerSiguienteContratoInterno()
+    {
+    // Obtener TODOS los registros asegurando el orden correcto
+        $registros = reporte::orderBy('idReportes', 'DESC')->get();
 
+        $ultimoNumero = 0;
+
+        foreach ($registros as $r) {
+
+            // Decodificar JSON de la columna
+            $json = json_decode($r->Detalles_Generales, true);
+
+            if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+
+                // Extraer el número final
+                $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+
+                if ($n > $ultimoNumero) {
+                    $ultimoNumero = $n;
+                }
+
+                break; // Ya encontramos el más reciente
+            }
+        }
+
+        // Nuevo número consecutivo
+        $nuevoNumero = $ultimoNumero + 1;
+
+        // Crear contrato con padding de 4 dígitos
+        $siguiente = "AICO-INT-" . str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+
+        return response()->json([
+            'siguiente' => $siguiente
+        ]);
+    }
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {

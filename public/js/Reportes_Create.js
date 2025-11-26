@@ -1,37 +1,53 @@
     /*check del contrato, si y no */
     document.addEventListener("DOMContentLoaded", function () {
+
         const radios = document.getElementsByName("TieneContrato");
         const campoContrato = document.getElementById("campoContrato");
+        const contratoInternoHidden = document.getElementById("contratoInternoHidden");
+
+        const textoInterno = document.getElementById("contratoInternoTexto");
         const numeroInterno = document.getElementById("numeroInterno");
 
-        // Estado inicial: "Sí" preseleccionado → Campo habilitado y requerido
-        campoContrato.disabled = false;
-        campoContrato.required = true;
-
         radios.forEach(radio => {
-            radio.addEventListener("change", function () {
-                if (this.value === "si") {
+            radio.addEventListener("change", async function () {
 
+                if (this.value === "si") {
                     campoContrato.disabled = false;
                     campoContrato.required = true;
-                    numeroInterno.value = ""; // Se borra el número interno
 
-                } else {
+                    // Limpiar contrato interno
+                    textoInterno.style.display = "none";
+                    numeroInterno.textContent = "";
+                    contratoInternoHidden.value = "";
+                    return;
+                }
+
+                if (this.value === "no") {
 
                     campoContrato.disabled = true;
                     campoContrato.required = false;
-                    campoContrato.value = ""; // Limpia el campo
+                    campoContrato.value = "";
 
-                    // Genera número interno automáticamente
-                    numeroInterno.value = generarNumeroInterno();
+                    try {
+                        const response = await fetch('/api/siguiente-contrato-interno');
+                        const data = await response.json();
+
+                        const nuevoContrato = data.siguiente;
+                        console.log("Contrato interno generado:", nuevoContrato);
+
+                        // Mostrarlo al usuario
+                        textoInterno.style.display = "block";
+                        numeroInterno.textContent = nuevoContrato;
+
+                        // Guardarlo para enviarlo al backend
+                        contratoInternoHidden.value = nuevoContrato;
+
+                    } catch (error) {
+                        console.error("Error al obtener el contrato interno:", error);
+                    }
                 }
             });
         });
-
-        function generarNumeroInterno() {
-            // Ejemplo: número interno tipo "INT-XXXXX"
-            return "INT-" + Math.floor(Math.random() * 90000 + 10000);
-        }
     });
 
     /*Prevenir el Enter*/

@@ -126,21 +126,16 @@
                                                 </span>
                                             </label>
 
-                                            <input
-                                                type="text"
-                                                id="campoContrato"
-                                                class="form-control inputForm @error('Contrato') is-invalid @enderror"
-                                                name="Detalles_Generales[Contrato]"
-                                                placeholder="Ejemplo: 640853841"
-                                                value="{{ old('Detalles_Generales.Contrato') }}"
-                                                required   <!-- IMPORTANTE: inicia siendo obligatorio -->
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
 
-                                            <!-- CAMPO OCULTO PARA EL NÚMERO INTERNO -->
-                                            <input type="hidden" id="numeroInterno" name="Detalles_Generales[NumeroInterno]">
+                                            <!-- Input oculto donde guardaremos el contrato interno -->
+                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
 
-                                            @error('Contrato')
-                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                            <!-- Texto para mostrar contrato interno -->
+                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
+                                                Contrato interno asignado: <b id="numeroInterno"></b>
+                                            </small>
                                         </div>
                                     </div>
 

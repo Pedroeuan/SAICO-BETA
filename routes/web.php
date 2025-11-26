@@ -178,6 +178,9 @@ use App\Http\Controllers\UsuarioController;
         /*Ruta del botón del eliminar del index de indexINS2 */
         Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
 
+        /*API para obtener el siguiente contrato interno*/
+        Route::get('/api/siguiente-contrato-interno', [ReporteController::class, 'obtenerSiguienteContratoInterno']);
+
         /*Ruta de Guardado Reportes/INS*/
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_03*/
         Route::post('/Reportes_FOR_01_PRO_INS_03/store', [FOR_01_PRO_INS_03Controller::class, 'FOR_01_PRO_INS_03_store'])->name('Reportes_FOR_01_PRO_INS_03.store');
