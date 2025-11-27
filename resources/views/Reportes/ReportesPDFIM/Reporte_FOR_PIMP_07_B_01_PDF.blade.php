@@ -79,7 +79,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE RELEVADO DE ESFUERZOS</th>
+                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE RELEVADO DE ESFUERZOS / RELIEVED OF STRESS INFORM</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -147,67 +147,45 @@
     </tr>
 
     <tr>
-        <th>NOMBRE DE LA PIEZA:</th>
+        <th>ELEMENTOS SOLDADOS:</th>
         <td class="lineaInferior"></td>
         <th>MATERIAL:</th>
         <td class="lineaInferior"></td>
     </tr>
 
     <tr>
-        <th>PROCEDIMIENTO:</th>
+        <th>No. JUNTA:</th>
         <td class="lineaInferior"></td>
         <th>TRAZABILIDAD:</th>
         <td class="lineaInferior"></td>
+        <th>ESPESORES:</th>
+        <td class="lineaInferior"></td>
     </tr>
         <tr>
-        <th>ACCESORIO:</th>
+        <th>PROCEDIMIENTO:</th>
         <td class="lineaInferior"></td>
-        <th>TUBERÍA:</th>
+        <th>CÓDIGO DE DISEÑO:</th>
         <td class="lineaInferior"></td>
-        <th>ESTRCUTURAL:</th>
+        <th>DIÁM. NOMINAL:</th>
+        <td class="lineaInferior"></td>
+    </tr>
+    <tr>
+        <th>REPORTE DE DUREZA ANTES DEL RELEVADO:</th>
+        <td class="lineaInferior"></td>
+        <th>REPORTE DE DUREZA DESPUÉS DEL RELEVADO:</th>
         <td class="lineaInferior"></td>
     </tr>
 </table>
 
 <br>
 
-<!-- DATOS DE LA PRUEBA -->
-<table>
-    <tr>
-        <th class="titulo" colspan="8">ANÁLISIS METALOGRÁFICO</th>
-    </tr>
+                <div style="margin-bottom: 4px;"></div>
 
-    <tr class="encabezado">
-        <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
-        <th colspan="2">MATERIAL PARA EL PULIDO</th>
-        <th colspan="2">DATOS DE ATAQUE QUÍMICO</th>
-        <th rowspan="2">FASES PRESENTES</th>
-        <th rowspan="2">ESPECIFICACIÓN APROXIMADA DEL MATERIAL</th>
-    </tr>
+                <table class="datosgenerales">
 
-    <tr class="encabezado">
-        <th>240</th>
-        <th>320</th>
-        <th>400</th>
-        <th>PAÑO</th>
-        <th>ABRASIVO</th>
-        <th>REACTIVO</th>
-        <th>TIEMPO</th>
-    </tr>
-
-    <tr>
-        <td>500</td>
-        <td>1000</td>
-        <td>1500</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-
-</table>
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>   
 
 </body>
 </html>
