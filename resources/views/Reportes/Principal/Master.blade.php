@@ -49,6 +49,7 @@
 @endsection
 
 @section('content')
+    /*PND*/
     @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
@@ -99,8 +100,10 @@
         @include('Reportes.INS.Create.FOR-02-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-03-PRO-INS-15')
+    /*IM*/
+    @elseif($Nombre_Formato == 'FOR-PIMP-07/01') 
+        @include('Reportes.IM.Create.FOR-PIMP-07_01')
     @endif
-
 @stop
 
 
