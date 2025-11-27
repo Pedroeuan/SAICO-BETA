@@ -101,8 +101,8 @@
     @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15') 
         @include('Reportes.INS.Create.FOR-03-PRO-INS-15')
     /*IM*/
-    @elseif($Nombre_Formato == 'FOR-PIMP-07/01') 
-        @include('Reportes.IM.Create.FOR-PIMP-07_01')
+    @elseif($Nombre_Formato == 'FOR-PIMP-07_B/01') 
+        @include('Reportes.IM.Create.FOR-PIMP-07_B_01')
     @endif
 @stop
 
