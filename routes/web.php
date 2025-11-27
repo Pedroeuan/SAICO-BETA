@@ -70,6 +70,7 @@ use App\Http\Controllers\UsuarioController;
 
     Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
     Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Reporte_FOR_PIMP_02_B_04.PDF');
+    Route::get('Reporte/FOR_PIMP_03/01', [ReporteController::class, 'FOR_PIMP_03_01'])->name('Reporte_FOR_PIMP_03_01.PDF');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {
