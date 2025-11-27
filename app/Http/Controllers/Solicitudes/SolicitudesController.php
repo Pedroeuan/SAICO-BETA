@@ -38,10 +38,15 @@ class SolicitudesController extends Controller
         {
             $nombreLimpio = Str::ascii(strtolower($Nombre)); // quita acentos y convierte a minúsculas
 
-            $Solicitudes = Solicitudes::whereRaw("
-                LOWER(REPLACE(REPLACE(REPLACE(REPLACE(tecnico, 'Ing.', ''), 'ing.', ''), 'Ing ', ''), 'ing ', ''))
-                LIKE ?
-            ", ['%' . $nombreLimpio . '%'])->get();
+            $Solicitudes = Solicitudes::get()->filter(function ($sol) use ($nombreLimpio) {
+                
+                $tecnico = strtolower(Str::ascii($sol->tecnico));
+
+                // SOLO elimina "ing" como palabra independiente
+                $tecnico = preg_replace('/^ing\\.?\\s+/i', '', $tecnico);
+
+                return str_contains($tecnico, $nombreLimpio);
+            });
         }
         else
         {

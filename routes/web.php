@@ -64,9 +64,9 @@ use App\Http\Controllers\UsuarioController;
 
     Auth::routes();
 
-    Route::redirect('/', '/login');
+    Route::redirect('/', '/dashboard');
     
-    Route::redirect('/register', '/login');
+    Route::redirect('/register', '/dashboard');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {
@@ -177,6 +177,9 @@ use App\Http\Controllers\UsuarioController;
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta del botón del eliminar del index de indexINS2 */
         Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
+
+        /*API para obtener el siguiente contrato interno*/
+        Route::get('/api/siguiente-contrato-interno', [ReporteController::class, 'obtenerSiguienteContratoInterno']);
 
         /*Ruta de Guardado Reportes/INS*/
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_03*/
