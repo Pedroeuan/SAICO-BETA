@@ -375,18 +375,18 @@
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">TRANSDUCTOR</div>
 
-                                    <!-- Select para Accesorios -->
+                                    <!-- Select para Equipos -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
-                                            <option value="" selected disabled>Seleccione un Accesorio</option>
-                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
-                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
-                                                            data-marca="{{ $accesorios->Marca }}"
-                                                            data-modelo="{{ $accesorios->Modelo }}"
-                                                            data-ns="{{ $accesorios->Serie }}">
-                                                        {{ $accesorios->Nombre_E_P_BP }}
+                                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect2">
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                    <option value="{{ $equipo->idGeneral_EyC }}"
+                                                            data-marca2="{{ $equipo->Marca }}"
+                                                            data-modelo2="{{ $equipo->Modelo }}"
+                                                            data-ns2="{{ $equipo->Serie }}">
+                                                        {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -403,21 +403,21 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
                                         </div>
                                     </div>
 
