@@ -1159,8 +1159,26 @@
 
 
     /*Selects */
+    document.getElementById('equiposSelect').addEventListener('change', function () {
+        const option = this.options[this.selectedIndex];
+
+        // Obtener los atributos data-*
+        let marca = option.getAttribute('data-marca') || '';
+        let modelo = option.getAttribute('data-modelo') || '';
+        let serie = option.getAttribute('data-ns') || '';
+
+        // Tomar solo el primer valor antes de la coma
+        marca = marca.split(',')[0].trim();  
+        modelo = modelo.split(',')[0].trim();
+        serie = serie.split(',')[0].trim();
+
+        // Enviar esos valores a tus inputs
+        document.getElementById('marcaInputE').value = marca;
+        document.getElementById('modeloInputE').value = modelo;
+        document.getElementById('nsInputE').value = serie;
+    });
     $(document).ready(function() {
-        function actualizarInputsE() {
+        /*function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
@@ -1180,7 +1198,7 @@
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
-            });
+            });*/
 
             function actualizarInputsA() {
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
@@ -1227,29 +1245,29 @@
             });
         });
 
-    /*FOR-02-PRO-INS-10*/
+    /*FOR-PIMP-07_B/01*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-02-PRO-INS-10');
+        const form = document.getElementById('FOR-PIMP-07_B/01');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+            //    localStorage.setItem('FOR-PIMP-07_B/01_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+                localStorage.setItem('FOR-PIMP-07_B/01_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-02-PRO-INS-10_' + el.name);
+                const value = localStorage.getItem('FOR-PIMP-07_B/01_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -1257,7 +1275,7 @@
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-02-PRO-INS-10_' + el.name);
+                localStorage.removeItem('FOR-PIMP-07_B/01_' + el.name);
                 //localStorage.clear();
             });
         });
