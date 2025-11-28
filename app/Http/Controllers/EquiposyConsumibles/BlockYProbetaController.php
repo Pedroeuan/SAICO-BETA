@@ -585,6 +585,8 @@ class BlockYProbetaController extends Controller
 
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'BLOCK Y PROBETA')
+            ->where('idGeneral_EyC', '!=', $id)
+            ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
 
             $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();

@@ -533,6 +533,8 @@ class equiposController extends Controller
              // Verifica si el número económico ya existe (compara el número limpio)
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'EQUIPOS')
+            ->where('idGeneral_EyC', '!=', $id)
+            ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
 
             $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
