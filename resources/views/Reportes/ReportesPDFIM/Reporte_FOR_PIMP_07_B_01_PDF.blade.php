@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOR-PIMP-02_B/03</title>
+    <title>FOR-PIMP-07_B/01</title>
 
     <style>
         @page {
@@ -181,11 +181,191 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
-                <table class="datosgenerales">
+                <table class="datosinspeccion">
 
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>   
+                        <tr><th colspan="7">DATOS DE LA INSPECCIÓN</th></tr>
+                    </thead>  
 
+                    <thead><tr class="sinBordeth"><th colspan="7"></th></tr></thead> <!-- Fila vacia -->
+
+                        <tbody>
+                            <tr class="celdaGris">
+                                <th style="width: 60px;">EQUIPO</th>
+                                <th style="width: 100px;">MARCA</th>
+                                <th style="width: 100px;">MODELO</th>
+                                <th style="width: 100px;">No. SERIE</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris">MAQUINA DE RELEVADO:</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris">REMOVEDOR:</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris">REVELEADOR:</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                        </tbody>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="datosinspeccionsinborde">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10%;">TIPO DE LUZ:</th>
+                            <td class="lineaInferior"></td>
+                            <th style="width: 10%;">INTENCIDAD:</th>
+                            <td class="lineaInferior"></th>
+                            <th style="width: 10%;">CONDICIÓN SUPERFICIAL:</th>
+                            <td class="lineaInferior"></td>
+                            <th style="width: 10%;">TEMPERATURA DE PRUEBA:</th>
+                            <td class="lineaInferior"></td> 
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 4px;"></div>
+            </header>
+
+            <footer>
+                    <table class="simbologia">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 20px;" class="celdaGris"><strong>NPIR</strong></td>
+                                <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                <td style="width: 20px;" class="celdaGris"><strong>DM</strong></td>
+                                <td style="width: 150px;">DAÑO MECÁNICO</td>
+                                <td style="width: 20px;" class="celdaGris"><strong>PT</strong></td>
+                                <td style="width: 180px;">POROSIDAD TUBULAR</td>
+                            </tr>
+
+                            <tr>
+                                <td class="celdaGris"><strong>G</strong></td>
+                                <td>GRIETA</td>
+                                <td class="celdaGris"><strong>S</strong></td>
+                                <td>SOCAVADO</td>
+                                <td class="celdaGris"><strong>C</strong></td>
+                                <td>CRATER</td>
+                            </tr>
+
+                            <tr>
+                                <td class="celdaGris"><strong>ZG</strong></td>
+                                <td>ZONA DE GRIETAS</td>
+                                <td class="celdaGris"><strong>P</strong></td>
+                                <td>POROSIDAD</td>
+                                <td class="celdaGris"><strong>IL</strong></td>
+                                <td>INDICACIÓN LINEAL</td>
+                            </tr>
+
+                            <tr>
+                                <td class="celdaGris"><strong>FF</strong></td>
+                                <td>FALTA DE FUSIÓN</td>
+                                <td class="celdaGris"><strong>ZP</strong></td>
+                                <td>ZONA DE POROS</td>
+                                <td class="celdaGris"><strong>IR</strong></td>
+                                <td>INDICACIÓN REDONDEADA</td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <br>
+
+                    <table class="datosgenerales">                               
+                        <tr>                                     
+                            <th>OBSERVACIONES:</th>                   
+                            <td class="lineaInferior" style="width: 606.5px;"></td>                            
+                        </tr>                      
+                    </table>
+
+                    <br>
+
+
+                            <!-- 4 Firmas -->
+                                <tr>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <th></th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+                            @endif
+                        </thead>                            
+                    </table>
+            </footer>
 </body>
 </html>
