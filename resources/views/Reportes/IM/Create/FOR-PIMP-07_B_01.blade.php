@@ -375,18 +375,18 @@
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">TRANSDUCTOR</div>
 
-                                    <!-- Select para Accesorios -->
+                                    <!-- Select para Equipos -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
-                                            <option value="" selected disabled>Seleccione un Accesorio</option>
-                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
-                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
-                                                            data-marca="{{ $accesorios->Marca }}"
-                                                            data-modelo="{{ $accesorios->Modelo }}"
-                                                            data-ns="{{ $accesorios->Serie }}">
-                                                        {{ $accesorios->Nombre_E_P_BP }}
+                                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                    <option value="{{ $equipo->idGeneral_EyC }}"
+                                                            data-marca2="{{ $equipo->Marca }}"
+                                                            data-modelo2="{{ $equipo->Modelo }}"
+                                                            data-ns2="{{ $equipo->Serie }}">
+                                                        {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -399,32 +399,25 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-3">
+                                    
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.FREC_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -1160,20 +1153,43 @@
 
     /*Selects */
     $(document).ready(function() {
+
         function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
+            document.getElementById('equiposSelect').addEventListener('change', function () {
+                const option = this.options[this.selectedIndex];
 
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
+                // Obtener los valores data-*
+                let marca = option.getAttribute('data-marca') || '';
+                let modelo = option.getAttribute('data-modelo') || '';
+                let serie = option.getAttribute('data-ns') || '';
 
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
+                // Dividir en partes
+                let marcaPartes = marca.split(',').map(p => p.trim());
+                let modeloPartes = modelo.split(',').map(p => p.trim());
+                let seriePartes = serie.split(',').map(p => p.trim());
+
+                // Ejemplo: obtener PARTE 1
+                let marcaP1 = marcaPartes[0] || '';
+                let modeloP1 = modeloPartes[0] || '';
+                let serieP1 = seriePartes[0] || '';
+
+                // Ejemplo: obtener PARTE 2
+                let marcaP2 = marcaPartes[1] || '';
+                let modeloP2 = modeloPartes[1] || '';
+                let serieP2 = seriePartes[1] || '';
+
+                // Colocar en los inputs el que necesites
+                document.getElementById('marcaInputE').value = marcaP1;  // Primera parte
+                document.getElementById('marcaInputE2').value = marcaP2; // Segunda parte
+
+                document.getElementById('modeloInputE').value = modeloP1;  
+                document.getElementById('modeloInputE2').value = modeloP2;
+
+                document.getElementById('serieInputE').value = serieP1;
+                document.getElementById('serieInputE2').value = serieP2;
+            });
+
         }
-
         const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
         selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
@@ -1182,50 +1198,7 @@
                 actualizarInputsE();
             });
 
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-
-            const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
-            selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
-
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
-            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-        });
+    });
 
     /*FOR-02-PRO-INS-10*/
     document.addEventListener('DOMContentLoaded', function () {
