@@ -354,7 +354,7 @@ class AccesoriosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function updateAccesorios(Request $request, $id)
+ public function updateAccesorios(Request $request, $id)
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
