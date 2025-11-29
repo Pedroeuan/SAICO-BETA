@@ -371,7 +371,7 @@ class equiposController extends Controller
 
         if (strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
         {
-        // Limpia y normaliza el número económico
+            // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
             
