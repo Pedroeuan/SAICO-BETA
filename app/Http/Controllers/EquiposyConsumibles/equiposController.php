@@ -418,8 +418,7 @@ class equiposController extends Controller
             if ($disponibilidadEstado == 'Elige un Tipo') {
                 $disponibilidadEstado = $EsperaDato;
             }
-
-
+        }
             // Actualizar los datos del equipo
             $generalEyC ->update([
                 'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -468,6 +467,7 @@ class equiposController extends Controller
                 $generalEyC->Factura = $pdfPath;
                 $generalEyC->save();
             }
+
             // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
@@ -562,7 +562,7 @@ class equiposController extends Controller
                     $CertificadosHistorialCertificados->save();
                     }
                 }
-        }
+
             return redirect()->route('inventario');
     }
 

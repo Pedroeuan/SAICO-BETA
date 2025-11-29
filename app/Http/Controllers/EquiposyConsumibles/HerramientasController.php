@@ -454,7 +454,7 @@ class HerramientasController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-
+        }
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
@@ -634,8 +634,7 @@ class HerramientasController extends Controller
                 $generalConHerramientas->Plano = $PlanoPath;
                 $generalConHerramientas->save();
                 }
-            }
-
+                
         return redirect()->route('inventario');
     }
     

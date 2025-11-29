@@ -384,12 +384,11 @@ class AccesoriosController extends Controller
                 'Serie' => 'La Serie ya existe en la base de datos.',
             ])->withInput();
         }
-        
+    }
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
         }
-
 
         // Actualizar los datos del equipo
         $generalEyC ->update([
@@ -514,8 +513,7 @@ class AccesoriosController extends Controller
         $generalConAlmacen->update([
             'Stock' => $request->input('Stock'),
         ]);
-    }
-    
+        
         return redirect()->route('inventario');
     }
     /**

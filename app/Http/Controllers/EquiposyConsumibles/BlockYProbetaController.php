@@ -389,7 +389,7 @@ class BlockYProbetaController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-    if (strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
+        if (strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
         {
         // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
@@ -430,7 +430,7 @@ class BlockYProbetaController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-        
+        }
         // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
         $disponibilidadEstado = $request->input('Disponibilidad_Estado');
         if ($disponibilidadEstado == 'Elige un Tipo') {
@@ -612,7 +612,6 @@ class BlockYProbetaController extends Controller
                 $CertificadosHistorialCertificados->save();
                 }
             }
-        }
 
         return redirect()->route('inventario');
     }
