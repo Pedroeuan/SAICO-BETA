@@ -21,6 +21,7 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -61,6 +62,7 @@ class general_eycController extends Controller
 
     public function editEyC($id)
     {
+        $rol = Auth::user()->rol;
         $generalEyC = general_eyc::findOrFail($id);
         /*devuelven los datos de la tabla a la que estan ligados */
         $generalConEquipos = equipos::where('idGeneral_EyC', $id)->first();
@@ -72,7 +74,7 @@ class general_eycController extends Controller
         $generalConHerramientas = herramientas::where('idGeneral_EyC', $id)->first();
         $CertificadosHistorialCertificados = historial_certificado::where('idGeneral_EyC', $id)->first();
         // Retornar la vista con los datos obtenidos
-        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados'));
+        return view('Equipos.edit', compact('id','generalEyC', 'generalConEquipos','generalConCertificados', 'generalConConsumibles','generalConAlmacen','generalConAccesorios','generalConBlocks','generalConHerramientas','CertificadosHistorialCertificados','rol'));
     }
 
     public function BajaEyC($id)
