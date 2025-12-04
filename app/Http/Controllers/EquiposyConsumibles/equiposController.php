@@ -348,7 +348,7 @@ class equiposController extends Controller
     }
 
     /*Update Equipos*/
-    public function updateEquipos(Request $request, $id)
+    public function updateEquipos(Request $request, $id)// Actualizar los datos del equipo
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
@@ -413,12 +413,13 @@ class equiposController extends Controller
                 ])->withInput();
             }
             //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
+        }
+        
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
             if ($disponibilidadEstado == 'Elige un Tipo') {
                 $disponibilidadEstado = $EsperaDato;
             }
-        }
             // Actualizar los datos del equipo
             $generalEyC ->update([
                 'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
