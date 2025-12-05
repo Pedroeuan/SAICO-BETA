@@ -204,18 +204,18 @@
         <!-- IZQUIERDA -->
         <td width="70%" valign="top">
 
-<table class="datosinspeccion" style="margin-bottom: 25px;">
-    <tr class="encabezadoAzul">
-        <th colspan="5">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)</th>
-    </tr>
+            <table class="datosinspeccion" style="margin-bottom: 25px;">
+                <tr class="encabezadoAzul">
+                        <th colspan="5">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)</th>
+                            </tr>
 
-    <tr>
-        <td height="25px"></td><td></td><td></td><td></td><td></td>
-    </tr>
-    <tr>
-        <td height="25px"></td><td></td><td></td><td></td><td></td>
-    </tr>
-</table>
+                                <tr>
+                                        <td height="25px"></td><td></td><td></td><td></td><td></td>
+                                            </tr>
+                                                <tr>
+                                                        <td height="25px"></td><td></td><td></td><td></td><td></td>
+                                                            </tr>
+                                                            </table>
 
 
             <table border="1" width="100%" style="border-collapse: collapse;">

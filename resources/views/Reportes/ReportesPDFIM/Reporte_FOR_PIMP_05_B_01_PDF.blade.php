@@ -10,19 +10,20 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding-bottom: 60px;
+            font-family: Arial, sans-serif;
         }
 
+        /* ----------------- CABECERA ----------------- */
         header, footer {
             width: 100%;
             text-align: center;
         }
 
         .tablaheader {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
             text-align: center;
             font-size: 10px;
         }
@@ -31,17 +32,23 @@
             border: 1px solid black;
         }
 
+        /* ----------------- COLORES ----------------- */
         .encabezadoAzul {
-            text-align: center;
             background-color: #305496;
             color: #fff;
+            text-align: center;
             font-size: 8px;
         }
 
+        .celdaGris {
+            background-color: #DBDBDB;
+        }
+
+        /* ----------------- TABLAS GENERALES ----------------- */
         .datosgenerales,
         .datosinspeccion {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
             font-size: 8px;
         }
 
@@ -51,74 +58,20 @@
             padding: 3px;
         }
 
-        .celdaGris {
-            background-color: #DBDBDB;
-        }
-
         .lineaInferior {
             border-bottom: 1px solid black;
         }
 
-        /* Ajuste para hacer las últimas tablas más pequeñas */
+        /* ----------------- TABLAS DE FIRMAS ----------------- */
         .tabla-firmas {
             width: 90%;
             margin: auto;
             font-size: 8px;
+            border-collapse: collapse;
         }
 
         .tabla-firmas td {
             padding: 2px;
-        }
-
-        /* ESTILO EDITADO PARA REDUCIR AMBAS TABLAS */
-        .contenedor-tabla {
-            width: 100%;
-            border: 1px solid #000;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .titulo-azul {
-            background: #305496;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 4px;
-            font-size: 12px;
-        }
-
-        .subtitulo {
-            text-align: center;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .tabla-interna {
-            width: 48%;
-            border-collapse: collapse;
-            font-size: 8px;     /* REDUCIDO */
-        }
-
-        .tabla-interna th,
-        .tabla-interna td {
-            border: 1px solid black;
-            padding: 2px;       /* REDUCIDO */
-            text-align: left;
-        }
-
-        .tabla-right-container {
-            width: 48%;
-            float: right;
-        }
-
-        .tabla-left-container {
-            width: 48%;
-            float: left;
-        }
-
-        .clearfix {
-            clear: both;
         }
     </style>
 </head>
@@ -136,11 +89,16 @@
                     <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
                 </th>
             </tr>
+
             <tr>
-                <th rowspan="2">Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES) Chemical Analysis Report Using the Optical Emission Spectrometry Technique</th>
+                <th rowspan="2">
+                    Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
+                    Chemical Analysis Report Using the Optical Emission Spectrometry Technique
+                </th>
                 <th>Versión</th>
                 <th>2</th>
             </tr>
+
             <tr>
                 <th>Página</th>
                 <th></th>
@@ -151,6 +109,7 @@
 
 <br>
 
+<!-- DATOS GENERALES -->
 <table class="datosgenerales">
     <thead class="encabezadoAzul">
         <tr><th colspan="4">DATOS GENERALES</th></tr>
@@ -163,52 +122,62 @@
             <th style="width: 15%;">NO. REPORTE:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>CLIENTE:</th>
             <td class="lineaInferior"></td>
             <th>CONTRATO:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>PROYECTO:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
+
         <tr>
             <th>ORDEN DE TRABAJO:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
+
         <tr>
             <th>FOLIO:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
+
         <tr>
             <th>PARTIDA:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
+
         <tr>
             <th>INSTALACIÓN:</th>
             <td class="lineaInferior"></td>
             <th>No. ISOMÉTRICO:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>NOMBRE DE LA PIEZA:</th>
             <td class="lineaInferior"></td>
             <th>MATERIAL:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>TRAZABILIDAD:</th>
             <td class="lineaInferior"></td>
             <th>PROCEDIMIENTO:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>CRITERIO DE EVALUACIÓN:</th>
             <td class="lineaInferior"></td>
             <th>ACCESORIO:</th>
             <td class="lineaInferior"></td>
         </tr>
+
         <tr>
             <th>TUBERÍA:</th>
             <td class="lineaInferior"></td>
@@ -220,6 +189,7 @@
 
 <br>
 
+<!-- DATOS DEL EQUIPO -->
 <table class="datosinspeccion">
     <tr class="encabezadoAzul">
         <th colspan="6">DATOS DEL EQUIPO</th>
@@ -237,82 +207,44 @@
 
 <br>
 
-<table class="contenedor-tabla">
-
+<!-- TABLA QUÍMICA IZQUIERDA + FOTO DERECHA -->
+<table width="100%" style="border-collapse: collapse;">
     <tr>
-        <th colspan="2" class="titulo-azul">
-            COMPOSICIÓN QUÍMICA DE LA PIEZA<br>
-            <span style="font-size: 10px; font-weight: normal;">
-                Chemical Composition of the Piece
-            </span>
-        </th>
-    </tr>
 
-    <tr>
-        <td style="padding: 10px;">
+        <!-- IZQUIERDA -->
+        <td width="70%" valign="top">
 
-            <div class="tabla-left-container">
-                <table class="tabla-interna">
+            <!-- TABLA DE COMPOSICIÓN QUÍMICA -->
+            <table class="datosinspeccion" style="font-size:8px; margin-bottom: 20px;">
+                <tr class="encabezadoAzul">
+                    <th>ELEMENTO QUÍMICO<br>Chemical Elements</th>
+                    <th>PROMEDIOS DE LA PIEZA ANALIZADA<br>Average of the analyzed Piece</th>
+                    <th>COMPOSICIÓN QUÍMICA TEÓRICA<br>Theoretical Chemical Composition</th>
+                </tr>
+
+                @foreach(['C','Si','Mn','P','S','Cr','Mo','Ni','Al','Co','Cu','Nb','Ti','V','W','Pb','Sn','Mg','As','Zr','B','Fe','N'] as $element)
                     <tr>
-                        <th>ELEMENTO QUÍMICO<br><span style="font-size:9px;">Chemical Elements</span></th>
-                        <th>PROMEDIOS DE LA PIEZA ANALIZADA<br><span style="font-size:9px;">Average of the Analyzed Piece</span></th>
-                        <th>COMPOSICIÓN QUÍMICA TEÓRICA<br><span style="font-size:9px;">Theoretical Chemical Composition</span></th>
-                    </tr>
-
-                    @php
-                        $elementos = ["C","Si","Mn","P","S","Cr","Mo","Ni","Al","Co","Cu","Nb","Ti","V","W","Pb","Sn","Mg","As","Zr","B","Fe","N"];
-                    @endphp
-
-                    @foreach($elementos as $e)
-                    <tr>
-                        <td>{{ $e }}</td>
+                        <td>{{ $element }}</td>
                         <td></td>
                         <td></td>
                     </tr>
-                    @endforeach
-                </table>
-            </div>
-
-            <div class="tabla-right-container">
-                <div class="subtitulo">
-                    ESPECIFICACIÓN APROXIMADA DEL MATERIAL<br>
-                    <span style="font-size:9px; font-weight: normal;">
-                        Reference standard or approximate material specification
-                    </span>
-                </div>
-
-                <!-- <table class="tabla-interna">
-                    <tr>
-                        <th colspan="4" style="text-align:center;">VALORES OBTENIDOS DE LA PIEZA ANALIZADA<br>
-                            <span style="font-size:9px; font-weight:normal;">Values Obtained from the Analyzed Piece</span>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <th>El.</th>
-                        <th>% Conc</th>
-                        <th>% Conc</th>
-                        <th>% Conc</th>
-                    </tr>
-
-                    @foreach($elementos as $e)
-                    <tr>
-                        <td>{{ $e }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    @endforeach
-                </table> -->
-            </div>
-
-            <div class="clearfix"></div>
+                @endforeach
+            </table>
 
         </td>
-    </tr>
 
+        <!-- DERECHA -->
+        <td width="30%" align="center" valign="top">
+            <img src="{{ asset('storage/fotos/' . ($foto ?? 'default.png')) }}"
+                width="180" style="border:1px solid #000; margin-left:10px;">
+        </td>
+
+    </tr>
 </table>
 
+<br>
+
+<!-- OBSERVACIONES -->
 <table class="datosgenerales" style="margin-top: 25px;">
     <tr>
         <th>OBSERVACIONES:</th>
@@ -320,15 +252,17 @@
     </tr>
 </table>
 
-<!-- TABLA DE FIRMAS REDUCIDA -->
+<br>
+
+<!-- TABLA DE FIRMAS -->
 <table class="tabla-firmas">
     <thead>
         <tr>
-            <td style="width: 10px;"></td><th></th>
-            <td style="width: 10px;"></td><th></th>
-            <td style="width: 10px;"></td><th></th>
-            <td style="width: 10px;"></td><th></th>
-            <td style="width: 10px;"></td>
+            <td></td><th></th>
+            <td></td><th></th>
+            <td></td><th></th>
+            <td></td><th></th>
+            <td></td>
         </tr>
 
         <tr>
@@ -348,7 +282,7 @@
         <tr>
             <th></th>
             <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-            <td></td><td></td><td></td><td></td><td></td><td></td>
+            <td colspan="6"></td>
             <th></th>
         </tr>
     </thead>
