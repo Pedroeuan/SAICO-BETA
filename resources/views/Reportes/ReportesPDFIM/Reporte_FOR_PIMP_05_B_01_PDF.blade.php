@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOR-PIMP-07_B/01</title>
+    <title>FOR-PIMP-05_B/01</title>
 
     <style>
         @page {
@@ -73,6 +73,57 @@
         .tabla-firmas td {
             padding: 2px;
         }
+
+        /* ----------------- TABLA + FOTO ----------------- */
+
+        .contenedor-flex {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px; /* separación entre tabla y foto */
+        }
+
+        .col-izq {
+            display: table-cell;
+            width: 40%;
+            vertical-align: top;
+        }
+
+        .col-der {
+            display: table-cell;
+            width: 60%;
+            vertical-align: top;
+        }
+
+        .campo-norma {
+            font-size: 8px;
+            margin-bottom: 10px;
+        }
+
+.foto {
+    text-align: center;
+    border: 1px solid black; /* borde del recuadro */
+    padding: 2px;
+    width: 150px; /* ancho más pequeño */
+    margin: auto;
+}
+
+.foto img {
+    width: 100%; /* ocupa todo el recuadro */
+    height: auto;
+    display: block;
+}
+
+
+        /* ----------------- TABLA IZQUIERDA MÁS CHICA ----------------- */
+        .tabla-quimica table td,
+        .tabla-quimica table th {
+            padding: 0px 1px !important;
+            height: 10px !important;
+            line-height: 10px !important;
+            font-size: 6.5px !important;
+        }
+
     </style>
 </head>
 
@@ -117,71 +168,71 @@
 
     <tbody>
         <tr>
-            <th style="width: 12%;">FECHA:</th>
+            <th style="width: 12%;">FECHA:<br>Date:</th>
             <td class="lineaInferior"></td>
-            <th style="width: 15%;">NO. REPORTE:</th>
-            <td class="lineaInferior"></td>
-        </tr>
-
-        <tr>
-            <th>CLIENTE:</th>
-            <td class="lineaInferior"></td>
-            <th>CONTRATO:</th>
+            <th style="width: 15%;">NO. REPORTE:<br>No.Report:</th>
             <td class="lineaInferior"></td>
         </tr>
 
         <tr>
-            <th>PROYECTO:</th>
+            <th>CLIENTE:<br>Client:</th>
+            <td class="lineaInferior"></td>
+            <th>CONTRATO:<br>No.Contract</th>
+            <td class="lineaInferior"></td>
+        </tr>
+
+        <tr>
+            <th>PROYECTO:<br>Project:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
 
         <tr>
-            <th>ORDEN DE TRABAJO:</th>
+            <th>ORDEN DE TRABAJO:<br>Work Order:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
 
         <tr>
-            <th>FOLIO:</th>
+            <th>FOLIO:<br>Folio:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
 
         <tr>
-            <th>PARTIDA:</th>
+            <th>PARTIDA:<br>Lot:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
 
         <tr>
-            <th>INSTALACIÓN:</th>
+            <th>INSTALACIÓN:<br>Location:</th>
             <td class="lineaInferior"></td>
-            <th>No. ISOMÉTRICO:</th>
-            <td class="lineaInferior"></td>
-        </tr>
-
-        <tr>
-            <th>NOMBRE DE LA PIEZA:</th>
-            <td class="lineaInferior"></td>
-            <th>MATERIAL:</th>
+            <th>No. ISOMÉTRICO:<br>No.Isometric:</th>
             <td class="lineaInferior"></td>
         </tr>
 
         <tr>
-            <th>TRAZABILIDAD:</th>
+            <th>NOMBRE DE LA PIEZA:<br>Name of the piece:</th>
             <td class="lineaInferior"></td>
-            <th>PROCEDIMIENTO:</th>
-            <td class="lineaInferior"></td>
-        </tr>
-
-        <tr>
-            <th>CRITERIO DE EVALUACIÓN:</th>
-            <td class="lineaInferior"></td>
-            <th>ACCESORIO:</th>
+            <th>MATERIAL:<br>Material:</th>
             <td class="lineaInferior"></td>
         </tr>
 
         <tr>
-            <th>TUBERÍA:</th>
+            <th>TRAZABILIDAD:<br>Traceabeility:</th>
             <td class="lineaInferior"></td>
-            <th>ESTRUCTURAL:</th>
+            <th>PROCEDIMIENTO:<br>Procedure:</th>
+            <td class="lineaInferior"></td>
+        </tr>
+
+        <tr>
+            <th>CRITERIO DE EVALUACIÓN:<br>Evaluation Criterion:</th>
+            <td class="lineaInferior"></td>
+            <th>ACCESORIO:<br>Fittings:</th>
+            <td class="lineaInferior"></td>
+        </tr>
+
+        <tr>
+            <th>TUBERÍA:<br>Piping</th>
+            <td class="lineaInferior"></td>
+            <th>ESTRUCTURAL:<br>Structural</th>
             <td class="lineaInferior"></td>
         </tr>
     </tbody>
@@ -207,40 +258,49 @@
 
 <br>
 
-<!-- TABLA QUÍMICA IZQUIERDA + FOTO DERECHA -->
-<table width="100%" style="border-collapse: collapse;">
-    <tr>
+<!-- TABLA QUÍMICA + FOTO -->
+<div class="contenedor-flex">
 
-        <!-- IZQUIERDA -->
-        <td width="70%" valign="top">
+    <!-- IZQUIERDA -->
+    <div class="col-izq tabla-quimica">
+        <table class="datosinspeccion">
+            <tr class="encabezadoAzul">
+                <th>ELEMENTO QUÍMICO<br>Chemical Elements</th>
+                <th>PROMEDIOS DE LA PIEZA ANALIZADA<br>Average of the analyzed Piece</th>
+                <th>COMPOSICIÓN QUÍMICA TEÓRICA<br>Theoretical Chemical Composition</th>
+            </tr>
 
-            <!-- TABLA DE COMPOSICIÓN QUÍMICA -->
-            <table class="datosinspeccion" style="font-size:8px; margin-bottom: 20px;">
-                <tr class="encabezadoAzul">
-                    <th>ELEMENTO QUÍMICO<br>Chemical Elements</th>
-                    <th>PROMEDIOS DE LA PIEZA ANALIZADA<br>Average of the analyzed Piece</th>
-                    <th>COMPOSICIÓN QUÍMICA TEÓRICA<br>Theoretical Chemical Composition</th>
-                </tr>
+            @foreach(['C','Si','Mn','P','S','Cr','Mo','Ni','Al','Co','Cu','Nb','Ti','V','W','Pb','Sn','Mg','As','Zr','B','Fe','N'] as $element)
+            <tr>
+                <td>{{ $element }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 
-                @foreach(['C','Si','Mn','P','S','Cr','Mo','Ni','Al','Co','Cu','Nb','Ti','V','W','Pb','Sn','Mg','As','Zr','B','Fe','N'] as $element)
-                    <tr>
-                        <td>{{ $element }}</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                @endforeach
-            </table>
+    <!-- DERECHA -->
+    <div class="col-der">
+                <div>
+                    <table class="datosgenerales">                               
+                        <tr>                                     
+                            <th>NORMA DE REFERENCIA O ESPECIFICACIÓN APROXIMADA DEL MATERIAL:<br>Reference standard or approximate material specification:</th>                   
+                            <td class="lineaInferior" style="width: 300px;"></td>                            
+                        </tr>                      
+                    </table>
+                </div>
+                <table></table>
+                <table></table>
+                <table></table>
+                <table></table>
 
-        </td>
+        <div class="foto" style="text-align:center;">
+            <img src="{{ asset('storage/fotos/' . ($foto ?? 'default.png')) }}">
+        </div>
 
-        <!-- DERECHA -->
-        <td width="30%" align="center" valign="top">
-            <img src="{{ asset('storage/fotos/' . ($foto ?? 'default.png')) }}"
-                width="180" style="border:1px solid #000; margin-left:10px;">
-        </td>
-
-    </tr>
-</table>
+    </div>
+</div>
 
 <br>
 
