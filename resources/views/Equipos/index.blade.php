@@ -108,7 +108,12 @@
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
+                                            @else <td scope="row">********</td>
                                 @endif
+                                @else
+                                {{-- 9 columnas vacías --}}
+                                <td></td><td></td><td></td><td></td><td></td>
+                                <td></td><td></td><td></td><td></td>
                             @endif 
                             @if($general_eyc->certificados)
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
@@ -120,14 +125,14 @@
                                         @else
                                             <td scope="row">N/A</td>
                                     @endif
-                                            <td scope="row"> 
+                                        <td scope="row"> 
                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
                                             <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')
                                             <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
-                                </td>
+                                        </td>
                             @endif
                             <td>
                                 <div class="btn-group">
