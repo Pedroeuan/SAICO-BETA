@@ -116,6 +116,8 @@
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
+                                            @else
+                                        <td scope="row">*******</td>
                                 @endif
                             @endif 
                             @if($general_eyc->certificados)
