@@ -168,7 +168,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
@@ -329,7 +329,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
@@ -531,7 +531,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
@@ -742,7 +742,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
@@ -909,7 +909,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
@@ -1133,7 +1133,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol != 'Administrador' || $rol != 'Super Administrador') disabled @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado" @if($rol == 'Administrador' || $rol == 'Super Administrador') @else disabled @endif>
                                                 <option selected="selected">Elige un Tipo</option>
                                                 <option value="DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'DISPONIBLE') selected="selected" @endif >DISPONIBLE</option>
                                                 <option value="NO DISPONIBLE" @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE') selected="selected" @endif >NO DISPONIBLE</option>
