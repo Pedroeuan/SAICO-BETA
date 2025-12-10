@@ -65,7 +65,7 @@ use App\Http\Controllers\UsuarioController;
     Auth::routes();
 
     Route::redirect('/', '/dashboard');
-    
+    Route::redirect('/login', '/dashboard');
     Route::redirect('/register', '/dashboard');
 
     //solicitud_AD
