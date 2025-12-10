@@ -66,6 +66,7 @@ use App\Http\Controllers\UsuarioController;
 
     Route::redirect('/', '/dashboard');
     Route::redirect('/register', '/dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {
