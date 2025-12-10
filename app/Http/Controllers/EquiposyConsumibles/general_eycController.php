@@ -55,29 +55,25 @@ class general_eycController extends Controller
          // Filtrar según el rol
         if ($rol === 'Laboratorio') {
             // Solo registros con ISO 17025
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])
                 ->whereHas('ISO', function ($query) {
                     $query->where('NombreISO', '17025');
                 })
                 ->get();
         } elseif($rol === 'Equipos') {
-        //Todos los registros
-        //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
         // Solo registros con ISO 9001
-        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])
+        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])
             ->whereHas('ISO', function ($query) {
                 $query->where('NombreISO', '9001')->where('Tipo', '!=', 'TICS');
             })
             ->get();
         }elseif($rol === 'Tics') {
-            //Todos los registros
-            //$generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
             // Solo registros con ISO 9001
             $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::where('Tipo','TICS')
                 ->get();
             }else{
              //Todos los registros
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])->get();
         }
 
         return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));

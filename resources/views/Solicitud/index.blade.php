@@ -256,6 +256,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     let table = new DataTable('#tablaJs', {
+        order: [[2, 'desc']], // 👈 ORDENAR POR FECHA
         // options
         language: {
                         "decimal": "",
@@ -352,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 </script>
 
 @endsection
