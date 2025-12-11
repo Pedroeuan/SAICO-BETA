@@ -262,8 +262,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Codigo de diseño(DESIGN CODE):</label>
-                                            <input type="text" class="form-control  inputForm @error('code_desing') is-invalid @enderror" name="Detalles_Generales[code_desing]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
-                                            @error('code_desing')
+                                            <input type="text" class="form-control  inputForm @error('Norma_cod_Criterio_Eva') is-invalid @enderror" name="Detalles_Generales[Norma_cod_Criterio_Eva]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            @error('Norma_cod_Criterio_Eva')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -725,7 +725,7 @@
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                                @for ($i = 1; $i <= 2; $i++)
+                                                @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
                                                 @endfor
                                             </select>

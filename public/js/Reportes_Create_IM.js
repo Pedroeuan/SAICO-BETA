@@ -182,43 +182,59 @@
 
         function generateImageFields(count) {
             container.innerHTML = '';
+
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
-                
+
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
 
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <div id="image${i}-preview" class="mt-2"></div>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
                 `;
+
                 container.appendChild(col);
+
+                // Después de cada 2 imágenes agregar un textarea (comentarios para ese par)
+                if (i % 2 === 0) {
+                    const pairIndex = Math.ceil(i / 2);
+                    const textareaCol = document.createElement('div');
+                    textareaCol.classList.add('col-12', 'mb-3');
+                    textareaCol.setAttribute('id', `images-comments-pair-${pairIndex}`);
+                    textareaCol.innerHTML = `
+                        <div class="form-group">
+                            <label for="images-comments-${pairIndex}">Comentarios para imágenes ${i - 1} y ${i}:</label>
+                            <textarea class="form-control images-comments" name="comments[]" id="images-comments-${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
+                        </div>
+                    `;
+                    container.appendChild(textareaCol);
+                }
             }
 
-            // Agregar eventos de eliminación a los botones
+            // Agregar eventos de eliminación a los botones: reconstruir campos para mantener consistencia
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
-                        
-                        const msgImgNoSave = document.getElementById('msgImgNoSave');
-                        if (msgImgNoSave) {
-                            msgImgNoSave.classList.remove('d-none');
-                        }
+                    let currentCount = parseInt(imageCountSelect.value, 10) || 0;
+                    if (currentCount > 0) currentCount = currentCount - 1;
+                    imageCountSelect.value = currentCount;
 
-                        // Actualizar el localStorage
-                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
-                        localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
-                    } else {
-                        alert('No se pudo encontrar el campo de imagen para eliminar.');
+                    const msgImgNoSave = document.getElementById('msgImgNoSave');
+                    if (msgImgNoSave) {
+                        msgImgNoSave.classList.remove('d-none');
                     }
+
+                    // Actualizar el localStorage
+                    const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+                    localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
+
+                    // Regenerar los campos con el nuevo conteo para mantener índices y textareas en orden
+                    generateImageFields(currentCount);
                 });
             });
 
@@ -227,7 +243,7 @@
                 input.addEventListener('change', function (e) {
                     const file = e.target.files[0];
                     if (!file) return;
-                    
+
                     if (!file.type.startsWith('image/')) {
                         alert('Por favor, sube solo imágenes.');
                         return;
