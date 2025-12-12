@@ -484,10 +484,10 @@ return [
                             'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-06',
+                            'text' => 'FOR-PIMP-06_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_06',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_06_B/01',
+                            'can' => '',
                         ],
                         [
                             'text' => 'FOR-01-PRO-INS-07',
