@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\INS;
+namespace App\Http\Controllers\Reporte\IM;
 
 use App\Http\Controllers\Controller;
 
@@ -217,112 +217,9 @@ class FOR_PIMP_07_B_01Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
+    public function FOR_PIMP_07_B_01_store(Request $request)
     {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('request completo:', $request->all());
-
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        //Log::info('***********************SIN_TITULO***********************');
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
-        //Log::info('filasSinTitulo: ', ['filasSinTitulo' => $filasSinTitulo]);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        //Log::info('numFilasSinTitulo: ', ['numFilasSinTitulo' => $numFilasSinTitulo]);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-                ];
-                //Log::info('***********************RESULTADOS_SIN_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            Log::info('***********************CON_TITULO***********************');
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = $titulo;
-            //$tituloKey = strtolower($titulo); // <- opcional, si sabes que vienen en minúsculas
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            //Log::info('***********************tituloKey***********************');
-            Log::info('tituloKey: ', ['tituloKey' => $tituloKey]);
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
-            Log::info('filas: ', ['filas' => $filas]);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
-                ];
-                //Log::info("Todos los elemento_tubo:", $request->input("elemento_tubo"));
-
-                //Log::info('***********************RESULTADOS_CON_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-            
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-    }
-
-    public function FOR_02_PRO_INS_10_store(Request $request)
-    {
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -336,61 +233,43 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Instal' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Elm_Sol' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Junta' => 'nullable|string',
+            'Detalles_Generales.Trazabi' => 'nullable|string',
+            'Detalles_Generales.Espesor' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Norma_cod_Criterio_Eva' => 'nullable|string',
+            'Detalles_Generales.Diam_Nomi' => 'nullable|string',
+            'Detalles_Generales.Ant_Rele' => 'nullable|string',
+            'Detalles_Generales.Desp_Rele' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
-            'Datos_Equipo.GANANCIA' => 'nullable|string',
-            'Datos_Equipo.RANGO' => 'nullable|string',
-            'Datos_Equipo.RECHAZO' => 'nullable|string',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string',
-            'Datos_Equipo.PINTURA' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOMR' => 'nullable|string',
+
+            'Datos_Equipo.MARCA_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOG' => 'nullable|string',
+
+            'Juntas_Grupo_Re' => 'required|array',  // Asegura que es un array
+            'Juntas_Grupo_Re.Hr_ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Cal' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_Fin_Pr' => 'nullable|string',
+            'Juntas_Grupo_Re.Temp_Sost' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Tim_Sos' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Fin_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Enfri' => 'nullable|string',
+            'Juntas_Grupo_Re.Grafica' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Grafi' => 'nullable|string',
+
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'ID' => 'nullable|array',
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -515,92 +394,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'ID' => $request->input("ID.$sinTituloKey.$i"),
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = strtolower($titulo);
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("ID.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'ID' => $request->input("ID.$tituloKey.$i"),
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
-                ];
-
-            }
-            
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-        
-        // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($validatedData['Juntas_Grupo_Re']);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
@@ -644,14 +438,14 @@ class FOR_PIMP_07_B_01Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -673,14 +467,14 @@ class FOR_PIMP_07_B_01Controller extends Controller
     }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $Lugar = $validatedData['Detalles_Generales']['Instal'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        $Pieza = $validatedData['Detalles_Generales']['Junta'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Norma_cod_Criterio_Eva'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -707,7 +501,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
+    public function FOR_PIMP_07_B_01_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
@@ -812,7 +606,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
     }
 
 
-    public function FOR_02_PRO_INS_10_update(Request $request, $id)
+    public function FOR_PIMP_07_B_01_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -1217,7 +1011,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
     }
 
 
-    public function FOR_02_INS_02($id)
+    public function FOR_PIMP_07_B_01($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();

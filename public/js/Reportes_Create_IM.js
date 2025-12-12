@@ -1,54 +1,99 @@
     /*check del contrato, si y no */
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-        const radios = document.getElementsByName("TieneContrato");
-        const campoContrato = document.getElementById("campoContrato");
-        const contratoInternoHidden = document.getElementById("contratoInternoHidden");
+            const radios = document.getElementsByName("TieneContrato");
+            const campoContrato = document.getElementById("campoContrato");
+            const contratoInternoHidden = document.getElementById("contratoInternoHidden");
 
-        const textoInterno = document.getElementById("contratoInternoTexto");
-        const numeroInterno = document.getElementById("numeroInterno");
+            const textoInterno = document.getElementById("contratoInternoTexto");
+            const numeroInterno = document.getElementById("numeroInterno");
 
-        radios.forEach(radio => {
-            radio.addEventListener("change", async function () {
+            // clave por formulario para localStorage
+            const formId_forContrato = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+            const keyTiene = formId_forContrato + '_TieneContrato';
+            const keyContratoInterno = formId_forContrato + '_ContratoInterno';
+            const keyCampoContrato = formId_forContrato + '_CampoContrato';
 
-                if (this.value === "si") {
-                    campoContrato.disabled = false;
-                    campoContrato.required = true;
+            // Restaurar selección si existe
+            const storedSelection = localStorage.getItem(keyTiene);
+            const storedContratoInterno = localStorage.getItem(keyContratoInterno);
+            const storedCampoContrato = localStorage.getItem(keyCampoContrato);
 
-                    // Limpiar contrato interno
-                    textoInterno.style.display = "none";
-                    numeroInterno.textContent = "";
-                    contratoInternoHidden.value = "";
+            function applySiState() {
+                // Mostrar campo editable
+                campoContrato.disabled = false;
+                campoContrato.required = true;
+                textoInterno.style.display = "none";
+                numeroInterno.textContent = "";
+                contratoInternoHidden.value = "";
+                if (storedCampoContrato) campoContrato.value = storedCampoContrato;
+            }
+
+            async function applyNoState(fetchIfMissing = true) {
+                campoContrato.disabled = true;
+                campoContrato.required = false;
+                campoContrato.value = "";
+
+                // Si ya guardamos un contrato interno en localStorage, usarlo
+                if (storedContratoInterno) {
+                    textoInterno.style.display = "block";
+                    numeroInterno.textContent = storedContratoInterno;
+                    contratoInternoHidden.value = storedContratoInterno;
                     return;
                 }
 
-                if (this.value === "no") {
-
-                    campoContrato.disabled = true;
-                    campoContrato.required = false;
-                    campoContrato.value = "";
-
+                // Si no hay contrato en localStorage y se permite obtener uno, solicitarlo
+                if (fetchIfMissing) {
                     try {
                         const response = await fetch('/api/siguiente-contrato-interno');
                         const data = await response.json();
-
                         const nuevoContrato = data.siguiente;
-                        console.log("Contrato interno generado:", nuevoContrato);
-
-                        // Mostrarlo al usuario
                         textoInterno.style.display = "block";
                         numeroInterno.textContent = nuevoContrato;
-
-                        // Guardarlo para enviarlo al backend
                         contratoInternoHidden.value = nuevoContrato;
-
+                        localStorage.setItem(keyContratoInterno, nuevoContrato);
                     } catch (error) {
                         console.error("Error al obtener el contrato interno:", error);
                     }
                 }
+            }
+
+            // Restaurar UI en base a lo guardado
+            if (storedSelection === 'no') {
+                // marcar radio correspondiente
+                radios.forEach(r => { if (r.value === 'no') r.checked = true; });
+                applyNoState(false).then(() => {});
+            } else if (storedSelection === 'si') {
+                radios.forEach(r => { if (r.value === 'si') r.checked = true; });
+                applySiState();
+            }
+
+            // guardar input campoContrato en localStorage al escribir
+            if (campoContrato) {
+                campoContrato.addEventListener('input', function() {
+                    localStorage.setItem(keyCampoContrato, campoContrato.value);
+                });
+            }
+
+            // listeners para cambio de radio
+            radios.forEach(radio => {
+                radio.addEventListener("change", async function () {
+                    // Guardar selección
+                    localStorage.setItem(keyTiene, this.value);
+
+                    if (this.value === "si") {
+                        applySiState();
+                        // remover contrato interno guardado (opcional)
+                        localStorage.removeItem(keyContratoInterno);
+                        return;
+                    }
+
+                    if (this.value === "no") {
+                        await applyNoState(true);
+                    }
+                });
             });
         });
-    });
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
@@ -275,204 +320,9 @@
         });
     });
 
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-        // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-            titulos.push($(this).val());
-        });
-
-        // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
-
-    /*Guarda en sesionstorage */
-    /*function saveData() {
-        const data = [];
-        
-        $('#dynamicTable tbody tr').each(function () {
-            const tr = $(this);
-            const isTitulo = tr.hasClass('titulo-row');
-            const tituloId = tr.attr('data-titulo');
-            
-            if (isTitulo) {
-                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-                data.push({
-                    type: 'titulo',
-                    id: tituloId,
-                    text: tituloText
-                });
-            } else {
-                const inputs = tr.find('input').map(function () {
-                    return $(this).val();
-                }).get();
-
-                data.push({
-                    type: 'fila',
-                    titulo: tituloId,
-                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
-                    inputs: inputs
-                });
-            }
-        });
-
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
-    }*/
-
-
-
-    function saveData(formKey) {
-    const data = [];
-    console.log('Saving data for form:', formKey);
-    
-    $('#dynamicTable tbody tr').each(function () {
-        const tr = $(this);
-        const isTitulo = tr.hasClass('titulo-row');
-        const tituloId = tr.attr('data-titulo');
-        
-        if (isTitulo) {
-            const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-            data.push({
-                type: 'titulo',
-                id: tituloId,
-                text: tituloText
-            });
-        } else {
-            const inputs = tr.find('input').map(function () {
-                return $(this).val();
-            }).get();
-
-            data.push({
-                type: 'fila',
-                titulo: tituloId,
-                rowNumber: tr.index() + 1,
-                inputs: inputs
-            });
-        }
-    });
-
-    // Usa la clave dinámica
-    sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
-}
-
-    // Escuchar en tiempo real y guarda en el momento que se cambia un input
-    $('#dynamicTable').on('input', 'input', function () {
-        //console.log('Input changed, saving data...');
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    // Evento para eliminar un título
-    $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-        let tituloRow = $(this).closest('tr');
-        let tituloId = tituloRow.data('titulo');
-        
-        // Eliminar la fila del título
-        tituloRow.remove();
-        
-        // Eliminar todas las filas que tengan el mismo data-titulo
-        $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-        updateRowNumbers(); // Si quieres actualizar el contador global
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    /*Cambia el data-titulo y guarda en sesionstorage */
-    $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-        const input = $(this);
-        const text = input.val().trim();
-        const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-        const tr = input.closest('tr');
-        const oldTitulo = tr.attr('data-titulo');
-
-        // Cambia el data-titulo del título
-        tr.attr('data-titulo', safeTitulo);
-
-        // Cambia el data-titulo de las filas asociadas a este título
-        $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-            $(this).attr('data-titulo', safeTitulo);
-
-            // Actualiza solo el valor entre corchetes en los names
-            $(this).find('input').each(function () {
-                let name = $(this).attr('name');
-                if (name) {
-                    // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                    name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
-                        return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                    });
-                    $(this).attr('name', name);
-                }
-            });
-        });
-
-        updateTitulos();
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#dynamicTable').on('click', '.btnEliminar', function() {
-        $(this).closest('tr').remove();
-        updateRowNumbers();
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#preFillBtn').click(function() {
-        $('#dynamicTable tbody tr').each(function() {
-            $(this).find('input').each(function() {
-                if ($(this).val() === '') {
-                    $(this).val('----');
-                }
-            });
-        });
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-            // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-        titulos.push($(this).val());
-        });
-            // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
-
-    /*llenado de campos vacios*/
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputFields = document.querySelectorAll(".default-input");
-
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
-                if (isNaN(column)) return; // Evitar errores si no es válido
-
-                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
-                    const cellInputs = row.querySelectorAll("td input");
-                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
-                });
-            });
-        });
-    });
-
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13","FOR-01-PRO-INS-14", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19","FOR-01-PRO-INS-20","FOR-01-PRO-INS-21","FOR-01-PRO-INS-22", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+    const formularios = ["FOR-PIMP-07_B/01"];
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -512,17 +362,6 @@
                 });
             }
         });
-
-        /* selects.forEach(select => {
-            const stored = localStorage.getItem(`${formId}_${select.name}`);
-            console.log(''+stored);
-
-            if (stored !== null) select.value = stored;
-
-            select.addEventListener("change", () => {
-                localStorage.setItem(`${formId}_${select.name}`, select.value);
-            });
-        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");

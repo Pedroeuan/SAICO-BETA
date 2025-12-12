@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-02-PRO-INS-10')
+@section('title', 'FOR-PIMP-07_B/01')
 
 @section('css')
 <!--datatable -->
@@ -74,7 +74,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="" method="post" enctype="multipart/form-data">
+                            <form id="FOR-PIMP-07_B/01" action="{{route('Reportes_FOR_PIMP_07_B_01.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -127,7 +127,7 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
 
                                             <!-- Input oculto donde guardaremos el contrato interno -->
                                             <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
@@ -182,7 +182,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Instalación(LOCATION):</label>
-                                            <input type="text" class="form-control  inputForm @error('Instal') is-invalid @enderror" name="Detalles_Generales[Instal]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar')}}">
+                                            <input type="text" class="form-control  inputForm @error('Instal') is-invalid @enderror" name="Detalles_Generales[Instal]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Instal')}}">
                                             @error('Instal')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -202,7 +202,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Elementos Soldados(WELDINGS):</label>
-                                            <input type="text" class="form-control  inputForm @error('Elm_Sol') is-invalid @enderror" name="Detalles_Generales[Elm_Sol]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Pieza')}}">
+                                            <input type="text" class="form-control  inputForm @error('Elm_Sol') is-invalid @enderror" name="Detalles_Generales[Elm_Sol]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elm_Sol')}}">
                                             @error('Elm_Sol')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -222,7 +222,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No. Junta(No. JOINT):</label>
-                                            <input type="text" class="form-control  inputForm @error('Junta') is-invalid @enderror" name="Detalles_Generales[Junta]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Junta') is-invalid @enderror" name="Detalles_Generales[Junta]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Junta')}}">
                                             @error('Junta')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -232,7 +232,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Trazabilidad(TRACEABILITY):</label>
-                                            <input type="text" class="form-control  inputForm @error('Trazabi') is-invalid @enderror" name="Detalles_Generales[Trazabi]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Trazabi') is-invalid @enderror" name="Detalles_Generales[Trazabi]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Trazabi')}}">
                                             @error('Trazabi')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -242,7 +242,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Espesores(THICKNESSES):</label>
-                                            <input type="text" class="form-control  inputForm @error('Espesor') is-invalid @enderror" name="Detalles_Generales[Espesor]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Espesor') is-invalid @enderror" name="Detalles_Generales[Espesor]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Espesor')}}">
                                             @error('Espesor')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -262,7 +262,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Codigo de diseño(DESIGN CODE):</label>
-                                            <input type="text" class="form-control  inputForm @error('Norma_cod_Criterio_Eva') is-invalid @enderror" name="Detalles_Generales[Norma_cod_Criterio_Eva]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Norma_cod_Criterio_Eva') is-invalid @enderror" name="Detalles_Generales[Norma_cod_Criterio_Eva]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Norma_cod_Criterio_Eva')}}">
                                             @error('Norma_cod_Criterio_Eva')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -272,7 +272,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Diam Nominal(NOMINAL DIAMETER):</label>
-                                            <input type="text" class="form-control  inputForm @error('Diam_Nomi') is-invalid @enderror" name="Detalles_Generales[Diam_Nomi]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Diam_Nomi') is-invalid @enderror" name="Detalles_Generales[Diam_Nomi]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Diam_Nomi')}}">
                                             @error('Diam_Nomi')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -282,7 +282,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Reporte de dureza antes del relevado(HARDNESS REPORT BEFORE THE RELIEVED OF STRESS):</label>
-                                            <input type="text" class="form-control  inputForm @error('Ant_Rele') is-invalid @enderror" name="Detalles_Generales[Ant_Rele]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Ant_Rele') is-invalid @enderror" name="Detalles_Generales[Ant_Rele]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Ant_Rele')}}">
                                             @error('Ant_Rele')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -292,7 +292,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Reporte de dureza después del relevado(HARDNESS REPORT AFTER THE RELIEVED OF STRESS):</label>
-                                            <input type="text" class="form-control  inputForm @error('Desp_Rele') is-invalid @enderror" name="Detalles_Generales[Desp_Rele]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Desp_Rele') is-invalid @enderror" name="Detalles_Generales[Desp_Rele]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Desp_Rele')}}">
                                             @error('Desp_Rele')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -355,21 +355,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPOMR]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPOMR]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPOMR]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                                         </div>
                                     </div>
 
@@ -402,21 +402,21 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE2" name="Datos_Equipo[MARCA_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MARCA_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE2" name="Datos_Equipo[MARCA_EQUIPOG]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPOG')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputE2" name="Datos_Equipo[MODELO_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.MODELO_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputE2" name="Datos_Equipo[MODELO_EQUIPOG]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPOG')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputE2" name="Datos_Equipo[N_S_TRANSDUCTOR]" placeholder="" value="{{old('Datos_Equipo.N_S_TRANSDUCTOR')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputE2" name="Datos_Equipo[NS_EQUIPOG]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPOG')}}">
                                         </div>
                                     </div>
 
@@ -427,7 +427,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TEMPERATURA INICIAL (°F):</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[Temp_Ini]" placeholder="" value="{{ old('Datos_Equipo.Temp_Ini') }}">
+                                                <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Temp_Ini]" placeholder="" value="{{ old('Juntas_Grupo_Re.Temp_Ini') }}">
                                                 {{--<div class="input-group-append">
                                                     <span class="input-group-text">db</span>
                                                 </div>--}}
@@ -438,76 +438,76 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">HORA INICIO DE PRUEBA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Hr_ini_Pru]" placeholder="" value="{{old('Datos_Equipo.Hr_ini_Pru')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Hr_ini_Pru]" placeholder="" value="{{old('Juntas_Grupo_Re.Hr_ini_Pru')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">VEL. DE CALENTAMIENTO (°F/hr):</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Vel_Cal]" placeholder="" value="{{old('Datos_Equipo.Vel_Cal')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Vel_Cal]" placeholder="" value="{{old('Juntas_Grupo_Re.Vel_Cal')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">HORA FINAL DE PRUEBA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Hr_Fin_Pr]" placeholder="" value="{{old('Datos_Equipo.Hr_Fin_Pr')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Hr_Fin_Pr]" placeholder="" value="{{old('Juntas_Grupo_Re.Hr_Fin_Pr')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TEMP. SOSTENIMIENTO (°F):</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Temp_Sost]" placeholder="" value="{{old('Datos_Equipo.Temp_Sost')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Temp_Sost]" placeholder="" value="{{old('Juntas_Grupo_Re.Temp_Sost')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">DÍA DE INICIO DE PRUEBA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[D_Ini_Pru]" placeholder="" value="{{old('Datos_Equipo.D_Ini_Pru')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[D_Ini_Pru]" placeholder="" value="{{old('Juntas_Grupo_Re.D_Ini_Pru')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">TIEMPO DE SOSTENIMIENTO (MINUTOS):</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Tim_Sos]" placeholder="" value="{{old('Datos_Equipo.Tim_Sos')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Tim_Sos]" placeholder="" value="{{old('Juntas_Grupo_Re.Tim_Sos')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">DÍA DE FINALIZACIÓN DE PRUEBA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[D_Fin_Pru]" placeholder="" value="{{old('Datos_Equipo.D_Fin_Pru')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[D_Fin_Pru]" placeholder="" value="{{old('Juntas_Grupo_Re.D_Fin_Pru')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">VEL. DE ENFRIAMIENTO °F/hr:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Vel_Enfri]" placeholder="" value="{{old('Datos_Equipo.Vel_Enfri')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Vel_Enfri]" placeholder="" value="{{old('Juntas_Grupo_Re.Vel_Enfri')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">No. GRÁFICA:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Grafica]" placeholder="" value="{{old('Datos_Equipo.Grafica')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Grafica]" placeholder="" value="{{old('Juntas_Grupo_Re.Grafica')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">VEL. DEL GRAFICADO (mm/hr):</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[Vel_Grafi]" placeholder="" value="{{old('Datos_Equipo.Vel_Grafi')}}">
+                                            <input type="text" class="form-control  inputForm" name="Juntas_Grupo_Re[Vel_Grafi]" placeholder="" value="{{old('Juntas_Grupo_Re.Vel_Grafi')}}">
                                         </div>
                                     </div>
                                     
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
+                                            <label class="col-form-label" for="inputSuccess">Observaciones (REMARKS):</label>
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                                         </div>
                                     </div>
