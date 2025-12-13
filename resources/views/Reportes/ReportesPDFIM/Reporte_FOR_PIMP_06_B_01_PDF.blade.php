@@ -58,6 +58,55 @@
         .lineaInferior {
             border-bottom: 1px solid black;
         }
+
+        /* SEPARACIÓN ENTRE LAS 4 TABLAS INTERNAS */
+        .main-table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 12px; /* separación visible */
+            margin-top: 10px;
+        }
+        .main-table th {
+            background: #1e5288;
+            color: white;
+            text-align: center;
+            padding: 6px;
+            border: 1px solid #000;
+            font-size: 13px;
+        }
+        .main-table td {
+            border: 1px solid #000;
+            height: 140px;
+            padding: 5px;
+            background: #fff;
+        }
+
+        .sub-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .sub-table th {
+            background: #1e5288;
+            color: white;
+            padding: 4px;
+            border: 1px solid #000;
+            font-size: 11px;
+        }
+        .sub-table td {
+            border: 1px solid #000;
+            padding: 4px;
+            height: 16px;
+            font-size: 11px;
+        }
+
+        /* CONTENEDOR QUE DA ESPACIO A CADA TABLA INTERNA */
+        .sub-container {
+            padding: 6px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
     </style>
 </head>
 
@@ -75,7 +124,7 @@
                 </th>
             </tr>
             <tr>
-                <th rowspan="2"> Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X <br>(XRF) Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
+                <th rowspan="2">Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF) <br> Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
                 <th>Versión</th>
                 <th>3</th>
             </tr>
@@ -105,14 +154,14 @@
             <th>CLIENTE:<br>Client:</th>
             <td class="lineaInferior"></td>
             <th>No.CONTRATO:<br>No.Contract:</th>
-            <td classa="lineaInferior"></td>
+            <td class="lineaInferior"></td>
         </tr>
         <tr>
             <th>CONTRATO:<br>Contract:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
         <tr>
-            <th>ORDEN DE TRABAJO:<br> work Orden:</th>
+            <th>ORDEN DE TRABAJO:<br>Work Orden:</th>
             <td class="lineaInferior" colspan="3"></td>
         </tr>
         <tr>
@@ -138,22 +187,19 @@
         <tr>
             <th>PROCEDIMIENTO:<br>Procedure:</th>
             <td class="lineaInferior"></td>
-            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:<br>Evaluation Criteria:</th>
+            <th>CRITERIO DE EVALUACIÓN:<br>Evaluation Criteria:</th>
             <td class="lineaInferior"></td>
         </tr>
         <tr>
             <th>TRAZABILIDAD:<br>Traceability:</th>
             <td class="lineaInferior"></td>
-            <th style="width: 160px;">No.JUNTA:<br>No.Join:</th>
+            <th>No.JUNTA:<br>No.Join:</th>
             <td class="lineaInferior"></td>
         </tr>
     </tbody>
 </table>
-
 <table></table>
-<Table></table>
 <table></table>
-
 <!-- DATOS DEL EQUIPO -->
 <table class="datosinspeccion">
     <tr class="encabezadoAzul">
@@ -170,102 +216,99 @@
     </tr>
 </table>
 
-<head>
-<meta charset="UTF-8">
-<title>PDF Análisis Químico</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        font-size: 12px;
-    }
-    .main-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-    .main-table th {
-        background: #1e5288;
-        color: white;
-        text-align: center;
-        padding: 6px;
-        border: 1px solid #000;
-        font-size: 13px;
-    }
-    .main-table td {
-        border: 1px solid #000;
-        height: 140px;
-        padding: 5px;
-    }
+    <table class="datosgenerales">
+        <thead class="encabezadoAzul">
+            <tr><th colspan="4">RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>Results of the Chemical Analysis of the Element</th></tr>
+        </thead>
 
-    .sub-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .sub-table th {
-        background: #1e5288;
-        color: white;
-        padding: 4px;
-        border: 1px solid #000;
-        font-size: 11px;
-    }
-    .sub-table td {
-        border: 1px solid #000;
-        padding: 4px;
-        height: 16px;
-        font-size: 11px;
-    }
-
-</style>
-</head>
-<body>
-
-<h3 style="text-align:center; margin-bottom:5px;">RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>Results of the Chemical Analysis of the Element</h3>
-
-<table class="main-table">
+<table width="100%" style="border-collapse: collapse;">
     <tr>
-        <th colspan="2">1er. DISPARO<br>(1st shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA</th>
-        <th colspan="2">2do. DISPARO<br>(2nd shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+        <!-- IZQUIERDA -->
+        <td width="30%" valign="top">
 
-    <tr>
-        <th colspan="2">3er. DISPARO<br>(3rd shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA</th>
-        <th colspan="2">&nbsp;</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td colspan="2" rowspan="2" style="padding:0;">
-            <table class="sub-table">
-                <tr>
-                    <th>Elementos Químicos<br>Chemical elements</th>
-                    <th>Promedio<br>Average</th>
-                    <th>% Composición<br>Chemical Composition</th>
-                </tr>
-                <tr><td>% Mn</td><td></td><td></td></tr>
-                <tr><td>% Si</td><td></td><td></td></tr>
-                <tr><td>% Cr</td><td></td><td></td></tr>
-                <tr><td>% Ni</td><td></td><td></td></tr>
-                <tr><td>% Al</td><td></td><td></td></tr>
-                <tr><td>% Cu</td><td></td><td></td></tr>
-                <tr><td>% V</td><td></td><td></td></tr>
-                <tr><td>% Mo</td><td></td><td></td></tr>
-                <tr><td>% P</td><td></td><td></td></tr>
-                <tr><td>% S</td><td></td><td></td></tr>
-                <tr><td>% Fe</td><td></td><td></td></tr>
-                <tr><td>% Mg</td><td></td><td></td></tr>
+            <table class="datosinspeccion" style="margin-bottom: 25px;">
+        <tr class="encabezadoAzul">
+            <th colspan="1">1er.DISPARO<br>(1st shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA<br>Values obtained in the analyzed piece</th>
+        </tr>
+
+        <tr>
+            <td height="25px"></td>
+        </tr>
+        <tr>
+            <td height="25px"></td>
+        </tr>
+</table>
+        <!-- DERECHA -->
+    <td width="30%" align="center" valign="top">
+            <table class="datosinspeccion" style="margin-bottom: 25px;">
+        <tr class="encabezadoAzul">
+            <th colspan="1">2do.DISPARO<br>(2nd shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA<br>Values obtained in the analyzed piece</th>
+        </tr>
+
+        <tr>
+            <td height="25px"></td>
+        </tr>
+        <tr>
+            <td height="25px"></td>
+        </tr>
+    </td>
             </table>
-        </td>
-    </tr>
+
+<table width="100%" style="border-collapse: collapse;">
     <tr>
-        <td></td>
-        <td></td>
-    </tr>
+        <!-- IZQUIERDA -->
+        <td width="30%" valign="top">
+
+            <table class="datosinspeccion" style="margin-bottom: 25px;">
+        <tr class="encabezadoAzul">
+            <th colspan="1">3er.DISPARO<br>(3rd shot)<br>VALORES OBTENIDOS EN LA PIEZA ANALIZADA<br>Values obtained in the analyzed piece</th>
+        </tr>
+
+        <tr>
+            <td height="25px"></td>
+        </tr>
+        <tr>
+            <td height="25px"></td>
+        </tr>
+</table>
+        <!-- DERECHA -->
+        <td width="70%" valign="top">
+
+            <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                <thead>
+                    <tr>
+                        <th style="border:1px solid #000; background:#1e5288; color:white; padding:6px;">
+                            Elementos Químicos<br>
+                            <span style="font-size:11px;">Chemical Elements</span>
+                        </th>
+
+                        <th style="border:1px solid #000; background:#1e5288; color:white; padding:6px;">
+                            Promedio de Valores Obtenidos en la Pieza Analizada<br>
+                            <span style="font-size:11px;">Average Values Obtained in the Analyzed Piece</span>
+                        </th>
+
+                        <th style="border:1px solid #000; background:#1e5288; color:white; padding:6px;">
+                            % Composición Química de la Aleación<br>
+                            <span style="font-size:11px;">% Chemical Composition of the Alloy</span>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr><td style="border:1px solid #000;">% Mn</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Si</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Cr</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Ni</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Al</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Cu</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% V</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Mo</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% P</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% S</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Fe</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                    <tr><td style="border:1px solid #000;">% Mg</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+                </tbody>
+            </table>
 </table>
 
 </body>
