@@ -204,12 +204,27 @@
                         </div>
                         
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="comments[${index}]" id="comment_for_image_${index}">
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
                     </div>
                 `;
                 container.appendChild(col);
+
+                // Si index es par, agregar un textarea para el par de imágenes
+                if (index % 2 === 0) {
+                    const pairIndex = Math.ceil(index / 2);
+                    const textareaCol = document.createElement('div');
+                    textareaCol.classList.add('col-12', 'mb-3');
+                    textareaCol.setAttribute('id', `images-comments-pair-${pairIndex}`);
+                    textareaCol.innerHTML = `
+                        <div class="form-group">
+                            <label for="images-comments-${pairIndex}">Comentarios para imágenes ${index - 1} y ${index}:</label>
+                            <textarea class="form-control images-comments" id="images-comments-${pairIndex}" data-pair-index="${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
+                        </div>
+                    `;
+                    container.appendChild(textareaCol);
+                }
             }
 
             // Eventos de eliminación
@@ -251,6 +266,37 @@
                     };
                     reader.readAsDataURL(file);
                 });
+            });
+
+            // Asignar eventos a los textareas de pares: sincronizar con los inputs hidden por imagen
+            document.querySelectorAll('.images-comments').forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                    const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                    if (isNaN(pairIndex)) return;
+                    const firstIndex = (pairIndex - 1) * 2 + 1; // 1-based indexing
+                    const secondIndex = firstIndex + 1;
+
+                    const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                    const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                    if (firstHidden) firstHidden.value = this.value;
+                    if (secondHidden) secondHidden.value = this.value;
+                });
+            });
+
+            // Inicializar valores de los textareas por par a partir de comments existentes
+            document.querySelectorAll('.images-comments').forEach(textarea => {
+                const pairIndex = parseInt(textarea.getAttribute('data-pair-index'), 10);
+                if (isNaN(pairIndex)) return;
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden && firstHidden.value) {
+                    textarea.value = firstHidden.value;
+                } else if (secondHidden && secondHidden.value) {
+                    textarea.value = secondHidden.value;
+                }
+                // Si ninguno tiene valor, dejar como originalmente en blade
             });
         }
 

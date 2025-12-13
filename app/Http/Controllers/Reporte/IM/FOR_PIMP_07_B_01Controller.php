@@ -258,6 +258,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Datos_Equipo.NS_EQUIPOG' => 'nullable|string',
 
             'Juntas_Grupo_Re' => 'required|array',  // Asegura que es un array
+            'Juntas_Grupo_Re.Temp_Ini' => 'nullable|string',
             'Juntas_Grupo_Re.Hr_ini_Pru' => 'nullable|string',
             'Juntas_Grupo_Re.Vel_Cal' => 'nullable|string',
             'Juntas_Grupo_Re.Hr_Fin_Pr' => 'nullable|string',
@@ -611,7 +612,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-                        /*DETALLES GENERALES */
+             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
             'Detalles_Generales.No_Reporte' => 'nullable|string',
@@ -621,61 +622,44 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Instal' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Elm_Sol' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Junta' => 'nullable|string',
+            'Detalles_Generales.Trazabi' => 'nullable|string',
+            'Detalles_Generales.Espesor' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Norma_cod_Criterio_Eva' => 'nullable|string',
+            'Detalles_Generales.Diam_Nomi' => 'nullable|string',
+            'Detalles_Generales.Ant_Rele' => 'nullable|string',
+            'Detalles_Generales.Desp_Rele' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string',
-            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK' => 'nullable|string',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
-            'Datos_Equipo.GANANCIA' => 'nullable|string',
-            'Datos_Equipo.RANGO' => 'nullable|string',
-            'Datos_Equipo.RECHAZO' => 'nullable|string',
-            'Datos_Equipo.SUPERFICIE' => 'nullable|string',
-            'Datos_Equipo.PINTURA' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOMR' => 'nullable|string',
+
+            'Datos_Equipo.MARCA_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOG' => 'nullable|string',
+
+            'Juntas_Grupo_Re' => 'required|array',  // Asegura que es un array
+            'Juntas_Grupo_Re.Temp_Ini' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Cal' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_Fin_Pr' => 'nullable|string',
+            'Juntas_Grupo_Re.Temp_Sost' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Tim_Sos' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Fin_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Enfri' => 'nullable|string',
+            'Juntas_Grupo_Re.Grafica' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Grafi' => 'nullable|string',
+
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'ID' => 'nullable|array',
-            'elemento_tubo' => 'nullable|array',
-            'no_aceptacion' => 'nullable|array',
-            'no_serie' => 'nullable|array',
-            'no_colada' => 'nullable|array',
-            'tnominal' => 'nullable|array',
-            'diametro' => 'nullable|array',
-            'no_ind' => 'nullable|array',
-            'tipo_indicacion' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'prof' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'tmax' => 'nullable|array',
-            'tmin' => 'nullable|array',
-            'metros_lineales' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',

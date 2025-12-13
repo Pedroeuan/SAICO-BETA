@@ -238,7 +238,8 @@
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
 
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                            <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                            <input type="hidden" name="comments[${i}]" id="comment_for_image_${i}">
                         <div id="image${i}-preview" class="mt-2"></div>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
@@ -255,7 +256,7 @@
                     textareaCol.innerHTML = `
                         <div class="form-group">
                             <label for="images-comments-${pairIndex}">Comentarios para imágenes ${i - 1} y ${i}:</label>
-                            <textarea class="form-control images-comments" name="comments[]" id="images-comments-${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
+                                <textarea class="form-control images-comments" id="images-comments-${pairIndex}" data-pair-index="${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
                         </div>
                     `;
                     container.appendChild(textareaCol);
@@ -282,6 +283,21 @@
                     generateImageFields(currentCount);
                 });
             });
+
+                // Asignar eventos a los textareas de pares: sincronizar con los inputs hidden por imagen
+                document.querySelectorAll('.images-comments').forEach(textarea => {
+                    textarea.addEventListener('input', function () {
+                        const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                        if (isNaN(pairIndex)) return;
+                        const firstIndex = (pairIndex - 1) * 2 + 1; // matches our 1-based indexing used in IDs
+                        const secondIndex = firstIndex + 1;
+
+                        const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                        const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                        if (firstHidden) firstHidden.value = this.value;
+                        if (secondHidden) secondHidden.value = this.value;
+                    });
+                });
 
             // Asignar eventos a los nuevos inputs
             document.querySelectorAll('.image-input').forEach(input => {
