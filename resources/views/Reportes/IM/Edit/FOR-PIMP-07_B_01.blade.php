@@ -114,27 +114,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label">
                                                 No. Contrato(No. CONTRACT):
-
-                                                <span class="ml-3">
-                                                    <label class="mr-2">
-                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="TieneContrato" value="no"> No
-                                                    </label>
-                                                </span>
-                                            </label>
-
-                                            <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                                         </div>
                                     </div>
 
@@ -509,16 +489,17 @@
                                             <textarea class="form-control is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                                         </div>
                                     </div>
-
+                                    
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
+                                                @php dump($numFirmas); @endphp 
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
-                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
-                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
-                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                                    <option value="1" {{ $numFirmas === 1 ? 'selected' : '' }}>1 Firma</option>
+                                                    <option value="2" {{ $numFirmas === 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas === 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas === 4 ? 'selected' : '' }}>4 Firmas</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -751,8 +732,8 @@
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
-                                                            <!-- Campo oculto para mantener el comentario por imagen (será actualizado por la textarea de par) -->
-                                                            <input type="hidden" name="comments[{{ $index }}]" id="comment_for_image_{{ $index }}" value="{{ $foto['comentario'] }}">
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 
                                                             <!-- Campo oculto para la imagen en base64 -->
                                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">

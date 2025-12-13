@@ -204,7 +204,7 @@
                         </div>
                         
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
-                        <input type="hidden" name="comments[${index}]" id="comment_for_image_${index}">
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
                     </div>
@@ -303,6 +303,38 @@
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
             localStorage.removeItem('imageCount');
+        });
+    });
+
+    // Inicializar textareas por par existentes en la vista de edición: eventos y valor inicial
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.images-comments').forEach(textarea => {
+            // Evento para actualizar ambos hidden inputs
+            textarea.addEventListener('input', function () {
+                const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                if (isNaN(pairIndex)) return;
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden) firstHidden.value = this.value;
+                if (secondHidden) secondHidden.value = this.value;
+            });
+
+            // Inicializar valor del textarea desde los hidden existentes
+            const pairIndex = parseInt(textarea.getAttribute('data-pair-index'), 10);
+            if (!isNaN(pairIndex)) {
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden && firstHidden.value) {
+                    textarea.value = firstHidden.value;
+                } else if (secondHidden && secondHidden.value) {
+                    textarea.value = secondHidden.value;
+                }
+            }
         });
     });
 
