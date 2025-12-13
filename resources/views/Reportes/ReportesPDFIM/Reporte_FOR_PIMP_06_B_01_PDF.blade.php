@@ -271,7 +271,7 @@
             <td height="25px"></td>
         </tr>
 </table>
-        <!-- DERECHA -->
+        <!-- DERECHA 
         <td width="70%" valign="top">
 
             <table style="width:100%; border-collapse:collapse; font-size:12px;">
@@ -308,7 +308,7 @@
                     <tr><td style="border:1px solid #000;">% Fe</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
                     <tr><td style="border:1px solid #000;">% Mg</td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
                 </tbody>
-            </table>
+            </table>-->
 </table>
 
 </body>
