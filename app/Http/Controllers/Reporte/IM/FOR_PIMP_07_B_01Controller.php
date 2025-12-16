@@ -574,6 +574,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+
+
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -686,118 +688,47 @@ class FOR_PIMP_07_B_01Controller extends Controller
         // Ruta base para guardar las imágenes
         $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
-        // Obtener las imágenes existentes
-        $existingImages = $request->input('existing_images', []);
-        $comments = $request->input('comments', []);
-        $imagesBase64 = $request->input('images_base64', []);
-        $deletedImages = $request->input('deleted_images', []);
+        $fotosExistentes = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+        $commentsPairs   = $request->input('comments_pairs', []);
 
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
-
-        // **1️⃣ Eliminar imágenes marcadas para borrar**
-        foreach ($deletedImages as $index) {
-            if (isset($existingImages[$index])) {
-                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
-
-                // Eliminar del almacenamiento
-                if (Storage::exists($rutaImagen)) {
-                    Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
-                } else {
-                    //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
-                }
-
-                // Eliminar de `existingImages` para que no se guarde en la BD
-                unset($existingImages[$index]);
+        /* Actualizar comentarios */
+        foreach ($fotosExistentes as &$foto) {
+            if (isset($commentsPairs[$foto['par']])) {
+                $foto['comentario'] = $commentsPairs[$foto['par']];
             }
         }
 
-        // **Reiniciar el array antes de procesar imágenes**
-        $imagenesGuardadas = [];
+        /* Reemplazar imágenes */
+        if ($request->has('replace_images')) {
+            foreach ($request->replace_images as $par => $imagenes) {
+                foreach ($imagenes as $i => $file) {
+                    if (!$file) continue;
 
-        // **Evitar duplicados en las rutas ya guardadas**
-        $rutasGuardadas = [];
+                    $imageName = 'imagen_' . time() . "_{$par}_{$i}.png";
+                    $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos";
 
-        // **2️⃣ Procesar imágenes existentes**
-        foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
-                // **Reemplazo de imagen existente**
-                $newImage = $request->file("replace_images.$index");
+                    Storage::putFileAs($rutaCarpeta, $file, $imageName);
 
-                // Eliminar imagen anterior si existe
-                $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
-                if (Storage::exists($rutaImagenPublic)) {
-                    Storage::delete($rutaImagenPublic);
-                }
-
-                // Guardar la nueva imagen
-                $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
-                $path = $newImage->storeAs($rutaCarpeta, $imageName);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
-                }
-            } elseif (!empty($imagesBase64[$index])) {
-                // **Procesar imágenes en Base64**
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            } else {
-                // **Mantener la imagen existente**
-                if (!in_array($ruta, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $ruta,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $ruta;
+                    foreach ($fotosExistentes as &$foto) {
+                        if ($foto['par'] == $par) {
+                            $foto['ruta'] = "storage/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+                            break;
+                        }
+                    }
                 }
             }
         }
 
-        // **3️⃣ Procesar nuevas imágenes Base64**
-        foreach ($imagesBase64 as $index => $base64Image) {
-            if (!empty($base64Image)) {
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen en el almacenamiento
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            }
+        /* Eliminar imágenes */
+        $deleted = $request->input('deleted_images', []);
+        if (!empty($deleted)) {
+            $fotosExistentes = array_filter($fotosExistentes, fn($f) => !in_array($f['ruta'], $deleted));
         }
+
 
         // **4️⃣ Guardar las imágenes actualizadas en la BD**
         $Fotos_Reportes->update([
-            'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
+            'Fotos_Reportes' => json_encode(array_values($fotosExistentes)), // Se usa array reindexado
         ]);
 
         //Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);

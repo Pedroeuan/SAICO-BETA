@@ -494,12 +494,11 @@
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                @php dump($numFirmas); @endphp 
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                                    <option value="1" {{ $numFirmas === 1 ? 'selected' : '' }}>1 Firma</option>
-                                                    <option value="2" {{ $numFirmas === 2 ? 'selected' : '' }}>2 Firmas</option>
-                                                    <option value="3" {{ $numFirmas === 3 ? 'selected' : '' }}>3 Firmas</option>
-                                                    <option value="4" {{ $numFirmas === 4 ? 'selected' : '' }}>4 Firmas</option>
+                                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
+                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -718,65 +717,62 @@
                                             </select>
                                         </div>
 
-                                        @if(!empty($Fotos_Comentarios))
-                                            <div class="row">
-                                                @foreach($Fotos_Comentarios as $index => $foto)
-                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
-                                                        <div class="form-group">
-                                                            <!-- Vista previa de la imagen existente -->
-                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
-                                                            <div class="image-preview mt-2">
-                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                            @php
+                                                $fotosAgrupadas = collect($Fotos_Comentarios)->groupBy('par');
+                                            @endphp
+
+                                            @if($fotosAgrupadas->isNotEmpty())
+                                                @foreach($fotosAgrupadas as $par => $fotos)
+                                                    <div class="row mb-4">
+
+                                                        {{-- IMÁGENES DEL PAR --}}
+                                                        @foreach($fotos as $index => $foto)
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Imagen {{ ($par - 1) * 2 + $loop->iteration }}:</label>
+
+                                                                    <div class="image-preview mt-2">
+                                                                        <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail">
+                                                                    </div>
+
+                                                                    <input type="file"
+                                                                        class="form-control mt-2"
+                                                                        name="replace_images[{{ $par }}][]"
+                                                                        accept="image/*">
+
+                                                                    <input type="hidden"
+                                                                        name="existing_images[{{ $par }}][]"
+                                                                        value="{{ $foto['ruta'] }}">
+
+                                                                    <!-- BOTÓN ELIMINAR -->
+                                                                    <button type="button"
+                                                                            class="btn btn-danger btn-sm mt-2 btn-delete-image"
+                                                                            data-ruta="{{ $foto['ruta'] }}">
+                                                                        Eliminar
+                                                                    </button>
+                                                                </div>
                                                             </div>
+                                                        @endforeach
 
-                                                            <!-- Campo para seleccionar una nueva imagen -->
-                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
+                                                        {{-- COMENTARIO DEL PAR --}}
+                                                        <div class="col-12 mt-2">
+                                                            <label>
+                                                                Comentario imágenes {{ ($par - 1) * 2 + 1 }}
+                                                                y {{ ($par - 1) * 2 + 2 }}
+                                                            </label>
 
-                                                            <!-- Campo para el comentario -->
-                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                            <!-- Campo oculto para la imagen en base64 -->
-                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
-                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
-                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
-
-                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
-                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
-
-                                                            <!-- Botón de eliminación -->
-                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                            <textarea class="form-control"
+                                                                    name="comments_pairs[{{ $par }}]"
+                                                                    rows="3">{{ $fotos->first()['comentario'] }}</textarea>
                                                         </div>
+
                                                     </div>
-
-                                                    {{-- Si el índice es impar, mostrar el textarea de comentarios para el par (index-1,index) --}}
-                                                    @if($index % 2 == 1)
-                                                        @php
-                                                            $prevIndex = $index - 1;
-                                                            $prevComment = $Fotos_Comentarios[$prevIndex]['comentario'] ?? '';
-                                                            $currentComment = $foto['comentario'] ?? '';
-                                                            $pairComment = '';
-                                                            if (!empty($prevComment) && !empty($currentComment)) {
-                                                                $pairComment = $prevComment . "\n" . $currentComment;
-                                                            } else if (!empty($prevComment)) {
-                                                                $pairComment = $prevComment;
-                                                            } else if (!empty($currentComment)) {
-                                                                $pairComment = $currentComment;
-                                                            }
-                                                            $pairIndex = floor($index / 2) + 1; // 1-based
-                                                        @endphp
-                                                        <div class="col-12 mb-3" id="images-comments-pair-{{ $pairIndex }}">
-                                                            <div class="form-group">
-                                                                <label for="images-comments-{{ $pairIndex }}">Comentarios para imágenes {{ $prevIndex + 1 }} y {{ $index + 1 }}:</label>
-                                                                <textarea class="form-control images-comments" id="images-comments-{{ $pairIndex }}" data-pair-index="{{ $pairIndex }}" rows="3" placeholder="Comentarios sobre estas dos imágenes...">{{ $pairComment }}</textarea>
-                                                            </div>
-                                                        </div>
-                                                    @endif
                                                 @endforeach
-                                            </div>
-                                        @else
-                                            <p>No hay imágenes disponibles.</p>
-                                        @endif
+
+                                                <input type="hidden" name="deleted_images[]" id="deleted_images_container">
+                                            @else
+                                                <p>No hay imágenes disponibles.</p>
+                                            @endif
 
                                         <div id="imageFieldsContainer" class="row">
                                             <!-- Aquí se agregarán dinámicamente los campos -->

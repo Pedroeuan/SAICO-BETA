@@ -428,68 +428,34 @@
 });
 
     /*Selección de Firmas */
-    document.addEventListener('DOMContentLoaded', function() {
-    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
+document.addEventListener('DOMContentLoaded', function () {
     const numFirmasSelect = document.getElementById('numFirmas');
     const firmas1 = document.getElementById('firmas1');
     const firmas2 = document.getElementById('firmas2');
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
 
+    // SOLO usar localStorage si existe
+    const key = document.querySelectorAll("form")[1]?.id + '_numFirmas';
+    const numFirmasLocal = key ? localStorage.getItem(key) : null;
 
-    //numFirmasSelect.value = numFirmasLocal;
+    if (numFirmasLocal !== null) {
+        numFirmasSelect.value = numFirmasLocal;
+    }
 
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
-    
+    function actualizarFirmas(valor) {
+        firmas1.style.display = valor == '1' ? 'block' : 'none';
+        firmas2.style.display = valor == '2' ? 'block' : 'none';
+        firmas3.style.display = valor == '3' ? 'block' : 'none';
+        firmas4.style.display = valor == '4' ? 'block' : 'none';
+    }
 
-    numFirmasSelect.addEventListener('change', function() {
-        if (this.value == '1') {
-            firmas1.style.display = 'block';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '2') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '3') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (this.value == '4') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
+    // Inicializar
+    actualizarFirmas(numFirmasSelect.value);
+
+    // Cambio manual
+    numFirmasSelect.addEventListener('change', function () {
+        actualizarFirmas(this.value);
+        localStorage.setItem(key, this.value);
     });
-
-    // Inicializar la visibilidad de las secciones de firmas
-    if (numFirmasSelect.value == '1') {
-        firmas1.style.display = 'block';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '2') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'block';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '3') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'block';
-        firmas4.style.display = 'none';
-    } else if (numFirmasSelect.value == '4') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'block';
-    }
-    });
+});

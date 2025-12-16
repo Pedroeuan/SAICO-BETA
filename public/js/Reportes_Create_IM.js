@@ -250,17 +250,23 @@
                 // Después de cada 2 imágenes agregar un textarea (comentarios para ese par)
                 if (i % 2 === 0) {
                     const pairIndex = Math.ceil(i / 2);
+
                     const textareaCol = document.createElement('div');
                     textareaCol.classList.add('col-12', 'mb-3');
-                    textareaCol.setAttribute('id', `images-comments-pair-${pairIndex}`);
                     textareaCol.innerHTML = `
                         <div class="form-group">
-                            <label for="images-comments-${pairIndex}">Comentarios para imágenes ${i - 1} y ${i}:</label>
-                                <textarea class="form-control images-comments" id="images-comments-${pairIndex}" data-pair-index="${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
+                            <label>Comentarios para imágenes ${i - 1} y ${i}:</label>
+                            <textarea
+                                class="form-control"
+                                name="comments_pairs[${pairIndex}]"
+                                rows="3"
+                                placeholder="Comentarios sobre estas dos imágenes..."
+                            ></textarea>
                         </div>
                     `;
                     container.appendChild(textareaCol);
                 }
+
             }
 
             // Agregar eventos de eliminación a los botones: reconstruir campos para mantener consistencia
