@@ -294,7 +294,7 @@
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="5">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                        <tr><th colspan="8">DATOS Y AJUSTES DEL EQUIPO </th></tr>
                     </thead>  
 
                                 <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
