@@ -1029,7 +1029,7 @@
                                     <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="13" style="width: 70px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="14" style="width: 70px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
@@ -1038,6 +1038,7 @@
 
                                 <tbody>
                                 <!-- Filas dinámicas aparecerán aquí -->
+                                <input type="hidden" name="titulos_data" id="titulos_hidden">
                                 </tbody>
                         </table>
                     </div>
