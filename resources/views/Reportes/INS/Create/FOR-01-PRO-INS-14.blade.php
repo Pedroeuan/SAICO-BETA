@@ -1401,7 +1401,7 @@ $(document).ready(function() {
 
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="15">
+                <td colspan="16">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título...">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -1415,25 +1415,36 @@ $(document).ready(function() {
             $('#dynamicTable tbody').append(newTitle);
         });
 
-        // Recrear filas
+        // Recrear filas (inserción debajo del título correspondiente)
         (data.rows || []).forEach(function(r){
             const titleId = r.titleId || 'sin_titulo';
             const vals = r.values || r.fields || []; // acepta array u objeto
-            rowCountGlobal++;
-            rowCount++;
 
             const inputsHtml = fieldNames.map(function(fn, idx){
-            const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
-            return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
+                const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
+                return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
             }).join('');
 
-            const newRow = `<tr data-titulo="${titleId}">
-                <td class="row-number">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+            const $newRow = $(`<tr data-titulo="${titleId}">
+                <td class="row-number">0 <input type="hidden" value="0"></td>
                 ${inputsHtml}
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
+            </tr>`);
 
-            $('#dynamicTable tbody').append(newRow);
+            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
+
+            if ($titleRow.length) {
+                // Si ya hay filas para ese título, insertar después de la última de ellas
+                const $lastRowSameTitle = $titleRow.nextAll(`tr[data-titulo="${titleId}"]:not(.titulo-row)`).last();
+                if ($lastRowSameTitle.length) {
+                    $lastRowSameTitle.after($newRow);
+                } else {
+                    $titleRow.after($newRow);
+                }
+            } else {
+                // Título no existe (sin_titulo u otro caso) -> agregar al final
+                $('#dynamicTable tbody').append($newRow);
+            }
         });
 
         // Reindexar numeración visible y actualizar contadores
