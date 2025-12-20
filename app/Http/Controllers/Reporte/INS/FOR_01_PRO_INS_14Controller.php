@@ -218,6 +218,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
     public function FOR_01_PRO_INS_14_store(Request $request)
     {
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -331,6 +332,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'no_junta' => 'nullable|array',
             'Tip_Ind' => 'nullable|array',
             'L_PGL' => 'nullable|array',
@@ -471,7 +473,11 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $titulos = $request->input('titulos', []);
+        //$titulos = $request->input('titulos', []);
+        // Recuperar 'titulos_data' (JSON con [{id,text},...])
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
+
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
@@ -498,7 +504,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
                     'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -509,9 +515,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
+        foreach ($titulos as $tituloObj) {
             //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
+
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -533,12 +542,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'SCAN' => $request->input("SCAN.$tituloKey.$i"),
                     'EVAL' => $request->input("EVAL.$tituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    //'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
         
             $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
+                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
                 'resultados' => $resultados
             ];
         }
@@ -763,9 +772,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
-
+            
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'no_junta' => 'nullable|array',
             'Tip_Ind' => 'nullable|array',
             'L_PGL' => 'nullable|array',
@@ -862,7 +872,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos = $request->input('titulos', []);
+        //$titulos = $request->input('titulos', []);
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
+
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
@@ -889,7 +902,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
                     'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+                    //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
         
@@ -900,9 +913,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
+        foreach ($titulos as $tituloObj) {
             //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1_..."
+            $tituloText = $tituloObj['text'];
+
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
@@ -924,10 +940,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'SCAN' => $request->input("SCAN.$tituloKey.$i"),
                     'EVAL' => $request->input("EVAL.$tituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
+                    //'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
             }
-        
+
             $datosAgrupados[] = [
                 'titulos_juntas' => $titulo,
                 'resultados' => $resultados

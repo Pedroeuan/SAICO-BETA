@@ -1038,6 +1038,7 @@
 
                                 <tbody>
                                 <!-- Filas dinámicas aparecerán aquí -->
+                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
                                 <input type="hidden" name="titulos_data" id="titulos_hidden">
                                 </tbody>
                         </table>
@@ -1369,13 +1370,107 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
 $(document).ready(function() {
-    let tituloCount = 0;
-    let rowCount = 0;
-    let rowCountGlobal = 0;
-
+    let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
+    
         function restoreData() {
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
+
+        // Helpers y configuración
+        const fieldNames = ['no_junta','Tip_Ind','L_PGL','A_PGL','AL_PGL','X','Y','DA_PROF','PA','SA','TMIN','SCAN','EVAL','FOTOS'];
+        const placeholders = {
+            no_junta: 'Junta / Elemento', Tip_Ind: 'Tipo de Indicación', L_PGL: 'L (PLG)',
+            A_PGL: 'A (PLG)', AL_PGL: 'ALTURA (PLG)', X: 'X', Y: 'Y', DA_PROF: 'DA (PROF)',
+            PA: 'PA', SA: 'SA', TMIN: 'Tmin', SCAN: 'Datos del Archivo (Escaneo)', EVAL: 'Evaluación', FOTOS: 'Fotos'
+        };
+        function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
+
+        // Limpiar tabla y contadores
+        $('#dynamicTable tbody').empty();
+        tituloCount = 0;
+        rowCount = 0;
+        rowCountGlobal = 0;
+
+        // Recrear títulos (manteniendo el id único guardado)
+        (data.titles || []).forEach(function(t){
+            tituloCount++;
+            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
+            const titleText = esc(t.text || '');
+
+            const newTitle = `
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="15">
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título...">
+                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
+                    <button type="button" class="btn btn-danger btnEliminarTitulo">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                </td>
+            </tr>
+            `;
+            $('#dynamicTable tbody').append(newTitle);
+        });
+
+        // Recrear filas
+        (data.rows || []).forEach(function(r){
+            const titleId = r.titleId || 'sin_titulo';
+            const vals = r.values || r.fields || []; // acepta array u objeto
+            rowCountGlobal++;
+            rowCount++;
+
+            const inputsHtml = fieldNames.map(function(fn, idx){
+            const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
+            return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
+            }).join('');
+
+            const newRow = `<tr data-titulo="${titleId}">
+                <td class="row-number">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                ${inputsHtml}
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`;
+
+            $('#dynamicTable tbody').append(newRow);
+        });
+
+        // Reindexar numeración visible y actualizar contadores
+        function reindexRows(){
+            let idx = 0;
+            $('#dynamicTable tbody tr').not('.titulo-row').each(function(){
+            idx++;
+            // actualizar número visible (dejando el input hidden intacto)
+            const td = $(this).find('td').eq(0);
+            // Si existe un nodo de texto lo reemplazamos; si no, reconstruimos el contenido
+            const textNode = td.contents().filter(function(){ return this.nodeType === 3; }).first();
+            if (textNode.length) {
+                textNode[0].nodeValue = idx + ' ';
+            } else {
+                // fallback: mantener el hidden input y escribir el número delante
+                const hidden = td.find('input[type="hidden"]').prop('outerHTML');
+                td.html(idx + ' ' + hidden);
+            }
+            td.find('input[type="hidden"]').val(idx);
+            });
+            rowCountGlobal = idx;
+            const lastTitleId = $('.titulo-row').last().data('titulo');
+            rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
+        }
+        reindexRows();
+
+        // Actualizaciones finales y guardado
+        if (typeof updateTitulos === 'function') updateTitulos();
+        // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
+        const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
+        if (formId && typeof saveData === 'function') saveData(formId);
+        }
+        /*function restoreData() {
             //const savedData = sessionStorage.getItem('dynamicTableData');
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            //const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
+            const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+            if (!data) return;
             if (savedData) {
                 // Restaurar contadores
                 tituloCount = savedData.filter(item => item.type === 'titulo').length;
@@ -1420,17 +1515,20 @@ $(document).ready(function() {
                 updateRowNumbers();
                 updateTitulos();
             }
-        }
+        }*/
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1441,11 +1539,14 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData(document.querySelectorAll("form")[1].id);
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
@@ -1476,7 +1577,8 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData(document.querySelectorAll("form")[1].id);
+            //saveData(document.querySelectorAll("form")[1].id);
+            saveData($(this).closest('form').attr('id'));
         }
     );
 
@@ -1491,7 +1593,8 @@ $(document).ready(function() {
                 });
                 return;
             }
-
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage

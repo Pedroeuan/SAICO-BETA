@@ -300,51 +300,28 @@
     // Función para actualizar los títulos en el campo oculto
     function updateTitulos() {
         var titulos = [];
-        // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-            titulos.push($(this).val());
+        $('.titulo-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
         });
-
-        // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        $('#titulos_hidden').val(JSON.stringify(titulos));
     }
 
-    /*Guarda en sesionstorage */
-    /*function saveData() {
-        const data = [];
-        
-        $('#dynamicTable tbody tr').each(function () {
-            const tr = $(this);
-            const isTitulo = tr.hasClass('titulo-row');
-            const tituloId = tr.attr('data-titulo');
-            
-            if (isTitulo) {
-                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-                data.push({
-                    type: 'titulo',
-                    id: tituloId,
-                    text: tituloText
-                });
-            } else {
-                const inputs = tr.find('input').map(function () {
-                    return $(this).val();
-                }).get();
+    function saveData(formId) {
+    const titles = $('.titulo-row').map(function() {
+        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
+    }).get();
 
-                data.push({
-                    type: 'fila',
-                    titulo: tituloId,
-                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
-                    inputs: inputs
-                });
-            }
-        });
+    const rows = $('#dynamicTable tbody tr').not('.titulo-row').map(function() {
+        const id = $(this).data('titulo');
+        const values = $(this).find('input[type="text"]').map(function(){ return $(this).val(); }).get();
+        return { titleId: id, values };
+    }).get();
 
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
-    }*/
-
-
-
-    function saveData(formKey) {
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles, rows }));
+    }
+    /*function saveData(formKey) {
     const data = [];
     console.log('Saving data for form:', formKey);
     
@@ -376,7 +353,7 @@
 
     // Usa la clave dinámica
     sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
-}
+}*/
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {
@@ -385,7 +362,17 @@
     });
 
     // Evento para eliminar un título
-    $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
+    $(document).on('click', '.btnEliminarTitulo', function () {
+        const tr = $(this).closest('tr.titulo-row');
+        const id = tr.data('titulo');
+        // eliminar filas del mismo id
+        $('#dynamicTable tbody tr').filter(function () {
+            return $(this).data('titulo') === id;
+        }).remove();
+        tr.remove();
+        saveData($(this).closest('form').attr('id'));
+    });
+    /*$('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
         let tituloRow = $(this).closest('tr');
         let tituloId = tituloRow.data('titulo');
         
@@ -397,10 +384,14 @@
 
         updateRowNumbers(); // Si quieres actualizar el contador global
         saveData(document.querySelectorAll("form")[1].id);
-    });
+    });*/
 
     /*Cambia el data-titulo y guarda en sesionstorage */
-    $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+    $(document).on('input', '.titulo-row .titulo-text', function () {
+        updateTitulos();
+        saveData(document.querySelectorAll("form")[1].id);
+    });
+    /*$(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
         const input = $(this);
         const text = input.val().trim();
         const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
@@ -430,7 +421,7 @@
 
         updateTitulos();
         saveData(document.querySelectorAll("form")[1].id);
-    });
+    });*/
 
     $('#dynamicTable').on('click', '.btnEliminar', function() {
         $(this).closest('tr').remove();
@@ -449,16 +440,6 @@
         saveData(document.querySelectorAll("form")[1].id);
     });
 
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-            // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-        titulos.push($(this).val());
-        });
-            // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
 
     /*llenado de campos vacios*/
     document.addEventListener("DOMContentLoaded", function () {
