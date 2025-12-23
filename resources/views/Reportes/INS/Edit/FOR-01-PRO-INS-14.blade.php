@@ -1027,16 +1027,13 @@
                             @endphp
 
                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
-                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
+                                    @php $titleId = 'titulo_' . $loop->index . '_' . time(); @endphp
+                                    <tr class="titulo-row" data-titulo="{{ $titleId }}">
                                         <td colspan="15">
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                        <i class="fa fa-times"  aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
+                                                <input type="text" class="form-control w-90 titulo-text" name="titulos_text[{{ $titleId }}]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
+                                                <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+                                                <td><button type="button" class="btn btn-danger btnEliminarTitulo">...</button></td>
                                             </div>
                                         </td>
                                     </tr>
