@@ -1000,22 +1000,23 @@
                                     <th></th> <!-- Para ID vacío -->
                                     <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
                             <tbody>
+                            <input type="hidden" name="titulos_data" id="titulos_hidden">
                             @php
                                 $contador = 1;
                             @endphp
@@ -1437,12 +1438,15 @@ $(document).ready(function() {
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>

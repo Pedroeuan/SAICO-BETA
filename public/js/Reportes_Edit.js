@@ -351,7 +351,16 @@
     }
 
     // Función para actualizar los títulos en el campo oculto
-        function updateTitulos() {
+    function updateTitulos() {
+        var titulos = [];
+        $('.titulo-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
+        });
+        $('#titulos_hidden').val(JSON.stringify(titulos));
+        }
+        /*function updateTitulos() {
             var titulos = [];
             // Recolectar todos los títulos en el array
             $('.titulo-row input[type="text"]').each(function() {
@@ -360,7 +369,7 @@
 
             // Asignar los títulos al campo oculto
             $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
+        }*/
 
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -459,7 +468,11 @@
         });
 
         /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
+        $(document).on('input', '.titulo-row .titulo-text', function () {
+            updateTitulos();
+            saveData(document.querySelectorAll("form")[1].id);
+        });
+        /*$(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
             const input = $(this);
             const text = input.val().trim();
             const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
@@ -491,7 +504,7 @@
 
             updateTitulos();
             saveData();
-        });
+        });*/
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
