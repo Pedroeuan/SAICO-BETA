@@ -208,24 +208,6 @@
             }
             
             // Agregar eventos de eliminación a los botones
-            /*document.querySelectorAll('.remove-image').forEach(button => {
-                button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
-                        document.getElementById('msgImgNoSave').classList.remove('d-none');
-                        // Actualizar el localStorage
-                        localStorage.setItem(document.querySelectorAll("form")[1].id+'_imageCount', imageCountSelect.value);
-                    } else {
-                        alert('No se pudo encontrar el campo de imagen para eliminar.');
-                    }
-                    
-                });
-            });*/
-
-            // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
                     const index = this.getAttribute('data-index');
@@ -321,39 +303,6 @@
 
     sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles, rows }));
     }
-    /*function saveData(formKey) {
-    const data = [];
-    console.log('Saving data for form:', formKey);
-    
-    $('#dynamicTable tbody tr').each(function () {
-        const tr = $(this);
-        const isTitulo = tr.hasClass('titulo-row');
-        const tituloId = tr.attr('data-titulo');
-        
-        if (isTitulo) {
-            const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-            data.push({
-                type: 'titulo',
-                id: tituloId,
-                text: tituloText
-            });
-        } else {
-            const inputs = tr.find('input').map(function () {
-                return $(this).val();
-            }).get();
-
-            data.push({
-                type: 'fila',
-                titulo: tituloId,
-                rowNumber: tr.index() + 1,
-                inputs: inputs
-            });
-        }
-    });
-
-    // Usa la clave dinámica
-    sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
-}*/
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {
@@ -372,56 +321,12 @@
         tr.remove();
         saveData($(this).closest('form').attr('id'));
     });
-    /*$('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-        let tituloRow = $(this).closest('tr');
-        let tituloId = tituloRow.data('titulo');
-        
-        // Eliminar la fila del título
-        tituloRow.remove();
-        
-        // Eliminar todas las filas que tengan el mismo data-titulo
-        $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-        updateRowNumbers(); // Si quieres actualizar el contador global
-        saveData(document.querySelectorAll("form")[1].id);
-    });*/
 
     /*Cambia el data-titulo y guarda en sesionstorage */
     $(document).on('input', '.titulo-row .titulo-text', function () {
         updateTitulos();
         saveData(document.querySelectorAll("form")[1].id);
     });
-    /*$(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-        const input = $(this);
-        const text = input.val().trim();
-        const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-        const tr = input.closest('tr');
-        const oldTitulo = tr.attr('data-titulo');
-
-        // Cambia el data-titulo del título
-        tr.attr('data-titulo', safeTitulo);
-
-        // Cambia el data-titulo de las filas asociadas a este título
-        $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-            $(this).attr('data-titulo', safeTitulo);
-
-            // Actualiza solo el valor entre corchetes en los names
-            $(this).find('input').each(function () {
-                let name = $(this).attr('name');
-                if (name) {
-                    // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                    name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
-                        return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                    });
-                    $(this).attr('name', name);
-                }
-            });
-        });
-
-        updateTitulos();
-        saveData(document.querySelectorAll("form")[1].id);
-    });*/
 
     $('#dynamicTable').on('click', '.btnEliminar', function() {
         $(this).closest('tr').remove();
@@ -504,16 +409,6 @@
             }
         });
 
-        /* selects.forEach(select => {
-            const stored = localStorage.getItem(`${formId}_${select.name}`);
-            console.log(''+stored);
-
-            if (stored !== null) select.value = stored;
-
-            select.addEventListener("change", () => {
-                localStorage.setItem(`${formId}_${select.name}`, select.value);
-            });
-        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");

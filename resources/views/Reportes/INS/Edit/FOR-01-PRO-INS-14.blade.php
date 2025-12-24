@@ -1040,22 +1040,22 @@
                                 @endif
 
                                 @foreach ($grupo['resultados'] as $resultado)
-                                    <tr data-titulo="{{ $tituloKey }}">
+                                    <tr data-titulo="{{ $titleId }}">
                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                        <td><input type="text" class="form-control" name='no_junta[{{ $tituloKey }}][]' value="{{ $resultado['no_junta'] }}"></td>
-                                        <td><input type="text" class="form-control" name='Tip_Ind[{{ $tituloKey }}][]' value="{{ $resultado['Tip_Ind'] }}"></td>
-                                        <td><input type="text" class="form-control" name='L_PGL[{{ $tituloKey }}][]' value="{{ $resultado['L_PGL'] }}"></td>
-                                        <td><input type="text" class="form-control" name='A_PGL[{{ $tituloKey }}][]' value="{{ $resultado['A_PGL'] }}"></td>
-                                        <td><input type="text" class="form-control" name='AL_PGL[{{ $tituloKey }}][]' value="{{ $resultado['AL_PGL'] }}"></td>
-                                        <td><input type="text" class="form-control" name='X[{{ $tituloKey }}][]' value="{{ $resultado['X'] }}"></td>
-                                        <td><input type="text" class="form-control" name='Y[{{ $tituloKey }}][]' value="{{ $resultado['Y'] }}"></td>
-                                        <td><input type="text" class="form-control" name='DA_PROF[{{ $tituloKey }}][]' value="{{ $resultado['DA_PROF'] }}"></td>
-                                        <td><input type="text" class="form-control" name='PA[{{ $tituloKey }}][]' value="{{ $resultado['PA'] }}"></td>
-                                        <td><input type="text" class="form-control" name='SA[{{ $tituloKey }}][]' value="{{ $resultado['SA'] }}"></td>
-                                        <td><input type="text" class="form-control" name='TMIN[{{ $tituloKey }}][]' value="{{ $resultado['TMIN'] }}"></td>
-                                        <td><input type="text" class="form-control" name='SCAN[{{ $tituloKey }}][]' value="{{ $resultado['SCAN'] }}"></td>
-                                        <td><input type="text" class="form-control" name='EVAL[{{ $tituloKey }}][]' value="{{ $resultado['EVAL'] }}"></td>
-                                        <td><input type="text" class="form-control" name='FOTOS[{{ $tituloKey }}][]' value="{{ $resultado['FOTOS'] }}"></td>
+                                        <td><input type="text" class="form-control" name='no_junta[{{ $titleId }}][]' value="{{ $resultado['no_junta'] }}"></td>
+                                        <td><input type="text" class="form-control" name='Tip_Ind[{{ $titleId }}][]' value="{{ $resultado['Tip_Ind'] }}"></td>
+                                        <td><input type="text" class="form-control" name='L_PGL[{{ $titleId }}][]' value="{{ $resultado['L_PGL'] }}"></td>
+                                        <td><input type="text" class="form-control" name='A_PGL[{{ $titleId }}][]' value="{{ $resultado['A_PGL'] }}"></td>
+                                        <td><input type="text" class="form-control" name='AL_PGL[{{ $titleId }}][]' value="{{ $resultado['AL_PGL'] }}"></td>
+                                        <td><input type="text" class="form-control" name='X[{{ $titleId }}][]' value="{{ $resultado['X'] }}"></td>
+                                        <td><input type="text" class="form-control" name='Y[{{ $titleId }}][]' value="{{ $resultado['Y'] }}"></td>
+                                        <td><input type="text" class="form-control" name='DA_PROF[{{ $titleId }}][]' value="{{ $resultado['DA_PROF'] }}"></td>
+                                        <td><input type="text" class="form-control" name='PA[{{ $titleId }}][]' value="{{ $resultado['PA'] }}"></td>
+                                        <td><input type="text" class="form-control" name='SA[{{ $titleId }}][]' value="{{ $resultado['SA'] }}"></td>
+                                        <td><input type="text" class="form-control" name='TMIN[{{ $titleId }}][]' value="{{ $resultado['TMIN'] }}"></td>
+                                        <td><input type="text" class="form-control" name='SCAN[{{ $titleId }}][]' value="{{ $resultado['SCAN'] }}"></td>
+                                        <td><input type="text" class="form-control" name='EVAL[{{ $titleId }}][]' value="{{ $resultado['EVAL'] }}"></td>
+                                        <td><input type="text" class="form-control" name='FOTOS[{{ $titleId }}][]' value="{{ $resultado['FOTOS'] }}"></td>
                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                     </tr>
                                     @php $contador++; @endphp
@@ -1431,6 +1431,110 @@ $(document).ready(function() {
     let tituloCount = 0;
     let rowCount = 0;
     let rowCountGlobal = 0;
+    
+        function restoreData() {
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
+
+        // Helpers y configuración
+        const fieldNames = ['no_junta','Tip_Ind','L_PGL','A_PGL','AL_PGL','X','Y','DA_PROF','PA','SA','TMIN','SCAN','EVAL','FOTOS'];
+        const placeholders = {
+            no_junta: 'Junta / Elemento', Tip_Ind: 'Tipo de Indicación', L_PGL: 'L (PLG)',
+            A_PGL: 'A (PLG)', AL_PGL: 'ALTURA (PLG)', X: 'X', Y: 'Y', DA_PROF: 'DA (PROF)',
+            PA: 'PA', SA: 'SA', TMIN: 'Tmin', SCAN: 'Datos del Archivo (Escaneo)', EVAL: 'Evaluación', FOTOS: 'Fotos'
+        };
+        function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
+
+        // Limpiar tabla y contadores
+        $('#dynamicTable tbody').empty();
+        tituloCount = 0;
+        rowCount = 0;
+        rowCountGlobal = 0;
+
+        // Recrear títulos (manteniendo el id único guardado)
+        (data.titles || []).forEach(function(t){
+            tituloCount++;
+            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
+            const titleText = esc(t.text || '');
+
+            const newTitle = `
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="16">
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título...">
+                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
+                    <button type="button" class="btn btn-danger btnEliminarTitulo">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                </td>
+            </tr>
+            `;
+            $('#dynamicTable tbody').append(newTitle);
+        });
+
+        // Recrear filas (inserción debajo del título correspondiente)
+        (data.rows || []).forEach(function(r){
+            const titleId = r.titleId || 'sin_titulo';
+            const vals = r.values || r.fields || []; // acepta array u objeto
+
+            const inputsHtml = fieldNames.map(function(fn, idx){
+                const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
+                return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
+            }).join('');
+
+            const $newRow = $(`<tr data-titulo="${titleId}">
+                <td class="row-number">0 <input type="hidden" value="0"></td>
+                ${inputsHtml}
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`);
+
+            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
+
+            if ($titleRow.length) {
+                // Si ya hay filas para ese título, insertar después de la última de ellas
+                const $lastRowSameTitle = $titleRow.nextAll(`tr[data-titulo="${titleId}"]:not(.titulo-row)`).last();
+                if ($lastRowSameTitle.length) {
+                    $lastRowSameTitle.after($newRow);
+                } else {
+                    $titleRow.after($newRow);
+                }
+            } else {
+                // Título no existe (sin_titulo u otro caso) -> agregar al final
+                $('#dynamicTable tbody').append($newRow);
+            }
+        });
+
+        // Reindexar numeración visible y actualizar contadores
+        function reindexRows(){
+            let idx = 0;
+            $('#dynamicTable tbody tr').not('.titulo-row').each(function(){
+            idx++;
+            // actualizar número visible (dejando el input hidden intacto)
+            const td = $(this).find('td').eq(0);
+            // Si existe un nodo de texto lo reemplazamos; si no, reconstruimos el contenido
+            const textNode = td.contents().filter(function(){ return this.nodeType === 3; }).first();
+            if (textNode.length) {
+                textNode[0].nodeValue = idx + ' ';
+            } else {
+                // fallback: mantener el hidden input y escribir el número delante
+                const hidden = td.find('input[type="hidden"]').prop('outerHTML');
+                td.html(idx + ' ' + hidden);
+            }
+            td.find('input[type="hidden"]').val(idx);
+            });
+            rowCountGlobal = idx;
+            const lastTitleId = $('.titulo-row').last().data('titulo');
+            rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
+        }
+        reindexRows();
+
+        // Actualizaciones finales y guardado
+        if (typeof updateTitulos === 'function') updateTitulos();
+        // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
+        const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
+        if (formId && typeof saveData === 'function') saveData(formId);
+        }
 
         $('#addTituloBtn').click(function () {
             tituloCount++;

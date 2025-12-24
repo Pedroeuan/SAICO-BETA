@@ -1477,56 +1477,6 @@ $(document).ready(function() {
         const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
         if (formId && typeof saveData === 'function') saveData(formId);
         }
-        /*function restoreData() {
-            //const savedData = sessionStorage.getItem('dynamicTableData');
-            //const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
-            if (!data) return;
-            if (savedData) {
-                // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
-                
-                savedData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="15">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="fa fa-times"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
-                                        <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                                        <td><input type="text" class="form-control" name="no_junta[${item.titulo}]" value="${item.inputs[1]}" placeholder="Junta / Elemento"></td>
-                                        <td><input type="text" class="form-control" name="Tip_Ind[${item.titulo}]" value="${item.inputs[2]}" placeholder="Tipo de Indicación"></td>
-                                        <td><input type="text" class="form-control" name="L_PGL[${item.titulo}]" value="${item.inputs[3]}" placeholder="L (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="A_PGL[${item.titulo}]" value="${item.inputs[4]}" placeholder="A (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="AL_PGL[${item.titulo}]" value="${item.inputs[5]}" placeholder="ALTURA (PLG)"></td>
-                                        <td><input type="text" class="form-control" name="X[${item.titulo}]" value="${item.inputs[6]}" placeholder="X"></td>
-                                        <td><input type="text" class="form-control" name="Y[${item.titulo}]" value="${item.inputs[7]}" placeholder="Y"></td>
-                                        <td><input type="text" class="form-control" name="DA_PROF[${item.titulo}]" value="${item.inputs[8]}" placeholder="DA (PROF)"></td>
-                                        <td><input type="text" class="form-control" name="PA[${item.titulo}]" value="${item.inputs[9]}" placeholder="PA"></td>
-                                        <td><input type="text" class="form-control" name="SA[${item.titulo}]" value="${item.inputs[10]}" placeholder="SA"></td>
-                                        <td><input type="text" class="form-control" name="TMIN[${item.titulo}]" value="${item.inputs[11]}" placeholder="Tmin"></td>
-                                        <td><input type="text" class="form-control" name="SCAN[${item.titulo}]" value="${item.inputs[12]}" placeholder="Datos del Archivo (Escaneo)"></td>
-                                        <td><input type="text" class="form-control" name="EVAL[${item.titulo}]" value="${item.inputs[13]}" placeholder="Evaluación"></td>
-                                        <td><input type="text" class="form-control" name="FOTOS[${item.titulo}]" value="${item.inputs[14]}" placeholder="Fotos"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                                    </tr>`;
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
-        }*/
 
         $('#addTituloBtn').click(function () {
             tituloCount++;

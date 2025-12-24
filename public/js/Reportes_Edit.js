@@ -349,9 +349,8 @@
         });
         rowCountGlobal = count;
     }
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
+        // Función correcta para serializar títulos como [{id,text}]
+        function updateTitulos() {
         var titulos = [];
         $('.titulo-row').each(function() {
             const id = $(this).data('titulo');
@@ -360,17 +359,16 @@
         });
         $('#titulos_hidden').val(JSON.stringify(titulos));
         }
-        /*function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
-
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }*/
-
+    // Función para actualizar los títulos en el campo oculto
+    /*function updateTitulos() {
+        var titulos = [];
+        $('.titulo-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
+        });
+        $('#titulos_hidden').val(JSON.stringify(titulos));
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
@@ -397,11 +395,10 @@
                     });
                 });
             });
-        });
-
+        });*/
 
     /*Juntas-Resultados */
-    function updateRowNumbers() {
+    /*function updateRowNumbers() {
         let count = 0;
         $('#dynamicTable tbody tr').each(function () {
             if (!$(this).hasClass('titulo-row')) {
@@ -422,10 +419,9 @@
 
             // Asignar los títulos al campo oculto
             $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
+        }*/
 
-
-        document.addEventListener('DOMContentLoaded', function () {
+/*        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
                 inputTitulo.addEventListener('input', function() {
                     const row = inputTitulo.closest('tr');
@@ -451,7 +447,7 @@
                 });
             });
         });
-
+*/
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
@@ -472,39 +468,6 @@
             updateTitulos();
             saveData(document.querySelectorAll("form")[1].id);
         });
-        /*$(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-            const input = $(this);
-            const text = input.val().trim();
-            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-            const tr = input.closest('tr');
-            const oldTitulo = tr.attr('data-titulo');
-
-            // Cambia el data-titulo del título
-            tr.attr('data-titulo', safeTitulo);
-
-            // Cambia el data-titulo de las filas asociadas a este título
-            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-                $(this).attr('data-titulo', safeTitulo);
-
-                // Actualiza solo el valor entre corchetes en los names
-                $(this).find('input').each(function () {
-                    let name = $(this).attr('name');
-                    if (name) {
-                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) 
-                        {
-                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                        });
-                        //name = name.replace(new RegExp(`\\[${oldTitulo}\\]`, 'g'), `[${safeTitulo}]`);
-                        $(this).attr('name', name);
-                    }
-                });
-            });
-
-            updateTitulos();
-            saveData();
-        });*/
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
@@ -583,17 +546,6 @@
                 });
             }
         });
-
-        /* selects.forEach(select => {
-            const stored = localStorage.getItem(`${formId}_${select.name}`);
-            console.log(''+stored);
-
-            if (stored !== null) select.value = stored;
-
-            select.addEventListener("change", () => {
-                localStorage.setItem(`${formId}_${select.name}`, select.value);
-            });
-        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");
