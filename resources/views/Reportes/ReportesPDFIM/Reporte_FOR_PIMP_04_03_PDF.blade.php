@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-02_B/03</title>
 
-       <style>
+    <style>
         @page {
-            /* Se reducen márgenes para ganar espacio vertical y evitar el salto de hoja */
-            margin: 1.5cm 1.2cm 1.5cm 1.2cm;
+            margin: 1cm 1.2cm 1cm 1.2cm;
         }
 
         body {
@@ -37,6 +36,7 @@
             background-color: #305496;
             color: #ffffff;
             font-size: 8px;
+            font-weight: bold;
         }
 
         .datosgenerales {
@@ -49,69 +49,78 @@
             border-bottom: 1px solid black;
         }
 
-        /* Espaciadores más pequeños */
+        .celdaGris {
+            background-color: #f2f2f2;
+        }
+
+        /* Espaciadores compactos */
         br {
             content: "";
             display: block;
-            margin: 3px 0;
-            line-height: 5px;
+            margin: 2px 0;
+            line-height: 2px;
         }
 
-        /* ===============================
-        ESTILOS MICROESTRUCTURA
-        =============================== */
+        /* Microestructura compacta para forzar una hoja */
         .tabla-micro {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 25px 5px; 
-            font-size: 10px;
+            border-spacing: 15px 2px;
+            font-size: 9px;
         }
 
         .cuadro {
-            border: 2px solid #000;
-            height: 155px; /* Reducido ligeramente para asegurar una sola hoja */
+            border: 1.5px solid #000;
+            height: 110px; /* Reducido para ahorrar espacio */
             position: relative;
             vertical-align: top;
         }
 
         .texto-arriba {
             position: absolute;
-            top: 4px;
-            left: 6px;
+            top: 3px;
+            left: 5px;
             font-weight: bold;
-            font-size: 9px;
+            font-size: 7.5px;
         }
 
         .texto-abajo {
             position: absolute;
-            bottom: 4px;
+            bottom: 3px;
             left: 0;
             right: 0;
-            font-size: 8.5px;
+            font-size: 7.5px;
             text-align: center;
             font-weight: bold;
         }
 
-        .area-imagen {
-            position: absolute;
-            top: 15px;
-            bottom: 15px;
-            left: 10px;
-            right: 10px;
+        /* Tablas Técnicas */
+        .tabla-tecnica {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7px;
+            margin-top: 3px;
+            text-align: center;
+        }
+
+        .tabla-tecnica th, .tabla-tecnica td {
+            border: 1px solid black;
+            height: 11px;
+            padding: 1px;
         }
     </style>
 </head>
 
 <body>
 
-    <header>
+<header>
     <table class="tablaheader">
         <tr>
             <th style="width: 50%;">FORMATO</th>
             <th style="width: 15%;">Código:</th>
             <th style="width: 20%;">FOR-PIMP-04_/03</th>
             <th rowspan="3" style="width: 15%;">
-                <img src="{{ $Logo }}" alt="Logo" style="width:55px;">
+                <img src="{{ $Logo }}" alt="Logo" style="width:50px;">
             </th>
         </tr>
         <tr>
@@ -128,8 +137,6 @@
         </tr>
     </table>
 </header>
-
-<br>
 
 <table class="datosgenerales">
     <tr class="encabezadoAzul">
@@ -200,9 +207,88 @@
 </table>
 
 <br>
-
-<table class="datosgenerales">
+<table class="tabla-tecnica">
     <tr class="encabezadoAzul">
-        <th colspan="4">ENSAYO DE DUREZA</th>
+        <th colspan="6">ENSAYO DE DUREZA - DATOS DEL EQUIPO</th>
+    </tr>
+    <tr>
+        <th style="width: 10%;" class="celdaGris">MARCA</th>
+        <td style="width: 23%;"></td>
+        <th style="width: 10%;" class="celdaGris">MODELO</th>
+        <td style="width: 23%;"></td>
+        <th style="width: 15%;" class="celdaGris">NO. DE SERIE</th>
+        <td style="width: 19%;"></td>
     </tr>
 </table>
+
+<table class="tabla-tecnica">
+    <tr class="encabezadoAzul"><th colspan="6">VALORES DE DUREZA MEDIDOS</th></tr>
+    <tr>
+        <td style="width: 16%;"></td><td style="width: 16%;"></td><td style="width: 16%;"></td><td style="width: 16%;"></td>
+        <th class="celdaGris" style="width: 16%;">PROMEDIO</th><td style="width: 20%;"></td>
+    </tr>
+</table>
+
+<table class="tabla-tecnica">
+    <tr class="encabezadoAzul"><th colspan="5">DATOS OBTENIDOS DEL MATERIAL</th></tr>
+    <tr class="celdaGris">
+        <th>DESCRIPCIÓN</th><th>DUREZA</th><th>R. TENSIÓN (KSI)</th><th>R. CEDENCIA (KSI)</th><th>GRANO</th>
+    </tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<table class="tabla-tecnica">
+    <tr class="encabezadoAzul"><th colspan="6">ANÁLISIS QUÍMICO - DATOS DEL EQUIPO</th></tr>
+    <tr>
+        <th class="celdaGris">MARCA</th><td></td>
+        <th class="celdaGris">MODELO</th><td></td>
+        <th class="celdaGris">NO. SERIE</th><td></td>
+    </tr>
+</table>
+
+<table class="tabla-tecnica">
+    <tr class="encabezadoAzul"><th colspan="13">COMPOSICIÓN QUÍMICA (%)</th></tr>
+    <tr class="celdaGris" style="font-size: 6px;">
+        <th>ELEMENTO</th><th>C</th><th>Mn</th><th>P</th><th>S</th><th>Si</th><th>Ni</th><th>Cr</th><th>Mo</th><th>Cu</th><th>V</th><th>Nb</th><th>C.E.</th>
+    </tr>
+    <tr><th class="celdaGris">ESPECIF.</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th class="celdaGris">OBTENIDO</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<footer style="margin-top: 10px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 7px;">
+        <thead> 
+            <tr><td colspan="9" style="padding-bottom: 5px; font-weight: bold;">4 Firmas</td></tr>
+            <tr>
+                <th></th>
+                <td style="width: 150px; height:25px" class="lineaInferior"></td>
+                <td></td>
+                <td style="width: 150px; height:25px" class="lineaInferior"></td>
+                <td></td>
+                <td style="width: 150px; height:25px" class="lineaInferior"></td>
+                <td></td>
+                <td style="width: 150px; height:25px" class="lineaInferior"></td>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <td><strong>ELABORÓ</strong></td>
+                <td></td>
+                <td><strong>REVISÓ</strong></td>
+                <td></td>
+                <td><strong>VALIDÓ</strong></td>
+                <td></td>
+                <td><strong>CLIENTE / INSPECCIÓN</strong></td>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <td style="font-size: 6.5px;"><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><th></th>
+            </tr>
+        </thead>                            
+    </table>
+</footer>
+
+</body>
+</html>
