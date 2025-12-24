@@ -502,10 +502,10 @@ return [
                             'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-09',
+                            'text' => 'FOR-PIMP-04/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_09',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_04/03',
+                            'can' => '',
                         ],
                         [
                             'text' => 'FOR-01-PRO-INS-10',

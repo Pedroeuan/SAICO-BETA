@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-02_B/03</title>
 
-    <style>
+       <style>
         @page {
             /* Se reducen márgenes para ganar espacio vertical y evitar el salto de hoja */
             margin: 1.5cm 1.2cm 1.5cm 1.2cm;
@@ -104,23 +104,23 @@
 
 <body>
 
-<header>
+    <header>
     <table class="tablaheader">
         <tr>
             <th style="width: 50%;">FORMATO</th>
             <th style="width: 15%;">Código:</th>
-            <th style="width: 20%;">FOR-PIMP-03_/01</th>
+            <th style="width: 20%;">FOR-PIMP-04_/03</th>
             <th rowspan="3" style="width: 15%;">
                 <img src="{{ $Logo }}" alt="Logo" style="width:55px;">
             </th>
         </tr>
         <tr>
             <th rowspan="2" style="font-size:9pt;">
-                Informe de Caracterización de Materiales Mediante la Técnica de<br>
-                Espectrometría de Emisión Óptica (OES)
+                Informe de Caracterizacíon de Materiales Mediante la Técnica<br>
+                de Fluorescencia de Rx (XRF)
             </th>
             <th>Versión</th>
-            <th>2</th>
+            <th>0</th>
         </tr>
         <tr>
             <th>Página</th>
@@ -203,115 +203,6 @@
 
 <table class="datosgenerales">
     <tr class="encabezadoAzul">
-        <th colspan="4">ANÁLISIS METALOGRÁFICO</th>
+        <th colspan="4">ENSAYO DE DUREZA</th>
     </tr>
 </table>
-
-<table style="width:100%; font-size:8px; border-collapse: collapse;" border="1" cellspacing="0">
-    <tr>
-        <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
-        <th colspan="2">MATERIAL PARA EL PULIDO</th>
-        <th colspan="2">DATOS DE ATAQUE QUÍMICO</th>
-        <th>FASES PRESENTES</th>
-        <th rowspan="2">ESPECIFICACIÓN APROXIMADA DEL MATERIAL</th>
-    </tr>
-    <tr>
-        <td>240</td><td>320</td><td>400</td>
-        <th>PAÑO</th><td></td>
-        <th>REACTIVO</th><td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>500</td><td>1000</td><td>1500</td>
-        <th>ABRASIVO</th><td></td>
-        <th>TIEMPO</th><td colspan="2"></td>
-        <td></td>
-    </tr>
-</table>
-
-<br>
-
-<table class="tabla-micro">
-    <tr>
-        <td class="cuadro">
-            <div class="area-imagen"></div>
-            <div class="texto-abajo">FOTOMICROGRAFÍA A 100X</div>
-        </td>
-        <td class="cuadro">
-            <div class="texto-arriba">DESCRIPCIÓN DE LA MICROESTRUCTURA:</div>
-            <div class="area-imagen"></div>
-        </td>
-    </tr>
-    <tr>
-        <td class="cuadro">
-            <div class="area-imagen"></div>
-            <div class="texto-abajo">TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112</div>
-        </td>
-        <td class="cuadro">
-            <div class="area-imagen"></div>
-            <div class="texto-abajo" style="color:#0a7f2e;">
-                FOTOGRAFÍA ESPECÍFICA DE CARACTERIZACIÓN
-            </div>
-        </td>
-    </tr>
-</table>
-
-<footer>
-    <table style="width: 100%; border-collapse: collapse; font-size: 8px;">
-        <thead> 
-                <tr>
-                    <td colspan="9" style="text-align: center; padding-bottom: 5px;">4 Firmas</td>
-                </tr>
-                <tr>
-                    <td style="width: 15px;"></td>
-                    <th></th>
-                    <td style="width: 15px;"></td>
-                    <th></th>
-                    <td style="width: 15px;"></td>
-                    <th></th>
-                    <td style="width: 15px;"></td>
-                    <th></th>
-                    <td style="width: 15px;"></td>
-                </tr>
-
-                <tr>
-                    <th></th>
-                    <td style="width: 150px; height:35px" class="lineaInferior"></td>
-                    <td></td>
-                    <td style="width: 150px; height:35px" class="lineaInferior"></td>
-                    <td></td>
-                    <td style="width: 150px; height:35px" class="lineaInferior"></td>
-                    <td></td>
-                    <td style="width: 150px; height:35px" class="lineaInferior"></td>
-                    <th></th>
-                </tr>
-
-                <tr>
-                    <th></th>
-                    <td><strong>ELABORÓ</strong></td>
-                    <td></td>
-                    <td><strong>REVISÓ</strong></td>
-                    <td></td>
-                    <td><strong>VALIDÓ</strong></td>
-                    <td></td>
-                    <td><strong>CLIENTE / INSPECCIÓN</strong></td>
-                    <th></th>
-                </tr>
-                
-                <tr>
-                    <th></th>
-                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                    <td></td>
-                    <td><strong></strong></td>
-                    <td></td>
-                    <td><strong></strong></td>
-                    <td></td>
-                    <td><strong></strong></td>
-                    <th></th>
-                </tr>
-        </thead>                            
-    </table>
-</footer>
-
-</body>
-</html>
