@@ -69,7 +69,7 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 235px; /* Altura del header */
+                    padding-top: 635px; /* Altura del header */
                     padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
@@ -763,7 +763,7 @@
                                             @php
                                                 $contadorFilas++;
                                                 $contadorFilasPagina++;
-                                                $totalMetros += floatval($junta['observaciones']);
+                                                $totalMetros += floatval($junta['FOTOS']);
                                                 $esUltimaFila = $loop->last;
                                             @endphp
                                             <tr class="juntas">
