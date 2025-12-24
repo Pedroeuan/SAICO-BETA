@@ -1598,6 +1598,7 @@ $(document).ready(function() {
     );
 
         $('form').submit(function(e) {
+            if (typeof updateTitulos === 'function') updateTitulos(); // <<-- AÑADIR
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
                 e.preventDefault();
