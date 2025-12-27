@@ -1059,6 +1059,8 @@
 
                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                     </div>
 
@@ -1490,6 +1492,33 @@ $(document).ready(function() {
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
+        });
+
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="${lastTitle}">
+                <td colspan="15">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
