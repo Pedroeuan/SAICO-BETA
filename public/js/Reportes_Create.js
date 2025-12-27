@@ -279,10 +279,10 @@
         rowCountGlobal = count;
     }
 
-    // Función para actualizar los títulos en el campo oculto
+    // Función para actualizar los títulos en el campo oculto (excluye longitudes)
     function updateTitulos() {
         var titulos = [];
-        $('.titulo-row').each(function() {
+        $('.titulo-row').not('.long-row').each(function() {
             const id = $(this).data('titulo');
             const text = $(this).find('.titulo-text').val() || '';
             titulos.push({ id: id, text: text });
@@ -291,7 +291,7 @@
     }
 
     function saveData(formId) {
-    const titles = $('.titulo-row').map(function() {
+    const titles = $('.titulo-row').not('.long-row').map(function() {
         return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
     }).get();
 
@@ -301,7 +301,11 @@
         return { titleId: id, values };
     }).get();
 
-    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles, rows }));
+    const longs = $('.titulo-row.long-row').map(function(){
+        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
+    }).get();
+
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles, rows, longs }));
     }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
@@ -319,6 +323,7 @@
             return $(this).data('titulo') === id;
         }).remove();
         tr.remove();
+        updateTitulos();
         saveData($(this).closest('form').attr('id'));
     });
 

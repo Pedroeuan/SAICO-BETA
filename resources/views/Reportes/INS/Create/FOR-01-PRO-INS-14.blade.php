@@ -1405,7 +1405,7 @@ $(document).ready(function() {
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="16">
                 <div class="d-flex justify-content-between align-items-center">
-                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título...">
+                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
                     <button type="button" class="btn btn-danger btnEliminarTitulo">
                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -1449,6 +1449,28 @@ $(document).ready(function() {
             }
         });
 
+                // Recrear títulos (manteniendo el id único guardado)
+        (data.titles || []).forEach(function(t){
+            tituloCount++;
+            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
+            const titleText = esc(t.text || '');
+
+            const newTitle = `
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="14"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${titleId}]" value="${titleText}" placeholder="Ingrese Longitud Inspeccionada...">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+            `;
+            $('#dynamicTable tbody').append(newTitle);
+        });
+        
         // Reindexar numeración visible y actualizar contadores
         function reindexRows(){
             let idx = 0;
@@ -1515,10 +1537,11 @@ $(document).ready(function() {
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="${lastTitle}">
-                <td colspan="15">
+            <tr class="titulo-row long-row" data-titulo="${lastTitle}">
+                <td colspan="14"> Longitud Inspeccionada</td>
+                <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
