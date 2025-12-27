@@ -246,49 +246,7 @@
     </tr>
 </table>
 
-<table class="tabla-tecnica">
-    <tr class="encabezadoAzul"><th colspan="13">COMPOSICIÓN QUÍMICA (%)</th></tr>
-    <tr class="celdaGris" style="font-size: 6px;">
-        <th>ELEMENTO</th><th>C</th><th>Mn</th><th>P</th><th>S</th><th>Si</th><th>Ni</th><th>Cr</th><th>Mo</th><th>Cu</th><th>V</th><th>Nb</th><th>C.E.</th>
-    </tr>
-    <tr><th class="celdaGris">ESPECIF.</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><th class="celdaGris">OBTENIDO</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</table>
 
-<footer style="margin-top: 10px;">
-    <table style="width: 100%; border-collapse: collapse; font-size: 7px;">
-        <thead> 
-            <tr><td colspan="9" style="padding-bottom: 5px; font-weight: bold;">4 Firmas</td></tr>
-            <tr>
-                <th></th>
-                <td style="width: 150px; height:25px" class="lineaInferior"></td>
-                <td></td>
-                <td style="width: 150px; height:25px" class="lineaInferior"></td>
-                <td></td>
-                <td style="width: 150px; height:25px" class="lineaInferior"></td>
-                <td></td>
-                <td style="width: 150px; height:25px" class="lineaInferior"></td>
-                <th></th>
-            </tr>
-            <tr>
-                <th></th>
-                <td><strong>ELABORÓ</strong></td>
-                <td></td>
-                <td><strong>REVISÓ</strong></td>
-                <td></td>
-                <td><strong>VALIDÓ</strong></td>
-                <td></td>
-                <td><strong>CLIENTE / INSPECCIÓN</strong></td>
-                <th></th>
-            </tr>
-            <tr>
-                <th></th>
-                <td style="font-size: 6.5px;"><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                <td></td><td></td><td></td><td></td><td></td><td></td><th></th>
-            </tr>
-        </thead>                            
-    </table>
-</footer>
 
 </body>
 </html>
