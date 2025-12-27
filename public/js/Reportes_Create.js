@@ -305,7 +305,19 @@
         return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
     }).get();
 
-    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles, rows, longs }));
+    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
+    function dedupe(arr){
+        const seen = new Set();
+        return arr.filter(item => {
+            const key = (item.id || '') + '||' + (item.text || '');
+            if(seen.has(key)) return false; seen.add(key); return true;
+        });
+    }
+
+    const uniqueTitles = dedupe(titles);
+    const uniqueLongs = dedupe(longs);
+
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles: uniqueTitles, rows, longs: uniqueLongs }));
     }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input

@@ -348,6 +348,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'EVAL' => 'nullable|array',
             'FOTOS' => 'nullable|array',
 
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|string|max:255',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -506,11 +508,13 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
                     //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
+                $longSin = $request->input("Long_Inspecc.$sinTituloKey", null);
             }
-        
+            
             $datosAgrupados[] = [
                 'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'longitud_inspeccionada' => $longSin,
             ];
         }
         
@@ -544,11 +548,13 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
                     //'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
+                $long = $request->input("Long_Inspecc.$tituloKey", null);
             }
         
             $datosAgrupados[] = [
                 'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'longitud_inspeccionada' => $long,
             ];
         }
         

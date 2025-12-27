@@ -1449,14 +1449,13 @@ $(document).ready(function() {
             }
         });
 
-                // Recrear títulos (manteniendo el id único guardado)
-        (data.titles || []).forEach(function(t){
-            tituloCount++;
-            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
-            const titleText = esc(t.text || '');
+        // Recrear Longitudes guardadas (data.longs)
+        (data.longs || []).forEach(function(l){
+            const titleId = l.id || `long_${Date.now()}`;
+            const titleText = esc(l.text || '');
 
-            const newTitle = `
-            <tr class="titulo-row" data-titulo="${titleId}">
+            const newLong = `
+            <tr class="titulo-row long-row" data-titulo="${titleId}">
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
@@ -1468,7 +1467,7 @@ $(document).ready(function() {
                 </td>
             </tr>
             `;
-            $('#dynamicTable tbody').append(newTitle);
+            $('#dynamicTable tbody').append(newLong);
         });
         
         // Reindexar numeración visible y actualizar contadores
