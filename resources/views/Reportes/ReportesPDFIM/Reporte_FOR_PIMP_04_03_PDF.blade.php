@@ -246,7 +246,92 @@
     </tr>
 </table>
 
+<table class="shot-container">
+    <tr>
+        <td width="49%">
+            <table width="100%" style="border-collapse: collapse;">
+                <tr><th class="encabezadoAzul">1er. DISPARO </th></tr>
+                <tr><td class="shot-box">Valores obtenidos en la pieza analizada...</td></tr>
+            </table>
+        </td>
+        <td width="2%"></td>
+        <td width="49%">
+            <table width="100%" style="border-collapse: collapse;">
+                <tr><th class="encabezadoAzul">2do. DISPARO </th></tr>
+                <tr><td class="shot-box">Valores obtenidos en la pieza analizada...</td></tr>
+            </table>
+    </tr>
+</table>
+                   <table>
+                        <thead> 
+                                4 Firmas 
+                                <tr>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                    <th></th>
+                                    <td style="width: 15px;"></td>
+                                </tr>
 
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <th></th>
+                                </tr>
 
-</body>
-</html>
+                                <tr>
+                                    <th></th>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <th></th>
+                                </tr>
+                        </thead>                            
+                    </table>
+            </footer>
+
+            <div class="content"> 
+
+                
+            </div>
+        </body>
+        
+    </html>
