@@ -1024,10 +1024,11 @@
                             @php
                                 $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
                                 $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
+                                // Definir titleId para grupos con o sin título (evita "Undefined variable $titleId")
+                                $titleId = ($grupo['titulos_juntas'] != 'SIN TITULO') ? 'titulo_' . $loop->index . '_' . time() : 'sin_titulo';
                             @endphp
 
                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                    @php $titleId = 'titulo_' . $loop->index . '_' . time(); @endphp
                                     <tr class="titulo-row" data-titulo="{{ $titleId }}">
                                         <td colspan="15">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -1079,6 +1080,8 @@
                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                     </div>
@@ -1561,6 +1564,34 @@ $(document).ready(function() {
         saveData(document.querySelectorAll("form")[1].id);
         });
 
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <tr class="titulo-row long-row" data-titulo="${lastTitle}">
+                <td colspan="14"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]">
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
+        });
+        
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
