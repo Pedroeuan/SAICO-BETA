@@ -372,7 +372,7 @@
             
             // Eliminar la fila del título
             tituloRow.remove();
-            
+            verificarYAgregarLongitud();
             // Eliminar todas las filas que tengan el mismo data-titulo
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
@@ -387,6 +387,7 @@
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
+            verificarYAgregarLongitud();
             updateRowNumbers();
         });
 

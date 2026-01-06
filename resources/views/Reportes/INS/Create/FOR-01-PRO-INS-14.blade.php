@@ -1493,7 +1493,7 @@ $(document).ready(function() {
             rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
         }
         reindexRows();
-
+        verificarYAgregarLongitud();
         // Actualizaciones finales y guardado
         if (typeof updateTitulos === 'function') updateTitulos();
         // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
@@ -1590,6 +1590,7 @@ $(document).ready(function() {
                 $('#dynamicTable tbody').append(newRow);
             }
             //saveData(document.querySelectorAll("form")[1].id);
+            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
@@ -1620,6 +1621,38 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
+    function verificarYAgregarLongitud() {
+        // Contar filas que NO sean longitudes
+        let totalFilas = $('#dynamicTable tbody tr')
+            .not('.long-row')
+            .length;
+
+        // Cada 13 filas agregar longitud
+        if (totalFilas % 13 === 0) {
+
+            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+
+            let newLong = `
+            <tr class="titulo-row long-row" data-titulo="${lastTitle}">
+                <td colspan="14">Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text"
+                            class="form-control w-90 titulo-text"
+                            name="Long_Inspecc[${lastTitle}][]"
+                            placeholder="Ingrese Longitud Inspeccionada...">
+                        <button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+
+            $('#dynamicTable tbody').append(newLong);
+        }
+    }
+
 
     $(document).ready(function() {
         function actualizarInputsE() {
