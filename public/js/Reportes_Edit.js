@@ -15,7 +15,7 @@
             e.preventDefault();
         }
     });
-
+    
     /*Botón eliminar para imagenes subidas */
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.remove-image').forEach(button => {
@@ -339,6 +339,11 @@
     });
 
     /*Juntas-Resultados */
+    // eliminar long
+    /*$(document).on('click', '.btnRemoveLong', function() {
+    $(this).closest('tr').remove();
+    saveData($('#FOR-01-PRO-INS-14').attr('id'));
+    });*/
     function updateRowNumbers() {
         let count = 0;
         $('#dynamicTable tbody tr').each(function () {

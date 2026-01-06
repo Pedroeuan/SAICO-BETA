@@ -1029,12 +1029,13 @@
                             @endphp
 
                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
+                                    @php $titleId = 'titulo_' . $loop->index . '_' . time(); @endphp
                                     <tr class="titulo-row" data-titulo="{{ $titleId }}">
                                         <td colspan="15">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <input type="text" class="form-control w-90 titulo-text" name="titulos_text[{{ $titleId }}]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                 <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
-                                                <td><button type="button" class="btn btn-danger btnEliminarTitulo">...</button></td>
+                                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                             </div>
                                         </td>
                                     </tr>
@@ -1591,6 +1592,7 @@ $(document).ready(function() {
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
         });
+
         
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
