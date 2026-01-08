@@ -346,9 +346,18 @@
     });
 
     $('#dynamicTable').on('click', '.btnEliminar', function() {
-        $(this).closest('tr').remove();
+
+        const $tr = $(this).closest('tr');
+        const esLongitud = $tr.hasClass('long-row');
+
+        $tr.remove();
         updateRowNumbers();
-        verificarYAgregarLongitud();
+
+        // 👉 Solo recalcular si NO estamos borrando una longitud
+        if (!esLongitud) {
+            verificarYAgregarLongitud();
+        }
+
         saveData(document.querySelectorAll("form")[1].id);
     });
 

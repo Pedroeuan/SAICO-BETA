@@ -1460,7 +1460,7 @@ $(document).ready(function() {
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${titleId}]" value="${titleText}" placeholder="Ingrese Longitud Inspeccionada...">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
@@ -1541,7 +1541,7 @@ $(document).ready(function() {
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
@@ -1622,51 +1622,55 @@ $(document).ready(function() {
             restoreData();
 });
 
-    function verificarYAgregarLongitud() {
+function verificarYAgregarLongitud() {
 
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
+    const $tbody = $('#dynamicTable tbody');
+    const $rows = $tbody.children('tr');
 
-        // Buscar la última longitud
-        const $ultimaLong = $rows.filter('.long-row').last();
+    // Buscar la última longitud
+    const $ultimaLong = $rows.filter('.long-row').last();
 
-        // Filas que pertenecen al bloque actual
-        let $bloque;
+    // Filas que pertenecen al bloque actual
+    let $bloque;
 
-        if ($ultimaLong.length) {
-            $bloque = $ultimaLong.nextAll('tr');
-        } else {
-            $bloque = $rows;
-        }
-
-        // Si el bloque ya tiene 13 o más filas
-        if ($bloque.length >= 13) {
-
-            // La fila #13 real del bloque (index 12)
-            const $fila13 = $bloque.eq(12);
-
-            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
-
-            let newLong = `
-            <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14">Longitud Inspeccionada</td>
-                <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text"
-                            class="form-control w-90 titulo-text"
-                            name="Long_Inspecc[${lastTitle}][]"
-                            placeholder="Ingrese Longitud Inspeccionada...">
-                            <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                <i class="fa fa-times"></i>
-                            </button></td>
-                    </div>
-                </td>
-            </tr>`;
-
-            // 👉 Insertar JUSTO después de la fila 13
-            $fila13.after(newLong);
-        }
+    if ($ultimaLong.length) {
+        $bloque = $ultimaLong.nextAll('tr');
+    } else {
+        $bloque = $rows;
     }
+
+    // Si el bloque ya tiene 13 o más filas
+    if ($bloque.length >= 13) {
+
+        // 🚫 Evitar insertar otra longitud si ya existe en este bloque
+        if ($bloque.filter('.long-row').length > 0) return;
+
+        // La fila #13 real del bloque (index 12)
+        const $fila13 = $bloque.eq(12);
+
+        let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+
+        let newLong = `
+        <tr class="long-row" data-titulo="${lastTitle}">
+            <td colspan="14">Longitud Inspeccionada</td>
+            <td>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text"
+                        class="form-control w-90 titulo-text"
+                        name="Long_Inspecc[${lastTitle}][]"
+                        placeholder="Ingrese Longitud Inspeccionada...">
+
+                    <td><button type="button" class="btn btn-danger btnEliminar">
+                        <i class="fa fa-times"></i>
+                    </button></td>
+                </div>
+            </td>
+        </tr>`;
+
+        // 👉 Insertar JUSTO después de la fila 13
+        $fila13.after(newLong);
+    }
+}
 
     $(document).ready(function() {
         function actualizarInputsE() {
