@@ -1403,13 +1403,13 @@ $(document).ready(function() {
 
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="16">
+                <td colspan="15">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
-                    <button type="button" class="btn btn-danger btnEliminarTitulo">
+                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                     <i class="fa fa-times" aria-hidden="true"></i>
-                    </button>
+                    </button></td>
                 </div>
                 </td>
             </tr>
@@ -1451,11 +1451,58 @@ $(document).ready(function() {
 
         // Recrear Longitudes guardadas (data.longs)
         (data.longs || []).forEach(function(l){
+
+            const titleId = l.titleId || 'sin_titulo';
+            const value   = esc(l.text || '');
+
+            const newLong = `
+                <tr class="long-row" data-titulo="${titleId}">
+                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text"
+                                class="form-control w-90 titulo-text"
+                                name="Long_Inspecc[${titleId}]"
+                                value="${value}"
+                                placeholder="Ingrese Longitud Inspeccionada...">
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            // 🔎 Buscar filas reales del bloque
+            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
+            const $rowsBlock = $titleRow.nextUntil('.titulo-row');
+
+            if ($rowsBlock.length >= 13) {
+                const $fila13 = $rowsBlock
+                    .not('.long-row')
+                    .eq(12);
+
+                if ($fila13.length) {
+                    $fila13.after(newLong);
+                } else {
+                    $rowsBlock.last().after(newLong);
+                }
+            } else {
+                // fallback: al final del bloque
+                $rowsBlock.last().after(newLong);
+            }
+
+        });
+
+        /*(data.longs || []).forEach(function(l){
             const titleId = l.id || `long_${Date.now()}`;
             const titleText = esc(l.text || '');
 
             const newLong = `
-            <tr class="titulo-row long-row" data-titulo="${titleId}">
+            <!--<tr class="titulo-row long-row" data-titulo="${titleId}"> -->
+            <tr class="long-row" data-titulo="${titleId}">
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
@@ -1468,12 +1515,45 @@ $(document).ready(function() {
             </tr>
             `;
             $('#dynamicTable tbody').append(newLong);
-        });
+        });*/
         
         // Reindexar numeración visible y actualizar contadores
         function reindexRows(){
             let idx = 0;
-            $('#dynamicTable tbody tr').not('.titulo-row').each(function(){
+            $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function(){
+                idx++;
+
+                const td = $(this).find('td').eq(0);
+                const textNode = td.contents().filter(function(){ 
+                    return this.nodeType === 3; 
+                }).first();
+
+                if (textNode.length) {
+                    textNode[0].nodeValue = idx + ' ';
+                } else {
+                    const hidden = td.find('input[type="hidden"]').prop('outerHTML');
+                    td.html(idx + ' ' + hidden);
+                }
+
+                td.find('input[type="hidden"]').val(idx);
+            });
+
+            rowCountGlobal = idx;
+
+            const lastTitleId = $('.titulo-row').last().data('titulo');
+
+            rowCount = lastTitleId 
+                ? $('#dynamicTable tbody tr')
+                    .not('.titulo-row, .long-row')
+                    .filter(function(){
+                        return $(this).data('titulo') === lastTitleId;
+                    }).length 
+                : 0;
+        }
+        /*function reindexRows(){
+            let idx = 0;
+            //$('#dynamicTable tbody tr').not('.titulo-row').each(function(){
+            $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function(){
             idx++;
             // actualizar número visible (dejando el input hidden intacto)
             const td = $(this).find('td').eq(0);
@@ -1490,15 +1570,18 @@ $(document).ready(function() {
             });
             rowCountGlobal = idx;
             const lastTitleId = $('.titulo-row').last().data('titulo');
-            rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
-        }
+            //rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
+            rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row, .long-row').filter(function(){return $(this).data('titulo') === lastTitleId; }).length : 0;
+
+        }*/
         reindexRows();
-        verificarYAgregarLongitud();
+        //updateTitulos(); // Actualizar lista de títulos
+        //verificarYAgregarLongitud();
         // Actualizaciones finales y guardado
         if (typeof updateTitulos === 'function') updateTitulos();
         // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
         const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
-        if (formId && typeof saveData === 'function') saveData(formId);
+        //if (formId && typeof saveData === 'function') saveData(formId);
         }
 
         $('#addTituloBtn').click(function () {
@@ -1536,7 +1619,8 @@ $(document).ready(function() {
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
-            <tr class="titulo-row long-row" data-titulo="${lastTitle}">
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
@@ -1621,56 +1705,51 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+    function verificarYAgregarLongitud() {
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+        // Buscar la última longitud
+        const $ultimaLong = $rows.filter('.long-row').last();
+        // Filas que pertenecen al bloque actual
+        let $bloque;
+        if ($ultimaLong.length) {
+            $bloque = $ultimaLong.nextAll('tr');
+        } else {
+            $bloque = $rows;
+        }
 
-function verificarYAgregarLongitud() {
+        // Si el bloque ya tiene 13 o más filas
+        if ($bloque.length >= 13) {
 
-    const $tbody = $('#dynamicTable tbody');
-    const $rows = $tbody.children('tr');
+            // 🚫 Evitar insertar otra longitud si ya existe en este bloque
+            if ($bloque.filter('.long-row').length > 0) return;
 
-    // Buscar la última longitud
-    const $ultimaLong = $rows.filter('.long-row').last();
+            // La fila #13 real del bloque (index 12)
+            const $fila13 = $bloque.eq(12);
 
-    // Filas que pertenecen al bloque actual
-    let $bloque;
+            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
 
-    if ($ultimaLong.length) {
-        $bloque = $ultimaLong.nextAll('tr');
-    } else {
-        $bloque = $rows;
+            let newLong = `
+            <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="14">Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text"
+                            class="form-control w-90 titulo-text"
+                            name="Long_Inspecc[${lastTitle}][]"
+                            placeholder="Ingrese Longitud Inspeccionada...">
+
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>`;
+
+            // 👉 Insertar JUSTO después de la fila 13
+            $fila13.after(newLong);
+        }
     }
-
-    // Si el bloque ya tiene 13 o más filas
-    if ($bloque.length >= 13) {
-
-        // 🚫 Evitar insertar otra longitud si ya existe en este bloque
-        if ($bloque.filter('.long-row').length > 0) return;
-
-        // La fila #13 real del bloque (index 12)
-        const $fila13 = $bloque.eq(12);
-
-        let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
-
-        let newLong = `
-        <tr class="long-row" data-titulo="${lastTitle}">
-            <td colspan="14">Longitud Inspeccionada</td>
-            <td>
-                <div class="d-flex justify-content-between align-items-center">
-                    <input type="text"
-                        class="form-control w-90 titulo-text"
-                        name="Long_Inspecc[${lastTitle}][]"
-                        placeholder="Ingrese Longitud Inspeccionada...">
-
-                    <td><button type="button" class="btn btn-danger btnEliminar">
-                        <i class="fa fa-times"></i>
-                    </button></td>
-                </div>
-            </td>
-        </tr>`;
-
-        // 👉 Insertar JUSTO después de la fila 13
-        $fila13.after(newLong);
-    }
-}
 
     $(document).ready(function() {
         function actualizarInputsE() {

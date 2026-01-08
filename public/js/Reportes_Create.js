@@ -270,12 +270,18 @@
     /*Juntas-Resultados */
     function updateRowNumbers() {
         let count = 0;
+
         $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+
+            // ⛔ Ignorar títulos y longitudes
+            if ($(this).hasClass('titulo-row') || $(this).hasClass('long-row')) {
+                return;
             }
+
+            count++;
+            $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
         });
+
         rowCountGlobal = count;
     }
 
@@ -301,8 +307,14 @@
         return { titleId: id, values };
     }).get();
 
-    const longs = $('.titulo-row.long-row').map(function(){
+    /*const longs = $('.titulo-row.long-row').map(function(){
         return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
+    }).get();*/
+    const longs = $('.long-row').map(function(){
+        return { 
+            titleId: $(this).data('titulo'),
+            text: $(this).find('.titulo-text').val() 
+        };
     }).get();
 
     // Dedupe by id+text para evitar entradas repetidas en sessionStorage
