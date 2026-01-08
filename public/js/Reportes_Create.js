@@ -348,6 +348,7 @@
     $('#dynamicTable').on('click', '.btnEliminar', function() {
         $(this).closest('tr').remove();
         updateRowNumbers();
+        verificarYAgregarLongitud();
         saveData(document.querySelectorAll("form")[1].id);
     });
 

@@ -1039,11 +1039,11 @@
                                 <tbody>
                                 <!-- Filas dinámicas aparecerán aquí -->
                                 <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
-                                <input type="hidden" name="titulos_data" id="titulos_hidden">
+                                
                                 </tbody>
                         </table>
                     </div>
-
+                    <input type="hidden" name="titulos_data" id="titulos_hidden">
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1376,7 +1376,7 @@ $(document).ready(function() {
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
     
-        function restoreData() {
+    function restoreData() {
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
 
@@ -1623,18 +1623,32 @@ $(document).ready(function() {
 });
 
     function verificarYAgregarLongitud() {
-        // Contar filas que NO sean longitudes
-        let totalFilas = $('#dynamicTable tbody tr')
-            .not('.long-row')
-            .length;
 
-        // Cada 13 filas agregar longitud
-        if (totalFilas % 13 === 0) {
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        // Buscar la última longitud
+        const $ultimaLong = $rows.filter('.long-row').last();
+
+        // Filas que pertenecen al bloque actual
+        let $bloque;
+
+        if ($ultimaLong.length) {
+            $bloque = $ultimaLong.nextAll('tr');
+        } else {
+            $bloque = $rows;
+        }
+
+        // Si el bloque ya tiene 13 o más filas
+        if ($bloque.length >= 13) {
+
+            // La fila #13 real del bloque (index 12)
+            const $fila13 = $bloque.eq(12);
 
             let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
 
             let newLong = `
-            <tr class="titulo-row long-row" data-titulo="${lastTitle}">
+            <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14">Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
@@ -1642,17 +1656,17 @@ $(document).ready(function() {
                             class="form-control w-90 titulo-text"
                             name="Long_Inspecc[${lastTitle}][]"
                             placeholder="Ingrese Longitud Inspeccionada...">
-                        <button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="fa fa-times"></i>
-                        </button>
+                            <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                                <i class="fa fa-times"></i>
+                            </button></td>
                     </div>
                 </td>
             </tr>`;
 
-            $('#dynamicTable tbody').append(newLong);
+            // 👉 Insertar JUSTO después de la fila 13
+            $fila13.after(newLong);
         }
     }
-
 
     $(document).ready(function() {
         function actualizarInputsE() {

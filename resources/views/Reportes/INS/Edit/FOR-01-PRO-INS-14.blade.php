@@ -1062,6 +1062,7 @@
                                     </tr>
                                     @php $contador++; @endphp
                                 @endforeach
+                                
                             @endforeach
                         </tbody>
                         </table>
