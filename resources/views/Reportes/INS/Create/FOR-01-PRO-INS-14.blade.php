@@ -1458,7 +1458,7 @@ $(document).ready(function() {
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
-                                class="form-control w-90 titulo-text"
+                                class="form-control w-90 long-text"
                                 name="Long_Inspecc[${titleId}][]"
                                 value="${value}"
                                 placeholder="Ingrese Longitud Inspeccionada...">
@@ -1575,7 +1575,7 @@ $(document).ready(function() {
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}][]">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
                         <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1686,7 +1686,7 @@ $(document).ready(function() {
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text"
-                            class="form-control w-90 titulo-text"
+                            class="form-control w-90 long-text"
                             name="Long_Inspecc[${lastTitle}][]"
                             placeholder="Ingrese Longitud Inspeccionada...">
 

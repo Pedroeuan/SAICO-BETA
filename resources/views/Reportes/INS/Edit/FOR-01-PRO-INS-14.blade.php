@@ -1080,25 +1080,26 @@
                             @endforeach
 
                             {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                            @if (!empty($grupo['Long_Inspecc']))
-                            <tr class="long-row" data-titulo="{{ $titleId }}">
-                                <td colspan="14">Longitud Inspeccionada</td>
-                                <td>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <input type="text"
-                                            class="form-control w-90 titulo-text"
-                                            name="Long_Inspecc[{{ $titleId }}]"
-                                            value="{{ $grupo['Long_Inspecc'] }}"
-                                            placeholder="Ingrese Longitud Inspeccionada...">
+                            @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                @foreach ($grupo['Long_Inspecc'] as $long)
+                                    <tr class="long-row" data-titulo="{{ $titleId }}">
+                                        <td colspan="14">Longitud Inspeccionada</td>
 
                                         <td>
+                                            <input type="text"
+                                                class="form-control long-text"
+                                                name="Long_Inspecc[{{ $titleId }}][]"
+                                                value="{{ $long }}"
+                                                placeholder="Ingrese Longitud Inspeccionada...">
+                                        </td>
+
+                                        <td class="text-center">
                                             <button type="button" class="btn btn-danger btnEliminar">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </tr>
+                                @endforeach
                             @endif
 
                             @endforeach

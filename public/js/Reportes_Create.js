@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const longs = $('.long-row').map(function(){
         return { 
             titleId: $(this).data('titulo'),
-            text: $(this).find('.titulo-text').val() 
+            text: $(this).find('.long-text').val() 
         };
     }).get();
 
@@ -331,7 +331,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const uniqueTitles = dedupe(titles);
     const uniqueLongs = dedupe(longs);
 
-    sessionStorage.setItem('dynamicTableData', JSON.stringify({ titles: uniqueTitles, rows, longs: uniqueLongs }));
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({
+            titles: uniqueTitles,
+            rows,
+            longs
+        }));
     }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input

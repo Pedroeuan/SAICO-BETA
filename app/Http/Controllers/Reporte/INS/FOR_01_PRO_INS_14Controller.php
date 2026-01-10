@@ -218,7 +218,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
     public function FOR_01_PRO_INS_14_store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -345,7 +345,9 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'FOTOS' => 'nullable|array',
 
             'Long_Inspecc' => 'nullable|array',
-            'Long_Inspecc.*' => 'nullable|string|max:255',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
+
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -789,7 +791,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
             /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',
-            'Long_Inspecc.*' => 'nullable|string|max:255',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
