@@ -339,15 +339,11 @@
     });
 
     /*Juntas-Resultados */
-    // eliminar long
-    /*$(document).on('click', '.btnRemoveLong', function() {
-    $(this).closest('tr').remove();
-    saveData($('#FOR-01-PRO-INS-14').attr('id'));
-    });*/
     function updateRowNumbers() {
         let count = 0;
         $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
+            //if (!$(this).hasClass('titulo-row')) {
+            if (!$(this).hasClass('titulo-row') && !$(this).hasClass('long-row')) {
                 count++;
                 $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
             }
@@ -410,7 +406,8 @@
                 const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
                 if (isNaN(column)) return; // Evitar errores si no es válido
 
-                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                //document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row):not(.long-row)").forEach(row => {
                     const cellInputs = row.querySelectorAll("td input");
                     const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
                     if (cellInput) {

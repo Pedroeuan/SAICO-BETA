@@ -1,54 +1,55 @@
     /*check del contrato, si y no */
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const radios = document.getElementsByName("TieneContrato");
-        const campoContrato = document.getElementById("campoContrato");
-        const contratoInternoHidden = document.getElementById("contratoInternoHidden");
+    const radios = document.getElementsByName("TieneContrato");
+    const campoContrato = document.getElementById("campoContrato");
 
-        const textoInterno = document.getElementById("contratoInternoTexto");
-        const numeroInterno = document.getElementById("numeroInterno");
+    radios.forEach(radio => {
+        radio.addEventListener("change", async function () {
 
-        radios.forEach(radio => {
-            radio.addEventListener("change", async function () {
+            // 💾 Guardar selección
+            sessionStorage.setItem("TieneContrato", this.value);
 
-                if (this.value === "si") {
-                    campoContrato.disabled = false;
-                    campoContrato.required = true;
+            if (this.value === "si") {
+                campoContrato.readOnly = false;
+                campoContrato.required = true;
+                campoContrato.value = "";
+                campoContrato.placeholder = "Ejemplo: 640853841";
+                return;
+            }
 
-                    // Limpiar contrato interno
-                    textoInterno.style.display = "none";
-                    numeroInterno.textContent = "";
-                    contratoInternoHidden.value = "";
-                    return;
+            if (this.value === "no") {
+                campoContrato.readOnly = true;
+                campoContrato.required = false;
+                campoContrato.placeholder = "Generando contrato interno...";
+
+                try {
+                    const response = await fetch('/api/siguiente-contrato-interno');
+                    const data = await response.json();
+
+                    const nuevoContrato = data.siguiente;
+                    campoContrato.value = nuevoContrato;
+
+                } catch (error) {
+                    console.error("Error al obtener el contrato interno:", error);
+                    alert("No se pudo generar el contrato interno");
                 }
-
-                if (this.value === "no") {
-
-                    campoContrato.disabled = true;
-                    campoContrato.required = false;
-                    campoContrato.value = "";
-
-                    try {
-                        const response = await fetch('/api/siguiente-contrato-interno');
-                        const data = await response.json();
-
-                        const nuevoContrato = data.siguiente;
-                        console.log("Contrato interno generado:", nuevoContrato);
-
-                        // Mostrarlo al usuario
-                        textoInterno.style.display = "block";
-                        numeroInterno.textContent = nuevoContrato;
-
-                        // Guardarlo para enviarlo al backend
-                        contratoInternoHidden.value = nuevoContrato;
-
-                    } catch (error) {
-                        console.error("Error al obtener el contrato interno:", error);
-                    }
-                }
-            });
+            }
         });
     });
+
+    // 🔄 Restaurar selección al recargar
+    const seleccionado = sessionStorage.getItem("TieneContrato");
+
+    if (seleccionado) {
+        const radioGuardado = [...radios].find(r => r.value === seleccionado);
+
+        if (radioGuardado) {
+            radioGuardado.checked = true;
+            radioGuardado.dispatchEvent(new Event("change"));
+        }
+    }
+});
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
@@ -301,15 +302,16 @@
         return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
     }).get();
 
-    const rows = $('#dynamicTable tbody tr').not('.titulo-row').map(function() {
-        const id = $(this).data('titulo');
-        const values = $(this).find('input[type="text"]').map(function(){ return $(this).val(); }).get();
-        return { titleId: id, values };
-    }).get();
+    const rows = $('#dynamicTable tbody tr')
+        .not('.titulo-row, .long-row')
+        .map(function() {
+            const id = $(this).data('titulo');
+            const values = $(this).find('input[type="text"]').map(function(){ 
+                return $(this).val(); 
+            }).get();
+            return { titleId: id, values };
+        }).get();
 
-    /*const longs = $('.titulo-row.long-row').map(function(){
-        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
-    }).get();*/
     const longs = $('.long-row').map(function(){
         return { 
             titleId: $(this).data('titulo'),
@@ -383,7 +385,6 @@
         });
         saveData(document.querySelectorAll("form")[1].id);
     });
-
 
     /*llenado de campos vacios*/
     document.addEventListener("DOMContentLoaded", function () {

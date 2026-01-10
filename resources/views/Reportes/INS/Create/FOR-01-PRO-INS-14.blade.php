@@ -115,7 +115,6 @@
                                         <div class="form-group">
                                             <label class="col-form-label">
                                                 Contrato
-
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -127,15 +126,13 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -1462,7 +1459,7 @@ $(document).ready(function() {
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
                                 class="form-control w-90 titulo-text"
-                                name="Long_Inspecc[${titleId}]"
+                                name="Long_Inspecc[${titleId}][]"
                                 value="${value}"
                                 placeholder="Ingrese Longitud Inspeccionada...">
                             <td>
@@ -1496,27 +1493,6 @@ $(document).ready(function() {
 
         });
 
-        /*(data.longs || []).forEach(function(l){
-            const titleId = l.id || `long_${Date.now()}`;
-            const titleText = esc(l.text || '');
-
-            const newLong = `
-            <!--<tr class="titulo-row long-row" data-titulo="${titleId}"> -->
-            <tr class="long-row" data-titulo="${titleId}">
-                <td colspan="14"> Longitud Inspeccionada</td>
-                <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${titleId}]" value="${titleText}" placeholder="Ingrese Longitud Inspeccionada...">
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"  aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-            `;
-            $('#dynamicTable tbody').append(newLong);
-        });*/
-        
         // Reindexar numeración visible y actualizar contadores
         function reindexRows(){
             let idx = 0;
@@ -1550,33 +1526,8 @@ $(document).ready(function() {
                     }).length 
                 : 0;
         }
-        /*function reindexRows(){
-            let idx = 0;
-            //$('#dynamicTable tbody tr').not('.titulo-row').each(function(){
-            $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function(){
-            idx++;
-            // actualizar número visible (dejando el input hidden intacto)
-            const td = $(this).find('td').eq(0);
-            // Si existe un nodo de texto lo reemplazamos; si no, reconstruimos el contenido
-            const textNode = td.contents().filter(function(){ return this.nodeType === 3; }).first();
-            if (textNode.length) {
-                textNode[0].nodeValue = idx + ' ';
-            } else {
-                // fallback: mantener el hidden input y escribir el número delante
-                const hidden = td.find('input[type="hidden"]').prop('outerHTML');
-                td.html(idx + ' ' + hidden);
-            }
-            td.find('input[type="hidden"]').val(idx);
-            });
-            rowCountGlobal = idx;
-            const lastTitleId = $('.titulo-row').last().data('titulo');
-            //rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row').filter(function(){ return $(this).data('titulo') === lastTitleId; }).length : 0;
-            rowCount = lastTitleId ? $('#dynamicTable tbody tr').not('.titulo-row, .long-row').filter(function(){return $(this).data('titulo') === lastTitleId; }).length : 0;
-
-        }*/
         reindexRows();
-        //updateTitulos(); // Actualizar lista de títulos
-        //verificarYAgregarLongitud();
+
         // Actualizaciones finales y guardado
         if (typeof updateTitulos === 'function') updateTitulos();
         // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
@@ -1624,7 +1575,7 @@ $(document).ready(function() {
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}]">
+                        <input type="text" class="form-control w-90 titulo-text" name="Long_Inspecc[${lastTitle}][]">
                         <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>

@@ -218,7 +218,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
     public function FOR_01_PRO_INS_14_store(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -325,10 +325,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
 
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
@@ -519,8 +515,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $tituloObj) {
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
@@ -551,7 +545,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
             // Obtener longitud inspeccionada asociada a este título (si existe)
             $long = $request->input("Long_Inspecc.$tituloKey", null);
-        
             $datosAgrupados[] = [
                 'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
                 'resultados' => $resultados,
@@ -776,10 +769,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
 
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string|max:255',  // Cada título debe ser un string válido
-            
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
@@ -918,7 +907,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
             }
         
             $longSin = $request->input("Long_Inspecc.$sinTituloKey", null); // Longitud para sin título (si existe)
-
             $datosAgrupados[] = [
                 'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
                 'resultados' => $resultados,
@@ -928,8 +916,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $tituloObj) {
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1_..."
             $tituloText = $tituloObj['text'];
 
@@ -960,7 +946,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
             // Obtener longitud inspeccionada asociada a este título (si existe)
             $long = $request->input("Long_Inspecc.$tituloKey", null);
-
             $datosAgrupados[] = [
                 'titulos_juntas' => $tituloText,
                 'resultados' => $resultados,
@@ -972,7 +957,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
         ]);
-
 
         /*Firmas */
         // Guardar las firmas
