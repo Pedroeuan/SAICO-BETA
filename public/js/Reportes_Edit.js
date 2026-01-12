@@ -378,7 +378,6 @@
         /*Cambia el data-titulo y guarda en sesionstorage */
         $(document).on('input', '.titulo-row .titulo-text', function () {
             updateTitulos();
-            saveData(document.querySelectorAll("form")[1].id);
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {

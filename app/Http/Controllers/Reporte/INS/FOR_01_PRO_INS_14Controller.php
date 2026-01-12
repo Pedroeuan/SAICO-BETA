@@ -908,8 +908,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                 ];
             }
-        
-            $longSin = $request->input("Long_Inspecc.$sinTituloKey", null); // Longitud para sin título (si existe)
+            $longSin = $request->input("Long_Inspecc.$sinTituloKey", null);
             $datosAgrupados[] = [
                 'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
                 'resultados' => $resultados,
@@ -950,7 +949,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             // Obtener longitud inspeccionada asociada a este título (si existe)
             $long = $request->input("Long_Inspecc.$tituloKey", null);
             $datosAgrupados[] = [
-                'titulos_juntas' => $tituloText,
+                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
                 'resultados' => $resultados,
                 'Long_Inspecc' => $long,
             ];
