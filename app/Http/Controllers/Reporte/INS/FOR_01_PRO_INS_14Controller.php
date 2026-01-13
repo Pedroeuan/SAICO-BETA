@@ -483,36 +483,51 @@ class FOR_01_PRO_INS_14Controller extends Controller
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
-                    'Tip_Ind' => $request->input("Tip_Ind.$sinTituloKey.$i"),
-                    'L_PGL' => $request->input("L_PGL.$sinTituloKey.$i"),
-                    'A_PGL' => $request->input("A_PGL.$sinTituloKey.$i"),
-                    'AL_PGL' => $request->input("AL_PGL.$sinTituloKey.$i"),
-                    'X' => $request->input("X.$sinTituloKey.$i"),
-                    'Y' => $request->input("Y.$sinTituloKey.$i"),
-                    'DA_PROF' => $request->input("DA_PROF.$sinTituloKey.$i"),
-                    'PA' => $request->input("PA.$sinTituloKey.$i"),
-                    'SA' => $request->input("SA.$sinTituloKey.$i"),
-                    'TMIN' => $request->input("TMIN.$sinTituloKey.$i"),
-                    'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
-                    'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
-                    'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
-                    //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 12;
+
+        if (!empty($filasSinTitulo)) {
+
+            $totalFilas = count($filasSinTitulo);
+            $contadorBloque = 1;
+
+            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+
+                $resultados = [];
+
+                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
+
+                    $resultados[] = [
+                        'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                        'Tip_Ind'  => $request->input("Tip_Ind.$sinTituloKey.$i"),
+                        'L_PGL'    => $request->input("L_PGL.$sinTituloKey.$i"),
+                        'A_PGL'    => $request->input("A_PGL.$sinTituloKey.$i"),
+                        'AL_PGL'   => $request->input("AL_PGL.$sinTituloKey.$i"),
+                        'X'        => $request->input("X.$sinTituloKey.$i"),
+                        'Y'        => $request->input("Y.$sinTituloKey.$i"),
+                        'DA_PROF'  => $request->input("DA_PROF.$sinTituloKey.$i"),
+                        'PA'       => $request->input("PA.$sinTituloKey.$i"),
+                        'SA'       => $request->input("SA.$sinTituloKey.$i"),
+                        'TMIN'     => $request->input("TMIN.$sinTituloKey.$i"),
+                        'SCAN'     => $request->input("SCAN.$sinTituloKey.$i"),
+                        'EVAL'     => $request->input("EVAL.$sinTituloKey.$i"),
+                        'FOTOS'    => $request->input("FOTOS.$sinTituloKey.$i"),
+                    ];
+                }
+
+                // tomar la longitud correspondiente al bloque
+                $longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+
+                $datosAgrupados[] = [
+                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
+                    'resultados'     => $resultados,
+                    'Long_Inspecc'   => [$longBloque],
                 ];
+
+                $contadorBloque++;
             }
-            $longSin = $request->input("Long_Inspecc.$sinTituloKey", null);
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados,
-                'Long_Inspecc' => $longSin,
-            ];
         }
         
         // 2. Procesar los títulos existentes
@@ -528,18 +543,18 @@ class FOR_01_PRO_INS_14Controller extends Controller
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
                     'no_junta' => $request->input("no_junta.$tituloKey.$i"),
-                    'Tip_Ind' => $request->input("Tip_Ind.$tituloKey.$i"),
-                    'L_PGL' => $request->input("L_PGL.$tituloKey.$i"),
-                    'A_PGL' => $request->input("A_PGL.$tituloKey.$i"),
-                    'AL_PGL' => $request->input("AL_PGL.$tituloKey.$i"),
-                    'X' => $request->input("X.$tituloKey.$i"),
-                    'Y' => $request->input("Y.$tituloKey.$i"),
-                    'DA_PROF' => $request->input("DA_PROF.$tituloKey.$i"),
-                    'PA' => $request->input("PA.$tituloKey.$i"),
-                    'SA' => $request->input("SA.$tituloKey.$i"),
-                    'TMIN' => $request->input("TMIN.$tituloKey.$i"),
-                    'SCAN' => $request->input("SCAN.$tituloKey.$i"),
-                    'EVAL' => $request->input("EVAL.$tituloKey.$i"),
+                    'Tip_Ind'  => $request->input("Tip_Ind.$tituloKey.$i"),
+                    'L_PGL'    => $request->input("L_PGL.$tituloKey.$i"),
+                    'A_PGL'    => $request->input("A_PGL.$tituloKey.$i"),
+                    'AL_PGL'   => $request->input("AL_PGL.$tituloKey.$i"),
+                    'X'        => $request->input("X.$tituloKey.$i"),
+                    'Y'        => $request->input("Y.$tituloKey.$i"),
+                    'DA_PROF'  => $request->input("DA_PROF.$tituloKey.$i"),
+                    'PA'       => $request->input("PA.$tituloKey.$i"),
+                    'SA'       => $request->input("SA.$tituloKey.$i"),
+                    'TMIN'     => $request->input("TMIN.$tituloKey.$i"),
+                    'SCAN'     => $request->input("SCAN.$tituloKey.$i"),
+                    'EVAL'     => $request->input("EVAL.$tituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
                     //'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];
@@ -884,36 +899,51 @@ class FOR_01_PRO_INS_14Controller extends Controller
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
-                    'Tip_Ind' => $request->input("Tip_Ind.$sinTituloKey.$i"),
-                    'L_PGL' => $request->input("L_PGL.$sinTituloKey.$i"),
-                    'A_PGL' => $request->input("A_PGL.$sinTituloKey.$i"),
-                    'AL_PGL' => $request->input("AL_PGL.$sinTituloKey.$i"),
-                    'X' => $request->input("X.$sinTituloKey.$i"),
-                    'Y' => $request->input("Y.$sinTituloKey.$i"),
-                    'DA_PROF' => $request->input("DA_PROF.$sinTituloKey.$i"),
-                    'PA' => $request->input("PA.$sinTituloKey.$i"),
-                    'SA' => $request->input("SA.$sinTituloKey.$i"),
-                    'TMIN' => $request->input("TMIN.$sinTituloKey.$i"),
-                    'SCAN' => $request->input("SCAN.$sinTituloKey.$i"),
-                    'EVAL' => $request->input("EVAL.$sinTituloKey.$i"),
-                    'FOTOS' => $request->input("FOTOS.$sinTituloKey.$i"),
-                    //'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
+        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 12;
+
+        if (!empty($filasSinTitulo)) {
+
+            $totalFilas = count($filasSinTitulo);
+            $contadorBloque = 1;
+
+            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+
+                $resultados = [];
+
+                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
+
+                    $resultados[] = [
+                        'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
+                        'Tip_Ind'  => $request->input("Tip_Ind.$sinTituloKey.$i"),
+                        'L_PGL'    => $request->input("L_PGL.$sinTituloKey.$i"),
+                        'A_PGL'    => $request->input("A_PGL.$sinTituloKey.$i"),
+                        'AL_PGL'   => $request->input("AL_PGL.$sinTituloKey.$i"),
+                        'X'        => $request->input("X.$sinTituloKey.$i"),
+                        'Y'        => $request->input("Y.$sinTituloKey.$i"),
+                        'DA_PROF'  => $request->input("DA_PROF.$sinTituloKey.$i"),
+                        'PA'       => $request->input("PA.$sinTituloKey.$i"),
+                        'SA'       => $request->input("SA.$sinTituloKey.$i"),
+                        'TMIN'     => $request->input("TMIN.$sinTituloKey.$i"),
+                        'SCAN'     => $request->input("SCAN.$sinTituloKey.$i"),
+                        'EVAL'     => $request->input("EVAL.$sinTituloKey.$i"),
+                        'FOTOS'    => $request->input("FOTOS.$sinTituloKey.$i"),
+                    ];
+                }
+
+                // tomar la longitud correspondiente al bloque
+                $longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+
+                $datosAgrupados[] = [
+                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
+                    'resultados'     => $resultados,
+                    'Long_Inspecc'   => [$longBloque],
                 ];
+
+                $contadorBloque++;
             }
-            $longSin = $request->input("Long_Inspecc.$sinTituloKey", null);
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados,
-                'Long_Inspecc' => $longSin,
-            ];
         }
         
         // 2. Procesar los títulos existentes

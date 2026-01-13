@@ -1022,14 +1022,15 @@
                             @foreach ($Grupo_Juntas_Re as $index => $grupo)
 
                             @php
-                                // ID estable para JS
-                                $titleId = $grupo['titulos_juntas'] !== 'SIN TITULO'
-                                    ? 'titulo_' . $index
-                                    : 'sin_titulo';
+                                $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
+
+                                $titleId = $esSinTitulo
+                                    ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                    : 'titulo_' . $index;
                             @endphp
 
                             {{-- 🔹 TÍTULO --}}
-                            @if ($grupo['titulos_juntas'] !== 'SIN TITULO')
+                            @if (!$esSinTitulo)
                             <tr class="titulo-row" data-titulo="{{ $titleId }}">
                                 <td colspan="15">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -1642,7 +1643,6 @@ $(document).ready(function() {
             $fila13.after(newLong);
         }
     }
-
 
     $(document).ready(function() {
         function actualizarInputsE() {
