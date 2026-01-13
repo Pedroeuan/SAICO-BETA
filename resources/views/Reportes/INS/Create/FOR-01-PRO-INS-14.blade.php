@@ -1032,15 +1032,13 @@
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
-
                                 <tbody>
                                 <!-- Filas dinámicas aparecerán aquí -->
-                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
-                                
                                 </tbody>
                         </table>
                     </div>
-                    <input type="hidden" name="titulos_data" id="titulos_hidden">
+                    <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
+                    <input type="text" name="table_json" id="table_json">
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1372,8 +1370,81 @@ $(document).ready(function() {
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
-    
+
     function restoreData() {
+
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || '[]');
+        if (!data.length) return;
+
+        $('#dynamicTable tbody').empty();
+
+        data.forEach(item => {
+
+            // 🟦 TÍTULO
+            if (item.type === 'title') {
+
+                const html = `
+                <tr class="titulo-row" data-titulo="${item.id}">
+                    <td colspan="15">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 titulo-text"
+                                name="titulos_text[${item.id}]"
+                                value="${item.text}">
+                            <input type="hidden" name="titulos_ids[]" value="${item.id}">
+                            <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                                <i class="fa fa-times"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>`;
+                $('#dynamicTable tbody').append(html);
+            }
+
+            // 🟩 LONGITUD
+            if (item.type === 'long') {
+
+                const html = `
+                <tr class="long-row" data-titulo="${item.titleId}">
+                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control long-text"
+                                name="Long_Inspecc[${item.titleId}][]"
+                                value="${item.text}">
+                            <td><button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>`;
+                $('#dynamicTable tbody').append(html);
+            }
+
+            // 🟨 FILA NORMAL
+            if (item.type === 'row') {
+
+                const vals = item.values || [];
+
+                const html = `
+                <tr data-titulo="${item.titleId}">
+                    <td class="row-number"></td>
+                    ${vals.map(v => `<td><input type="text" class="form-control" value="${v}"></td>`).join('')}
+                    <td>
+                        <button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                </tr>`;
+
+                $('#dynamicTable tbody').append(html);
+            }
+
+        });
+
+        updateRowNumbers();
+    }
+
+    /*function restoreData() {
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
 
@@ -1533,7 +1604,7 @@ $(document).ready(function() {
         // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
         const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
         //if (formId && typeof saveData === 'function') saveData(formId);
-        }
+        }*/
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
@@ -1656,7 +1727,56 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
+
     function verificarYAgregarLongitud() {
+
+        const $rows = $('#dynamicTable tbody tr');
+        let contador = 0;
+        let ultimoBloque = [];
+
+        $rows.each(function(){
+
+            const $tr = $(this);
+
+            // Cuando hay un título, reinicia bloque
+            if ($tr.hasClass('titulo-row')) {
+                contador = 0;
+                ultimoBloque = [];
+                return;
+            }
+
+            contador++;
+            ultimoBloque.push($tr);
+
+            // Si ya llegó a 13 filas
+            if (contador === 13) {
+
+                const yaTieneLong = ultimoBloque.some(tr => tr.hasClass('long-row'));
+                if (yaTieneLong) return;
+
+                const lastTitle = $tr.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                            <td><button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>`;
+
+                $tr.after(newLong);
+            }
+
+        });
+    }
+
+    /*function verificarYAgregarLongitud() {
         const $tbody = $('#dynamicTable tbody');
         const $rows = $tbody.children('tr');
         // Buscar la última longitud
@@ -1700,7 +1820,7 @@ $(document).ready(function() {
             // 👉 Insertar JUSTO después de la fila 13
             $fila13.after(newLong);
         }
-    }
+    }*/
 
     $(document).ready(function() {
         function actualizarInputsE() {

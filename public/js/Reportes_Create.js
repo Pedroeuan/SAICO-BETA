@@ -298,6 +298,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveData(formId) {
+
+        const ordered = [];
+
+        $('#dynamicTable tbody tr').each(function(){
+
+            const $tr = $(this);
+
+            // 🟦 TÍTULO
+            if ($tr.hasClass('titulo-row')) {
+                ordered.push({
+                    type: 'title',
+                    id: $tr.data('titulo'),
+                    text: $tr.find('.titulo-text').val() || ''
+                });
+                return;
+            }
+
+            // 🟩 LONGITUD
+            if ($tr.hasClass('long-row')) {
+                ordered.push({
+                    type: 'long',
+                    titleId: $tr.data('titulo'),
+                    text: $tr.find('.long-text').val() || ''
+                });
+                return;
+            }
+
+            // 🟨 FILA NORMAL
+            const values = $tr.find('input[type="text"]').map(function(){
+                return $(this).val();
+            }).get();
+
+            ordered.push({
+                type: 'row',
+                titleId: $tr.data('titulo'),
+                values: values
+            });
+
+        });
+
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(ordered));
+        $('#table_json').val(JSON.stringify(ordered));
+
+    }
+
+    /*function saveData(formId) {
     const titles = $('.titulo-row').not('.long-row').map(function() {
         return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
     }).get();
@@ -336,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
             rows,
             longs
         }));
-    }
+    } */
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {

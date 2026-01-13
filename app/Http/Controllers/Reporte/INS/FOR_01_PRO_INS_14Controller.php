@@ -325,28 +325,9 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
 
             'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
-
+    
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
-            'no_junta' => 'nullable|array',
-            'Tip_Ind' => 'nullable|array',
-            'L_PGL' => 'nullable|array',
-            'A_PGL' => 'nullable|array',
-            'AL_PGL' => 'nullable|array',
-            'X' => 'nullable|array',
-            'Y' => 'nullable|array',
-            'DA_PROF' => 'nullable|array',
-            'PA' => 'nullable|array',
-            'SA' => 'nullable|array',
-            'TMIN' => 'nullable|array',
-            'SCAN' => 'nullable|array',
-            'EVAL' => 'nullable|array',
-            'FOTOS' => 'nullable|array',
-
-            'Long_Inspecc' => 'nullable|array',
-            'Long_Inspecc.*' => 'nullable|array',
-            'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'table_json' => 'required|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -473,9 +454,119 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
+        // ================================
+        // 1. Obtener JSON de la tabla
+        // ================================
+        $tableJson = $request->input('table_json');
+
+        if (!$tableJson) {
+            return back()->withErrors('No se recibió información de la tabla.');
+        }
+
+        $data = json_decode($tableJson, true);
+
+        if (!is_array($data)) {
+            return back()->withErrors('El formato de la tabla es inválido.');
+        }
+
+        // ================================
+        // 2. Construir bloques ordenados
+        // ================================
+        $bloques = [];
+        $bloqueActual = null;
+        $contadorBloque = 1;
+
+        foreach ($data as $item) {
+
+            switch ($item['type']) {
+
+                // 🟦 TÍTULO
+                case 'title':
+
+                    // Si ya había un bloque abierto, lo cerramos
+                    if ($bloqueActual) {
+                        $bloques[] = $bloqueActual;
+                    }
+
+                    $bloqueActual = [
+                        'titulos_juntas' => trim($item['text']) !== ''
+                            ? $item['text']
+                            : 'SIN TITULO ' . $contadorBloque++,
+                        'resultados' => [],
+                        'Long_Inspecc' => []
+                    ];
+                break;
+
+                // 🟨 FILA NORMAL
+                case 'row':
+
+                    // Si no existe bloque todavía → crear automático
+                    if (!$bloqueActual) {
+                        $bloqueActual = [
+                            'titulos_juntas' => 'SIN TITULO ' . $contadorBloque++,
+                            'resultados' => [],
+                            'Long_Inspecc' => []
+                        ];
+                    }
+
+                    $bloqueActual['resultados'][] = [
+                        'no_junta' => $item['values'][0] ?? null,
+                        'Tip_Ind'  => $item['values'][1] ?? null,
+                        'L_PGL'    => $item['values'][2] ?? null,
+                        'A_PGL'    => $item['values'][3] ?? null,
+                        'AL_PGL'   => $item['values'][4] ?? null,
+                        'X'        => $item['values'][5] ?? null,
+                        'Y'        => $item['values'][6] ?? null,
+                        'DA_PROF'  => $item['values'][7] ?? null,
+                        'PA'       => $item['values'][8] ?? null,
+                        'SA'       => $item['values'][9] ?? null,
+                        'TMIN'     => $item['values'][10] ?? null,
+                        'SCAN'     => $item['values'][11] ?? null,
+                        'EVAL'     => $item['values'][12] ?? null,
+                        'FOTOS'    => $item['values'][13] ?? null,
+                    ];
+                break;
+
+                // 🟩 LONGITUD
+                case 'long':
+
+                    if ($bloqueActual) {
+                        $bloqueActual['Long_Inspecc'][] = $item['text'];
+                    }
+                break;
+            }
+        }
+
+        // Guardar último bloque abierto
+        if ($bloqueActual) {
+            $bloques[] = $bloqueActual;
+        }
+
+        // ================================
+        // 3. Validación opcional
+        // ================================
+        /*foreach ($bloques as $i => $bloque) {
+
+            if (count($bloque['resultados']) > 12) {
+                return back()->withErrors("El bloque {$bloque['titulos_juntas']} tiene más de 12 filas.");
+            }
+
+            if (count($bloque['Long_Inspecc']) > 1) {
+                return back()->withErrors("El bloque {$bloque['titulos_juntas']} tiene más de una longitud.");
+            }
+        }*/
+
+        // ================================
+        // 4. Guardar en base de datos
+        // ================================
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re =
+            json_encode($bloques, JSON_UNESCAPED_UNICODE);
+
+        $Grupo_Juntas_Detalles_Re->save();
+
         //$titulos = $request->input('titulos', []);
         // Recuperar 'titulos_data' (JSON con [{id,text},...])
-        $titulos_json = $request->input('titulos_data', '[]');
+        /*$titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
 
         $datosAgrupados = [];
@@ -571,7 +662,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         
         // Guardar en el modelo
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
-        $Grupo_Juntas_Detalles_Re->save();
+        $Grupo_Juntas_Detalles_Re->save();*/
         
         /*Firmas */
         // Guardar las firmas
