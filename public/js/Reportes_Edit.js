@@ -350,16 +350,6 @@
         });
         rowCountGlobal = count;
     }
-        // Función correcta para serializar títulos como [{id,text}]
-        function updateTitulos() {
-        var titulos = [];
-        $('.titulo-row').each(function() {
-            const id = $(this).data('titulo');
-            const text = $(this).find('.titulo-text').val() || '';
-            titulos.push({ id: id, text: text });
-        });
-        $('#titulos_hidden').val(JSON.stringify(titulos));
-        }
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
