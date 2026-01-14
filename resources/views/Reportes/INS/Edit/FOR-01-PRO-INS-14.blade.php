@@ -1500,7 +1500,7 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
+        //updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addLongBtn').click(function () {
@@ -1526,10 +1526,10 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
+        //updateTitulos(); // Actualizar lista de títulos
         //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito
-        saveData($(this).closest('form').attr('id'));
+        //saveData($(this).closest('form').attr('id'));
         });
 
         $('#addBtn').click(function () {
@@ -1567,7 +1567,7 @@ $(document).ready(function() {
             }
             //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
-            saveData($(this).closest('form').attr('id'));
+            //saveData($(this).closest('form').attr('id'));
         }
     );
 
@@ -1599,7 +1599,6 @@ $(document).ready(function() {
     });
 
 function verificarYAgregarLongitud() {
-
     const TITULO_SELECTOR = '.titulo-row';
 
     let tituloActual = null;
@@ -1623,15 +1622,19 @@ function verificarYAgregarLongitud() {
 
         // 🟨 Fila normal
         contadorFilas++;
-
-        // Si llegó a 13 filas
+        
+        // Si ya llegó a 13 filas
         if (contadorFilas === 13) {
 
-            const yaExisteLong = $(
-                `#dynamicTable tbody tr.long-row[data-titulo="${tituloActual}"]`
-            ).length > 0;
+            const selector = `#dynamicTable tbody tr.long-row[data-titulo="${tituloActual}"]`;
 
-            if (yaExisteLong) return;
+            // doble verificación inmediata
+            if ($(selector).length > 0) {
+                return;
+            }
+
+            // 🚫 marcar temporalmente para evitar doble inserción
+            $tr.data('long-inserted', true);
 
             const newLong = `
                 <tr class="long-row" data-titulo="${tituloActual}">
@@ -1649,7 +1652,10 @@ function verificarYAgregarLongitud() {
                     </td>
                 </tr>`;
 
-            $tr.after(newLong);
+            // ⚡ insertar solo una vez
+            if (!$tr.next().hasClass('long-row')) {
+                $tr.after(newLong);
+            }
         }
 
     });
@@ -1692,7 +1698,7 @@ function verificarYAgregarLongitud() {
             // 🟨 FILA NORMAL
             let values = [];
 
-            $tr.find('input').each(function () {
+            $tr.find('input:not([type="hidden"])').each(function () {
                 values.push($(this).val());
             });
 

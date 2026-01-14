@@ -345,7 +345,8 @@
             //if (!$(this).hasClass('titulo-row')) {
             if (!$(this).hasClass('titulo-row') && !$(this).hasClass('long-row')) {
                 count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+               //$(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+                $(this).find('td:first').text(count);
             }
         });
         rowCountGlobal = count;
@@ -365,14 +366,9 @@
             updateRowNumbers(); // Si quieres actualizar el contador global
         });
 
-        /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row .titulo-text', function () {
-            updateTitulos();
-        });
-
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
-            verificarYAgregarLongitud();
+            //verificarYAgregarLongitud();
             updateRowNumbers();
         });
 

@@ -1465,7 +1465,7 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
+        //updateTitulos(); // Actualizar lista de títulos
         //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
@@ -1494,7 +1494,7 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
+        //updateTitulos(); // Actualizar lista de títulos
         //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
@@ -1551,7 +1551,7 @@ $(document).ready(function() {
                 return;
             }
             // Actualizar el campo oculto con [{id,text},...]
-            updateTitulos();
+            //updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
             sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
@@ -1566,53 +1566,66 @@ $(document).ready(function() {
             restoreData();
 });
 
-    function verificarYAgregarLongitud() {
+function verificarYAgregarLongitud() {
 
-        const $rows = $('#dynamicTable tbody tr');
-        let contador = 0;
-        let ultimoBloque = [];
+    let contador = 0;
+    let tituloActual = 'sin_titulo';
 
-        $rows.each(function(){
+    const $rows = $('#dynamicTable tbody tr');
 
-            const $tr = $(this);
+    $rows.each(function () {
 
-            // Cuando hay un título, reinicia bloque
-            if ($tr.hasClass('titulo-row')) {
-                contador = 0;
-                ultimoBloque = [];
+        const $tr = $(this);
+
+        // 🟦 Cuando hay título → reiniciar conteo
+        if ($tr.hasClass('titulo-row')) {
+            contador = 0;
+            tituloActual = $tr.data('titulo') || 'sin_titulo';
+            return;
+        }
+
+        // ⛔ Ignorar longitudes existentes
+        if ($tr.hasClass('long-row')) {
+            return;
+        }
+
+        contador++;
+
+        // ✅ Cada 13 filas
+        if (contador % 13 === 0) {
+
+            const selector = `.long-row[data-titulo="${tituloActual}"]`;
+
+            // ⚠️ Evitar duplicados consecutivos
+            const $next = $tr.next();
+
+            if ($next.hasClass('long-row')) {
                 return;
             }
 
-            contador++;
-            ultimoBloque.push($tr);
-
-            // Si ya llegó a 13 filas
-            if (contador === 13) {
-
-                const yaTieneLong = ultimoBloque.some(tr => tr.hasClass('long-row'));
-                if (yaTieneLong) return;
-
-                const lastTitle = $tr.data('titulo') || 'sin_titulo';
-
-                const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
+            const newLong = `
+                <tr class="long-row" data-titulo="${tituloActual}">
                     <td colspan="14">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text" class="form-control long-text"
-                                name="Long_Inspecc[${lastTitle}][]">
+                                name="Long_Inspecc[${tituloActual}][]">
                             <td><button type="button" class="btn btn-danger btnEliminar">
                                 <i class="fa fa-times"></i>
                             </button></td>
                         </div>
                     </td>
-                </tr>`;
+                </tr>
+            `;
 
-                $tr.after(newLong);
-            }
+            // 👉 Insertar después de cada bloque de 13
+            $tr.after(newLong);
+        }
 
-        });
-    }
+    });
+
+}
+
 
     $(document).ready(function() {
         function actualizarInputsE() {

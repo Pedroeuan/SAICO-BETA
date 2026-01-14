@@ -343,47 +343,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /*function saveData(formId) {
-    const titles = $('.titulo-row').not('.long-row').map(function() {
-        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
-    }).get();
-
-    const rows = $('#dynamicTable tbody tr')
-        .not('.titulo-row, .long-row')
-        .map(function() {
-            const id = $(this).data('titulo');
-            const values = $(this).find('input[type="text"]').map(function(){ 
-                return $(this).val(); 
-            }).get();
-            return { titleId: id, values };
-        }).get();
-
-    const longs = $('.long-row').map(function(){
-        return { 
-            titleId: $(this).data('titulo'),
-            text: $(this).find('.long-text').val() 
-        };
-    }).get();
-
-    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
-    function dedupe(arr){
-        const seen = new Set();
-        return arr.filter(item => {
-            const key = (item.id || '') + '||' + (item.text || '');
-            if(seen.has(key)) return false; seen.add(key); return true;
-        });
-    }
-
-    const uniqueTitles = dedupe(titles);
-    const uniqueLongs = dedupe(longs);
-
-    sessionStorage.setItem('dynamicTableData', JSON.stringify({
-            titles: uniqueTitles,
-            rows,
-            longs
-        }));
-    } */
-
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {
         //console.log('Input changed, saving data...');
