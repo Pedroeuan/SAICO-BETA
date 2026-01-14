@@ -1109,7 +1109,7 @@
                         </table>
                     </div>
                     <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
-                    <input type="text" name="table_json" id="table_json">
+                    <input type="hidden" name="table_json" id="table_json">
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1572,7 +1572,7 @@ $(document).ready(function() {
     );
 
     $('form').submit(function(e) {
-console.log('🚀 SUBMIT DETECTADO');
+    //console.log('🚀 SUBMIT DETECTADO');
         // Validar que la tabla no esté vacía
         if ($('#dynamicTable tbody tr').length === 0) {
             e.preventDefault();
@@ -1588,7 +1588,7 @@ console.log('🚀 SUBMIT DETECTADO');
         const tableJson = buildTableJson();
         $('#table_json').val(tableJson);
 
-        console.log('JSON enviado:', tableJson); // 👈 útil para debug
+        //console.log('JSON enviado:', tableJson); // 👈 útil para debug
 
         sessionStorage.clear();
 
@@ -1598,57 +1598,62 @@ console.log('🚀 SUBMIT DETECTADO');
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
-            // Restaurar datos al cargar la página
-            //restoreData();
+function verificarYAgregarLongitud() {
 
+    const TITULO_SELECTOR = '.titulo-row';
 
-    function verificarYAgregarLongitud() {
+    let tituloActual = null;
+    let contadorFilas = 0;
 
-        const $rows = $('#dynamicTable tbody tr');
-        let contador = 0;
-        let ultimoBloque = [];
+    $('#dynamicTable tbody tr').each(function () {
 
-        $rows.each(function(){
+        const $tr = $(this);
 
-            const $tr = $(this);
+        // 🟦 Detectar nuevo título
+        if ($tr.hasClass('titulo-row')) {
+            tituloActual = $tr.data('titulo');
+            contadorFilas = 0;
+            return;
+        }
 
-            // Cuando hay un título, reinicia bloque
-            if ($tr.hasClass('titulo-row')) {
-                contador = 0;
-                ultimoBloque = [];
-                return;
-            }
+        // 🟩 Ignorar filas de longitud
+        if ($tr.hasClass('long-row')) {
+            return;
+        }
 
-            contador++;
-            ultimoBloque.push($tr);
+        // 🟨 Fila normal
+        contadorFilas++;
 
-            // Si ya llegó a 13 filas
-            if (contador === 13) {
+        // Si llegó a 13 filas
+        if (contadorFilas === 13) {
 
-                const yaTieneLong = ultimoBloque.some(tr => tr.hasClass('long-row'));
-                if (yaTieneLong) return;
+            const yaExisteLong = $(
+                `#dynamicTable tbody tr.long-row[data-titulo="${tituloActual}"]`
+            ).length > 0;
 
-                const lastTitle = $tr.data('titulo') || 'sin_titulo';
+            if (yaExisteLong) return;
 
-                const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
+            const newLong = `
+                <tr class="long-row" data-titulo="${tituloActual}">
                     <td colspan="14">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text" class="form-control long-text"
-                                name="Long_Inspecc[${lastTitle}][]">
-                            <td><button type="button" class="btn btn-danger btnEliminar">
-                                <i class="fa fa-times"></i>
-                            </button></td>
+                                name="Long_Inspecc[${tituloActual}][]">
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
                         </div>
                     </td>
                 </tr>`;
 
-                $tr.after(newLong);
-            }
+            $tr.after(newLong);
+        }
 
-        });
-    }
+    });
+}
 
     function buildTableJson() {
 
