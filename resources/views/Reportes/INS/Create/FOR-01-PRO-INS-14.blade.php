@@ -1366,6 +1366,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
+    var paginaLista = false;
 $(document).ready(function() {
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
@@ -1561,9 +1562,21 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-
+        function limpiarInputRow() {
+            $('#inputRow input')
+                .val('')
+                .attr('value', '')
+                .prop('defaultValue', '');
+        }
             // Restaurar datos al cargar la página
             restoreData();
+
+            // ⚠️ Esperar a que el navegador termine de restaurar valores
+            setTimeout(() => {
+                limpiarInputRow();  
+                paginaLista = true;   // ✅ ya puede escuchar escritura real
+            }, 300);
+
 });
 
 function verificarYAgregarLongitud() {
