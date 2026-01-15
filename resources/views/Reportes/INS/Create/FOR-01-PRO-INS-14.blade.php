@@ -1578,8 +1578,13 @@ $(document).ready(function() {
             // ⚠️ Esperar a que el navegador termine de restaurar valores
             setTimeout(() => {
                 limpiarInputRow();  
-                paginaLista = true;   // ✅ ya puede escuchar escritura real
+                paginaLista = true;   
+
+                // ✅ FORZAR sincronización con el input hidden
+                saveData($('form').attr('id'));
+
             }, 300);
+
 
         function verificarYAgregarLongitud() {
 
