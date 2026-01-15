@@ -377,9 +377,9 @@ document.addEventListener("DOMContentLoaded", function () {
         updateRowNumbers();
 
         // 👉 Solo recalcular si NO estamos borrando una longitud
-        if (!esLongitud) {
+        /*if (!esLongitud) {
             verificarYAgregarLongitud();
-        }
+        }*/
 
         saveData(document.querySelectorAll("form")[1].id);
     });
