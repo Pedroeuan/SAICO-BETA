@@ -1368,6 +1368,10 @@
 <script>
     var paginaLista = false;
 $(document).ready(function() {
+
+    function generarGrupoId() {
+        return 'grupo_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    }
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
@@ -1481,10 +1485,16 @@ $(document).ready(function() {
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle;
+
+            if ($('.titulo-row').length > 0) {
+                lastTitle = $('.titulo-row').last().data('titulo');
+            } else {
+                lastTitle = generarGrupoId();
+            }
 
             let newTitle = `
-            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14"> Longitud Inspeccionada</td>
                 <td>
@@ -1510,7 +1520,15 @@ $(document).ready(function() {
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            let lastTitle;
+
+            if ($('.titulo-row').length > 0) {
+                lastTitle = $('.titulo-row').last().data('titulo');
+            } else {
+                // 🟡 Crear grupo invisible si no hay título
+                lastTitle = generarGrupoId();
+            }
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
@@ -1591,7 +1609,8 @@ $(document).ready(function() {
             if (restaurando) return;
 
             let contador = 0;
-            let tituloActual = 'sin_titulo';
+            //let tituloActual = 'sin_titulo';
+            let tituloActual = null;
 
             const $rows = $('#dynamicTable tbody tr');
 
@@ -1614,7 +1633,16 @@ $(document).ready(function() {
                 // 🟨 Fila normal
                 if ($tr.hasClass('normal-row')) {
                     contador++;
+
+                    if (!tituloActual) {
+                        tituloActual = $tr.data('titulo') || generarGrupoId();
+                        $tr.attr('data-titulo', tituloActual);
+                    }
                 }
+
+                /*if ($tr.hasClass('normal-row')) {
+                    contador++;
+                }*/
 
                 // ✅ Cada vez que llegue a 13
                 if (contador === 13) {
@@ -1651,8 +1679,6 @@ $(document).ready(function() {
                 }
             });
         }
-
-
 });
 
     $(document).ready(function() {
