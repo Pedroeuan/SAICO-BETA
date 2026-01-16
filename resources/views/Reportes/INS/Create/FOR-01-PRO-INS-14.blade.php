@@ -1367,7 +1367,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
     var paginaLista = false;
-$(document).ready(function() {
+    // ✅ GLOBAL REAL
+    var grupoActivo = null;
+    $(document).ready(function() {
 
     function generarGrupoId() {
         return 'grupo_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
@@ -1376,6 +1378,11 @@ $(document).ready(function() {
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
     var restaurando = false;
+
+    function nuevoGrupo() {
+        grupoActivo = generarGrupoId();
+        return grupoActivo;
+    }
 
     function restoreData() {
 
@@ -1458,7 +1465,8 @@ $(document).ready(function() {
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
-
+            grupoActivo = titleId;
+            console.log('Asignado grupoActivo:', grupoActivo);
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
@@ -1475,7 +1483,6 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         //updateTitulos(); // Actualizar lista de títulos
-        //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
         });
@@ -1486,13 +1493,11 @@ $(document).ready(function() {
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            let lastTitle;
-
-            if ($('.titulo-row').length > 0) {
-                lastTitle = $('.titulo-row').last().data('titulo');
-            } else {
-                lastTitle = generarGrupoId();
+            if (!grupoActivo) {
+                nuevoGrupo();
             }
+
+            let lastTitle = grupoActivo;
 
             let newTitle = `
                 <tr class="long-row" data-titulo="${lastTitle}">
@@ -1510,7 +1515,6 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         //updateTitulos(); // Actualizar lista de títulos
-        //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
         });
@@ -1520,15 +1524,12 @@ $(document).ready(function() {
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            let lastTitle;
 
-            if ($('.titulo-row').length > 0) {
-                lastTitle = $('.titulo-row').last().data('titulo');
-            } else {
-                // 🟡 Crear grupo invisible si no hay título
-                lastTitle = generarGrupoId();
+            if (!grupoActivo) {
+                nuevoGrupo();     // crea grupo invisible si no hay título
             }
+
+            let lastTitle = grupoActivo;
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
@@ -1556,34 +1557,48 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
 
-        $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-            // Actualizar el campo oculto con [{id,text},...]
-            //updateTitulos();
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+$('form').submit(function(e) {
+
+    if ($('#dynamicTable tbody tr').length === 0) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Advertencia',
+            text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
         });
+        return;
+    }
+
+    // ✅ PASAR JSON AL INPUT HIDDEN
+    const json = sessionStorage.getItem('dynamicTableData');
+
+        if (!json) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No hay datos para guardar.',
+            });
+            return;
+        }
+
+        $('#table_json').val(json);
+
+        console.log('📦 Enviando JSON:', json); // 👈 para validar en consola
+
+        // ⚠️ AHORA SÍ puedes limpiar después si quieres (opcional)
+        // sessionStorage.clear();
+
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+    });
+
         function limpiarInputRow() {
             $('#inputRow input')
                 .val('')
@@ -1611,7 +1626,6 @@ $(document).ready(function() {
             let contador = 0;
             //let tituloActual = 'sin_titulo';
             let tituloActual = null;
-
             const $rows = $('#dynamicTable tbody tr');
 
             $rows.each(function () {
@@ -1621,7 +1635,10 @@ $(document).ready(function() {
                 // 🟦 Título reinicia y cuenta como 1
                 if ($tr.hasClass('titulo-row')) {
                     contador = 1;
-                    tituloActual = $tr.data('titulo') || 'sin_titulo';
+                    tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
+
+                    console.log('🟦 Título detectado → grupo:', tituloActual);
+
                     return;
                 }
 
@@ -1634,10 +1651,13 @@ $(document).ready(function() {
                 if ($tr.hasClass('normal-row')) {
                     contador++;
 
-                    if (!tituloActual) {
-                        tituloActual = $tr.data('titulo') || generarGrupoId();
-                        $tr.attr('data-titulo', tituloActual);
-                    }
+                if (!tituloActual) {
+                    tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
+                    $tr.attr('data-titulo', tituloActual);
+
+                    console.log('🟨 Fila sin grupo → asignado:', tituloActual);
+                }
+
                 }
 
                 /*if ($tr.hasClass('normal-row')) {
@@ -1672,10 +1692,11 @@ $(document).ready(function() {
                         </tr>
                     `;
 
-                    $tr.after(newLong);
+                $tr.after(newLong);
 
-                    // 🔁 Reiniciar correctamente para el siguiente bloque
-                    contador = 0;
+            // ❌ NO crear nuevo grupo aquí
+            contador = 0;
+
                 }
             });
         }

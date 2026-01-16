@@ -299,48 +299,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function saveData(formId) {
 
-        const ordered = [];
+        const data = [];
 
-        $('#dynamicTable tbody tr').each(function(){
+        $('#dynamicTable tbody tr').each(function () {
 
             const $tr = $(this);
+            const tituloId = $tr.data('titulo') || null;
 
             // 🟦 TÍTULO
             if ($tr.hasClass('titulo-row')) {
-                ordered.push({
+                data.push({
                     type: 'title',
-                    id: $tr.data('titulo'),
+                    id: tituloId,
                     text: $tr.find('.titulo-text').val() || ''
                 });
-                return;
             }
 
             // 🟩 LONGITUD
-            if ($tr.hasClass('long-row')) {
-                ordered.push({
+            else if ($tr.hasClass('long-row')) {
+                data.push({
                     type: 'long',
-                    titleId: $tr.data('titulo'),
+                    titleId: tituloId,
                     text: $tr.find('.long-text').val() || ''
                 });
-                return;
             }
 
             // 🟨 FILA NORMAL
-            const values = $tr.find('input[type="text"]').map(function(){
-                return $(this).val();
-            }).get();
+            else if ($tr.hasClass('normal-row')) {
+                const values = [];
+                $tr.find('input[type="text"]').each(function () {
+                    values.push($(this).val());
+                });
 
-            ordered.push({
-                type: 'row',
-                titleId: $tr.data('titulo'),
-                values: values
-            });
+                data.push({
+                    type: 'row',
+                    titleId: tituloId,
+                    values: values
+                });
+            }
 
         });
 
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(ordered));
-        $('#table_json').val(JSON.stringify(ordered));
-
+        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
     }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
         tr.remove();
         updateTitulos();
         saveData($(this).closest('form').attr('id'));
+        grupoActivo = null;
     });
 
     /*Cambia el data-titulo y guarda en sesionstorage */
