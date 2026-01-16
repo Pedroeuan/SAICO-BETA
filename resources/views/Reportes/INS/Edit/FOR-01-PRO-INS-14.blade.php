@@ -1016,7 +1016,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <!--<input type="hidden" name="titulos_data" id="titulos_hidden">-->
+                            <input type="hidden" name="titulos_data" id="titulos_hidden">
                             @php $contador = 1; @endphp
 
                             @foreach ($Grupo_Juntas_Re as $index => $grupo)
@@ -1025,8 +1025,8 @@
                                 $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
 
                                 $titleId = $esSinTitulo
-                                    ? 'sin_titulo_' . $index
-                                    : 'titulo_' . $index . '_' . uniqid();
+                                    ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                    : 'titulo_' . $index;
                             @endphp
 
                             {{-- 🔹 TÍTULO --}}
@@ -1108,8 +1108,7 @@
                         </tbody>
                         </table>
                     </div>
-                    <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
-                    <input type="hidden" name="table_json" id="table_json">
+
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1500,43 +1499,44 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        //updateTitulos(); // Actualizar lista de títulos
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addLongBtn').click(function () {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
-            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
-                <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14"> Longitud Inspeccionada</td>
+            <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="14">Longitud Inspeccionada</td>
+
                 <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"  aria-hidden="true"></i>
-                        </button></td>
-                    </div>
+                    <input type="text"
+                        class="form-control long-text"
+                        name="Long_Inspecc[${lastTitle}][]"
                 </td>
-            </tr>
-        `;
+
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger btnEliminar">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>`;
 
         $('#dynamicTable tbody').append(newTitle);
-        //updateTitulos(); // Actualizar lista de títulos
-        //saveData(document.querySelectorAll("form")[1].id);
-        // Guardar de forma robusta: usar el form relativo o id explícito
-        //saveData($(this).closest('form').attr('id'));
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addBtn').click(function () {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1565,152 +1565,85 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
-            //saveData($(this).closest('form').attr('id'));
         }
     );
 
-    $('form').submit(function(e) {
-    //console.log('🚀 SUBMIT DETECTADO');
-        // Validar que la tabla no esté vacía
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-            return;
-        }
+        $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
 
-        // 🔥 Construir JSON de la tabla
-        const tableJson = buildTableJson();
-        $('#table_json').val(tableJson);
 
-        //console.log('JSON enviado:', tableJson); // 👈 útil para debug
-
-        sessionStorage.clear();
-
-        // Deshabilitar botón
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-function verificarYAgregarLongitud() {
-    const TITULO_SELECTOR = '.titulo-row';
-
-    let tituloActual = null;
-    let contadorFilas = 0;
-
-    $('#dynamicTable tbody tr').each(function () {
-
-        const $tr = $(this);
-
-        // 🟦 Detectar nuevo título
-        if ($tr.hasClass('titulo-row')) {
-            tituloActual = $tr.data('titulo');
-            contadorFilas = 0;
-            return;
-        }
-
-        // 🟩 Ignorar filas de longitud
-        if ($tr.hasClass('long-row')) {
-            return;
-        }
-
-        // 🟨 Fila normal
-        contadorFilas++;
-        
-        // Si ya llegó a 13 filas
-        if (contadorFilas === 13) {
-
-            const selector = `#dynamicTable tbody tr.long-row[data-titulo="${tituloActual}"]`;
-
-            // doble verificación inmediata
-            if ($(selector).length > 0) {
-                return;
-            }
-
-            // 🚫 marcar temporalmente para evitar doble inserción
-            $tr.data('long-inserted', true);
-
-            const newLong = `
-                <tr class="long-row" data-titulo="${tituloActual}">
-                    <td colspan="14">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text" class="form-control long-text"
-                                name="Long_Inspecc[${tituloActual}][]">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>`;
-
-            // ⚡ insertar solo una vez
-            if (!$tr.next().hasClass('long-row')) {
-                $tr.after(newLong);
-            }
-        }
-
-    });
-}
-
-    function buildTableJson() {
-
-        let data = [];
-
-        $('#dynamicTable tbody tr').each(function () {
-
-            const $tr = $(this);
-
-            // 🟦 TÍTULO
-            if ($tr.hasClass('titulo-row')) {
-
-                const text = $tr.find('.titulo-text').val() || '';
-
-                data.push({
-                    type: 'title',
-                    text: text
+                    
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
-
                 return;
             }
-
-            // 🟩 LONGITUD
-            if ($tr.hasClass('long-row')) {
-
-                const text = $tr.find('.long-text').val() || '';
-
-                data.push({
-                    type: 'long',
-                    text: text
-                });
-
-                return;
-            }
-
-            // 🟨 FILA NORMAL
-            let values = [];
-
-            $tr.find('input:not([type="hidden"])').each(function () {
-                values.push($(this).val());
-            });
-
-            data.push({
-                type: 'row',
-                values: values
-            });
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-        return JSON.stringify(data);
-    }
 });
+
+    function verificarYAgregarLongitud() {
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+        // Buscar la última longitud
+        const $ultimaLong = $rows.filter('.long-row').last();
+        // Filas que pertenecen al bloque actual
+        let $bloque;
+        if ($ultimaLong.length) {
+            $bloque = $ultimaLong.nextAll('tr');
+        } else {
+            $bloque = $rows;
+        }
+
+        // Si el bloque ya tiene 13 o más filas
+        if ($bloque.length >= 13) {
+
+            // 🚫 Evitar insertar otra longitud si ya existe en este bloque
+            if ($bloque.filter('.long-row').length > 0) return;
+
+            // La fila #13 real del bloque (index 12)
+            const $fila13 = $bloque.eq(12);
+
+            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+
+            const newLong = `
+            <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="14">Longitud Inspeccionada</td>
+
+                <td>
+                    <input type="text"
+                        class="form-control long-text"
+                        name="Long_Inspecc[${lastTitle}][]"
+                        placeholder="Ingrese Longitud Inspeccionada...">
+                </td>
+
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger btnEliminar">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>
+            </tr>`;
+
+            // 👉 Insertar JUSTO después de la fila 13
+            $fila13.after(newLong);
+        }
+    }
+
     $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');

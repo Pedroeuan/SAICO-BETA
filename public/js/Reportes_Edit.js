@@ -345,12 +345,21 @@
             //if (!$(this).hasClass('titulo-row')) {
             if (!$(this).hasClass('titulo-row') && !$(this).hasClass('long-row')) {
                 count++;
-               //$(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-                $(this).find('td:first').text(count);
+                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
             }
         });
         rowCountGlobal = count;
     }
+        // Función correcta para serializar títulos como [{id,text}]
+        function updateTitulos() {
+        var titulos = [];
+        $('.titulo-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
+        });
+        $('#titulos_hidden').val(JSON.stringify(titulos));
+        }
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
@@ -366,9 +375,14 @@
             updateRowNumbers(); // Si quieres actualizar el contador global
         });
 
+        /*Cambia el data-titulo y guarda en sesionstorage */
+        $(document).on('input', '.titulo-row .titulo-text', function () {
+            updateTitulos();
+        });
+
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
-            //verificarYAgregarLongitud();
+            verificarYAgregarLongitud();
             updateRowNumbers();
         });
 

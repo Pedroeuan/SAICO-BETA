@@ -298,49 +298,44 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveData(formId) {
+    const titles = $('.titulo-row').not('.long-row').map(function() {
+        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
+    }).get();
 
-        const data = [];
+    const rows = $('#dynamicTable tbody tr')
+        .not('.titulo-row, .long-row')
+        .map(function() {
+            const id = $(this).data('titulo');
+            const values = $(this).find('input[type="text"]').map(function(){ 
+                return $(this).val(); 
+            }).get();
+            return { titleId: id, values };
+        }).get();
 
-        $('#dynamicTable tbody tr').each(function () {
+    const longs = $('.long-row').map(function(){
+        return { 
+            titleId: $(this).data('titulo'),
+            text: $(this).find('.long-text').val() 
+        };
+    }).get();
 
-            const $tr = $(this);
-            const tituloId = $tr.data('titulo') || null;
-
-            // 🟦 TÍTULO
-            if ($tr.hasClass('titulo-row')) {
-                data.push({
-                    type: 'title',
-                    id: tituloId,
-                    text: $tr.find('.titulo-text').val() || ''
-                });
-            }
-
-            // 🟩 LONGITUD
-            else if ($tr.hasClass('long-row')) {
-                data.push({
-                    type: 'long',
-                    titleId: tituloId,
-                    text: $tr.find('.long-text').val() || ''
-                });
-            }
-
-            // 🟨 FILA NORMAL
-            else if ($tr.hasClass('normal-row')) {
-                const values = [];
-                $tr.find('input[type="text"]').each(function () {
-                    values.push($(this).val());
-                });
-
-                data.push({
-                    type: 'row',
-                    titleId: tituloId,
-                    values: values
-                });
-            }
-
+    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
+    function dedupe(arr){
+        const seen = new Set();
+        return arr.filter(item => {
+            const key = (item.id || '') + '||' + (item.text || '');
+            if(seen.has(key)) return false; seen.add(key); return true;
         });
+    }
 
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
+    const uniqueTitles = dedupe(titles);
+    const uniqueLongs = dedupe(longs);
+
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({
+            titles: uniqueTitles,
+            rows,
+            longs
+        }));
     }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
@@ -360,7 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
         tr.remove();
         updateTitulos();
         saveData($(this).closest('form').attr('id'));
-        grupoActivo = null;
     });
 
     /*Cambia el data-titulo y guarda en sesionstorage */
@@ -378,9 +372,9 @@ document.addEventListener("DOMContentLoaded", function () {
         updateRowNumbers();
 
         // 👉 Solo recalcular si NO estamos borrando una longitud
-        /*if (!esLongitud) {
+        if (!esLongitud) {
             verificarYAgregarLongitud();
-        }*/
+        }
 
         saveData(document.querySelectorAll("form")[1].id);
     });
@@ -402,16 +396,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         inputFields.forEach(input => {
             input.addEventListener("input", function () {
-
-                // ⛔ No permitir copiar mientras la página está cargando
-                if (!paginaLista) return;
-
-                const column = parseInt(input.getAttribute("data-column"));
-                if (isNaN(column)) return;
+                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
+                if (isNaN(column)) return; // Evitar errores si no es válido
 
                 document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
                     const cellInputs = row.querySelectorAll("td input");
-                    const cellInput = cellInputs[column];
+                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
                     if (cellInput) {
                         cellInput.value = input.value;
                     }
