@@ -1566,7 +1566,8 @@ $(document).ready(function() {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
@@ -1595,7 +1596,9 @@ $(document).ready(function() {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1656,31 +1659,36 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
-    function verificarYAgregarLongitud() {
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
-        // Buscar la última longitud
-        const $ultimaLong = $rows.filter('.long-row').last();
-        // Filas que pertenecen al bloque actual
-        let $bloque;
-        if ($ultimaLong.length) {
-            $bloque = $ultimaLong.nextAll('tr');
-        } else {
-            $bloque = $rows;
-        }
+function verificarYAgregarLongitud() {
 
-        // Si el bloque ya tiene 13 o más filas
-        if ($bloque.length >= 13) {
+    const $tbody = $('#dynamicTable tbody');
 
-            // 🚫 Evitar insertar otra longitud si ya existe en este bloque
-            if ($bloque.filter('.long-row').length > 0) return;
+    // 👉 Obtener solo filas reales (no títulos, no longitudes)
+    const $rowsReales = $tbody.children('tr')
+        .not('.titulo-row, .long-row');
 
-            // La fila #13 real del bloque (index 12)
-            const $fila13 = $bloque.eq(12);
+    // 👉 Buscar última longitud
+    const $ultimaLong = $tbody.children('tr.long-row').last();
 
-            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+    let $bloque;
 
-            let newLong = `
+    if ($ultimaLong.length) {
+        // Filas reales después de la última longitud
+        $bloque = $ultimaLong.nextAll('tr')
+            .not('.titulo-row, .long-row');
+    } else {
+        // Todas las filas reales
+        $bloque = $rowsReales;
+    }
+
+    // ✅ Solo cuando hay exactamente 13 filas reales
+    if ($bloque.length === 13) {
+
+        let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+
+        const $fila13 = $bloque.eq(12); // índice 12 = fila 13 real
+
+        let newLong = `
             <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14">Longitud Inspeccionada</td>
                 <td>
@@ -1690,17 +1698,20 @@ $(document).ready(function() {
                             name="Long_Inspecc[${lastTitle}][]"
                             placeholder="Ingrese Longitud Inspeccionada...">
 
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"></i>
-                        </button></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
                     </div>
                 </td>
             </tr>`;
 
-            // 👉 Insertar JUSTO después de la fila 13
-            $fila13.after(newLong);
-        }
+        // 👉 Insertar justo después de la fila 13 real
+        $fila13.after(newLong);
     }
+}
+
 
     $(document).ready(function() {
         function actualizarInputsE() {

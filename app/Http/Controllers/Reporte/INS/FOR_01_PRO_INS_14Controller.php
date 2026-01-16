@@ -486,7 +486,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 12;
+        $maxFilasPorBloque = 13;
 
         if (!empty($filasSinTitulo)) {
 
@@ -902,7 +902,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 12;
+        $maxFilasPorBloque = 13; //Cambiar a comveniencia del PDF
 
         if (!empty($filasSinTitulo)) {
 
