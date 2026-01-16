@@ -1024,8 +1024,16 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
                     if ($bloqueActual) {
                         $bloqueActual['Long_Inspecc'][] = $item['text'];
+
+                        // ✅ CERRAR BLOQUE AUTOMÁTICAMENTE SI NO HUBO TÍTULO REAL
+                        if (str_starts_with($bloqueActual['titulos_juntas'], 'SIN TITULO')) {
+                            $bloques[] = $bloqueActual;
+                            $bloqueActual = null;
+                        }
                     }
+
                 break;
+
             }
         }
 

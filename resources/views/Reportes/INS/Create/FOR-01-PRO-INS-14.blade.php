@@ -1618,88 +1618,89 @@ $('form').submit(function(e) {
 
             }, 300);
 
+function verificarYAgregarLongitud() {
 
-        function verificarYAgregarLongitud() {
+    if (restaurando) return;
 
-            if (restaurando) return;
+    let contador = 0;
+    let tituloActual = null;
+    const $rows = $('#dynamicTable tbody tr');
 
-            let contador = 0;
-            //let tituloActual = 'sin_titulo';
-            let tituloActual = null;
-            const $rows = $('#dynamicTable tbody tr');
+    $rows.each(function () {
 
-            $rows.each(function () {
+        const $tr = $(this);
 
-                const $tr = $(this);
+        // 🟦 Título reinicia contador
+        if ($tr.hasClass('titulo-row')) {
+            contador = 1;
+            tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
 
-                // 🟦 Título reinicia y cuenta como 1
-                if ($tr.hasClass('titulo-row')) {
-                    contador = 1;
-                    tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
+            console.log('🟦 Título detectado → grupo:', tituloActual);
+            return;
+        }
 
-                    console.log('🟦 Título detectado → grupo:', tituloActual);
+        // 🟩 Longitudes no cuentan
+        if ($tr.hasClass('long-row')) {
+            return;
+        }
 
+        // 🟨 Fila normal
+        if ($tr.hasClass('normal-row')) {
+            contador++;
+
+            if (!tituloActual) {
+                tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
+                $tr.attr('data-titulo', tituloActual);
+
+                console.log('🟨 Fila sin grupo → asignado:', tituloActual);
+            }
+        }
+
+        // ✅ Cuando llega a 13 filas → insertar longitud
+        if (contador === 13) {
+
+                const $next = $tr.next();
+
+                // Evitar duplicado inmediato
+                if ($next.hasClass('long-row')) {
+                    contador = 0;
                     return;
                 }
 
-                // 🟩 Longitudes no cuentan
-                if ($tr.hasClass('long-row')) {
-                    return;
-                }
-
-                // 🟨 Fila normal
-                if ($tr.hasClass('normal-row')) {
-                    contador++;
-
-                if (!tituloActual) {
-                    tituloActual = $tr.data('titulo') || grupoActivo || nuevoGrupo();
-                    $tr.attr('data-titulo', tituloActual);
-
-                    console.log('🟨 Fila sin grupo → asignado:', tituloActual);
-                }
-
-                }
-
-                /*if ($tr.hasClass('normal-row')) {
-                    contador++;
-                }*/
-
-                // ✅ Cada vez que llegue a 13
-                if (contador === 13) {
-
-                    const $next = $tr.next();
-
-                    // Evitar duplicado inmediato
-                    if ($next.hasClass('long-row')) {
-                        contador = 0;
-                        return;
-                    }
-
-                    const newLong = `
-                        <tr class="long-row" data-titulo="${tituloActual}">
-                            <td colspan="14">Longitud Inspeccionada</td>
-                            <td>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control long-text"
-                                        name="Long_Inspecc[${tituloActual}][]">
-                                    <td>
-                                        <button type="button" class="btn btn-danger btnEliminar">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </td>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                const newLong = `
+                    <tr class="long-row" data-titulo="${tituloActual}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text" class="form-control long-text"
+                                    name="Long_Inspecc[${tituloActual}][]">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>
+                `;
 
                 $tr.after(newLong);
 
-            // ❌ NO crear nuevo grupo aquí
-            contador = 0;
-
+                // ✅ SI NO EXISTE TÍTULO REAL → CREAR NUEVO GRUPO AUTOMÁTICO
+                if (!$('.titulo-row[data-titulo="' + tituloActual + '"]').length) {
+                    grupoActivo = nuevoGrupo();   // nuevo grupo invisible
+                    console.log('🆕 Nuevo grupo automático:', grupoActivo);
                 }
-            });
-        }
+
+                // ✅ Guardar inmediatamente
+                saveData($('form').attr('id'));
+
+                contador = 0;
+            }
+
+        });
+    }
+
 });
 
     $(document).ready(function() {
