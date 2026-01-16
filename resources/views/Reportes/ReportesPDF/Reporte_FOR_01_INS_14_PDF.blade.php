@@ -16,7 +16,7 @@
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalTitulosYFilas <=20)
+                @if ($totalTitulosYFilas <=13)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -69,7 +69,7 @@
                 body {
                     /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
                     margin: 0;
-                    padding-top: 235px; /* Altura del header */
+                    padding-top: 550px; /* Altura del header 435 antes */
                     padding-bottom: 95px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
@@ -294,7 +294,7 @@
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="5">DATOS Y AJUSTES DEL EQUIPO </th></tr>
+                        <tr><th colspan="8">DATOS Y AJUSTES DEL EQUIPO </th></tr>
                     </thead>  
 
                                 <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
@@ -763,7 +763,7 @@
                                             @php
                                                 $contadorFilas++;
                                                 $contadorFilasPagina++;
-                                                $totalMetros += floatval($junta['observaciones']);
+                                                $totalMetros += floatval($junta['FOTOS']);
                                                 $esUltimaFila = $loop->last;
                                             @endphp
                                             <tr class="juntas">

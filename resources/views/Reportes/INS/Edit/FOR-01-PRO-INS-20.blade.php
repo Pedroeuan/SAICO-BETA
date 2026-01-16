@@ -57,6 +57,13 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .border-primary {
+            border: 2px solid #007bff !important; /* azul brillante */
+        }
+        .border-secondary {
+            border: 1px solid #6c757d !important; /* gris */
+        }
+
     </style>
 @endsection
 
@@ -158,8 +165,6 @@
                             @enderror
                         </div>
                     </div>
-
-
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -314,68 +319,59 @@
 
                         <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                         <!--***************************************** INICIO RESULTADOS *****************************************-->
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA</div>
-                                    
-                        <!-- IMÁGENES CON COMENTARIOS -->
-                        <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                <option value="">Selecciona Cuántas Imágenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 50; $i++)
-                                    <option value="{{ $i }}" {{ isset($Fotos_Comentarios) && count($Fotos_Comentarios) == $i ? 'selected' : '' }}>
-                                        {{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
-
-                        @if(!empty($Fotos_Comentarios))
-                            <div class="row">
-                                @php
-                                    // Para evitar repetir comentarios grupales
-                                    $comentariosMostrados = [];
-                                @endphp
-
-                                @foreach ($imagenes as $img)
-                                    <div class="col-md-6 mb-4">
-                                        <div class="card shadow-sm position-relative" 
-                                            style="border: 2px solid {{ $img['comentario_grupal'] ?? false ? '#1e88e5' : '#dee2e6' }}">
-                                            
-                                            <div class="card-body text-center">
-                                                <img src="{{ asset($img['ruta']) }}" class="img-fluid rounded mb-2" alt="Imagen {{ $img['id'] }}">
-                                                
-                                                {{-- Comentario individual --}}
-                                                @if (!empty($img['comentario']) && empty($img['comentario_grupal']))
-                                                    <textarea class="form-control mt-2" name="comments[]"
-                                                        placeholder="Comentario individual">{{ $img['comentario'] }}</textarea>
-                                                @endif
-
-                                                {{-- Comentario grupal (solo mostrar una vez por grupo) --}}
-                                                @if (!empty($img['comentario_grupal']) && !in_array($img['comentario_grupal'], $comentariosMostrados))
-                                                    <div class="mt-3 p-2 bg-light border border-primary rounded">
-                                                        <strong>Comentario grupal:</strong>
-                                                        <textarea class="form-control mt-2" name="comentario_grupo[]">{{ $img['comentario_grupal'] }}</textarea>
-                                                    </div>
-                                                    @php
-                                                        $comentariosMostrados[] = $img['comentario_grupal'];
-                                                    @endphp
-                                                @endif
-                                            </div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA / SEÑAL DE REFERENCIA</div>
+                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 50; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
 
+                                        @if(!empty($Fotos_Comentarios))
+                                            <div class="row">
+                                                @foreach($Fotos_Comentarios as $index => $foto)
+                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                        <div class="form-group">
+                                                            <!-- Vista previa de la imagen existente -->
+                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                            <div class="image-preview mt-2">
+                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                            </div>
 
-                        @else
-                            <p>No hay imágenes disponibles.</p>
-                        @endif
+                                                            <!-- Campo para seleccionar una nueva imagen -->
+                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
-                        <!-- Contenedor para nuevas imágenes -->
-                        <div id="imageFieldsContainer" class="row"></div>
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 
-                                    <!-- Modal para recortar la imagen -->
+                                                            <!-- Campo oculto para la imagen en base64 -->
+                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                            <!-- Botón de eliminación -->
+                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
+
+                                        <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
@@ -650,6 +646,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
-
+    // 🟢 Selecciona automáticamente el número de imágenes existentes
+    /*document.addEventListener("DOMContentLoaded", () => {
+        const existingCount = {{ count($Fotos_Comentarios) }};
+        const select = document.getElementById('imageCount');
+        if (select) select.value = existingCount;
+    });*/
 </script>
 @endsection

@@ -71,13 +71,13 @@
                                         </div>
                                     </div>
 
-                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable</button>
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Norma o Codigo Aplicable/Procedimiento</button>
 
                                     <table id="Norma_Codigo" class="table table-bordered table-striped dt-responsive tablas">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Norma o Codigo Aplicable</th>
+                                                <th>Norma o Codigo Aplicable/Procedimiento</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>

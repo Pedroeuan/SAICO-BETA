@@ -441,11 +441,15 @@ class BlockYProbetaController extends Controller
 
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'BLOCK Y PROBETA')
+            ->where('idGeneral_EyC', '!=', $id)
             ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
             
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->where('Serie', '!=', $serie)  // ← EXCLUYE SU PROPIO REGISTRO
-            ->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
             if ($existsNo_Economico && $existsSerie)

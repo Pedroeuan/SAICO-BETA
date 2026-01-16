@@ -1,4 +1,55 @@
+    /*check del contrato, si y no */
+    document.addEventListener("DOMContentLoaded", function () {
 
+        const radios = document.getElementsByName("TieneContrato");
+        const campoContrato = document.getElementById("campoContrato");
+        const contratoInternoHidden = document.getElementById("contratoInternoHidden");
+
+        const textoInterno = document.getElementById("contratoInternoTexto");
+        const numeroInterno = document.getElementById("numeroInterno");
+
+        radios.forEach(radio => {
+            radio.addEventListener("change", async function () {
+
+                if (this.value === "si") {
+                    campoContrato.disabled = false;
+                    campoContrato.required = true;
+
+                    // Limpiar contrato interno
+                    textoInterno.style.display = "none";
+                    numeroInterno.textContent = "";
+                    contratoInternoHidden.value = "";
+                    return;
+                }
+
+                if (this.value === "no") {
+
+                    campoContrato.disabled = true;
+                    campoContrato.required = false;
+                    campoContrato.value = "";
+
+                    try {
+                        const response = await fetch('/api/siguiente-contrato-interno');
+                        const data = await response.json();
+
+                        const nuevoContrato = data.siguiente;
+                        console.log("Contrato interno generado:", nuevoContrato);
+
+                        // Mostrarlo al usuario
+                        textoInterno.style.display = "block";
+                        numeroInterno.textContent = nuevoContrato;
+
+                        // Guardarlo para enviarlo al backend
+                        contratoInternoHidden.value = nuevoContrato;
+
+                    } catch (error) {
+                        console.error("Error al obtener el contrato interno:", error);
+                    }
+                }
+            });
+        });
+    });
+    
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
