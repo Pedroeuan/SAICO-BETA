@@ -1681,13 +1681,12 @@ function verificarYAgregarLongitud() {
         $bloque = $rowsReales;
     }
 
-    // ✅ Solo cuando hay exactamente 13 filas reales
-    if ($bloque.length === 13) {
+    // ✅ Solo cuando hay exactamente 11 filas reales
+    if ($bloque.length === 11) {
 
         let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
 
-        const $fila13 = $bloque.eq(12); // índice 12 = fila 13 real
-
+        const $Numfila = $bloque.eq(10); // índice 10 = fila 11 real
         let newLong = `
             <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14">Longitud Inspeccionada</td>
@@ -1707,8 +1706,8 @@ function verificarYAgregarLongitud() {
                 </td>
             </tr>`;
 
-        // 👉 Insertar justo después de la fila 13 real
-        $fila13.after(newLong);
+        // 👉 Insertar justo después de la fila 11 real
+        $Numfila.after(newLong);
     }
 }
 
