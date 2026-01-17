@@ -893,7 +893,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos_json = $request->input('titulos_hidden', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
 
         $datosAgrupados = [];

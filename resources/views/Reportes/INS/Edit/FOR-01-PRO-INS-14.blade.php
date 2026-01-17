@@ -1023,9 +1023,13 @@
                             @php
                                 $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
 
-                                $titleId = $esSinTitulo
+                                /*$titleId = $esSinTitulo
                                     ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                    : 'titulo_' . $index;*/
+                                $titleId = $esSinTitulo
+                                    ? 'sin_titulo'
                                     : 'titulo_' . $index;
+
                             @endphp
 
                             {{-- 🔹 TÍTULO --}}
@@ -1107,7 +1111,7 @@
                         </tbody>
                         </table>
                     </div>
-
+                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1474,7 +1478,8 @@
 <script>
 
 $(document).ready(function() {
-    let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let tituloCount = $('.titulo-row').length;
+    //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
@@ -1500,9 +1505,6 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        //saveData(document.querySelectorAll("form")[1].id);
-        // Guardar de forma robusta: usar el form relativo o id explícito
-        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addLongBtn').click(function () {
@@ -1530,9 +1532,6 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        //saveData(document.querySelectorAll("form")[1].id);
-        // Guardar de forma robusta: usar el form relativo o id explícito
-        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addBtn').click(function () {
@@ -1570,9 +1569,7 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
-            saveData($(this).closest('form').attr('id'));
         }
     );
 
@@ -1599,8 +1596,6 @@ $(document).ready(function() {
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-            restoreData();
 });
 
 function verificarYAgregarLongitud() {
@@ -1655,7 +1650,6 @@ function verificarYAgregarLongitud() {
         $fila13.after(newLong);
     }
 }
-
 
     $(document).ready(function() {
         function actualizarInputsE() {
