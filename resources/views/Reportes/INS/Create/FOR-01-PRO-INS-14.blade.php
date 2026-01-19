@@ -1040,7 +1040,7 @@
                                 </tbody>
                         </table>
                     </div>
-                    <input type="hidden" name="titulos_data" id="titulos_hidden">
+                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <---------------------------------------Agregar
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1373,16 +1373,39 @@ $(document).ready(function() {
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
     
-    function restoreData() {
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
 
-        // Helpers y configuración
-        const fieldNames = ['no_junta','Tip_Ind','L_PGL','A_PGL','AL_PGL','X','Y','DA_PROF','PA','SA','TMIN','SCAN','EVAL','FOTOS'];
-        const placeholders = {
-            no_junta: 'Junta / Elemento', Tip_Ind: 'Tipo de Indicación', L_PGL: 'L (PLG)',
-            A_PGL: 'A (PLG)', AL_PGL: 'ALTURA (PLG)', X: 'X', Y: 'Y', DA_PROF: 'DA (PROF)',
-            PA: 'PA', SA: 'SA', TMIN: 'Tmin', SCAN: 'Datos del Archivo (Escaneo)', EVAL: 'Evaluación', FOTOS: 'Fotos'
+        // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
+        const fieldNames = [
+        'no_junta',
+        'Tip_Ind',
+        'L_PGL',
+        'A_PGL',
+        'AL_PGL'
+        ,'X','Y',
+        'DA_PROF',
+        'PA','SA',
+        'TMIN',
+        'SCAN',
+        'EVAL',
+        'FOTOS'];
+        const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
+            no_junta: 'Junta / Elemento', 
+            Tip_Ind: 'Tipo de Indicación', 
+            L_PGL: 'L (PLG)',
+            A_PGL: 'A (PLG)', 
+            AL_PGL: 'ALTURA (PLG)', 
+            X: 'X', 
+            Y: 'Y', 
+            DA_PROF: 'DA (PROF)',
+            PA: 'PA', 
+            SA: 'SA', 
+            TMIN: 'Tmin', 
+            SCAN: 'Datos del Archivo (Escaneo)', 
+            EVAL: 'Evaluación', 
+            FOTOS: 'Fotos'
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
@@ -1398,6 +1421,7 @@ $(document).ready(function() {
             const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
             const titleText = esc(t.text || '');
 
+            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
@@ -1452,6 +1476,7 @@ $(document).ready(function() {
             const titleId = l.titleId || 'sin_titulo';
             const value   = esc(l.text || '');
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
                     <td colspan="14">Longitud Inspeccionada</td>
@@ -1471,18 +1496,18 @@ $(document).ready(function() {
                     </td>
                 </tr>
             `;
-
+            //-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
             // 🔎 Buscar filas reales del bloque
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 13) {
-                const $fila13 = $rowsBlock
+            if ($rowsBlock.length >= 13) { // si hay al menos 13 filas en el bloque
+                const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(12);
+                    .eq(12); // fila índice 12 = fila 13 (0-based)
 
-                if ($fila13.length) {
-                    $fila13.after(newLong);
+                if ($nfila.length) { 
+                    $nfila.after(newLong);
                 } else {
                     $rowsBlock.last().after(newLong);
                 }
@@ -1683,7 +1708,7 @@ function verificarYAgregarLongitud() {
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
-
+        //-----------------------------------------Hacer ajuste de "N" filas por bloque
         // 🎯 Cuando llegue a 11 → insertar longitud
         if (contadorBloque === 11) {
 

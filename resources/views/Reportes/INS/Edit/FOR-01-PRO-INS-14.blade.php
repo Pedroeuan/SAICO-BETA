@@ -1622,7 +1622,7 @@ $(document).ready(function() {
                 contadorBloque++;
                 $ultimoElementoBloque = $row;
             }
-
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
             // 🎯 Cuando llegue a 11 → insertar longitud
             if (contadorBloque === 11) {
 
