@@ -1598,6 +1598,66 @@ $(document).ready(function() {
 
 });
 
+    function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            // ❌ Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // ✅ Contar título o fila normal
+            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+
+            // 🎯 Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 11) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // 👉 Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                // 🔄 Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
+/*
 function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');
@@ -1649,7 +1709,7 @@ function verificarYAgregarLongitud() {
         // 👉 Insertar justo después de la fila 13 real
         $Numfila.after(newLong);
     }
-}
+}*/
 
     $(document).ready(function() {
         function actualizarInputsE() {
