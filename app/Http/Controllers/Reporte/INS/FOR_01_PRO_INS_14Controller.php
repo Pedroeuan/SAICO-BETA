@@ -486,7 +486,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 12;
+        $maxFilasPorBloque = 13;
 
         if (!empty($filasSinTitulo)) {
 
@@ -518,7 +518,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 }
 
                 // tomar la longitud correspondiente al bloque
-                $longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+                //$longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+                $indexLong = floor($offset / $maxFilasPorBloque);
+
+                $longBloque = $longitudesSin[$indexLong] ?? null;
 
                 $datosAgrupados[] = [
                     'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
@@ -890,19 +893,18 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        //$titulos = $request->input('titulos', []);
-        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos_json = $request->input('titulos_hidden', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
 
         $datosAgrupados = [];
-        //update
+        
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 12;
+        $maxFilasPorBloque = 11;
 
         if (!empty($filasSinTitulo)) {
 
@@ -948,8 +950,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
         
         // 2. Procesar los títulos existentes
         foreach ($titulos as $tituloObj) {
-            $tituloKey = $tituloObj['id'];   // ej. "titulo_1_..."
-            $tituloText = $tituloObj['text'];
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
 
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
@@ -959,18 +961,18 @@ class FOR_01_PRO_INS_14Controller extends Controller
             for ($i = 0; $i < $numFilas; $i++) {
                 $resultados[] = [
                     'no_junta' => $request->input("no_junta.$tituloKey.$i"),
-                    'Tip_Ind' => $request->input("Tip_Ind.$tituloKey.$i"),
-                    'L_PGL' => $request->input("L_PGL.$tituloKey.$i"),
-                    'A_PGL' => $request->input("A_PGL.$tituloKey.$i"),
-                    'AL_PGL' => $request->input("AL_PGL.$tituloKey.$i"),
-                    'X' => $request->input("X.$tituloKey.$i"),
-                    'Y' => $request->input("Y.$tituloKey.$i"),
-                    'DA_PROF' => $request->input("DA_PROF.$tituloKey.$i"),
-                    'PA' => $request->input("PA.$tituloKey.$i"),
-                    'SA' => $request->input("SA.$tituloKey.$i"),
-                    'TMIN' => $request->input("TMIN.$tituloKey.$i"),
-                    'SCAN' => $request->input("SCAN.$tituloKey.$i"),
-                    'EVAL' => $request->input("EVAL.$tituloKey.$i"),
+                    'Tip_Ind'  => $request->input("Tip_Ind.$tituloKey.$i"),
+                    'L_PGL'    => $request->input("L_PGL.$tituloKey.$i"),
+                    'A_PGL'    => $request->input("A_PGL.$tituloKey.$i"),
+                    'AL_PGL'   => $request->input("AL_PGL.$tituloKey.$i"),
+                    'X'        => $request->input("X.$tituloKey.$i"),
+                    'Y'        => $request->input("Y.$tituloKey.$i"),
+                    'DA_PROF'  => $request->input("DA_PROF.$tituloKey.$i"),
+                    'PA'       => $request->input("PA.$tituloKey.$i"),
+                    'SA'       => $request->input("SA.$tituloKey.$i"),
+                    'TMIN'     => $request->input("TMIN.$tituloKey.$i"),
+                    'SCAN'     => $request->input("SCAN.$tituloKey.$i"),
+                    'EVAL'     => $request->input("EVAL.$tituloKey.$i"),
                     'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
                     //'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                 ];

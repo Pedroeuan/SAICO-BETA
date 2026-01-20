@@ -1040,7 +1040,7 @@
                                 </tbody>
                         </table>
                     </div>
-                    <input type="hidden" name="titulos_data" id="titulos_hidden">
+                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <---------------------------------------Agregar
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1366,23 +1366,46 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">  <!---------------------------- AGREGAR -->
 <script>
 $(document).ready(function() {
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
     
-    function restoreData() {
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
 
-        // Helpers y configuración
-        const fieldNames = ['no_junta','Tip_Ind','L_PGL','A_PGL','AL_PGL','X','Y','DA_PROF','PA','SA','TMIN','SCAN','EVAL','FOTOS'];
-        const placeholders = {
-            no_junta: 'Junta / Elemento', Tip_Ind: 'Tipo de Indicación', L_PGL: 'L (PLG)',
-            A_PGL: 'A (PLG)', AL_PGL: 'ALTURA (PLG)', X: 'X', Y: 'Y', DA_PROF: 'DA (PROF)',
-            PA: 'PA', SA: 'SA', TMIN: 'Tmin', SCAN: 'Datos del Archivo (Escaneo)', EVAL: 'Evaluación', FOTOS: 'Fotos'
+        // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
+        const fieldNames = [
+        'no_junta',
+        'Tip_Ind',
+        'L_PGL',
+        'A_PGL',
+        'AL_PGL'
+        ,'X','Y',
+        'DA_PROF',
+        'PA','SA',
+        'TMIN',
+        'SCAN',
+        'EVAL',
+        'FOTOS'];
+        const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
+            no_junta: 'Junta / Elemento', 
+            Tip_Ind: 'Tipo de Indicación', 
+            L_PGL: 'L (PLG)',
+            A_PGL: 'A (PLG)', 
+            AL_PGL: 'ALTURA (PLG)', 
+            X: 'X', 
+            Y: 'Y', 
+            DA_PROF: 'DA (PROF)',
+            PA: 'PA', 
+            SA: 'SA', 
+            TMIN: 'Tmin', 
+            SCAN: 'Datos del Archivo (Escaneo)', 
+            EVAL: 'Evaluación', 
+            FOTOS: 'Fotos'
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
@@ -1398,6 +1421,7 @@ $(document).ready(function() {
             const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
             const titleText = esc(t.text || '');
 
+            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
@@ -1452,6 +1476,7 @@ $(document).ready(function() {
             const titleId = l.titleId || 'sin_titulo';
             const value   = esc(l.text || '');
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
                     <td colspan="14">Longitud Inspeccionada</td>
@@ -1471,18 +1496,18 @@ $(document).ready(function() {
                     </td>
                 </tr>
             `;
-
+            //-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
             // 🔎 Buscar filas reales del bloque
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 13) {
-                const $fila13 = $rowsBlock
+            if ($rowsBlock.length >= 13) { // si hay al menos 13 filas en el bloque
+                const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(12);
+                    .eq(12); // fila índice 12 = fila 13 (0-based)
 
-                if ($fila13.length) {
-                    $fila13.after(newLong);
+                if ($nfila.length) { 
+                    $nfila.after(newLong);
                 } else {
                     $rowsBlock.last().after(newLong);
                 }
@@ -1541,6 +1566,8 @@ $(document).ready(function() {
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
+            
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
@@ -1566,7 +1593,8 @@ $(document).ready(function() {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
@@ -1595,7 +1623,9 @@ $(document).ready(function() {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1656,31 +1686,96 @@ $(document).ready(function() {
             // Restaurar datos al cargar la página
             restoreData();
 });
-    function verificarYAgregarLongitud() {
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
-        // Buscar la última longitud
-        const $ultimaLong = $rows.filter('.long-row').last();
-        // Filas que pertenecen al bloque actual
-        let $bloque;
-        if ($ultimaLong.length) {
-            $bloque = $ultimaLong.nextAll('tr');
-        } else {
-            $bloque = $rows;
+function verificarYAgregarLongitud() {
+
+    const $tbody = $('#dynamicTable tbody');
+    const $rows = $tbody.children('tr');
+
+    let contadorBloque = 0;
+    let $ultimoElementoBloque = null;
+
+    $rows.each(function () {
+
+        const $row = $(this);
+
+        // ❌ Ignorar longitudes existentes (no cuentan)
+        if ($row.hasClass('long-row')) {
+            contadorBloque = 0;
+            $ultimoElementoBloque = null;
+            return;
         }
 
-        // Si el bloque ya tiene 13 o más filas
-        if ($bloque.length >= 13) {
+        // ✅ Contar título o fila normal
+        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+            contadorBloque++;
+            $ultimoElementoBloque = $row;
+        }
+        //-----------------------------------------Hacer ajuste de "N" filas por bloque
+        // 🎯 Cuando llegue a 11 → insertar longitud
+        if (contadorBloque === 11) {
 
-            // 🚫 Evitar insertar otra longitud si ya existe en este bloque
-            if ($bloque.filter('.long-row').length > 0) return;
+            const lastTitle = $row.data('titulo') || 'sin_titulo';
 
-            // La fila #13 real del bloque (index 12)
-            const $fila13 = $bloque.eq(12);
+            const newLong = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text"
+                                class="form-control w-90 long-text"
+                                name="Long_Inspecc[${lastTitle}][]"
+                                placeholder="Ingrese Longitud Inspeccionada...">
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </div>
+                    </td>
+                </tr>`;
 
-            let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+            // 👉 Evitar duplicados
+            if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                $ultimoElementoBloque.after(newLong);
+            }
 
-            let newLong = `
+            // 🔄 Reiniciar contador para siguiente bloque
+            contadorBloque = 0;
+            $ultimoElementoBloque = null;
+        }
+    });
+}
+
+/*
+function verificarYAgregarLongitud() {
+
+    const $tbody = $('#dynamicTable tbody');
+
+    // 👉 Obtener solo filas reales (no títulos, no longitudes)
+    const $rowsReales = $tbody.children('tr')
+        .not('.titulo-row, .long-row');
+
+    // 👉 Buscar última longitud
+    const $ultimaLong = $tbody.children('tr.long-row').last();
+
+    let $bloque;
+
+    if ($ultimaLong.length) {
+        // Filas reales después de la última longitud
+        $bloque = $ultimaLong.nextAll('tr')
+            .not('.titulo-row, .long-row');
+    } else {
+        // Todas las filas reales
+        $bloque = $rowsReales;
+    }
+
+    // ✅ Solo cuando hay exactamente 11 filas reales
+    if ($bloque.length === 11) {
+
+        let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
+
+        const $Numfila = $bloque.eq(10); // índice 10 = fila 11 real
+        let newLong = `
             <tr class="long-row" data-titulo="${lastTitle}">
                 <td colspan="14">Longitud Inspeccionada</td>
                 <td>
@@ -1690,17 +1785,20 @@ $(document).ready(function() {
                             name="Long_Inspecc[${lastTitle}][]"
                             placeholder="Ingrese Longitud Inspeccionada...">
 
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"></i>
-                        </button></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
                     </div>
                 </td>
             </tr>`;
 
-            // 👉 Insertar JUSTO después de la fila 13
-            $fila13.after(newLong);
-        }
+        // 👉 Insertar justo después de la fila 11 real
+        $Numfila.after(newLong);
     }
+}
+*/
 
     $(document).ready(function() {
         function actualizarInputsE() {
