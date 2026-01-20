@@ -15,7 +15,7 @@
             e.preventDefault();
         }
     });
-
+    
     /*Botón eliminar para imagenes subidas */
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.remove-image').forEach(button => {
@@ -210,6 +210,21 @@
                     </div>
                 `;
                 container.appendChild(col);
+
+                // Si index es par, agregar un textarea para el par de imágenes
+                /*if (index % 2 === 0) {
+                    const pairIndex = Math.ceil(index / 2);
+                    const textareaCol = document.createElement('div');
+                    textareaCol.classList.add('col-12', 'mb-3');
+                    textareaCol.setAttribute('id', `images-comments-pair-${pairIndex}`);
+                    textareaCol.innerHTML = `
+                        <div class="form-group">
+                            <label for="images-comments-${pairIndex}">Comentarios para imágenes ${index - 1} y ${index}:</label>
+                            <textarea class="form-control images-comments" id="images-comments-${pairIndex}" data-pair-index="${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
+                        </div>
+                    `;
+                    container.appendChild(textareaCol);
+                }*/
             }
 
             // Eventos de eliminación
@@ -252,6 +267,37 @@
                     reader.readAsDataURL(file);
                 });
             });
+
+            // Asignar eventos a los textareas de pares: sincronizar con los inputs hidden por imagen
+            document.querySelectorAll('.images-comments').forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                    const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                    if (isNaN(pairIndex)) return;
+                    const firstIndex = (pairIndex - 1) * 2 + 1; // 1-based indexing
+                    const secondIndex = firstIndex + 1;
+
+                    const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                    const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                    if (firstHidden) firstHidden.value = this.value;
+                    if (secondHidden) secondHidden.value = this.value;
+                });
+            });
+
+            // Inicializar valores de los textareas por par a partir de comments existentes
+            document.querySelectorAll('.images-comments').forEach(textarea => {
+                const pairIndex = parseInt(textarea.getAttribute('data-pair-index'), 10);
+                if (isNaN(pairIndex)) return;
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden && firstHidden.value) {
+                    textarea.value = firstHidden.value;
+                } else if (secondHidden && secondHidden.value) {
+                    textarea.value = secondHidden.value;
+                }
+                // Si ninguno tiene valor, dejar como originalmente en blade
+            });
         }
 
         // Limpiar localStorage al enviar el formulario
@@ -260,111 +306,60 @@
         });
     });
 
+    // Inicializar textareas por par existentes en la vista de edición: eventos y valor inicial
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.images-comments').forEach(textarea => {
+            // Evento para actualizar ambos hidden inputs
+            textarea.addEventListener('input', function () {
+                const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                if (isNaN(pairIndex)) return;
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden) firstHidden.value = this.value;
+                if (secondHidden) secondHidden.value = this.value;
+            });
+
+            // Inicializar valor del textarea desde los hidden existentes
+            const pairIndex = parseInt(textarea.getAttribute('data-pair-index'), 10);
+            if (!isNaN(pairIndex)) {
+                const firstIndex = (pairIndex - 1) * 2 + 1;
+                const secondIndex = firstIndex + 1;
+                const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                if (firstHidden && firstHidden.value) {
+                    textarea.value = firstHidden.value;
+                } else if (secondHidden && secondHidden.value) {
+                    textarea.value = secondHidden.value;
+                }
+            }
+        });
+    });
+
     /*Juntas-Resultados */
     function updateRowNumbers() {
         let count = 0;
         $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
+            //if (!$(this).hasClass('titulo-row')) {
+            if (!$(this).hasClass('titulo-row') && !$(this).hasClass('long-row')) {
                 count++;
                 $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
             }
         });
         rowCountGlobal = count;
     }
-
-    // Función para actualizar los títulos en el campo oculto
+        // Función correcta para serializar títulos como [{id,text}]
         function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
-
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        var titulos = [];
+        $('.titulo-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
+        });
+        $('#titulos_hidden').val(JSON.stringify(titulos));
         }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
-                inputTitulo.addEventListener('input', function() {
-                    const row = inputTitulo.closest('tr');
-                    const oldTituloKey = row.getAttribute('data-titulo')?.replace('titulo_', '');
-
-                    // Generar nuevo tituloKey con guiones bajos
-                    const nuevoTituloRaw = inputTitulo.value.trim() || 'sin_titulo';
-                    const nuevoTituloKey = nuevoTituloRaw.replace(/\s+/g, '_');
-                    const nuevoDataTitulo = `titulo_${nuevoTituloKey}`;
-
-                    // Actualizar el data-titulo del row del título
-                    row.setAttribute('data-titulo', nuevoDataTitulo);
-
-                    // Actualizar todos los <tr> que tenían el antiguo data-titulo relacionado
-                    document.querySelectorAll(`tr[data-titulo="${oldTituloKey}"]`).forEach(function(rowResultado) {
-                        rowResultado.setAttribute('data-titulo', nuevoTituloKey);
-
-                        // También puedes actualizar los name de los inputs si lo necesitas:
-                        rowResultado.querySelectorAll('input').forEach(function(input) {
-                            input.name = input.name.replace(oldTituloKey, nuevoTituloKey);
-                        });
-                    });
-                });
-            });
-        });
-
-
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto
-        function updateTitulos() {
-            var titulos = [];
-            // Recolectar todos los títulos en el array
-            $('.titulo-row input[type="text"]').each(function() {
-                titulos.push($(this).val());
-            });
-
-            // Asignar los títulos al campo oculto
-            $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-        }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.titulo-row input[name="titulos[]"]').forEach(function(inputTitulo) {
-                inputTitulo.addEventListener('input', function() {
-                    const row = inputTitulo.closest('tr');
-                    const oldTituloKey = row.getAttribute('data-titulo')?.replace('titulo_', '');
-
-                    // Generar nuevo tituloKey con guiones bajos
-                    const nuevoTituloRaw = inputTitulo.value.trim() || 'sin_titulo';
-                    const nuevoTituloKey = nuevoTituloRaw.replace(/\s+/g, '_');
-                    const nuevoDataTitulo = `titulo_${nuevoTituloKey}`;
-
-                    // Actualizar el data-titulo del row del título
-                    row.setAttribute('data-titulo', nuevoDataTitulo);
-
-                    // Actualizar todos los <tr> que tenían el antiguo data-titulo relacionado
-                    document.querySelectorAll(`tr[data-titulo="${oldTituloKey}"]`).forEach(function(rowResultado) {
-                        rowResultado.setAttribute('data-titulo', nuevoTituloKey);
-
-                        // También puedes actualizar los name de los inputs si lo necesitas:
-                        rowResultado.querySelectorAll('input').forEach(function(input) {
-                            input.name = input.name.replace(oldTituloKey, nuevoTituloKey);
-                        });
-                    });
-                });
-            });
-        });
-
 
     // Evento para eliminar un título
         $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
@@ -373,7 +368,7 @@
             
             // Eliminar la fila del título
             tituloRow.remove();
-            
+            verificarYAgregarLongitud();
             // Eliminar todas las filas que tengan el mismo data-titulo
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
@@ -381,42 +376,13 @@
         });
 
         /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-            const input = $(this);
-            const text = input.val().trim();
-            const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-            const tr = input.closest('tr');
-            const oldTitulo = tr.attr('data-titulo');
-
-            // Cambia el data-titulo del título
-            tr.attr('data-titulo', safeTitulo);
-
-            // Cambia el data-titulo de las filas asociadas a este título
-            $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-                $(this).attr('data-titulo', safeTitulo);
-
-                // Actualiza solo el valor entre corchetes en los names
-                $(this).find('input').each(function () {
-                    let name = $(this).attr('name');
-                    if (name) {
-                        // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                        name = name.replace(/\[([^\]]+)\]/, function(match, p1) 
-                        {
-                            return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                        });
-                        //name = name.replace(new RegExp(`\\[${oldTitulo}\\]`, 'g'), `[${safeTitulo}]`);
-                        $(this).attr('name', name);
-                    }
-                });
-            });
-
+        $(document).on('input', '.titulo-row .titulo-text', function () {
             updateTitulos();
-            saveData();
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
+            verificarYAgregarLongitud();
             updateRowNumbers();
         });
 
@@ -439,7 +405,8 @@
                 const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
                 if (isNaN(column)) return; // Evitar errores si no es válido
 
-                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                //document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row):not(.long-row)").forEach(row => {
                     const cellInputs = row.querySelectorAll("td input");
                     const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
                     if (cellInput) {
@@ -492,17 +459,6 @@
                 });
             }
         });
-
-        /* selects.forEach(select => {
-            const stored = localStorage.getItem(`${formId}_${select.name}`);
-            console.log(''+stored);
-
-            if (stored !== null) select.value = stored;
-
-            select.addEventListener("change", () => {
-                localStorage.setItem(`${formId}_${select.name}`, select.value);
-            });
-        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");

@@ -354,7 +354,7 @@ class AccesoriosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function updateAccesorios(Request $request, $id)
+ public function updateAccesorios(Request $request, $id)
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
@@ -394,7 +394,11 @@ class AccesoriosController extends Controller
         ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
         ->exists();
 
-        $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
         //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
         //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.

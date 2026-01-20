@@ -148,7 +148,9 @@ class SolicitudesController extends Controller
         {
             // Obtener todas las solicitudes
             //$Solicitudes = Solicitudes::all();
-            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
+            ->orderBy('Fecha', 'desc')
+            ->get();
         }
 
         // Crear un array para almacenar el último folio encontrado para cada grupo

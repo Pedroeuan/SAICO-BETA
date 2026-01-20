@@ -102,6 +102,7 @@
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
+                        <th>Ubicación</th>
                         <th>Prox.Fecha Calibración/Caducidad</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
@@ -138,7 +139,10 @@
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
-                            @endif 
+                            @endif
+                            <td>
+                                {{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}
+                            </td> 
                             @if($general_eyc->certificados)
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
