@@ -1366,7 +1366,7 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">  <!---------------------------- AGREGAR -->
 <script>
 $(document).ready(function() {
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
@@ -1566,6 +1566,8 @@ $(document).ready(function() {
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
+            
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">

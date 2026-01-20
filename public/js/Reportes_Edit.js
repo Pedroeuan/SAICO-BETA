@@ -212,7 +212,7 @@
                 container.appendChild(col);
 
                 // Si index es par, agregar un textarea para el par de imágenes
-                if (index % 2 === 0) {
+                /*if (index % 2 === 0) {
                     const pairIndex = Math.ceil(index / 2);
                     const textareaCol = document.createElement('div');
                     textareaCol.classList.add('col-12', 'mb-3');
@@ -224,7 +224,7 @@
                         </div>
                     `;
                     container.appendChild(textareaCol);
-                }
+                }*/
             }
 
             // Eventos de eliminación
