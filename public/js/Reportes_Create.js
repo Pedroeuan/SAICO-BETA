@@ -1,3 +1,38 @@
+    /*check del cliente, si y no */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const radios = document.querySelectorAll('input[name="TieneCliente"]');
+    const select = document.getElementById('campoClienteSelect');
+    const input  = document.getElementById('campoClienteInput');
+
+    function toggleCliente() {
+        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
+
+        if (valor === 'si') {
+            // Mostrar select
+            select.style.display = 'block';
+            input.style.display  = 'none';
+
+            input.value = '';   // limpiar input
+
+        } else {
+            // Mostrar input vacío
+            select.style.display = 'none';
+            input.style.display  = 'block';
+
+            select.value = '';  // limpiar select
+            input.value  = '';  // aseguramos vacío
+            input.focus();      // cursor automático
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', toggleCliente);
+    });
+
+    toggleCliente(); // ejecutar al cargar
+});
+
     /*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
