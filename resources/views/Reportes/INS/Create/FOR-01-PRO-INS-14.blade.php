@@ -117,11 +117,11 @@
 
                             <!-- SELECT cuando es SI -->
                             <select id="campoClienteSelect"
-                                    class="form-select inputForm"
-                                    name="Detalles_Generales[ClienteSelect]">
+                                    class="form-select"
+                                    name="Detalles_Generales[Cliente]">
                                 <option value="" selected disabled>Seleccione un Cliente</option>
                                 @foreach($Clientes as $Cliente)
-                                    <option value="{{ $Cliente->idClientes }}">
+                                    <option value="{{ $Cliente->Cliente }}">
                                         {{ $Cliente->Cliente }}
                                     </option>
                                 @endforeach
@@ -1686,7 +1686,7 @@ $(document).ready(function() {
         }
     );
 
-        $('form').submit(function(e) {
+        /*$('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
                 e.preventDefault();
@@ -1707,11 +1707,12 @@ $(document).ready(function() {
             submitButton.prop('disabled', true).text('Guardando...');
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-        });
+        });*/
 
             // Restaurar datos al cargar la página
             restoreData();
 });
+
 function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');

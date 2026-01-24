@@ -603,3 +603,76 @@ document.addEventListener("DOMContentLoaded", function () {
         firmas4.style.display = 'block';
     }
     });
+
+    /*Envio de formulario */
+/* Envio de formulario */
+$(document).ready(function () {
+
+    $('form').submit(function(e) {
+
+        // ============================
+        // VALIDAR CLIENTE SELECCIONADO
+        // ============================
+        let tieneCliente   = $('input[name="TieneCliente"]:checked').val();
+        let clienteSelect  = $('#campoClienteSelect').val();
+        let clienteInput   = $('#campoClienteInput').val();
+
+        // Si seleccionó "SI", debe elegir un cliente del select
+        if (tieneCliente === 'si' && 
+            (clienteSelect === null || clienteSelect === 'Seleccione un Cliente')) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor seleccione un cliente válido.',
+            });
+
+            $('#campoClienteSelect').focus();
+            return;
+        }
+
+        // Si seleccionó "NO", debe escribir un cliente
+        if (tieneCliente === 'no' && clienteInput.trim() === '') {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor ingrese el nombre del cliente.',
+            });
+
+            $('#campoClienteInput').focus();
+            return;
+        }
+
+        // ============================
+        // VALIDAR QUE LA TABLA NO ESTE VACIA
+        // ============================
+        if ($('#dynamicTable tbody tr').length === 0) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+            });
+
+            return;
+        }
+
+        // ============================
+        // CONTINUA ENVIO NORMAL
+        // ============================
+        updateTitulos();
+
+        sessionStorage.clear();
+
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+    });
+
+});

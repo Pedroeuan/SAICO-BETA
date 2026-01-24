@@ -168,6 +168,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $idSolicitud            = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes             = $datosParaCrearOS_OC['idReportes'];
 
+        $EsperaDato = "ESPERA DE DATOS";
         /*Instancias */
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
@@ -178,10 +179,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Lineal_Ideal = new Lineal_Ideal;
 
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
-        Log::info('BusquedaCliente: ' . ($BusquedaCliente ? 'Encontrado' : 'No encontrado'));
+
         if ($BusquedaCliente) {
             $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
-            Log::info('idCliente: ' . $idCliente);
+
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -221,7 +222,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
+
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
@@ -248,17 +249,20 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         } else {
             // Cliente no encontrado
-            $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            //$Cliente = "POR DEFINIR";
+            //$NewCliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            if (!$Busqueda2Cliente) {
-                $Busqueda2Cliente = new clientes();
-                $Busqueda2Cliente->Cliente = $Cliente;
-                $Busqueda2Cliente->RFC = 'N/A';
-                $Busqueda2Cliente->Telefono = 'N/A';
-                $Busqueda2Cliente->Correo = 'N/A';
-                $Busqueda2Cliente->save();
-            }
+            //if (!$NewCliente) {
+                
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->save();
+                // Obtén el ID del registro recién creado
+                //$idNewCliente = $NewCliente->idClientes;
+            //}
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -267,7 +271,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $Busqueda2Cliente->idClientes; 
+            $idClientes = $NewCliente->idClientes; 
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
             $Orden_Servicio->Lugar = $Lugar;
@@ -300,7 +304,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
+
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
@@ -330,7 +334,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
     public function FOR_01_PRO_INS_14_store(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -546,12 +550,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $clienteInput = $validatedData['Detalles_Generales']['Cliente'] ?? null;
                 
-                }else {
-                    // Si el frontend envió un cliente válido, se utiliza ese
-                    $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
-                }
-            
-        
+            }else {
+                // Si el frontend envió un cliente válido, se utiliza ese
+                $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
+            }
         // ==========================
         // Lógica para manejar Contrato
         // ==========================
