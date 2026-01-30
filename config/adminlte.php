@@ -698,7 +698,7 @@ return [
                         [
                             'text' => 'Ver usuarios',
                             'icon' => 'fas fa-users',
-                            'url' => 'Admin/index',
+                            'url' => 'Adminindex',
                         ],
                         [
                             'text' => 'Registro de usuarios',
