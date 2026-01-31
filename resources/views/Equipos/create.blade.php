@@ -53,7 +53,16 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
                         @elseif($rol == 'Tics')
                         <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
+                        @elseif($rol == 'Equipos')
+                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Block Y Probeta</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>
                         @else
+                        <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
@@ -367,6 +376,11 @@
                                                     <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo-17025</option>
                                                 @endif
                                             </select>
+                                            @error('Disponibilidad_Estado')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -526,13 +540,18 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Tipo</label>
-                                                <select class="form-control select2" style="width: 100%;" name="TIPO" required>
-                                                        <option>Elige el tipo</option>
+                                                <select class="form-control select2" style="width: 100%;" name="TIPO">
+                                                        <option value="">Elige el tipo</option>
                                                         <option value="EQUIPOS" {{ old('TIPO') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
                                                         <option value="ACCESORIOS" {{ old('TIPO') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
                                                         <option value="BLOCK Y PROBETA" {{ old('TIPO') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
                                                         <option value="HERRAMIENTAS" {{ old('TIPO') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
                                                 </select>
+                                            @error('TIPO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                             </div>
                                         </div>
                                     @endif
@@ -674,6 +693,11 @@
                                                     <option value="Equipo en Resguardo" {{ old('Disponibilidad_Estado') == 'Equipo en Resguardo' ? 'selected' : '' }}>Equipo en Resguardo-17025</option>
                                                 @endif
                                             </select>
+                                            @error('Disponibilidad_Estado')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -922,6 +946,11 @@
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
+                                            @error('Disponibilidad_Estado')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -1118,6 +1147,11 @@
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
+                                            @error('Disponibilidad_Estado')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -1330,6 +1364,11 @@
                                                 <option value="NO DISPONIBLE" {{ old('Disponibilidad_Estado') == 'NO DISPONIBLE' ? 'selected' : '' }}>NO DISPONIBLE</option>
                                                 <option value="FUERA DE SERVICIO/BAJA" {{ old('Disponibilidad_Estado') == 'FUERA DE SERVICIO/BAJA' ? 'selected' : '' }}>FUERA DE SERVICIO/BAJA</option>
                                             </select>
+                                            @error('Disponibilidad_Estado')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
