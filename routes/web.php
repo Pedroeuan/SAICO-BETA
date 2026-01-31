@@ -60,6 +60,8 @@ use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 use App\Http\Controllers\solicitud_AD\SolicitudADController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\VehiculoController; //accesso a vehiculos
+use App\Http\Controllers\SalidaVehiculoController; //accesso a salidas de vehiculos
 
     require __DIR__.'/auth.php';
 
@@ -581,6 +583,26 @@ use App\Http\Controllers\UsuarioController;
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
 
     });
+    
+    Route::middleware('auth')->group(function(){
+     //Gestioin de Vehiculos. CRUD
+    Route::get('/vehiculos/index',[VehiculoController::class,'index'])->name('vehiculos.index');
+    Route::get('/vehiculos/create',[VehiculoController::class, 'create'])->name('vehiculos.create');
+    Route::post('/vehiculos/store',[VehiculoController::class, 'store'])->name('vehiculos.store');
+    Route::get('/vehiculos/edit/{id}',[VehiculoController::class, 'edit'])->name('vehiculos.edit');
+    Route::post('/vehiculos/update/{id}',[VehiculoController::class,'update'])->name('vehiculos.update');
+    Route::delete('/vehiculos/destroy/{id}',[VehiculoController::class, 'destroy'])->name('vehiculos.destroy');
+
+    //salidas de vehiculos
+    Route::get('/salidas-vehiculo/index',[SalidaVehiculoController::class, 'index'])->name('salidas.index');
+    Route::get('/salidas-vehiculo/create',[SalidaVehiculoController::class, 'create'])->name('salidas.create');
+    Route::post('/salidas-vehiculo/store', [SalidaVehiculoController::class, 'store'])->name('salidas.store');
+    Route::get('/salidas-vehiculo/show/{id}', [SalidaVehiculoController::class, 'show'])->name('salidas.show');
+    Route::post('/salidas-vehiculo/update/{id}',[SalidaVehiculoController::class, 'update'])->name('salidas.update');
+
+    });
+
+
 });
 
 
