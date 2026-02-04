@@ -368,9 +368,9 @@
                         </thead>                            
                     </table>
             </footer>
-
+@foreach ($Grupo_Juntas_Detalles_Re as $grupo)
             <div class="content">
-                @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+                
                 <div style="margin-bottom: 0px;"></div>
                 <table class="datosgenerales">
 
@@ -743,15 +743,18 @@
                                     </th>
                                 </tr>
 
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE --}}
+                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
                                 <tr style="page-break-after: always;" class="sinBordetd">
                                     <td colspan="14"></td>
-                                </tr>
+                                </tr>--}}
                             </tbody>
                     </table>
-                    <div style="margin-bottom: 80px;"></div>
-                    @endforeach
+
+                <table>
             </div>
-            
+                @if (!$loop->last)
+                    <div style="page-break-after: always;"></div>
+                @endif
+            @endforeach
         </body>
     </html>
