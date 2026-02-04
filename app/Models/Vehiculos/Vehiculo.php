@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vehiculos;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ class Vehiculo extends Model
         'marca',
         'modelo',
         'anio',
-        'placa',
+        'estatus',
     ];
     public function salida()
     {

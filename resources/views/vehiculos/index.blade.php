@@ -1,11 +1,14 @@
-@extends('layouts.simple') 
+@extends('adminlte::page') 
 
 @section('content')
+<br>
+<br>
+<br>
 <div class="container">
     <h4>Listado de Vehiculos</h4>
 
-    <a href="{{ route('vehiculos.create') }}" class="btn btn-primary mb-3">+ Nuevo Vehiculo </a>
-<table class="table table-bordered" table-sm>
+    <a href="{{ url('/vehiculos/create') }}" class="btn btn-primary mb-3">+ Nuevo Vehiculo </a>
+<table class="table table-bordered table-sm">
     <thead>
         <tr>
             <th>ID</th>
@@ -27,7 +30,7 @@
             <td>{{ $vehiculo->anio}}</td>
             <td>{{ $vehiculo->estatus}}</td>
               <td>
-            <a href="{{route('vehiculos.edit',$vehiculo->id)}}" class="btn btn-sm btn-warning"> Editar</a>
+            <a href="{{ route('vehiculos.edit', $vehiculo->id) }}" class="btn btn-sm btn-warning"> Editar</a>
             <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')

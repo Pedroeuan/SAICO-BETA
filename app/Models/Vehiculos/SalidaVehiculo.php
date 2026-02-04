@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Vehiculos;
 
 use Illuminate\Database\Eloquent\Model;
 
 class SalidaVehiculo extends Model
 {
     //
-    protected $table = 'salidas_vehiculos';
+    protected $table = 'salidas_vehiculo';
 
     protected $fillable =[
         'vehiculo_id',
@@ -15,7 +15,7 @@ class SalidaVehiculo extends Model
         'solicitado_por',
         'fecha_salida',
         'fecha_regreso',
-        'regreso',
+        'motivo',
         'estatus',
     ];
     public function vehiculo(){
@@ -24,7 +24,7 @@ class SalidaVehiculo extends Model
     public function chofer(){
         return $this->belongsTo(User::class,'chofer_id');
     }
-    public function solicitado_por(){
-        return $this->belongsTo(User::class,'solicitado_por');
+    public function solicitante(){
+        return $this->belongsTo(User::class,'solicitado_por');//f
     }
 }

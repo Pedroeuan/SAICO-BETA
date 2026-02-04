@@ -1,6 +1,9 @@
-@extends('layouts.simple')
+@extends('adminlte::page')
 
 @section('content')
+<br>
+<br>
+<br>
 <h4>Registrar Vehículo</h4>
 
 <form method="POST" action="{{ route('vehiculos.store') }}">
@@ -24,6 +27,14 @@
     <div class="mb-2">
         <label>Año</label>
         <input type="number" name="anio" class="form-control">
+    </div>
+    <div class="mb-2">
+        <label>Estatus</label>
+        <select name="estatus" class="form-control" required>
+            <option value="disponible">Disponible</option>
+            <option value="ocupado">Ocupado</option>
+            <option value="inactivo">Inactivo</option>
+        </select>
     </div>
 
     <button class="btn btn-success mt-3">Guardar</button>

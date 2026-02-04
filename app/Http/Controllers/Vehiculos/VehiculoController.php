@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Models\Vehiculo;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Vehiculos;
+
+use App\Http\Controllers\Controller;
+use App\Models\Vehiculos\Vehiculo;
+use App\Http\Requests\Vehiculos\VehiculoRequest;
+
 
 class VehiculoController extends Controller
 {
@@ -11,7 +14,7 @@ class VehiculoController extends Controller
      */
     public function index()
     {
-        $vehiculos = \App\Models\Vehiculo::orderBy('id', 'desc')->get();
+        $vehiculos = Vehiculo::orderBy('id', 'desc')->get();
         return view('vehiculos.index', compact('vehiculos'));
     }
 
@@ -26,11 +29,15 @@ class VehiculoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        Vehiculo::create($request->all());
-        return redirect()->route('vehiculos.index')->with('success', 'vehiculo resgistrado correctamente');
-    }
+    public function store(VehiculoRequest $request)
+{
+    Vehiculo::create($request->validated());
+
+    return redirect()->route('vehiculos.index')->with('success', 'Vehículo registrado correctamente');
+}
+
+
+
 
     /**
      * Display the specified resource.
@@ -51,10 +58,10 @@ class VehiculoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
+    public function update(VehiculoRequest $request, $id)
+    { 
         $vehiculo = Vehiculo::findOrFail($id);
-        $vehiculo->update($request->all());
+        $vehiculo->update($request->validated());
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehiculo actualizado');
 
@@ -65,7 +72,7 @@ class VehiculoController extends Controller
      */
     public function destroy(string $id)
     {
-        vehiculo::findOrFail($id)->delete();
+        Vehiculo::findOrFail($id)->delete();
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehiculo eliminado');
 
