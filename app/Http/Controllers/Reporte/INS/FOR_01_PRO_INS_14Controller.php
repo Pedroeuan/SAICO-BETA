@@ -41,23 +41,135 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_01_PRO_INS_14Controller extends Controller
 {
+    /*public function OS_OC($datosParaCrearOS_OC)
+    {
+        return DB::transaction(function () use ($datosParaCrearOS_OC) {
+
+            /** =======================
+             *  Datos de entrada
+             ======================= */
+            /* $idPrueba_Aplica        = $datosParaCrearOS_OC['idPrueba_Aplica'];
+            $Cliente               = trim($datosParaCrearOS_OC['Cliente']);
+            $Lugar                 = $datosParaCrearOS_OC['Lugar'];
+            $Contrato              = trim($datosParaCrearOS_OC['Contrato']);
+            $Proyecto              = $datosParaCrearOS_OC['Proyecto'];
+            $Material              = $datosParaCrearOS_OC['Material'];
+            $Isometrico_Plano       = $datosParaCrearOS_OC['Isometrico_Plano'];
+            $ResultadosJuntas       = $datosParaCrearOS_OC['ResultadosJuntas'];
+            $idSolicitud            = $datosParaCrearOS_OC['idSolicitud'];
+            $idReportes             = $datosParaCrearOS_OC['idReportes'];
+
+            /** =======================
+             *  CLIENTE
+             ======================= */
+            /*$cliente = clientes::where('Cliente', $Cliente)->first();
+
+            if (!$cliente) {
+                $cliente = clientes::firstOrCreate(
+                    ['Cliente' => 'POR DEFINIR'],
+                    [
+                        'RFC'      => 'N/A',
+                        'Telefono' => 'N/A',
+                        'Correo'   => 'N/A'
+                    ]
+                );
+            }
+
+            /** =======================
+             *  ORDEN DE SERVICIO
+             ======================= */
+            /*$ordenServicio = Orden_Servicio::where('Contrato', $Contrato)->first();
+
+            if (!$ordenServicio) {
+
+                $ordenServicio = Orden_Servicio::create([
+                    'idClientes'         => $cliente->idClientes,
+                    'Fecha'              => '2001-01-01',
+                    'Lugar'              => $Lugar,
+                    'Contrato'           => $Contrato,
+                    'Proyecto_actividad' => $Proyecto,
+                    'Material'           => $Material,
+                    'Plano_isometrico'   => $Isometrico_Plano,
+                ]);
+
+                // Relacionados
+                Orden_Servicio_Prueba::create([
+                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
+                    'idPrueba_Aplica'  => $idPrueba_Aplica,
+                ]);
+
+                Firmantes_OS::create([
+                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
+                    'Nombre_Cargo'     => '[]',
+                ]);
+
+                Grupo_Juntas_Detalles_OS::create([
+                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
+                    'Juntas_grupo'     => $ResultadosJuntas,
+                ]);
+            }
+
+            /** =======================
+             *  OC
+             ======================= */
+            /*$oc = OC::where('Contrato', $Contrato)->first();
+
+            if (!$oc) {
+
+                $EsperaDato = 'ESPERA DE DATOS';
+
+                $oc = OC::create([
+                    'Contrato'        => $Contrato,
+                    'Num_OC'          => $EsperaDato,
+                    'Requisicion'     => $EsperaDato,
+                    'Proyecto'        => $Proyecto,
+                    'Lugar_trabajo'   => $EsperaDato,
+                    'Fecha_solicitud' => '2001-01-01',
+                    'Tipo_servicio'   => $EsperaDato,
+                    'Estatus'         => 'OC',
+                    'OC_archivo'      => $EsperaDato,
+                ]);
+
+                detallesOC::create([
+                    'idOC'      => $oc->idOC,
+                    'Detalles' => $EsperaDato,
+                ]);
+            }
+
+            /** =======================
+             *  LINEAL IDEAL
+             ======================= */
+            /*$lineal = Lineal_Ideal::create([
+                'idOC'              => $oc->idOC,
+                'idOrden_Servicio'  => $ordenServicio->idOrden_Servicio,
+                'idSolicitud'       => $idSolicitud,
+                'idReportes'        => $idReportes,
+                'Estatus'           => 'CREADO',
+            ]);
+
+            return $lineal; // opcional
+        });
+    }*/
 
     public function OS_OC($datosParaCrearOS_OC)
     {
-        $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
-        $Cliente = $datosParaCrearOS_OC['Cliente'];
-        $Lugar = $datosParaCrearOS_OC['Lugar'];
-        $Contrato= $datosParaCrearOS_OC['Contrato'];
+        /*Datos del Formulario */
+        $idPrueba_Aplica  = $datosParaCrearOS_OC['idPrueba_Aplica'];
+        $Cliente          = $datosParaCrearOS_OC['Cliente'];
+        $Lugar            = $datosParaCrearOS_OC['Lugar'];
+        $Contrato         = $datosParaCrearOS_OC['Contrato'];
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
-        $Proyecto = $datosParaCrearOS_OC['Proyecto'];
-        $Material = $datosParaCrearOS_OC['Material'];
+        $Proyecto         = $datosParaCrearOS_OC['Proyecto'];
+        $Material         = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        $Pieza = $datosParaCrearOS_OC['Pieza'];
+        $Pieza            = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
-        $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
-        $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
-        $idReportes = $datosParaCrearOS_OC['idReportes'];
+        $ResultadosJuntas       = $datosParaCrearOS_OC['ResultadosJuntas'];
+        $idSolicitud            = $datosParaCrearOS_OC['idSolicitud'];
+        $idReportes             = $datosParaCrearOS_OC['idReportes'];
 
+        $EsperaDato = "ESPERA DE DATOS";
+        /*Instancias */
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
         $Firmantes_OS = new Firmantes_OS;
@@ -69,16 +181,17 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
+
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
-            if($BusquedaContratoOS)
+            if($BusquedaContratoOS) 
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             $Orden_Servicio->idClientes = $idCliente;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -109,14 +222,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
+
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_Solicitud = '2001/01/01';
-            $OC->Tipo_Servicio = $EsperaDato;
+            $OC->Fecha_solicitud = '2001-01-01';
+            $OC->Tipo_servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
             $OC->save();
@@ -136,17 +249,20 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         } else {
             // Cliente no encontrado
-            $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            //$Cliente = "POR DEFINIR";
+            //$NewCliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            if (!$Busqueda2Cliente) {
-                $Busqueda2Cliente = new clientes();
-                $Busqueda2Cliente->Cliente = $Cliente;
-                $Busqueda2Cliente->RFC = 'N/A';
-                $Busqueda2Cliente->Telefono = 'N/A';
-                $Busqueda2Cliente->Correo = 'N/A';
-                $Busqueda2Cliente->save();
-            }
+            //if (!$NewCliente) {
+                
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->save();
+                // Obtén el ID del registro recién creado
+                //$idNewCliente = $NewCliente->idClientes;
+            //}
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -155,7 +271,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $Busqueda2Cliente->idClientes;
+            $idClientes = $NewCliente->idClientes; 
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
             $Orden_Servicio->Lugar = $Lugar;
@@ -188,14 +304,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
+
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_Solicitud = '2001/01/01';
-            $OC->Tipo_Servicio = $EsperaDato;
+            $OC->Fecha_solicitud = '2001-01-01';
+            $OC->Tipo_servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
             $OC->save();
@@ -426,6 +542,21 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+
+        // ==========================
+        // Lógica para manejar Cliente
+        // ==========================
+        if ($request->TieneContrato === "no") 
+            {
+                $clienteInput = $validatedData['Detalles_Generales']['Cliente'] ?? null;
+                
+            }else {
+                // Si el frontend envió un cliente válido, se utiliza ese
+                $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
+            }
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 

@@ -347,7 +347,7 @@ class ReporteController extends Controller
             "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
             "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
             "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
-            "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
+            "FOR-01-PRO-INS-20" => "Informe de ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)",
             "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
             "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
         ];
@@ -502,8 +502,11 @@ class ReporteController extends Controller
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
-    
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
+
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes'));
     }
 
     public function indexINS2(Request $request)

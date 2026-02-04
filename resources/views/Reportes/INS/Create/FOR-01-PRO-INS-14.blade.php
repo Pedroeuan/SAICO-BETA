@@ -103,18 +103,44 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
-                            @error('Cliente')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="Detalles_Generales[Cliente]">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="Detalles_Generales[Cliente]"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
                         </div>
                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -1040,7 +1066,7 @@
                                 </tbody>
                         </table>
                     </div>
-                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <---------------------------------------Agregar
+                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -1660,7 +1686,7 @@ $(document).ready(function() {
         }
     );
 
-        $('form').submit(function(e) {
+        /*$('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
                 e.preventDefault();
@@ -1681,11 +1707,12 @@ $(document).ready(function() {
             submitButton.prop('disabled', true).text('Guardando...');
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-        });
+        });*/
 
             // Restaurar datos al cargar la página
             restoreData();
 });
+
 function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');
