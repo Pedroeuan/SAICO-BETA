@@ -62,6 +62,7 @@ use App\Http\Controllers\solicitud_AD\SolicitudADController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Vehiculos\VehiculoController; //controlador a vehiculos
 use App\Http\Controllers\Vehiculos\SalidaVehiculoController; //accesso a salidas de vehiculos
+use App\Http\Controllers\Vehiculos\SalidaChecklistController; //accesso a checklists de salidas de vehiculos
 
     require __DIR__.'/auth.php';
 
@@ -602,8 +603,13 @@ use App\Http\Controllers\Vehiculos\SalidaVehiculoController; //accesso a salidas
     Route::get('/create',[SalidaVehiculoController::class, 'create'])->name('create');
     Route::post('/', [SalidaVehiculoController::class, 'store'])->name('store');
     Route::put('/{id}/finalizar',[SalidaVehiculoController::class, 'finalizar'])->name('finalizar');
-
+    //checklist de salidas y entradas
+    Route::get('/{salida}/checklist-salida',[SalidaChecklistController::class, 'create'])->name('checklist.salida.create');
+    Route::post('/{salida}/checklist-salida',[SalidaChecklistController::class, 'store'])->name('checklist.salida.store');
+    Route::get('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'createEntrada'])->name('checklist.entrada.create');
+    Route::post('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'storeEntrada'])->name('checklist.entrada.store');
     });
+    
     
     });
 

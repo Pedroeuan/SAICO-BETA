@@ -31,14 +31,19 @@
                 <td>{{ $salida->fecha_regreso ?? '-' }}</td>
                 <td>{{ ucfirst($salida->estatus) }}</td>
                 <td>
-                    @if($salida->estatus === 'activo')
-                    <form action="{{ route('salidas.finalizar', $salida->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn btn-sm btn-success" onclick="return confirm('¿Finalizar salida?')">Finalizar</button>
+                   @if($salida->estatus === 'activo')
+
+                    @if(!$salida->checklistSalida)
+                    <a href="{{ route('salidas.checklist.salida.create', $salida->id) }}" class="btn btn-sm btn-warning">Checklist Salida</a>
+                    <span class="badge bg-danger">Salida pendiente</span>
                     @else
-                    -
-                    @endif                   
+                    <span class="badge bg-success">Salida OK</span>
+                    <a href="{{ route('salidas.checklist.entrada.create', $salida->id) }}"class="btn btn-sm btn-success">Registrar Entrada</a>
+                    @endif
+                    @else
+                    <span class="badge bg-secondary">Cerrada</span>
+                 @endif
+                  
                 </td>
             </tr>
         @empty
