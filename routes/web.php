@@ -31,6 +31,7 @@ use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
+use App\Http\Controllers\Reporte\IM\FOR_PIMP_07_B_01Controller;
 use App\Http\Controllers\Reporte\ReporteController;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_03Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_04Controller;
@@ -64,9 +65,9 @@ use App\Http\Controllers\UsuarioController;
 
     Auth::routes();
 
-    Route::redirect('/', '/login');
-    
-    Route::redirect('/register', '/login');
+    Route::redirect('/', '/dashboard');
+    Route::redirect('/register', '/dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
     Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Reporte_FOR_PIMP_02_B_04.PDF');
@@ -186,6 +187,17 @@ use App\Http\Controllers\UsuarioController;
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta del botón del eliminar del index de indexINS2 */
         Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
+
+        /*API para obtener el siguiente contrato interno*/
+        Route::get('/api/siguiente-contrato-interno', [ReporteController::class, 'obtenerSiguienteContratoInterno']);
+
+        /*Ruta de Guardado Reportes/IM*/
+        /*Ruta de Guardado Reportes/IM FOR_PIMP_07_B_01*/
+        Route::post('/Reportes_FOR_PIMP_07_B_01/store', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_store'])->name('Reportes_FOR_PIMP_07_B_01.store');
+        /*Ruta de Actualización Reportes/IM FOR_PIMP_07_B_01*/
+        Route::post('/Reportes_FOR_PIMP_07_B_01/update/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_update'])->name('Reportes_FOR_PIMP_07_B_01.update');
+        /*Ruta del PDF de Reportes/IM FOR_PIMP_07_B_01*/
+        Route::get('/Reporte/FOR_PIMP_07_B_01/PDF/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
 
         /*Ruta de Guardado Reportes/INS*/
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_03*/

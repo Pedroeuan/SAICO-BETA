@@ -1,90 +1,99 @@
-    /*check del cliente, si y no */
-document.addEventListener('DOMContentLoaded', function () {
-
-    const radios = document.querySelectorAll('input[name="TieneCliente"]');
-    const select = document.getElementById('campoClienteSelect');
-    const input  = document.getElementById('campoClienteInput');
-
-    function toggleCliente() {
-        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
-
-        if (valor === 'si') {
-            // Mostrar select
-            select.style.display = 'block';
-            input.style.display  = 'none';
-
-            input.value = '';   // limpiar input
-
-        } else {
-            // Mostrar input vacío
-            select.style.display = 'none';
-            input.style.display  = 'block';
-
-            select.value = '';  // limpiar select
-            input.value  = '';  // aseguramos vacío
-            input.focus();      // cursor automático
-        }
-    }
-
-    radios.forEach(radio => {
-        radio.addEventListener('change', toggleCliente);
-    });
-
-    toggleCliente(); // ejecutar al cargar
-});
-
     /*check del contrato, si y no */
-document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-    const radios = document.getElementsByName("TieneContrato");
-    const campoContrato = document.getElementById("campoContrato");
+            const radios = document.getElementsByName("TieneContrato");
+            const campoContrato = document.getElementById("campoContrato");
+            const contratoInternoHidden = document.getElementById("contratoInternoHidden");
 
-    radios.forEach(radio => {
-        radio.addEventListener("change", async function () {
+            const textoInterno = document.getElementById("contratoInternoTexto");
+            const numeroInterno = document.getElementById("numeroInterno");
 
-            // 💾 Guardar selección
-            sessionStorage.setItem("TieneContrato", this.value);
+            // clave por formulario para localStorage
+            const formId_forContrato = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+            const keyTiene = formId_forContrato + '_TieneContrato';
+            const keyContratoInterno = formId_forContrato + '_ContratoInterno';
+            const keyCampoContrato = formId_forContrato + '_CampoContrato';
 
-            if (this.value === "si") {
-                campoContrato.readOnly = false;
+            // Restaurar selección si existe
+            const storedSelection = localStorage.getItem(keyTiene);
+            const storedContratoInterno = localStorage.getItem(keyContratoInterno);
+            const storedCampoContrato = localStorage.getItem(keyCampoContrato);
+
+            function applySiState() {
+                // Mostrar campo editable
+                campoContrato.disabled = false;
                 campoContrato.required = true;
-                campoContrato.value = "";
-                campoContrato.placeholder = "Ejemplo: 640853841";
-                return;
+                textoInterno.style.display = "none";
+                numeroInterno.textContent = "";
+                contratoInternoHidden.value = "";
+                if (storedCampoContrato) campoContrato.value = storedCampoContrato;
             }
 
-            if (this.value === "no") {
-                campoContrato.readOnly = true;
+            async function applyNoState(fetchIfMissing = true) {
+                campoContrato.disabled = true;
                 campoContrato.required = false;
-                campoContrato.placeholder = "Generando contrato interno...";
+                campoContrato.value = "";
 
-                try {
-                    const response = await fetch('/api/siguiente-contrato-interno');
-                    const data = await response.json();
+                // Si ya guardamos un contrato interno en localStorage, usarlo
+                if (storedContratoInterno) {
+                    textoInterno.style.display = "block";
+                    numeroInterno.textContent = storedContratoInterno;
+                    contratoInternoHidden.value = storedContratoInterno;
+                    return;
+                }
 
-                    const nuevoContrato = data.siguiente;
-                    campoContrato.value = nuevoContrato;
-
-                } catch (error) {
-                    console.error("Error al obtener el contrato interno:", error);
-                    alert("No se pudo generar el contrato interno");
+                // Si no hay contrato en localStorage y se permite obtener uno, solicitarlo
+                if (fetchIfMissing) {
+                    try {
+                        const response = await fetch('/api/siguiente-contrato-interno');
+                        const data = await response.json();
+                        const nuevoContrato = data.siguiente;
+                        textoInterno.style.display = "block";
+                        numeroInterno.textContent = nuevoContrato;
+                        contratoInternoHidden.value = nuevoContrato;
+                        localStorage.setItem(keyContratoInterno, nuevoContrato);
+                    } catch (error) {
+                        console.error("Error al obtener el contrato interno:", error);
+                    }
                 }
             }
+
+            // Restaurar UI en base a lo guardado
+            if (storedSelection === 'no') {
+                // marcar radio correspondiente
+                radios.forEach(r => { if (r.value === 'no') r.checked = true; });
+                applyNoState(false).then(() => {});
+            } else if (storedSelection === 'si') {
+                radios.forEach(r => { if (r.value === 'si') r.checked = true; });
+                applySiState();
+            }
+
+            // guardar input campoContrato en localStorage al escribir
+            if (campoContrato) {
+                campoContrato.addEventListener('input', function() {
+                    localStorage.setItem(keyCampoContrato, campoContrato.value);
+                });
+            }
+
+            // listeners para cambio de radio
+            radios.forEach(radio => {
+                radio.addEventListener("change", async function () {
+                    // Guardar selección
+                    localStorage.setItem(keyTiene, this.value);
+
+                    if (this.value === "si") {
+                        applySiState();
+                        // remover contrato interno guardado (opcional)
+                        localStorage.removeItem(keyContratoInterno);
+                        return;
+                    }
+
+                    if (this.value === "no") {
+                        await applyNoState(true);
+                    }
+                });
+            });
         });
-    });
-
-    // 🔄 Restaurar selección al recargar
-    const seleccionado = sessionStorage.getItem("TieneContrato");
-
-    if (seleccionado) {
-        const radioGuardado = [...radios].find(r => r.value === seleccionado);
-
-        if (radioGuardado) {
-            radioGuardado.checked = true;
-            radioGuardado.dispatchEvent(new Event("change"));
-        }
-    }
-});
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
@@ -218,60 +227,90 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function generateImageFields(count) {
             container.innerHTML = '';
+
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
+
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
-                        
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
-                            <label class="form-check-label" for="imagenHoja${i}">
-                                Imagen en una hoja
-                            </label>
-                        </div>
 
-                        <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                            <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                            <input type="hidden" name="comments[${i}]" id="comment_for_image_${i}">
+                        <div id="image${i}-preview" class="mt-2"></div>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
                 `;
+
                 container.appendChild(col);
+
+                // Después de cada 2 imágenes agregar un textarea (comentarios para ese par)
+                if (i % 2 === 0) {
+                    const pairIndex = Math.ceil(i / 2);
+
+                    const textareaCol = document.createElement('div');
+                    textareaCol.classList.add('col-12', 'mb-3');
+                    textareaCol.innerHTML = `
+                        <div class="form-group">
+                            <label>Comentarios para imágenes ${i - 1} y ${i}:</label>
+                            <textarea
+                                class="form-control"
+                                name="comments_pairs[${pairIndex}]"
+                                rows="3"
+                                placeholder="Comentarios sobre estas dos imágenes..."
+                            ></textarea>
+                        </div>
+                    `;
+                    container.appendChild(textareaCol);
+                }
+
             }
-            
-            // Agregar eventos de eliminación a los botones
+
+            // Agregar eventos de eliminación a los botones: reconstruir campos para mantener consistencia
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
-                        
-                        const msgImgNoSave = document.getElementById('msgImgNoSave');
-                        if (msgImgNoSave) {
-                            msgImgNoSave.classList.remove('d-none');
-                        }
+                    let currentCount = parseInt(imageCountSelect.value, 10) || 0;
+                    if (currentCount > 0) currentCount = currentCount - 1;
+                    imageCountSelect.value = currentCount;
 
-                        // Actualizar el localStorage
-                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
-                        localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
-                    } else {
-                        alert('No se pudo encontrar el campo de imagen para eliminar.');
+                    const msgImgNoSave = document.getElementById('msgImgNoSave');
+                    if (msgImgNoSave) {
+                        msgImgNoSave.classList.remove('d-none');
                     }
+
+                    // Actualizar el localStorage
+                    const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+                    localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
+
+                    // Regenerar los campos con el nuevo conteo para mantener índices y textareas en orden
+                    generateImageFields(currentCount);
                 });
             });
+
+                // Asignar eventos a los textareas de pares: sincronizar con los inputs hidden por imagen
+                document.querySelectorAll('.images-comments').forEach(textarea => {
+                    textarea.addEventListener('input', function () {
+                        const pairIndex = parseInt(this.getAttribute('data-pair-index'), 10);
+                        if (isNaN(pairIndex)) return;
+                        const firstIndex = (pairIndex - 1) * 2 + 1; // matches our 1-based indexing used in IDs
+                        const secondIndex = firstIndex + 1;
+
+                        const firstHidden = document.getElementById(`comment_for_image_${firstIndex}`);
+                        const secondHidden = document.getElementById(`comment_for_image_${secondIndex}`);
+                        if (firstHidden) firstHidden.value = this.value;
+                        if (secondHidden) secondHidden.value = this.value;
+                    });
+                });
 
             // Asignar eventos a los nuevos inputs
             document.querySelectorAll('.image-input').forEach(input => {
                 input.addEventListener('change', function (e) {
                     const file = e.target.files[0];
                     if (!file) return;
-                    
+
                     if (!file.type.startsWith('image/')) {
                         alert('Por favor, sube solo imágenes.');
                         return;
@@ -303,151 +342,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-
-        $('#dynamicTable tbody tr').each(function () {
-
-            // ⛔ Ignorar títulos y longitudes
-            if ($(this).hasClass('titulo-row') || $(this).hasClass('long-row')) {
-                return;
-            }
-
-            count++;
-            $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-        });
-
-        rowCountGlobal = count;
-    }
-
-    // Función para actualizar los títulos en el campo oculto (excluye longitudes)
-    function updateTitulos() {
-        var titulos = [];
-        $('.titulo-row').not('.long-row').each(function() {
-            const id = $(this).data('titulo');
-            const text = $(this).find('.titulo-text').val() || '';
-            titulos.push({ id: id, text: text });
-        });
-        $('#titulos_hidden').val(JSON.stringify(titulos));
-    }
-
-    function saveData(formId) {
-    const titles = $('.titulo-row').not('.long-row').map(function() {
-        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
-    }).get();
-
-    const rows = $('#dynamicTable tbody tr')
-        .not('.titulo-row, .long-row')
-        .map(function() {
-            const id = $(this).data('titulo');
-            const values = $(this).find('input[type="text"]').map(function(){ 
-                return $(this).val(); 
-            }).get();
-            return { titleId: id, values };
-        }).get();
-
-    const longs = $('.long-row').map(function(){
-        return { 
-            titleId: $(this).data('titulo'),
-            text: $(this).find('.long-text').val() 
-        };
-    }).get();
-
-    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
-    function dedupe(arr){
-        const seen = new Set();
-        return arr.filter(item => {
-            const key = (item.id || '') + '||' + (item.text || '');
-            if(seen.has(key)) return false; seen.add(key); return true;
-        });
-    }
-
-    const uniqueTitles = dedupe(titles);
-    const uniqueLongs = dedupe(longs);
-
-    sessionStorage.setItem('dynamicTableData', JSON.stringify({
-            titles: uniqueTitles,
-            rows,
-            longs
-        }));
-    }
-
-    // Escuchar en tiempo real y guarda en el momento que se cambia un input
-    $('#dynamicTable').on('input', 'input', function () {
-        //console.log('Input changed, saving data...');
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    // Evento para eliminar un título
-    $(document).on('click', '.btnEliminarTitulo', function () {
-        const tr = $(this).closest('tr.titulo-row');
-        const id = tr.data('titulo');
-        // eliminar filas del mismo id
-        $('#dynamicTable tbody tr').filter(function () {
-            return $(this).data('titulo') === id;
-        }).remove();
-        tr.remove();
-        updateTitulos();
-        saveData($(this).closest('form').attr('id'));
-    });
-
-    /*Cambia el data-titulo y guarda en sesionstorage */
-    $(document).on('input', '.titulo-row .titulo-text', function () {
-        updateTitulos();
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#dynamicTable').on('click', '.btnEliminar', function() {
-
-        const $tr = $(this).closest('tr');
-        const esLongitud = $tr.hasClass('long-row');
-
-        $tr.remove();
-        updateRowNumbers();
-
-        // 👉 Solo recalcular si NO estamos borrando una longitud
-        if (!esLongitud) {
-            verificarYAgregarLongitud();
-        }
-
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    $('#preFillBtn').click(function() {
-        $('#dynamicTable tbody tr').each(function() {
-            $(this).find('input').each(function() {
-                if ($(this).val() === '') {
-                    $(this).val('----');
-                }
-            });
-        });
-        saveData(document.querySelectorAll("form")[1].id);
-    });
-
-    /*llenado de campos vacios*/
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputFields = document.querySelectorAll(".default-input");
-
-        inputFields.forEach(input => {
-            input.addEventListener("input", function () {
-                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
-                if (isNaN(column)) return; // Evitar errores si no es válido
-
-                document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
-                    const cellInputs = row.querySelectorAll("td input");
-                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
-                    if (cellInput) {
-                        cellInput.value = input.value;
-                    }
-                });
-            });
-        });
-    });
-
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-01-PRO-INS-03", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13","FOR-01-PRO-INS-14", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19","FOR-01-PRO-INS-20","FOR-01-PRO-INS-21","FOR-01-PRO-INS-22", "FOR-02-PRO-INS-02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+    const formularios = ["FOR-PIMP-07_B/01"];
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -487,7 +384,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");
@@ -603,76 +499,3 @@ document.addEventListener("DOMContentLoaded", function () {
         firmas4.style.display = 'block';
     }
     });
-
-    /*Envio de formulario */
-/* Envio de formulario */
-$(document).ready(function () {
-
-    $('form').submit(function(e) {
-
-        // ============================
-        // VALIDAR CLIENTE SELECCIONADO
-        // ============================
-        let tieneCliente   = $('input[name="TieneCliente"]:checked').val();
-        let clienteSelect  = $('#campoClienteSelect').val();
-        let clienteInput   = $('#campoClienteInput').val();
-
-        // Si seleccionó "SI", debe elegir un cliente del select
-        if (tieneCliente === 'si' && 
-            (clienteSelect === null || clienteSelect === 'Seleccione un Cliente')) {
-
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cliente requerido',
-                text: 'Por favor seleccione un cliente válido.',
-            });
-
-            $('#campoClienteSelect').focus();
-            return;
-        }
-
-        // Si seleccionó "NO", debe escribir un cliente
-        if (tieneCliente === 'no' && clienteInput.trim() === '') {
-
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cliente requerido',
-                text: 'Por favor ingrese el nombre del cliente.',
-            });
-
-            $('#campoClienteInput').focus();
-            return;
-        }
-
-        // ============================
-        // VALIDAR QUE LA TABLA NO ESTE VACIA
-        // ============================
-        if ($('#dynamicTable tbody tr').length === 0) {
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-            });
-
-            return;
-        }
-
-        // ============================
-        // CONTINUA ENVIO NORMAL
-        // ============================
-        updateTitulos();
-
-        sessionStorage.clear();
-
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-});

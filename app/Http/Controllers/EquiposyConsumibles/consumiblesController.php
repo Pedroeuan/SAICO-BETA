@@ -60,7 +60,7 @@ class consumiblesController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
                 'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
+                'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
 
             // Limpia y normaliza el número económico
@@ -422,7 +422,7 @@ class consumiblesController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Stock' => 'required|integer|min:1',
                 'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
+                'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
         // Obtener el equipo existente
         $generalEyC  = general_eyc::where('idGeneral_EyC', $id)->first();

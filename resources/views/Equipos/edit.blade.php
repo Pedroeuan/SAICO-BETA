@@ -1,7 +1,25 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Equipos')
+@if($generalEyC->Tipo=='TICS')
+    @section('title', 'TICS')
+@endif
+@if($generalEyC->Tipo=='EQUIPOS')
+    @section('title', 'Equipos')
+@endif
+@if($generalEyC->Tipo=='CONSUMIBLES')
+    @section('title', 'Consumibles')
+@endif
+@if($generalEyC->Tipo=='ACCESORIOS')
+    @section('title', 'Accesorios')
+@endif
+@if($generalEyC->Tipo=='BLOCK Y PROBETA')
+    @section('title', 'Block')
+@endif
+@if($generalEyC->Tipo=='HERRAMIENTAS')
+    @section('title', 'Herramientas')
+@endif
+
 
 @section('css')
 <style>

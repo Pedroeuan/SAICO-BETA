@@ -747,6 +747,46 @@ class ReporteController extends Controller
         return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
     }
 
+    public function FOR_PIMP_07_B_01()
+    {
+        return view('Reportes.IM.Create.FOR-PIMP-07_B_01');
+    }
+    
+    public function obtenerSiguienteContratoInterno()
+    {
+    // Obtener TODOS los registros asegurando el orden correcto
+        $registros = reporte::orderBy('idReportes', 'DESC')->get();
+
+        $ultimoNumero = 0;
+
+        foreach ($registros as $r) {
+
+            // Decodificar JSON de la columna
+            $json = json_decode($r->Detalles_Generales, true);
+
+            if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+
+                // Extraer el número final
+                $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+
+                if ($n > $ultimoNumero) {
+                    $ultimoNumero = $n;
+                }
+
+                break; // Ya encontramos el más reciente
+            }
+        }
+
+        // Nuevo número consecutivo
+        $nuevoNumero = $ultimoNumero + 1;
+
+        // Crear contrato con padding de 4 dígitos
+        $siguiente = "AICO-INT-" . str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+
+        return response()->json([
+            'siguiente' => $siguiente
+        ]);
+    }
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -930,7 +970,7 @@ class ReporteController extends Controller
             "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
             "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
             "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
-            "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
+            "FOR-01-PRO-INS-20" => "Informe de ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)",
             "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
             "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
         ];
@@ -1085,8 +1125,11 @@ class ReporteController extends Controller
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
-    
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
+
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes'));
     }
 
     public function indexINS2(Request $request)

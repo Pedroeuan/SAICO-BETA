@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\INS;
+namespace App\Http\Controllers\Reporte\IM;
 
 use App\Http\Controllers\Controller;
 
@@ -39,7 +39,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class FOR_01_PRO_INS_07Controller extends Controller
+class FOR_PIMP_07_B_01Controller extends Controller
 {
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -70,6 +70,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
 
         if ($BusquedaCliente) {
             $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -216,82 +217,60 @@ class FOR_01_PRO_INS_07Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_07_store(Request $request)
+    public function FOR_PIMP_07_B_01_store(Request $request)
     {
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Instal' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Elm_Sol' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Junta' => 'nullable|string',
+            'Detalles_Generales.Trazabi' => 'nullable|string',
+            'Detalles_Generales.Espesor' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Norma_cod_Criterio_Eva' => 'nullable|string',
+            'Detalles_Generales.Diam_Nomi' => 'nullable|string',
+            'Detalles_Generales.Ant_Rele' => 'nullable|string',
+            'Detalles_Generales.Desp_Rele' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOMR' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string',
-            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
-            'Datos_Equipo.N_S_SONDA1' => 'nullable|string',
-            'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOG' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
-            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
-            'Datos_Equipo.N_S_SONDA2' => 'nullable|string',
-            'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
+            'Juntas_Grupo_Re' => 'required|array',  // Asegura que es un array
+            'Juntas_Grupo_Re.Temp_Ini' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Cal' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_Fin_Pr' => 'nullable|string',
+            'Juntas_Grupo_Re.Temp_Sost' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Tim_Sos' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Fin_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Enfri' => 'nullable|string',
+            'Juntas_Grupo_Re.Grafica' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Grafi' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_BLOCK_SEN' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK_SEN' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK_SEN' => 'nullable|string',
-
-            'Datos_Equipo.MARCA_BLOCK_DIS' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK_DIS' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK_DIS' => 'nullable|string',
-
-            'Datos_Equipo.GANANCIA' => 'nullable|string',
-            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string',
-            'Datos_Equipo.RECHAZO' => 'nullable|string',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string',
-            'Datos_Equipo.TEMPERATURA' => 'nullable|string',
-            'Datos_Equipo.ESPESOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'junta_ele' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
-            'angulo' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'dist_zapata' => 'nullable|array',
-            'sa' => 'nullable|array',
-            'da' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'fotos' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -403,7 +382,6 @@ class FOR_01_PRO_INS_07Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -417,77 +395,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("junta_ele.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'junta_ele' => $request->input("junta_ele.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'angulo' => $request->input("angulo.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'dist_zapata' => $request->input("dist_zapata.$sinTituloKey.$i"),
-                    'sa' => $request->input("sa.$sinTituloKey.$i"),
-                    'da' => $request->input("da.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'fotos' => $request->input("fotos.$sinTituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("junta_ele.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'junta_ele' => $request->input("junta_ele.$tituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'angulo' => $request->input("angulo.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'dist_zapata' => $request->input("dist_zapata.$tituloKey.$i"),
-                    'sa' => $request->input("sa.$tituloKey.$i"),
-                    'da' => $request->input("da.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'fotos' => $request->input("fotos.$tituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-        
-        // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($validatedData['Juntas_Grupo_Re']);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
@@ -531,14 +439,14 @@ class FOR_01_PRO_INS_07Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_07/{$Contrato}/{$No_Reporte}/Fotos";
+            $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_07/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
             ];
         }
@@ -560,14 +468,14 @@ class FOR_01_PRO_INS_07Controller extends Controller
     }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $Lugar = $validatedData['Detalles_Generales']['Instal'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        $Pieza = $validatedData['Detalles_Generales']['Junta'];
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Norma_cod_Criterio_Eva'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -595,82 +503,60 @@ class FOR_01_PRO_INS_07Controller extends Controller
     }
 
 
-    public function FOR_01_PRO_INS_07_update(Request $request, $id)
+    public function FOR_PIMP_07_B_01_update(Request $request, $id)
     {
+        //dd($request->all());
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-            /*DETALLES GENERALES */
+             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
-            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Instal' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Elm_Sol' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Junta' => 'nullable|string',
+            'Detalles_Generales.Trazabi' => 'nullable|string',
+            'Detalles_Generales.Espesor' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Norma_cod_Criterio_Eva' => 'nullable|string',
+            'Detalles_Generales.Diam_Nomi' => 'nullable|string',
+            'Detalles_Generales.Ant_Rele' => 'nullable|string',
+            'Detalles_Generales.Desp_Rele' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
-            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOMR' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOMR' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string',
-            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
-            'Datos_Equipo.N_S_SONDA1' => 'nullable|string',
-            'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
+            'Datos_Equipo.MARCA_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPOG' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPOG' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
-            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
-            'Datos_Equipo.N_S_SONDA2' => 'nullable|string',
-            'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
+            'Juntas_Grupo_Re' => 'required|array',  // Asegura que es un array
+            'Juntas_Grupo_Re.Temp_Ini' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Cal' => 'nullable|string',
+            'Juntas_Grupo_Re.Hr_Fin_Pr' => 'nullable|string',
+            'Juntas_Grupo_Re.Temp_Sost' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Ini_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Tim_Sos' => 'nullable|string',
+            'Juntas_Grupo_Re.D_Fin_Pru' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Enfri' => 'nullable|string',
+            'Juntas_Grupo_Re.Grafica' => 'nullable|string',
+            'Juntas_Grupo_Re.Vel_Grafi' => 'nullable|string',
 
-            'Datos_Equipo.MARCA_BLOCK_SEN' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK_SEN' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK_SEN' => 'nullable|string',
-
-            'Datos_Equipo.MARCA_BLOCK_DIS' => 'nullable|string',
-            'Datos_Equipo.MODELO_BLOCK_DIS' => 'nullable|string',
-            'Datos_Equipo.N_S_BLOCK_DIS' => 'nullable|string',
-
-            'Datos_Equipo.GANANCIA' => 'nullable|string',
-            'Datos_Equipo.TIPO_JUNTA' => 'nullable|string',
-            'Datos_Equipo.RECHAZO' => 'nullable|string',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string',
-            'Datos_Equipo.TEMPERATURA' => 'nullable|string',
-            'Datos_Equipo.ESPESOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
-
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
-
-            /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
-            'junta_ele' => 'nullable|array',
-            'no_indicacion' => 'nullable|array',
-            'angulo' => 'nullable|array',
-            'nr' => 'nullable|array',
-            'ni' => 'nullable|array',
-            'la' => 'nullable|array',
-            'lc' => 'nullable|array',
-            'dist_zapata' => 'nullable|array',
-            'sa' => 'nullable|array',
-            'da' => 'nullable|array',
-            'ht' => 'nullable|array',
-            'evaluacion' => 'nullable|array',
-            'fotos' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -683,10 +569,12 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
+
+
 
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
@@ -753,81 +641,13 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("junta_ele.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'junta_ele' => $request->input("junta_ele.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'angulo' => $request->input("angulo.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'dist_zapata' => $request->input("dist_zapata.$sinTituloKey.$i"),
-                    'sa' => $request->input("sa.$sinTituloKey.$i"),
-                    'da' => $request->input("da.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'fotos' => $request->input("fotos.$sinTituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("junta_ele.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'junta_ele' => $request->input("junta_ele.$tituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
-                    'angulo' => $request->input("angulo.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'dist_zapata' => $request->input("dist_zapata.$tituloKey.$i"),
-                    'sa' => $request->input("sa.$tituloKey.$i"),
-                    'da' => $request->input("da.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'fotos' => $request->input("fotos.$tituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-        
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
+            'Juntas_Grupo_Re' => json_encode($validatedData['Juntas_Grupo_Re'])
         ]);
 
 
-     /*Firmas */
+        /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
@@ -866,120 +686,49 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_07/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+        $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
-        // Obtener las imágenes existentes
-        $existingImages = $request->input('existing_images', []);
-        $comments = $request->input('comments', []);
-        $imagesBase64 = $request->input('images_base64', []);
-        $deletedImages = $request->input('deleted_images', []);
+        $fotosExistentes = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+        $commentsPairs   = $request->input('comments_pairs', []);
 
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
-
-        // **1️⃣ Eliminar imágenes marcadas para borrar**
-        foreach ($deletedImages as $index) {
-            if (isset($existingImages[$index])) {
-                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
-
-                // Eliminar del almacenamiento
-                if (Storage::exists($rutaImagen)) {
-                    Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
-                } else {
-                    //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
-                }
-
-                // Eliminar de `existingImages` para que no se guarde en la BD
-                unset($existingImages[$index]);
+        /* Actualizar comentarios */
+        foreach ($fotosExistentes as &$foto) {
+            if (isset($commentsPairs[$foto['par']])) {
+                $foto['comentario'] = $commentsPairs[$foto['par']];
             }
         }
 
-        // **Reiniciar el array antes de procesar imágenes**
-        $imagenesGuardadas = [];
+        /* Reemplazar imágenes */
+        if ($request->has('replace_images')) {
+            foreach ($request->replace_images as $par => $imagenes) {
+                foreach ($imagenes as $i => $file) {
+                    if (!$file) continue;
 
-        // **Evitar duplicados en las rutas ya guardadas**
-        $rutasGuardadas = [];
+                    $imageName = 'imagen_' . time() . "_{$par}_{$i}.png";
+                    $rutaCarpeta = "public/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos";
 
-        // **2️⃣ Procesar imágenes existentes**
-        foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
-                // **Reemplazo de imagen existente**
-                $newImage = $request->file("replace_images.$index");
+                    Storage::putFileAs($rutaCarpeta, $file, $imageName);
 
-                // Eliminar imagen anterior si existe
-                $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
-                if (Storage::exists($rutaImagenPublic)) {
-                    Storage::delete($rutaImagenPublic);
-                }
-
-                // Guardar la nueva imagen
-                $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
-                $path = $newImage->storeAs($rutaCarpeta, $imageName);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
-                }
-            } elseif (!empty($imagesBase64[$index])) {
-                // **Procesar imágenes en Base64**
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            } else {
-                // **Mantener la imagen existente**
-                if (!in_array($ruta, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $ruta,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $ruta;
+                    foreach ($fotosExistentes as &$foto) {
+                        if ($foto['par'] == $par) {
+                            $foto['ruta'] = "storage/Reportes/FOR_PIMP_07_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+                            break;
+                        }
+                    }
                 }
             }
         }
 
-        // **3️⃣ Procesar nuevas imágenes Base64**
-        foreach ($imagesBase64 as $index => $base64Image) {
-            if (!empty($base64Image)) {
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen en el almacenamiento
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            }
+        /* Eliminar imágenes */
+        $deleted = $request->input('deleted_images', []);
+        if (!empty($deleted)) {
+            $fotosExistentes = array_filter($fotosExistentes, fn($f) => !in_array($f['ruta'], $deleted));
         }
+
 
         // **4️⃣ Guardar las imágenes actualizadas en la BD**
         $Fotos_Reportes->update([
-            'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
+            'Fotos_Reportes' => json_encode(array_values($fotosExistentes)), // Se usa array reindexado
         ]);
 
         //Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
@@ -992,7 +741,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
     }
 
 
-    public function FOR_01_INS_07($id)
+    public function FOR_PIMP_07_B_01($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -1041,7 +790,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-01-INS-07.PDF',
+            'title' => 'Reporte_FOR-02-INS-10.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1064,10 +813,10 @@ class FOR_01_PRO_INS_07Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_07_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_07_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1088,10 +837,10 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(136.5, -266.8);
+            $combinedPdf->SetXY(179, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1107,7 +856,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01-INS_07.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_02_INS_10.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

@@ -38,10 +38,15 @@ class SolicitudesController extends Controller
         {
             $nombreLimpio = Str::ascii(strtolower($Nombre)); // quita acentos y convierte a minúsculas
 
-            $Solicitudes = Solicitudes::whereRaw("
-                LOWER(REPLACE(REPLACE(REPLACE(REPLACE(tecnico, 'Ing.', ''), 'ing.', ''), 'Ing ', ''), 'ing ', ''))
-                LIKE ?
-            ", ['%' . $nombreLimpio . '%'])->get();
+            $Solicitudes = Solicitudes::get()->filter(function ($sol) use ($nombreLimpio) {
+                
+                $tecnico = strtolower(Str::ascii($sol->tecnico));
+
+                // SOLO elimina "ing" como palabra independiente
+                $tecnico = preg_replace('/^ing\\.?\\s+/i', '', $tecnico);
+
+                return str_contains($tecnico, $nombreLimpio);
+            });
         }
         else
         {
@@ -143,7 +148,9 @@ class SolicitudesController extends Controller
         {
             // Obtener todas las solicitudes
             //$Solicitudes = Solicitudes::all();
-            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
+            $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
+            ->orderBy('Fecha', 'desc')
+            ->get();
         }
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
