@@ -262,7 +262,7 @@
             </table>
     </tr>
 </table>
-                   <table>
+                <table>
                         <thead> 
                                 4 Firmas 
                                 <tr>
@@ -325,7 +325,7 @@
                                     <th></th>
                                 </tr>
                         </thead>                            
-                    </table>
+                </table>
             </footer>
 
             <div class="content"> 
