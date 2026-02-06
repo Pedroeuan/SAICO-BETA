@@ -97,7 +97,8 @@
                 // Actualizar el campo oculto con la imagen en base64
                 const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
                 if (base64Input) {
-                    base64Input.value = base64data;
+                    //base64Input.value = base64data;
+                    base64Input.value = "";
                 }
             }
             $('#cropperModal').modal('hide');

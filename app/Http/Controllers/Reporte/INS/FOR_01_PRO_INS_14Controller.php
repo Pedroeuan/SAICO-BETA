@@ -546,14 +546,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
-        if ($request->TieneContrato === "no") 
-            {
-                $clienteInput = $validatedData['Detalles_Generales']['Cliente'] ?? null;
-                
-            }else {
-                // Si el frontend envió un cliente válido, se utiliza ese
-                $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
-            }
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
+
         // ==========================
         // Lógica para manejar Contrato
         // ==========================
@@ -1253,6 +1251,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         // **3️⃣ Procesar nuevas imágenes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
+            if (isset($existingImages[$index])) {
+                continue; // ⛔ ya fue procesada arriba
+            }
+
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';

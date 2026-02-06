@@ -208,6 +208,11 @@
         .cross-line::after {
             transform: rotate(-27deg);
         }
+        .foto-container[colspan="2"] img {
+            width: 100%;
+            height: 23%;
+        }
+
             </style>
         </head>
         <body>
@@ -466,35 +471,49 @@
                         @foreach($chunks as $fotosGrupo)
                             <table class="imagenes-reporte">
                                 <tr>
-                                    @foreach($fotosGrupo as $index => $foto)
+                                @foreach($fotosGrupo as $index => $foto)
+
+                                    {{-- CASO: tercera imagen cuando solo hay 3 --}}
+                                    @if(count($fotosGrupo) == 3 && $index == 2)
+                                        <td class="foto-container" colspan="2">
+                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                    @else
                                         <td class="foto-container">
                                             <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
                                             <p class="comment">{{ $foto['comment'] }}</p>
                                         </td>
-                                        
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                                        @endif
-                                    @endforeach
+                                    @endif
 
-                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
+                                    {{-- Salto de fila cada 2 imágenes SOLO si no es la tercera con colspan --}}
+                                    @if(($index + 1) % 2 == 0 && !(count($fotosGrupo) == 3 && $index == 2))
+                                        </tr><tr>
+                                    @endif
+
+                                @endforeach
+
+                                {{-- Relleno solo si NO son 3 imágenes --}}
+                                @if(count($fotosGrupo) < 4 && count($fotosGrupo) != 3)
                                     @for($i = count($fotosGrupo); $i < 4; $i++)
                                         <td class="foto-container empty-box">
-                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
-                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
+                                            <div class="cross-line"></div>
+                                            <p class="empty-comment">&nbsp;</p>
+                                        </td>
                                         @if(($i + 1) % 2 == 0)
-                                            </tr><tr> <!-- Mantiene la estructura -->
+                                            </tr><tr>
                                         @endif
                                     @endfor
+                                @endif
+
                                 </tr>
                             </table>
 
-                            {{-- Salto de página cada 4 imágenes --}}
                             @if (!$loop->last)
                                 <div style="page-break-after: always;"></div>
                             @endif
                         @endforeach
+
                     </tbody>
                 </table>
             </div>

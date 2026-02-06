@@ -747,10 +747,10 @@ class ReporteController extends Controller
         return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
     }
 
-    public function FOR_PIMP_07_B_01()
+    /*public function FOR_PIMP_07_B_01()
     {
         return view('Reportes.IM.Create.FOR-PIMP-07_B_01');
-    }
+    }*/
     
     public function obtenerSiguienteContratoInterno()
     {

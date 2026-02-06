@@ -118,7 +118,7 @@
                             <!-- SELECT cuando es SI -->
                             <select id="campoClienteSelect"
                                     class="form-select"
-                                    name="Detalles_Generales[Cliente]">
+                                    name="ClienteSelect">
                                 <option value="" selected disabled>Seleccione un Cliente</option>
                                 @foreach($Clientes as $Cliente)
                                     <option value="{{ $Cliente->Cliente }}">
@@ -131,7 +131,7 @@
                             <input type="text"
                                 id="campoClienteInput"
                                 class="form-control inputForm mt-2"
-                                name="Detalles_Generales[Cliente]"
+                                name="ClienteInput"
                                 placeholder="Ingrese nombre del cliente"
                                 style="display:none;">
                         </div>
