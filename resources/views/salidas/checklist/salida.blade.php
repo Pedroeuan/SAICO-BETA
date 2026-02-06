@@ -55,6 +55,56 @@
 
         <button class="btn btn-success">Guardar Checklist</button>
         <a href="{{ route('salidas.index') }}" class="btn btn-secondary">Cancelar</a>
+        
+        <hr>
+<h5>Herramientas del vehículo</h5>
+
+@php
+$herramientas = [
+    'llantas' => 'Llantas',
+    'extintor' => 'Extintor',
+    'cables_corriente' => 'Cables para corriente',
+    'gato_hidraulico' => 'Gato hidráulico',
+    'llave_cruz' => 'Llave de cruz',
+    'llanta_refaccion' => 'Llanta de refacción',
+];
+@endphp
+
+@foreach($herramientas as $key => $label)
+<div class="mb-2">
+    <label>{{ $label }}</label>
+    <select name="herramientas[{{ $key }}]" class="form-control" required>
+        <option value="">Seleccione</option>
+        <option value="1">Se tiene</option>
+        <option value="0">No se tiene</option>
+    </select>
+</div>
+@endforeach
+<hr>
+<h5>Documentos del vehículo</h5>
+
+@php
+$documentos = [
+    'tarjeta_circulacion' => 'Tarjeta de circulación',
+    'seguro' => 'Seguro',
+    'verificacion' => 'Verificación',
+    'tenencia' => 'Tenencia',
+];
+@endphp
+
+@foreach($documentos as $key => $label)
+<div class="mb-2">
+    <label>{{ $label }}</label>
+    <select name="documentos[{{ $key }}]" class="form-control" required>
+        <option value="">Seleccione</option>
+        <option value="1">Se tiene</option>
+        <option value="0">No se tiene</option>
+    </select>
+</div>
+@endforeach
+
+
+
     </form>
 </div>
 @endsection

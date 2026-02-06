@@ -16,7 +16,7 @@ class SalidaVehiculoController extends Controller
      */
     public function index()
     {
-        $salidas = SalidaVehiculo::with(['vehiculo', 'chofer'])->orderBy('fecha_salida','desc')->get();
+        $salidas = SalidaVehiculo::with(['vehiculo', 'checklists'])->get();
         return view('salidas.index', compact('salidas'));
     }
 

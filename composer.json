@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "barryvdh/laravel-snappy": "^1.0",
         "clegginabox/pdf-merger": "dev-master",
+        "doctrine/dbal": "^4.4",
         "dompdf/dompdf": "^3.1",
         "fpdf/fpdf": "^1.86",
         "iio/libmergepdf": "^3.1",

@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('checklist_condiciones', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('salida_checklist_id')->constrained('salida_checklists')->cascadeOnDelete();
+
+            $table->string('nivel_gasolina');
+            $table->integer('kilometraje');
+            $table->boolean('limpio_exterior');
+            $table->boolean('limpio_interior');
+            $table->text('observaciones')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('checklist_condiciones');
+    }
+};

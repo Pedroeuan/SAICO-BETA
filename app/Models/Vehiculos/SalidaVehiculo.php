@@ -3,6 +3,7 @@
 namespace App\Models\Vehiculos;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Vehiculos\Vehiculo;
+use App\Models\Vehiculos\Checklist\SalidaChecklist;
 use App\Models\User;
 
 class SalidaVehiculo extends Model
@@ -29,12 +30,15 @@ class SalidaVehiculo extends Model
         return $this->belongsTo(User::class,'solicitado_por');//f
     }
     public function checklists(){
-        return $this->hasMany(SalidaChecklist::class,'salida_vehiculo_id');
+        return $this->hasMany(\App\Models\Vehiculos\Checklist\SalidaChecklist::class,'salida_vehiculo_id');
     }
-    public function checklistSalida(){
-        return $this->hasOne(SalidaChecklist::class,'salida_vehiculo_id')->where('tipo','salida');
+    public function getChecklistSalidaAttribute(){
+        return $this->checklists()->where('tipo', 'salida')->with('condicion')->first();
+        }
+
+    public function getChecklistEntradaAttribute()
+    {
+    return $this->checklists->where('tipo', 'entrada')->first();
     }
-    public function checklistEntrada(){
-        return $this->hasOne(SalidaChecklist::class,'salida_vehiculo_id')->where('tipo','entrada');
-    }
+
 }
