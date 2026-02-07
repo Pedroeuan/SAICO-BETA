@@ -546,13 +546,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
-        if ($request->TieneContrato === "no") 
+        if ($request->TieneCliente === "no") 
             {
-                $clienteInput = $validatedData['Detalles_Generales']['Cliente'] ?? null;
+                $clienteInput = $validatedData['Detalles_Generales']['Cliente'] =$request->ClienteSelect;
                 
             }else {
-                // Si el frontend envió un cliente válido, se utiliza ese
-                $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
+                $validatedData['Detalles_Generales']['Cliente']=$request->$clienteInput;
             }
         // ==========================
         // Lógica para manejar Contrato

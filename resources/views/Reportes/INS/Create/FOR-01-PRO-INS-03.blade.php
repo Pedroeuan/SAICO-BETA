@@ -111,11 +111,47 @@
                                         </div>
                                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="Detalles_Generales[Cliente]">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="Detalles_Generales[Cliente]"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
+                        </div>
+                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -127,15 +163,13 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
