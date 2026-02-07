@@ -465,7 +465,16 @@
                     <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
                         <tbody>
                         @php
-                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                            //$chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                                $totalFotos = count($Fotos);
+
+                                if ($totalFotos % 3 === 0) {
+                                    $porHoja = 3;
+                                } else {
+                                    $porHoja = 4;
+                                }
+
+                                $chunks = array_chunk($Fotos, $porHoja);
                         @endphp
 
                         @foreach($chunks as $fotosGrupo)
@@ -473,33 +482,32 @@
                                 <tr>
                                 @foreach($fotosGrupo as $index => $foto)
 
-                                    {{-- CASO: tercera imagen cuando solo hay 3 --}}
+                                    {{-- Caso 3 imágenes: la tercera ocupa toda la fila --}}
                                     @if(count($fotosGrupo) == 3 && $index == 2)
-                                        <td class="foto-container" colspan="2">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="foto-container" colspan="2">
+                                                <img src="{{ $foto['path'] }}">
+                                                <p class="comment">{{ $foto['comment'] }}</p>
+                                            </td>
+                                        </tr>
                                     @else
                                         <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                            <img src="{{ $foto['path'] }}">
                                             <p class="comment">{{ $foto['comment'] }}</p>
                                         </td>
-                                    @endif
 
-                                    {{-- Salto de fila cada 2 imágenes SOLO si no es la tercera con colspan --}}
-                                    @if(($index + 1) % 2 == 0 && !(count($fotosGrupo) == 3 && $index == 2))
-                                        </tr><tr>
+                                        @if(($index + 1) % 2 == 0)
+                                            </tr><tr>
+                                        @endif
                                     @endif
 
                                 @endforeach
 
-                                {{-- Relleno solo si NO son 3 imágenes --}}
-                                @if(count($fotosGrupo) < 4 && count($fotosGrupo) != 3)
+                                {{-- Relleno SOLO cuando son 4 por hoja y faltan --}}
+                                @if(count($fotosGrupo) < 4 && $porHoja == 4)
                                     @for($i = count($fotosGrupo); $i < 4; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div>
-                                            <p class="empty-comment">&nbsp;</p>
-                                        </td>
+                                        <td class="foto-container empty-box"></td>
                                         @if(($i + 1) % 2 == 0)
                                             </tr><tr>
                                         @endif
@@ -509,10 +517,11 @@
                                 </tr>
                             </table>
 
-                            @if (!$loop->last)
+                            @if(!$loop->last)
                                 <div style="page-break-after: always;"></div>
                             @endif
                         @endforeach
+
 
                     </tbody>
                 </table>
