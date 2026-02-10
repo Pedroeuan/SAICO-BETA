@@ -1168,7 +1168,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
-
+        $imagenHoja = $request->input('imagen_hoja', []);
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
@@ -1217,6 +1217,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
@@ -1235,6 +1236,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -1244,6 +1246,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $ruta;
                 }
@@ -1270,6 +1273,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }

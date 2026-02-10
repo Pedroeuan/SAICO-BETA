@@ -1375,7 +1375,18 @@
                                                             <div class="image-preview mt-2">
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
-
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input imagen-hoja-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="imagenHoja{{ $index }}"
+                                                                    {{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                    Imagen en una hoja
+                                                                </label>
+                                                            </div>
+                                                            
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
