@@ -149,10 +149,11 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->url = $url;
                         $notificacion->leida = false;
                         $notificacion->save();
-                    }
 
                     // 📧 Enviar correo
                     $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                    }
+
                 }
             }
         }
