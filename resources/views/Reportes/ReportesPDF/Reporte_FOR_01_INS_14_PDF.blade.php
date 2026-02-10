@@ -705,8 +705,7 @@
                             </tr>                               
                         </thead>
                             <tbody>
-                            
-
+                                
                                 {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
