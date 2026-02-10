@@ -184,6 +184,22 @@
             height: 23%;
         }
 
+        /* ===== Imagen que ocupa una hoja completa ===== */
+        .foto-full {
+            width: 100% !important;
+            height: 435px !important;
+        }
+
+        .foto-full img {
+            width: 100% !important;
+            height: 404px !important;
+            object-fit: contain; /* no recorta */
+        }
+
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 10px;
+        }
             </style>
         </head>
         <body>
@@ -369,16 +385,38 @@
                     </table>
             </footer>
             @php
-                //$chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
-                $totalFotos = count($Fotos);
+                $chunks = [];
+                $grupoActual = [];
 
-                if ($totalFotos % 3 === 0) {
-                    $porHoja = 3;
-                } else {
-                $porHoja = 4;
+                foreach ($Fotos as $foto) {
+
+                    // 👉 Si la imagen es "una hoja", va sola
+                    if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
+
+                        // Guarda lo que haya antes
+                        if (!empty($grupoActual)) {
+                            $chunks[] = $grupoActual;
+                            $grupoActual = [];
+                        }
+
+                        // La imagen va sola
+                        $chunks[] = [$foto];
+
+                    } else {
+                        $grupoActual[] = $foto;
+
+                        // Máximo 4 por hoja
+                        if (count($grupoActual) == 4) {
+                            $chunks[] = $grupoActual;
+                            $grupoActual = [];
+                        }
+                    }
                 }
 
-                $chunks = array_chunk($Fotos, $porHoja);
+                // Último grupo
+                if (!empty($grupoActual)) {
+                    $chunks[] = $grupoActual;
+                }
             @endphp
 
         @foreach($chunks as $fotosGrupo)
@@ -451,15 +489,17 @@
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
                 </table>
-
-                <table>
-                        <tbody>
                             <table class="imagenes-reporte">
                                 <tr>
                                 @foreach($fotosGrupo as $index => $foto)
 
-                                    {{-- Caso 3 imágenes: la tercera ocupa toda la fila --}}
-                                    @if(count($fotosGrupo) == 3 && $index == 2)
+                                    {{-- Caso 1 imagen: ocupa toda la hoja --}}
+                                    @if(count($fotosGrupo) == 1)
+                                        <td class="foto-container foto-full" colspan="2">
+                                            <img src="{{ $foto['path'] }}">
+                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                        </td>
+                                    @elseif(count($fotosGrupo) == 3 && $index == 2)
                                         </tr>
                                         <tr>
                                             <td class="foto-container" colspan="2">
@@ -481,7 +521,7 @@
                                 @endforeach
 
                                 {{-- Relleno SOLO cuando son 4 por hoja y faltan --}}
-                                @if(count($fotosGrupo) < 4 && $porHoja == 4)
+                                @if(count($fotosGrupo) < 4 && count($fotosGrupo) != 1)
                                     @for($i = count($fotosGrupo); $i < 4; $i++)
                                         <td class="foto-container empty-box"></td>
                                         @if(($i + 1) % 2 == 0)
@@ -492,9 +532,6 @@
 
                                 </tr>
                             </table>
-
-                    </tbody>
-                </table>
             </div>
             @if(!$loop->last)
                 <div style="page-break-after: always;"></div>
