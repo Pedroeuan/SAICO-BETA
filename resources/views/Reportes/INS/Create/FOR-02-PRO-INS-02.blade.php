@@ -1232,11 +1232,38 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            saveData(document.querySelectorAll("form")[1].id);
+            //saveData(document.querySelectorAll("form")[1].id);
+            verificarYAgregarLongitud();
+            saveData($(this).closest('form').attr('id'));
         }
+    );
+
+        /*$('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+                });
+                return;
+            }
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
+            // Eliminar los datos de sessionStorage
+            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            // Deshabilitar el botón de submit y cambiar el texto (opcional)
+            let submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Guardando...');
+            // Opcional: Agregar un indicador de carga
+            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+        });*/
+
             // Restaurar datos al cargar la página
             restoreData();
-    });
+});
 function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');

@@ -584,6 +584,7 @@
                                     </table>
                                     </div>
 
+                                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -896,14 +897,14 @@
                                             </select>
                                         </div>
 
-                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                        <!-- <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>
                                                 Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
                                                 y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
                                             </p>
-                                        </div>
+                                        </div> -->
 
                                         <div class="w-100">
                                             <div id="imageFieldsContainer" class="row">
@@ -991,9 +992,9 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
                 // Restaurar contadores
                 tituloCount = savedData.filter(item => item.type === 'titulo').length;
                 rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
