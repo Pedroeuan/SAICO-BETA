@@ -384,40 +384,42 @@
                         </thead>                            
                     </table>
             </footer>
-            @php
-                $chunks = [];
-                $grupoActual = [];
+                @php
+                    $chunks = [];
+                    $grupoActual = [];
 
-                foreach ($Fotos as $foto) {
+                    foreach ($Fotos as $foto) {
 
-                    // 👉 Si la imagen es "una hoja", va sola
-                    if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
+                        // Si la imagen es de hoja completa
+                        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
 
-                        // Guarda lo que haya antes
-                        if (!empty($grupoActual)) {
-                            $chunks[] = $grupoActual;
-                            $grupoActual = [];
+                            // Guardar grupo previo (si existe)
+                            if (!empty($grupoActual)) {
+                                $chunks[] = $grupoActual;
+                                $grupoActual = [];
+                            }
+
+                            // La imagen va SOLA
+                            $chunks[] = [$foto];
+
+                            continue; // 🔴 CLAVE: evita que siga fluyendo
                         }
 
-                        // La imagen va sola
-                        $chunks[] = [$foto];
-
-                    } else {
+                        // Imagen normal
                         $grupoActual[] = $foto;
 
-                        // Máximo 4 por hoja
+                        // Máximo 4 imágenes normales por hoja
                         if (count($grupoActual) == 4) {
                             $chunks[] = $grupoActual;
                             $grupoActual = [];
                         }
                     }
-                }
 
-                // Último grupo
-                if (!empty($grupoActual)) {
-                    $chunks[] = $grupoActual;
-                }
-            @endphp
+                    // Último grupo pendiente
+                    if (!empty($grupoActual)) {
+                        $chunks[] = $grupoActual;
+                    }
+                @endphp
 
         @foreach($chunks as $fotosGrupo)
             <div class="content">
@@ -489,12 +491,20 @@
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
                 </table>
+                    @php
+                        $esHojaCompleta = (
+                            count($fotosGrupo) == 1 &&
+                            !empty($fotosGrupo[0]['una_hoja']) &&
+                            $fotosGrupo[0]['una_hoja'] == 1
+                        );
+                    @endphp
+
                             <table class="imagenes-reporte">
                                 <tr>
                                 @foreach($fotosGrupo as $index => $foto)
 
                                     {{-- Caso 1 imagen: ocupa toda la hoja --}}
-                                    @if(count($fotosGrupo) == 1)
+                                    @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
                                         <td class="foto-container foto-full" colspan="2">
                                             <img src="{{ $foto['path'] }}">
                                             <p class="comment">{{ $foto['comment'] }}</p>
@@ -521,10 +531,19 @@
                                 @endforeach
 
                                 {{-- Relleno SOLO cuando son 4 por hoja y faltan --}}
-                                @if(count($fotosGrupo) < 4 && count($fotosGrupo) != 1)
-                                    @for($i = count($fotosGrupo); $i < 4; $i++)
-                                        <td class="foto-container empty-box"></td>
-                                        @if(($i + 1) % 2 == 0)
+                                @if(!$esHojaCompleta && count($fotosGrupo) == 2)
+                                    @php
+                                        $faltantes = 4 - count($fotosGrupo);
+                                    @endphp
+
+                                    @for($i = 0; $i < $faltantes; $i++)
+                                        <td class="foto-container empty-box">
+                                            <div class="cross-line"></div>
+                                            <div class="empty-comment"></div>
+                                        </td>
+
+                                        {{-- Cerrar fila cada 2 columnas --}}
+                                        @if((count($fotosGrupo) + $i + 1) % 2 == 0)
                                             </tr><tr>
                                         @endif
                                     @endfor
