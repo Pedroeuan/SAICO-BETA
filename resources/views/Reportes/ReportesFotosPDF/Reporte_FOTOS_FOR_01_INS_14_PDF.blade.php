@@ -150,7 +150,7 @@
         /* Estilo para los "comentarios" en blanco */
         .empty-comment {
             margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            /*border-top: 1px solid black; /* Borde superior de 2px en color negro */
             padding-top: 0px; /* Espaciado entre el borde y el texto */
         }
         
@@ -387,35 +387,25 @@
                 @php
                     $chunks = [];
                     $grupoActual = [];
-
                     foreach ($Fotos as $foto) {
-
                         // Si la imagen es de hoja completa
                         if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-
                             // Guardar grupo previo (si existe)
                             if (!empty($grupoActual)) {
                                 $chunks[] = $grupoActual;
                                 $grupoActual = [];
                             }
-
                             // La imagen va SOLA
                             $chunks[] = [$foto];
-
-                            continue; // 🔴 CLAVE: evita que siga fluyendo
+                            continue;
                         }
-
                         // Imagen normal
                         $grupoActual[] = $foto;
-
-                        // Máximo 4 imágenes normales por hoja
                         if (count($grupoActual) == 4) {
                             $chunks[] = $grupoActual;
                             $grupoActual = [];
                         }
                     }
-
-                    // Último grupo pendiente
                     if (!empty($grupoActual)) {
                         $chunks[] = $grupoActual;
                     }
@@ -501,52 +491,61 @@
 
                             <table class="imagenes-reporte">
                                 <tr>
-                                @foreach($fotosGrupo as $index => $foto)
-
-                                    {{-- Caso 1 imagen: ocupa toda la hoja --}}
-                                    @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                                        <td class="foto-container foto-full" colspan="2">
-                                            <img src="{{ $foto['path'] }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
-                                    @elseif(count($fotosGrupo) == 3 && $index == 2)
-                                        </tr>
-                                        <tr>
-                                            <td class="foto-container" colspan="2">
+                                @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
+                                    {{-- 3 imágenes: 2 arriba, 1 abajo --}}
+                                    <td class="foto-container">
+                                        <img src="{{ $fotosGrupo[0]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
+                                    </td>
+                                    <td class="foto-container">
+                                        <img src="{{ $fotosGrupo[1]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
+                                    </td>
+                                    </tr><tr>
+                                    <td class="foto-container" colspan="2">
+                                        <img src="{{ $fotosGrupo[2]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
+                                    </td>
+                                @else
+                                    @foreach($fotosGrupo as $index => $foto)
+                                        {{-- Caso 1 imagen: ocupa toda la hoja --}}
+                                        @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
+                                            <td class="foto-container foto-full" colspan="2">
                                                 <img src="{{ $foto['path'] }}">
                                                 <p class="comment">{{ $foto['comment'] }}</p>
                                             </td>
-                                        </tr>
-                                    @else
-                                        <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
-
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr>
+                                        @else
+                                            <td class="foto-container">
+                                                <img src="{{ $foto['path'] }}">
+                                                <p class="comment">{{ $foto['comment'] }}</p>
+                                            </td>
+                                            @if(($index + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
                                         @endif
+                                    @endforeach
+                                @endif
+
+                                {{-- Relleno cuando NO es hoja completa y faltan imágenes --}}
+                                @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
+                                    @php $faltantes = 4 - count($fotosGrupo); @endphp
+                                    @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
+                                        @for($i = 0; $i < $faltantes; $i++)
+                                            <td class="foto-container empty-box">
+                                                <div class="cross-line"></div>
+                                                <div class="empty-comment"></div>
+                                            </td>
+                                            @if((count($fotosGrupo) + $i + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endfor
+                                    @elseif(count($fotosGrupo) == 3)
+                                        </tr><tr>
+                                        <td class="foto-container" colspan="2">
+                                            <img src="{{ $fotosGrupo[2]['path'] }}">
+                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
+                                        </td>
                                     @endif
-
-                                @endforeach
-
-                                {{-- Relleno SOLO cuando son 4 por hoja y faltan --}}
-                                @if(!$esHojaCompleta && count($fotosGrupo) == 2)
-                                    @php
-                                        $faltantes = 4 - count($fotosGrupo);
-                                    @endphp
-
-                                    @for($i = 0; $i < $faltantes; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div>
-                                            <div class="empty-comment"></div>
-                                        </td>
-
-                                        {{-- Cerrar fila cada 2 columnas --}}
-                                        @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                            </tr><tr>
-                                        @endif
-                                    @endfor
                                 @endif
 
                                 </tr>
