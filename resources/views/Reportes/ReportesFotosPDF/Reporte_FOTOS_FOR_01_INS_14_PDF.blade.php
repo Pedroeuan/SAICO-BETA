@@ -118,7 +118,7 @@
         }
 
         .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
             width: 312px;  /* Fija el ancho de la celda */
             height: 170px; /* Fija la altura de la celda */
             border: 1px solid black; 
@@ -150,8 +150,8 @@
         /* Estilo para los "comentarios" en blanco */
         .empty-comment {
             margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            /*border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 42px; /* Espaciado entre el borde y el texto del comentario de las vacios*/
         }
         
         .empty-box {
@@ -198,7 +198,7 @@
 
         .foto-full .comment {
             margin-top: 0px;
-            font-size: 10px;
+            font-size: 12px;
         }
             </style>
         </head>
