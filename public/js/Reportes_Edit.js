@@ -97,7 +97,8 @@
                 // Actualizar el campo oculto con la imagen en base64
                 const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
                 if (base64Input) {
-                    base64Input.value = base64data;
+                    //base64Input.value = base64data;
+                    base64Input.value = "";
                 }
             }
             $('#cropperModal').modal('hide');
@@ -166,6 +167,19 @@
         if (cropper) cropper.destroy();
     });
 
+    function bindImagenHojaCheckboxes() {
+    document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+        cb.addEventListener('change', function () {
+            const index = this.dataset.index;
+            const hidden = document.getElementById(`imagenHojaValue${index}`);
+            if (hidden) {
+                hidden.value = this.checked ? 1 : 0;
+            }
+        });
+    });
+}
+
+
     // Generar campos de imágenes
     document.addEventListener("DOMContentLoaded", function () {
         const imageCountSelect = document.getElementById('imageCount');
@@ -197,12 +211,12 @@
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
 
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${index}" value="${index}">
+                            <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="${index}" id="imagenHoja${index}">
                             <label class="form-check-label" for="imagenHoja${index}">
                                 Imagen en una hoja
                             </label>
                         </div>
-                        
+                        <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
@@ -299,7 +313,7 @@
                 // Si ninguno tiene valor, dejar como originalmente en blade
             });
         }
-
+        bindImagenHojaCheckboxes();
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
             localStorage.removeItem('imageCount');
