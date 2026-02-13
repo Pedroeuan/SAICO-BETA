@@ -551,7 +551,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         } else {
             $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
         }
-
         // ==========================
         // Lógica para manejar Contrato
         // ==========================
