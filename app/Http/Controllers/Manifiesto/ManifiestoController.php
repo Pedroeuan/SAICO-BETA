@@ -375,8 +375,8 @@ class ManifiestoController extends Controller
                     $AlmacenStock = $Almacen->Stock;
                     $AlmacenDescuento = $detalle->Cantidad;
                     $Verificar = $AlmacenStock-$AlmacenDescuento;
-                    Log::info('***********************');
-                    Log::info('Verificar: ', ['Verificar' => $Verificar]);
+                    //Log::info('***********************');
+                    //Log::info('Verificar: ', ['Verificar' => $Verificar]);
                         // Actualizar stock
                         $Almacen->update([
                             'Stock' => $Verificar
@@ -419,7 +419,7 @@ class ManifiestoController extends Controller
                 }
             }
         }
-
+        //Si el campo Cliente viene en la petición y NO está vacío”
             if ($request->filled('Cliente')) 
             { 
                 $Manifiestos = new manifiesto;

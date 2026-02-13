@@ -32,9 +32,20 @@
                 <div class="col-sm-4">
                     <div class="form-group">
 
-                        <label class="col-form-label" for="inputSuccess">Cliente</label>
+                        <label class="col-form-label">¿Cliente registrado?</label>
 
-                        <select class="form-control inputForm" name="Cliente" required>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cliente_tipo" id="cliente_si" value="si" checked>
+                            <label class="form-check-label" for="cliente_si">Sí</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cliente_tipo" id="cliente_no" value="no">
+                            <label class="form-check-label" for="cliente_no">No</label>
+                        </div>
+
+                        <!-- SELECT -->
+                        <select class="form-control inputForm" name="Cliente" id="cliente_select" required>
                             <option value="">Seleccione un cliente</option>
                             @foreach ($clientes as $cliente)
                                 <option value="{{ $cliente->Cliente }}">
@@ -42,8 +53,15 @@
                                 </option>
                             @endforeach
                         </select>
+
+                        <!-- INPUT MANUAL -->
+                        <input type="text" 
+                            class="form-control inputForm mt-2 d-none" 
+                            id="cliente_input"
+                            placeholder="Escriba el nombre del cliente">
+
                         @error('Cliente')
-                                <div class="alert alert-danger"><span>*{{ $message }}</span></div>
+                            <div class="alert alert-danger"><span>*{{ $message }}</span></div>
                         @enderror
 
                     </div>
@@ -210,88 +228,154 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        const clienteSelect = document.querySelector('select[name="Cliente"]');
-        
-        if (clienteSelect.value === "") {
-            event.preventDefault(); // Evita que se envíe el formulario
-            alert("Por favor, selecciona un cliente."); // Muestra una alerta
-            clienteSelect.focus(); // Coloca el foco en el campo de selección
-        }
-    });
 
     document.addEventListener('DOMContentLoaded', function() {
-        const clienteSelect = document.querySelector('select[name="Cliente"]');
+
+        const form = document.getElementById('manifiestoForm');
+
+        const radioSi = document.getElementById('cliente_si');
+        const radioNo = document.getElementById('cliente_no');
+        const selectCliente = document.getElementById('cliente_select');
+        const inputCliente = document.getElementById('cliente_input');
         const folioInput = document.getElementById('folio');
 
-        clienteSelect.addEventListener('change', function() {
-            const cliente = clienteSelect.value;
+        /* ==============================
+        MOSTRAR / OCULTAR SELECT O INPUT
+        ============================== */
+        function toggleCliente() {
 
-            if (cliente) {
-                // 1. Obtener las primeras 4 letras del nombre del cliente
-                const clientePrefix = cliente.substring(0, 4).toUpperCase();
-
-                // 2. Realizar la solicitud AJAX para obtener el conteo actual de registros en la tabla Solicitud
-                fetch('{{ route("manifiestos.count") }}')
-                    .then(response => response.json())
-                    .then(data => {
-                        const totalRegistros = data.total + 1; // Sumar 1 para el próximo folio original:const totalRegistros = data.total + 1;
-                        const registroCount = totalRegistros.toString().padStart(3, '0'); // Convertir a formato 001, 002, etc.
-
-                        // 3. Obtener el año actual (últimos dos dígitos)
-                        const year = new Date().getFullYear().toString().slice(-2);
-
-                        // 4. Crear el folio con el formato PROP-001/24
-                        const folio = `${clientePrefix}-${registroCount}/${year}`;
-                        folioInput.value = folio;
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener el total de registros:', error);
-                    });
+            if (radioSi.checked) {
+                selectCliente.classList.remove('d-none');
+                inputCliente.classList.add('d-none');
+                selectCliente.setAttribute('required', true);
+                inputCliente.removeAttribute('required');
             } else {
-                folioInput.value = ''; // Resetear el valor si no hay cliente seleccionado
+                selectCliente.classList.add('d-none');
+                inputCliente.classList.remove('d-none');
+                inputCliente.setAttribute('required', true);
+                selectCliente.removeAttribute('required');
+            }
+        }
+
+        radioSi.addEventListener('change', toggleCliente);
+        radioNo.addEventListener('change', toggleCliente);
+        toggleCliente();
+
+
+        /* ==============================
+        GENERAR FOLIO
+        ============================== */
+        function generarFolio(cliente) {
+
+            if (!cliente || cliente.length < 4) {
+                folioInput.value = '';
+                return;
+            }
+
+            const clientePrefix = cliente.substring(0, 4).toUpperCase();
+
+            fetch('{{ route("manifiestos.count") }}')
+                .then(response => response.json())
+                .then(data => {
+
+                    const totalRegistros = data.total + 1;
+                    const registroCount = totalRegistros.toString().padStart(3, '0');
+                    const year = new Date().getFullYear().toString().slice(-2);
+
+                    const folio = `${clientePrefix}-${registroCount}/${year}`;
+                    folioInput.value = folio;
+                })
+                .catch(error => {
+                    console.error('Error al obtener el total de registros:', error);
+                });
+        }
+
+        // SELECT
+        selectCliente.addEventListener('change', function() {
+            if (radioSi.checked) {
+                generarFolio(selectCliente.value);
             }
         });
+
+        // INPUT manual
+        inputCliente.addEventListener('input', function() {
+            if (radioNo.checked) {
+                generarFolio(inputCliente.value);
+            }
+        });
+
+
+        /* ==============================
+        VALIDACIÓN AL ENVIAR
+        ============================== */
+        form.addEventListener('submit', function(event) {
+
+            let clienteFinal = '';
+
+            if (radioSi.checked) {
+                clienteFinal = selectCliente.value;
+            } else {
+                clienteFinal = inputCliente.value.trim();
+            }
+
+            if (clienteFinal === '') {
+                event.preventDefault();
+                alert("Por favor, ingresa o selecciona un cliente.");
+                return;
+            }
+
+            // Asegurar que el select tenga el valor final para Laravel
+            selectCliente.value = clienteFinal;
+        });
+
+
+        /* ==============================
+        PREVENIR ENTER
+        ============================== */
+        form.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+
+
+        /* ==============================
+        LOCAL STORAGE
+        ============================== */
+        document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
+
+            input.addEventListener('input', function() {
+                localStorage.setItem('manifiestoForm_' + input.name, input.value);
+            });
+
+            let value = localStorage.getItem('manifiestoForm_' + input.name);
+            if (value !== null && input.type !== 'file') {
+                input.value = value;
+            }
+        });
+
+        form.addEventListener('submit', function() {
+            document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
+                localStorage.removeItem('manifiestoForm_' + input.name);
+            });
+        });
+
     });
 
-    // llamar switch boostrap
+
+    /* ==============================
+    BOOTSTRAP SWITCH
+    ============================== */
     $("[name='Renta']").bootstrapSwitch({
         onText: 'Sí',
         offText: 'No'
     });
+
     $("[name='SATBMPRO']").bootstrapSwitch({
         onText: 'Sí',
         offText: 'No'
     });
 
-/*Prevenir el Enter*/
-document.getElementById('manifiestoForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
-
-    // Guardar datos en localStorage al escribir
-document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
-    input.addEventListener('input', function() {
-        localStorage.setItem('manifiestoForm_' + input.name, input.value);
-    });
-});
-// Restaurar datos al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
-        let value = localStorage.getItem('manifiestoForm_' + input.name);
-        if (value !== null && input.type !== 'file') {
-            input.value = value;
-        }
-    });
-});
-// Limpiar localStorage al enviar el formulario
-document.getElementById('manifiestoForm').addEventListener('submit', function() {
-    document.querySelectorAll('#manifiestoForm input, #manifiestoForm textarea, #manifiestoForm select').forEach(function(input) {
-        localStorage.removeItem('manifiestoForm_' + input.name);
-    });
-});
 </script>
 
 @endsection
