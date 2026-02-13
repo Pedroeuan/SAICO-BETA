@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+  @extends('adminlte::page')
 
 @section('title', 'FOR-01-PRO-INS-03')
 
