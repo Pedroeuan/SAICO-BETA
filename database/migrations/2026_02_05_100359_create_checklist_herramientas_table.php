@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('checklist_herramientas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('salida_checklist_id')->constrained('salidas_checklists')->cascadeOnDelete();
-            $table->enum('herramienta',['llantas','extintor','cable_corriente','gato_hidraulico','llave_cruz','llanta_refaccion']);
-            $table->boolean('disponible')->default(false);
+            $table->string('herramienta');
+            $table->boolean('disponible');
             $table->timestamps();
         });
     }

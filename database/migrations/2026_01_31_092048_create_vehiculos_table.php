@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('marca');
             $table->string('modelo');
             $table->year('anio')->nullable();
-            $table->string('estatus')->default('disponible');
+            $table->string('estatus',['disponible','ocupado','inactivo'])->default('disponible');
             $table->timestamps();
         });
     }

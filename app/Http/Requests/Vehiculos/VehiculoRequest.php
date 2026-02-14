@@ -13,6 +13,12 @@ class VehiculoRequest extends FormRequest
     {
         return true;
     }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'placa' => strtoupper(trim($this->placa)),
+        ]);
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +28,7 @@ class VehiculoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'placa'   => 'required|string|max:20',
+            'placa'   => 'required|string|max:100|unique:vehiculos,placa,'. $this->route('id'),
             'marca'   => 'required|string|max:100',
             'modelo'  => 'required|string|max:100',
             'anio'    => 'required|integer|min:1900|max:' . (date('Y') + 1),
@@ -30,4 +36,5 @@ class VehiculoRequest extends FormRequest
 
         ];
     }
+
 }

@@ -11,18 +11,17 @@ return new class extends Migration
         Schema::create('salidas_vehiculo', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('vehiculo_id');
+            $table->foreignId('vehiculo_id')->constrained()->restrictOnDelete();
             // IDs de users (SIN foreign key)
-            $table->bigInteger('chofer_id'); // probelmas con foreign keys
-            $table->bigInteger('solicitado_por');
+            $table-foreignId('chofer_id')->constrained('users'); // probelmas con foreign keys
+            $table->foreignId('solicitado_por')->constrained('users');
 
             $table->dateTime('fecha_salida');
             $table->dateTime('fecha_regreso')->nullable();
             $table->text('motivo')->nullable();
-            $table->string('estatus')->default('activo');
-
+            $table->enum('estatus',['activo','finaliizado'])->default('activo');
             $table->timestamps();
-            $table->foreign('vehiculo_id')->references('id')->on('vehiculos')->restrictOnDelete();
+            $table->unique(['vehiculo_id','estatus']);
         });
     }
 

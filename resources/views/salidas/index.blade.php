@@ -20,7 +20,9 @@
                 <th>Fecha salida</th>
                 <th>Checklist salida</th>
                 <th>Checklist entrada</th>
-                <th>Acciones</th>
+                <th>PDF</th>
+                <th>Ver Salida</th>
+                <th>Ver Entrada</th>
             </tr>
         </thead>
 
@@ -30,11 +32,12 @@
                 <td>{{ $salida->vehiculo->placa }}</td>
                 <td>{{ $salida->chofer->name }}</td>
                 <td>{{ $salida->fecha_salida }}</td>
+                
 
                 {{-- CHECKLIST SALIDA --}}
                 <td class="text-center">
                     @if($salida->checklistSalida)
-                        <span class="badge bg-success">✔ Registrado</span>
+                        <span class="badge bg-success">Registrado</span>
                     @else
                         <a href="{{ route('salidas.checklist.salida.create',$salida->id) }}"
                            class="btn btn-sm btn-primary">
@@ -46,7 +49,7 @@
                 {{-- CHECKLIST ENTRADA --}}
                 <td class="text-center">
                     @if($salida->checklistEntrada)
-                        <span class="badge bg-success">✔ Registrado</span>
+                        <span class="badge bg-success">Registrado</span>
                     @elseif($salida->checklistSalida)
                         <a href="{{ route('salidas.checklist.entrada.create',$salida->id) }}"
                            class="btn btn-sm btn-warning">
@@ -58,21 +61,19 @@
                 </td>
 
                 {{-- ACCIONES --}}
-                <td>
+
+                        <td>
+                            <a href="{{ route('salidas.salidas.checklist.pdf',$salida->id) }}" target="_blank"class="btn btn-sm btn-danger">PDF </a>
+                        </td>
+                    <td>
                     {{-- SALIDA --}}
                     @if($salida->checklistSalida)
-                        <a href="{{ route('salidas.checklist.show',[$salida->id,'salida']) }}"
-                           class="btn btn-sm btn-info">
-                            Ver salida
-                        </a>
-
-                        <a href="{{ route('salidas.checklist.pdf',[$salida->id,'salida']) }}"
-                           target="_blank"
-                           class="btn btn-sm btn-danger">
-                            PDF salida
-                        </a>
+                        <a href="{{ route('salidas.checklist.show',[$salida->id,'salida']) }}"class="btn btn-sm btn-info">Ver salida</a>
+                    </td>
                     @endif
+                </td> 
 
+                <td>
                     {{-- ENTRADA --}}
                     @if($salida->checklistEntrada)
                         <a href="{{ route('salidas.checklist.show',[$salida->id,'entrada']) }}"
@@ -80,11 +81,6 @@
                             Ver entrada
                         </a>
 
-                        <a href="{{ route('salidas.checklist.pdf',[$salida->id,'entrada']) }}"
-                           target="_blank"
-                           class="btn btn-sm btn-secondary">
-                            PDF entrada
-                        </a>
                     @endif
                 </td>
             </tr>

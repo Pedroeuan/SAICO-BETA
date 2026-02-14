@@ -9,7 +9,7 @@ use App\Models\User;
 class SalidaVehiculo extends Model
 {
     //
-    protected $table = 'salidas_vehiculo';
+    protected $table = 'salidas_vehiculos';
 
     protected $fillable =[
         'vehiculo_id',
@@ -20,25 +20,36 @@ class SalidaVehiculo extends Model
         'motivo',
         'estatus',
     ];
-    public function vehiculo(){
+
+    protected $casts=[
+        'fecha_salida' =>'datetime',
+        'fecha_regreso' =>'datetime',
+    ];
+
+    public function vehiculo()
+    {
         return $this->belongsTo(Vehiculo::class);
     }
-    public function chofer(){
+
+    public function chofer()
+    {
         return $this->belongsTo(User::class,'chofer_id');
     }
-    public function solicitante(){
+    public function solicitante()
+    {
         return $this->belongsTo(User::class,'solicitado_por');//f
     }
-    public function checklists(){
-        return $this->hasMany(\App\Models\Vehiculos\Checklist\SalidaChecklist::class,'salida_vehiculo_id');
-    }
-    public function getChecklistSalidaAttribute(){
-        return $this->checklists()->where('tipo', 'salida')->with('condicion')->first();
-        }
 
-    public function getChecklistEntradaAttribute()
+    public function checklistSalida()
     {
-    return $this->checklists->where('tipo', 'entrada')->first();
+        return $this->hasOne(SalidaChecklist::class)->where('tipo', 'salida');
     }
 
+    public function checklistEntrada()
+    {
+    return $this->hasOne(SalidaChecklist::class)->where('tipo', 'entrada');
+    }
+    public function checklist(){
+        return $this->hasMany(SalidaChecklist::class,'salida_vehiculo_id');
+    }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('checklist_documentos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('salida_checklist_id')->constrained('salidas_checklists')->cascadeOnDelete();
-            $table->enum('documento',['licencia_conducir','tarjeta_circulacion','poliza_seguro']);
+            $table->string('documento');
             $table->enum('estatus',['ok','vencido']);
             $table->timestamps();
         });

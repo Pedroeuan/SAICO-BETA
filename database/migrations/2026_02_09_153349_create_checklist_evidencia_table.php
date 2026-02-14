@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('salidas_checklists', function (Blueprint $table) {
+        Schema::create('checklist_evidencia', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('salida_vehiculo_id')->constrained()->cascadeOnDelete();
-            $table->enum('tipo',['salida','entrada']);
+            $table->foreignId('salida_checklist_id')->constrained('salidas_checklists')->onDelete('cascade');
+            $table->string('foto');
             $table->timestamps();
-            $table->unique(['salida_vehiculo_id','tipo']);
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('salidas_checklists');
+        Schema::dropIfExists('checklist_evidencia');
     }
 };

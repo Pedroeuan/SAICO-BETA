@@ -609,7 +609,7 @@ use App\Http\Controllers\Vehiculos\SalidaChecklistController; //accesso a checkl
     Route::get('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'createEntrada'])->name('checklist.entrada.create');
     Route::post('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'storeEntrada'])->name('checklist.entrada.store');
     Route::get('/{salida}/checklist/{tipo}',[SalidaChecklistController::class, 'show'])->name('checklist.show'); //ruta detalle
-    Route::get('/{salida}/checklist/{tipo}/pdf',[SalidaChecklistController::class,'pdf'])->name('checklist.pdf'); //generar pdf
+    Route::get('/{salida}/checklist.pdf',[SalidaChecklistController::class,'pdf'])->name('salidas.checklist.pdf'); //generar pdf
     });
     
     

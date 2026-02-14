@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('checklist_condiciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('salida_checklist_id')->constrained('salida_checklists')->cascadeOnDelete();
-
             $table->string('nivel_gasolina');
             $table->integer('kilometraje');
             $table->boolean('limpio_exterior');

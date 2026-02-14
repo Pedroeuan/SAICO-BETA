@@ -14,8 +14,24 @@ class Vehiculo extends Model
         'anio',
         'estatus',
     ];
-    public function salida()
+    
+    public function salidas()
     {
         return $this->hasMany(SalidaVehiculo::class);
+    }
+
+    public function salidaActiva()
+    {
+        return $this->hasOne(SalidaVehiculo::class)->where('estatus','activo');
+
+    }
+    public function getEstadoAttribute()
+    {
+        if($this->estatus === 'inactivo') {
+            return 'inactivo';
+            }
+            
+        return $this->salidaActiva ? 'ocupado' : 'disponible';
+
     }
 }
