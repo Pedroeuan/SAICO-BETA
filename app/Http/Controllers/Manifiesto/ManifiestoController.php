@@ -302,9 +302,11 @@ class ManifiestoController extends Controller
     /*BOTON FINALIZAR MANFIESTO DE PRE-MANIFIESTO.BLADE */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
         $request->validate([
-            'Cliente' => 'required|exists:clientes,Cliente', // 'required' asegura que no esté vacío
+            'cliente_tipo' => 'required',
+            'Cliente' => 'required_if:cliente_tipo,si|nullable|string|max:255',
+            'Cliente_manual' => 'required_if:cliente_tipo,no|nullable|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
             'Fecha_Salida' => 'required|date',
@@ -419,28 +421,38 @@ class ManifiestoController extends Controller
                 }
             }
         }
-        //Si el campo Cliente viene en la petición y NO está vacío”
-            if ($request->filled('Cliente')) 
-            { 
-                $Manifiestos = new manifiesto;
-                $Manifiestos->idSolicitud = $request->input('idSolicitud');
-                $Manifiestos->Cliente = $request->input('Cliente');
-                $Manifiestos->Folio = $request->input('Folio');
-                $Manifiestos->Destino = $request->input('Destino');
-                $Manifiestos->Trabajo = $request->input('Trabajo');
-                $Manifiestos->Puesto = $request->input('Puesto');
-                $Manifiestos->Responsable = $request->input('Responsable');
-                $Manifiestos->Entrega = $request->input('Entrega_Nombre');
-                $Manifiestos->ScanPDF = $EsperaDato;
-                $Manifiestos->SATBMPRO = $SATBMPRO;
-                if($request->input('Observaciones')==null)
-                {
-                    $Manifiestos->Observaciones = '-----';
-                }else{
-                    $Manifiestos->Observaciones = $request->input('Observaciones');
-                }
-                $Manifiestos->save();
-            }
+
+        $clienteNombre = $request->input('cliente_tipo') === 'si' ? $request->input('Cliente'): $request->input('Cliente_manual');
+
+
+        // Verificar si el cliente ya existe
+        $clienteExistente = clientes::where('Cliente', $clienteNombre)->first();
+
+        if (!$clienteExistente) {
+
+            $NewCliente = new clientes();
+            $NewCliente->Cliente = $clienteNombre;
+            $NewCliente->RFC = $EsperaDato;
+            $NewCliente->Telefono = $EsperaDato;
+            $NewCliente->Correo = $EsperaDato;
+            $NewCliente->save();
+        }
+
+        // Crear manifiesto
+        $Manifiestos = new manifiesto;
+        $Manifiestos->idSolicitud = $request->input('idSolicitud');
+        $Manifiestos->Cliente = $clienteNombre;
+        $Manifiestos->Folio = $request->input('Folio');
+        $Manifiestos->Destino = $request->input('Destino');
+        $Manifiestos->Trabajo = $request->input('Trabajo');
+        $Manifiestos->Puesto = $request->input('Puesto');
+        $Manifiestos->Responsable = $request->input('Responsable');
+        $Manifiestos->Entrega = $request->input('Entrega_Nombre');
+        $Manifiestos->ScanPDF = $EsperaDato;
+        $Manifiestos->SATBMPRO = $SATBMPRO;
+        $Manifiestos->Observaciones = $request->input('Observaciones') ?? '-----';
+        $Manifiestos->save();
+
 
         return redirect()->route('solicitud.index');
     }
