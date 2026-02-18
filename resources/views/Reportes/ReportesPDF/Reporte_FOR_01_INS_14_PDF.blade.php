@@ -125,10 +125,11 @@
             width: 100%;
             text-align: center;
             font-size: 8px;
+            border: 1px solid black; 
         }
 
         .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
+            border: .5px solid black; 
         }
         .celdaGris{
             background-color: #DBDBDB;
@@ -368,7 +369,8 @@
                         </thead>                            
                     </table>
             </footer>
-@foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+
+            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
             <div class="content">
                 
                 <div style="margin-bottom: 0px;"></div>
@@ -703,12 +705,11 @@
                             </tr>                               
                         </thead>
                             <tbody>
-                            
-
+                                
                                 {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
-                                        <td colspan="14" style="border:2px solid black; font-weight:bold;">
+                                        <td colspan="14" style="border:.5px solid black;">
                                             {{ $grupo['titulos_juntas'] }}
                                         </td>
                                     </tr>
@@ -735,8 +736,11 @@
                                 @endforeach
 
                                 {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="sinBordetd">
-                                    <td colspan="5"></td>
+                                <tr class="">
+                                    <td colspan="9"><b>SIR</b>= Sin indicaciones Relevantes <b>L</b>= Indicacion Lineal <b>R</b>= Indicacion Redondeada <b>A</b>= Aceptado 
+                                    <b>R</b>= Rechazado <br> <b>FP</b>= Falta de Penetracion <b>FF</b>= Falta de Fusion <b>P</b>= Poros <b>PA</b>= Poros Agrupados
+                                    <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
+                                    </td>
                                     <th colspan="3">Longitud inspeccionada:</th>
                                     <th colspan="2">
                                         {{ $grupo['Long_Inspecc'][0] ?? '---' }} m

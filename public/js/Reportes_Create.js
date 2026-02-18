@@ -228,11 +228,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
                         
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
+                            <input type="checkbox"
+                                class="form-check-input imagen-hoja-checkbox"
+                                data-index="${i}"
+                                id="imagenHoja${i}">
                             <label class="form-check-label" for="imagenHoja${i}">
                                 Imagen en una hoja
                             </label>
                         </div>
+
+                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
 
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
@@ -242,7 +247,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 container.appendChild(col);
             }
-            
+            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
+                });
+            });
+
             // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {

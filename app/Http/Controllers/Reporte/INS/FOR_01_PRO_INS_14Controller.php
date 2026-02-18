@@ -546,14 +546,11 @@ class FOR_01_PRO_INS_14Controller extends Controller
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
-        if ($request->TieneContrato === "no") 
-            {
-                $clienteInput = $validatedData['Detalles_Generales']['Cliente'] ?? null;
-                
-            }else {
-                // Si el frontend envió un cliente válido, se utiliza ese
-                $validatedData['Detalles_Generales']['Cliente'] = $clienteInput;
-            }
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
         // ==========================
         // Lógica para manejar Contrato
         // ==========================
@@ -757,6 +754,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
             ];
         }
 
@@ -1169,7 +1167,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
-
+        $imagenHoja = $request->input('imagen_hoja', []);
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
@@ -1218,6 +1216,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
@@ -1236,6 +1235,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -1245,6 +1245,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $ruta;
                 }
@@ -1253,6 +1254,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         // **3️⃣ Procesar nuevas imágenes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
+            if (isset($existingImages[$index])) {
+                continue; // ⛔ ya fue procesada arriba
+            }
+
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
@@ -1267,6 +1272,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -1381,7 +1387,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
+                    'comment' => $foto['comentario'] ?? '',
+                    'una_hoja'  => $foto['una_hoja'] ?? 0, // 👈 CLAVE
                 ];
             }
         }

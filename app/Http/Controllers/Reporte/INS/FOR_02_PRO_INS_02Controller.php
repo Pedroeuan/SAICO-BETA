@@ -430,7 +430,17 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
-                // Lógica para manejar el campo Contrato
+
+        // ==========================
+        // Lógica para manejar Cliente
+        // ==========================
+                if ($request->TieneCliente === 'si') {
+                        $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+                } else {
+                        $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+                }
+        
+        // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 
             // Si el usuario alteró el valor o no llegó, se recalcula en backend
@@ -462,6 +472,8 @@ class FOR_02_PRO_INS_02Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
+
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -476,19 +488,34 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $titulos = $request->input('titulos', []);
+
+
+                //$titulos = $request->input('titulos', []);
+        // Recuperar 'titulos_data' (JSON con [{id,text},...])
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
         $datosAgrupados = [];
 
          // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("componente.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
+        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 13;
+
+        if (!empty($filasSinTitulo)) {
+
+            $totalFilas = count($filasSinTitulo);
+            $contadorBloque = 1;
+
+            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+
+                $resultados = [];
+
+                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
+
+                    $resultados[] = [
                     'componente' => $request->input("componente.$sinTituloKey.$i"),
                     'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
@@ -498,20 +525,31 @@ class FOR_02_PRO_INS_02Controller extends Controller
                     'ht' => $request->input("ht.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
                     'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$sinTituloKey.$i"),
+                    ];
+                }
+
+                // tomar la longitud correspondiente al bloque
+                //$longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+                $indexLong = floor($offset / $maxFilasPorBloque);
+
+                $longBloque = $longitudesSin[$indexLong] ?? null;
+
+                $datosAgrupados[] = [
+                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
+                    'resultados'     => $resultados,
+                    'Long_Inspecc'   => [$longBloque],
                 ];
+
+                $contadorBloque++;
             }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("componente.$tituloKey", []);
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
+
+            $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -529,10 +567,13 @@ class FOR_02_PRO_INS_02Controller extends Controller
                     'longitud_inspeccionada' => $request->input("longitud_inspeccionada.$tituloKey.$i"),
                 ];
             }
-        
+
+            // Obtener longitud inspeccionada asociada a este título (si existe)
+            $long = $request->input("Long_Inspecc.$tituloKey", null);
             $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
+                'resultados' => $resultados,
+                'Long_Inspecc' => $long,
             ];
         }
         
@@ -701,6 +742,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'componente' => 'nullable|array',
             'no_ind' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
