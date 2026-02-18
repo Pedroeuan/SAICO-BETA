@@ -480,7 +480,9 @@ class ManifiestoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Cliente' => 'required|string|max:255',
+            'cliente_tipo' => 'required',
+            'Cliente' => 'required_if:cliente_tipo,si|nullable|string|max:255',
+            'Cliente_manual' => 'required_if:cliente_tipo,no|nullable|string|max:255',
             'Folio' => 'required|string|max:255',
             'Destino' => 'required|string|max:255',
             'Fecha_Salida' => 'required|date',
@@ -498,6 +500,7 @@ class ManifiestoController extends Controller
         $Estatus ='MANIFIESTO';
         $Tipo = ['SALIDA', 'EN RENTA'];
         $NO_DISPONIBLE = 'NO DISPONIBLE';
+        $EsperaDato ='ESPERA DE DATO';
         // Capturar el valor del switch
         $Renta_Salida = $request->has('Renta') ? 'EN RENTA' : 'SALIDA';
         $SATBMPRO = $request->has('SATBMPRO') ? 'SI' : 'NO';
@@ -669,9 +672,24 @@ class ManifiestoController extends Controller
                 $Manifiestos = manifiesto::where('idSolicitud', $id)->first();
                 if($Manifiestos)
                 {
+                    $clienteNombre = $request->input('cliente_tipo') === 'si' ? $request->input('Cliente'): $request->input('Cliente_manual');
+
+                    // Verificar si el cliente ya existe
+                    $clienteExistente = clientes::where('Cliente', $clienteNombre)->first();
+
+                    if (!$clienteExistente) {
+
+                        $NewCliente = new clientes();
+                        $NewCliente->Cliente = $clienteNombre;
+                        $NewCliente->RFC = $EsperaDato;
+                        $NewCliente->Telefono = $EsperaDato;
+                        $NewCliente->Correo = $EsperaDato;
+                        $NewCliente->save();
+                    }
+                    
                     $Manifiestos->update([
                         'idSolicitud' => $request->input('idSolicitud'),
-                        'Cliente' =>$request->input('Cliente'),
+                        'Cliente' =>$clienteNombre,
                         'Folio' =>$request->input('Folio'),
                         'Destino' =>$request->input('Destino'),
                         'Trabajo' =>$request->input('Trabajo'),
