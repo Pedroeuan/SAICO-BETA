@@ -9,12 +9,31 @@
     <form method="POST" action="{{ route('salidas.store') }}">
         @csrf
 
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        @if(session('warning'))
+            <div class="alert alert-warning">{{ session('warning') }}</div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="mb-2">
             <label>Vehículo</label>
             <select name="vehiculo_id" class="form-control" required>
                 <option value="">Seleccione</option>
                 @foreach($vehiculos as $vehiculo)
-                    <option value="{{ $vehiculo->id }}">
+                    <option value="{{ $vehiculo->id }}" {{ old('vehiculo_id') == $vehiculo->id ? 'selected' : '' }}>
                         {{ $vehiculo->placa }} - {{ $vehiculo->marca }}
                     </option>
                 @endforeach
@@ -23,39 +42,94 @@
 
         <div class="mb-2">
             <label>Chofer</label>
-            <select name="chofer_id" class="form-control" required>
+            <select name="chofer_id" id="chofer_id" class="form-control" required>
                 <option value="">Seleccione</option>
                 @foreach($usuarios as $usuario)
-                    <option value="{{ $usuario->id }}">
+                    <option value="{{ $usuario->id }}" data-rol="{{ $usuario->rol }}" data-licencia="{{ $usuario->licencia_vencimiento }}" {{ old('chofer_id') == $usuario->id ? 'selected' : '' }}>
                         {{ $usuario->name }}
                     </option>
                 @endforeach
             </select>
+            <div id="chofer-alert" class="mt-2"></div>
         </div>
 
         <div class="mb-2">
             <label>Solicitado por</label>
-            <select name="solicitado_por" class="form-control" required>
+            <select name="solicitado_por" id="solicitado_por" class="form-control" required>
                 @foreach($usuarios as $usuario)
-                    <option value="{{ $usuario->id }}">
+                    <option value="{{ $usuario->id }}" data-rol="{{ $usuario->rol }}" data-licencia="{{ $usuario->licencia_vencimiento }}" {{ old('solicitado_por') == $usuario->id ? 'selected' : '' }}>
                         {{ $usuario->name }}
                     </option>
                 @endforeach
             </select>
+            <div id="solicitante-alert" class="mt-2"></div>
         </div>
 
         <div class="mb-2">
             <label>Fecha salida</label>
-            <input type="datetime-local" name="fecha_salida" class="form-control" required>
+            <input type="datetime-local" name="fecha_salida" class="form-control" required value="{{ old('fecha_salida') }}">
         </div>
 
         <div class="mb-2">
             <label>Motivo</label>
-            <textarea name="motivo" class="form-control"></textarea>
+            <textarea name="motivo" class="form-control">{{ old('motivo') }}</textarea>
         </div>
 
         <button class="btn btn-success mt-3">Guardar salida</button>
         <a href="{{ route('salidas.index') }}" class="btn btn-secondary mt-3">Cancelar</a>
     </form>
 </div>
+@endsection
+
+@section('js')
+<script>
+    function formatAlert(message, type = 'danger'){
+        return `<div class="alert alert-${type}" role="alert">${message}</div>`;
+    }
+
+    function checkLicense(licencia){
+        if (!licencia) return {ok:false, text:'Sin fecha de licencia registrada'};
+        const d = new Date(licencia);
+        if (isNaN(d.getTime())) return {ok:false, text:'Fecha de licencia inválida'};
+        return {ok: d > new Date(), text: d > new Date() ? 'Licencia vigente' : 'Licencia vencida'};
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const choferSelect = document.getElementById('chofer_id');
+        const solicitanteSelect = document.getElementById('solicitado_por');
+        const choferAlert = document.getElementById('chofer-alert');
+        const solicitanteAlert = document.getElementById('solicitante-alert');
+
+        function evalChofer(){
+            const opt = choferSelect.selectedOptions[0];
+            if (!opt || !opt.value) { choferAlert.innerHTML = ''; return; }
+            const licencia = opt.dataset.licencia || '';
+            const res = checkLicense(licencia);
+            if (!res.ok) {
+                choferAlert.innerHTML = formatAlert(' ' + res.text + '. No recomendable asignar como chofer.');
+            } else {
+                choferAlert.innerHTML = formatAlert(' ' + res.text, 'success');
+            }
+        }
+
+        function evalSolicitante(){
+            const opt = solicitanteSelect.selectedOptions[0];
+            if (!opt || !opt.value) { solicitanteAlert.innerHTML = ''; return; }
+            const rol = (opt.dataset.rol || '').toLowerCase();
+            // Regla por defecto: usuarios con rol 'cliente' no pueden solicitar
+            if (rol === 'cliente') {
+                solicitanteAlert.innerHTML = formatAlert(' Este usuario no tiene permiso para solicitar vehículos.');
+            } else {
+                solicitanteAlert.innerHTML = formatAlert(' Este usuario puede solicitar vehículos.', 'success');
+            }
+        }
+
+        choferSelect.addEventListener('change', evalChofer);
+        solicitanteSelect.addEventListener('change', evalSolicitante);
+
+        // evaluar estado inicial si ya hay selección
+        evalChofer();
+        evalSolicitante();
+    });
+</script>
 @endsection

@@ -64,36 +64,38 @@
         <label>Nivel de gasolina</label>
         <select name="nivel_gasolina" class="form-control" required>
             <option value="">Seleccione</option>
-            <option value="Lleno">Lleno</option>
-            <option value="3/4">3/4</option>
-            <option value="1/2">1/2</option>
-            <option value="1/4">1/4</option>
-            <option value="Vacío">Vacío</option>
+            <option value="Lleno" {{ old('nivel_gasolina', $defaultNivel ?? '') == 'Lleno' ? 'selected' : '' }}>Lleno</option>
+            <option value="3/4" {{ old('nivel_gasolina', $defaultNivel ?? '') == '3/4' ? 'selected' : '' }}>3/4</option>
+            <option value="1/2" {{ old('nivel_gasolina', $defaultNivel ?? '') == '1/2' ? 'selected' : '' }}>1/2</option>
+            <option value="1/4" {{ old('nivel_gasolina', $defaultNivel ?? '') == '1/4' ? 'selected' : '' }}>1/4</option>
+            <option value="Vacío" {{ old('nivel_gasolina', $defaultNivel ?? '') == 'Vacío' ? 'selected' : '' }}>Vacío</option>
         </select>
     </div>
 
     <div class="mb-3">
         <label>Kilometraje</label>
-        <input type="number" name="kilometraje" class="form-control" required>
+        <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje', $defaultKilometraje ?? '') }}">
     </div>
 
     <div class="custom-control custom-switch mb-2">
+        <input type="hidden" name="limpio_exterior" value="0">
         <input type="checkbox"
                class="custom-control-input"
                id="limpio_exterior"
                name="limpio_exterior"
-               value="1">
+               value="1" {{ old('limpio_exterior') == '1' ? 'checked' : '' }}>
         <label class="custom-control-label" for="limpio_exterior">
             Limpio Exterior
         </label>
     </div>
 
     <div class="custom-control custom-switch mb-3">
+        <input type="hidden" name="limpio_interior" value="0">
         <input type="checkbox"
                class="custom-control-input"
                id="limpio_interior"
                name="limpio_interior"
-               value="1">
+               value="1" {{ old('limpio_interior') == '1' ? 'checked' : '' }}>
         <label class="custom-control-label" for="limpio_interior">
             Limpio Interior
         </label>
@@ -103,7 +105,9 @@
         <label>Observaciones</label>
         <textarea name="observaciones" class="form-control"></textarea>
     </div>
-
+    <div class="text-end">
+    <button type="button" class="btn btn-primary" onclick="nextTab(2)">Siguiente <i class="fas fa-arrow-right"></i></button>
+    </div>
 </div>
 
 <div class="tab-pane fade" id="tab2">
@@ -127,13 +131,17 @@ $herramientas = [
                class="custom-control-input"
                id="{{ $key }}"
                name="herramientas[{{ $key }}]"
-               value="1">
+               value="1" {{ old('herramientas.'.$key) ? 'checked' : '' }}>
         <label class="custom-control-label" for="{{ $key }}">
             {{ $label }}
         </label>
     </div>
+    
 </div>
 @endforeach
+<div class="text-end mt-3">
+    <button type="button" class="btn btn-primary" onclick="nextTab(3)">Siguiente <i class="fas fa-arrow-right"></i></button>
+</div>
 </div>
 
 </div>
@@ -148,35 +156,41 @@ $documentos = [
 ];
 @endphp
 
-@foreach($documentos as $key => $label)
-<div class="mb-3">
-    <label><strong>{{ $label }}</strong></label>
-
-    <div class="custom-control custom-radio">
-        <input type="radio"
-               id="{{ $key }}_ok"
-               name="documentos[{{ $key }}]"
-               value="ok"
-               class="custom-control-input"
-               required>
-        <label class="custom-control-label" for="{{ $key }}_ok">
-            Vigente
-        </label>
+    <div class="mb-3">
+        <label><strong>Licencia de conducir (chofer)</strong></label>
+        <div>
+            @if(isset($licenciaVigente) && $licenciaVigente)
+                <span class="badge bg-success">Vigente</span>
+            @else
+                <span class="badge bg-danger">Vencida / No registrada</span>
+            @endif
+        </div>
     </div>
 
-    <div class="custom-control custom-radio">
-        <input type="radio"
-               id="{{ $key }}_vencido"
-               name="documentos[{{ $key }}]"
-               value="vencido"
-               class="custom-control-input">
-        <label class="custom-control-label" for="{{ $key }}_vencido">
-            Vencido
-        </label>
+    <div class="mb-3">
+        <label><strong>Tarjeta de circulación (vehículo)</strong></label>
+        <div>
+            @if(isset($tarjetaVigente) && $tarjetaVigente)
+                <span class="badge bg-success">Vigente</span>
+            @else
+                <span class="badge bg-danger">Vencida / No registrada</span>
+            @endif
+        </div>
     </div>
+
+    <div class="mb-3">
+        <label><strong>Póliza de seguro (vehículo)</strong></label>
+        <div>
+            @if(isset($polizaVigente) && $polizaVigente)
+                <span class="badge bg-success">Vigente</span>
+            @else
+                <span class="badge bg-danger">Vencida / No registrada</span>
+            @endif
+        </div>
+    </div>
+<div class="text-end mt-3">
+    <button type="button" class="btn btn-primary" onclick="nextTab(4)">Siguiente <i class="fas fa-arrow-right"></i></button>
 </div>
-@endforeach
-
 </div>
 
 <div class="tab-pane fade" id="tab4">
@@ -188,24 +202,25 @@ $documentos = [
            multiple
            accept="image/*"
            required>
-
+<div class="text-end mt-3">
+    <button type="submit" class="btn btn-success">Guardar Checklist</button>
+    <a href="{{ route('salidas.index') }}" class="btn btn-secondary">Cancelar</a>
+</div>
 </div>
 
 </div>
 </div>
-</div>
-
-<div class="text-center mt-3">
-    <button class="btn btn-success btn-lg">
-        Guardar Checklist
-    </button>
-    <a href="{{ route('salidas.index') }}"
-       class="btn btn-secondary btn-lg">
-        Cancelar
-    </a>
 </div>
 
 </form>
 </div>
-
+<script>
+function nextTab(tabNum) {
+    // Compatible con Bootstrap 4/5
+    document.querySelectorAll('.nav-pills .nav-link').forEach(function(el){el.classList.remove('active');});
+    document.querySelectorAll('.tab-pane').forEach(function(el){el.classList.remove('show','active');});
+    document.querySelector('.nav-pills .nav-link[href="#tab'+tabNum+'"]').classList.add('active');
+    document.getElementById('tab'+tabNum).classList.add('show','active');
+}
+</script>
 @endsection

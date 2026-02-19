@@ -107,6 +107,28 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <hr>
+
+                        <h5>Documentación para Vehículos</h5>
+                        <div class="form-group">
+                            <label>Número de Licenica</label>
+                            <input type="text" name="licencia_numero" class="form-control" placeholder="Número de licencia">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimeinto licencia</label>
+                            <input type="date" name="licencia_vencimeinto" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Subir PDF Licencia</label>
+                            <input type="file" name="licencia_pdf" class="form_control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subir CV (PDF)</label>
+                            <input type="file" name="cv_pdf" class="form-cotrol" accept="application/pdf">
+                        </div>
 
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Registrar">

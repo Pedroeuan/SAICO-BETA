@@ -98,7 +98,7 @@ class User extends Authenticatable
             $hoy = Carbon::now();
 
             //si esta vencida 
-            if($fechaVencimiento->it($hoy)){
+            if($fechaVencimiento->lt($hoy)){
                 $user->licencia_estatus ='vencida';
             }else{
                 $user->licencia_estatus = 'vigente';

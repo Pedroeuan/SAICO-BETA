@@ -15,7 +15,38 @@ class VehiculoController extends Controller
     public function index()
     {
         $vehiculos = Vehiculo::orderBy('id', 'desc')->get();
-        return view('vehiculos.index', compact('vehiculos'));
+
+        // Estadísticas y alertas
+        $totalVehiculos = Vehiculo::count();
+        $disponibles = Vehiculo::where('estatus', 'disponible')->count();
+        $ocupados = Vehiculo::where('estatus', 'ocupado')->count();
+        $vencidos = Vehiculo::where('documentacion_estatus', 'vencida')->count();
+
+        // Alertas de documentación
+        $documentosVencidos = Vehiculo::where('documentacion_estatus', 'vencida')->get();
+        
+        $proximo15dias = \Carbon\Carbon::now()->addDays(15);
+        $documentosProximoVencer = Vehiculo::where('documentacion_estatus', 'completa')
+            ->where(function($q) use ($proximo15dias) {
+                $q->whereBetween('poliza_seguro_vencimiento', [\Carbon\Carbon::now(), $proximo15dias])
+                  ->orWhereBetween('tarjeta_circulacion_vencimiento', [\Carbon\Carbon::now(), $proximo15dias]);
+            })
+            ->get();
+
+        $documentosSinRegistrar = Vehiculo::where('documentacion_estatus', 'incompleta')->get();
+        $vencidosCount = $vencidos;
+
+        return view('vehiculos.index', compact(
+            'vehiculos',
+            'totalVehiculos',
+            'disponibles',
+            'ocupados',
+            'vencidos',
+            'documentosVencidos',
+            'documentosProximoVencer',
+            'documentosSinRegistrar',
+            'vencidosCount'
+        ));
     }
 
     /**
@@ -30,11 +61,36 @@ class VehiculoController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(VehiculoRequest $request)
-{
-    Vehiculo::create($request->validated());
+    {
+        $data = $request->validated();
 
-    return redirect()->route('vehiculos.index')->with('success', 'Vehículo registrado correctamente');
-}
+        // crear vehículo sin archivos primero
+        $vehiculo = Vehiculo::create(
+            array_merge($data, ['kilometraje_actual' => $data['kilometraje_actual'] ?? 0])
+        );
+
+        // almacenar PDFs en carpeta organizada
+        if ($request->hasFile('poliza_seguro_pdf')) {
+            $path = $request->file('poliza_seguro_pdf')->store("vehiculos/{$vehiculo->id}/poliza", 'public');
+            $vehiculo->poliza_seguro_pdf = $path;
+        }
+        if ($request->hasFile('tarjeta_circulacion_pdf')) {
+            $path = $request->file('tarjeta_circulacion_pdf')->store("vehiculos/{$vehiculo->id}/tarjeta", 'public');
+            $vehiculo->tarjeta_circulacion_pdf = $path;
+        }
+
+        // fechas
+        if ($request->filled('poliza_seguro_vencimiento')) {
+            $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
+        }
+        if ($request->filled('tarjeta_circulacion_vencimiento')) {
+            $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
+        }
+
+        $vehiculo->save();
+
+        return redirect()->route('vehiculos.index')->with('success', 'Vehículo registrado correctamente');
+    }
 
 
 
@@ -59,9 +115,32 @@ class VehiculoController extends Controller
      * Update the specified resource in storage.
      */
     public function update(VehiculoRequest $request, $id)
-    { 
+    {
         $vehiculo = Vehiculo::findOrFail($id);
-        $vehiculo->update($request->validated());
+
+        $data = $request->validated();
+
+        // actualizar campos básicos
+        $vehiculo->update($data);
+
+        // archivos
+        if ($request->hasFile('poliza_seguro_pdf')) {
+            $path = $request->file('poliza_seguro_pdf')->store("vehiculos/{$vehiculo->id}/poliza", 'public');
+            $vehiculo->poliza_seguro_pdf = $path;
+        }
+        if ($request->hasFile('tarjeta_circulacion_pdf')) {
+            $path = $request->file('tarjeta_circulacion_pdf')->store("vehiculos/{$vehiculo->id}/tarjeta", 'public');
+            $vehiculo->tarjeta_circulacion_pdf = $path;
+        }
+
+        if ($request->filled('poliza_seguro_vencimiento')) {
+            $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
+        }
+        if ($request->filled('tarjeta_circulacion_vencimiento')) {
+            $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
+        }
+
+        $vehiculo->save();
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehiculo actualizado');
 

@@ -34,6 +34,12 @@ class VehiculoRequest extends FormRequest
             'anio'    => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'estatus' => 'required|in:disponible,ocupado,inactivo',
 
+            // Documentación del vehículo
+            'poliza_seguro_pdf' => 'nullable|file|mimes:pdf|max:5120',
+            'poliza_seguro_vencimiento' => 'nullable|date',
+            'tarjeta_circulacion_pdf' => 'nullable|file|mimes:pdf|max:5120',
+            'tarjeta_circulacion_vencimiento' => 'nullable|date',
+
         ];
     }
 

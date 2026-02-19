@@ -8,6 +8,7 @@ use App\Models\Vehiculos\Checklist\SalidaChecklist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 
 class SalidaChecklistController extends Controller
@@ -18,7 +19,41 @@ class SalidaChecklistController extends Controller
         if ($salida->checklistSalida) {
             return redirect()->route('salidas.index')->with('error', 'Este vehiculo ya tiene checklist de salida');
         }
-        return view('salidas.checklist.salida', compact('salida'));
+        // vlidacion
+        $chofer = $salida->chofer;
+
+        $licenciaVigente = false;
+
+        if ($chofer && $chofer->licencia_vencimiento) {
+            $licenciaVigente = Carbon::parse($chofer->licencia_vencimiento)->isFuture();
+        }
+
+        // estados de documentación del vehículo
+        $vehiculo = $salida->vehiculo;
+        $tarjetaVigente = false;
+        $polizaVigente = false;
+        if ($vehiculo) {
+            if ($vehiculo->tarjeta_circulacion_vencimiento) {
+                $tarjetaVigente = Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->isFuture();
+            }
+            if ($vehiculo->poliza_seguro_vencimiento) {
+                $polizaVigente = Carbon::parse($vehiculo->poliza_seguro_vencimiento)->isFuture();
+            }
+        }
+
+        // valores por defecto desde la última entrada registrada para este vehículo
+        $ultimaCondicion = SalidaChecklist::whereHas('salida', function($q) use ($salida){
+            $q->where('vehiculo_id', $salida->vehiculo_id);
+        })->where('tipo', 'entrada')->with('condicion')->orderByDesc('id')->first();
+
+        $defaultNivel = null;
+        $defaultKilometraje = null;
+        if ($ultimaCondicion && $ultimaCondicion->condicion) {
+            $defaultNivel = $ultimaCondicion->condicion->nivel_gasolina;
+            $defaultKilometraje = $ultimaCondicion->condicion->kilometraje;
+        }
+
+        return view('salidas.checklist.salida', compact('salida', 'licenciaVigente', 'tarjetaVigente', 'polizaVigente', 'defaultNivel', 'defaultKilometraje'));
     }
 
     public function store(Request $request, SalidaVehiculo $salida)
@@ -26,10 +61,10 @@ class SalidaChecklistController extends Controller
         $request->validate([
             'nivel_gasolina'  => 'required|string',
             'kilometraje'     => 'required|integer|min:0',
-            'limpio_exterior' => 'required|in:0,1',
-            'limpio_interior' => 'required|in:0,1',
+            'limpio_exterior' => 'nullable|in:0,1',
+            'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
-            'herramientas'    => 'required|array',
+            'herramientas'    => 'nullable|array',
             'evidencias' => 'required|array|min:5',
             'evidencias.*' => 'image|max:5120',
 
@@ -47,20 +82,47 @@ class SalidaChecklistController extends Controller
             $checklist->condicion()->create([
                 'nivel_gasolina'  => $request->nivel_gasolina,
                 'kilometraje'     => $request->kilometraje,
-                'limpio_exterior' => $request->limpio_exterior,
-                'limpio_interior' => $request->limpio_interior,
+                'limpio_exterior' => $request->input('limpio_exterior', 0),
+                'limpio_interior' => $request->input('limpio_interior', 0),
                 'observaciones'   => $request->observaciones,
             ]);
 
-            if ($request->has('documentos')) {
-                foreach ($request->documentos as $documento => $estatus) {
-                    $checklist->documentos()->create(['documento' => $documento, 'estatus' => $estatus,]);
-                }
+            // Documentos: determinar automáticamente a partir del chofer y vehículo
+            $chofer = $salida->chofer;
+            $vehiculo = $salida->vehiculo;
+
+            $licenciaEstatus = 'vencido';
+            if ($chofer && $chofer->licencia_vencimiento && Carbon::parse($chofer->licencia_vencimiento)->isFuture()) {
+                $licenciaEstatus = 'ok';
             }
 
-            //  Guardar herramientas
-            foreach ($request->herramientas as $herramienta => $disponible) {
-                $checklist->herramientas()->create(['herramienta' => $herramienta, 'disponible'  => $disponible,]);
+            $tarjetaEstatus = 'vencido';
+            if ($vehiculo && $vehiculo->tarjeta_circulacion_vencimiento && Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->isFuture()) {
+                $tarjetaEstatus = 'ok';
+            }
+
+            $polizaEstatus = 'vencido';
+            if ($vehiculo && $vehiculo->poliza_seguro_vencimiento && Carbon::parse($vehiculo->poliza_seguro_vencimiento)->isFuture()) {
+                $polizaEstatus = 'ok';
+            }
+
+            $autoDocs = [
+                'licencia_conducir' => $licenciaEstatus,
+                'tarjeta_circulacion' => $tarjetaEstatus,
+                'poliza_seguro' => $polizaEstatus,
+            ];
+
+            foreach ($autoDocs as $documento => $estatus) {
+                $checklist->documentos()->create(['documento' => $documento, 'estatus' => $estatus]);
+            }
+
+            //  Guardar herramientas (incluir no marcados como 0)
+            $herramientasList = [
+                'llantas', 'extintor', 'cables_corriente', 'gato_hidraulico', 'llave_cruz', 'llanta_refaccion'
+            ];
+            foreach ($herramientasList as $herramienta) {
+                $disponible = $request->input("herramientas.$herramienta", 0);
+                $checklist->herramientas()->create(['herramienta' => $herramienta, 'disponible'  => $disponible]);
             }
             foreach ($request->file('evidencias') as $foto) {
                 $ruta = $foto->store('checklists/salida', 'public');
@@ -111,8 +173,8 @@ class SalidaChecklistController extends Controller
         $request->validate([
             'nivel_gasolina'  => 'required|string',
             'kilometraje'     => "required|integer|min:$kmSalida",
-            'limpio_exterior' => 'required|in:0,1',
-            'limpio_interior' => 'required|in:0,1',
+            'limpio_exterior' => 'nullable|in:0,1',
+            'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
             'evidencias' => 'required|array|min:5',
             'evidencias.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -128,8 +190,8 @@ class SalidaChecklistController extends Controller
             $checklist->condicion()->create([
                 'nivel_gasolina'  => $request->nivel_gasolina,
                 'kilometraje'     => $request->kilometraje,
-                'limpio_exterior' => $request->limpio_exterior,
-                'limpio_interior' => $request->limpio_interior,
+                'limpio_exterior' => $request->input('limpio_exterior', 0),
+                'limpio_interior' => $request->input('limpio_interior', 0),
                 'observaciones'   => $request->observaciones,
             ]);
 

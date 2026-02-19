@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Vehiculos\Jobs\RevisarVencimientosVehiculosJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,6 +30,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('notificaciones:crear-certificados')->daily(); //cada dia
         //$schedule->command('notificaciones:crear-certificados')->everyMinute(); //cada minuto
         //$schedule->command('notificaciones:crear-certificados')->dailyAt('02:00'); //ejecutar en un horario específico (por ejemplo, a las 2 am
+
+        // vehiculos 
+        $schedule->job(new RevisarVencimientosVehiculosJob)->daily();
     }
 
     protected $routeMiddleware = [

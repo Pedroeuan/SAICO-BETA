@@ -18,7 +18,7 @@ class SalidaChecklist extends Model
 
     public function salida()
     {
-        return $this->belongsTo(SalidaVehiculo::class);
+        return $this->belongsTo(SalidaVehiculo::class, 'salida_vehiculo_id');
     }
     public function condicion(){
         return $this->hasOne(ChecklistCondicion::class);
