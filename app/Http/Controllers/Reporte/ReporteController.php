@@ -1299,6 +1299,50 @@ class ReporteController extends Controller
 
     }
 
+    public function Next_Reporte($id)
+    {
+        //dd($id);
+        //Función que realiza una copia del reporte actual, con un nuevo idReportes, y con el mismo idPrueba_Aplica, 
+        // para crear un nuevo reporte con los mismos datos, pero con un nuevo No_Reporte y Fecha.
+        /*Obtener datos del Reporte */
+        $Reporte = reporte::where('idReportes',$id)->first();
+        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
+        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
+        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        DB::transaction(function () use ($id) {
+
+        $ReporteOriginal = reporte::findOrFail($id);
+
+        $NuevoReporte = $ReporteOriginal->replicate();
+
+        $numeroActual = $ReporteOriginal->No_Reporte;
+
+        preg_match_all('/\d{3}/', $numeroActual, $matches);
+
+        if (!empty($matches[0])) {
+
+            $ultimoConsecutivo = end($matches[0]);
+
+            $nuevoNumero = str_pad(((int)$ultimoConsecutivo) + 1, 3, '0', STR_PAD_LEFT);
+
+            $nuevoNoReporte = preg_replace('/\d{3}(?!.*\d{3})/', $nuevoNumero, $numeroActual);
+
+        } else {
+
+            $nuevoNoReporte = $numeroActual . '-001';
+        }
+
+        $NuevoReporte->No_Reporte = $nuevoNoReporte;
+        $NuevoReporte->Fecha = now();
+
+        $NuevoReporte->save();
+        });
+
+        
+    }
+
+
     /**
      * Display the specified resource.
      */

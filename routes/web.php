@@ -148,6 +148,8 @@ use App\Http\Controllers\UsuarioController;
         Route::get('/ReportesPrincipalMaster', [ReporteController::class, 'ReportesPrincipalMaster'])->name('ReportesPrincipalMaster');
         /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
         Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
+        /*Rutas de controlador para duplicar los datos y redirigir el Reporte*/
+        Route::get('/Next/Reporte/{id}', [ReporteController::class, 'Next_Reporte'])->name('Next.Reporte');
 
         /*PRUEBAS*/
         /*Vista Menu Pruebas*/
