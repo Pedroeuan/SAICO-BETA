@@ -1142,7 +1142,7 @@ class ReporteController extends Controller
         if ($reportesEncontrados->isNotEmpty()) {
             return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
         } else {
-            return "No se encontraron reportes con ese contrato.";
+            return redirect()->route('indexINS1');
         }
     }
 
