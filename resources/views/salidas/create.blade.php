@@ -87,18 +87,28 @@
         return `<div class="alert alert-${type}" role="alert">${message}</div>`;
     }
 
-    function checkLicense(licencia){
+    function parseDateAsLocal(dateString){
+        // Evita desfases por zona horaria al parsear YYYY-MM-DD.
+        if (!dateString) return null;
+        const onlyDate = String(dateString).trim().slice(0, 10);
+        const parts = onlyDate.split('-').map(Number);
+        if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+        const [year, month, day] = parts;
+        return new Date(year, month - 1, day, 23, 59, 59, 999);
+    }
+
+    function checkLicense(licencia, fechaSalida){
         if (!licencia) return {ok:false, text:'Sin fecha de licencia registrada'};
-        const d = new Date(licencia);
-        if (isNaN(d.getTime())) return {ok:false, text:'Fecha de licencia inválida'};
-        d.setHours(23, 59, 59, 999); // vigente todo el dia de vencimiento
-        const now = new Date();
-        return {ok: d >= now, text: d >= now ? 'Licencia vigente' : 'Licencia vencida'};
+        const vencimiento = parseDateAsLocal(licencia);
+        if (!vencimiento || isNaN(vencimiento.getTime())) return {ok:false, text:'Fecha de licencia inválida'};
+        const referencia = fechaSalida && !isNaN(fechaSalida.getTime()) ? fechaSalida : new Date();
+        return {ok: vencimiento >= referencia, text: vencimiento >= referencia ? 'Licencia vigente' : 'Licencia vencida'};
     }
 
     document.addEventListener('DOMContentLoaded', function(){
         const choferSelect = document.getElementById('chofer_id');
         const solicitanteSelect = document.getElementById('solicitado_por');
+        const fechaSalidaInput = document.querySelector('input[name="fecha_salida"]');
         const choferAlert = document.getElementById('chofer-alert');
         const solicitanteAlert = document.getElementById('solicitante-alert');
 
@@ -106,7 +116,8 @@
             const opt = choferSelect.selectedOptions[0];
             if (!opt || !opt.value) { choferAlert.innerHTML = ''; return; }
             const licencia = opt.dataset.licencia || '';
-            const res = checkLicense(licencia);
+            const fechaSalida = fechaSalidaInput && fechaSalidaInput.value ? new Date(fechaSalidaInput.value) : new Date();
+            const res = checkLicense(licencia, fechaSalida);
             if (!res.ok) {
                 choferAlert.innerHTML = formatAlert(' ' + res.text + '. No recomendable asignar como chofer.');
             } else {
@@ -128,11 +139,15 @@
 
         choferSelect.addEventListener('change', evalChofer);
         solicitanteSelect.addEventListener('change', evalSolicitante);
+        if (fechaSalidaInput) {
+            fechaSalidaInput.addEventListener('change', evalChofer);
+        }
 
         // evaluar estado inicial si ya hay selección
         evalChofer();
         evalSolicitante();
     });
 </script>
+
 @endsection
 

@@ -635,7 +635,7 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
         /*Ruta de Guardado Vehiculos*/
         Route::post('/vehiculos/store', [VehiculoController::class, 'store'])->name('vehiculos.store');
         /*Ruta de Actualizar Vehiculos*/
-        Route::post('/vehiculos/update/{id}', [VehiculoController::class, 'update'])->name('vehiculos.update');
+        Route::match(['post', 'put'], '/vehiculos/update/{id}', [VehiculoController::class, 'update'])->name('vehiculos.update');
         /*Rutas de Vista de Edicion-index*/
         Route::get('/vehiculos/edit/{id}', [VehiculoController::class, 'edit'])->name('vehiculos.edit');
         /*Ruta de boton Eliminacion-index-Vehiculos*/

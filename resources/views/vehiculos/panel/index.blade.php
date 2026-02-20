@@ -2,6 +2,22 @@
 
 @section('title', 'Panel Vehicular')
 
+@section('css')
+<style>
+    #my-notification .dropdown-menu {
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
+
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
+    }
+</style>
+@endsection
+
 @section('content_header')
     <h1>Panel de Control Vehicular</h1>
     @php
@@ -296,7 +312,7 @@
                     <div class="card-body">
                         @if($documentosVencidos->count() > 0)
                         <div class="table-responsive">
-                            <table class="table table-sm table-hover table-bordered align-middle text-center">
+                            <table id="tablaVehiculos" class="table table-sm table-hover table-bordered align-middle text-center">
                                 <thead>
                                     <tr>
                                         <th>Placa</th>
@@ -391,11 +407,23 @@
                                         </td>
                                         <td>
                                             @php
-                                                $diasPoliza = $vehiculo->poliza_seguro_vencimiento ? \Carbon\Carbon::parse($vehiculo->poliza_seguro_vencimiento)->diffInDays(\Carbon\Carbon::now()) : 999;
-                                                $diasTarjeta = $vehiculo->tarjeta_circulacion_vencimiento ? \Carbon\Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->diffInDays(\Carbon\Carbon::now()) : 999;
-                                                $diasMinimo = min($diasPoliza, $diasTarjeta);
+                                                $hoy = \Carbon\Carbon::today();
+                                                $diasPoliza = $vehiculo->poliza_seguro_vencimiento
+                                                    ? $hoy->diffInDays(\Carbon\Carbon::parse($vehiculo->poliza_seguro_vencimiento)->startOfDay(), false)
+                                                    : null;
+                                                $diasTarjeta = $vehiculo->tarjeta_circulacion_vencimiento
+                                                    ? $hoy->diffInDays(\Carbon\Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->startOfDay(), false)
+                                                    : null;
+                                                $diasValidos = collect([$diasPoliza, $diasTarjeta])->filter(fn($d) => !is_null($d) && $d >= 0);
+                                                $diasMinimo = $diasValidos->isNotEmpty() ? (int) $diasValidos->min() : null;
                                             @endphp
-                                            <strong>{{ $diasMinimo }} días</strong>
+                                            @if(is_null($diasMinimo))
+                                                <strong>N/A</strong>
+                                            @elseif($diasMinimo === 0)
+                                                <strong>Vence hoy</strong>
+                                            @else
+                                                <strong>{{ $diasMinimo }} días</strong>
+                                            @endif
                                         </td>
                                         <td>
                                             <a href="{{ route('vehiculos.edit', $vehiculo->id) }}" class="btn btn-sm btn-warning px-3">Renovar</a>
@@ -479,9 +507,75 @@
 
 
 @section('js')
+<!-- jQuery (solo si no lo carga AdminLTE) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Scripts personalizados -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
+    if (!notificationMenu) return;
+
+    function normalizeNotificationMenu() {
+        const items = notificationMenu.querySelectorAll('.dropdown-item');
+        items.forEach((item) => {
+            const text = (item.textContent || '').trim().toLowerCase();
+            if (text === 'todas las notificaciones') {
+                item.textContent = 'Ver todas las notificaciones';
+                item.classList.add('font-weight-bold');
+            }
+        });
+    }
+
+    const observer = new MutationObserver(normalizeNotificationMenu);
+    observer.observe(notificationMenu, { childList: true, subtree: true });
+    normalizeNotificationMenu();
+});
+
+$(document).ready(function() {
+    if ($('#tablaVehiculos').length) {
+        $('#tablaVehiculos').DataTable({
+            language: {
+                decimal: "",
+                emptyTable: "No hay datos disponibles en la tabla",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+                infoFiltered: "(filtrado de _MAX_ entradas totales)",
+                thousands: ",",
+                lengthMenu: "Mostrar _MENU_ entradas",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                search: "Buscar:",
+                zeroRecords: "No se encontraron registros coincidentes",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            },
+            responsive: true,
+            autoWidth: false
+        });
+    }
+});
 
    document.addEventListener("DOMContentLoaded", function() {
     // GRAFICA DE LINEA - SALIDAS POR MES
@@ -619,4 +713,3 @@
 });
 </script>
 @stop
-

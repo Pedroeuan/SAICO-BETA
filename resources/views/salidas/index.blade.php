@@ -1,7 +1,21 @@
 @extends('adminlte::page')
 
 @section('title', ' Salida Vehiculos')
+@section('css')
+<style>
+    #my-notification .dropdown-menu {
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
 
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
+    }
+</style>
+@endsection
 @section('content')
 <br>
 <br>
@@ -122,6 +136,24 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
+    if (notificationMenu) {
+        const normalizeNotificationMenu = () => {
+            const items = notificationMenu.querySelectorAll('.dropdown-item');
+            items.forEach((item) => {
+                const text = (item.textContent || '').trim().toLowerCase();
+                if (text === 'todas las notificaciones') {
+                    item.textContent = 'Ver todas las notificaciones';
+                    item.classList.add('font-weight-bold');
+                }
+            });
+        };
+
+        const observer = new MutationObserver(normalizeNotificationMenu);
+        observer.observe(notificationMenu, { childList: true, subtree: true });
+        normalizeNotificationMenu();
+    }
+
 
     let table = new DataTable('#tablaJs', {
         responsive: true,
@@ -157,3 +189,4 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 @endsection
+

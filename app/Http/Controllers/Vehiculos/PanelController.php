@@ -7,8 +7,10 @@ use App\Models\User;
 use App\Models\Vehiculos\SalidaVehiculo;
 use App\Models\Vehiculos\Vehiculo;
 use App\Models\Vehiculos\Checklist\SalidaChecklist;
+use App\Models\Notificacion\Notificacion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PanelController extends Controller
 {
@@ -29,15 +31,19 @@ class PanelController extends Controller
         // ALERTAS DE DOCUMENTACIÓN (DASHBOARD)
         $documentosVencidos = Vehiculo::where('documentacion_estatus', 'vencida')->get();
         
-        $proximo15dias = Carbon::now()->addDays(15);
+        $hoy = Carbon::today();
+        $proximo15dias = Carbon::today()->addDays(15);
         $documentosProximoVencer = Vehiculo::where('documentacion_estatus', 'completa')
-            ->where(function($q) use ($proximo15dias) {
-                $q->whereBetween('poliza_seguro_vencimiento', [Carbon::now(), $proximo15dias])
-                  ->orWhereBetween('tarjeta_circulacion_vencimiento', [Carbon::now(), $proximo15dias]);
+            ->where(function($q) use ($hoy, $proximo15dias) {
+                $q->whereBetween('poliza_seguro_vencimiento', [$hoy->toDateString(), $proximo15dias->toDateString()])
+                  ->orWhereBetween('tarjeta_circulacion_vencimiento', [$hoy->toDateString(), $proximo15dias->toDateString()]);
             })
             ->get();
 
         $documentosSinRegistrar = Vehiculo::where('documentacion_estatus', 'incompleta')->get();
+
+        // Notificaciones vehiculares (aditivo): próximas a vencer y vencidas.
+        $this->crearNotificacionesVehiculares($documentosProximoVencer, $documentosVencidos);
 
         // SALIDAS
         $totalSalidas   = SalidaVehiculo::count();
@@ -157,5 +163,70 @@ class PanelController extends Controller
             'nivelChecklistsCompletos',
             'proyeccionAnual'
         ));
+    }
+
+    private function crearNotificacionesVehiculares($documentosProximoVencer, $documentosVencidos): void
+    {
+        $userId = Auth::id();
+        if (!$userId) {
+            return;
+        }
+
+        $hoy = Carbon::today();
+
+        foreach ($documentosProximoVencer as $vehiculo) {
+            $diasPoliza = $vehiculo->poliza_seguro_vencimiento
+                ? $hoy->diffInDays(Carbon::parse($vehiculo->poliza_seguro_vencimiento)->startOfDay(), false)
+                : null;
+            $diasTarjeta = $vehiculo->tarjeta_circulacion_vencimiento
+                ? $hoy->diffInDays(Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->startOfDay(), false)
+                : null;
+            $diasValidos = collect([$diasPoliza, $diasTarjeta])->filter(fn($d) => !is_null($d) && $d >= 0);
+            $diasMinimo = $diasValidos->isNotEmpty() ? (int) $diasValidos->min() : null;
+
+            if (is_null($diasMinimo)) {
+                continue;
+            }
+
+            $mensajeCorto = $diasMinimo === 0
+                ? "Vehículo {$vehiculo->placa} vence hoy"
+                : "Vehículo {$vehiculo->placa} vence en {$diasMinimo} días";
+            $mensajeLargo = "La documentación del vehículo {$vehiculo->placa} ({$vehiculo->marca}) está próxima a vencer.";
+
+            $existe = Notificacion::where('users_id', $userId)
+                ->where('Mensaje_Corto', $mensajeCorto)
+                ->where('Mensaje_Largo', $mensajeLargo)
+                ->first();
+
+            if (!$existe) {
+                Notificacion::create([
+                    'users_id' => $userId,
+                    'Mensaje_Corto' => $mensajeCorto,
+                    'Mensaje_Largo' => $mensajeLargo,
+                    'url' => url("/vehiculos/edit/{$vehiculo->id}"),
+                    'leida' => 0,
+                ]);
+            }
+        }
+
+        foreach ($documentosVencidos as $vehiculo) {
+            $mensajeCorto = "Vehículo {$vehiculo->placa} con doc. vencida";
+            $mensajeLargo = "La documentación del vehículo {$vehiculo->placa} ({$vehiculo->marca}) está vencida.";
+
+            $existe = Notificacion::where('users_id', $userId)
+                ->where('Mensaje_Corto', $mensajeCorto)
+                ->where('Mensaje_Largo', $mensajeLargo)
+                ->first();
+
+            if (!$existe) {
+                Notificacion::create([
+                    'users_id' => $userId,
+                    'Mensaje_Corto' => $mensajeCorto,
+                    'Mensaje_Largo' => $mensajeLargo,
+                    'url' => url("/vehiculos/edit/{$vehiculo->id}"),
+                    'leida' => 0,
+                ]);
+            }
+        }
     }
 }

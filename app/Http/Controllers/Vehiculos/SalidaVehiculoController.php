@@ -6,6 +6,7 @@ use App\Models\Vehiculos\SalidaVehiculo;
 use App\Models\Vehiculos\Vehiculo;
 use App\Models\User;
 use App\Http\Requests\Vehiculos\SalidaVehiculoRequest;
+use App\Models\Notificacion\Notificacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -27,6 +28,7 @@ class SalidaVehiculoController extends Controller
                 ->with(['vehiculo', 'chofer'])->get();
         }
         $metricas = $this->metricas();
+        $this->crearNotificacionesLicencias();
         return view('salidas.index', compact('salidas','metricas'));
     }
 
@@ -124,11 +126,15 @@ class SalidaVehiculoController extends Controller
         return back()->withInput()->with('error', 'El chofer no tiene licencia registrada.');
     }
 
+    $fechaSalida = $request->filled('fecha_salida')
+        ? Carbon::parse($request->fecha_salida)
+        : now();
+
     $licenciaExpirada = $chofer->licencia_vencimiento
-        ? Carbon::parse($chofer->licencia_vencimiento)->endOfDay()->lt(now())
+        ? Carbon::parse($chofer->licencia_vencimiento)->toDateString() < $fechaSalida->toDateString()
         : true;
 
-    if ($chofer->licencia_estatus === 'vencida' || $licenciaExpirada) {
+    if ($licenciaExpirada) {
         return back()->withInput()->with('error', 'La licencia del chofer está vencida.');
     }
 
@@ -147,7 +153,7 @@ class SalidaVehiculoController extends Controller
             'chofer_id' => $chofer->id,
             'solicitado_por' => $usuarioLogueado->id,
             'creado_por' => $usuarioLogueado->id,
-            'fecha_salida' => now(),
+            'fecha_salida' => $fechaSalida,
             'estatus' => 'activo'
         ]);
 
@@ -215,4 +221,79 @@ class SalidaVehiculoController extends Controller
 
     return redirect()->route('salidas.index')->with('success', 'Salida finalizada correctamente.');
    }
+
+    private function crearNotificacionesLicencias(): void
+    {
+        $usuarioActual = Auth::user();
+        if (!$usuarioActual) {
+            return;
+        }
+
+        $hoy = Carbon::today();
+        $limite = Carbon::today()->addDays(15);
+
+        // 1) Notificación para que el propio usuario vea su licencia.
+        if ($usuarioActual->licencia_vencimiento) {
+            $fechaLicencia = Carbon::parse($usuarioActual->licencia_vencimiento)->startOfDay();
+            $dias = $hoy->diffInDays($fechaLicencia, false);
+
+            if ($dias <= 15) {
+                $mensajeCorto = $dias < 0
+                    ? 'Tu licencia está vencida'
+                    : ($dias === 0 ? 'Tu licencia vence hoy' : "Tu licencia vence en {$dias} días");
+                $mensajeLargo = "Revisa tu licencia de conducir. Vencimiento: {$fechaLicencia->format('d/m/Y')}.";
+                $this->crearNotificacionSiNoExiste(
+                    $usuarioActual->id,
+                    $mensajeCorto,
+                    $mensajeLargo,
+                    route('salidas.index')
+                );
+            }
+        }
+
+        // 2) Notificaciones para admin sobre licencias de usuarios (vencidas o <= 15 días).
+        $admins = User::whereIn('rol', ['Administrador', 'Super Administrador', 'SuperAdministrador'])->pluck('id');
+        if ($admins->isEmpty()) {
+            return;
+        }
+
+        $usuariosConLicencia = User::whereNotNull('licencia_vencimiento')
+            ->whereDate('licencia_vencimiento', '<=', $limite->toDateString())
+            ->get(['id', 'name', 'licencia_vencimiento']);
+
+        foreach ($usuariosConLicencia as $usuario) {
+            $fechaLicencia = Carbon::parse($usuario->licencia_vencimiento)->startOfDay();
+            $dias = $hoy->diffInDays($fechaLicencia, false);
+
+            $mensajeCorto = $dias < 0
+                ? "Licencia vencida: {$usuario->name}"
+                : ($dias === 0
+                    ? "Licencia vence hoy: {$usuario->name}"
+                    : "Licencia vence en {$dias} días: {$usuario->name}");
+            $mensajeLargo = "La licencia de {$usuario->name} vence el {$fechaLicencia->format('d/m/Y')}.";
+            $url = url("/edicion/editusuarios/{$usuario->id}");
+
+            foreach ($admins as $adminId) {
+                $this->crearNotificacionSiNoExiste($adminId, $mensajeCorto, $mensajeLargo, $url);
+            }
+        }
+    }
+
+    private function crearNotificacionSiNoExiste(int $userId, string $mensajeCorto, string $mensajeLargo, string $url): void
+    {
+        $existe = Notificacion::where('users_id', $userId)
+            ->where('Mensaje_Corto', $mensajeCorto)
+            ->where('Mensaje_Largo', $mensajeLargo)
+            ->first();
+
+        if (!$existe) {
+            Notificacion::create([
+                'users_id' => $userId,
+                'Mensaje_Corto' => $mensajeCorto,
+                'Mensaje_Largo' => $mensajeLargo,
+                'url' => $url,
+                'leida' => 0,
+            ]);
+        }
+    }
 }
