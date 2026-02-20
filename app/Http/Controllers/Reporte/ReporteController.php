@@ -1301,46 +1301,75 @@ class ReporteController extends Controller
 
     public function Next_Reporte($id)
     {
-        //dd($id);
-        //Función que realiza una copia del reporte actual, con un nuevo idReportes, y con el mismo idPrueba_Aplica, 
-        // para crear un nuevo reporte con los mismos datos, pero con un nuevo No_Reporte y Fecha.
-        /*Obtener datos del Reporte */
-        $Reporte = reporte::where('idReportes',$id)->first();
-        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
-        $Firmas = Firma_Reporte::where('idReportes',$id)->first();
-        $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+        DB::transaction(function () use ($id, &$nuevoId) {
 
-        DB::transaction(function () use ($id) {
+            // 1️ Obtener reporte original
+            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
 
-        $ReporteOriginal = reporte::findOrFail($id);
+            // 2️ Clonar reporte
+            $NuevoReporte = $ReporteOriginal->replicate();
 
-        $NuevoReporte = $ReporteOriginal->replicate();
+            // 3️ Decodificar JSON
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
 
-        $numeroActual = $ReporteOriginal->No_Reporte;
+            $numeroActual = $Detalles_Generales['No_Reporte'];
 
-        preg_match_all('/\d{3}/', $numeroActual, $matches);
+            preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
 
-        if (!empty($matches[0])) {
+            if ($matches) {
+                $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
+                $nuevoNoReporte = $nuevoNumero . '-' . $matches[2];
+            } else {
+                $nuevoNoReporte = $numeroActual . '-001';
+            }
 
-            $ultimoConsecutivo = end($matches[0]);
+            // 4️ Reemplazar valores
+            $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
+            $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
-            $nuevoNumero = str_pad(((int)$ultimoConsecutivo) + 1, 3, '0', STR_PAD_LEFT);
+            $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            $NuevoReporte->Estatus = 'CREADO';
 
-            $nuevoNoReporte = preg_replace('/\d{3}(?!.*\d{3})/', $nuevoNumero, $numeroActual);
+            // 5️ Guardar nuevo reporte
+            $NuevoReporte->save();
 
-        } else {
+            $nuevoId = $NuevoReporte->idReportes;
 
-            $nuevoNoReporte = $numeroActual . '-001';
-        }
+            // =====================================
+            // 🔹 CLONAR FIRMAS
+            // =====================================
 
-        $NuevoReporte->No_Reporte = $nuevoNoReporte;
-        $NuevoReporte->Fecha = now();
+            $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
 
-        $NuevoReporte->save();
+            if ($FirmaOriginal) {
+
+                $NuevaFirma = $FirmaOriginal->replicate();
+                $NuevaFirma->idReportes = $nuevoId; // 👈 AQUÍ está la clave
+                $NuevaFirma->save();
+            }
+
+            // =====================================
+            //  CREAR FOTOS VACÍAS
+            // =====================================
+
+            Fotos_Reporte::create([
+                'idReportes' => $nuevoId,
+                'Fotos_Reportes' => json_encode([]),
+            ]);
+
+            // =====================================
+            //  CREAR JUNTAS VACÍAS
+            // =====================================
+
+            Grupo_Juntas_Detalles_Re::create([
+                'idReportes' => $nuevoId,
+                'Juntas_Grupo_Re' => json_encode([]),
+            ]);
         });
 
-        
+        return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
     }
+
 
 
     /**
