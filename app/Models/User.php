@@ -94,7 +94,7 @@ class User extends Authenticatable
                 $user->licencia_estatus ='no_aplica';
                 return;
             }
-            $fechaVencimiento = Carbon::parse($user->licencia_vencimiento);
+            $fechaVencimiento = Carbon::parse($user->licencia_vencimiento)->endOfDay();
             $hoy = Carbon::now();
 
             //si esta vencida 

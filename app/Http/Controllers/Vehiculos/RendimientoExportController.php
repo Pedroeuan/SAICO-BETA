@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Vehiculos;
 
-use App\Http\Controllers\Controller;
 use App\Exports\VehiculosRendimientoExport;
+use App\Http\Controllers\Controller;
 use App\Models\Vehiculos\SalidaVehiculo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -42,7 +42,13 @@ class RendimientoExportController extends Controller
         $now = Carbon::now();
         $periodo = strtolower(trim($periodo));
 
-        if ($request->filled('fecha')) {
+        if ($request->filled('mes')) {
+            try {
+                $now = Carbon::createFromFormat('Y-m', $request->input('mes'))->startOfMonth();
+            } catch (\Throwable $e) {
+                $now = Carbon::now();
+            }
+        } elseif ($request->filled('fecha')) {
             $now = Carbon::parse($request->input('fecha'));
         }
 
@@ -51,6 +57,11 @@ class RendimientoExportController extends Controller
                 $inicio = $now->copy()->startOfWeek();
                 $fin = $now->copy()->endOfWeek();
                 $label = 'Semana';
+                break;
+            case 'mes_pasado':
+                $inicio = $now->copy()->subMonthNoOverflow()->startOfMonth();
+                $fin = $now->copy()->subMonthNoOverflow()->endOfMonth();
+                $label = 'Mes Pasado';
                 break;
             case 'anio':
             case 'año':
@@ -91,13 +102,22 @@ class RendimientoExportController extends Controller
             ->with('vehiculo')
             ->get();
 
+        $maxTotalVehiculo = max((int) ($porVehiculo->max('total') ?? 0), 1);
+        $estatusChart = [
+            ['label' => 'Activas', 'valor' => (int) $salidasActivas, 'color' => '#f59e0b'],
+            ['label' => 'Finalizadas', 'valor' => (int) $salidasFinalizadas, 'color' => '#10b981'],
+        ];
+        $maxEstatus = max((int) $salidasActivas, (int) $salidasFinalizadas, 1);
+
         return compact(
             'totalSalidas',
             'salidasActivas',
             'salidasFinalizadas',
             'tiempoPromedio',
-            'porVehiculo'
+            'porVehiculo',
+            'maxTotalVehiculo',
+            'estatusChart',
+            'maxEstatus'
         );
     }
 }
-

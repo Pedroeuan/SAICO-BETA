@@ -4,24 +4,38 @@
 
 @section('content_header')
     <h1>Panel de Control Vehicular</h1>
+    @php
+        $mesFiltro = request('mes', now()->format('Y-m'));
+    @endphp
     <div class="mt-2">
         <div class="btn-group mr-2" role="group" aria-label="Exportar PDF">
             <a class="btn btn-sm btn-danger" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'semana']) }}">PDF Semana</a>
             <a class="btn btn-sm btn-danger" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'mes']) }}">PDF Mes</a>
-            <a class="btn btn-sm btn-danger" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'anio']) }}">PDF Año</a>
+            <a class="btn btn-sm btn-danger" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'mes_pasado']) }}">PDF Mes Pasado</a>
+            <a class="btn btn-sm btn-danger" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'anio']) }}">PDF Anio</a>
         </div>
         <div class="btn-group" role="group" aria-label="Exportar Excel">
             <a class="btn btn-sm btn-success" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'semana']) }}">Excel Semana</a>
             <a class="btn btn-sm btn-success" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'mes']) }}">Excel Mes</a>
-            <a class="btn btn-sm btn-success" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'anio']) }}">Excel Año</a>
+            <a class="btn btn-sm btn-success" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'mes_pasado']) }}">Excel Mes Pasado</a>
+            <a class="btn btn-sm btn-success" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'anio']) }}">Excel Anio</a>
         </div>
     </div>
+    <div class="mt-2">
+        <form class="form-inline" method="GET" action="{{ route('salidas.panel') }}">
+            <label class="mr-2 mb-1" for="mesFiltroExport">Filtrar exportacion por mes:</label>
+            <input id="mesFiltroExport" type="month" name="mes" class="form-control form-control-sm mr-2 mb-1" value="{{ $mesFiltro }}">
+            <button type="submit" class="btn btn-sm btn-secondary mr-2 mb-1">Aplicar</button>
+            <a class="btn btn-sm btn-outline-danger mr-2 mb-1" href="{{ route('salidas.rendimiento.pdf', ['periodo' => 'mes']) }}?mes={{ $mesFiltro }}">PDF del mes filtrado</a>
+            <a class="btn btn-sm btn-outline-success mb-1" href="{{ route('salidas.rendimiento.excel', ['periodo' => 'mes']) }}?mes={{ $mesFiltro }}">Excel del mes filtrado</a>
+        </form>
+        <div class="text-muted small mt-1">Para mes pasado: usa los botones "Mes Pasado" o selecciona {{ now()->subMonth()->format('Y-m') }}.</div>
+    </div>
     @if($vencidos > 0)
-<div class="alert alert-danger">
-     Hay {{ $vencidos }} vehículos con documentación vencida.
-</div>
-@endif
-
+    <div class="alert alert-danger">
+         Hay {{ $vencidos }} vehiculos con documentacion vencida.
+    </div>
+    @endif
 @stop
 <br>
 <br>
@@ -605,3 +619,4 @@
 });
 </script>
 @stop
+

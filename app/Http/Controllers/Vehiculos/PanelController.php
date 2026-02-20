@@ -49,7 +49,10 @@ class PanelController extends Controller
         $vehiculoMasUsado = SalidaVehiculo::select('vehiculo_id', DB::raw('count(*) as total'))->groupBy('vehiculo_id')->orderByDesc('total')->with('vehiculo')->first();
 
         // USUARIOS
-        $usuariosActivos   = User::where('Estatus', 'Alta')->count();$licenciasVencidas = User::whereNotNull('licencia_vencimiento')->where('licencia_vencimiento', '<', $fechaActual)->count();
+        $usuariosActivos = User::where('Estatus', 'Alta')->count();
+        $licenciasVencidas = User::whereNotNull('licencia_vencimiento')
+            ->whereDate('licencia_vencimiento', '<', $fechaActual->toDateString())
+            ->count();
 
         // SALIDAS POR MES
         $salidasPorMes = SalidaVehiculo::selectRaw('MONTH(fecha_salida) as mes, COUNT(*) as total')->whereYear('fecha_salida', $fechaActual->year)->groupBy('mes')->orderBy('mes')->pluck('total','mes');

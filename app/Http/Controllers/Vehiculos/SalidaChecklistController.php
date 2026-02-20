@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 
 class SalidaChecklistController extends Controller
@@ -16,6 +18,7 @@ class SalidaChecklistController extends Controller
     // CHECKLIST DE SALIDA
     public function create(SalidaVehiculo $salida)
     {
+        //dd($salida);
         if ($salida->checklistSalida) {
             return redirect()->route('salidas.index')->with('error', 'Este vehiculo ya tiene checklist de salida');
         }
@@ -25,7 +28,7 @@ class SalidaChecklistController extends Controller
         $licenciaVigente = false;
 
         if ($chofer && $chofer->licencia_vencimiento) {
-            $licenciaVigente = Carbon::parse($chofer->licencia_vencimiento)->isFuture();
+            $licenciaVigente = Carbon::parse($chofer->licencia_vencimiento)->endOfDay()->gte(now());
         }
 
         // estados de documentación del vehículo
@@ -34,10 +37,10 @@ class SalidaChecklistController extends Controller
         $polizaVigente = false;
         if ($vehiculo) {
             if ($vehiculo->tarjeta_circulacion_vencimiento) {
-                $tarjetaVigente = Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->isFuture();
+                $tarjetaVigente = Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->endOfDay()->gte(now());
             }
             if ($vehiculo->poliza_seguro_vencimiento) {
-                $polizaVigente = Carbon::parse($vehiculo->poliza_seguro_vencimiento)->isFuture();
+                $polizaVigente = Carbon::parse($vehiculo->poliza_seguro_vencimiento)->endOfDay()->gte(now());
             }
         }
 
@@ -92,17 +95,17 @@ class SalidaChecklistController extends Controller
             $vehiculo = $salida->vehiculo;
 
             $licenciaEstatus = 'vencido';
-            if ($chofer && $chofer->licencia_vencimiento && Carbon::parse($chofer->licencia_vencimiento)->isFuture()) {
+            if ($chofer && $chofer->licencia_vencimiento && Carbon::parse($chofer->licencia_vencimiento)->endOfDay()->gte(now())) {
                 $licenciaEstatus = 'ok';
             }
 
             $tarjetaEstatus = 'vencido';
-            if ($vehiculo && $vehiculo->tarjeta_circulacion_vencimiento && Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->isFuture()) {
+            if ($vehiculo && $vehiculo->tarjeta_circulacion_vencimiento && Carbon::parse($vehiculo->tarjeta_circulacion_vencimiento)->endOfDay()->gte(now())) {
                 $tarjetaEstatus = 'ok';
             }
 
             $polizaEstatus = 'vencido';
-            if ($vehiculo && $vehiculo->poliza_seguro_vencimiento && Carbon::parse($vehiculo->poliza_seguro_vencimiento)->isFuture()) {
+            if ($vehiculo && $vehiculo->poliza_seguro_vencimiento && Carbon::parse($vehiculo->poliza_seguro_vencimiento)->endOfDay()->gte(now())) {
                 $polizaEstatus = 'ok';
             }
 
@@ -228,13 +231,18 @@ class SalidaChecklistController extends Controller
                 'checklistSalida.evidencias',
             ]);
 
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
         return Pdf::loadView(
             'salidas.checklist.pdf_unificado',
             [
                 'salida' => $salida,
                 'checklistSalida' => $salida->checklistSalida,
-                'checklistEntrada' => $salida->checklistEntrada
+                'checklistEntrada' => $salida->checklistEntrada,
+                'Logo' => $Logo,
             ]
-        )->stream();
+        )
+        ->setPaper('letter', 'portrait')
+        ->stream("checklist_vehiculo_{$salida->id}.pdf");
     }
 }

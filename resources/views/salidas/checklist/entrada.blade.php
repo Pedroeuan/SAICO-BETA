@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-
+@section('title', 'Vehículos')
 @section('content')
 
 <br><br><br>

@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-
+@section('title', 'Nueva Salida')
 @section('content')
 <br><br><br>
 
@@ -67,7 +67,7 @@
 
         <div class="mb-2">
             <label>Fecha salida</label>
-            <input type="datetime-local" name="fecha_salida" class="form-control" required value="{{ old('fecha_salida') }}">
+            <input type="datetime-local" name="fecha_salida" class="form-control" required value="{{ old('fecha_salida', now()->format('Y-m-d\TH:i')) }}">
         </div>
 
         <div class="mb-2">
@@ -91,7 +91,9 @@
         if (!licencia) return {ok:false, text:'Sin fecha de licencia registrada'};
         const d = new Date(licencia);
         if (isNaN(d.getTime())) return {ok:false, text:'Fecha de licencia inválida'};
-        return {ok: d > new Date(), text: d > new Date() ? 'Licencia vigente' : 'Licencia vencida'};
+        d.setHours(23, 59, 59, 999); // vigente todo el dia de vencimiento
+        const now = new Date();
+        return {ok: d >= now, text: d >= now ? 'Licencia vigente' : 'Licencia vencida'};
     }
 
     document.addEventListener('DOMContentLoaded', function(){
@@ -133,3 +135,4 @@
     });
 </script>
 @endsection
+

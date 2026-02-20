@@ -587,7 +587,7 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
 
     });
     
-    // VEHÍCULOS (SOLO ADMIN)
+    /* VEHÍCULOS (SOLO ADMIN) 
     Route::middleware('can:vehiculos-admin-access')->group(function(){
 
     // CRUD Vehículos
@@ -614,18 +614,72 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
     Route::post('/', [SalidaVehiculoController::class, 'store'])->name('store');
     Route::put('/{id}/finalizar',[SalidaVehiculoController::class, 'finalizar'])->name('finalizar');
 
-    Route::get('/{salida}/checklist-salida',[SalidaChecklistController::class, 'create'])->name('checklist.salida.create');
+    //Route::get('/{salida}/checklist-salida',[SalidaChecklistController::class, 'create'])->name('checklist.salida.create');
     Route::post('/{salida}/checklist-salida',[SalidaChecklistController::class, 'store'])->name('checklist.salida.store');
     Route::get('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'createEntrada'])->name('checklist.entrada.create');
     Route::post('/{salida}/checklist-entrada',[SalidaChecklistController::class, 'storeEntrada'])->name('checklist.entrada.store');
     Route::get('/{salida}/checklist/{tipo}',[SalidaChecklistController::class, 'show'])->name('checklist.show');
     Route::get('/{salida}/checklist.pdf',[SalidaChecklistController::class,'pdf'])->name('salidas.checklist.pdf');
 
-});
+    Route::get('SV/{salida}/checklist-salida',[SalidaChecklistController::class, 'create'])->name('checklist.salida.create');
+
+}); */
+    
+    Route::middleware('can:vehiculos-admin-access')->group(function () {
+        /*VEHICULOS*/
+        /*Ruta de Vista de Vehiculos-index*/
+        Route::get('/vehiculos', [VehiculoController::class, 'index'])->name('vehiculos.home');
+        Route::get('/vehiculos/index', [VehiculoController::class, 'index'])->name('vehiculos.index');
+        /*Ruta de Vista de Registro de Vehiculos*/
+        Route::get('/vehiculos/create', [VehiculoController::class, 'create'])->name('vehiculos.create');
+        /*Ruta de Guardado Vehiculos*/
+        Route::post('/vehiculos/store', [VehiculoController::class, 'store'])->name('vehiculos.store');
+        /*Ruta de Actualizar Vehiculos*/
+        Route::post('/vehiculos/update/{id}', [VehiculoController::class, 'update'])->name('vehiculos.update');
+        /*Rutas de Vista de Edicion-index*/
+        Route::get('/vehiculos/edit/{id}', [VehiculoController::class, 'edit'])->name('vehiculos.edit');
+        /*Ruta de boton Eliminacion-index-Vehiculos*/
+        Route::delete('/vehiculos/delete/{id}', [VehiculoController::class, 'destroy'])->name('vehiculos.destroy');
+
+        /*PANEL VEHICULAR*/
+        /*Ruta de Vista de Panel Vehicular*/
+        Route::get('/salidas-vehiculos/panel', [PanelController::class, 'index'])->name('salidas.panel');
+        /*Ruta de Exportar Rendimiento en PDF*/
+        Route::get('/salidas-vehiculos/rendimiento/pdf/{periodo}', [RendimientoExportController::class, 'pdf'])->name('salidas.rendimiento.pdf');
+        /*Ruta de Exportar Rendimiento en Excel*/
+        Route::get('/salidas-vehiculos/rendimiento/excel/{periodo}', [RendimientoExportController::class, 'excel'])->name('salidas.rendimiento.excel');
+    });
+
+    /*SALIDAS VEHICULOS*/
+    /*Ruta de Vista de Salidas-index*/
+    Route::get('/salidas-vehiculos', [SalidaVehiculoController::class, 'index'])->name('salidas.home');
+    Route::get('/salidas-vehiculos/index', [SalidaVehiculoController::class, 'index'])->name('salidas.index');
+    /*Ruta de Vista de Registro de Salida*/
+    Route::get('/salidas-vehiculos/create', [SalidaVehiculoController::class, 'create'])->name('salidas.create');
+    /*Ruta de Guardado de Salida*/
+    Route::post('/salidas-vehiculos/store', [SalidaVehiculoController::class, 'store'])->name('salidas.store');
+    /*Ruta de Finalizar Salida*/
+    Route::post('/salidas-vehiculos/finalizar/{id}', [SalidaVehiculoController::class, 'finalizar'])->name('salidas.finalizar');
+
+    /*CHECKLIST*/
+    /*Ruta de Vista de Checklist de Salida*/
+    Route::get('/salidas-vehiculos/checklist-salida/{salida}', [SalidaChecklistController::class, 'create'])->name('salidas.checklist.salida.create');
+    /*Ruta de Guardado de Checklist de Salida*/
+    Route::post('/salidas-vehiculos/checklist-salida/{salida}', [SalidaChecklistController::class, 'store'])->name('salidas.checklist.salida.store');
+    /*Ruta de Vista de Checklist de Entrada*/
+    Route::get('/salidas-vehiculos/checklist-entrada/{salida}', [SalidaChecklistController::class, 'createEntrada'])->name('salidas.checklist.entrada.create');
+    /*Ruta de Guardado de Checklist de Entrada*/
+    Route::post('/salidas-vehiculos/checklist-entrada/{salida}', [SalidaChecklistController::class, 'storeEntrada'])->name('salidas.checklist.entrada.store');
+    /*Ruta de Vista de Checklist Salida/Entrada*/
+    Route::get('/salidas-vehiculos/checklist/{salida}/{tipo}', [SalidaChecklistController::class, 'show'])->name('salidas.checklist.show');
+    /*Ruta de PDF de Checklist*/
+    Route::get('/salidas-vehiculos/checklist-pdf/{salida}', [SalidaChecklistController::class, 'pdf'])->name('salidas.checklist.pdf');
 
 
 
-});
+
+}); 
 
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
+

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SalidaVehiculoController extends Controller
 {
@@ -123,7 +124,11 @@ class SalidaVehiculoController extends Controller
         return back()->withInput()->with('error', 'El chofer no tiene licencia registrada.');
     }
 
-    if ($chofer->licencia_estatus === 'vencida') {
+    $licenciaExpirada = $chofer->licencia_vencimiento
+        ? Carbon::parse($chofer->licencia_vencimiento)->endOfDay()->lt(now())
+        : true;
+
+    if ($chofer->licencia_estatus === 'vencida' || $licenciaExpirada) {
         return back()->withInput()->with('error', 'La licencia del chofer está vencida.');
     }
 

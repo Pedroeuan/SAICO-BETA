@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('title', ' Salida Vehiculos')
+
 @section('content')
 <br>
 <br>
@@ -65,7 +67,7 @@
 
                 <td>
                     @if($salida->checklistSalida && $salida->checklistEntrada)
-                        <a href="{{ route('salidas.salidas.checklist.pdf',$salida->id) }}" target="_blank" class="btn btn-sm btn-danger px-3" title="Descargar PDF completo">
+                        <a href="{{ route('salidas.checklist.pdf',$salida->id) }}" target="_blank" class="btn btn-sm btn-danger px-3" title="Descargar PDF completo">
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
                     @else
@@ -96,7 +98,7 @@
         @endforeach
     </table>
 </div>
-
+@stop
 </div>
 @section('js')
 
@@ -153,7 +155,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
-
-@endsection
 
 @endsection
