@@ -129,6 +129,37 @@
                             @enderror
                         </div>
 
+                        <hr>
+                        <h5>Documentación para Vehículos</h5>
+
+                        <div class="form-group">
+                            <label>Número de Licencia</label>
+                            <input type="text" name="licencia_numero" class="form-control" value="{{ $Usuario->licencia_numero }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimiento licencia</label>
+                            <input type="date" name="licencia_vencimiento" class="form-control" value="{{ $Usuario->licencia_vencimiento }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Licencia actual:</label>
+                            @if($Usuario->licencia_pdf)
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->licencia_pdf) }}" target="_blank">Ver Licencia Actual</a>
+                            @endif
+                            <input type="file" name="licencia_pdf" class="form-control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>CV actual:</label>
+                            @if($Usuario->cv_pdf)
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->cv_pdf) }}" target="_blank">Ver CV Actual </a>
+                            @endif
+                            <input type="file" name="cv_pdf" class="form-control" accept="application/pdf">
+                        </div>
+
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Actualizar">
                         </div>

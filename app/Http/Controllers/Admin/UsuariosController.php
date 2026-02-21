@@ -83,6 +83,24 @@ class UsuariosController extends Controller
 
         $Usuario->Estatus = $request->input('Estatus') ?? $EsperaDato;
 
+        // campos de licencia
+        $Usuario->licencia_numero = $request->input('licencia_numero');
+        
+        //fecha de vencimiento
+        $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
+
+        //Guardar pdf licencia
+        if($request->hasFile('licencia_pdf')){
+            $rutaLicencia = $request->file('licencia_pdf')->store('usuarios/licencias', 'public');
+            $Usuario->licencia_pdf = $rutaLicencia;
+        }
+
+        // Guardar CV
+        if($request->hasFile('cv_pdf')){
+                $rutaCV = $request->file('cv_pdf')->store('usuario/cv', 'public');
+                $Usuario->cv_pdf = $rutaCV;
+    
+        }
         // Guardar el usuario en la base de datos
         $Usuario->save();
 
@@ -135,12 +153,30 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio,Tics',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
         // Obtener el usuario existente
         $Usuario  = Usuario::find($id);
+
+        // ===== CAMPOS LICENCIA =====
+        $Usuario->licencia_numero = $request->input('licencia_numero');
+        $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
+
+        // Subir nueva licencia si existe
+        if ($request->hasFile('licencia_pdf')) {
+            $rutaLicencia = $request->file('licencia_pdf')
+                ->store('usuarios/licencias', 'public');
+            $Usuario->licencia_pdf = $rutaLicencia;
+        }
+
+        // Subir nuevo CV si existe
+        if ($request->hasFile('cv_pdf')) {
+            $rutaCV = $request->file('cv_pdf')
+                ->store('usuarios/cv', 'public');
+            $Usuario->cv_pdf = $rutaCV;
+        }
 
         // Actualizar los datos del usuario
         $Usuario ->update([
@@ -160,12 +196,30 @@ class UsuariosController extends Controller
             //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio,Tics',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
         // Obtener el usuario existente
         $Usuario  = Usuario::find($id);
+
+        // ===== CAMPOS LICENCIA =====
+        $Usuario->licencia_numero = $request->input('licencia_numero');
+        $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
+
+        // Subir nueva licencia si existe
+        if ($request->hasFile('licencia_pdf')) {
+            $rutaLicencia = $request->file('licencia_pdf')
+                ->store('usuarios/licencias', 'public');
+            $Usuario->licencia_pdf = $rutaLicencia;
+        }
+
+        // Subir nuevo CV si existe
+        if ($request->hasFile('cv_pdf')) {
+            $rutaCV = $request->file('cv_pdf')
+                ->store('usuarios/cv', 'public');
+            $Usuario->cv_pdf = $rutaCV;
+        }
 
         // Actualizar los datos del usuario
         $Usuario ->update([
