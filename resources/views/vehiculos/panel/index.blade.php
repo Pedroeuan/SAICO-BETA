@@ -147,7 +147,7 @@
                     <strong>Variación mensual:</strong>
                     @php
                     $colorVariacion = $variacionMensual >= 0 ? 'success' : 'danger';
-                    $icono = $variacionMensual >= 0 ? '↑' : '↓';
+                    $icono = $variacionMensual >= 0 ? '+' : '-';
                     @endphp
                     <span class="badge bg-{{ $colorVariacion }} fs-6">
                         {{ $icono }} {{ $variacionMensual }}%
@@ -155,7 +155,7 @@
 
                 </p>
 
-                <p><strong>Tiempo promedio:</strong> {{ round($tiempoPromedioUso ?? 0, 2) }} h</p>
+                <p><strong>Tiempo promedio:</strong> {{ round($tiempoPromedioUso ?? 0, 2) }} min</p>
                 <p><strong>Proyección anual:</strong> {{ $proyeccionAnual }}</p>
 
             </div>
@@ -187,6 +187,17 @@
                     <div class="col-md-4">
                         <h6 class="text-center">Checklists Completos vs Incompletos</h6>
                         <canvas id="graficaChecklists"></canvas>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6 class="text-center">Km Recorridos por Mes</h6>
+                        <canvas id="graficaKmMes"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-center">Incidencias por Vehiculo</h6>
+                        <canvas id="graficaIncidenciasVehiculo"></canvas>
                     </div>
                 </div>
 
@@ -225,9 +236,7 @@
 
             <!-- TAB 4 INDICADORES -->
             <div class="tab-pane fade" id="indicadores" role="tabpanel" aria-labelledby="indicadores-tab">
-
     <div class="row mt-3">
-
         <div class="col-md-3">
             <div class="card shadow-sm border-0 bg-primary text-white">
                 <div class="card-body text-center py-4">
@@ -250,23 +259,56 @@
             <div class="card shadow-sm border-0 bg-warning text-dark">
                 <div class="card-body text-center py-4">
                     <h6>Tiempo Promedio (min)</h6>
-                    <h3 class="fw-bold">{{ round($tiempoPromedioUso) }}</h3>
+                    <h3 class="fw-bold">{{ round($tiempoPromedioUso, 2) }}</h3>
                 </div>
             </div>
-
         </div>
 
         <div class="col-md-3">
             <div class="card shadow-sm border-0 bg-danger text-white">
                 <div class="card-body text-center py-4">
-                    <h6>Vehículo Más Usado</h6>
-                    <h5 class="fw-bold">
-                        {{ $vehiculoMasUsado->vehiculo->placa ?? 'N/A' }}</h5>
-                    </div>
+                    <h6>Vehiculo Mas Usado</h6>
+                    <h5 class="fw-bold">{{ $vehiculoMasUsado->vehiculo->placa ?? 'N/A' }}</h5>
                 </div>
             </div>
         </div>
 
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-info text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Km Recorridos del Mes</h6>
+                    <h3 class="fw-bold">{{ round($kmRecorridosMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-secondary text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Promedio Km Mensual</h6>
+                    <h3 class="fw-bold">{{ round($promedioKmMensual ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-dark text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Incidencias del Mes</h6>
+                    <h3 class="fw-bold">{{ $incidenciasMes ?? 0 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body text-center py-4">
+                    <h6>Vehiculo con Mas Incidencias</h6>
+                    <h5 class="fw-bold">{{ $vehiculoMasIncidencias->placa ?? 'Sin incidencias' }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card mt-4">
         <div class="card-header">
             <strong>Porcentajes Clave</strong>
@@ -297,7 +339,7 @@
     
             </div>
 
-            <!-- TAB 5 ALERTAS DE DOCUMENTACIÓN -->
+            <!-- TAB 5 ALERTAS DE DOCUMENTACION -->
     <div class="tab-pane fade" id="alertas" role="tabpanel" aria-labelledby="alertas-tab">
 
         <h4 class="mb-4">Estado de Documentación de Vehículos</h4>
@@ -361,7 +403,7 @@
             </div>
         </div>
 
-        <!-- PRÓXIMO A VENCER (15 DÍAS) -->
+        <!-- PROXIMO A VENCER (15 DIAS) -->
         <div class="row mb-4">
             <div class="col-md-12">
                 <div class="card border-warning">
@@ -441,7 +483,7 @@
             </div>
         </div>
 
-        <!-- SIN DOCUMENTACIÓN -->
+        <!-- SIN DOCUMENTACION -->
         <div class="row mb-4">
             <div class="col-md-12">
                 <div class="card border-info">
@@ -489,7 +531,7 @@
                             </table>
                         </div>
                         @else
-                            <p class="text-success"><strong>✓ Todos los vehículos tienen documentación completa</strong></p>
+                            <p class="text-success"><strong>OK Todos los vehiculos tienen documentacion completa</strong></p>
                         @endif
                     </div>
                 </div>
@@ -566,7 +608,7 @@ $(document).ready(function() {
                 zeroRecords: "No se encontraron registros coincidentes",
                 paginate: {
                     first: "Primero",
-                    last: "Último",
+                    last: "Ultimo",
                     next: "Siguiente",
                     previous: "Anterior"
                 }
@@ -710,6 +752,58 @@ $(document).ready(function() {
         });
     }
 
+    // GRAFICA DE LINEA - KM POR MES
+    const ctxKmMes = document.getElementById('graficaKmMes');
+    if (ctxKmMes) {
+        new Chart(ctxKmMes, {
+            type: 'line',
+            data: {
+                labels: [
+                    'Ene','Feb','Mar','Abr','May','Jun',
+                    'Jul','Ago','Sep','Oct','Nov','Dic'
+                ],
+                datasets: [{
+                    label: 'Kilometros',
+                    data: @json($datosKmMeses ?? []),
+                    borderColor: '#fd7e14',
+                    backgroundColor: 'rgba(253, 126, 20, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // GRAFICA DE BARRAS - INCIDENCIAS POR VEHICULO
+    const ctxIncidenciasVehiculo = document.getElementById('graficaIncidenciasVehiculo');
+    if (ctxIncidenciasVehiculo) {
+        new Chart(ctxIncidenciasVehiculo, {
+            type: 'bar',
+            data: {
+                labels: @json($labelsIncidencias ?? []),
+                datasets: [{
+                    label: 'Incidencias',
+                    data: @json($dataIncidencias ?? []),
+                    backgroundColor: '#6c757d'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    }
+
 });
 </script>
 @stop
+

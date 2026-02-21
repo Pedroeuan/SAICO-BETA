@@ -73,8 +73,10 @@ class PanelController extends Controller
         $mesAnterior = SalidaVehiculo::whereMonth('fecha_salida', $fechaMesAnterior->month)->whereYear('fecha_salida', $fechaMesAnterior->year)->count();
         $variacionMensual = $mesAnterior > 0 ? round((($mesActual - $mesAnterior) / $mesAnterior) * 100, 2): 0;
 
-        // TIEMPO PROMEDIO
-        $tiempoPromedioUso = SalidaVehiculo::whereNotNull('fecha_regreso')->selectRaw('AVG(TIMESTAMPDIFF(HOUR, fecha_salida, fecha_regreso)) as promedio')->value('promedio') ?? 0;
+        // TIEMPO PROMEDIO (MINUTOS)
+        $tiempoPromedioUso = SalidaVehiculo::whereNotNull('fecha_regreso')
+            ->selectRaw('AVG(COALESCE(duracion_minutos, TIMESTAMPDIFF(MINUTE, fecha_salida, fecha_regreso))) as promedio')
+            ->value('promedio') ?? 0;
 
         // TOP 5 VEHÍCULOS
         $topVehiculos = SalidaVehiculo::select('vehiculo_id', DB::raw('count(*) as total'))->groupBy('vehiculo_id')->orderByDesc('total')->with('vehiculo')->take(5)->get();
@@ -101,6 +103,99 @@ class PanelController extends Controller
             return $item->solicitante->name ?? 'N/A';
         })->values();
         $dataSolicitantes = $topSolicitantes->pluck('total')->values();
+
+        // KM RECORRIDOS POR MES (AÑO ACTUAL): ENTRADA - SALIDA
+        $kmPorMes = DB::table('salidas_vehiculos as sv')
+            ->join('salidas_checklists as scs', function ($join) {
+                $join->on('scs.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('scs.tipo', '=', 'salida');
+            })
+            ->join('checklist_condiciones as ccs', 'ccs.salida_checklist_id', '=', 'scs.id')
+            ->join('salidas_checklists as sce', function ($join) {
+                $join->on('sce.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('sce.tipo', '=', 'entrada');
+            })
+            ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
+            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->selectRaw('MONTH(sv.fecha_salida) as mes, SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->pluck('total_km', 'mes');
+
+        $datosKmMeses = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $datosKmMeses[] = round((float) ($kmPorMes[$i] ?? 0), 2);
+        }
+
+        $kmRecorridosMes = DB::table('salidas_vehiculos as sv')
+            ->join('salidas_checklists as scs', function ($join) {
+                $join->on('scs.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('scs.tipo', '=', 'salida');
+            })
+            ->join('checklist_condiciones as ccs', 'ccs.salida_checklist_id', '=', 'scs.id')
+            ->join('salidas_checklists as sce', function ($join) {
+                $join->on('sce.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('sce.tipo', '=', 'entrada');
+            })
+            ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
+            ->whereMonth('sv.fecha_salida', $fechaActual->month)
+            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->selectRaw('SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
+            ->value('total_km') ?? 0;
+
+        $kmRecorridosAnio = DB::table('salidas_vehiculos as sv')
+            ->join('salidas_checklists as scs', function ($join) {
+                $join->on('scs.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('scs.tipo', '=', 'salida');
+            })
+            ->join('checklist_condiciones as ccs', 'ccs.salida_checklist_id', '=', 'scs.id')
+            ->join('salidas_checklists as sce', function ($join) {
+                $join->on('sce.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('sce.tipo', '=', 'entrada');
+            })
+            ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
+            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->selectRaw('SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
+            ->value('total_km') ?? 0;
+
+        $promedioKmMensual = $fechaActual->month > 0
+            ? round(((float) $kmRecorridosAnio) / $fechaActual->month, 2)
+            : 0;
+
+        // INCIDENCIAS: salida con al menos una observacion en checklist de salida/entrada
+        $incidenciasPorVehiculo = DB::table('salidas_vehiculos as sv')
+            ->join('vehiculos as v', 'v.id', '=', 'sv.vehiculo_id')
+            ->leftJoin('salidas_checklists as sc', 'sc.salida_vehiculo_id', '=', 'sv.id')
+            ->leftJoin('checklist_condiciones as cc', 'cc.salida_checklist_id', '=', 'sc.id')
+            ->select(
+                'sv.vehiculo_id',
+                'v.placa',
+                DB::raw("COUNT(DISTINCT CASE WHEN cc.observaciones IS NOT NULL AND TRIM(cc.observaciones) <> '' THEN sv.id END) as incidencias")
+            )
+            ->groupBy('sv.vehiculo_id', 'v.placa')
+            ->orderByDesc('incidencias')
+            ->take(10)
+            ->get();
+
+        $vehiculoMasIncidencias = $incidenciasPorVehiculo->first(function ($item) {
+            return (int) $item->incidencias > 0;
+        });
+
+        $incidenciasMes = DB::table('salidas_vehiculos as sv')
+            ->leftJoin('salidas_checklists as sc', 'sc.salida_vehiculo_id', '=', 'sv.id')
+            ->leftJoin('checklist_condiciones as cc', 'cc.salida_checklist_id', '=', 'sc.id')
+            ->whereMonth('sv.fecha_salida', $fechaActual->month)
+            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->whereRaw("cc.observaciones IS NOT NULL AND TRIM(cc.observaciones) <> ''")
+            ->selectRaw('COUNT(DISTINCT sv.id) as total')
+            ->value('total') ?? 0;
+
+        $labelsIncidencias = $incidenciasPorVehiculo->map(function ($item) {
+            return $item->placa ?? 'N/A';
+        })->values();
+        $dataIncidencias = $incidenciasPorVehiculo->pluck('incidencias')->map(function ($value) {
+            return (int) $value;
+        })->values();
 
         // KPI DISPONIBILIDAD
         $nivelDisponibilidad = $totalVehiculos > 0 ? round(($disponibles / $totalVehiculos) * 100, 2): 0;
@@ -155,6 +250,13 @@ class PanelController extends Controller
             'dataVehiculos',
             'labelsSolicitantes',
             'dataSolicitantes',
+            'datosKmMeses',
+            'kmRecorridosMes',
+            'promedioKmMensual',
+            'vehiculoMasIncidencias',
+            'incidenciasMes',
+            'labelsIncidencias',
+            'dataIncidencias',
             'nivelDisponibilidad',
             'nivelFinalizadas',
             'totalChecklistsSalida',
