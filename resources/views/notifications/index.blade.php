@@ -29,6 +29,11 @@
         color: #0d17a0ff;        /* opcional: cambia de color al pasar el mouse */
         text-decoration: underline; /* opcional: solo subraya al hacer hover */
     }
+
+    .notificacion-disabled {
+        cursor: default !important;
+        opacity: 0.9;
+    }
 </style>
 @endsection
 
@@ -52,7 +57,15 @@
             </thead>
             <tbody>
                 @foreach ($notificaciones as $notificacion)
-                <tr onclick="window.open('{{ $notificacion->url }}', '_blank')" class="notificacion-link">
+                @php
+                    $urlNotificacion = trim((string) ($notificacion->url ?? ''));
+                    $sinAccion = $urlNotificacion === '' || $urlNotificacion === '#' || str_contains($urlNotificacion, '/profile');
+                @endphp
+                <tr
+                    class="notificacion-link {{ $sinAccion ? 'notificacion-disabled' : '' }}"
+                    data-url="{{ $urlNotificacion }}"
+                    data-no-action="{{ $sinAccion ? '1' : '0' }}"
+                >
                     <td>{{ $notificacion->Mensaje_Largo }}</td>
                 </tr>
                 @endforeach
@@ -111,6 +124,19 @@ let table = new DataTable('#tablaJs', {
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
+});
+
+document.querySelectorAll('#tablaJs tbody tr.notificacion-link').forEach((row) => {
+    row.addEventListener('click', () => {
+        if (row.dataset.noAction === '1') {
+            return;
+        }
+        const url = (row.dataset.url || '').trim();
+        if (!url || url === '#') {
+            return;
+        }
+        window.open(url, '_blank');
+    });
 });
 </script>
 

@@ -726,7 +726,30 @@ return [
                         ],
                     ],
                 ],
-
+                // Sidebar Vehiculo
+                [
+                    'text' => 'Gestión de Vehículos',
+                    'icon' => 'fas fa-car',
+                    'submenu'=> [
+                        [
+                            'text' => 'Vehículos',
+                            'icon' => 'fas fa-truck',
+                            'url' => '/vehiculos',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                        [
+                            'text' => 'Salidas de Vehículos',
+                            'icon' => 'fas fa-sign-out-alt',
+                            'url' => '/salidas-vehiculos',
+                        ],
+                        [
+                            'text' => 'Panel Vehícular',
+                            'url' => 'salidas-vehiculos/panel',
+                            'icon' => 'fas fa-chart-bar',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                    ],
+                ],
     ],//Final Menu
 
     /*
