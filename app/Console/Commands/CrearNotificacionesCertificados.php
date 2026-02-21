@@ -44,8 +44,8 @@ class CrearNotificacionesCertificados extends Command
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
         $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
-            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
 
         // Recorrer cada certificado
@@ -157,10 +157,11 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->url = $url;
                         $notificacion->leida = false;
                         $notificacion->save();
-                    }
 
                     // 📧 Enviar correo
                     $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                    }
+
                 }
             }
         }

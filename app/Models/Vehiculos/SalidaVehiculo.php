@@ -15,8 +15,11 @@ class SalidaVehiculo extends Model
         'vehiculo_id',
         'chofer_id',
         'solicitado_por',
+        'creado_por',
+        'finalizado_por',
         'fecha_salida',
         'fecha_regreso',
+        'duracion_minutos',
         'motivo',
         'estatus',
     ];

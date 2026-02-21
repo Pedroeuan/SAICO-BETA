@@ -59,7 +59,8 @@
                 <table id="tablaVehiculos" class="table table-sm table-hover table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 80px;">#</th>
+                            <!--<th style="width: 80px;">#</th> 
+                            <th style="width: 80px;">ID</th>-- IGNORE -->
                             <th>Vehículo</th>
                             <th>Año</th>
                             <th>Estado</th>
@@ -73,8 +74,9 @@
                     <tbody>
                     @forelse ($vehiculos as $vehiculo)
                         <tr>
-                            <td>{{ $vehiculo->id }}</td>
-                            <td>
+                            <!--<td>{{ $vehiculo->id }}</td>-- IGNORE -->
+                            
+                            <td> 
                                 <strong>{{ $vehiculo->placa }}</strong><br>
                                 <small class="text-muted">{{ $vehiculo->marca }} {{ $vehiculo->modelo }}</small>
                             </td>
@@ -98,46 +100,40 @@
                                 @endif
                             </td>
                             <td class="text-center">
-    <a href="{{ route('vehiculos.edit', $vehiculo->id) }}"
-       class="btn btn-sm btn-warning"
-       title="Editar">
-        <i class="fas fa-edit"></i>
-    </a>
-</td>
-
-<td class="text-center">
-    @if($vehiculo->estatus === 'disponible')
-        <a href="{{ route('salidas.create') }}"
-           class="btn btn-sm btn-success"
-           title="Nueva salida">
-            <i class="fas fa-door-open"></i>
-        </a>
-    @else
-        <span class="text-muted">—</span>
-    @endif
-</td>
-
-<td class="text-center">
-    <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}"
-          method="POST"
-          onsubmit="return confirm('¿Eliminar vehículo?')">
-        @csrf
-        @method('DELETE')
-        <button class="btn btn-sm btn-outline-danger"
-                title="Eliminar">
-            <i class="fas fa-trash"></i>
-        </button>
-    </form>
-</td>
-
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
-                                <i class="fas fa-inbox"></i> No hay vehículos registrados
+                                <a href="{{ route('vehiculos.edit', $vehiculo->id) }}"
+                                class="btn btn-sm btn-warning"
+                                title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
                             </td>
+
+                            <td class="text-center">
+                                @if($vehiculo->estatus === 'disponible')
+                                    <a href="{{ route('salidas.create') }}"
+                                    class="btn btn-sm btn-success"
+                                    title="Nueva salida">
+                                        <i class="fas fa-door-open"></i>
+                                    </a>
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </td>
+
+                            <td class="text-center">
+                                <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('¿Eliminar vehículo?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+
                         </tr>
-                    @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -289,7 +285,7 @@ $(document).ready(function() {
     $('#tablaVehiculos').DataTable({
         language: {
             decimal: "",
-            emptyTable: "No hay datos disponibles en la tabla",
+            emptyTable: '<i class="fas fa-inbox"></i> No hay vehículos registrados',
             info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
             infoEmpty: "Mostrando 0 a 0 de 0 entradas",
             infoFiltered: "(filtrado de _MAX_ entradas totales)",

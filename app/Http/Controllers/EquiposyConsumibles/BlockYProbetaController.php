@@ -56,7 +56,7 @@ class BlockYProbetaController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
                 'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
+                'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
             $NA='N/A';
             // Limpia y normaliza el número económico
@@ -418,7 +418,7 @@ class BlockYProbetaController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
                 'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
+                'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);

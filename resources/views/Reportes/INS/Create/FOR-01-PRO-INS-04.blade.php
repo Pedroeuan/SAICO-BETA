@@ -532,8 +532,9 @@
                                     </table>
                                     </div>
 
+                                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                    <div class="d-flex justify-content-between align-items-center w-100 m-3">
+                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
                                             <label for="numRows">Número de Filas:</label>
                                             <select id="numRows" class="form-select">

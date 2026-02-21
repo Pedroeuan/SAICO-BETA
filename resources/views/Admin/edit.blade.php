@@ -139,23 +139,27 @@
 
                         <div class="form-group">
                             <label>Fecha vencimiento licencia</label>
-                            <input type="date" name="licencia_vencimiento" class="form-control" value="{{ $Usuario->licencia_vencimiento }}">
+                            <input type="date" name="licencia_vencimiento" class="form-control" value="@if($Usuario->licencia_vencimiento == '2001-01-01') {{ '' }} @else  {{ $Usuario->licencia_vencimiento }} @endif">
                         </div>
 
                         <div class="form-group">
                             <label>Licencia actual:</label>
-                            @if($Usuario->licencia_pdf)
+                            @if($Usuario->licencia_pdf && $Usuario->licencia_pdf != 'ESPERA DE DATO')
                                 <br>
                                 <a href="{{ asset('storage/'.$Usuario->licencia_pdf) }}" target="_blank">Ver Licencia Actual</a>
+                                @else
+                                <p>No se ha subido una licencia.</p>
                             @endif
                             <input type="file" name="licencia_pdf" class="form-control" accept="application/pdf">
                         </div>
 
                         <div class="form-group">
                             <label>CV actual:</label>
-                            @if($Usuario->cv_pdf)
+                            @if($Usuario->cv_pdf && $Usuario->cv_pdf != 'ESPERA DE DATO')
                                 <br>
                                 <a href="{{ asset('storage/'.$Usuario->cv_pdf) }}" target="_blank">Ver CV Actual </a>
+                            @else
+                                <p>No se ha subido un CV.</p>
                             @endif
                             <input type="file" name="cv_pdf" class="form-control" accept="application/pdf">
                         </div>

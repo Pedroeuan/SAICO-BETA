@@ -74,6 +74,15 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
     Route::redirect('/register', '/dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
+    Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Reporte_FOR_PIMP_02_B_04.PDF');
+    Route::get('Reporte/FOR_PIMP_07_B/01', [ReporteController::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
+    Route::get('Reporte/FOR_PIMP_03/01', [ReporteController::class, 'FOR_PIMP_03_01'])->name('Reporte_FOR_PIMP_03_01.PDF');
+    Route::get('Reporte/FOR_PIMP_05_B/01', [ReporteController::class, 'FOR_PIMP_05_B_01'])->name('Reporte_FOR_PIMP_05_B_01.PDF');
+    Route::get('Reporte/FOR_PIMP_06_B/01', [ReporteController::class, 'FOR_PIMP_06_B_01'])->name('Reporte_FOR_PIMP_06_B_01.PDF');
+    Route::get('Reporte/FOR_PIMP_04/02', [ReporteController::class, 'FOR_PIMP_04_02'])->name('Reporte_FOR_PIMP_04_02.PDF');
+    Route::get('Reporte/FOR_PIMP_03/01', [ReporteController::class, 'FOR_PIMP_03_01'])->name('Reporte_FOR_PIMP_03_01.PDF');
+    Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Reporte_FOR_PIMP_04_03.PDF');
     //solicitud_AD
     Route::middleware('auth')->group(function () {
     /*SOLICITUDES-1*/
@@ -144,6 +153,8 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
         Route::get('/ReportesPrincipalMaster', [ReporteController::class, 'ReportesPrincipalMaster'])->name('ReportesPrincipalMaster');
         /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
         Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
+        /*Rutas de controlador para duplicar los datos y redirigir el Reporte*/
+        Route::get('/Next/Reporte/{id}', [ReporteController::class, 'Next_Reporte'])->name('Next.Reporte');
 
         /*PRUEBAS*/
         /*Vista Menu Pruebas*/

@@ -56,12 +56,17 @@ class equiposController extends Controller
                 'Modelo' => 'required|string|max:255',
                 'Serie' => 'required|string|max:255',
                 'ISO' => 'required|in:9001,17025',
-                'Disponibilidad_Estado' => 'required|string|max:255',
+                'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
+                'TIPO' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
-            
+
+            /*Esta validaciones es por el apartado de la 17025*/
+            $Tipo = $request->input('TIPO');
+
+            if($Tipo == 'EQUIPOS'){
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
@@ -71,6 +76,37 @@ class equiposController extends Controller
             ->where('Tipo', 'EQUIPOS')
             ->exists();
 
+            }
+            elseif($Tipo == 'ACCESORIOS')
+            {
+                // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+                $noEconomicoLimpio = preg_replace('/^(no\.?\s*aico[- ]?|aico[- ]?)/i', '', $noEconomico);
+                $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+                $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AICO-', ''))) = ?", [$noEconomicoLimpio])
+                ->where('Tipo', 'ACCESORIOS')
+                ->exists();
+            }
+            elseif($Tipo == 'BLOCK Y PROBETA')
+            {
+                // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+                $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?|eco-b[- ]?)/i', '', $noEconomico);
+                $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+                $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(REPLACE(No_economico, 'No. ', ''), 'ECO-', ''), 'ECO-B-', ''))) = ?", [$noEconomicoLimpio])
+                ->where('Tipo', 'BLOCK Y PROBETA')
+                ->exists();
+            }
+            elseif($Tipo == 'HERRAMIENTAS')
+            {
+                // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
+                $noEconomicoLimpio = preg_replace('/^(no\.?\s*ad[- ]?|ad[- ]?)/i', '', $noEconomico);
+                $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
+
+                $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
+                ->where('Tipo', 'HERRAMIENTAS')
+                ->exists();
+            }
             //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
@@ -163,11 +199,11 @@ class equiposController extends Controller
             }else{
                 $general->BMPRO = $request->input('BMPRO');
             }
-            if($request->input('Tipo')==null)
+            if($request->input('TIPO')==null)
             {
                 $general->Tipo = $EsperaDato;
             }else{
-                $general->Tipo = $request->input('Tipo');
+                $general->Tipo = $request->input('TIPO');
             } 
             if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
             {

@@ -34,19 +34,19 @@
                         <div class="mb-3">
                             <label class="fw-bold">Placa <span class="text-danger">*</span></label>
                             <input type="text" name="placa" class="form-control"
-                                   value="{{ old('placa', $vehiculo->placa) }}" required>
+                                value="{{ old('placa', $vehiculo->placa) }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="fw-bold">Marca <span class="text-danger">*</span></label>
                             <input type="text" name="marca" class="form-control"
-                                   value="{{ old('marca', $vehiculo->marca) }}" required>
+                                value="{{ old('marca', $vehiculo->marca) }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="fw-bold">Modelo <span class="text-danger">*</span></label>
                             <input type="text" name="modelo" class="form-control"
-                                   value="{{ old('modelo', $vehiculo->modelo) }}" required>
+                                value="{{ old('modelo', $vehiculo->modelo) }}" required>
                         </div>
 
                         <div class="row">
@@ -54,7 +54,7 @@
                                 <div class="mb-3">
                                     <label class="fw-bold">Año</label>
                                     <input type="number" name="anio" class="form-control"
-                                           value="{{ old('anio', $vehiculo->anio) }}">
+                                        value="{{ old('anio', $vehiculo->anio) }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -101,7 +101,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento Póliza</label>
-                            <input type="date" name="poliza_seguro_vencimiento" class="form-control" value="{{ old('poliza_seguro_vencimiento', optional($vehiculo->poliza_seguro_vencimiento)->format('Y-m-d')) }}">
+                            <input type="date" name="poliza_seguro_vencimiento" class="form-control" value="@if($vehiculo->poliza_seguro_vencimiento == '2001-01-01') {{ '' }} @else {{ old('poliza_seguro_vencimiento', optional($vehiculo->poliza_seguro_vencimiento)->format('Y-m-d')) }}@endif">
                         </div>
 
                         <div class="mb-3">
@@ -120,7 +120,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento Tarjeta</label>
-                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="{{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}">
+                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="@if($vehiculo->tarjeta_circulacion_vencimiento == '20001-01-01') {{ '' }} @else {{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}@endif">
                         </div>
                     </div>
                 </div>

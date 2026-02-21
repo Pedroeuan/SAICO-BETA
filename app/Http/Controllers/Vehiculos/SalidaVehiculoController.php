@@ -99,7 +99,7 @@ class SalidaVehiculoController extends Controller
     $usuarioLogueado = Auth::user();
     $vehiculo = Vehiculo::findOrFail($request->vehiculo_id);
     $chofer = User::findOrFail($request->chofer_id);
-    
+    $ESPERADATO= 'ESPERA DE DATO';
     //VALIDACIONES
     // Vehículo con salida activa
     if ($vehiculo->estatus !== 'disponible') {
@@ -129,7 +129,6 @@ class SalidaVehiculoController extends Controller
     $fechaSalida = $request->filled('fecha_salida')
         ? Carbon::parse($request->fecha_salida)
         : now();
-
     $licenciaExpirada = $chofer->licencia_vencimiento
         ? Carbon::parse($chofer->licencia_vencimiento)->toDateString() < $fechaSalida->toDateString()
         : true;
@@ -145,15 +144,18 @@ class SalidaVehiculoController extends Controller
     }
 
     //TRANSACCIÓN SEGURA
-
-    DB::transaction(function () use ($request, $vehiculo, $chofer, $usuarioLogueado) {
-
+    DB::transaction(function () use ($request, $vehiculo, $chofer, $usuarioLogueado,$fechaSalida,$ESPERADATO) {
+    
         $salida = SalidaVehiculo::create([
             'vehiculo_id' => $vehiculo->id,
             'chofer_id' => $chofer->id,
             'solicitado_por' => $usuarioLogueado->id,
             'creado_por' => $usuarioLogueado->id,
+            'finalizado_por' => 0,
             'fecha_salida' => $fechaSalida,
+            'fecha_regreso' => NULL,
+            'duracion_minutos' => NULL,
+            'motivo' => $request->input('motivo') ?? $ESPERADATO,
             'estatus' => 'activo'
         ]);
 
