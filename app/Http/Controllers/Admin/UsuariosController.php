@@ -84,22 +84,34 @@ class UsuariosController extends Controller
         $Usuario->Estatus = $request->input('Estatus') ?? $EsperaDato;
 
         // campos de licencia
+        if($request->input('licencia_numero')==null)
+        {
+            $Usuario->licencia_numero = $EsperaDato;
+        }else{
         $Usuario->licencia_numero = $request->input('licencia_numero');
-        
+        }
         //fecha de vencimiento
+        if($request->input('licencia_vencimiento')==null)
+        {
+            $Usuario->licencia_vencimiento = '2001-01-01';
+        }else{
         $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
-
+        }
+            
         //Guardar pdf licencia
         if($request->hasFile('licencia_pdf')){
             $rutaLicencia = $request->file('licencia_pdf')->store('usuarios/licencias', 'public');
             $Usuario->licencia_pdf = $rutaLicencia;
+        }else{
+            $Usuario->licencia_pdf = $EsperaDato;
         }
 
         // Guardar CV
         if($request->hasFile('cv_pdf')){
                 $rutaCV = $request->file('cv_pdf')->store('usuario/cv', 'public');
                 $Usuario->cv_pdf = $rutaCV;
-    
+        }else{
+            $Usuario->cv_pdf = $EsperaDato;
         }
         // Guardar el usuario en la base de datos
         $Usuario->save();
@@ -143,7 +155,7 @@ class UsuariosController extends Controller
         // Obtener el nombre del usuario
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
-        
+        $EsperaDato ='ESPERA DE DATO';
         if ($request->filled('ContrasenaUsuario') && $request->filled('RepetirContrasena')) {
         // Validar los datos de entrada
         $request->validate([
@@ -161,7 +173,12 @@ class UsuariosController extends Controller
         $Usuario  = Usuario::find($id);
 
         // ===== CAMPOS LICENCIA =====
+        if($request->input('licencia_numero')==null)
+        {
+            $Usuario->licencia_numero = $EsperaDato;
+        }else{
         $Usuario->licencia_numero = $request->input('licencia_numero');
+        }
         $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
 
         // Subir nueva licencia si existe
@@ -204,7 +221,12 @@ class UsuariosController extends Controller
         $Usuario  = Usuario::find($id);
 
         // ===== CAMPOS LICENCIA =====
+        if($request->input('licencia_numero')==null)
+        {
+            $Usuario->licencia_numero = $EsperaDato;
+        }else{
         $Usuario->licencia_numero = $request->input('licencia_numero');
+        }
         $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
 
         // Subir nueva licencia si existe
