@@ -59,7 +59,8 @@
                 <table id="tablaVehiculos" class="table table-sm table-hover table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 80px;">#</th>
+                            <!--<th style="width: 80px;">#</th> 
+                            <th style="width: 80px;">ID</th>-- IGNORE -->
                             <th>Vehículo</th>
                             <th>Año</th>
                             <th>Estado</th>
@@ -73,8 +74,9 @@
                     <tbody>
                     @forelse ($vehiculos as $vehiculo)
                         <tr>
-                            <td>{{ $vehiculo->id }}</td>
-                            <td>
+                            <!--<td>{{ $vehiculo->id }}</td>-- IGNORE -->
+                            
+                            <td> 
                                 <strong>{{ $vehiculo->placa }}</strong><br>
                                 <small class="text-muted">{{ $vehiculo->marca }} {{ $vehiculo->modelo }}</small>
                             </td>

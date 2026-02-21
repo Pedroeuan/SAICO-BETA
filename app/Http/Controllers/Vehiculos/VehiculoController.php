@@ -29,7 +29,7 @@ class VehiculoController extends Controller
         $documentosProximoVencer = Vehiculo::where('documentacion_estatus', 'completa')
             ->where(function($q) use ($proximo15dias) {
                 $q->whereBetween('poliza_seguro_vencimiento', [\Carbon\Carbon::now(), $proximo15dias])
-                  ->orWhereBetween('tarjeta_circulacion_vencimiento', [\Carbon\Carbon::now(), $proximo15dias]);
+                ->orWhereBetween('tarjeta_circulacion_vencimiento', [\Carbon\Carbon::now(), $proximo15dias]);
             })
             ->get();
 
@@ -62,38 +62,47 @@ class VehiculoController extends Controller
      */
     public function store(VehiculoRequest $request)
     {
+        //dd($request->all());
         $data = $request->validated();
 
-        // crear vehículo sin archivos primero
-        $vehiculo = Vehiculo::create(
-            array_merge($data, ['kilometraje_actual' => $data['kilometraje_actual'] ?? 0])
-        );
+        $ESPERADATO = 'ESPERA DE DATO';
 
+        // crear vehículo sin archivos primero
+        /*$vehiculo = Vehiculo::create(
+            array_merge($data, ['kilometraje_actual' => $data['kilometraje_actual'] ?? 0])
+        );*/
+        $vehiculo = new Vehiculo($data);
+        $vehiculo->kilometraje_actual = $data['kilometraje_actual'] ?? 0;
+        $vehiculo->save(); 
         // almacenar PDFs en carpeta organizada
-        if ($request->hasFile('poliza_seguro_pdf')) {
+        if ($request->hasFile('poliza_seguro_pdf') && $request->file('poliza_seguro_pdf') != null) {
             $path = $request->file('poliza_seguro_pdf')->store("vehiculos/{$vehiculo->id}/poliza", 'public');
             $vehiculo->poliza_seguro_pdf = $path;
+        }else{
+            $vehiculo->poliza_seguro_pdf = $ESPERADATO;
         }
-        if ($request->hasFile('tarjeta_circulacion_pdf')) {
+        if ($request->hasFile('tarjeta_circulacion_pdf') && $request->file('tarjeta_circulacion_pdf') != null) {
             $path = $request->file('tarjeta_circulacion_pdf')->store("vehiculos/{$vehiculo->id}/tarjeta", 'public');
             $vehiculo->tarjeta_circulacion_pdf = $path;
+        }else{
+            $vehiculo->tarjeta_circulacion_pdf = $ESPERADATO;
         }
-
         // fechas
-        if ($request->filled('poliza_seguro_vencimiento')) {
+        if ($request->filled('poliza_seguro_vencimiento') && $request->input('poliza_seguro_vencimiento') != null) {
             $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
+        }else{
+            $vehiculo->poliza_seguro_vencimiento = '2001-01-01';
         }
-        if ($request->filled('tarjeta_circulacion_vencimiento')) {
+        if ($request->filled('tarjeta_circulacion_vencimiento') && $request->input('tarjeta_circulacion_vencimiento') != null) {
             $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
+        }else{
+            $vehiculo->tarjeta_circulacion_vencimiento = '2001-01-01';
         }
 
         $vehiculo->save();
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehículo registrado correctamente');
     }
-
-
-
 
     /**
      * Display the specified resource.
