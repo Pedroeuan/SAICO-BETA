@@ -1178,7 +1178,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 // Eliminar del almacenamiento
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
+                    //Log::info("Imagen eliminada: {$rutaImagen}");
                 } else {
                     //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
                 }
