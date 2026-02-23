@@ -157,34 +157,16 @@ class SalidaChecklistController extends Controller
             return redirect()->route('salidas.index')->with('error', 'Esta salida ya fue finalizada');
         }
 
-        // no se puede finalizar dos veces 
-    if($salida->estatus==='finalizado'){
-    return redirect()->route('salidas.index')->with('erro','Esta salida ya fue finalizada');
-   }
-   // validar kilometraje
-   //// Validar contra el kilometraje real del checklist de salida (no existe kilometraje_inicial en salidas_vehiculos).
-    $checklistSalida = $salida->checklistSalida;
-
-     if (!$checklistSalida || !$checklistSalida->condicion) {
-    return redirect()->route('salidas.index')->with('error', 'El checklist de salida no tiene condición registrada');
-      }
-
-   $kmSalida = (int) $checklistSalida->condicion->kilometraje;
- 
-   /*if ($request->kilometraje <=$salida->kilometraje_inicial){
-    return back()->with('error','El kilometraje final debe ser mayor al inical');
-   }*/
-
+        // Validar contra el kilometraje real del checklist de salida.
         $checklistSalida = $salida->checklistSalida;
-
         if (!$checklistSalida || !$checklistSalida->condicion) {
             return redirect()->route('salidas.index')->with('error', 'El checklist de salida no tiene condición registrada');
         }
+        $kmSalida = (int) $checklistSalida->condicion->kilometraje;
 
-        $kmSalida = $checklistSalida->condicion->kilometraje;
         $request->validate([
             'nivel_gasolina'  => 'required|string',
-            'kilometraje'     => "required|integer|ht:$kmSalida",
+            'kilometraje'     => "required|integer|gt:$kmSalida",
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
