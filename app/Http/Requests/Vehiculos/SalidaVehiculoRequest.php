@@ -19,7 +19,6 @@ class SalidaVehiculoRequest extends FormRequest
             'fecha_salida'   => 'required|date',
             'fecha_regreso'  => 'nullable|date|after_or_equal:fecha_salida',
             'motivo'         => 'nullable|string|max:255',
-            ''
         ];
     }
 }
