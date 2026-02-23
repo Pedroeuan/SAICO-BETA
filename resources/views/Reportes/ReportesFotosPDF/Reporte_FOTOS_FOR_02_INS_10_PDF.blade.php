@@ -472,6 +472,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    
                 <div style="margin-bottom: 6px;"></div>
 
                 <table class="datosgenerales">
