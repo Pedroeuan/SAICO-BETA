@@ -145,18 +145,21 @@ class SalidaVehiculoController extends Controller
 
     //TRANSACCIÓN SEGURA
     DB::transaction(function () use ($request, $vehiculo, $chofer, $usuarioLogueado,$fechaSalida,$ESPERADATO) {
-    
+    //generacion de folio para evitar dependencia del formulario 
+    $numReporte = 'SV-' . now()->format('Ymd-His') . '-' . strtoupper(\Illuminate\Support\Str::random(4));
+
         $salida = SalidaVehiculo::create([
             'vehiculo_id' => $vehiculo->id,
             'chofer_id' => $chofer->id,
             'solicitado_por' => $usuarioLogueado->id,
             'creado_por' => $usuarioLogueado->id,
-            'finalizado_por' => 0,
+            'finalizado_por' => null, //aun no finalizado
             'fecha_salida' => $fechaSalida,
             'fecha_regreso' => NULL,
             'duracion_minutos' => NULL,
             'motivo' => $request->input('motivo') ?? $ESPERADATO,
-            'estatus' => 'activo'
+            'estatus' => 'activo',
+            'Num_Reporte' => $numReporte, 
         ]);
 
         $vehiculo->update([

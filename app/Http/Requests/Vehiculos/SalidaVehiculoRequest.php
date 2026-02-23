@@ -15,11 +15,11 @@ class SalidaVehiculoRequest extends FormRequest
         return [
             'vehiculo_id'    => 'required|exists:vehiculos,id',
             'chofer_id'      => 'required|exists:users,id',
-            'solicitado_por' => 'required|exists:users,id',
+            'solicitado_por' => 'nullable|exists:users,id',
             'fecha_salida'   => 'required|date',
             'fecha_regreso'  => 'nullable|date|after_or_equal:fecha_salida',
             'motivo'         => 'nullable|string|max:255',
-            
+            ''
         ];
     }
 }

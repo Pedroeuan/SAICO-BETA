@@ -204,8 +204,15 @@ class SalidaChecklistController extends Controller
                 $checklist->evidencias()->create(['foto' => $ruta]);
             }
 
-
-            $salida->update(['fecha_regreso' => now(), 'estatus' => 'finalizado',]);
+            //$salida->update(['fecha_regreso' => now(), 'estatus' => 'finalizado',]);
+            // se rempleza para que marque el estaus finalizado y se mida la duracion del tiempo de vehiculo que estuvo 
+            $fechaRegreso = now();
+            $salida->update([
+                'fecha_regreso' =>$fechaRegreso,
+                'estatus' => 'finalizado',
+                'finalizado_por' => auth()->id(),
+                'duracion_minutos' => $salida->fecha_salida ? $salida->fecha_salida->diffInMinutes($fechaRegreso): null,
+            ]);
             $salida->vehiculo->update(['estatus' => 'disponible']);
         });
 
