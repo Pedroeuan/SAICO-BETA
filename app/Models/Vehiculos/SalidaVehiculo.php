@@ -22,6 +22,7 @@ class SalidaVehiculo extends Model
         'duracion_minutos',
         'motivo',
         'estatus',
+        'Num_Reporte', 
     ];
 
     protected $casts=[
