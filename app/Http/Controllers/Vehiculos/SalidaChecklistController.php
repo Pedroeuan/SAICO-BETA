@@ -162,9 +162,18 @@ class SalidaChecklistController extends Controller
     return redirect()->route('salidas.index')->with('erro','Esta salida ya fue finalizada');
    }
    // validar kilometraje
-   if ($request->kilometraje <=$salida->kilometraje_inicial){
+   //// Validar contra el kilometraje real del checklist de salida (no existe kilometraje_inicial en salidas_vehiculos).
+    $checklistSalida = $salida->checklistSalida;
+
+     if (!$checklistSalida || !$checklistSalida->condicion) {
+    return redirect()->route('salidas.index')->with('error', 'El checklist de salida no tiene condición registrada');
+      }
+
+   $kmSalida = (int) $checklistSalida->condicion->kilometraje;
+ 
+   /*if ($request->kilometraje <=$salida->kilometraje_inicial){
     return back()->with('error','El kilometraje final debe ser mayor al inical');
-   }
+   }*/
 
         $checklistSalida = $salida->checklistSalida;
 
@@ -175,7 +184,7 @@ class SalidaChecklistController extends Controller
         $kmSalida = $checklistSalida->condicion->kilometraje;
         $request->validate([
             'nivel_gasolina'  => 'required|string',
-            'kilometraje'     => "required|integer|min:$kmSalida",
+            'kilometraje'     => "required|integer|ht:$kmSalida",
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
@@ -204,8 +213,15 @@ class SalidaChecklistController extends Controller
                 $checklist->evidencias()->create(['foto' => $ruta]);
             }
 
-
-            $salida->update(['fecha_regreso' => now(), 'estatus' => 'finalizado',]);
+            //$salida->update(['fecha_regreso' => now(), 'estatus' => 'finalizado',]);
+            // se rempleza para que marque el estaus finalizado y se mida la duracion del tiempo de vehiculo que estuvo 
+            $fechaRegreso = now();
+            $salida->update([
+                'fecha_regreso' =>$fechaRegreso,
+                'estatus' => 'finalizado',
+                'finalizado_por' => auth()->id(),
+                'duracion_minutos' => $salida->fecha_salida ? $salida->fecha_salida->diffInMinutes($fechaRegreso): null,
+            ]);
             $salida->vehiculo->update(['estatus' => 'disponible']);
         });
 
