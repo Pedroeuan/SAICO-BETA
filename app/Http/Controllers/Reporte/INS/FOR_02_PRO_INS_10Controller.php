@@ -1393,7 +1393,8 @@ class FOR_02_PRO_INS_10Controller extends Controller
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
+                    'comment' => $foto['comentario'] ?? '',
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
                 ];
             }
         }
