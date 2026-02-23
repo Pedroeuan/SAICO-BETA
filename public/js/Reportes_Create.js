@@ -1,3 +1,38 @@
+    /*check del cliente, si y no */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const radios = document.querySelectorAll('input[name="TieneCliente"]');
+    const select = document.getElementById('campoClienteSelect');
+    const input  = document.getElementById('campoClienteInput');
+
+    function toggleCliente() {
+        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
+
+        if (valor === 'si') {
+            // Mostrar select
+            select.style.display = 'block';
+            input.style.display  = 'none';
+
+            input.value = '';   // limpiar input
+
+        } else {
+            // Mostrar input vacío
+            select.style.display = 'none';
+            input.style.display  = 'block';
+
+            select.value = '';  // limpiar select
+            input.value  = '';  // aseguramos vacío
+            input.focus();      // cursor automático
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', toggleCliente);
+    });
+
+    toggleCliente(); // ejecutar al cargar
+});
+
     /*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -193,11 +228,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
                         
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
+                            <input type="checkbox"
+                                class="form-check-input imagen-hoja-checkbox"
+                                data-index="${i}"
+                                id="imagenHoja${i}">
                             <label class="form-check-label" for="imagenHoja${i}">
                                 Imagen en una hoja
                             </label>
                         </div>
+
+                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
 
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
@@ -207,7 +247,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 container.appendChild(col);
             }
-            
+            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
+                });
+            });
+
             // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
@@ -568,3 +614,76 @@ document.addEventListener("DOMContentLoaded", function () {
         firmas4.style.display = 'block';
     }
     });
+
+    /*Envio de formulario */
+/* Envio de formulario */
+$(document).ready(function () {
+
+    $('form').submit(function(e) {
+
+        // ============================
+        // VALIDAR CLIENTE SELECCIONADO
+        // ============================
+        let tieneCliente   = $('input[name="TieneCliente"]:checked').val();
+        let clienteSelect  = $('#campoClienteSelect').val();
+        let clienteInput   = $('#campoClienteInput').val();
+
+        // Si seleccionó "SI", debe elegir un cliente del select
+        if (tieneCliente === 'si' && 
+            (clienteSelect === null || clienteSelect === 'Seleccione un Cliente')) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor seleccione un cliente válido.',
+            });
+
+            $('#campoClienteSelect').focus();
+            return;
+        }
+
+        // Si seleccionó "NO", debe escribir un cliente
+        if (tieneCliente === 'no' && clienteInput.trim() === '') {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor ingrese el nombre del cliente.',
+            });
+
+            $('#campoClienteInput').focus();
+            return;
+        }
+
+        // ============================
+        // VALIDAR QUE LA TABLA NO ESTE VACIA
+        // ============================
+        if ($('#dynamicTable tbody tr').length === 0) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+            });
+
+            return;
+        }
+
+        // ============================
+        // CONTINUA ENVIO NORMAL
+        // ============================
+        updateTitulos();
+
+        sessionStorage.clear();
+
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+    });
+
+});

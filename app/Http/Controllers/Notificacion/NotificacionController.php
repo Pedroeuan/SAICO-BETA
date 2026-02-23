@@ -186,10 +186,11 @@ class NotificacionController extends Controller
                         $notificacion->url = $url;
                         $notificacion->leida = false;
                         $notificacion->save();
+
+                        // 📧 Enviar correo
+                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                     }
 
-                    // 📧 Enviar correo
-                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                 }
             }
         }
