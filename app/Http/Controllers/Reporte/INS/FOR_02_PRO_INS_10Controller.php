@@ -1314,6 +1314,57 @@ class FOR_02_PRO_INS_10Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
+
+        // Normalizar estructura para asegurar compatibilidad con la vista PDF
+        $normalizedGrupos = [];
+        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
+            $titulo = 'SIN TITULO';
+            $resultados = [];
+
+            // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
+            if (is_array($grupo)) {
+                if (isset($grupo['titulos_juntas'])) {
+                    if (is_array($grupo['titulos_juntas'])) {
+                        // Si por alguna razon se guardó como objeto, intentar extraer 'text' o 'titulo'
+                        if (isset($grupo['titulos_juntas']['text'])) {
+                            $titulo = $grupo['titulos_juntas']['text'];
+                        } elseif (isset($grupo['titulos_juntas']['titulo'])) {
+                            $titulo = $grupo['titulos_juntas']['titulo'];
+                        } else {
+                            $titulo = json_encode($grupo['titulos_juntas']);
+                        }
+                    } else {
+                        $titulo = $grupo['titulos_juntas'];
+                        if (trim($titulo) === '') {
+                            $titulo = 'SIN TITULO';
+                        }
+                    }
+                } elseif (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    // No hay título explícito, se toma SIN TITULO
+                    $titulo = 'SIN TITULO';
+                } else {
+                    // Manejar estructura en la que la clave del grupo es el título y su valor es el array de resultados
+                    $firstKey = null;
+                    foreach ($grupo as $k => $v) { $firstKey = $k; break; }
+                    if ($firstKey !== null && is_array($grupo[$firstKey])) {
+                        $titulo = $firstKey;
+                        $resultados = $grupo[$firstKey];
+                    }
+                }
+
+                if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    $resultados = $grupo['resultados'];
+                }
+            }
+
+            $normalizedGrupos[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+
+        $Grupo_Juntas_Detalles_Re = $normalizedGrupos;
+
         $totalTitulos = 0;
         $totalFilas = 0;
 
