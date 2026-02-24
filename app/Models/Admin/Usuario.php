@@ -18,6 +18,11 @@ class Usuario extends Model
         'password',
         'rol',
         'Estatus',
+        'licencia_numero',
+        'licencia_vencimieno',
+        'licencia_pdf',
+        'cv_pdf',
+        'licencia_estatus',
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';

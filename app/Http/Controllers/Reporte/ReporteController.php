@@ -1142,7 +1142,7 @@ class ReporteController extends Controller
         if ($reportesEncontrados->isNotEmpty()) {
             return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
         } else {
-            return "No se encontraron reportes con ese contrato.";
+            return redirect()->route('indexINS1');
         }
     }
 
@@ -1298,6 +1298,79 @@ class ReporteController extends Controller
         ]);
 
     }
+
+    public function Next_Reporte($id)
+    {
+        DB::transaction(function () use ($id, &$nuevoId) {
+
+            // 1️ Obtener reporte original
+            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
+
+            // 2️ Clonar reporte
+            $NuevoReporte = $ReporteOriginal->replicate();
+
+            // 3️ Decodificar JSON
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
+
+            $numeroActual = $Detalles_Generales['No_Reporte'];
+
+            preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
+
+            if ($matches) {
+                $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
+                $nuevoNoReporte = $nuevoNumero . '-' . $matches[2];
+            } else {
+                $nuevoNoReporte = $numeroActual . '-001';
+            }
+
+            // 4️ Reemplazar valores
+            $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
+            $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
+
+            $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            $NuevoReporte->Estatus = 'CREADO';
+
+            // 5️ Guardar nuevo reporte
+            $NuevoReporte->save();
+
+            $nuevoId = $NuevoReporte->idReportes;
+
+            // =====================================
+            // 🔹 CLONAR FIRMAS
+            // =====================================
+
+            $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
+
+            if ($FirmaOriginal) {
+
+                $NuevaFirma = $FirmaOriginal->replicate();
+                $NuevaFirma->idReportes = $nuevoId; // 👈 AQUÍ está la clave
+                $NuevaFirma->save();
+            }
+
+            // =====================================
+            //  CREAR FOTOS VACÍAS
+            // =====================================
+
+            Fotos_Reporte::create([
+                'idReportes' => $nuevoId,
+                'Fotos_Reportes' => json_encode([]),
+            ]);
+
+            // =====================================
+            //  CREAR JUNTAS VACÍAS
+            // =====================================
+
+            Grupo_Juntas_Detalles_Re::create([
+                'idReportes' => $nuevoId,
+                'Juntas_Grupo_Re' => json_encode([]),
+            ]);
+        });
+
+        return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
+    }
+
+
 
     /**
      * Display the specified resource.

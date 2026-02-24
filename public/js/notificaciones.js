@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
             messageText.style.flexGrow = '1';
             link.appendChild(messageText);
 
-            // 🟢 NUEVO: Marcar como leída al hacer clic
+            //  NUEVO: Marcar como leída al hacer clic
             link.addEventListener('click', async (e) => {
                 e.preventDefault(); // Evita que recargue antes de marcar como leída
 
