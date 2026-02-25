@@ -1021,7 +1021,7 @@ $(document).ready(function() {
             ta: 'ta',
             Perd_Mate: 'Perdida de Material (%)',
             fotos: 'Fotos No.',
-            observaciones: 'Observaciones'
+            Observaciones: 'Observaciones'
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
