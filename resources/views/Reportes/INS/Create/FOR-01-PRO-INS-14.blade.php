@@ -1418,7 +1418,7 @@ $(document).ready(function() {
         'EVAL',
         'FOTOS'];
         const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
-            no_junta: 'Junta / Elemento', 
+            no_junta: 'Junta / Eento', 
             Tip_Ind: 'Tipo de Indicación', 
             L_PGL: 'L (PLG)',
             A_PGL: 'A (PLG)', 
@@ -1585,7 +1585,8 @@ $(document).ready(function() {
         const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
         //if (formId && typeof saveData === 'function') saveData(formId);
         }
-
+        //TERMINA  restoreData()
+        
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
