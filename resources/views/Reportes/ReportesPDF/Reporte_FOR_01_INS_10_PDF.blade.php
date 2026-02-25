@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-10/01</title>
             <style>
-                  @page {
+                @page {
                     margin: 
                     3.0cm /* superior */
                     2.1cm /* derecho */
@@ -35,7 +35,7 @@
                 }
 
                 body {
-                    margin-top: 30px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 35px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -737,12 +737,10 @@
                                 @endforeach
 
                                 {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="">
-                                    <td colspan="9"><b>SIR</b>= Sin indicaciones Relevantes <b>L</b>= Indicacion Lineal <b>R</b>= Indicacion Redondeada <b>A</b>= Aceptado 
-                                    <b>R</b>= Rechazado <br> <b>FP</b>= Falta de Penetracion <b>FF</b>= Falta de Fusion <b>P</b>= Poros <b>PA</b>= Poros Agrupados
-                                    <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
+                                <tr class="sinBordetd">
+                                    <td colspan="14">
                                     </td>
-                                    <th colspan="3">Longitud inspeccionada:</th>
+                                    <th colspan="5">Longitud inspeccionada:</th>
                                     <th colspan="2">
                                         {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
                                     </th>

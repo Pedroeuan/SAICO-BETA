@@ -576,7 +576,7 @@
                                 <td><input type="text" class="form-control" name='ta[{{ $titleId }}][]' value="{{ $resultado['ta'] }}"></td>
                                 <td><input type="text" class="form-control" name='Perd_Mate[{{ $titleId }}][]' value="{{ $resultado['Perd_Mate'] }}"></td>
                                 <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $resultado['fotos'] }}"></td>
-                                <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $resultado['observaciones'] }}"></td>
+                                <td><input type="text" class="form-control" name='Observaciones[{{ $titleId }}][]' value="{{ $resultado['Observaciones'] }}"></td>
                                 <td>
                                     <button type="button" class="btn btn-danger btnEliminar">
                                         <i class="fa fa-times"></i>
@@ -1239,7 +1239,7 @@ $(document).ready(function() {
             }
             //-----------------------------------------Hacer ajuste de "N" filas por bloque
             // 🎯 Cuando llegue a 11 → insertar longitud
-            if (contadorBloque === 15) {
+            if (contadorBloque === 11) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
