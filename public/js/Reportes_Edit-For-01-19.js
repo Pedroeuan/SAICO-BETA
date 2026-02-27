@@ -230,7 +230,12 @@ function bindDetallesJuntaCheckboxes() {
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image${index}">Imagen por Subir ${index}:</label>
+
+                        <div class="image-preview mt-2" id="image${index}-preview"></div>
+                        
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
+
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
 
                         <div class="form-check mt-2">
                             <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="${index}" id="imagenHoja${index}">
@@ -240,6 +245,7 @@ function bindDetallesJuntaCheckboxes() {
                         </div>
 
                         <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
+
                         <div class="form-check mt-2">
                             <input type="checkbox" class="form-check-input detalles-junta-checkbox"
                                 data-index="${index}" id="detallesJunta${index}">
@@ -281,8 +287,6 @@ function bindDetallesJuntaCheckboxes() {
                             <input type="text" class="form-control mt-1"
                                 name="recubrimiento[${index}]" placeholder="Recubrimiento">
                         </div>
-                        <div class="image-preview mt-2" id="image${index}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
                     </div>

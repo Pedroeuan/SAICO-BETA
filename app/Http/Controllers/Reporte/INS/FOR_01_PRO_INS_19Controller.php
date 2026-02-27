@@ -253,7 +253,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
 
             'Datos_Equipo.MARCA_SOFTWARE' => 'nullable|string',
             'Datos_Equipo.MODELO_SOFTWARE' => 'nullable|string',
-            'Datos_Equipo.NS_SOFTWARE' => 'nullable|string',
+            'Datos_Equipo.VERSION_SOFTWARE' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string',
@@ -692,7 +692,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
 
             'Datos_Equipo.MARCA_SOFTWARE' => 'nullable|string',
             'Datos_Equipo.MODELO_SOFTWARE' => 'nullable|string',
-            'Datos_Equipo.NS_SOFTWARE' => 'nullable|string',
+            'Datos_Equipo.VERSION_SOFTWARE' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA' => 'nullable|string',
@@ -874,7 +874,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("no.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -1117,7 +1117,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
                 // Guardar la imagen en el almacenamiento
                 Storage::put($path, $image);
                 $rutaNueva = str_replace('public/', 'storage/', $path);
- 
+
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
 
@@ -1163,6 +1163,56 @@ class FOR_01_PRO_INS_19Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
+        // Normalizar estructura para asegurar compatibilidad con la vista PDF
+        $normalizedGrupos = [];
+        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
+            $titulo = 'SIN TITULO';
+            $resultados = [];
+
+            // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
+            if (is_array($grupo)) {
+                if (isset($grupo['titulos_juntas'])) {
+                    if (is_array($grupo['titulos_juntas'])) {
+                        // Si por alguna razon se guardó como objeto, intentar extraer 'text' o 'titulo'
+                        if (isset($grupo['titulos_juntas']['text'])) {
+                            $titulo = $grupo['titulos_juntas']['text'];
+                        } elseif (isset($grupo['titulos_juntas']['titulo'])) {
+                            $titulo = $grupo['titulos_juntas']['titulo'];
+                        } else {
+                            $titulo = json_encode($grupo['titulos_juntas']);
+                        }
+                    } else {
+                        $titulo = $grupo['titulos_juntas'];
+                        if (trim($titulo) === '') {
+                            $titulo = 'SIN TITULO';
+                        }
+                    }
+                } elseif (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    // No hay título explícito, se toma SIN TITULO
+                    $titulo = 'SIN TITULO';
+                } else {
+                    // Manejar estructura en la que la clave del grupo es el título y su valor es el array de resultados
+                    $firstKey = null;
+                    foreach ($grupo as $k => $v) { $firstKey = $k; break; }
+                    if ($firstKey !== null && is_array($grupo[$firstKey])) {
+                        $titulo = $firstKey;
+                        $resultados = $grupo[$firstKey];
+                    }
+                }
+
+                if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    $resultados = $grupo['resultados'];
+                }
+            }
+
+            $normalizedGrupos[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados
+            ];
+        }
+
+        $Grupo_Juntas_Detalles_Re = $normalizedGrupos;
+
         $totalTitulos = 0;
         $totalFilas = 0;
 
@@ -1186,35 +1236,24 @@ class FOR_01_PRO_INS_19Controller extends Controller
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
             $totalFotos = count($fotos); // Contar el total de imágenes
-            $FotosMarcadas = [];
-            $FotosNormales = [];
-
-            foreach ($fotos as $foto) {
-                $item = [
-                    'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? '',
-                    'fullsize' => !empty($foto['hoja']) ? (bool)$foto['hoja'] : false
-                ];
-                if ($item['fullsize']) {
-                    $FotosMarcadas[] = $item;
-                } else {
-                    $FotosNormales[] = $item;
-                }
-            }
-        }
-        /*if ($Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-            $totalFotos = count($fotos); // Contar el total de imágenes
             $Fotos = [];
         
-            foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
+            foreach ($fotos as $foto) {
+
+                $detallesActivo = $foto['detalles_junta'] ?? 0;
+                $datosJunta = $foto['datos_junta'] ?? null;
+
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
                     'comment' => $foto['comentario'] ?? '',
-                    'fullsize' => !empty($foto['hoja']) ? (bool)$foto['hoja'] : false // 👈 aquí añadimos la bandera
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
+
+                    // 🔥 NUEVO
+                    'detalles_junta' => $detallesActivo,
+                    'datos_junta' => $datosJunta,
                 ];
             }
-        }*/
+        }
 
         $data = [
             'title' => 'Reporte_FOR-01-INS-19.PDF',
@@ -1230,16 +1269,13 @@ class FOR_01_PRO_INS_19Controller extends Controller
             'totalFilas' => $totalFilas,*/
             'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
-            //'Fotos' => $Fotos,
+            'Fotos' => $Fotos,
             //Total de Fotos
-            //'totalFotos' => $totalFotos,
+            'totalFotos' => $totalFotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
-            'FotosMarcadas' => $FotosMarcadas,
-            'FotosNormales' => $FotosNormales,
-            'totalFotos' => $totalFotos,
         ];
 
         // Generar el PDF principal en orientación horizontal
