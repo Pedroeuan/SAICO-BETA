@@ -57,6 +57,10 @@
         $ce = $checklistEntrada;
         $Logo = $Logo ?? public_path('images/Logo_AICO_R.jpg');
 
+        $fotoVehiculo = ($vehiculo && !empty($vehiculo->foto_principal))
+        ? public_path('storage/' . $vehiculo->foto_principal)
+        : null;
+
         $docs = $cs ? $cs->documentos->keyBy('documento') : collect();
         $herr = $cs ? $cs->herramientas->keyBy('herramienta') : collect();
 
@@ -73,21 +77,33 @@
         $fmtFecha = function($value) {
             return $value ? \Carbon\Carbon::parse($value)->format('d/m/Y H:i') : 'N/A';
         };
+
     @endphp
 
     <table class="mini" style="margin-bottom: 6px;">
         <tr>
-            <th rowspan="3" style="width: 20%; text-align: center; background: #fff;">
-                <img src="{{ $Logo }}" alt="Logo" style="width: auto; max-width: 95px; max-height: 30px; height: auto; display: block; margin: 0 auto;">
-            </th>
-            <th style="width: 80%; text-align: center;">Checklist de Vehiculo - Resumen</th>
-        </tr>
+    <th rowspan="3" style="width: 18%; text-align: center; background: #fff;">
+        <img src="{{ $Logo }}" alt="Logo" style="width:auto; max-width:95px; max-height:30px; height:auto; display:block; margin:0 auto;">
+    </th>
+
+    <th style="width: 64%; text-align: center;">Checklist de Vehiculo - Resumen</th>
+
+    <th rowspan="3" style="width: 18%; text-align: center; background: #fff;">
+        @if($fotoVehiculo && file_exists($fotoVehiculo))
+            <img src="{{ $fotoVehiculo }}" alt="Foto vehiculo" style="width:auto; max-width:95px; max-height:30px; height:auto; display:block; margin:0 auto;">
+        @else
+            <span style="font-size:8px; color:#666;">Sin foto</span>
+        @endif
+    </th>
+</tr>
+
         <tr>
             <td><strong>Checklist</strong></td>
         </tr>
         <tr>
             <td>Salida ID: {{ $salida->id }} | Fecha: {{ now()->format('d/m/Y') }}</td>
         </tr>
+
     </table>
 
     <div class="box">

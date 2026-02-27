@@ -88,7 +88,7 @@ class VehiculoController extends Controller
             $vehiculo->tarjeta_circulacion_pdf = $ESPERADATO;
         }
         // fechas
-        if ($request->filled('poliza_seguro_vencimiento') && $request->input('poliza_seguro_vencimiento') != null) {
+        /*if ($request->filled('poliza_seguro_vencimiento') && $request->input('poliza_seguro_vencimiento') != null) {
             $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
         }else{
             $vehiculo->poliza_seguro_vencimiento = '2001-01-01';
@@ -97,7 +97,15 @@ class VehiculoController extends Controller
             $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
         }else{
             $vehiculo->tarjeta_circulacion_vencimiento = '2001-01-01';
-        }
+        }*/
+        $vehiculo->poliza_seguro_vencimiento = $request->filled('poliza_seguro_vencimiento')
+        ? $request->input('poliza_seguro_vencimiento')
+        : null;
+
+        $vehiculo->tarjeta_circulacion_vencimiento = $request->filled('tarjeta_circulacion_vencimiento')
+        ? $request->input('tarjeta_circulacion_vencimiento')
+        : null;
+
 
         $vehiculo->save();
 
@@ -117,43 +125,59 @@ class VehiculoController extends Controller
      */
     public function edit($id)
     {
-        $vehiculo = Vehiculo::findOrFail($id);
+        $vehiculo = Vehiculo::with([
+        'mantenimientos' => function ($q) {
+            $q->latest('fecha')->limit(5);
+        },
+        'pagosVehiculo' => function ($q) {
+            $q->latest('fecha_pago')->limit(5);
+        }
+        ])->findOrFail($id);
+
         return view('vehiculos.edit', compact('vehiculo'));
     }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(VehiculoRequest $request, $id)
-    {
-        $vehiculo = Vehiculo::findOrFail($id);
+{
+    $vehiculo = Vehiculo::findOrFail($id);
+    $data = $request->validated();
 
-        $data = $request->validated();
+    // 1) actualizar solo campos que no son docs/fechas de docs
+    $vehiculo->fill(collect($data)->except([
+        'poliza_seguro_pdf',
+        'tarjeta_circulacion_pdf',
+        'poliza_seguro_vencimiento',
+        'tarjeta_circulacion_vencimiento',
+    ])->toArray());
 
-        // actualizar campos básicos
-        $vehiculo->update($data);
-
-        // archivos
-        if ($request->hasFile('poliza_seguro_pdf')) {
-            $path = $request->file('poliza_seguro_pdf')->store("vehiculos/{$vehiculo->id}/poliza", 'public');
-            $vehiculo->poliza_seguro_pdf = $path;
-        }
-        if ($request->hasFile('tarjeta_circulacion_pdf')) {
-            $path = $request->file('tarjeta_circulacion_pdf')->store("vehiculos/{$vehiculo->id}/tarjeta", 'public');
-            $vehiculo->tarjeta_circulacion_pdf = $path;
-        }
-
-        if ($request->filled('poliza_seguro_vencimiento')) {
-            $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
-        }
-        if ($request->filled('tarjeta_circulacion_vencimiento')) {
-            $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
-        }
-
-        $vehiculo->save();
-
-        return redirect()->route('vehiculos.index')->with('success', 'Vehiculo actualizado');
-
+    // 2) archivos (solo si suben uno nuevo)
+    if ($request->hasFile('poliza_seguro_pdf')) {
+        $vehiculo->poliza_seguro_pdf = $request->file('poliza_seguro_pdf')
+            ->store("vehiculos/{$vehiculo->id}/poliza", 'public');
     }
+
+    if ($request->hasFile('tarjeta_circulacion_pdf')) {
+        $vehiculo->tarjeta_circulacion_pdf = $request->file('tarjeta_circulacion_pdf')
+            ->store("vehiculos/{$vehiculo->id}/tarjeta", 'public');
+    }
+
+    // 3) fechas docs: SOLO cambiar si vienen con valor
+    if ($request->filled('poliza_seguro_vencimiento')) {
+        $vehiculo->poliza_seguro_vencimiento = $request->input('poliza_seguro_vencimiento');
+    }
+
+    if ($request->filled('tarjeta_circulacion_vencimiento')) {
+        $vehiculo->tarjeta_circulacion_vencimiento = $request->input('tarjeta_circulacion_vencimiento');
+    }
+
+    $vehiculo->save();
+
+    return redirect()->route('vehiculos.index')->with('success', 'Vehiculo actualizado');
+}
+
 
     /**
      * Remove the specified resource from storage.

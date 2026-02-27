@@ -65,6 +65,9 @@ use App\Http\Controllers\Vehiculos\VehiculoController; //controlador a vehiculos
 use App\Http\Controllers\Vehiculos\SalidaVehiculoController; //accesso a salidas de vehiculos
 use App\Http\Controllers\Vehiculos\SalidaChecklistController; //accesso a checklists de salidas de vehiculos
 use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendimiento vehiculos
+use App\Http\Controllers\Vehiculos\MantenimientoController;// Controlador de mantenimientos
+use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
+
 
     require __DIR__.'/auth.php';
 
@@ -658,7 +661,37 @@ use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendi
         /*Ruta de Exportar Rendimiento en PDF*/
         Route::get('/salidas-vehiculos/rendimiento/pdf/{periodo}', [RendimientoExportController::class, 'pdf'])->name('salidas.rendimiento.pdf');
         /*Ruta de Exportar Rendimiento en Excel*/
-        Route::get('/salidas-vehiculos/rendimiento/excel/{periodo}', [RendimientoExportController::class, 'excel'])->name('salidas.rendimiento.excel');
+        Route::get('/salidas-vehiculos/rendimiento/excel/{periodo}', [RendimientoExportController::class, 'excel'])->name('salidas.rendimiento.excel'); 
+      
+        // MANTENIMIENTOS DEL VEHICULO
+
+        // Lista mantenimientos de un vehículo (historial paginado).
+        Route::get('/vehiculos/{vehiculo}/mantenimientos', [MantenimientoController::class, 'index'])->name('vehiculos.mantenimientos.index');
+        // Formulario para crear mantenimiento de un vehículo.
+        Route::get('/vehiculos/{vehiculo}/mantenimientos/create', [MantenimientoController::class, 'create'])->name('vehiculos.mantenimientos.create');
+        // Guarda nuevo mantenimiento para el vehículo.
+        Route::post('/vehiculos/{vehiculo}/mantenimientos/store', [MantenimientoController::class, 'store'])->name('vehiculos.mantenimientos.store');
+        // Formulario para editar mantenimiento específico del vehículo.
+        Route::get('/vehiculos/{vehiculo}/mantenimientos/edit/{id}', [MantenimientoController::class, 'edit'])->name('vehiculos.mantenimientos.edit');
+        // Actualiza mantenimiento específico (acepta PUT o POST por compatibilidad del módulo).
+        Route::match(['post', 'put'], '/vehiculos/{vehiculo}/mantenimientos/update/{id}', [MantenimientoController::class, 'update'])->name('vehiculos.mantenimientos.update');
+        // Elimina mantenimiento específico del vehículo.
+        Route::delete('/vehiculos/{vehiculo}/mantenimientos/delete/{id}', [MantenimientoController::class, 'destroy'])->name('vehiculos.mantenimientos.destroy');
+
+        // PAGOS DEL VEHICULO
+        // Lista pagos del vehículo (tenencia, refrendo, verificación).
+        Route::get('/vehiculos/{vehiculo}/pagos', [PagoVehiculoController::class, 'index'])->name('vehiculos.pagos.index');
+        // Formulario para registrar pago del vehículo.
+        Route::get('/vehiculos/{vehiculo}/pagos/create', [PagoVehiculoController::class, 'create'])->name('vehiculos.pagos.create');
+        // Guarda nuevo pago del vehículo.
+        Route::post('/vehiculos/{vehiculo}/pagos/store', [PagoVehiculoController::class, 'store'])->name('vehiculos.pagos.store');
+        // Formulario para editar pago específico del vehículo.
+        Route::get('/vehiculos/{vehiculo}/pagos/edit/{id}', [PagoVehiculoController::class, 'edit'])->name('vehiculos.pagos.edit');
+        // Actualiza pago específico (acepta PUT o POST por compatibilidad del módulo).
+        Route::match(['post', 'put'], '/vehiculos/{vehiculo}/pagos/update/{id}', [PagoVehiculoController::class, 'update'])->name('vehiculos.pagos.update');
+        // Elimina pago específico del vehículo.
+        Route::delete('/vehiculos/{vehiculo}/pagos/delete/{id}', [PagoVehiculoController::class, 'destroy'])->name('vehiculos.pagos.destroy');
+
     });
 
     /*SALIDAS VEHICULOS*/

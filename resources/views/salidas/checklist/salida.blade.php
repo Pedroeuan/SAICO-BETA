@@ -10,11 +10,6 @@
 
 <div class="custom-container">
 
-<p>
-    <strong>Vehículo:</strong>
-    {{ $salida->vehiculo->placa }} - {{ $salida->vehiculo->marca }}
-</p>
-
 @if ($errors->any())
 <div class="alert alert-danger">
     <ul>
@@ -31,35 +26,66 @@
 @csrf
 
 <div class="card">
-<div class="card-header p-2">
-    <ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="nav-link active" href="#tab1" data-toggle="tab">
-                Datos Generales
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#tab2" data-toggle="tab">
-                Herramientas
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#tab3" data-toggle="tab">
-                Documentos
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#tab4" data-toggle="tab">
-                Evidencias
-            </a>
-        </li>
-    </ul>
-</div>
+<div class="card-body row">
 
-<div class="card-body">
-<div class="tab-content">
+    <!-- COLUMNA IZQUIERDA: FOTO VEHICULO -->
+    <div class="col-5 text-center d-flex align-items-center justify-content-center">
+        <div>
+            <h5 class="mb-3">Vehículo</h5>
 
-<!-- primer tab -->
+            @if(!empty($salida->vehiculo->foto_principal))
+                <img src="{{ asset('storage/'.$salida->vehiculo->foto_principal) }}"
+                     alt="Foto vehículo"
+                     width="340"
+                     height="300"
+                     style="object-fit: contain;">
+            @else
+                <img src="{{ asset('images/vehiculo_checklist.png') }}"
+                     alt="checklist-vehiculo"
+                     width="340"
+                     height="300"
+                     style="object-fit: contain;">
+            @endif
+
+            <div class="mt-2">
+                <strong>{{ $salida->vehiculo->placa }} - {{ $salida->vehiculo->marca }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: FORMULARIO -->
+    <div class="col-7">
+
+        <div class="card">
+        <div class="card-header p-2">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#tab1" data-toggle="tab">
+                        Datos Generales
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab2" data-toggle="tab">
+                        Herramientas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab3" data-toggle="tab">
+                        Documentos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab4" data-toggle="tab">
+                        Evidencias
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+        <div class="tab-content">
+
+<!-- TAB 1 -->
 <div class="tab-pane fade show active" id="tab1">
 
     <div class="mb-3">
@@ -105,13 +131,15 @@
 
     <div class="mb-3">
         <label>Observaciones</label>
-        <textarea name="observaciones" class="form-control"></textarea>
+        <textarea name="observaciones" class="form-control">{{ old('observaciones') }}</textarea>
     </div>
+
     <div class="text-end">
-    <button type="button" class="btn btn-primary" onclick="nextTab(2)">Siguiente <i class="fas fa-arrow-right"></i></button>
+        <button type="button" class="btn btn-primary" onclick="nextTab(2)">Siguiente <i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
+<!-- TAB 2 -->
 <div class="tab-pane fade" id="tab2">
 
 @php
@@ -138,25 +166,18 @@ $herramientas = [
             {{ $label }}
         </label>
     </div>
-    
 </div>
 @endforeach
-<div class="text-end mt-3">
+
+<div class="text-end mt-3 col-12">
     <button type="button" class="btn btn-primary" onclick="nextTab(3)">Siguiente <i class="fas fa-arrow-right"></i></button>
 </div>
 </div>
 
 </div>
 
+<!-- TAB 3 -->
 <div class="tab-pane fade" id="tab3">
-
-@php
-$documentos = [
-    'licencia_conducir' => 'Licencia de conducir',
-    'tarjeta_circulacion' => 'Tarjeta de circulación',
-    'poliza_seguro' => 'Póliza de seguro',
-];
-@endphp
 
     <div class="mb-3">
         <label><strong>Licencia de conducir (chofer)</strong></label>
@@ -190,29 +211,37 @@ $documentos = [
             @endif
         </div>
     </div>
-<div class="text-end mt-3">
-    <button type="button" class="btn btn-primary" onclick="nextTab(4)">Siguiente <i class="fas fa-arrow-right"></i></button>
-</div>
+
+    <div class="text-end mt-3">
+        <button type="button" class="btn btn-primary" onclick="nextTab(4)">Siguiente <i class="fas fa-arrow-right"></i></button>
+    </div>
 </div>
 
+<!-- TAB 4 -->
 <div class="tab-pane fade" id="tab4">
 
-    <label>Evidencia fotográfica (mínimo 5 imágenes)</label>
+    <label>Evidencia fotográfica (3 imágenes)</label>
     <input type="file"
            name="evidencias[]"
            class="form-control"
            multiple
            accept="image/*"
            required>
-<div class="text-end mt-3">
-    <button type="submit" class="btn btn-success">Guardar Checklist</button>
-    <a href="{{ route('salidas.index') }}" class="btn btn-secondary">Cancelar</a>
-</div>
+
+    <div class="text-end mt-3">
+        <button type="submit" class="btn btn-success">Guardar Checklist</button>
+        <a href="{{ route('salidas.index') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
 </div>
 
 </div>
 </div>
 </div>
+
+    </div> <!-- col-7 -->
+
+</div> <!-- card-body row -->
+</div> <!-- card -->
 
 </form>
 </div>

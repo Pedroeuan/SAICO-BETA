@@ -62,14 +62,15 @@ class SalidaChecklistController extends Controller
     public function store(Request $request, SalidaVehiculo $salida)
     {
         $request->validate([
+            // valores de cada campo
             'nivel_gasolina'  => 'required|string',
             'kilometraje'     => 'required|integer|min:0',
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
             'herramientas'    => 'nullable|array',
-            'evidencias' => 'required|array|min:5',
-            'evidencias.*' => 'image|max:5120',
+            'evidencias' => 'required|array|min:3|max:3',// aumetar o disminuir la cantida de imagen
+            'evidencias.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // formato
 
         ]);
 
@@ -170,7 +171,7 @@ class SalidaChecklistController extends Controller
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
-            'evidencias' => 'required|array|min:5',
+            'evidencias' => 'required|array|min:3|max:3',
             'evidencias.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 

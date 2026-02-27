@@ -68,6 +68,8 @@
                             <th style="width: 90px;">Editar</th>
                             <th style="width: 90px;">Salida</th>
                             <th style="width: 90px;">Eliminar</th>
+                            <th style="width: 120px;">Mantenimientos</th>
+                            <th style="width: 100px;">Pagos</th>
 
                         </tr>
                     </thead>
@@ -131,7 +133,21 @@
                                     </button>
                                 </form>
                             </td>
+                            <td class="text-center">
+                                <a href="{{ route('vehiculos.mantenimientos.index', $vehiculo->id) }}"
+                                class="btn btn-info btn-sm"
+                                title="Mantenimientos">
+                                    <i class="fas fa-tools"></i>
+                                </a>
+                            </td>
 
+                            <td class="text-center">
+                                <a href="{{ route('vehiculos.pagos.index', $vehiculo->id) }}"
+                                class="btn btn-warning btn-sm"
+                                title="Pagos">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

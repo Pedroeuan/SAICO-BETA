@@ -1,5 +1,8 @@
 @extends('adminlte::page')
 @section('title', 'Editar Vehículos')
+<br>
+<br>
+<br>
 @section('content')
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -8,6 +11,16 @@
             <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
+    <!--  botmn  -->
+    <div class="mb-3">
+    <a href="{{ route('vehiculos.mantenimientos.index', $vehiculo->id) }}" class="btn btn-info btn-sm mr-2">
+        <i class="fas fa-tools"></i> Mantenimientos
+    </a>
+    <a href="{{ route('vehiculos.pagos.index', $vehiculo->id) }}" class="btn btn-warning btn-sm">
+        <i class="fas fa-file-invoice-dollar"></i> Pagos Vehículo
+    </a>
+</div>
+
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -120,12 +133,103 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento Tarjeta</label>
-                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="@if($vehiculo->tarjeta_circulacion_vencimiento == '20001-01-01') {{ '' }} @else {{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}@endif">
+                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="@if($vehiculo->tarjeta_circulacion_vencimiento == '2001-01-01') {{ '' }} @else {{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}@endif">
                         </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Foto principal del vehículo</label>
+                            @if($vehiculo->foto_principal)
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/'.$vehiculo->foto_principal) }}" style="max-width: 180px; border:1px solid #ddd; padding:4px;">
+                                </div>
+                            @endif
+                            <input type="file" name="foto_principal" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Vencimiento tenencia</label>
+                            <input type="date" name="tenencia_vencimiento" class="form-control"
+                                value="{{ old('tenencia_vencimiento', optional($vehiculo->tenencia_vencimiento)->format('Y-m-d')) }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Estatus tenencia</label>
+                            <select name="tenencia_estatus" class="form-control">
+                                <option value="sin_registro" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'sin_registro' ? 'selected' : '' }}>Sin registro</option>
+                                <option value="vigente" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'vigente' ? 'selected' : '' }}>Vigente</option>
+                                <option value="proxima" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'proxima' ? 'selected' : '' }}>Próxima</option>
+                                <option value="vencida" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'vencida' ? 'selected' : '' }}>Vencida</option>
+                            </select>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Historial de Mantenimiento (últimos 5)</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>KM</th>
+                            <th>Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($vehiculo->mantenimientos as $m)
+                            <tr>
+                                <td>{{ optional($m->fecha)->format('Y-m-d') }}</td>
+                                <td>{{ ucfirst($m->tipo) }}</td>
+                                <td>{{ $m->kilometraje ?? 'N/A' }}</td>
+                                <td>${{ $m->costo ?? '0.00' }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="text-center">Sin registros</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">Pagos del Vehículo (últimos 5)</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Año</th>
+                            <th>Tipo</th>
+                            <th>Fecha pago</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($vehiculo->pagosVehiculo as $p)
+                            <tr>
+                                <td>{{ $p->anio }}</td>
+                                <td>{{ ucfirst($p->tipo_pago) }}</td>
+                                <td>{{ optional($p->fecha_pago)->format('Y-m-d') ?? 'N/A' }}</td>
+                                <td>${{ $p->monto ?? '0.00' }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="text-center">Sin registros</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- BOTONES AL FONDO -->
         <div class="mt-3 text-end">
