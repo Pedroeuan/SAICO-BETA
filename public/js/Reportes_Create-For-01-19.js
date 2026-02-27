@@ -378,8 +378,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (stored !== null) {
                     cb.checked = stored === "true";
 
-                    // 🔥 DISPARAR EL EVENTO CHANGE
-                    cb.dispatchEvent(new Event('change'));
+                    const index = cb.dataset.index;
+                    const container = document.getElementById(`detallesContainer${index}`);
+                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
+
+                    if (cb.checked) {
+                        container.classList.remove('d-none');
+                        hiddenInput.value = 1;
+                    } else {
+                        container.classList.add('d-none');
+                        hiddenInput.value = 0;
+                    }
                 }
             });
 
@@ -614,10 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        //const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-        const checkboxes = form.querySelectorAll(
-            'input[type="checkbox"]:not(.imagen-hoja-checkbox):not(.detalles-junta-checkbox)'
-        );
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
 
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
             const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
