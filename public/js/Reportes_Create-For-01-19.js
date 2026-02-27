@@ -277,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <input type="text" class="form-control mt-1" name="recubrimiento[]" placeholder="Recubrimiento">
                         </div>
                         <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <br>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
                 `;
@@ -355,11 +356,56 @@ document.addEventListener("DOMContentLoaded", function () {
                     reader.readAsDataURL(file);
                 });
             });
+
+            // 🔁 RESTAURAR CHECKS DESPUÉS DE GENERAR
+            const form = document.querySelector("form");
+            const formId = form.id;
+
+            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                const key = `${formId}_${cb.id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    cb.checked = stored === "true";
+                    document.getElementById(`imagenHojaValue${cb.dataset.index}`).value = cb.checked ? 1 : 0;
+                }
+            });
+
+            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
+                const key = `${formId}_${cb.id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    cb.checked = stored === "true";
+
+                    // 🔥 DISPARAR EL EVENTO CHANGE
+                    cb.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // 🔁 RESTAURAR INPUTS DE DETALLES JUNTA
+            document.querySelectorAll('.detalles-junta-container input').forEach(input => {
+                const key = `${formId}_${input.name}_${input.closest('.detalles-junta-container').id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    input.value = stored;
+                }
+
+                input.addEventListener('input', function() {
+                    localStorage.setItem(key, input.value);
+                });
+            });
         }
 
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
             localStorage.removeItem('imageCount');
+            Object.keys(localStorage).forEach(key => {
+            if (key.startsWith(formId)) {
+                    localStorage.removeItem(key);
+                }
+            });
         });
     });
 
@@ -568,7 +614,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        //const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        const checkboxes = form.querySelectorAll(
+            'input[type="checkbox"]:not(.imagen-hoja-checkbox):not(.detalles-junta-checkbox)'
+        );
 
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
             const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;

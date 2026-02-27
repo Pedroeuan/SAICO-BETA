@@ -288,6 +288,7 @@ function bindDetallesJuntaCheckboxes() {
                                 name="recubrimiento[${index}]" placeholder="Recubrimiento">
                         </div>
                         <input type="hidden" name="images_base64[]" id="image${index}-base64">
+                        <br>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
                     </div>
                 `;
