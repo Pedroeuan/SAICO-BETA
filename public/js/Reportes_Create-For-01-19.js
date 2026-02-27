@@ -283,27 +283,93 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 container.appendChild(col);
             }
+
+            // 🔁 RESTAURAR CHECKS DESPUÉS DE GENERAR
+            const form = document.querySelector("form");
+            const formId = form.id;
+
             document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const index = this.dataset.index;
-                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
-                });
+                const key = `${formId}_${cb.id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    cb.checked = stored === "true";
+                    document.getElementById(`imagenHojaValue${cb.dataset.index}`).value = cb.checked ? 1 : 0;
+                }
             });
+
             document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const index = this.dataset.index;
+                const key = `${formId}_${cb.id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    cb.checked = stored === "true";
+
+                    const index = cb.dataset.index;
                     const container = document.getElementById(`detallesContainer${index}`);
                     const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
 
-                    if (this.checked) {
+                    if (cb.checked) {
                         container.classList.remove('d-none');
                         hiddenInput.value = 1;
                     } else {
                         container.classList.add('d-none');
                         hiddenInput.value = 0;
                     }
+                }
+            });
+
+            // 🔁 RESTAURAR INPUTS DE DETALLES JUNTA
+            document.querySelectorAll('.detalles-junta-container input').forEach(input => {
+                const key = `${formId}_${input.name}_${input.closest('.detalles-junta-container').id}`;
+                const stored = localStorage.getItem(key);
+
+                if (stored !== null) {
+                    input.value = stored;
+                }
+
+                input.addEventListener('input', function() {
+                    localStorage.setItem(key, input.value);
                 });
             });
+
+            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
+                });
+            });
+
+            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    const container = document.getElementById(`detallesContainer${index}`);
+                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
+                    const form = document.querySelector("form");
+                    const formId = form.id;
+
+                    if (this.checked) {
+                        container.classList.remove('d-none');
+                        hiddenInput.value = 1;
+                        
+                        // Restaurar valores guardados cuando se activa
+                        container.querySelectorAll('input[type="text"]').forEach(input => {
+                            const key = `${formId}_${input.name}_${container.id}`;
+                            const stored = localStorage.getItem(key);
+                            if (stored !== null) {
+                                input.value = stored;
+                            }
+                        });
+                    } else {
+                        container.classList.add('d-none');
+                        hiddenInput.value = 0;
+                    }
+
+                    // Guardar estado del checkbox
+                    localStorage.setItem(`${formId}_${this.id}`, this.checked);
+                });
+            });
+            
             // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
@@ -357,54 +423,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
 
-            // 🔁 RESTAURAR CHECKS DESPUÉS DE GENERAR
-            const form = document.querySelector("form");
-            const formId = form.id;
-
-            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-                const key = `${formId}_${cb.id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    cb.checked = stored === "true";
-                    document.getElementById(`imagenHojaValue${cb.dataset.index}`).value = cb.checked ? 1 : 0;
-                }
-            });
-
-            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
-                const key = `${formId}_${cb.id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    cb.checked = stored === "true";
-
-                    const index = cb.dataset.index;
-                    const container = document.getElementById(`detallesContainer${index}`);
-                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
-
-                    if (cb.checked) {
-                        container.classList.remove('d-none');
-                        hiddenInput.value = 1;
-                    } else {
-                        container.classList.add('d-none');
-                        hiddenInput.value = 0;
-                    }
-                }
-            });
-
-            // 🔁 RESTAURAR INPUTS DE DETALLES JUNTA
-            document.querySelectorAll('.detalles-junta-container input').forEach(input => {
-                const key = `${formId}_${input.name}_${input.closest('.detalles-junta-container').id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    input.value = stored;
-                }
-
-                input.addEventListener('input', function() {
-                    localStorage.setItem(key, input.value);
-                });
-            });
         }
 
         // Limpiar localStorage al enviar el formulario
