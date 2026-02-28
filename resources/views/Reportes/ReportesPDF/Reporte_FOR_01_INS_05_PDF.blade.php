@@ -16,24 +16,25 @@
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalTitulosYFilas <=20)
                 header {
-                    width: 100%;
+                    position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    height: auto; /* Permite crecer según el contenido */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
-                    /*background-color: rgb(226, 45, 45);*/
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px;
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    /*background-color: rgb(7, 231, 18);*/
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 

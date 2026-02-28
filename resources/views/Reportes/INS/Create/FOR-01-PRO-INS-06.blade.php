@@ -109,11 +109,47 @@
                                             @enderror
                                         </div>
                                     </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="ClienteSelect">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="ClienteInput"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
+                        </div>
+                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -125,15 +161,13 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -540,17 +574,17 @@
                                             </tr>
                                         </thead>
 
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
+                                <tbody>
+                                <!-- Filas dinámicas aparecerán aquí -->
+                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
+                                
+                                </tbody>
                                     </table>
-                                    </div>
-
-                                    <p>
-
-                                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                            <div>
+                                </div>
+                                <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
+                                <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                    <div>
                                                 <label for="numRows">Número de Filas:</label>
                                                 <select id="numRows" class="form-select">
                                                     @for ($i = 1; $i <= 500; $i++)
@@ -793,7 +827,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -801,21 +835,10 @@
                                             </select>
                                         </div>
 
-                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>
-                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
-                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
-                                            </p>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-                                        
-                                        <div class="w-100">
-                                            <div id="imageFieldsContainer" class="row">
-                                                <!-- Aquí se agregarán dinámicamente los campos -->
-                                            </div>
-                                        </div>
-                                        
+
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -890,20 +913,20 @@
 
 <script>
     /*Juntas-Resultados */
-    $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
-
-        function restoreData() {
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
+$(document).ready(function() {
+    let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
+    
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
                 //const tableData = JSON.parse(savedData);
                 // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                tituloCount = data.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = data.filter(item => item.type === 'fila').length;
                 
-                savedData.forEach((item) => {
+                data.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -920,34 +943,34 @@
                     } else if (item.type === 'fila') {
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="ID[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="ID"></td>
-                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Descripción del Elemento"></td>
-                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="12:00"></td>
-                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:00"></td>
-                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="01:30"></td>
-                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="02:00"></td>
-                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="03:00"></td>
-                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:00"></td>
-                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="04:30"></td>
-                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="05:00"></td>
-                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="06:00"></td>
-                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:00"></td>
-                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="07:30"></td>
-                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="08:00"></td>
-                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="09:00"></td>
-                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:00"></td>
-                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="10:30"></td>
-                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="11:00"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmin"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tmax"></td>
-                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Tprom"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[25]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                        </tr>`;
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
+                    <td><input type="text" class="form-control" name="0nom[${lastTitle}][]" placeholder="Ønom"></td>
+                    <td><input type="text" class="form-control" name="0ext[${lastTitle}][]" placeholder="Øext"></td>
+                    <td><input type="text" class="form-control" name="nivel[${lastTitle}][]" placeholder="Nivel"></td>
+                    <td><input type="text" class="form-control" name="12_00[${lastTitle}][]" placeholder="12:00"></td>
+                    <td><input type="text" class="form-control" name="01_00[${lastTitle}][]" placeholder="01:00"></td>
+                    <td><input type="text" class="form-control" name="01_30[${lastTitle}][]" placeholder="01:30"></td>
+                    <td><input type="text" class="form-control" name="02_00[${lastTitle}][]" placeholder="02:00"></td>
+                    <td><input type="text" class="form-control" name="03_00[${lastTitle}][]" placeholder="SA"></td>
+                    <td><input type="text" class="form-control" name="04_00[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="04_30[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
+                    <td><input type="text" class="form-control" name="05_00[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="06_00[${lastTitle}][]" placeholder="Fotos"></td>
+                    <td><input type="text" class="form-control" name="07_00[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><input type="text" class="form-control" name="07_30[${lastTitle}][]" placeholder="Recomendaciones"></td>
+                    <td><input type="text" class="form-control" name="08_00[${lastTitle}][]" placeholder="Responsable de la Acción"></td>
+                    <td><input type="text" class="form-control" name="09_00[${lastTitle}][]" placeholder="Fecha de Cumplimiento"></td>
+                    <td><input type="text" class="form-control" name="10_00[${lastTitle}][]" placeholder="Estatus"></td>
+                    <td><input type="text" class="form-control" name="10_30[${lastTitle}][]" placeholder="Comentarios Adicionales"></td>
+                    <td><input type="text" class="form-control" name="11_00[${lastTitle}][]" placeholder="Seguimiento"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="Tmax"></td>
+                    <td><input type="text" class="form-control" name="tprom[${lastTitle}][]" placeholder="Tprom"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
 
 
                         $('#dynamicTable tbody').append(newRow);
