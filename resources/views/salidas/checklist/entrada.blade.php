@@ -1,111 +1,46 @@
 @extends('adminlte::page')
 @section('title', 'Vehículos')
-
 @section('css')
 <style>
 
-html, body {
-    height: 100%;
-    overflow: hidden;
-}
-
+/* Subir un poco el contenido */
 .content-wrapper {
-    height: 100vh;
-    overflow: hidden;
+    padding-top: 5px !important;
 }
 
-.container {
-    margin-top: 0 !important;
-}
-
+/* Card sin altura fija */
 .card {
-    height: 96vh;
+    margin-top: 5px !important;
 }
 
-.card-header {
-    padding: 6px 10px;
-}
-
+/* Aumentar letra */
 .card-body {
-    padding: 8px 12px;
-    font-size: 13px;
+    font-size: 18px;
 }
 
-/* Quitar espacios bootstrap */
-.mb-3 { margin-bottom: 6px !important; }
-.mb-2 { margin-bottom: 4px !important; }
-.mt-4 { margin-top: 8px !important; }
-hr { margin: 6px 0 !important; }
-
-/* Labels */
 label {
-    font-size: 12px;
-    margin-bottom: 2px;
+    font-size: 18px;
 }
 
-/* Inputs compactos */
 .form-control {
-    height: 30px;
-    font-size: 12px;
-    padding: 2px 6px;
+    font-size: 18px;
 }
 
-/* Textarea pequeño */
-textarea.form-control {
-    height: 50px !important;
-}
-
-/* Imagen más pequeña */
-img {
-    max-height: 200px;
-}
-
-/* Botones más chicos */
-.btn-lg {
-    padding: 5px 12px;
-    font-size: 14px;
-}
-
-</style>
-@endsection
-@section('css')
-<style>
-
-html, body {
-    height: 100%;
-}
-
-.content-wrapper {
-    padding-top: 10px !important; /* sube el contenido */
-}
-
-.container {
-    margin-top: 0 !important;
-}
-
-.card {
-    margin-top: 10px !important; /* reduce espacio arriba */
-}
-
-/* 🔠 Aumentar tamaño de letra */
-.card-body {
-    font-size: 17px; /* +4 aprox */
-}
-
-/* Labels más grandes */
-label {
-    font-size: 17px;
-}
-
-/* Selects e inputs más grandes */
-.form-control {
-    font-size: 17px;
-}
-
-/* Texto del header más grande */
 .card-header h4 {
-    font-size: 22px;
+    font-size: 23px;
 }
+label {
+    display: block;
+    min-height: 45px; /* fuerza misma altura */
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+/* Quita espacio extra inferior */
+.mb-3 {
+    margin-bottom: 10px !important;
+}
+
 
 </style>
 @endsection
@@ -184,9 +119,6 @@ label {
             <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje') }}">
         </div>
 
-        <div class="alert alert-info py-2">
-            Captura de llantas por tanteo: registra si la calibracion se percibe <strong>Baja</strong>, <strong>Normal</strong> o <strong>Alta</strong> en cada llanta.
-        </div>
 
         <div class="row">
             <div class="col-md-4 mb-3">
@@ -216,6 +148,10 @@ label {
                     <option value="no_hay" {{ old('anticongelante') === 'no_hay' ? 'selected' : '' }}>No hay</option>
                 </select>
             </div>
+        </div>
+
+          <div class="alert alert-info py-2">
+            Captura de llantas por: <strong>Baja</strong>, <strong>Normal</strong> o <strong>Alta</strong> en cada llanta.
         </div>
 
         <div class="mb-3">
