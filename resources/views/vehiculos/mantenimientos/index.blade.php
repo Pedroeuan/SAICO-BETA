@@ -16,7 +16,7 @@
             </h5>
 
             <div>
-                <a href="{{ route('vehiculos.edit', $vehiculo->id) }}"
+                <a href="{{ route('vehiculos.index', $vehiculo->id) }}"
                    class="btn btn-light btn-sm">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
@@ -46,7 +46,7 @@
                     </thead>
 
                     <tbody>
-                    @forelse($mantenimientos as $m)
+                    @foreach($mantenimientos as $m)
                         <tr>
                             <td>{{ optional($m->fecha)->format('d/m/Y') }}</td>
                             <td>
@@ -82,14 +82,7 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-4">
-                                <i class="fas fa-info-circle text-muted"></i>
-                                No hay mantenimientos registrados
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                     </tbody>
 
                 </table>
@@ -116,6 +109,7 @@ $(document).ready(function() {
             search: "Buscar:",
             lengthMenu: "Mostrar _MENU_ registros",
             info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            emptyTable: "No hay mantenimientos registrados",
             zeroRecords: "No se encontraron resultados",
             paginate: {
                 next: "Siguiente",

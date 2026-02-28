@@ -105,6 +105,89 @@
         <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje', $defaultKilometraje ?? '') }}">
     </div>
 
+    <div class="alert alert-info py-2">
+        Captura de llantas por tanteo: registra si la calibracion se percibe <strong>Baja</strong>, <strong>Normal</strong> o <strong>Alta</strong> en cada llanta.
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label>Liquido limpia parabrisas</label>
+            <select name="liquido_limpiaparabrisas" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="suficiente" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
+                <option value="escaso" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
+                <option value="no_hay" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Aceite</label>
+            <select name="aceite" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="suficiente" {{ old('aceite', $defaultAceite ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
+                <option value="escaso" {{ old('aceite', $defaultAceite ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
+                <option value="no_hay" {{ old('aceite', $defaultAceite ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Anticongelante</label>
+            <select name="anticongelante" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="suficiente" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
+                <option value="escaso" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
+                <option value="no_hay" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Estado general de llantas</label>
+        <select name="estado_llantas" class="form-control" required>
+            <option value="">Seleccione</option>
+            <option value="buen_estado" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'buen_estado' ? 'selected' : '' }}>Buen estado</option>
+            <option value="regular" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'regular' ? 'selected' : '' }}>Regular</option>
+            <option value="malo" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'malo' ? 'selected' : '' }}>Malo</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label>Delantera izquierda (calibracion)</label>
+            <select name="llanta_delantera_izq_calibracion" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="baja" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
+                <option value="normal" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
+                <option value="alta" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Delantera derecha (calibracion)</label>
+            <select name="llanta_delantera_der_calibracion" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="baja" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
+                <option value="normal" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
+                <option value="alta" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Trasera izquierda (calibracion)</label>
+            <select name="llanta_trasera_izq_calibracion" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="baja" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
+                <option value="normal" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
+                <option value="alta" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Trasera derecha (calibracion)</label>
+            <select name="llanta_trasera_der_calibracion" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="baja" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
+                <option value="normal" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
+                <option value="alta" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
+            </select>
+        </div>
+    </div>
+
     <div class="custom-control custom-switch mb-2">
         <input type="hidden" name="limpio_exterior" value="0">
         <input type="checkbox"

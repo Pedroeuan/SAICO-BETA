@@ -34,18 +34,23 @@
     <div class="card-header p-0 pt-1">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="listado-tab" data-toggle="tab" href="#listado" role="tab">
+                <a class="nav-link {{ $tabActiva === 'listado' ? 'active' : '' }}" id="listado-tab" data-toggle="tab" href="#listado" role="tab">
                     <i class="fas fa-list"></i>Listado de Vehículos
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="documentos-tab" data-toggle="tab" href="#documentos" role="tab">
+                <a class="nav-link {{ $tabActiva === 'documentos' ? 'active' : '' }}" id="documentos-tab" data-toggle="tab" href="#documentos" role="tab">
                     <i class="fas fa-file-pdf"></i>Documentación (<span class="badge bg-danger">{{ $vencidosCount ?? 0 }}</span>)
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="estadisticas-tab" data-toggle="tab" href="#estadisticas" role="tab">
+                <a class="nav-link {{ $tabActiva === 'estadisticas' ? 'active' : '' }}" id="estadisticas-tab" data-toggle="tab" href="#estadisticas" role="tab">
                     <i class="fas fa-chart-bar"></i>Estadísticas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tabActiva === 'movimientos' ? 'active' : '' }}" id="movimientos-tab" data-toggle="tab" href="#movimientos" role="tab">
+                    <i class="fas fa-calendar-alt"></i>Movimientos del Mes
                 </a>
             </li>
         </ul>
@@ -55,7 +60,7 @@
         <div class="tab-content">
 
             <!-- TAB 1: LISTADO -->
-            <div class="tab-pane fade show active" id="listado" role="tabpanel">
+            <div class="tab-pane fade {{ $tabActiva === 'listado' ? 'show active' : '' }}" id="listado" role="tabpanel">
                 <table id="tablaVehiculos" class="table table-sm table-hover table-bordered">
                     <thead class="table-light">
                         <tr>
@@ -155,7 +160,7 @@
             </div>
 
             <!-- TAB 2: DOCUMENTACIÓN -->
-            <div class="tab-pane fade" id="documentos" role="tabpanel">
+            <div class="tab-pane fade {{ $tabActiva === 'documentos' ? 'show active' : '' }}" id="documentos" role="tabpanel">
                 <p class="mb-3"><strong>Alertas de Documentación</strong></p>
                 
                 <!-- VENCIDOS -->
@@ -213,7 +218,7 @@
             </div>
 
             <!-- TAB 3: ESTADÍSTICAS -->
-            <div class="tab-pane fade" id="estadisticas" role="tabpanel">
+            <div class="tab-pane fade {{ $tabActiva === 'estadisticas' ? 'show active' : '' }}" id="estadisticas" role="tabpanel">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card text-center bg-light">
@@ -250,6 +255,87 @@
                 </div>
             </div>
 
+            <!-- TAB 4: MOVIMIENTOS MENSUALES -->
+            <div class="tab-pane fade {{ $tabActiva === 'movimientos' ? 'show active' : '' }}" id="movimientos" role="tabpanel">
+                <form method="GET" action="{{ route('vehiculos.index') }}" class="mb-3">
+                    <input type="hidden" name="tab" value="movimientos">
+                    <div class="form-row align-items-end">
+                        <div class="col-md-3">
+                            <label for="mes">Mes</label>
+                            <select name="mes" id="mes" class="form-control">
+                                @for($i = 1; $i <= 12; $i++)
+                                    <option value="{{ $i }}" {{ (int) $mesSeleccionado === $i ? 'selected' : '' }}>
+                                        {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="anio">Anio</label>
+                            <input type="number"
+                                   name="anio"
+                                   id="anio"
+                                   min="2000"
+                                   max="{{ now()->year + 1 }}"
+                                   class="form-control"
+                                   value="{{ $anioSeleccionado }}">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Consultar
+                            </button>
+                            <a href="{{ route('vehiculos.reportes.movimientos.pdf', ['mes' => $mesSeleccionado, 'anio' => $anioSeleccionado]) }}"
+                               target="_blank"
+                               class="btn btn-danger ml-2">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Vehiculo</th>
+                                <th class="text-center">Mantenimientos</th>
+                                <th class="text-right">Monto Mantto.</th>
+                                <th class="text-center">Pagos</th>
+                                <th class="text-right">Monto Pagos</th>
+                                <th class="text-right">Total Mes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($movimientosMensuales as $mov)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $mov->placa }}</strong><br>
+                                        <small class="text-muted">{{ $mov->marca }} {{ $mov->modelo }}</small>
+                                    </td>
+                                    <td class="text-center">{{ $mov->mantenimientos_count }}</td>
+                                    <td class="text-right">${{ number_format($mov->mantenimientos_total, 2) }}</td>
+                                    <td class="text-center">{{ $mov->pagos_count }}</td>
+                                    <td class="text-right">${{ number_format($mov->pagos_total, 2) }}</td>
+                                    <td class="text-right font-weight-bold">${{ number_format($mov->total_general, 2) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <i class="fas fa-info-circle text-muted"></i>
+                                        Sin movimientos en el periodo seleccionado
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @if(method_exists($movimientosMensuales, 'links'))
+                    <div class="mt-2">
+                        {{ $movimientosMensuales->links() }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -321,6 +407,11 @@ $(document).ready(function() {
         responsive: true,
         autoWidth: false
     });
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'movimientos') {
+        $('#movimientos-tab').tab('show');
+    }
 
 });
 </script>

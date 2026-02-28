@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vehiculos;
 
 use App\Http\Controllers\Controller;
+use App\Models\Vehiculos\Mantenimiento;
 use App\Models\Vehiculos\PagoVehiculo;
 use App\Models\Vehiculos\Vehiculo;
 use Illuminate\Http\Request;
@@ -11,25 +12,60 @@ class PagoVehiculoController extends Controller
 {
     public function index($vehiculoId)
     {
-        // Lista pagos del vehículo (tenencia/refrendo/verificación) con paginación.
+        // Lista pagos generales del vehiculo (administrativos + mantenimiento).
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
-        $pagos = PagoVehiculo::where('vehiculo_id', $vehiculoId)
-            ->orderByDesc('anio')
-            ->paginate(15);
 
-        return view('vehiculos.pagos.index', compact('vehiculo', 'pagos'));
+        $pagosAdministrativos = PagoVehiculo::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha_pago')
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'origen' => 'pago',
+                    'id' => $p->id,
+                    'anio' => $p->anio,
+                    'tipo' => ucfirst($p->tipo_pago),
+                    'fecha' => $p->fecha_pago,
+                    'monto' => (float) ($p->monto ?? 0),
+                    'archivo' => $p->comprobante_url,
+                    'fecha_orden' => $p->fecha_pago ? $p->fecha_pago->format('Y-m-d') : ($p->anio . '-12-31'),
+                ];
+            });
+
+        $pagosMantenimiento = Mantenimiento::where('vehiculo_id', $vehiculoId)
+            ->whereNotNull('costo')
+            ->orderByDesc('fecha')
+            ->get()
+            ->map(function ($m) {
+                return [
+                    'origen' => 'mantenimiento',
+                    'id' => $m->id,
+                    'anio' => optional($m->fecha)->format('Y') ?? 'N/A',
+                    'tipo' => 'Mantenimiento ' . ucfirst($m->tipo),
+                    'fecha' => $m->fecha,
+                    'monto' => (float) ($m->costo ?? 0),
+                    'archivo' => $m->factura_pdf,
+                    'fecha_orden' => optional($m->fecha)->format('Y-m-d') ?? '1900-01-01',
+                ];
+            });
+
+        $pagosGenerales = $pagosAdministrativos
+            ->concat($pagosMantenimiento)
+            ->sortByDesc('fecha_orden')
+            ->values();
+
+        return view('vehiculos.pagos.index', compact('vehiculo', 'pagosGenerales'));
     }
 
     public function create($vehiculoId)
     {
-        // Formulario de alta de pago para el vehículo seleccionado.
+        // Formulario de alta de pago para el vehiculo seleccionado.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
         return view('vehiculos.pagos.create', compact('vehiculo'));
     }
 
     public function store(Request $request, $vehiculoId)
     {
-        // Valida y guarda pago; almacena comprobante en carpeta del vehículo.
+        // Valida y guarda pago; almacena comprobante en carpeta del vehiculo.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
 
         $data = $request->validate([
@@ -55,7 +91,7 @@ class PagoVehiculoController extends Controller
 
     public function edit($vehiculoId, $id)
     {
-        // Carga pago puntual del vehículo para edición.
+        // Carga pago puntual del vehiculo para edicion.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
         $pago = PagoVehiculo::where('vehiculo_id', $vehiculoId)->findOrFail($id);
 
@@ -89,11 +125,28 @@ class PagoVehiculoController extends Controller
 
     public function destroy($vehiculoId, $id)
     {
-        // Elimina pago acotado al vehículo para evitar borrados cruzados.
+        // Elimina pago acotado al vehiculo para evitar borrados cruzados.
         $pago = PagoVehiculo::where('vehiculo_id', $vehiculoId)->findOrFail($id);
         $pago->delete();
 
         return redirect()->route('vehiculos.pagos.index', $vehiculoId)
             ->with('success', 'Pago eliminado.');
+    }
+
+    public function historial($vehiculoId)
+    {
+        $vehiculo = Vehiculo::findOrFail($vehiculoId);
+
+        $ultimosMantenimientos = Mantenimiento::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha')
+            ->limit(5)
+            ->get();
+
+        $ultimosPagos = PagoVehiculo::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha_pago')
+            ->limit(5)
+            ->get();
+
+        return view('vehiculos.historial.index', compact('vehiculo', 'ultimosMantenimientos', 'ultimosPagos'));
     }
 }

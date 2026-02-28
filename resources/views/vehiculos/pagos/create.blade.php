@@ -31,12 +31,12 @@
                         <label class="form-label fw-bold">Tipo de pago</label>
                         <select name="tipo_pago" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <option value="tenencia">Tenencia</option>
-                            <option value="refrendo">Refrendo</option>
-                            <option value="verificacion">Verificación</option>
+                            <option value="tenencia">Impuesto Anual</option>
+                            <option value="refrendo">Pago de Placas</option>
+                            <option value="verificacion">Verificación Vehicular</option>
                         </select>
                     </div>
-
+                    
                     <!-- AÑO -->
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Año</label>

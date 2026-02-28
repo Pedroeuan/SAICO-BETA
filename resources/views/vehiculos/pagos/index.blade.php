@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Pagos Vehículo')
+@section('title', 'Pagos Vehiculo')
 <br>
 <br>
 <br>
@@ -16,7 +16,7 @@
             </h5>
 
             <div>
-                <a href="{{ route('vehiculos.edit', $vehiculo->id) }}"
+                <a href="{{ route('vehiculos.index', $vehiculo->id) }}"
                    class="btn btn-light btn-sm">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
@@ -36,42 +36,44 @@
 
                     <thead class="table-light">
                         <tr>
-                            <th>Año</th>
+                            <th>Anio</th>
+                            <th>Origen</th>
                             <th>Tipo</th>
                             <th>Fecha pago</th>
                             <th>Monto</th>
                             <th class="text-center">Comprobante</th>
+                            <th class="text-center" style="width:110px;">Historial</th>
                             <th class="text-center" style="width:100px;">Editar</th>
                             <th class="text-center" style="width:110px;">Eliminar</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                    @forelse($pagos as $p)
+                    @foreach($pagosGenerales as $p)
                         <tr>
-                            <td>{{ $p->anio }}</td>
+                            <td>{{ $p['anio'] }}</td>
 
                             <td>
-                                <span class="badge bg-info">
-                                    {{ ucfirst($p->tipo_pago) }}
-                                </span>
+                                @if($p['origen'] === 'pago')
+                                    <span class="badge bg-info">Administrativo</span>
+                                @else
+                                    <span class="badge bg-secondary">Mantenimiento</span>
+                                @endif
                             </td>
 
-                            <td>
-                                {{ optional($p->fecha_pago)->format('d/m/Y') ?? 'N/A' }}
-                            </td>
+                            <td>{{ $p['tipo'] }}</td>
 
-                            <td>
-                                ${{ number_format($p->monto ?? 0, 2) }}
-                            </td>
+                            <td>{{ optional($p['fecha'])->format('d/m/Y') ?? 'N/A' }}</td>
+
+                            <td>${{ number_format($p['monto'] ?? 0, 2) }}</td>
 
                             <td class="text-center">
-                                @if($p->comprobante_url)
+                                @if($p['archivo'])
                                     @php
-                                        $extension = strtolower(pathinfo($p->comprobante_url, PATHINFO_EXTENSION));
+                                        $extension = strtolower(pathinfo($p['archivo'], PATHINFO_EXTENSION));
                                     @endphp
 
-                                    <a href="{{ asset('storage/'.$p->comprobante_url) }}"
+                                    <a href="{{ asset('storage/'.$p['archivo']) }}"
                                        target="_blank"
                                        class="btn btn-outline-primary btn-sm"
                                        title="Ver comprobante">
@@ -86,40 +88,61 @@
 
                                     </a>
                                 @else
-                                    <span class="text-muted">—</span>
+                                    <span class="text-muted">-</span>
                                 @endif
                             </td>
 
                             <td class="text-center">
-                                <a href="{{ route('vehiculos.pagos.edit', [$vehiculo->id, $p->id]) }}"
-                                   class="btn btn-warning btn-sm"
-                                   title="Editar">
-                                    <i class="fas fa-edit"></i>
+                                <a href="{{ route('vehiculos.pagos.historial', $vehiculo->id) }}"
+                                   class="btn btn-info btn-sm"
+                                   title="Ver historial">
+                                    <i class="fas fa-history"></i>
                                 </a>
                             </td>
 
                             <td class="text-center">
-                                <form method="POST"
-                                      action="{{ route('vehiculos.pagos.destroy', [$vehiculo->id, $p->id]) }}"
-                                      onsubmit="return confirm('¿Eliminar pago?');">
-                                    @csrf
-                                    @method('DELETE')
+                                @if($p['origen'] === 'pago')
+                                    <a href="{{ route('vehiculos.pagos.edit', [$vehiculo->id, $p['id']]) }}"
+                                       class="btn btn-warning btn-sm"
+                                       title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('vehiculos.mantenimientos.edit', [$vehiculo->id, $p['id']]) }}"
+                                       class="btn btn-warning btn-sm"
+                                       title="Editar mantenimiento">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                @endif
+                            </td>
 
-                                    <button class="btn btn-danger btn-sm"
-                                            title="Eliminar">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                            <td class="text-center">
+                                @if($p['origen'] === 'pago')
+                                    <form method="POST"
+                                          action="{{ route('vehiculos.pagos.destroy', [$vehiculo->id, $p['id']]) }}"
+                                          onsubmit="return confirm('Eliminar pago?');">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <form method="POST"
+                                          action="{{ route('vehiculos.mantenimientos.destroy', [$vehiculo->id, $p['id']]) }}"
+                                          onsubmit="return confirm('Eliminar mantenimiento?');">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button class="btn btn-danger btn-sm" title="Eliminar mantenimiento">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center py-4">
-                                <i class="fas fa-info-circle text-muted"></i>
-                                No hay pagos registrados
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                     </tbody>
 
                 </table>
@@ -146,6 +169,7 @@ $(document).ready(function() {
             search: "Buscar:",
             lengthMenu: "Mostrar _MENU_ registros",
             info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            emptyTable: "No hay pagos registrados",
             zeroRecords: "No se encontraron resultados",
             infoEmpty: "Mostrando 0 a 0 de 0 registros",
             paginate: {

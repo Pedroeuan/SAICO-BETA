@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vehiculos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vehiculos\Mantenimiento;
+use App\Models\Vehiculos\PagoVehiculo;
 use App\Models\Vehiculos\Vehiculo;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class MantenimientoController extends Controller
 {
     public function index($vehiculoId)
     {
-        // Lista historial de mantenimientos del vehículo con paginación.
+        // Lista historial de mantenimientos del vehiculo con paginacion.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
         $mantenimientos = Mantenimiento::where('vehiculo_id', $vehiculoId)
             ->orderByDesc('fecha')
@@ -22,15 +23,13 @@ class MantenimientoController extends Controller
 
     public function create($vehiculoId)
     {
-        
-        // Muestra formulario para registrar mantenimiento ligado al vehículo.
+        // Muestra formulario para registrar mantenimiento ligado al vehiculo.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
         return view('vehiculos.mantenimientos.create', compact('vehiculo'));
     }
 
     public function store(Request $request, $vehiculoId)
     {
-        
         // Valida, guarda archivo factura (si existe) y crea el mantenimiento.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
 
@@ -63,7 +62,7 @@ class MantenimientoController extends Controller
 
     public function edit($vehiculoId, $id)
     {
-        // Carga mantenimiento específico del vehículo para edición segura.
+        // Carga mantenimiento especifico del vehiculo para edicion segura.
         $vehiculo = Vehiculo::findOrFail($vehiculoId);
         $mantenimiento = Mantenimiento::where('vehiculo_id', $vehiculoId)->findOrFail($id);
 
@@ -103,11 +102,28 @@ class MantenimientoController extends Controller
 
     public function destroy($vehiculoId, $id)
     {
-        // Elimina solo si el mantenimiento pertenece al vehículo indicado.
+        // Elimina solo si el mantenimiento pertenece al vehiculo indicado.
         $mantenimiento = Mantenimiento::where('vehiculo_id', $vehiculoId)->findOrFail($id);
         $mantenimiento->delete();
 
         return redirect()->route('vehiculos.mantenimientos.index', $vehiculoId)
             ->with('success', 'Mantenimiento eliminado.');
+    }
+
+    public function historial($vehiculoId)
+    {
+        $vehiculo = Vehiculo::findOrFail($vehiculoId);
+
+        $ultimosMantenimientos = Mantenimiento::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha')
+            ->limit(5)
+            ->get();
+
+        $ultimosPagos = PagoVehiculo::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha_pago')
+            ->limit(5)
+            ->get();
+
+        return view('vehiculos.historial.index', compact('vehiculo', 'ultimosMantenimientos', 'ultimosPagos'));
     }
 }

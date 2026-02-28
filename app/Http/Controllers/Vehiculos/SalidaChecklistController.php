@@ -51,12 +51,43 @@ class SalidaChecklistController extends Controller
 
         $defaultNivel = null;
         $defaultKilometraje = null;
+        $defaultLiquidoLimpiaparabrisas = null;
+        $defaultAceite = null;
+        $defaultAnticongelante = null;
+        $defaultEstadoLlantas = null;
+        $defaultLlantaDelanteraIzq = null;
+        $defaultLlantaDelanteraDer = null;
+        $defaultLlantaTraseraIzq = null;
+        $defaultLlantaTraseraDer = null;
         if ($ultimaCondicion && $ultimaCondicion->condicion) {
             $defaultNivel = $ultimaCondicion->condicion->nivel_gasolina;
             $defaultKilometraje = $ultimaCondicion->condicion->kilometraje;
+            $defaultLiquidoLimpiaparabrisas = $ultimaCondicion->condicion->liquido_limpiaparabrisas;
+            $defaultAceite = $ultimaCondicion->condicion->aceite;
+            $defaultAnticongelante = $ultimaCondicion->condicion->anticongelante;
+            $defaultEstadoLlantas = $ultimaCondicion->condicion->estado_llantas;
+            $defaultLlantaDelanteraIzq = $ultimaCondicion->condicion->llanta_delantera_izq_calibracion;
+            $defaultLlantaDelanteraDer = $ultimaCondicion->condicion->llanta_delantera_der_calibracion;
+            $defaultLlantaTraseraIzq = $ultimaCondicion->condicion->llanta_trasera_izq_calibracion;
+            $defaultLlantaTraseraDer = $ultimaCondicion->condicion->llanta_trasera_der_calibracion;
         }
 
-        return view('salidas.checklist.salida', compact('salida', 'licenciaVigente', 'tarjetaVigente', 'polizaVigente', 'defaultNivel', 'defaultKilometraje'));
+        return view('salidas.checklist.salida', compact(
+            'salida',
+            'licenciaVigente',
+            'tarjetaVigente',
+            'polizaVigente',
+            'defaultNivel',
+            'defaultKilometraje',
+            'defaultLiquidoLimpiaparabrisas',
+            'defaultAceite',
+            'defaultAnticongelante',
+            'defaultEstadoLlantas',
+            'defaultLlantaDelanteraIzq',
+            'defaultLlantaDelanteraDer',
+            'defaultLlantaTraseraIzq',
+            'defaultLlantaTraseraDer'
+        ));
     }
 
     public function store(Request $request, SalidaVehiculo $salida)
@@ -68,6 +99,14 @@ class SalidaChecklistController extends Controller
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
+            'liquido_limpiaparabrisas' => 'required|in:suficiente,escaso,no_hay',
+            'aceite' => 'required|in:suficiente,escaso,no_hay',
+            'anticongelante' => 'required|in:suficiente,escaso,no_hay',
+            'estado_llantas' => 'required|in:buen_estado,regular,malo',
+            'llanta_delantera_izq_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_delantera_der_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_trasera_izq_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_trasera_der_calibracion' => 'required|in:baja,normal,alta',
             'herramientas'    => 'nullable|array',
             'evidencias' => 'required|array|min:3|max:3',// aumetar o disminuir la cantida de imagen
             'evidencias.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // formato
@@ -89,6 +128,14 @@ class SalidaChecklistController extends Controller
                 'limpio_exterior' => $request->input('limpio_exterior', 0),
                 'limpio_interior' => $request->input('limpio_interior', 0),
                 'observaciones'   => $request->observaciones,
+                'liquido_limpiaparabrisas' => $request->liquido_limpiaparabrisas,
+                'aceite' => $request->aceite,
+                'anticongelante' => $request->anticongelante,
+                'estado_llantas' => $request->estado_llantas,
+                'llanta_delantera_izq_calibracion' => $request->llanta_delantera_izq_calibracion,
+                'llanta_delantera_der_calibracion' => $request->llanta_delantera_der_calibracion,
+                'llanta_trasera_izq_calibracion' => $request->llanta_trasera_izq_calibracion,
+                'llanta_trasera_der_calibracion' => $request->llanta_trasera_der_calibracion,
             ]);
 
             // Documentos: determinar automáticamente a partir del chofer y vehículo
@@ -132,6 +179,11 @@ class SalidaChecklistController extends Controller
                 $ruta = $foto->store('checklists/salida', 'public');
                 $checklist->evidencias()->create(['foto' => $ruta]);
             }
+
+            // Sincroniza kilometraje maestro del vehiculo con el checklist capturado.
+            $salida->vehiculo()->update([
+                'kilometraje_actual' => (int) $request->kilometraje,
+            ]);
         });
         return redirect()->route('salidas.index')->with('success', 'Checklist de salida registrado correctamente');
     }
@@ -152,16 +204,16 @@ class SalidaChecklistController extends Controller
     public function storeEntrada(Request $request, SalidaVehiculo $salida)
     {
         if ($salida->checklistEntrada) {
-            return redirect()->route('salidas.index')->with('error', 'Este vehículo ya tiene checklist de entrada');
+            return back()->withInput()->with('error', 'Este vehículo ya tiene checklist de entrada');
         }
         if ($salida->estatus === 'finalizado') {
-            return redirect()->route('salidas.index')->with('error', 'Esta salida ya fue finalizada');
+            return back()->withInput()->with('error', 'Esta salida ya fue finalizada');
         }
 
         // Validar contra el kilometraje real del checklist de salida.
         $checklistSalida = $salida->checklistSalida;
         if (!$checklistSalida || !$checklistSalida->condicion) {
-            return redirect()->route('salidas.index')->with('error', 'El checklist de salida no tiene condición registrada');
+            return back()->withInput()->with('error', 'El checklist de salida no tiene condición registrada');
         }
         $kmSalida = (int) $checklistSalida->condicion->kilometraje;
 
@@ -171,6 +223,14 @@ class SalidaChecklistController extends Controller
             'limpio_exterior' => 'nullable|in:0,1',
             'limpio_interior' => 'nullable|in:0,1',
             'observaciones'   => 'nullable|string|max:500',
+            'liquido_limpiaparabrisas' => 'required|in:suficiente,escaso,no_hay',
+            'aceite' => 'required|in:suficiente,escaso,no_hay',
+            'anticongelante' => 'required|in:suficiente,escaso,no_hay',
+            'estado_llantas' => 'required|in:buen_estado,regular,malo',
+            'llanta_delantera_izq_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_delantera_der_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_trasera_izq_calibracion' => 'required|in:baja,normal,alta',
+            'llanta_trasera_der_calibracion' => 'required|in:baja,normal,alta',
             'evidencias' => 'required|array|min:3|max:3',
             'evidencias.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
@@ -188,6 +248,14 @@ class SalidaChecklistController extends Controller
                 'limpio_exterior' => $request->input('limpio_exterior', 0),
                 'limpio_interior' => $request->input('limpio_interior', 0),
                 'observaciones'   => $request->observaciones,
+                'liquido_limpiaparabrisas' => $request->liquido_limpiaparabrisas,
+                'aceite' => $request->aceite,
+                'anticongelante' => $request->anticongelante,
+                'estado_llantas' => $request->estado_llantas,
+                'llanta_delantera_izq_calibracion' => $request->llanta_delantera_izq_calibracion,
+                'llanta_delantera_der_calibracion' => $request->llanta_delantera_der_calibracion,
+                'llanta_trasera_izq_calibracion' => $request->llanta_trasera_izq_calibracion,
+                'llanta_trasera_der_calibracion' => $request->llanta_trasera_der_calibracion,
             ]);
 
             foreach ($request->file('evidencias') as $foto) {
@@ -205,7 +273,10 @@ class SalidaChecklistController extends Controller
                 'finalizado_por' => auth()->id(),
                 'duracion_minutos' => $salida->fecha_salida ? $salida->fecha_salida->diffInMinutes($fechaRegreso): null,
             ]);
-            $salida->vehiculo->update(['estatus' => 'disponible']);
+            $salida->vehiculo()->update([
+                'estatus' => 'disponible',
+                'kilometraje_actual' => (int) $request->kilometraje,
+            ]);
         });
 
         return redirect()->route('salidas.index')->with('success', 'Checklist de entrada registrado correctamente');

@@ -662,11 +662,14 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/salidas-vehiculos/rendimiento/pdf/{periodo}', [RendimientoExportController::class, 'pdf'])->name('salidas.rendimiento.pdf');
         /*Ruta de Exportar Rendimiento en Excel*/
         Route::get('/salidas-vehiculos/rendimiento/excel/{periodo}', [RendimientoExportController::class, 'excel'])->name('salidas.rendimiento.excel'); 
+        /*Ruta PDF reporte mensual de movimientos de vehiculos*/
+        Route::get('/vehiculos/reportes/movimientos-mensuales/pdf', [VehiculoController::class, 'movimientosMensualesPdf'])->name('vehiculos.reportes.movimientos.pdf');
       
         // MANTENIMIENTOS DEL VEHICULO
 
         // Lista mantenimientos de un vehículo (historial paginado).
         Route::get('/vehiculos/{vehiculo}/mantenimientos', [MantenimientoController::class, 'index'])->name('vehiculos.mantenimientos.index');
+        Route::get('/vehiculos/{vehiculo}/mantenimientos/historial', [MantenimientoController::class, 'historial'])->name('vehiculos.mantenimientos.historial');
         // Formulario para crear mantenimiento de un vehículo.
         Route::get('/vehiculos/{vehiculo}/mantenimientos/create', [MantenimientoController::class, 'create'])->name('vehiculos.mantenimientos.create');
         // Guarda nuevo mantenimiento para el vehículo.
@@ -681,6 +684,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         // PAGOS DEL VEHICULO
         // Lista pagos del vehículo (tenencia, refrendo, verificación).
         Route::get('/vehiculos/{vehiculo}/pagos', [PagoVehiculoController::class, 'index'])->name('vehiculos.pagos.index');
+        Route::get('/vehiculos/{vehiculo}/pagos/historial', [PagoVehiculoController::class, 'historial'])->name('vehiculos.pagos.historial');
         // Formulario para registrar pago del vehículo.
         Route::get('/vehiculos/{vehiculo}/pagos/create', [PagoVehiculoController::class, 'create'])->name('vehiculos.pagos.create');
         // Guarda nuevo pago del vehículo.

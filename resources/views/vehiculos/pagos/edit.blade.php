@@ -31,13 +31,13 @@
                         <label class="form-label fw-bold">Tipo de pago</label>
                         <select name="tipo_pago" class="form-control" required>
                             <option value="tenencia" {{ $pago->tipo_pago == 'tenencia' ? 'selected' : '' }}>
-                                Tenencia
+                                Impuesto anual 
                             </option>
                             <option value="refrendo" {{ $pago->tipo_pago == 'refrendo' ? 'selected' : '' }}>
-                                Refrendo
+                                Pago de placas
                             </option>
                             <option value="verificacion" {{ $pago->tipo_pago == 'verificacion' ? 'selected' : '' }}>
-                                Verificación
+                                Verificación Vehicular
                             </option>
                         </select>
                     </div>
