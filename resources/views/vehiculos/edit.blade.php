@@ -1,5 +1,8 @@
 @extends('adminlte::page')
 @section('title', 'Editar Vehículos')
+<br>
+<br>
+<br>
 @section('content')
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -8,6 +11,16 @@
             <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
+    <!--  botmn  -->
+    <div class="mb-3">
+    <a href="{{ route('vehiculos.mantenimientos.index', $vehiculo->id) }}" class="btn btn-info btn-sm mr-2">
+        <i class="fas fa-tools"></i> Mantenimientos
+    </a>
+    <a href="{{ route('vehiculos.pagos.index', $vehiculo->id) }}" class="btn btn-warning btn-sm">
+        <i class="fas fa-file-invoice-dollar"></i> Pagos Vehículo
+    </a>
+</div>
+
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -122,6 +135,32 @@
                             <label class="fw-bold">Vencimiento Tarjeta</label>
                             <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="@if($vehiculo->tarjeta_circulacion_vencimiento == '2001-01-01') {{ '' }} @else {{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}@endif">
                         </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Foto principal del vehículo</label>
+                            @if($vehiculo->foto_principal)
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/'.$vehiculo->foto_principal) }}" style="max-width: 180px; border:1px solid #ddd; padding:4px;">
+                                </div>
+                            @endif
+                            <input type="file" name="foto_principal" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Vencimiento tenencia</label>
+                            <input type="date" name="tenencia_vencimiento" class="form-control"
+                                value="{{ old('tenencia_vencimiento', optional($vehiculo->tenencia_vencimiento)->format('Y-m-d')) }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Estatus tenencia</label>
+                            <select name="tenencia_estatus" class="form-control">
+                                <option value="sin_registro" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'sin_registro' ? 'selected' : '' }}>Sin registro</option>
+                                <option value="vigente" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'vigente' ? 'selected' : '' }}>Vigente</option>
+                                <option value="proxima" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'proxima' ? 'selected' : '' }}>Próxima</option>
+                                <option value="vencida" {{ old('tenencia_estatus', $vehiculo->tenencia_estatus) == 'vencida' ? 'selected' : '' }}>Vencida</option>
+                            </select>
+                        </div>
+
                     </div>
                 </div>
             </div>

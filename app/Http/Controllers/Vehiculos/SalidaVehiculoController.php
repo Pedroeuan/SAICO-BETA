@@ -22,10 +22,17 @@ class SalidaVehiculoController extends Controller
     {
         // Admin y super administrador pueden ver todas las salidas.
         if ($this->puedeVerTodasLasSalidas()) {
-            $salidas = SalidaVehiculo::with(['vehiculo', 'chofer'])->get();
+            $salidas = SalidaVehiculo::query()
+                ->select(['id', 'vehiculo_id', 'chofer_id', 'fecha_salida', 'estatus'])
+                ->with(['vehiculo:id,placa', 'chofer:id,name'])
+                ->latest('fecha_salida')
+                ->get();
         } else {
             $salidas = SalidaVehiculo::where('chofer_id', auth()->id())
-                ->with(['vehiculo', 'chofer'])->get();
+                ->select(['id', 'vehiculo_id', 'chofer_id', 'fecha_salida', 'estatus'])
+                ->with(['vehiculo:id,placa', 'chofer:id,name'])
+                ->latest('fecha_salida')
+                ->get();
         }
         $metricas = $this->metricas();
         $this->crearNotificacionesLicencias();
@@ -80,11 +87,16 @@ class SalidaVehiculoController extends Controller
      */
     public function create()
     {
-        $vehiculos=Vehiculo::where('estatus','disponible')->whereDoesntHave('salidaActiva')->get();
+        $vehiculos = Vehiculo::where('estatus', 'disponible')
+            ->where('documentacion_estatus', 'completa')
+            ->whereDoesntHave('salidaActiva')
+            ->select(['id', 'placa', 'marca'])
+            ->get();
         
         $usuarios = User::whereDoesntHave('salidasComoChofer',function ($q){
             $q->where('estatus','activo');
         })
+        ->select(['id', 'name', 'rol', 'licencia_vencimiento'])
         ->orderBy('name')
         ->get();
 
@@ -151,7 +163,7 @@ class SalidaVehiculoController extends Controller
         $salida = SalidaVehiculo::create([
             'vehiculo_id' => $vehiculo->id,
             'chofer_id' => $chofer->id,
-            'solicitado_por' => $usuarioLogueado->id,
+            'solicitado_por' => $request->input('solicitado_por', $usuarioLogueado->id),
             'creado_por' => $usuarioLogueado->id,
             'finalizado_por' => null, //aun no finalizado
             'fecha_salida' => $fechaSalida,

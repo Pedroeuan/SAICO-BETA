@@ -1021,7 +1021,7 @@ $(document).ready(function() {
             ta: 'ta',
             Perd_Mate: 'Perdida de Material (%)',
             fotos: 'Fotos No.',
-            observaciones: 'Observaciones'
+            Observaciones: 'Observaciones'
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
@@ -1117,10 +1117,10 @@ $(document).ready(function() {
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 15) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 11) { // si hay al menos 11 filas en el bloque
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(14); // fila índice 12 = fila 13 (0-based)
+                    .eq(10); // fila índice 10 = fila 11 (0-based)
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1311,7 +1311,7 @@ function verificarYAgregarLongitud() {
         }
         //-----------------------------------------Hacer ajuste de "N" filas por bloque
         // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 15) {
+        if (contadorBloque === 11) {
 
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 
