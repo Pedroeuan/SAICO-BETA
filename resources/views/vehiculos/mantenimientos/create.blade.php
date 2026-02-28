@@ -98,6 +98,32 @@
                                accept="application/pdf">
                     </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Numero de factura</label>
+                        <input name="factura_numero"
+                               type="text"
+                               class="form-control"
+                               maxlength="100"
+                               placeholder="Ej. FAC-2026-001">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Fecha de factura</label>
+                        <input name="factura_fecha"
+                               type="date"
+                               class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Monto de factura</label>
+                        <input name="factura_monto"
+                               type="number"
+                               step="0.01"
+                               min="0"
+                               class="form-control"
+                               placeholder="$0.00">
+                    </div>
+
                 </div>
 
                 <div class="mt-4 text-end">
