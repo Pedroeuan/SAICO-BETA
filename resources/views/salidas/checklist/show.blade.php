@@ -72,6 +72,14 @@
                                 <table class="table table-sm table-bordered mb-0">
                                     <tr><th style="width: 45%;">Nivel gasolina</th><td>{{ $checklist->condicion->nivel_gasolina }}</td></tr>
                                     <tr><th>Kilometraje</th><td>{{ $checklist->condicion->kilometraje }}</td></tr>
+                                    <tr><th>Liquido limpia parabrisas</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->liquido_limpiaparabrisas ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Aceite</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->aceite ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Anticongelante</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->anticongelante ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Estado general llantas</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->estado_llantas ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Delantera izquierda (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_delantera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Delantera derecha (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_delantera_der_calibracion ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Trasera izquierda (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_trasera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Trasera derecha (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_trasera_der_calibracion ?? 'n/a')) }}</td></tr>
                                     <tr><th>Limpio exterior</th><td>{!! $checklist->condicion->limpio_exterior ? '<span class="badge badge-success">Si</span>' : '<span class="badge badge-danger">No</span>' !!}</td></tr>
                                     <tr><th>Limpio interior</th><td>{!! $checklist->condicion->limpio_interior ? '<span class="badge badge-success">Si</span>' : '<span class="badge badge-danger">No</span>' !!}</td></tr>
                                     <tr><th>Observaciones</th><td>{{ $checklist->condicion->observaciones ?? 'N/A' }}</td></tr>

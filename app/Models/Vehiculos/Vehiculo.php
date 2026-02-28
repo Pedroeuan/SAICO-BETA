@@ -5,6 +5,8 @@ namespace App\Models\Vehiculos;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Vehiculos\Mantenimiento;
+use App\Models\Vehiculos\PagoVehiculo;
 
 class Vehiculo extends Model
 {
@@ -13,6 +15,7 @@ class Vehiculo extends Model
         'placa',
         'marca',
         'modelo',
+        'foto_principal',
         'anio',
         'estatus',
         'kilometraje_actual',
@@ -20,12 +23,16 @@ class Vehiculo extends Model
         'poliza_seguro_vencimiento',
         'tarjeta_circulacion_pdf',
         'tarjeta_circulacion_vencimiento',
+        'tenencia_vencimiento',
+        'tenencia_estatus',
         'documentacion_estatus',
+
     ];
     
     protected $casts = [
         'poliza_seguro_vencimiento' => 'date',
         'tarjeta_circulacion_vencimiento' => 'date',
+        'tenencia_vencimiento' => 'date',
     ];
     public function salidas()
     {
@@ -45,6 +52,15 @@ class Vehiculo extends Model
             
         return $this->salidaActiva ? 'ocupado' : 'disponible';
 
+    }
+    public function mantenimientos()
+    {
+        return $this->hasMany(Mantenimiento::class, 'vehiculo_id');
+
+    }
+    public function pagosVehiculo()
+    {
+    return $this->hasMany(PagoVehiculo::class, 'vehiculo_id');
     }
 
     protected static function boot(){

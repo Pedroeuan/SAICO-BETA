@@ -57,6 +57,10 @@
         $ce = $checklistEntrada;
         $Logo = $Logo ?? public_path('images/Logo_AICO_R.jpg');
 
+        $fotoVehiculo = ($vehiculo && !empty($vehiculo->foto_principal))
+        ? public_path('storage/' . $vehiculo->foto_principal)
+        : null;
+
         $docs = $cs ? $cs->documentos->keyBy('documento') : collect();
         $herr = $cs ? $cs->herramientas->keyBy('herramienta') : collect();
 
@@ -73,21 +77,33 @@
         $fmtFecha = function($value) {
             return $value ? \Carbon\Carbon::parse($value)->format('d/m/Y H:i') : 'N/A';
         };
+
     @endphp
 
     <table class="mini" style="margin-bottom: 6px;">
         <tr>
-            <th rowspan="3" style="width: 20%; text-align: center; background: #fff;">
-                <img src="{{ $Logo }}" alt="Logo" style="width: auto; max-width: 95px; max-height: 30px; height: auto; display: block; margin: 0 auto;">
-            </th>
-            <th style="width: 80%; text-align: center;">Checklist de Vehiculo - Resumen</th>
-        </tr>
+    <th rowspan="3" style="width: 18%; text-align: center; background: #fff;">
+        <img src="{{ $Logo }}" alt="Logo" style="width:auto; max-width:95px; max-height:30px; height:auto; display:block; margin:0 auto;">
+    </th>
+
+    <th style="width: 64%; text-align: center;">Checklist de Vehiculo - Resumen</th>
+
+    <th rowspan="3" style="width: 18%; text-align: center; background: #fff;">
+        @if($fotoVehiculo && file_exists($fotoVehiculo))
+            <img src="{{ $fotoVehiculo }}" alt="Foto vehiculo" style="width:auto; max-width:95px; max-height:30px; height:auto; display:block; margin:0 auto;">
+        @else
+            <span style="font-size:8px; color:#666;">Sin foto</span>
+        @endif
+    </th>
+</tr>
+
         <tr>
             <td><strong>Checklist</strong></td>
         </tr>
         <tr>
             <td>Salida ID: {{ $salida->id }} | Fecha: {{ now()->format('d/m/Y') }}</td>
         </tr>
+
     </table>
 
     <div class="box">
@@ -135,6 +151,14 @@
                         <table class="mini">
                             <tr><th>Nivel gasolina</th><td>{{ $cs?->condicion?->nivel_gasolina ?? 'N/A' }}</td></tr>
                             <tr><th>Kilometraje</th><td>{{ $cs?->condicion?->kilometraje ?? 'N/A' }}</td></tr>
+                            <tr><th>Liquido limpia parabrisas</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->liquido_limpiaparabrisas ?? 'n/a')) }}</td></tr>
+                            <tr><th>Aceite</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->aceite ?? 'n/a')) }}</td></tr>
+                            <tr><th>Anticongelante</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->anticongelante ?? 'n/a')) }}</td></tr>
+                            <tr><th>Estado llantas</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->estado_llantas ?? 'n/a')) }}</td></tr>
+                            <tr><th>Delantera izq (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->llanta_delantera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                            <tr><th>Delantera der (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->llanta_delantera_der_calibracion ?? 'n/a')) }}</td></tr>
+                            <tr><th>Trasera izq (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->llanta_trasera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                            <tr><th>Trasera der (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $cs?->condicion?->llanta_trasera_der_calibracion ?? 'n/a')) }}</td></tr>
                             <tr><th>Limpio exterior</th><td>{{ $cs?->condicion ? ($cs->condicion->limpio_exterior ? 'SI' : 'NO') : 'N/A' }}</td></tr>
                             <tr><th>Limpio interior</th><td>{{ $cs?->condicion ? ($cs->condicion->limpio_interior ? 'SI' : 'NO') : 'N/A' }}</td></tr>
                             <tr><th>Observaciones</th><td>{{ $cs?->condicion?->observaciones ?? 'N/A' }}</td></tr>
@@ -150,6 +174,14 @@
                             <table class="mini">
                                 <tr><th>Nivel gasolina</th><td>{{ $ce?->condicion?->nivel_gasolina ?? 'N/A' }}</td></tr>
                                 <tr><th>Kilometraje</th><td>{{ $ce?->condicion?->kilometraje ?? 'N/A' }}</td></tr>
+                                <tr><th>Liquido limpia parabrisas</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->liquido_limpiaparabrisas ?? 'n/a')) }}</td></tr>
+                                <tr><th>Aceite</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->aceite ?? 'n/a')) }}</td></tr>
+                                <tr><th>Anticongelante</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->anticongelante ?? 'n/a')) }}</td></tr>
+                                <tr><th>Estado llantas</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->estado_llantas ?? 'n/a')) }}</td></tr>
+                                <tr><th>Delantera izq (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->llanta_delantera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                                <tr><th>Delantera der (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->llanta_delantera_der_calibracion ?? 'n/a')) }}</td></tr>
+                                <tr><th>Trasera izq (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->llanta_trasera_izq_calibracion ?? 'n/a')) }}</td></tr>
+                                <tr><th>Trasera der (cal.)</th><td>{{ ucfirst(str_replace('_', ' ', $ce?->condicion?->llanta_trasera_der_calibracion ?? 'n/a')) }}</td></tr>
                                 <tr><th>Limpio exterior</th><td>{{ $ce?->condicion ? ($ce->condicion->limpio_exterior ? 'SI' : 'NO') : 'N/A' }}</td></tr>
                                 <tr><th>Limpio interior</th><td>{{ $ce?->condicion ? ($ce->condicion->limpio_interior ? 'SI' : 'NO') : 'N/A' }}</td></tr>
                                 <tr><th>Observaciones</th><td>{{ $ce?->condicion?->observaciones ?? 'N/A' }}</td></tr>

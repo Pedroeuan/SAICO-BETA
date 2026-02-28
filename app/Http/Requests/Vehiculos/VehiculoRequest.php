@@ -33,6 +33,9 @@ class VehiculoRequest extends FormRequest
             'modelo'  => 'required|string|max:100',
             'anio'    => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'estatus' => 'required|in:disponible,ocupado,inactivo',
+            'foto_principal' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'tenencia_vencimiento' => 'nullable|date',
+            'tenencia_estatus' => 'nullable|in:vigente,proxima,vencida,sin_registro',
 
             // Documentación del vehículo
             'poliza_seguro_pdf' => 'nullable|file|mimes:pdf|max:5120',

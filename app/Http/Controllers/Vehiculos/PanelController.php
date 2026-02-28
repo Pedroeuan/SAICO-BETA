@@ -18,38 +18,61 @@ class PanelController extends Controller
     {
         $fechaActual      = Carbon::now();
         $fechaMesAnterior = Carbon::now()->copy()->subMonth();
+        $hoy = Carbon::today();
+        $anioActual = $fechaActual->year;
+        $mesActualNum = $fechaActual->month;
 
         // VEHÍCULOS
-        $totalVehiculos = Vehiculo::count();
-        $disponibles    = Vehiculo::where('estatus', 'disponible')->count();
-        $ocupados       = Vehiculo::where('estatus', 'ocupado')->count();
-        $inactivos      = Vehiculo::where('estatus', 'inactivo')->count();
+        $resumenVehiculos = Vehiculo::query()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw("SUM(CASE WHEN estatus = 'disponible' THEN 1 ELSE 0 END) as disponibles")
+            ->selectRaw("SUM(CASE WHEN estatus = 'ocupado' THEN 1 ELSE 0 END) as ocupados")
+            ->selectRaw("SUM(CASE WHEN estatus = 'inactivo' THEN 1 ELSE 0 END) as inactivos")
+            ->selectRaw("SUM(CASE WHEN documentacion_estatus = 'vencida' THEN 1 ELSE 0 END) as vencidos")
+            ->selectRaw("SUM(CASE WHEN documentacion_estatus = 'incompleta' THEN 1 ELSE 0 END) as incompletos")
+            ->first();
 
-        $vencidos    = Vehiculo::where('documentacion_estatus', 'vencida')->count();
-        $incompletos = Vehiculo::where('documentacion_estatus', 'incompleta')->count();
+        $totalVehiculos = (int) ($resumenVehiculos->total ?? 0);
+        $disponibles = (int) ($resumenVehiculos->disponibles ?? 0);
+        $ocupados = (int) ($resumenVehiculos->ocupados ?? 0);
+        $inactivos = (int) ($resumenVehiculos->inactivos ?? 0);
+        $vencidos = (int) ($resumenVehiculos->vencidos ?? 0);
+        $incompletos = (int) ($resumenVehiculos->incompletos ?? 0);
 
         // ALERTAS DE DOCUMENTACIÓN (DASHBOARD)
-        $documentosVencidos = Vehiculo::where('documentacion_estatus', 'vencida')->get();
+        $documentosVencidos = Vehiculo::query()
+            ->select(['id', 'placa', 'marca', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
+            ->where('documentacion_estatus', 'vencida')
+            ->get();
         
-        $hoy = Carbon::today();
         $proximo15dias = Carbon::today()->addDays(15);
-        $documentosProximoVencer = Vehiculo::where('documentacion_estatus', 'completa')
+        $documentosProximoVencer = Vehiculo::query()
+            ->select(['id', 'placa', 'marca', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
+            ->where('documentacion_estatus', 'completa')
             ->where(function($q) use ($hoy, $proximo15dias) {
                 $q->whereBetween('poliza_seguro_vencimiento', [$hoy->toDateString(), $proximo15dias->toDateString()])
                   ->orWhereBetween('tarjeta_circulacion_vencimiento', [$hoy->toDateString(), $proximo15dias->toDateString()]);
             })
             ->get();
 
-        $documentosSinRegistrar = Vehiculo::where('documentacion_estatus', 'incompleta')->get();
+        $documentosSinRegistrar = Vehiculo::query()
+            ->select(['id', 'placa', 'marca'])
+            ->where('documentacion_estatus', 'incompleta')
+            ->get();
 
         // Notificaciones vehiculares (aditivo): próximas a vencer y vencidas.
         $this->crearNotificacionesVehiculares($documentosProximoVencer, $documentosVencidos);
 
         // SALIDAS
-        $totalSalidas   = SalidaVehiculo::count();
-        $salidasActivas = SalidaVehiculo::where('estatus', 'activo')->count();
-        $salidasMes = SalidaVehiculo::whereMonth('fecha_salida', $fechaActual->month)->whereYear('fecha_salida', $fechaActual->year)->count();
-        $salidasFinalizadas = SalidaVehiculo::where('estatus', 'finalizado')->count();
+        $resumenSalidas = SalidaVehiculo::query()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw("SUM(CASE WHEN estatus = 'activo' THEN 1 ELSE 0 END) as activas")
+            ->selectRaw("SUM(CASE WHEN estatus = 'finalizado' THEN 1 ELSE 0 END) as finalizadas")
+            ->first();
+        $totalSalidas   = (int) ($resumenSalidas->total ?? 0);
+        $salidasActivas = (int) ($resumenSalidas->activas ?? 0);
+        $salidasFinalizadas = (int) ($resumenSalidas->finalizadas ?? 0);
+        $salidasMes = SalidaVehiculo::whereMonth('fecha_salida', $mesActualNum)->whereYear('fecha_salida', $anioActual)->count();
 
         // VEHÍCULO MÁS USADO
         $vehiculoMasUsado = SalidaVehiculo::select('vehiculo_id', DB::raw('count(*) as total'))->groupBy('vehiculo_id')->orderByDesc('total')->with('vehiculo')->first();
@@ -61,7 +84,11 @@ class PanelController extends Controller
             ->count();
 
         // SALIDAS POR MES
-        $salidasPorMes = SalidaVehiculo::selectRaw('MONTH(fecha_salida) as mes, COUNT(*) as total')->whereYear('fecha_salida', $fechaActual->year)->groupBy('mes')->orderBy('mes')->pluck('total','mes');
+        $salidasPorMes = SalidaVehiculo::selectRaw('MONTH(fecha_salida) as mes, COUNT(*) as total')
+            ->whereYear('fecha_salida', $anioActual)
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->pluck('total', 'mes');
 
         $datosMeses = [];
         for ($i = 1; $i <= 12; $i++) {
@@ -69,7 +96,7 @@ class PanelController extends Controller
         }
 
         // ANÁLISIS COMPARATIVO
-        $mesActual = SalidaVehiculo::whereMonth('fecha_salida', $fechaActual->month)->whereYear('fecha_salida', $fechaActual->year)->count();
+        $mesActual = SalidaVehiculo::whereMonth('fecha_salida', $mesActualNum)->whereYear('fecha_salida', $anioActual)->count();
         $mesAnterior = SalidaVehiculo::whereMonth('fecha_salida', $fechaMesAnterior->month)->whereYear('fecha_salida', $fechaMesAnterior->year)->count();
         $variacionMensual = $mesAnterior > 0 ? round((($mesActual - $mesAnterior) / $mesAnterior) * 100, 2): 0;
 
@@ -79,13 +106,13 @@ class PanelController extends Controller
             ->value('promedio') ?? 0;
 
         // TOP 5 VEHÍCULOS
-        $topVehiculos = SalidaVehiculo::select('vehiculo_id', DB::raw('count(*) as total'))->groupBy('vehiculo_id')->orderByDesc('total')->with('vehiculo')->take(5)->get();
         $topVehiculosGrafica = SalidaVehiculo::select('vehiculo_id', DB::raw('count(*) as total'))
             ->groupBy('vehiculo_id')
             ->orderByDesc('total')
             ->with('vehiculo')
             ->take(10)
             ->get();
+        $topVehiculos = $topVehiculosGrafica->take(5);
 
         $labelsVehiculos = $topVehiculosGrafica->map(function ($item) {
             return $item->vehiculo->placa ?? 'N/A';
@@ -116,7 +143,7 @@ class PanelController extends Controller
                     ->where('sce.tipo', '=', 'entrada');
             })
             ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
-            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->whereYear('sv.fecha_salida', $anioActual)
             ->selectRaw('MONTH(sv.fecha_salida) as mes, SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
             ->groupBy('mes')
             ->orderBy('mes')
@@ -138,8 +165,8 @@ class PanelController extends Controller
                     ->where('sce.tipo', '=', 'entrada');
             })
             ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
-            ->whereMonth('sv.fecha_salida', $fechaActual->month)
-            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->whereMonth('sv.fecha_salida', $mesActualNum)
+            ->whereYear('sv.fecha_salida', $anioActual)
             ->selectRaw('SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
             ->value('total_km') ?? 0;
 
@@ -154,7 +181,7 @@ class PanelController extends Controller
                     ->where('sce.tipo', '=', 'entrada');
             })
             ->join('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
-            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->whereYear('sv.fecha_salida', $anioActual)
             ->selectRaw('SUM(GREATEST(cce.kilometraje - ccs.kilometraje, 0)) as total_km')
             ->value('total_km') ?? 0;
 
@@ -184,8 +211,8 @@ class PanelController extends Controller
         $incidenciasMes = DB::table('salidas_vehiculos as sv')
             ->leftJoin('salidas_checklists as sc', 'sc.salida_vehiculo_id', '=', 'sv.id')
             ->leftJoin('checklist_condiciones as cc', 'cc.salida_checklist_id', '=', 'sc.id')
-            ->whereMonth('sv.fecha_salida', $fechaActual->month)
-            ->whereYear('sv.fecha_salida', $fechaActual->year)
+            ->whereMonth('sv.fecha_salida', $mesActualNum)
+            ->whereYear('sv.fecha_salida', $anioActual)
             ->whereRaw("cc.observaciones IS NOT NULL AND TRIM(cc.observaciones) <> ''")
             ->selectRaw('COUNT(DISTINCT sv.id) as total')
             ->value('total') ?? 0;
@@ -222,7 +249,9 @@ class PanelController extends Controller
         $nivelChecklistsCompletos = $totalChecklistsSalida > 0 ? round(($checklistsCompletos / $totalChecklistsSalida) * 100, 2): 0;
 
         // PROYECCIÓN ANUAL
-        $promedioMensual = $fechaActual->month > 0 ? SalidaVehiculo::whereYear('fecha_salida', $fechaActual->year)->count() / $fechaActual->month: 0;
+        $promedioMensual = $mesActualNum > 0
+            ? SalidaVehiculo::whereYear('fecha_salida', $anioActual)->count() / $mesActualNum
+            : 0;
         $proyeccionAnual = round($promedioMensual * 12);
 
         return view('vehiculos.panel.index', compact(
