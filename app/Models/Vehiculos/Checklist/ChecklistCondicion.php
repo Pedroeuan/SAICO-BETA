@@ -12,6 +12,14 @@ class ChecklistCondicion extends Model
         'limpio_exterior',
         'limpio_interior',
         'observaciones',
+        'liquido_limpiaparabrisas',
+        'aceite',
+        'anticongelante',
+        'estado_llantas',
+        'llanta_delantera_izq_calibracion',
+        'llanta_delantera_der_calibracion',
+        'llanta_trasera_izq_calibracion',
+        'llanta_trasera_der_calibracion',
     ];
 
     public function checklist()

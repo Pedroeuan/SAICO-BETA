@@ -95,6 +95,25 @@
                             <label class="fw-bold">Vencimiento Tarjeta</label>
                             <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control">
                         </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Foto principal del vehículo</label>
+                            <input type="file" name="foto_principal" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Vencimiento tenencia</label>
+                            <input type="date" name="tenencia_vencimiento" class="form-control" value="{{ old('tenencia_vencimiento') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Estatus tenencia</label>
+                            <select name="tenencia_estatus" class="form-control">
+                                <option value="sin_registro" {{ old('tenencia_estatus') == 'sin_registro' ? 'selected' : '' }}>Sin registro</option>
+                                <option value="vigente" {{ old('tenencia_estatus') == 'vigente' ? 'selected' : '' }}>Vigente</option>
+                                <option value="proxima" {{ old('tenencia_estatus') == 'proxima' ? 'selected' : '' }}>Próxima</option>
+                                <option value="vencida" {{ old('tenencia_estatus') == 'vencida' ? 'selected' : '' }}>Vencida</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>

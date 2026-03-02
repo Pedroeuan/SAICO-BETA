@@ -38,6 +38,11 @@
                     </option>
                 @endforeach
             </select>
+            @if($vehiculos->isEmpty())
+                <small class="text-danger d-block mt-1">
+                    No hay vehiculos disponibles con documentacion completa.
+                </small>
+            @endif
         </div>
 
         <div class="mb-2">
@@ -75,7 +80,7 @@
             <textarea name="motivo" class="form-control">{{ old('motivo') }}</textarea>
         </div>
 
-        <button class="btn btn-success mt-3">Guardar salida</button>
+        <button class="btn btn-success mt-3" {{ $vehiculos->isEmpty() ? 'disabled' : '' }}>Guardar salida</button>
         <a href="{{ route('salidas.index') }}" class="btn btn-secondary mt-3">Cancelar</a>
     </form>
 </div>
@@ -150,4 +155,3 @@
 </script>
 
 @endsection
-
