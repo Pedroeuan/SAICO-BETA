@@ -1,9 +1,24 @@
 @extends('adminlte::page')
 @section('title', 'Editar Vehículos')
-<br>
-<br>
-<br>
+@section('css')
+<style>
+    #my-notification .dropdown-menu {
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
+
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
+    }
+</style>
+@endsection
 @section('content')
+<br>
+<br>
+<br>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>Editar Vehículo</h4>
@@ -139,7 +154,7 @@
                             <label class="fw-bold">Foto principal del vehículo</label>
                             @if($vehiculo->foto_principal)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/'.$vehiculo->foto_principal) }}" style="max-width: 180px; border:1px solid #ddd; padding:4px;">
+                                    <img src="{{ $vehiculo->foto_url }}" style="max-width: 180px; border:1px solid #ddd; padding:4px;">
                                 </div>
                             @endif
                             <input type="file" name="foto_principal" accept="image/*" class="form-control">
@@ -177,4 +192,50 @@
         </div>
     </form>
 </div>
+@stop
+
+@section('js')
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Scripts personalizados -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
+    if (notificationMenu) {
+        const normalizeNotificationMenu = () => {
+            const items = notificationMenu.querySelectorAll('.dropdown-item');
+            items.forEach((item) => {
+                const text = (item.textContent || '').trim().toLowerCase();
+                if (text === 'todas las notificaciones') {
+                    item.textContent = 'Ver todas las notificaciones';
+                    item.classList.add('font-weight-bold');
+                }
+            });
+        };
+
+        const observer = new MutationObserver(normalizeNotificationMenu);
+        observer.observe(notificationMenu, { childList: true, subtree: true });
+        normalizeNotificationMenu();
+    }
+
+});
+
+</script>
+
 @endsection

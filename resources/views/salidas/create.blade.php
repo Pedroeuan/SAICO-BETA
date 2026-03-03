@@ -1,5 +1,20 @@
 @extends('adminlte::page')
 @section('title', 'Nueva Salida')
+@section('css')
+<style>
+    #my-notification .dropdown-menu {
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
+
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
+    }
+</style>
+@endsection
 @section('content')
 <br><br><br>
 
@@ -88,6 +103,46 @@
 
 @section('js')
 <script>
+    
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Scripts personalizados -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
+    if (notificationMenu) {
+        const normalizeNotificationMenu = () => {
+            const items = notificationMenu.querySelectorAll('.dropdown-item');
+            items.forEach((item) => {
+                const text = (item.textContent || '').trim().toLowerCase();
+                if (text === 'todas las notificaciones') {
+                    item.textContent = 'Ver todas las notificaciones';
+                    item.classList.add('font-weight-bold');
+                }
+            });
+        };
+
+        const observer = new MutationObserver(normalizeNotificationMenu);
+        observer.observe(notificationMenu, { childList: true, subtree: true });
+        normalizeNotificationMenu();
+    }
+
+});
     function formatAlert(message, type = 'danger'){
         return `<div class="alert alert-${type}" role="alert">${message}</div>`;
     }

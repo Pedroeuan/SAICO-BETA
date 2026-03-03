@@ -29,7 +29,7 @@
     </a>
 
     <div class="table-responsive">
-      <table id="tablaJs" class="table table-sm table-hover table-bordered align-middle text-center">
+        <table id="tablaJs" class="table table-sm table-hover table-bordered align-middle text-center">
         <thead>
             <tr>
                 <th>Vehículo</th>
@@ -57,7 +57,7 @@
                         <span class="badge bg-success">Registrado</span>
                     @else
                         <a href="{{ route('salidas.checklist.salida.create',$salida->id) }}"
-                           class="btn btn-sm btn-primary px-3">
+                            class="btn btn-sm btn-primary px-3">
                             Registrar
                         </a>
                     @endif
@@ -69,7 +69,7 @@
                         <span class="badge bg-success">Registrado</span>
                     @elseif($salida->checklistSalida)
                         <a href="{{ route('salidas.checklist.entrada.create',$salida->id) }}"
-                           class="btn btn-sm btn-warning px-3">
+                            class="btn btn-sm btn-warning px-3">
                             Registrar
                         </a>
                     @else
@@ -102,7 +102,7 @@
                     {{-- ENTRADA --}}
                     @if($salida->checklistEntrada)
                         <a href="{{ route('salidas.checklist.show',[$salida->id,'entrada']) }}"
-                           class="btn btn-sm btn-secondary px-3">
+                            class="btn btn-sm btn-secondary px-3">
                             Ver entrada
                         </a>
 
