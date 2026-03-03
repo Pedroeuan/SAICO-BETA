@@ -711,7 +711,7 @@ return [
                 [
                     'text' => 'Solicitudes AD',
                     'icon' => 'fas fa-file-alt',
-                    'can' => 'tecnicos-equipos-access',  // Define una política en Laravel para controlar el acceso
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
                     //'topnav' => true,
                     'submenu' => [
                         [
