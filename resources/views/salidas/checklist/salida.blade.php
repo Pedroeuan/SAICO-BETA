@@ -21,8 +21,8 @@
 @endif
 
 <form method="POST"
-      action="{{ route('salidas.checklist.salida.store', $salida->id) }}"
-      enctype="multipart/form-data">
+    action="{{ route('salidas.checklist.salida.store', $salida->id) }}"
+    enctype="multipart/form-data">
 @csrf
 
 <div class="card">
@@ -35,16 +35,16 @@
 
             @if(!empty($salida->vehiculo->foto_principal))
                 <img src="{{ asset('storage/'.$salida->vehiculo->foto_principal) }}"
-                     alt="Foto vehículo"
-                     width="340"
-                     height="300"
-                     style="object-fit: contain;">
+                    alt="Foto vehículo"
+                    width="340"
+                    height="300"
+                    style="object-fit: contain;">
             @else
                 <img src="{{ asset('images/vehiculo_checklist.png') }}"
-                     alt="checklist-vehiculo"
-                     width="340"
-                     height="300"
-                     style="object-fit: contain;">
+                    alt="checklist-vehiculo"
+                    width="340"
+                    height="300"
+                    style="object-fit: contain;">
             @endif
 
             <div class="mt-2">
