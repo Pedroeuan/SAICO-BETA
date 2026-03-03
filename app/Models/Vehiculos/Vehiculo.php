@@ -3,10 +3,10 @@
 namespace App\Models\Vehiculos;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Vehiculos\Mantenimiento;
 use App\Models\Vehiculos\PagoVehiculo;
+use Carbon\Carbon;
 
 class Vehiculo extends Model
 {
@@ -28,7 +28,13 @@ class Vehiculo extends Model
         'documentacion_estatus',
 
     ];
-    
+
+    public function getFotoUrlAttribute()
+    {
+        return $this->foto_principal
+            ? Storage::url($this->foto_principal)
+            : null;
+    }
     protected $casts = [
         'poliza_seguro_vencimiento' => 'date',
         'tarjeta_circulacion_vencimiento' => 'date',

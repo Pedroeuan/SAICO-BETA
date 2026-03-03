@@ -150,6 +150,7 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
@@ -179,8 +180,12 @@ class UsuariosController extends Controller
         }else{
         $Usuario->licencia_numero = $request->input('licencia_numero');
         }
-        $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
-
+        if($request->input('licencia_vencimiento')==null)
+        {
+            $Usuario->licencia_vencimiento = '2001-01-01';
+        }else{
+            $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
+        }
         // Subir nueva licencia si existe
         if ($request->hasFile('licencia_pdf')) {
             $rutaLicencia = $request->file('licencia_pdf')
@@ -227,8 +232,12 @@ class UsuariosController extends Controller
         }else{
         $Usuario->licencia_numero = $request->input('licencia_numero');
         }
-        $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
-
+        if($request->input('licencia_vencimiento')==null)
+        {
+            $Usuario->licencia_vencimiento = '2001-01-01';
+        }else{
+            $Usuario->licencia_vencimiento = $request->input('licencia_vencimiento');
+        }
         // Subir nueva licencia si existe
         if ($request->hasFile('licencia_pdf')) {
             $rutaLicencia = $request->file('licencia_pdf')
@@ -258,9 +267,6 @@ class UsuariosController extends Controller
         return view('Admin.index', compact('Usuarios','rol'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     /**
      * Remove the specified resource from storage.
      */

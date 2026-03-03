@@ -2,7 +2,17 @@
 @section('title', 'Vehículos')
 @section('css')
 <style>
+    #my-notification .dropdown-menu {
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
 
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
+    }
 /* Subir un poco el contenido */
 .content-wrapper {
     padding-top: 5px !important;
@@ -40,8 +50,6 @@ label {
 .mb-3 {
     margin-bottom: 10px !important;
 }
-
-
 </style>
 @endsection
 @section('content')
@@ -53,6 +61,7 @@ label {
 <div class="col-md-10">
 
 <div class="card shadow-lg">
+
 <div class="card-header bg-primary text-white text-center">
     <h4 class="mb-0">Checklist de Entrada</h4>
 </div>
@@ -66,16 +75,16 @@ label {
 
             @if(!empty($salida->vehiculo->foto_principal))
                 <img src="{{ asset('storage/'.$salida->vehiculo->foto_principal) }}"
-                     alt="Foto vehículo"
-                     width="340"
-                     height="300"
-                     style="object-fit: contain;">
+                    alt="Foto vehículo"
+                    width="340"
+                    height="300"
+                    style="object-fit: contain;">
             @else
                 <img src="{{ asset('images/vehiculo_checklist.png') }}"
-                     alt="checklist-vehiculo"
-                     width="340"
-                     height="300"
-                     style="object-fit: contain;">
+                    alt="checklist-vehiculo"
+                    width="340"
+                    height="300"
+                    style="object-fit: contain;">
             @endif
 
             <div class="mt-2">
@@ -97,9 +106,7 @@ label {
         </div>
         @endif
 
-        <form method="POST"
-              action="{{ route('salidas.checklist.entrada.store', $salida->id) }}"
-              enctype="multipart/form-data">
+        <form method="POST" action="{{ route('salidas.checklist.entrada.store', $salida->id) }}" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -118,7 +125,6 @@ label {
             <label>Kilometraje final</label>
             <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje') }}">
         </div>
-
 
         <div class="row">
             <div class="col-md-4 mb-3">
@@ -150,7 +156,7 @@ label {
             </div>
         </div>
 
-          <div class="alert alert-info py-2">
+        <div class="alert alert-info py-2">
             Captura de llantas por: <strong>Baja</strong>, <strong>Normal</strong> o <strong>Alta</strong> en cada llanta.
         </div>
 
@@ -208,10 +214,10 @@ label {
         <div class="custom-control custom-switch mb-2">
             <input type="hidden" name="limpio_exterior" value="0">
             <input type="checkbox"
-                   class="custom-control-input"
-                   id="limpio_exterior"
-                   name="limpio_exterior"
-                   value="1" {{ old('limpio_exterior') == '1' ? 'checked' : '' }}>
+                    class="custom-control-input"
+                    id="limpio_exterior"
+                    name="limpio_exterior"
+                    value="1" {{ old('limpio_exterior') == '1' ? 'checked' : '' }}>
             <label class="custom-control-label" for="limpio_exterior">
                 Limpio Exterior
             </label>
@@ -220,10 +226,10 @@ label {
         <div class="custom-control custom-switch mb-3">
             <input type="hidden" name="limpio_interior" value="0">
             <input type="checkbox"
-                   class="custom-control-input"
-                   id="limpio_interior"
-                   name="limpio_interior"
-                   value="1" {{ old('limpio_interior') == '1' ? 'checked' : '' }}>
+                    class="custom-control-input"
+                    id="limpio_interior"
+                    name="limpio_interior"
+                    value="1" {{ old('limpio_interior') == '1' ? 'checked' : '' }}>
             <label class="custom-control-label" for="limpio_interior">
                 Limpio Interior
             </label>
@@ -241,11 +247,11 @@ label {
         <div class="mb-3">
             <label>Evidencia fotográfica (exactamente 3 imágenes)</label>
             <input type="file"
-                   name="evidencias[]"
-                   class="form-control"
-                   multiple
-                   accept="image/*"
-                   required>
+                    name="evidencias[]"
+                    class="form-control"
+                    multiple
+                    accept="image/*"
+                    required>
         </div>
 
         <div class="text-center mt-4">
@@ -266,5 +272,50 @@ label {
 </div>
 </div>
 </div>
+@stop
+@section('js')
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Scripts personalizados -->
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
+    if (notificationMenu) {
+        const normalizeNotificationMenu = () => {
+            const items = notificationMenu.querySelectorAll('.dropdown-item');
+            items.forEach((item) => {
+                const text = (item.textContent || '').trim().toLowerCase();
+                if (text === 'todas las notificaciones') {
+                    item.textContent = 'Ver todas las notificaciones';
+                    item.classList.add('font-weight-bold');
+                }
+            });
+        };
+
+        const observer = new MutationObserver(normalizeNotificationMenu);
+        observer.observe(notificationMenu, { childList: true, subtree: true });
+        normalizeNotificationMenu();
+    }
+
+});
+</script>
 
 @endsection
+
+
