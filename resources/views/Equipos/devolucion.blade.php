@@ -304,7 +304,6 @@ $(document).ready(function() {
 });
 
 /*Devolver Todo*/
-/* Devolver Todo */
 document.getElementById('btnDevolverTodo').addEventListener('click', function () {
 
     Swal.fire({
@@ -358,29 +357,6 @@ document.getElementById('btnDevolverTodo').addEventListener('click', function ()
     });
 
 });
-
-/*document.getElementById('btnDevolverTodo').addEventListener('click', function() {
-    if (confirm('¿Estás seguro que deseas devolver TODO? Esta acción no se puede deshacer.')) {
-
-        fetch("{{ route('DevolverTodo.Manifiesto') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({
-                idSolicitudes: {!! json_encode($idsSolicitud) !!}, // TODOS los idSolicitud
-                devolverTodo: true
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.success);
-            location.reload(); // recarga la página
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});*/
 
 
 /*Devolución 1X1 */
