@@ -942,6 +942,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
+        $imagenHoja = $request->input('imagen_hoja', []);
 
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
@@ -1220,8 +1221,8 @@ class FOR_01_PRO_INS_07Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(136.5, -266.8);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetXY(150.5, 29.5);
+            $combinedPdf->Cell(22, 5.2, "$i de $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF

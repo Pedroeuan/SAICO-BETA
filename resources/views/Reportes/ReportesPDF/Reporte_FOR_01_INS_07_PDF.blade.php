@@ -5,53 +5,56 @@
             <title>FORMATO FOR-INS-07/01</title>
             <style>
                 @page {
-            margin: 2.9cm 1.2cm 2.1cm 2.2cm; /* top right bottom left */
-            }
+                    margin: 
+                    3.0cm /* superior */
+                    2.1cm /* derecho */
+                    2.1cm /* inferior */
+                    2.4cm; /* izquierdo */
+                }
+                .content { margin-top: 6px; }
 
-            header {
-                position: fixed;
-                top: -2.4cm;   /* pega el cuadro de formato al margen superior */
-                left: 0;
-                right: 0;
-                height: 2.4cm;
-                text-align: center;
-                font-family: 'arial', sans-serif;
-            }
+                header {
+                    position: fixed;
+                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
 
-            footer {
-                position: fixed;
-                bottom: -1.7cm;
-                left: 0;
-                right: 0;
-                height: 1.7cm;
-                text-align: center;
-                font-family: 'arial', sans-serif;
-            }
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
 
-            body {
-                margin: 0;
-                padding-top: 0;      /* quita el espacio que te bajaba DATOS GENERALES */
-                padding-bottom: 0;
-                font-family: 'arial', sans-serif;
-            }
-            .content {
-                margin-top: 4px; /* queda justo debajo del cuadro del formato */
-            }
-
-
-
+                body {
+                    margin-top: 2.5px;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    font-family: 'arial', sans-serif;;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 6px;
                 }
                     
                 .simbologia {
@@ -59,7 +62,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 5px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -86,10 +89,14 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
-            background-color: #305496;
+            font-size: 7px;
+            background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
+        }
+
+        .border {
+            border: 1px solid black; 
         }
             
         .datosinspeccion{
@@ -97,34 +104,70 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 6px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
         }
+        
 
         .datosinspeccionsinborde{
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
+            font-size: 6px;
         }
 
         .datosresultados{
-            border-collapse: separate;  /*separate No colapsar bordes */
-            border-spacing: 0px;        /* Espacio entre celdas */
+            border-collapse: collapse;
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 10px;
+            }
+        .datosresultados td, .datosresultados th {
+            border: .6px solid black;
+        }
+        .datosresultados .sinBordeth th{
+            border: 0 !important;
+        }
+        .datosresultados td.long-wrap{
+            border: 0 !important;
+            padding: 0 !important;
         }
 
-        .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
+        .long-wrap{
+            border: none !important;
+            padding: 0 !important;
         }
+
+        .long-box{
+            width: 36%;
+            margin-left: auto;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .long-box td{
+            border: .6px solid black !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
         .celdaGris{
             background-color: #DBDBDB;
+            font-size: 6px;
+        }
+
+        .celdaGrisResultados{
+            background-color: #DBDBDB;
+            font-size: 9px;
+        }
+
+        .juntas{
+            font-size: 9px;
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -132,7 +175,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -140,7 +182,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -148,7 +189,6 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
-            /*font-size: 10px;*/
         }
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
@@ -166,6 +206,28 @@
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
+        /* agrega/ajusta en tu <style> */
+        .tablaheader th{
+            border: 1px solid black;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .pagina-cell{
+            text-align: center !important;
+            vertical-align: middle !important;
+            white-space: nowrap;
+            padding: 0;
+        }
+        .logo-cell{
+            padding: 0;
+        }
+        .logo-cell img{
+            display: block;
+            margin: 0 auto;
+            width: 80px;
+            height: auto;
+        }
+
             </style>
         </head>
         <body>
@@ -177,7 +239,7 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 70%;">Código:</th>
                             <th style="width: 90%;">FOR-INS-07/01</th>
-                            <th rowspan="3" style="width: 80%;"><img class="" src="{{ $FOR_01_INS_07 ?? public_path('images/FOR-01-INS-07.png') }}" alt="FOR_01_INS_07" style="width: 80px; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -189,12 +251,13 @@
                         </tr>
                         <tr>
                             <th>Página</th>
-                            <th></th>
+                            <th class="pagina-cell">{{ $TextoPagina ?? '' }}</th>
+
                         </tr>
                     </tbody>
                 </table>
     
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 0px;"></div>
             </header>
                           
             <footer>
@@ -368,7 +431,7 @@
                         <th colspan="4">DATOS GENERALES</th>
                     </tr>
                 </table>   
-                <div style="margin-bottom: 5px;"></div>         
+                <div style="margin-bottom: 1px;"></div>         
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
@@ -424,10 +487,12 @@
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
-                    </thead>  
+                        <tr><th colspan="7">DATOS DEL EQUIPO</th></tr>
+                    </thead>
 
-                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+                    <thead>
+                        <tr class="sinBordeth"><th colspan="7"></th></tr>
+                    </thead> <!-- Fila vacia -->
 
                     <tbody>
                         <tr class="celdaGris">
@@ -440,7 +505,7 @@
                             <td style="width: 15%;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</td>
                             <td>{{ $Datos_Equipo['ACOPLANTE'] }}</td>
                             <th class="celdaGris" style="width: 12%;">MARCA:</th>
-                            <td colspan="3" style="width: 10%;">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_SONDA1'] }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
@@ -454,14 +519,12 @@
                             <td>{{ $Datos_Equipo['N_S_EQUIPO'] }}</td>
                             <td>{{ $Datos_Equipo['LONGITUD_CABLE'] }}</td>
                             <th class="celdaGris">SERIE:</th>
-                            
-                            <td style="width: 12%;">{{ $Datos_Equipo['N_S_SONDA1'] }}</td>
+                            <td>{{ $Datos_Equipo['N_S_SONDA1'] }}</td>
                             <th class="celdaGris">FRECC:</th>
                             <td>{{ $Datos_Equipo['FREC_SONDA1'] }}</td>
                         </tr>
                     </tbody>
                 </table>
-
                 <div style="margin-bottom: 4px;"></div>
 
                 <table class="encabezadoAzul">
