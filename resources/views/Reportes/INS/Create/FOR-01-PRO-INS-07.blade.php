@@ -1100,21 +1100,21 @@ $(document).ready(function() {
             `;
             //-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
             // 🔎 Buscar filas reales del bloque
+           // Dentro de: (data.longs || []).forEach(function(l){ ... })
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 14) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 13) { // igual lógica que 08
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(13); // fila índice 12 = fila 13 (0-based)
+                    .eq(12); // fila 13 (index 12)
 
-                if ($nfila.length) { 
+                if ($nfila.length) {
                     $nfila.after(newLong);
                 } else {
                     $rowsBlock.last().after(newLong);
                 }
             } else {
-                // fallback: al final del bloque
                 $rowsBlock.last().after(newLong);
             }
 
@@ -1212,34 +1212,6 @@ $(document).ready(function() {
                 </td>
             </tr>
         `;
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        // Guardar de forma robusta: usar el form relativo o id explícito
-        saveData($(this).closest('form').attr('id'));
-        });
-
-        $('#addLongBtn').click(function () {
-            //let numFilas = parseInt($('#numRows').val());
-            let numFilas = parseInt($('#numRows').val(), 10) || 0;
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
-
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-
-            let newTitle = `
-            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
-                <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="13"> Longitud Inspeccionada</td>
-                <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Ingrese Longitud Inspeccionada...">
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"  aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-        `;
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
@@ -1290,7 +1262,6 @@ $(document).ready(function() {
             restoreData();
 });
 function verificarYAgregarLongitud() {
-
     const $tbody = $('#dynamicTable tbody');
     const $rows = $tbody.children('tr');
 
@@ -1298,25 +1269,21 @@ function verificarYAgregarLongitud() {
     let $ultimoElementoBloque = null;
 
     $rows.each(function () {
-
         const $row = $(this);
 
-        // ❌ Ignorar longitudes existentes (no cuentan)
         if ($row.hasClass('long-row')) {
             contadorBloque = 0;
             $ultimoElementoBloque = null;
             return;
         }
 
-        // ✅ Contar título o fila normal
         if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
-        //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 15) {
 
+        // Igual criterio que 08
+        if (contadorBloque === 11) {
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 
             const newLong = `
@@ -1337,12 +1304,10 @@ function verificarYAgregarLongitud() {
                     </td>
                 </tr>`;
 
-            // 👉 Evitar duplicados
             if (!$ultimoElementoBloque.next().hasClass('long-row')) {
                 $ultimoElementoBloque.after(newLong);
             }
 
-            // 🔄 Reiniciar contador para siguiente bloque
             contadorBloque = 0;
             $ultimoElementoBloque = null;
         }
