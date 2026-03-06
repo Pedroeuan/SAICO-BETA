@@ -33,7 +33,11 @@
         <thead>
             <tr>
                 <th>Vehículo</th>
+                {{--<th>Modelo</th>
+                <th>Año</th>
+                <th>Placa</th>--}}
                 <th>Chofer</th>
+                <th>Solicitado por</th>
                 <th>Fecha salida</th>
                 <th>Checklist salida</th>
                 <th>Checklist entrada</th>
@@ -46,8 +50,12 @@
         <tbody>
         @foreach($salidas as $salida)
             <tr>
-                <td>{{ $salida->vehiculo->placa }}</td>
+                <td>{{ $salida->vehiculo->marca }}</td>
+                {{--<td>{{ $salida->vehiculo->modelo }}</td>
+                <td>{{ $salida->vehiculo->anio }}</td>
+                <td>{{ $salida->vehiculo->placa }}</td> --}}
                 <td>{{ $salida->chofer->name }}</td>
+                <td>{{ $salida->solicitante->name ?? 'N/A' }}</td>
                 <td>{{ $salida->fecha_salida }}</td>
                 
 
