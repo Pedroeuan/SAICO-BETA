@@ -343,15 +343,23 @@
 
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
-                    <div class="col-sm-16">
+                    <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text" class="form-control  inputForm @error('Stndr_refe') is-invalid @enderror" name="Detalles_Generales[Stndr_refe]"  placeholder="IMAGEN DE REFERENCIA" value="{{old('Detalles_Generales.Stndr_refe', ?? 'IMAGEN DE REFERENCIA . . .')}}">
-                            @error('Stndr_refe')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            <input type="text"
+                                class="form-control inputForm @error('Detalles_Generales.Stndr_refe1') is-invalid @enderror"
+                                name="Detalles_Generales[Stndr_refe1]"
+                                placeholder="IMAGEN DE REFERENCIA"
+                                value="{{ old('Detalles_Generales.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
+
+                            @error('Detalles_Generales.Stndr_refe1')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                             @enderror
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div>
+                    
+                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
 
                     <div style="margin-bottom: 2px;"></div>
 
@@ -360,7 +368,7 @@
                             <label for="imageCount">Número de imágenes a subir:</label>
                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 50; $i++)
+                                @for ($i = 1; $i <= 2; $i++)
                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
                                 @endfor
                             </select>
@@ -396,6 +404,66 @@
                             </div>
                         </div>
 
+                        <div class="col-12">
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
+                            <input type="text"
+                                class="form-control inputForm @error('Detalles_Generales.Stndr_refe2') is-invalid @enderror"
+                                name="Detalles_Generales[Stndr_refe2]"
+                                placeholder="IMAGEN DE REFERENCIA"
+                                value="{{ old('Detalles_Generales.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+
+                            @error('Detalles_Generales.Stndr_refe2')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
+
+                    <div style="margin-bottom: 2px;"></div>
+
+                        <!--IMAGENES CON COMENTARIOS-->
+                        <div class="form-group">
+                            <label for="imageCount">Número de imágenes a subir:</label>
+                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                @for ($i = 1; $i <= 2; $i++)
+                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div id="imageFieldsContainer" class="row">
+                            <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
+
+                        <!-- Modal para recortar la imagen -->
+                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
@@ -403,65 +471,103 @@
 
                     <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">VOLTAJE:</label>
                                             <input type="text" class="form-control  inputForm" id="voltajeInputE" name="Datos_Equipo[voltaje]" placeholder="" value="{{old('Datos_Equipo.voltaje')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CARGA AMP:</label>
                                             <input type="text" class="form-control  inputForm" id="cargaInputE" name="Datos_Equipo[CARGA_AMP]" placeholder="" value="{{old('Datos_Equipo.CARGA_AMP')}}">
                                         </div>
                                     </div>
 
-                        <table class="table table-bordered table-striped dt-responsive tablas">
-                            <tr>
-                                <td>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th colspan="6" class="p-2 alert alert-warning">SIMBOLOGÍA</th>
-                                            </tr>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="p-2 alert alert-warning text-center">
+                                                                TABLA DE SEVERIDAD
+                                                            </th>
+                                                        </tr>
 
-                                            <tr>
-                                                <td><strong>BUENO:</strong></td>
-                                                <td>El equipo se encuentra en condiciones de operación optimas.</td>
-                                                <td><strong>PREVENTIVO:</strong></td>
-                                                <td>Media anomalia programar el paro del equipo para su reparación.</td>
-                                            </tr>
+                                                        <tr>
+                                                            <td class="text-success">
+                                                                <label>
+                                                                    <input type="radio" name="severidad" value="bueno">
+                                                                    <strong>BUENO</strong>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                            {{--<td class="text-success"> --}}
+                                                                El equipo se encuentra en condiciones de operación óptimas.
+                                                            </td>
 
-                                            <tr>
-                                                <td><strong>MODERADO</strong></td>
-                                                <td>ligera anomalia, mantener en observación y programar reparación.</td>
-                                                <td><strong>NO ACEPTABLE</strong></td>
-                                                <td>Anomalia severa, se recomienda para el equipo para su intervención</td>
-                                            </tr>
-                                        </thead>
+                                                            <td class="text-warning">
+                                                                <label>
+                                                                    <input type="radio" name="severidad" value="preventivo">
+                                                                    <strong>PREVENTIVO</strong>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                            {{--<td class="text-warning">--}}
+                                                                Media anomalía, programar el paro del equipo para su reparación.
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td style="color:#d4b000;">
+                                                                <label>
+                                                                    <input type="radio" name="severidad" value="moderado">
+                                                                    <strong>MODERADO</strong>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                            {{--<td style="color:#d4b000;">--}}
+                                                                Ligera anomalía, mantener en observación y programar reparación.
+                                                            </td>
+
+                                                            <td class="text-danger">
+                                                                <label>
+                                                                    <input type="radio" name="severidad" value="no_aceptable">
+                                                                    <strong>NO ACEPTABLE</strong>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                            {{--<td class="text-danger">--}}
+                                                                Anomalía severa, se recomienda parar el equipo para su intervención.
+                                                            </td>
+                                                        </tr>
+
+                                                    </thead>
+                                                </table>
+                                            </td>
+                                        </tr>
                                     </table>
-                                </td>
-                            </tr>
-                        </table>
 
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: Dentro del aspecto general no se observaron temperaturas">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                         </div>
                     </div>
 
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-info"></i> NOTA:</h5>
-                        <p>Se utilizó las técnicas de análisis comparativa cualitativa/comparativa cuantitativa descritas en la NORMA ISO 18434-1 apartado 4 al 5 para establecer las condiciones del equipo.</p>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Nota:</label>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Nota]" placeholder="Ejemplo: Se utilizó las técnicas de análisis comparativa cualitativa/comparativa">{{old('Nota', $Datos_Equipo['Nota'] ?? '')}}</textarea>
+                        </div>
                     </div>
 
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Recomendaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Recomendaciones]" placeholder="Ejemplo:">{{old('Recomendaciones', $Datos_Equipo['Recomendaciones'] ?? '')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Recomendaciones]" placeholder="Ejemplo: 1.- Mantener bajo observación el equipo.">{{old('Recomendaciones', $Datos_Equipo['Recomendaciones'] ?? '')}}</textarea>
                         </div>
                     </div>
 
@@ -625,7 +731,7 @@
                                     </tr>
 
                                     <tr>
-
+                                        
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
@@ -634,7 +740,7 @@
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
                                     </tr>
-                                                                        
+                                    
                                     <tr>
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>

@@ -51,9 +51,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
         //$Material = $datosParaCrearOS_OC['Material'];
-        $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
+        //$Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
         //$Pieza = $datosParaCrearOS_OC['Pieza'];
-        $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
+        //$Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
@@ -216,7 +216,6 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
     }
 
-
     public function FOR_01_PRO_INS_16_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -233,17 +232,19 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Equipo' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
+            'Detalles_Generales.Ubicacion' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.H_Inspeccion' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
+
             'Datos_Equipo.FEC_CAL' => 'nullable|string',
             'Datos_Equipo.CER_POR' => 'nullable|string',
             'Datos_Equipo.RAN_MED' => 'nullable|string',
@@ -251,6 +252,8 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Datos_Equipo.voltaje' => 'nullable|string',
             'Datos_Equipo.CARGA_AMP' => 'nullable|string',
             'Datos_Equipo.Recomendaciones' => 'nullable|string',
+
+            'severidad' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -330,6 +333,18 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+        
+        // ==========================
+        // Lógica para manejar Cliente
+        // ==========================
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 
@@ -408,7 +423,6 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
-
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
         if($imageCount>=1)
@@ -435,6 +449,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
             ];
         }
 
@@ -471,10 +486,10 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Contrato' => $Contrato,
             'Proyecto' => $Proyecto,
             //'Material' => $Material,
-            'Isometrico_Plano' => $Isometrico_Plano,
+            //'Isometrico_Plano' => $Isometrico_Plano,
             //'Pieza' => $Pieza,
-            'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
-            'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
+            //'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
+            //'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
             
