@@ -57,6 +57,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
+        $EsperaDato = "ESPERA DE DATOS";
 
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
