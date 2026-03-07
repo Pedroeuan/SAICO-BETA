@@ -81,16 +81,6 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">EQUIPO:</label>
-                            <input type="date" class="form-control  inputForm @error('Equipo') is-invalid @enderror" name="Detalles_Generales[Equipo]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Equipo')}}">
-                            @error('Fecha')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
                             <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha')}}">
                             @error('Fecha')
@@ -111,19 +101,44 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
-                            @error('Cliente')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="ClienteSelect">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="ClienteInput"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
                         </div>
                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -135,15 +150,13 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -200,6 +213,16 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Ubicación</label>
+                            <input type="text" class="form-control  inputForm @error('Ubicacion') is-invalid @enderror" name="Detalles_Generales[Ubicacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Ubicacion')}}">
+                            @error('Ubicacion')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Lugar</label>
                             <input type="text" class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar')}}">
                             @error('Lugar')
@@ -211,8 +234,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Hora de Inspeccíon</label>
-                            <input type="text" class="form-control  inputForm @error('Isometrico_Plano') is-invalid @enderror" name="Detalles_Generales[Isometrico_Plano]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Isometrico_Plano')}}">
-                            @error('Isometrico_Plano')
+                            <input type="text" class="form-control  inputForm @error('H_Inspeccion') is-invalid @enderror" name="Detalles_Generales[H_Inspeccion]"  placeholder="Ejemplo:  18:00 HRS" value="{{old('Detalles_Generales.H_Inspeccion')}}">
+                            @error('H_Inspeccion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -231,8 +254,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">ESTÁNDAR DE REFERENCIA:</label>
-                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
-                            @error('Criterio_Evaluacion')
+                            <input type="text" class="form-control  inputForm @error('Stndr_refe') is-invalid @enderror" name="Detalles_Generales[Stndr_refe]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Stndr_refe')}}">
+                            @error('Stndr_refe')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -264,14 +287,14 @@
                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                {{-- @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach 
                             </select>
                         </div>
                     </div>
@@ -293,7 +316,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[N_S_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.N_S_EQUIPO')}}">
+                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                         </div>
                     </div>
 
@@ -320,7 +343,14 @@
 
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
-
+                    <div class="col-sm-16">
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
+                            <input type="text" class="form-control  inputForm @error('Stndr_refe') is-invalid @enderror" name="Detalles_Generales[Stndr_refe]"  placeholder="IMAGEN DE REFERENCIA" value="{{old('Detalles_Generales.Stndr_refe', ?? 'IMAGEN DE REFERENCIA . . .')}}">
+                            @error('Stndr_refe')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div>
 
                     <div style="margin-bottom: 2px;"></div>
@@ -678,82 +708,34 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
-$(document).ready(function() {
-    let tituloCount = 0;
-    let rowCount = 0;
-    let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
-                // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
-                
-                savedData.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                                        <i class="fa fa-times"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
-                            </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow = `<tr data-titulo="${item.titulo}">
-                                        <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}">
-                                        </td><td><input type="text" class="form-control" name="nombre_Equipo[${item.titulo}]" value="${item.inputs[0]}" placeholder="Nombre del equipo"></td>
-                                        <td><input type="text" class="form-control" name="status[${item.titulo}]" value="${item.inputs[1]}" placeholder="Estado"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                                    </tr>`;
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
 
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
-            }
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
         }
 
-        $('#addTituloBtn').click(function () {
-            tituloCount++;
-            rowCount = 0; // Reiniciar el contador de filas para este título
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
-            let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="fa fa-times"  aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        saveData();
-
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+                });
     /*FOR-01-PRO-INS-16*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-16');
         if (!form) return;
-
-        // Guardar en localStorage al escribir
-        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-          //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-01-PRO-INS-16_' + el.name, el.value);
-
-            //});
-        //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
