@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Str;
 /*PDF */
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
@@ -54,7 +54,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         //$Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
         //$Pieza = $datosParaCrearOS_OC['Pieza'];
         //$Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
-        $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
+        //$ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
 
@@ -69,7 +69,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -78,12 +78,12 @@ class FOR_01_PRO_INS_16Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             $Orden_Servicio->idClientes = $idCliente;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
             //$Orden_Servicio->Material = $Material;
-            $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
+            //$Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
             // Obtén el ID del registro recién creado
@@ -98,7 +98,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            //$Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
             $Grupo_Juntas_Detalles_OS->save();
 
             }
@@ -115,7 +115,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_Solicitud = '2001/01/01';
+            $OC->Fecha_Solicitud = '2001-01-01';
             $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
@@ -162,7 +162,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
             //$Orden_Servicio->Material = $Material;
-            $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
+            //$Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
             // Obtén el ID del registro recién creado
@@ -177,7 +177,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            //$Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
             $Grupo_Juntas_Detalles_OS->save();
 
             }
@@ -248,12 +248,24 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Datos_Equipo.FEC_CAL' => 'nullable|string',
             'Datos_Equipo.CER_POR' => 'nullable|string',
             'Datos_Equipo.RAN_MED' => 'nullable|string',
+
+            'Datos_Equipo.Stndr_refe1' => 'nullable|string',
+            'Datos_Equipo.termograma1' => 'nullable|string',
+            'Datos_Equipo.emisividad1' => 'nullable|string',
+
+            'Datos_Equipo.Stndr_refe2' => 'nullable|string',
+            'Datos_Equipo.termograma2' => 'nullable|string',
+            'Datos_Equipo.emisividad2' => 'nullable|string',
+
             'Datos_Equipo.Observaciones' => 'nullable|string',
+
             'Datos_Equipo.voltaje' => 'nullable|string',
             'Datos_Equipo.CARGA_AMP' => 'nullable|string',
             'Datos_Equipo.Recomendaciones' => 'nullable|string',
 
-            'severidad' => 'nullable|string',
+            'Datos_Equipo.severidad' => 'nullable|string',
+            'Datos_Equipo.Nota' => 'nullable|string',
+            'Datos_Equipo.Recomendaciones' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -423,51 +435,49 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
+
         /* Fotos y Comentarios */
-        $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>=1)
-        {
-        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $Contrato   = $validatedData['Detalles_Generales']['Contrato'];
 
-        foreach ($request->images_base64 as $index => $base64Image) {
-            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
 
-            // Decodificar Base64
-            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-            
-            // Crear un nombre único para la imagen
-            $imageName = 'imagen_' . time() . '_' . $index . '.png';
+        $imagenesGuardadas = [];
 
-            // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-            
-            // Guardar la imagen en la ruta personalizada
-            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+        $bloques = ['1','2']; // bloques de imágenes del formulario
 
-            // Guardar la ruta en el array con su comentario correspondiente
-            $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
-                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
-            ];
+        foreach ($bloques as $bloque) {
+
+            $imagenes = $request->input("images_$bloque");
+
+            if(!$imagenes) continue;
+
+            foreach ($imagenes as $index => $base64Image) {
+
+                if(!$base64Image) continue;
+
+                // limpiar base64
+                $image = base64_decode(
+                    preg_replace('/^data:image\/\w+;base64,/', '', $base64Image)
+                );
+
+                $imageName = 'imagen_' . $bloque . '_' . time() . '_' . $index . '.png';
+
+                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                $imagenesGuardadas[] = [
+                    'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                    //'comentario' => $request->comments[$bloque][$index] ?? null,
+                    'bloque' => $bloque
+                ];
+            }
         }
 
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($imagenesGuardadas); 
-
-        // Guardar en la base de datos
-        $Fotos_Reportes->idReportes = $idReportes;
-        $Fotos_Reportes->Fotos_Reportes = $Fotos;
-        $Fotos_Reportes->save();
-    }else{
-        $imagenesGuardadas = [];
         $Fotos = json_encode($imagenesGuardadas);
-        $Fotos = json_encode($imagenesGuardadas); 
+
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
-    }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
@@ -475,9 +485,9 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         //$Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
-        $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
+        //$Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         //$Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        //$Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,

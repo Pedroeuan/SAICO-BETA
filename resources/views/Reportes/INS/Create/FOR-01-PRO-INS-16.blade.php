@@ -340,18 +340,18 @@
                             <input type="text" class="form-control  inputForm" id="rangoInputE" name="Datos_Equipo[RAN_MED]" placeholder="" value="{{old('Datos_Equipo.RAN_MED')}}">
                         </div>
                     </div>
-
+                    
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
                             <input type="text"
-                                class="form-control inputForm @error('Detalles_Generales.Stndr_refe1') is-invalid @enderror"
-                                name="Detalles_Generales[Stndr_refe1]"
+                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror"
+                                name="Datos_Equipo[Stndr_refe1]"
                                 placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Detalles_Generales.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
+                                value="{{ old('Datos_Equipo.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
 
-                            @error('Detalles_Generales.Stndr_refe1')
+                            @error('Datos_Equipo.Stndr_refe1')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -362,57 +362,42 @@
                     {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
 
                     <div style="margin-bottom: 2px;"></div>
-
-                        <!--IMAGENES CON COMENTARIOS-->
                         <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                            <label>Número de imágenes a subir:</label>
+                            <select class="form-control imageCount" data-target="1">
                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 2; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
+                                <option value="1">1 Imagen</option>
+                                <option value="2" selected>2 Imagenes</option>
                             </select>
                         </div>
 
-                        <div id="imageFieldsContainer" class="row">
-                            <!-- Aquí se agregarán dinámicamente los campos -->
-                        </div>
+                        <div id="imageFieldsContainer1" class="row"></div>
 
-                        <!-- Modal para recortar la imagen -->
-                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="img-container">
-                                            <img id="cropperImage" src="" style="max-width: 100%;">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                    </div>
-                                </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label>Termograma</label>
+                                <input type="text" class="form-control" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1')}}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Emisividad</label>
+                                <input type="text" class="form-control" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1')}}">
                             </div>
                         </div>
-
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <!-- IMAGEN DE REFERENCIA 2-->
                         <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
                             <input type="text"
-                                class="form-control inputForm @error('Detalles_Generales.Stndr_refe2') is-invalid @enderror"
-                                name="Detalles_Generales[Stndr_refe2]"
+                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
+                                name="Datos_Equipo[Stndr_refe2]"
                                 placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Detalles_Generales.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+                                value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
 
-                            @error('Detalles_Generales.Stndr_refe2')
+                            @error('Datos_Equipo.Stndr_refe2')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -423,47 +408,55 @@
                     {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
 
                     <div style="margin-bottom: 2px;"></div>
+                    <div class="form-group">
+                        <label>Número de imágenes a subir:</label>
+                        <select class="form-control imageCount" data-target="2">
+                            <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                            <option value="1">1 Imagen</option>
+                            <option value="2" selected>2 Imagenes</option>
+                        </select>
+                    </div>
 
-                        <!--IMAGENES CON COMENTARIOS-->
-                        <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 2; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
-                            </select>
+                    <div id="imageFieldsContainer2" class="row"></div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Termograma</label>
+                            <input type="text" class="form-control" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2')}}">
                         </div>
 
-                        <div id="imageFieldsContainer" class="row">
-                            <!-- Aquí se agregarán dinámicamente los campos -->
+                        <div class="col-md-6">
+                            <label>Emisividad</label>
+                            <input type="text" class="form-control" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2')}}">
                         </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="modal fade" id="cropperModal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
 
-                        <!-- Modal para recortar la imagen -->
-                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="img-container">
-                                            <img id="cropperImage" src="" style="max-width: 100%;">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                    </div>
+                                <div class="modal-header">
+                                    <h5>Recortar Imagen</h5>
                                 </div>
+
+                                <div class="modal-body">
+                                    <img id="cropperImage" style="max-width:100%">
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                    <button type="button" class="btn btn-info" id="rotateLeft">⟲ Rotar -90°</button>
+                                    <button type="button" class="btn btn-info" id="rotateRight">⟳ Rotar +90°</button>
+                                    <button type="button" class="btn btn-primary" id="cropImage">Recortar y Guardar</button>
+                                    <button type="button" class="btn btn-success" id="saveImage">Guardar Sin Recortar</button>
+                                </div>
+
                             </div>
                         </div>
+                    </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
@@ -499,7 +492,7 @@
                                                         <tr>
                                                             <td class="text-success">
                                                                 <label>
-                                                                    <input type="radio" name="severidad" value="bueno">
+                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="bueno" checked>
                                                                     <strong>BUENO</strong>
                                                                 </label>
                                                             </td>
@@ -510,7 +503,7 @@
 
                                                             <td class="text-warning">
                                                                 <label>
-                                                                    <input type="radio" name="severidad" value="preventivo">
+                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="preventivo">
                                                                     <strong>PREVENTIVO</strong>
                                                                 </label>
                                                             </td>
@@ -523,7 +516,7 @@
                                                         <tr>
                                                             <td style="color:#d4b000;">
                                                                 <label>
-                                                                    <input type="radio" name="severidad" value="moderado">
+                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="moderado">
                                                                     <strong>MODERADO</strong>
                                                                 </label>
                                                             </td>
@@ -534,7 +527,7 @@
 
                                                             <td class="text-danger">
                                                                 <label>
-                                                                    <input type="radio" name="severidad" value="no_aceptable">
+                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="no_aceptable">
                                                                     <strong>NO ACEPTABLE</strong>
                                                                 </label>
                                                             </td>
@@ -807,7 +800,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create-For-01-16_17.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
