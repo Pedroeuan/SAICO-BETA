@@ -1162,7 +1162,7 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                                         <!-- 1 DOS FIRMAS-->
                                         <div id="firmas1" class="col-12">
                                             <table class="table table-bordered table-striped dt-responsive tablas">

@@ -105,8 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    /*Imagenes */
     let cropper;
-let currentInput;
+    let currentInput;
 
 document.addEventListener("DOMContentLoaded", function () {
 

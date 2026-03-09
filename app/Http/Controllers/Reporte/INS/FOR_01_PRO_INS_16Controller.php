@@ -436,7 +436,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
-        /* Fotos y Comentarios */
+        /* Fotos*/
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         $Contrato   = $validatedData['Detalles_Generales']['Contrato'];
 
