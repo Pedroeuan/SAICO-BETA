@@ -105,133 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    /*Imagenes */
-    let cropper;
-    let currentInput;
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const cropperImage = document.getElementById("cropperImage");
-
-    // Botón: Rotar -90° (Antihorario)
-    document.getElementById("rotateLeft").onclick = () => cropper.rotate(-90);
-
-    // Botón: Rotar +90° (Horario)
-    document.getElementById("rotateRight").onclick = () => cropper.rotate(90);
-
-    // Botón: Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function () {
-        $('#cropperModal').modal('hide');
-    });
-
-    // GUARDAR
-    document.getElementById("saveImage").onclick = function () {
-
-        const canvas = cropper.getCroppedCanvas();
-        const base64 = canvas.toDataURL();
-
-        const preview = document.getElementById(`${currentInput.id}-preview`);
-
-        preview.innerHTML = `
-            <img src="${base64}" class="img-fluid img-thumbnail">
-        `;
-
-        document.getElementById(`${currentInput.id}-base64`).value = base64;
-
-        $('#cropperModal').modal('hide');
-    };
-
-    // SELECTOR DE IMÁGENES
-    document.querySelectorAll(".imageCount").forEach(select => {
-
-        select.addEventListener("change", function () {
-
-            const target = this.dataset.target;
-            const container = document.getElementById(`imageFieldsContainer${target}`);
-            const count = parseInt(this.value);
-
-            container.innerHTML = "";
-
-            for (let i = 1; i <= count; i++) {
-
-                container.innerHTML += `
-                    <div class="col-md-6">
-
-                        <label>Imagen ${i}</label>
-
-                        <input type="file"
-                        class="form-control image-input"
-                        id="image_${target}_${i}"
-                        accept="image/*">
-
-                        <div id="image_${target}_${i}-preview"
-                        class="mt-2"></div>
-
-                        <input type="hidden"
-                        name="images_${target}[]"
-                        id="image_${target}_${i}-base64">
-
-                        <button type="button"
-                        class="btn btn-danger mt-2 remove-image">
-                        Eliminar
-                        </button>
-
-                    </div>
-                `;
-            }
-
-            initImageInputs();
-        });
-
-        // Generar por default
-        select.dispatchEvent(new Event("change"));
-    });
-
-});
-
-
-function initImageInputs() {
-
-    document.querySelectorAll(".image-input").forEach(input => {
-
-        input.onchange = function (e) {
-
-            const file = e.target.files[0];
-
-            if (!file.type.startsWith("image/")) {
-                alert("Solo imágenes");
-                return;
-            }
-
-            currentInput = e.target;
-
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-
-                if (cropper) cropper.destroy();
-
-                document.getElementById("cropperImage").src = event.target.result;
-
-                $("#cropperModal").modal("show");
-
-                cropper = new Cropper(document.getElementById("cropperImage"), {
-                    aspectRatio: 4/3,
-                    viewMode: 1,
-                    autoCropArea: 1,
-                    minContainerWidth: 760,
-                    minContainerHeight: 600,
-                    responsive: true
-                });
-
-            };
-
-            reader.readAsDataURL(file);
-        };
-    });
-
-}
-
     $('#preFillBtn').click(function() {
         $('#dynamicTable tbody tr').each(function() {
             $(this).find('input').each(function() {
@@ -241,6 +114,389 @@ function initImageInputs() {
             });
         });
         saveData(document.querySelectorAll("form")[1].id);
+    });
+
+    /* Imágenes */
+    let cropper;
+    let currentInput;
+
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(-90);
+    });
+
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (cropper) cropper.rotate(90);
+    });
+
+    // Botón: Cancelar
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        $('#cropperModal').modal('hide');
+    });
+
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+
+        try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
+        }
+    });
+
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (cropper && currentInput) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput.id}-base64`).value = base64data;
+            }
+        }
+        $('#cropperModal').modal('hide');
+    });
+
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal').on('hidden.bs.modal', function () {
+        if (cropper) cropper.destroy();
+    });
+
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+
+        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
+        //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
+
+        if (selImgCountLocal != null) {
+            $('#imageCountSelect').val(selImgCountLocal);
+            generateImageFields(selImgCountLocal);
+
+            const msgImgNoSave = document.getElementById('msgImgNoSave');
+            if (msgImgNoSave) {
+                msgImgNoSave.classList.remove('d-none');
+            }
+        }
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields(count);
+        });
+
+        function generateImageFields(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            // Agregar eventos de eliminación a los botones
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
+                        
+                        const msgImgNoSave = document.getElementById('msgImgNoSave');
+                        if (msgImgNoSave) {
+                            msgImgNoSave.classList.remove('d-none');
+                        }
+
+                        // Actualizar el localStorage
+                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+                        localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
+                    } else {
+                        alert('No se pudo encontrar el campo de imagen para eliminar.');
+                    }
+                });
+            });
+
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper) cropper.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal').modal('show');
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem('imageCount');
+        });
+    });
+
+    /* Imágenes 2 */
+    let cropper2;
+    let currentInput2;
+
+    // Botón: Rotar -90° (Antihorario)
+    document.getElementById('rotateLeftBtn2').addEventListener('click', function () {
+        if (cropper2) cropper2.rotate(-90);
+    });
+
+    // Botón: Rotar +90° (Horario)
+    document.getElementById('rotateRightBtn2').addEventListener('click', function () {
+        if (cropper2) cropper2.rotate(90);
+    });
+
+    // Botón: Cancelar
+    document.getElementById('cancelBtn2').addEventListener('click', function () {
+        $('#cropperModal2').modal('hide');
+    });
+
+    // Botón: Guardar sin recortar (manteniendo rotación)
+    document.getElementById('saveWithoutCropBtn2').addEventListener('click', function () {
+
+        try {
+            // Obtener los datos de la imagen original (incluyendo rotación)
+            const imageData = cropper2.getImageData();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
+            if (Math.abs(cropper2.getData().rotate) % 180 === 90) {
+                canvas.width = imageData.naturalHeight;
+                canvas.height = imageData.naturalWidth;
+            } else {
+                canvas.width = imageData.naturalWidth;
+                canvas.height = imageData.naturalHeight;
+            }
+
+            // Dibujar la imagen rotada en el lienzo
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((imageData.rotate * Math.PI) / 180);
+            ctx.drawImage(
+                cropper2.element, // Aquí usamos el elemento de la imagen directamente
+                -imageData.naturalWidth / 2,
+                -imageData.naturalHeight / 2,
+                imageData.naturalWidth,
+                imageData.naturalHeight
+            );
+
+            // Convertir el lienzo a base64
+            const base64data = canvas.toDataURL();
+            const previewDiv = document.getElementById(`${currentInput2.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail" />
+                <span class="badge bg-success">¡Guardado!</span>
+            `;
+            document.getElementById(`${currentInput2.id}-base64`).value = base64data;
+
+            // Cerrar el modal
+            $('#cropperModal2').modal('hide');
+        } catch (error) {
+            console.error('Error al guardar la imagen sin recortar:', error);
+        }
+    });
+
+    // Botón: Recortar y guardar
+    document.getElementById('cropImageBtn2').addEventListener('click', function () {
+        if (cropper2 && currentInput2) {
+            const croppedCanvas = cropper2.getCroppedCanvas();
+            if (croppedCanvas) {
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput2.id}-preview`);
+                previewDiv.innerHTML = `
+                    <img src="${base64data}" class="img-fluid img-thumbnail" />
+                    <span class="badge bg-success">¡Recortado!</span>
+                `;
+                document.getElementById(`${currentInput2.id}-base64`).value = base64data;
+            }
+        }
+        $('#cropperModal2').modal('hide');
+    });
+
+    // Destruir Cropper al cerrar el modal
+    $('#cropperModal2').on('hidden.bs.modal', function () {
+        if (cropper2) cropper2.destroy();
+    });
+
+    // Generar campos de imágenes
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageCountSelect = document.getElementById('imageCount2');
+        const container = document.getElementById('imageFieldsContainer2');
+        const cropperImage = document.getElementById('cropperImage2');
+
+        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount2');
+        //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
+
+        if (selImgCountLocal != null) {
+            $('#imageCount2').val(selImgCountLocal);
+            generateImageFields2(selImgCountLocal);
+
+            const msgImgNoSave = document.getElementById('msgImgNoSave');
+            if (msgImgNoSave) {
+                msgImgNoSave.classList.remove('d-none');
+            }
+        }
+
+        imageCountSelect.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            //localStorage.setItem('imageCount', count);
+            generateImageFields2(count);
+        });
+
+        function generateImageFields2(count) {
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image2${i}">Imagen por Subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image2${i}" accept="image/*">
+
+                        <div class="image-preview mt-2" id="image2${i}-preview"></div>
+                        
+                        <input type="hidden" name="images_base64[]" id="image2${i}-base64">
+                        <button type="button" class="btn btn-danger mt-2 remove-image2" data-index="${i}">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            // Agregar eventos de eliminación a los botones
+            document.querySelectorAll('.remove-image2').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    if (fieldToRemove) {
+                        fieldToRemove.remove();
+                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
+                        
+                        const msgImgNoSave = document.getElementById('msgImgNoSave');
+                        if (msgImgNoSave) {
+                            msgImgNoSave.classList.remove('d-none');
+                        }
+
+                        // Actualizar el localStorage
+                        const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
+                        localStorage.setItem(formId + '_imageCount2', imageCountSelect.value);
+                    } else {
+                        alert('No se pudo encontrar el campo de imagen para eliminar.');
+                    }
+                });
+            });
+
+            // Asignar eventos a los nuevos inputs
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        return;
+                    }
+
+                    currentInput2 = e.target;
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        if (cropper2) cropper2.destroy();
+                        cropperImage.src = event.target.result;
+                        $('#cropperModal2').modal('show');
+                        cropper2 = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Limpiar localStorage al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function () {
+            //localStorage.removeItem('imageCount2');
+            localStorage.removeItem(formId + '_imageCount2');
+        });
     });
 
     /*llenado de campos vacios*/

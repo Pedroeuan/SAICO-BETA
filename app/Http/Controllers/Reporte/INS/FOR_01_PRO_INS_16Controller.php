@@ -436,48 +436,51 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
-        /* Fotos*/
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-        $Contrato   = $validatedData['Detalles_Generales']['Contrato'];
+        /* Fotos y Comentarios */
+        $imageCount = $request->input('imageCount'); // Número de imágenes
+        if($imageCount>=1)
+        {
+        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+        foreach ($request->images_base64 as $index => $base64Image) {
+            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-        $imagenesGuardadas = [];
+            // Decodificar Base64
+            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+            
+            // Crear un nombre único para la imagen
+            $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
-        $bloques = ['1','2']; // bloques de imágenes del formulario
+            // Definir la ruta personalizada
+            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+            
+            // Guardar la imagen en la ruta personalizada
+            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
-        foreach ($bloques as $bloque) {
-
-            $imagenes = $request->input("images_$bloque");
-
-            if(!$imagenes) continue;
-
-            foreach ($imagenes as $index => $base64Image) {
-
-                if(!$base64Image) continue;
-
-                // limpiar base64
-                $image = base64_decode(
-                    preg_replace('/^data:image\/\w+;base64,/', '', $base64Image)
-                );
-
-                $imageName = 'imagen_' . $bloque . '_' . time() . '_' . $index . '.png';
-
-                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
-
-                $imagenesGuardadas[] = [
-                    'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                    //'comentario' => $request->comments[$bloque][$index] ?? null,
-                    'bloque' => $bloque
-                ];
-            }
+            // Guardar la ruta en el array con su comentario correspondiente
+            $imagenesGuardadas[] = [
+                'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                //'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                //'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
+            ];
         }
 
-        $Fotos = json_encode($imagenesGuardadas);
+        // Convertir el array de fotos a JSON
+        $Fotos = json_encode($imagenesGuardadas); 
 
+        // Guardar en la base de datos
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
+    }else{
+        $imagenesGuardadas = [];
+        $Fotos = json_encode($imagenesGuardadas);
+        $Fotos = json_encode($imagenesGuardadas); 
+        $Fotos_Reportes->idReportes = $idReportes;
+        $Fotos_Reportes->Fotos_Reportes = $Fotos;
+        $Fotos_Reportes->save();
+    }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];

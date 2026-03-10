@@ -358,20 +358,47 @@
                             @enderror
                         </div>
                     </div>
-                    
-                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
 
-                    <div style="margin-bottom: 2px;"></div>
-                        <div class="form-group">
-                            <label>Número de imágenes a subir:</label>
-                            <select class="form-control imageCount" data-target="1">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                <option value="1">1 Imagen</option>
-                                <option value="2" selected>2 Imagenes</option>
-                            </select>
-                        </div>
+                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 2; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
 
-                        <div id="imageFieldsContainer1" class="row"></div>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
+
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                         <div class="row mt-3">
                             <div class="col-md-6">
@@ -388,37 +415,46 @@
                         <br>
                         <br>
                         <br>
-                        <!-- IMAGEN DE REFERENCIA 2-->
-                        <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text"
-                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
-                                name="Datos_Equipo[Stndr_refe2]"
-                                placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+                                        <!--IMAGENES CON COMENTARIOS-->
+                                        <div class="form-group">
+                                            <label for="imageCount2">Número de imágenes a subir:</label>
+                                            <select class="form-control" id="imageCount2" name="imageCount2" autocomplete="off">
+                                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                                @for ($i = 1; $i <= 2; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
 
-                            @error('Datos_Equipo.Stndr_refe2')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-                    
-                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
+                                        <div id="imageFieldsContainer2" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
+                                        </div>
 
-                    <div style="margin-bottom: 2px;"></div>
-                    <div class="form-group">
-                        <label>Número de imágenes a subir:</label>
-                        <select class="form-control imageCount" data-target="2">
-                            <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                            <option value="1">1 Imagen</option>
-                            <option value="2" selected>2 Imagenes</option>
-                        </select>
-                    </div>
-
-                    <div id="imageFieldsContainer2" class="row"></div>
-
+                                        <!-- Modal para recortar la imagen -->
+                                        <div class="modal fade" id="cropperModal2" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="img-container">
+                                                            <img id="cropperImage2" src="" style="max-width: 100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn2">Cancelar</button>
+                                                        <button type="button" id="rotateLeftBtn2" class="btn btn-info">⟲ Rotar -90°</button>
+                                                        <button type="button" id="rotateRightBtn2" class="btn btn-info">⟳ Rotar +90°</button>
+                                                        <button type="button" class="btn btn-primary" id="cropImageBtn2">Recortar y Guardar</button>
+                                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn2">Guardar Sin Recortar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Termograma</label>
