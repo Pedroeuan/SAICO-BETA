@@ -208,11 +208,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
 
-        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
+        //const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
+        const selImgCountLocal = localStorage.getItem(formId + '_imageCount');
         //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
 
         if (selImgCountLocal != null) {
-            $('#imageCountSelect').val(selImgCountLocal);
+            $('#imageCount').val(selImgCountLocal);
             generateImageFields(selImgCountLocal);
 
             const msgImgNoSave = document.getElementById('msgImgNoSave');
@@ -262,6 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                         // Actualizar el localStorage
+                        //const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
                         const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
                         localStorage.setItem(formId + '_imageCount', imageCountSelect.value);
                     } else {
@@ -399,7 +401,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById('imageFieldsContainer2');
         const cropperImage = document.getElementById('cropperImage2');
 
-        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount2');
+        //const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount2');
+        const selImgCountLocal = localStorage.getItem(formId + '_imageCount2');
         //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
 
         if (selImgCountLocal != null) {
@@ -423,11 +426,11 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 1; i <= count; i++) {
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
-                col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
+                col.setAttribute('id', `image2-container-${i}`); // ID único para eliminarlo después
                 col.innerHTML = `
                     <div class="form-group">
                         <label for="image2${i}">Imagen por Subir ${i}:</label>
-                        <input type="file" class="form-control image-input" id="image2${i}" accept="image/*">
+                        <input type="file" class="form-control image2-input" id="image2${i}" accept="image/*">
 
                         <div class="image-preview mt-2" id="image2${i}-preview"></div>
                         
@@ -442,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.remove-image2').forEach(button => {
                 button.addEventListener('click', function () {
                     const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
+                    const fieldToRemove = document.getElementById(`image2-container-${index}`);
                     if (fieldToRemove) {
                         fieldToRemove.remove();
                         imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
@@ -453,6 +456,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                         // Actualizar el localStorage
+                        //const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
                         const formId = document.querySelectorAll("form")[1]?.id || document.querySelector("form").id;
                         localStorage.setItem(formId + '_imageCount2', imageCountSelect.value);
                     } else {
@@ -462,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             // Asignar eventos a los nuevos inputs
-            document.querySelectorAll('.image-input').forEach(input => {
+            document.querySelectorAll('.image2-input').forEach(input => {
                 input.addEventListener('change', function (e) {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -494,8 +498,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
-            //localStorage.removeItem('imageCount2');
-            localStorage.removeItem(formId + '_imageCount2');
+            localStorage.removeItem('imageCount2');
         });
     });
 

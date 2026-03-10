@@ -415,6 +415,21 @@
                         <br>
                         <br>
                         <br>
+                        <div class="col-12">
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
+                                <input type="text"
+                                    class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
+                                    name="Datos_Equipo[Stndr_refe2]"
+                                    placeholder="IMAGEN DE REFERENCIA"
+                                    value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+
+                                @error('Datos_Equipo.Stndr_refe2')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount2">Número de imágenes a subir:</label>
