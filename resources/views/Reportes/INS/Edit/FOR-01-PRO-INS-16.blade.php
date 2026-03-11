@@ -315,8 +315,6 @@
 
                     }
 
-                    //dd($imagenesPorNumero);
-
                     @endphp
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
@@ -334,40 +332,48 @@
                         </div>
                     </div>
 
-                        <!--IMAGEN 1-->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Imagen 1</label>
-                                <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
-                                <div id="imagen1-preview" class="mt-2"></div>
-                                <input type="hidden" id="imagen1-base64" name="imagen1_base64">
-                                @if(isset($imagenesPorNumero[1]))
+                    <!--IMAGEN 1-->
+                    <div class="col-sm-6">
+                        <div class="form-group">
 
-                                <div class="mt-2">
+                            <label class="col-form-label">Imagen 1</label>
 
-                                <img src="{{ asset($imagenesPorNumero[1]) }}"
-                                    class="img-thumbnail"
-                                    style="max-width:250px;">
+                            <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
 
-                                </div>
+                            <!-- preview de nueva imagen -->
+                            <div id="imagen1-preview" class="mt-2"></div>
 
-                                @endif
-                            </div>
+                            <!-- base64 que se enviará al controlador -->
+                            <input type="hidden" id="imagen1-base64" name="imagen1_base64">
+
+                            <!-- ruta de imagen existente -->
+                            <input type="hidden" name="imagen1_old" value="{{ $imagenesPorNumero[1] ?? '' }}">
+
+                            <!-- mostrar imagen actual -->
+                            @if(isset($imagenesPorNumero[1]))
+                            <img id="imagen1-old-preview" src="{{ asset($imagenesPorNumero[1]) }}" class="img-fluid rounded shadow-sm mt-2" style="max-width:250px;">
+                            @endif
+
                         </div>
+                    </div>
 
                         <!--IMAGEN 2-->
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Imagen 2</label>
                                 <input type="file" class="form-control image-input" id="imagen2" name="imagen2" accept="image/*">
+                                <!-- preview de nueva imagen -->
                                 <div id="imagen2-preview" class="mt-2"></div>
+                                <!-- base64 que se enviará al controlador -->
                                 <input type="hidden" id="imagen2-base64" name="imagen2_base64">
+                                <!-- ruta de imagen existente -->
+                                <input type="hidden" name="imagen2_old" value="{{ $imagenesPorNumero[2] ?? '' }}">
                                 @if(isset($imagenesPorNumero[2]))
 
                                 <div class="mt-2">
 
-                                <img src="{{ asset($imagenesPorNumero[2]) }}"
-                                    class="img-thumbnail"
+                                <img id="imagen2-old-preview" src="{{ asset($imagenesPorNumero[2]) }}"
+                                    class="img-fluid rounded shadow-sm mt-2"
                                     style="max-width:250px;">
 
                                 </div>
@@ -411,12 +417,16 @@
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Imagen 3</label>
                                 <input type="file" class="form-control image-input" id="imagen3" name="imagen3" accept="image/*">
+                                <!-- preview de nueva imagen -->
                                 <div id="imagen3-preview" class="mt-2"></div>
+                                <!-- base64 que se enviará al controlador -->
                                 <input type="hidden" id="imagen3-base64" name="imagen3_base64">
+                                <!-- ruta de imagen existente -->
+                                <input type="hidden" name="imagen3_old" value="{{ $imagenesPorNumero[3] ?? '' }}">
                                 @if(isset($imagenesPorNumero[3]))
 
-                                <img src="{{ asset($imagenesPorNumero[3]) }}"
-                                    class="img-thumbnail mt-2"
+                                <img id="imagen3-old-preview" src="{{ asset($imagenesPorNumero[3]) }}"
+                                    class="img-fluid rounded shadow-sm mt-2"
                                     style="max-width:250px;">
 
                                 @endif
@@ -427,12 +437,16 @@
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Imagen 4</label>
                                 <input type="file" class="form-control image-input" id="imagen4" name="imagen4" accept="image/*">
+                                <!-- preview de nueva imagen -->
                                 <div id="imagen4-preview" class="mt-2"></div>
+                                <!-- base64 que se enviará al controlador -->
                                 <input type="hidden" id="imagen4-base64" name="imagen4_base64">
+                                <!-- ruta de imagen existente -->
+                                <input type="hidden" name="imagen4_old" value="{{ $imagenesPorNumero[4] ?? '' }}">
                                 @if(isset($imagenesPorNumero[4]))
 
-                                <img src="{{ asset($imagenesPorNumero[4]) }}"
-                                    class="img-thumbnail mt-2"
+                                <img id="imagen4-old-preview" src="{{ asset($imagenesPorNumero[4]) }}"
+                                    class="img-fluid rounded shadow-sm mt-2"
                                     style="max-width:250px;">
 
                                 @endif

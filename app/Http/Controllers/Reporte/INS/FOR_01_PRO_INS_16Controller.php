@@ -477,7 +477,6 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
 
-
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -652,87 +651,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        /* Imágenes */
-        $fotosActuales = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
-        $nuevasImagenes = [];
 
-        if ($request->has('ref1_images_base64')) {
-
-            foreach ($request->ref1_images_base64 as $index => $base64Image) {
-
-                if ($base64Image) {
-
-                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-
-                    $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-                    $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-
-                    $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-
-                    $imageName = 'ref1_' . time() . '_' . $index . '.png';
-
-                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
-
-                    $nuevasImagenes[] = [
-                        'tipo' => 'ref1',
-                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}"
-                    ];
-
-                } else {
-
-                    if(isset($request->ref1_images_old[$index])){
-
-                        $nuevasImagenes[] = [
-                            'tipo' => 'ref1',
-                            'ruta' => $request->ref1_images_old[$index]
-                        ];
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        if ($request->has('ref2_images_base64')) {
-
-            foreach ($request->ref2_images_base64 as $index => $base64Image) {
-
-                if ($base64Image) {
-
-                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-
-                    $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-                    $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-
-                    $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-
-                    $imageName = 'ref2_' . time() . '_' . $index . '.png';
-
-                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
-
-                    $nuevasImagenes[] = [
-                        'tipo' => 'ref2',
-                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}"
-                    ];
-
-                } else {
-
-                    if(isset($request->ref2_images_old[$index])){
-
-                        $nuevasImagenes[] = [
-                            'tipo' => 'ref2',
-                            'ruta' => $request->ref2_images_old[$index]
-                        ];
-
-                    }
-
-                }
-
-            }
-
-        }
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas

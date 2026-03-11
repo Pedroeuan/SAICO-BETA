@@ -61,123 +61,142 @@
         }
     });
 
-    /* Imágenes Al seleccionar numero de imagenes a subir*/
-    let cropper;
-    let currentInput;
+    /* Imágenes */
+    document.addEventListener("DOMContentLoaded", function () {
+        let cropper = null;
+        let currentInput = null;
 
-    // Botón: Rotar -90° (Antihorario)
-    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(-90);
-    });
+        const cropperImage = document.getElementById('cropperImage');
 
-    // Botón: Rotar +90° (Horario)
-    document.getElementById('rotateRightBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(90);
-    });
-
-    // Botón: Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function () {
-        $('#cropperModal').modal('hide');
-    });
-
-    // Botón: Recortar y Guardar
-    document.getElementById('cropImageBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Recortado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    //base64Input.value = base64data;
-                    base64Input.value = "";
-                }
-            }
-            $('#cropperModal').modal('hide');
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Botón: Guardar Sin Recortar
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            try {
-                // Obtener los datos de la imagen original (incluyendo rotación)
-                const imageData = cropper.getImageData();
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-                if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                    canvas.width = imageData.naturalHeight;
-                    canvas.height = imageData.naturalWidth;
-                } else {
-                    canvas.width = imageData.naturalWidth;
-                    canvas.height = imageData.naturalHeight;
-                }
-
-                // Dibujar la imagen rotada en el lienzo
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate((imageData.rotate * Math.PI) / 180);
-                ctx.drawImage(
-                    cropper.element, // Aquí usamos el elemento de la imagen directamente
-                    -imageData.naturalWidth / 2,
-                    -imageData.naturalHeight / 2,
-                    imageData.naturalWidth,
-                    imageData.naturalHeight
-                );
-
-                // Convertir el lienzo a base64
-                const base64data = canvas.toDataURL();
-
-                // Actualizar la vista previa de la imagen
-                const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Guardado!</span>
-                `;
-
-                // Actualizar el campo oculto con la imagen en base64
-                const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
-                if (base64Input) {
-                    base64Input.value = base64data;
-                }
-
-                // Cerrar el modal
-                $('#cropperModal').modal('hide');
-            } catch (error) {
-                console.error('Error al guardar la imagen sin recortar:', error);
-            }
-        } else {
-            console.error('Cropper o currentInput no están inicializados.');
-        }
-    });
-
-    // Destruir Cropper al cerrar el modal
-    $('#cropperModal').on('hidden.bs.modal', function () {
-        if (cropper) cropper.destroy();
-    });
-
-    function bindImagenHojaCheckboxes() {
-    document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-        cb.addEventListener('change', function () {
-            const index = this.dataset.index;
-            const hidden = document.getElementById(`imagenHojaValue${index}`);
-            if (hidden) {
-                hidden.value = this.checked ? 1 : 0;
-            }
+        /* ROTAR */
+        document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(-90);
         });
+
+        document.getElementById('rotateRightBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(90);
+        });
+
+        /* CANCELAR */
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            $('#cropperModal').modal('hide');
+        });
+
+        /* GUARDAR SIN RECORTAR */
+        document.getElementById('saveWithoutCropBtn').addEventListener('click', () => {
+
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas({
+                width: cropper.getImageData().naturalWidth,
+                height: cropper.getImageData().naturalHeight
+            });
+
+            const base64data = canvas.toDataURL();
+
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail">
+                <span class="badge bg-success">Guardado</span>
+            `;
+            /* ocultar imagen anterior */
+            const oldPreview = document.getElementById(`${currentInput.id}-old-preview`);
+            if(oldPreview){
+                oldPreview.remove();
+            }
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            $('#cropperModal').modal('hide');
+
+        });
+
+        /* RECORTAR */
+        document.getElementById('cropImageBtn').addEventListener('click', () => {
+
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas();
+
+            const base64data = canvas.toDataURL();
+
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail">
+                <span class="badge bg-success">Recortado</span>
+            `;
+            /* ocultar imagen anterior */
+            const oldPreview = document.getElementById(`${currentInput.id}-old-preview`);
+            if(oldPreview){
+                oldPreview.remove();
+            }
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            $('#cropperModal').modal('hide');
+
+        });
+
+
+        /* DESTRUIR AL CERRAR */
+        $('#cropperModal').on('hidden.bs.modal', function () {
+
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+
+        });
+
+
+        /* ACTIVAR INPUTS */
+        function activateImageEvents(){
+
+            document.querySelectorAll('.image-input').forEach(input => {
+
+                input.addEventListener('change', function(e){
+
+                    const file = e.target.files[0];
+                    if(!file) return;
+
+                    currentInput = e.target;
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(event){
+
+                        cropperImage.src = event.target.result;
+
+                        $('#cropperModal').modal('show');
+
+                    };
+
+                    reader.readAsDataURL(file);
+
+                });
+
+            });
+
+        }
+
+        /* CREAR CROPPER CUANDO EL MODAL ABRA */
+        $('#cropperModal').on('shown.bs.modal', function () {
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(cropperImage,{
+                aspectRatio: 4 / 3,
+                viewMode: 1,
+                autoCropArea: 1,
+                minContainerWidth: 760,
+                minContainerHeight: 600,
+                responsive: true
+            });
+
+        });
+        activateImageEvents();
     });
-}
 
 
     // Generar campos de imágenes
@@ -352,63 +371,6 @@
         });
     });
 
-    /*Juntas-Resultados */
-    function updateRowNumbers() {
-        let count = 0;
-        $('#dynamicTable tbody tr').each(function () {
-            //if (!$(this).hasClass('titulo-row')) {
-            if (!$(this).hasClass('titulo-row') && !$(this).hasClass('long-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
-            }
-        });
-        rowCountGlobal = count;
-    }
-        // Función correcta para serializar títulos como [{id,text}]
-        function updateTitulos() {
-        var titulos = [];
-        $('.titulo-row').each(function() {
-            const id = $(this).data('titulo');
-            const text = $(this).find('.titulo-text').val() || '';
-            titulos.push({ id: id, text: text });
-        });
-        $('#titulos_hidden').val(JSON.stringify(titulos));
-        }
-
-    // Evento para eliminar un título
-        $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-            let tituloRow = $(this).closest('tr');
-            let tituloId = tituloRow.data('titulo');
-            
-            // Eliminar la fila del título
-            tituloRow.remove();
-            verificarYAgregarLongitud();
-            // Eliminar todas las filas que tengan el mismo data-titulo
-            $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-            updateRowNumbers(); // Si quieres actualizar el contador global
-        });
-
-        /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row .titulo-text', function () {
-            updateTitulos();
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            verificarYAgregarLongitud();
-            updateRowNumbers();
-        });
-
-        $('#preFillBtn').click(function() {
-            $('#dynamicTable tbody tr').each(function() {
-                $(this).find('input').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).val('----');
-                    }
-                });
-            });
-        });
 
     /*llenado de campos vacios*/
     document.addEventListener("DOMContentLoaded", function () {
